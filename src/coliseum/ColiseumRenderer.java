@@ -24,7 +24,7 @@ public class ColiseumRenderer extends IRendererMaster {
 
 	@Override
 	public void render() {
-		OpenGlUtils.prepareNewRenderParse(0.1f, 0.1f, 0.1f);
+		OpenGlUtils.prepareNewRenderParse(0.8f, 0.8f, 0.8f);
 		guiRenderer.render(null, null);
 		fontRenderer.render(null, null);
 	}

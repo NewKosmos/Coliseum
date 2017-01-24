@@ -1,6 +1,6 @@
 package coliseum;
 
-import coliseum.uis.*;
+import coliseum.uis.console.*;
 import flounder.devices.*;
 import flounder.fonts.*;
 import flounder.guis.*;
