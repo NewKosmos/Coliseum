@@ -7,7 +7,7 @@ import java.util.*;
 public class Chunk {
 	private static final float[][] GENERATE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
 
-	public static final int CHUNK_RADIUS = 4; // The amount of tiles that make up the radius.
+	public static final int CHUNK_RADIUS = 5; // The amount of tiles that make up the radius.
 
 	private Vector2f position;
 	private List<Tile> tiles;
@@ -55,5 +55,9 @@ public class Chunk {
 		float x = (float) Math.sqrt(3.0f) * Tile.SIDE_LENGTH * ((b / 2.0f) + r);
 		System.out.println("[" + r + ", " + g + ", " + b + "]  |  " + x + ", " + y);
 		tiles.add(new Tile(this, Vector2f.add(position, new Vector2f(x, y), null)));
+	}
+
+	public List<Tile> getTiles() {
+		return tiles;
 	}
 }

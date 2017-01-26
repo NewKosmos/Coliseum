@@ -33,8 +33,8 @@ public class Coliseum extends FlounderFramework {
 		);
 		TextBuilder.DEFAULT_TYPE = FlounderFonts.FFF_FORWARD;
 
-		new Chunk(new Vector2f());
-		System.exit(0);
+	//	new Chunk(new Vector2f());
+	//	System.exit(0);
 	}
 
 	protected static void closeConfigs() {
