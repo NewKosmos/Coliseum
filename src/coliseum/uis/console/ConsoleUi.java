@@ -111,7 +111,7 @@ public class ConsoleUi extends GuiComponent {
 			if (cursorGrabbed) {
 				consoleSize.x -= FlounderMouse.getDeltaX() * FlounderDisplay.getAspectRatio() * (1.0f / FlounderFramework.getDelta());
 				consoleSize.y -= FlounderMouse.getDeltaY() * (1.0f / FlounderFramework.getDelta());
-				consoleSize.x = Maths.clamp(consoleSize.x, 3.0f * TOP_BUTTON_SIZE, Float.POSITIVE_INFINITY);
+				consoleSize.x = Maths.clamp(consoleSize.x, 4.0f * TOP_BUTTON_SIZE, Float.POSITIVE_INFINITY);
 				consoleSize.y = Maths.clamp(consoleSize.y, TOP_BAR_HEIGHT, Float.POSITIVE_INFINITY);
 				cursorGrabbed = true;
 			}
@@ -119,26 +119,26 @@ public class ConsoleUi extends GuiComponent {
 			cursorGrabbed = false;
 		}
 
-		textureTopBar.setPosition((consolePosition.x) + (consoleSize.x / 2.0f), consolePosition.y, consoleSize.x, TOP_BAR_HEIGHT);
+		textureTopBar.setPosition(consolePosition.x + (consoleSize.x / 2.0f), consolePosition.y, consoleSize.x, TOP_BAR_HEIGHT);
 		textureTopBar.update();
 
-		textureBody.setPosition((consolePosition.x) + (consoleSize.x / 2.0f), consolePosition.y + ((TOP_BAR_HEIGHT + consoleSize.y) / 2.0f), consoleSize.x, consoleSize.y);
+		textureBody.setPosition(consolePosition.x + (consoleSize.x / 2.0f), consolePosition.y + ((TOP_BAR_HEIGHT + consoleSize.y) / 2.0f), consoleSize.x, consoleSize.y);
 		textureBody.update();
 
-		textureInput.setPosition((consolePosition.x) + (consoleSize.x / 2.0f), consolePosition.y + consoleSize.y - (INPUT_AREA_HEIGHT / 5.0f), consoleSize.x, INPUT_AREA_HEIGHT);
+		textureInput.setPosition(consolePosition.x + (consoleSize.x / 2.0f), consolePosition.y + consoleSize.y, consoleSize.x, INPUT_AREA_HEIGHT);
 		textureInput.update();
 
-		textureClose.setPosition((consolePosition.x) + (TOP_BUTTON_SIZE / 2.0f) + ((TOP_BAR_HEIGHT - TOP_BUTTON_SIZE) / 2.0f), consolePosition.y, TOP_BUTTON_SIZE, TOP_BUTTON_SIZE);
+		textureClose.setPosition(consolePosition.x + (TOP_BUTTON_SIZE / 2.0f) + ((TOP_BAR_HEIGHT - TOP_BUTTON_SIZE) / 2.0f), consolePosition.y, TOP_BUTTON_SIZE, TOP_BUTTON_SIZE);
 		textureClose.update();
 
-		textureLock.setPosition((consolePosition.x) + ((3.0f * TOP_BUTTON_SIZE) / 2.0f) + (TOP_BAR_HEIGHT - TOP_BUTTON_SIZE), consolePosition.y, TOP_BUTTON_SIZE, TOP_BUTTON_SIZE);
+		textureLock.setPosition(consolePosition.x + ((3.0f * TOP_BUTTON_SIZE) / 2.0f) + (TOP_BAR_HEIGHT - TOP_BUTTON_SIZE), consolePosition.y, TOP_BUTTON_SIZE, TOP_BUTTON_SIZE);
 		textureLock.update();
 
 		consoleInput.setRelativeX(consolePosition.x);
-		consoleInput.setRelativeY(consolePosition.y + consoleSize.y - (INPUT_AREA_HEIGHT / 5.0f));
+		consoleInput.setRelativeY(consolePosition.y + consoleSize.y);
 
 		consoleText.setRelativeX(consolePosition.x);
-		consoleText.setRelativeY(consolePosition.y + TOP_BAR_HEIGHT);
+		consoleText.setRelativeY(consolePosition.y + (TOP_BAR_HEIGHT / 2.0f));
 
 		consoleText.show(!windowClosed);
 		consoleInput.show(!windowClosed);
@@ -151,8 +151,8 @@ public class ConsoleUi extends GuiComponent {
 		guiTextures.add(textureTopBar);
 
 		if (!windowClosed) {
-			guiTextures.add(textureBody);
 			guiTextures.add(textureInput);
+			guiTextures.add(textureBody);
 		}
 
 		guiTextures.add(textureClose);

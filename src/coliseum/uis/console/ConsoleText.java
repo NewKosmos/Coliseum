@@ -26,7 +26,7 @@ public class ConsoleText extends GuiComponent {
 	public void addText(String string, Colour colour) {
 		Text text = Text.newText(" > " + string).textAlign(GuiAlign.LEFT).setFontSize(0.8f).setFont(FlounderFonts.SEGO_UI).create();
 		text.setColour(colour);
-		addText(text, 0.01f, 0.01f + (texts.size() * 0.03f), 1.0f);
+		addText(text, 0.01f, 0.02f + (texts.size() * 0.03f), 1.0f);
 		texts.add(text);
 
 		if (string.contains("/") && string.contains(" ")) {

@@ -29,7 +29,7 @@ public class ConsoleInput extends GuiComponent {
 
 		this.currentInput = Text.newText(START_STRING).textAlign(GuiAlign.LEFT).setFontSize(0.875f).setFont(FlounderFonts.SEGO_UI).create();
 		this.currentInput.setColour(0.5f, 0.5f, 0.5f);
-		addText(currentInput, 0.01f, 0.0f, 1.0f);
+		addText(currentInput, 0.01f, -0.001f, 1.0f);
 	}
 
 	@Override
