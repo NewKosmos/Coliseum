@@ -1,6 +1,7 @@
 package coliseum.uis;
 
 import coliseum.world.*;
+import flounder.devices.*;
 import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.maths.*;
@@ -11,53 +12,51 @@ import flounder.textures.*;
 import java.util.*;
 
 public class ChunkTesting extends GuiComponent {
-	private Chunk chunk;
-	private List<Pair<GuiTexture, Tile>> textures;
-
-	private float minX, maxX, minY, maxY;
+	private Map<Chunk, List<Pair<GuiTexture, Tile>>> chunks;
 
 	public ChunkTesting() {
-		this.chunk = new Chunk(new Vector2f());
-		this.textures = new ArrayList<>();
+		this.chunks = new HashMap<>();
 
-		for (Tile tile : chunk.getTiles()) {
-			GuiTexture texture = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "hexagon.png")).create());
-			textures.add(new Pair<>(texture, tile));
+		for (int i = 0; i < 4; i ++) {
+			for (int j = 0; j < 3; j ++) {
+				float iOff = (j % 2 == 0) ? 0.5f : 0.0f;
+				float x = (i + iOff) * (Chunk.CHUNK_RADIUS - 0.5f) * Tile.SIDE_LENGTH * Tile.SIDE_COUNT;
+				float y = j * (Chunk.CHUNK_RADIUS - 0.5f) * Tile.SIDE_LENGTH * Tile.SIDE_COUNT;
+				Chunk chunk = new Chunk(new Vector2f(x, y));
+				List<Pair<GuiTexture, Tile>> textures = new ArrayList<>();
 
-			if (tile.getPosition().x < minX) {
-				minX = tile.getPosition().x;
-			} else if (tile.getPosition().x > maxX) {
-				maxX = tile.getPosition().x;
-			}
+				for (Tile tile : chunk.getTiles()) {
+					GuiTexture texture = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "hexagon.png")).create());
+					textures.add(new Pair<>(texture, tile));
+				}
 
-			if (tile.getPosition().y < minY) {
-				minY = tile.getPosition().y;
-			} else if (tile.getPosition().y > maxY) {
-				maxY = tile.getPosition().y;
+				textures.get(0).getFirst().setColourOffset(new Colour(-0.2f, -0.1f, -0.1f));
+				chunks.put(chunk, textures);
 			}
 		}
-
-		textures.get(0).getFirst().setColourOffset(new Colour(0.2f, 0.1f, 0.1f));
 	}
 
 	@Override
 	protected void updateSelf() {
-		for (Pair<GuiTexture, Tile> pair : textures) {
-			float x = pair.getSecond().getPosition().x + (maxX - minX);
-			float y = pair.getSecond().getPosition().y + (maxY - minY);
+		for (Chunk chunk : chunks.keySet()) {
+			for (Pair<GuiTexture, Tile> pair : chunks.get(chunk)) {
+				float x = pair.getSecond().getPosition().x + (0.1f * FlounderDisplay.getAspectRatio());
+				float y = pair.getSecond().getPosition().y + 0.1f;
+				float t = 2.0f * Tile.SIDE_LENGTH;
 
-			float w = 0.1f;
-			float h = 0.1f;
-
-			pair.getFirst().setPosition(x, y, w, h);
-			pair.getFirst().update();
+				pair.getFirst().setColourOffset(new Colour(-x, (pair.equals(chunks.get(chunk).get(0))) ? -0.75f : -0.35f, -y));
+				pair.getFirst().setPosition(x, y, t, t);
+				pair.getFirst().update();
+			}
 		}
 	}
 
 	@Override
 	protected void getGuiTextures(List<GuiTexture> guiTextures) {
-		for (Pair<GuiTexture, Tile> pair : textures) {
-			guiTextures.add(pair.getFirst());
+		for (Chunk chunk : chunks.keySet()) {
+			for (Pair<GuiTexture, Tile> pair : chunks.get(chunk)) {
+				guiTextures.add(pair.getFirst());
+			}
 		}
 	}
 }
