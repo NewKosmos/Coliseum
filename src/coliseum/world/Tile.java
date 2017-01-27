@@ -3,8 +3,7 @@ package coliseum.world;
 import flounder.maths.vectors.*;
 
 public class Tile {
-	public static final int SIDE_COUNT = 6; // The number of sides for each figure (hexagon).
-	public static final float SIDE_LENGTH = 0.015f; //  Each tile can be broken into equilateral triangles with sides of length.
+	public static final float SIDE_LENGTH = 2.0f; //  Each tile can be broken into equilateral triangles with sides of length. (0.015f)
 
 	private Chunk parent;
 	private Vector2f position;

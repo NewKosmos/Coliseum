@@ -20,8 +20,8 @@ public class ChunkTesting extends GuiComponent {
 		for (int i = 0; i < 4; i ++) {
 			for (int j = 0; j < 3; j ++) {
 				float iOff = (j % 2 == 0) ? 0.5f : 0.0f;
-				float x = (i + iOff) * (Chunk.CHUNK_RADIUS - 0.5f) * Tile.SIDE_LENGTH * Tile.SIDE_COUNT;
-				float y = j * (Chunk.CHUNK_RADIUS - 0.5f) * Tile.SIDE_LENGTH * Tile.SIDE_COUNT;
+				float x = (i + iOff) * (Chunk.CHUNK_RADIUS - 0.5f) * Tile.SIDE_LENGTH * 5.5f;
+				float y = j * (Chunk.CHUNK_RADIUS - 0.5f) * Tile.SIDE_LENGTH * 1.5f;
 				Chunk chunk = new Chunk(new Vector2f(x, y));
 				List<Pair<GuiTexture, Tile>> textures = new ArrayList<>();
 
@@ -30,7 +30,6 @@ public class ChunkTesting extends GuiComponent {
 					textures.add(new Pair<>(texture, tile));
 				}
 
-				textures.get(0).getFirst().setColourOffset(new Colour(-0.2f, -0.1f, -0.1f));
 				chunks.put(chunk, textures);
 			}
 		}

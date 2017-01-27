@@ -5,9 +5,9 @@ import flounder.maths.vectors.*;
 import java.util.*;
 
 public class Chunk {
-	private static final float[][] GENERATE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
+	public static final float[][] GENERATE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
 
-	public static final int CHUNK_RADIUS = 4; // The amount of tiles that make up the radius.
+	public static final int CHUNK_RADIUS = 6; // The amount of tiles that make up the radius.
 
 	private Vector2f position;
 	private List<Tile> tiles;
@@ -15,6 +15,8 @@ public class Chunk {
 	public Chunk(Vector2f position) {
 		this.position = position;
 		this.tiles = new ArrayList<>();
+		System.out.println("");
+		System.out.println("Chunk [" + position.x + ", " + position.y + "]");
 		generate();
 	}
 
@@ -27,7 +29,7 @@ public class Chunk {
 
 			generateTile(r, g, b);
 
-			for (int j = 0; j < Tile.SIDE_COUNT; j++) {
+			for (int j = 0; j < 6; j++) {
 				if (j == 5) {
 					shapesOnEdge = i - 1;
 				}

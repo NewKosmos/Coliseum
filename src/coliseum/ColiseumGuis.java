@@ -17,10 +17,10 @@ public class ColiseumGuis extends IGuiMaster {
 
 	@Override
 	public void init() {
-		this.consoleUi = new ConsoleUi();
-		this.chunkTesting  = new ChunkTesting();
+	//	this.consoleUi = new ConsoleUi();
+	//	this.chunkTesting  = new ChunkTesting();
 	//	FlounderGuis.addComponent(consoleUi, 0.0f, 0.0f, 1.0f, 1.0f);
-		FlounderGuis.addComponent(chunkTesting, 0.0f, 0.0f, 1.0f, 1.0f);
+	//	FlounderGuis.addComponent(chunkTesting, 0.0f, 0.0f, 1.0f, 1.0f);
 	}
 
 	@Override

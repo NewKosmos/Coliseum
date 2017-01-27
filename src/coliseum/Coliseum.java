@@ -1,5 +1,6 @@
 package coliseum;
 
+import coliseum.camera.*;
 import coliseum.world.*;
 import flounder.devices.*;
 import flounder.fonts.*;
@@ -18,7 +19,7 @@ public class Coliseum extends FlounderFramework {
 	public static Config configMain;
 
 	public Coliseum() {
-		super("Coliseum", -1, new ColiseumInterface(), new ColiseumRenderer(), new ColiseumGuis()); // , new ColiseumMusic()
+		super("Coliseum", -1, new ColiseumInterface(), new ColiseumRenderer(), new CameraIsographic(), new ColiseumGuis()); // , new ColiseumMusic()
 
 		configMain = new Config(new MyFile(FlounderFramework.getRoamingFolder(), "configs", "settings.conf"));
 
