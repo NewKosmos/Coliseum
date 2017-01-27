@@ -3,6 +3,7 @@ package coliseum.world;
 import coliseum.world.terrain.*;
 import flounder.entities.*;
 import flounder.logger.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
@@ -62,13 +63,19 @@ public class Chunk {
 	}
 
 	private void generateTile(Vector2f position) {
-		float height = tiles.size() == 0 ? 2.0f : 0.0f; // (int) Maths.logRandom(1.0, 3.0); // tile.equals(chunk.getTiles().get(0))
+		// tiles.size() == 0 ? 2.0f : 0.0f
+		//for (int h = 0; h < height; h++) {
+		//	float y = (float) (2.0 * Math.sqrt(2.0)) * (h + 1);
+		//	tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, y, position.y), new Vector3f(), this));
+		//}
 
-		if (height >= 1.0f) {
-			for (int h = 0; h < height; h++) {
-				float y = (float) (2.0 * Math.sqrt(2.0)) * (h + 1);
-				tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, y, position.y), new Vector3f(), this));
-			}
+		float random = (float) Math.random() * 2.0f;
+
+		if (random >= 0.80f) {
+			tiles.add(new TerrainWater(FlounderEntities.getEntities(), new Vector3f(position.x, -0.175f, position.y), new Vector3f(), this));
+		} else if (random >= 0.65f) {
+			tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, 0.0f, position.y), new Vector3f(), this));
+			tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, random, position.y), new Vector3f(), this));
 		} else {
 			tiles.add(new TerrainGrass(FlounderEntities.getEntities(), new Vector3f(position.x, 0.0f, position.y), new Vector3f(), this));
 		}
