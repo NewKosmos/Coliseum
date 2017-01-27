@@ -1,6 +1,11 @@
 package coliseum.world;
 
+import coliseum.world.terrain.*;
+import flounder.entities.*;
+import flounder.logger.*;
 import flounder.maths.vectors.*;
+import flounder.physics.*;
+import flounder.physics.bounding.*;
 
 import java.util.*;
 
@@ -10,14 +15,25 @@ import java.util.*;
 public class Chunk {
 	public static final float[][] GENERATE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
 
+	public static final int SIDE_COUNT = 6; // The number of sides for each figure (hexagon).
+	public static final float SIDE_LENGTH = 2.0f; //  Each tile can be broken into equilateral triangles with sides of length. (0.015f)
 	public static final int CHUNK_RADIUS = 6; // The amount of tiles that make up the radius.
 
 	private Vector2f position;
-	private List<Tile> tiles;
+	private List<Entity> tiles;
+	private boolean tilesChanged;
+	private AABB aabb;
+
+	private float visibility;
 
 	public Chunk(Vector2f position) {
 		this.position = position;
 		this.tiles = new ArrayList<>();
+		this.tilesChanged = true;
+		this.aabb = new AABB();
+
+		this.visibility = 0.0f;
+
 		generate();
 	}
 
@@ -27,10 +43,10 @@ public class Chunk {
 			float r = 0;
 			float g = -i;
 			float b = i;
-			tiles.add(new Tile(this, Vector2f.add(position, calculateXY(new Vector3f(r, g, b), Tile.SIDE_LENGTH, null), null)));
+			generateTile(Vector2f.add(position, calculateXY(new Vector3f(r, g, b), SIDE_LENGTH, null), null));
 
-			for (int j = 0; j < Tile.SIDE_COUNT; j++) {
-				if (j == Tile.SIDE_COUNT - 1) {
+			for (int j = 0; j < SIDE_COUNT; j++) {
+				if (j == SIDE_COUNT - 1) {
 					shapesOnEdge = i - 1;
 				}
 
@@ -39,8 +55,55 @@ public class Chunk {
 					r = r + GENERATE_DELTAS[j][0];
 					g = g + GENERATE_DELTAS[j][1];
 					b = b + GENERATE_DELTAS[j][2];
-					tiles.add(new Tile(this, Vector2f.add(position, calculateXY(new Vector3f(r, g, b), Tile.SIDE_LENGTH, null), null)));
+					generateTile(Vector2f.add(position, calculateXY(new Vector3f(r, g, b), SIDE_LENGTH, null), null));
 				}
+			}
+		}
+	}
+
+	private void generateTile(Vector2f position) {
+		float height = tiles.size() == 0 ? 2.0f : 0.0f; // (int) Maths.logRandom(1.0, 3.0); // tile.equals(chunk.getTiles().get(0))
+
+		if (height >= 1.0f) {
+			for (int h = 0; h < height; h++) {
+				float y = (float) (2.0 * Math.sqrt(2.0)) * (h + 1);
+				tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, y, position.y), new Vector3f(), this));
+			}
+		} else {
+			tiles.add(new TerrainGrass(FlounderEntities.getEntities(), new Vector3f(position.x, 0.0f, position.y), new Vector3f(), this));
+		}
+	}
+
+	public void update(Vector3f playerPosition) {
+		if (tilesChanged) {
+			recalculate();
+			tilesChanged = false;
+		}
+
+		FlounderBounding.addShapeRender(aabb);
+	}
+
+	public void recalculate() {
+		for (Entity tile : tiles) {
+			tile.update();
+			AABB aabb = (AABB) tile.getBounding();
+
+			if (aabb.getMinExtents().x < this.aabb.getMinExtents().x) {
+				this.aabb.getMinExtents().x = aabb.getMinExtents().x;
+			} else if (aabb.getMaxExtents().x > this.aabb.getMaxExtents().x) {
+				this.aabb.getMaxExtents().x = aabb.getMaxExtents().x;
+			}
+
+			if (aabb.getMinExtents().y < this.aabb.getMinExtents().y) {
+				this.aabb.getMinExtents().y = aabb.getMinExtents().y;
+			} else if (aabb.getMaxExtents().y > this.aabb.getMaxExtents().y) {
+				this.aabb.getMaxExtents().y = aabb.getMaxExtents().y;
+			}
+
+			if (aabb.getMinExtents().z < this.aabb.getMinExtents().z) {
+				this.aabb.getMinExtents().z = aabb.getMinExtents().z;
+			} else if (aabb.getMaxExtents().z > this.aabb.getMaxExtents().z) {
+				this.aabb.getMaxExtents().z = aabb.getMaxExtents().z;
 			}
 		}
 	}
@@ -66,7 +129,16 @@ public class Chunk {
 		return destination;
 	}
 
-	public List<Tile> getTiles() {
+	public List<Entity> getTiles() {
 		return tiles;
+	}
+
+	public void addTile(Entity tile) {
+		tiles.add(tile);
+		tilesChanged = true;
+	}
+
+	public float getVisibility() {
+		return visibility;
 	}
 }

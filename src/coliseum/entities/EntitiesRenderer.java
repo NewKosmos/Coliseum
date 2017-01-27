@@ -8,7 +8,6 @@ import flounder.devices.*;
 import flounder.entities.*;
 import flounder.helpers.*;
 import flounder.maths.vectors.*;
-import flounder.models.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
 import flounder.resources.*;

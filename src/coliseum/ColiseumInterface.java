@@ -2,7 +2,6 @@ package coliseum;
 
 import coliseum.world.*;
 import flounder.devices.*;
-import flounder.entities.*;
 import flounder.events.*;
 import flounder.helpers.*;
 import flounder.inputs.*;

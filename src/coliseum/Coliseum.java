@@ -1,11 +1,9 @@
 package coliseum;
 
 import coliseum.camera.*;
-import coliseum.world.*;
 import flounder.devices.*;
 import flounder.fonts.*;
 import flounder.framework.*;
-import flounder.maths.vectors.*;
 import flounder.parsing.*;
 import flounder.resources.*;
 
@@ -34,8 +32,8 @@ public class Coliseum extends FlounderFramework {
 		);
 		TextBuilder.DEFAULT_TYPE = FlounderFonts.FFF_FORWARD;
 
-	//	new Chunk(new Vector2f());
-	//	System.exit(0);
+		//	new Chunk(new Vector2f());
+		//	System.exit(0);
 	}
 
 	protected static void closeConfigs() {

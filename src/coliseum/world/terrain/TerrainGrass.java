@@ -10,7 +10,7 @@ import flounder.space.*;
 import flounder.textures.*;
 
 public class TerrainGrass extends Entity {
-	public TerrainGrass(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation, Tile tile) {
+	public TerrainGrass(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation, Chunk chunk) {
 		super(structure, position, rotation);
 
 		Model model = Model.newModel(new MyFile(MyFile.RES_FOLDER, "terrains", "grass", "grass.obj")).create();
@@ -19,6 +19,6 @@ public class TerrainGrass extends Entity {
 		new ComponentModel(this, model, 2.0f, texture, 0);
 		new ComponentCollider(this);
 		new ComponentCollision(this);
-		new ComponentTerrain(this, tile);
+		new ComponentTerrain(this, chunk);
 	}
 }

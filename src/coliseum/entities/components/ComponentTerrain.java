@@ -9,21 +9,20 @@ import flounder.physics.*;
 public class ComponentTerrain extends IComponentEntity {
 	public static final int ID = EntityIDAssigner.getId();
 
-	private Tile tile;
+	private Chunk chunk;
 
-	public ComponentTerrain(Entity entity, Tile tile) {
+	public ComponentTerrain(Entity entity, Chunk chunk) {
 		super(entity, ID);
-		this.tile = tile;
+		this.chunk = chunk;
 	}
 
 	public ComponentTerrain(Entity entity, EntityTemplate template) {
 		super(entity, ID);
-		this.tile = null;
+		this.chunk = null;
 	}
 
 	@Override
 	public void update() {
-
 	}
 
 	@Override
@@ -33,6 +32,5 @@ public class ComponentTerrain extends IComponentEntity {
 
 	@Override
 	public void dispose() {
-
 	}
 }
