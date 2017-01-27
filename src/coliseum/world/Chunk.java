@@ -4,6 +4,9 @@ import flounder.maths.vectors.*;
 
 import java.util.*;
 
+/**
+ * A hexagonal chunk based off of the article: http://stackoverflow.com/questions/2459402/hexagonal-grid-coordinates-to-pixel-coordinates
+ */
 public class Chunk {
 	public static final float[][] GENERATE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
 
@@ -15,9 +18,8 @@ public class Chunk {
 	public Chunk(Vector2f position) {
 		this.position = position;
 		this.tiles = new ArrayList<>();
-		System.out.println("");
-		System.out.println("Chunk [" + position.x + ", " + position.y + "]");
 		generate();
+		// System.out.println("Chunk [" + position.x + ", " + position.y + "]");
 	}
 
 	private void generate() {
@@ -26,11 +28,10 @@ public class Chunk {
 			float r = 0;
 			float g = -i;
 			float b = i;
+			tiles.add(new Tile(this, Vector2f.add(position, calculateXY(new Vector3f(r, g, b), Tile.SIDE_LENGTH, null), null)));
 
-			generateTile(r, g, b);
-
-			for (int j = 0; j < 6; j++) {
-				if (j == 5) {
+			for (int j = 0; j < Tile.SIDE_COUNT; j++) {
+				if (j == Tile.SIDE_COUNT - 1) {
 					shapesOnEdge = i - 1;
 				}
 
@@ -39,25 +40,31 @@ public class Chunk {
 					r = r + GENERATE_DELTAS[j][0];
 					g = g + GENERATE_DELTAS[j][1];
 					b = b + GENERATE_DELTAS[j][2];
-					generateTile(r, g, b);
+					tiles.add(new Tile(this, Vector2f.add(position, calculateXY(new Vector3f(r, g, b), Tile.SIDE_LENGTH, null), null)));
 				}
 			}
 		}
 	}
 
-	/**
-	 * The "hexagonal" coordinates are represented as" (r,g,b)
-	 * @param r
-	 * @param g
-	 * @param b
-	 */
-	private void generateTile(float r, float g, float b) {
-		// http://stackoverflow.com/questions/2459402/hexagonal-grid-coordinates-to-pixel-coordinates
-		float y = (3.0f / 2.0f) * Tile.SIDE_LENGTH * b;
-		float x = (float) Math.sqrt(3.0f) * Tile.SIDE_LENGTH * ((b / 2.0f) + r);
-		Tile t = new Tile(this, Vector2f.add(position, new Vector2f(x, y), null));
-		System.out.println("[" + r + ", " + g + ", " + b + "]  |  " + x + ", " + y);
-		tiles.add(t);
+	public static Vector3f calculateRGB(Vector2f position, float length, Vector3f destination) {
+		if (destination == null) {
+			destination = new Vector3f();
+		}
+
+		destination.x = (((float) Math.sqrt(3.0f) / 3.0f) * position.x - (position.y / 3.0f)) / length;
+		destination.y = -(((float) Math.sqrt(3.0f) / 3.0f) * position.x + (position.y / 3.0f)) / length;
+		destination.z = (2.0f / 3.0f) * position.y / length;
+		return destination;
+	}
+
+	public static Vector2f calculateXY(Vector3f position, float length, Vector2f destination) {
+		if (destination == null) {
+			destination = new Vector2f();
+		}
+
+		destination.x = (float) Math.sqrt(3.0f) * length * ((position.z / 2.0f) + position.x);
+		destination.y = (3.0f / 2.0f) * length * position.z;
+		return destination;
 	}
 
 	public List<Tile> getTiles() {
