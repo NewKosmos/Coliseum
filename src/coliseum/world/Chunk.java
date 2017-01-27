@@ -19,7 +19,6 @@ public class Chunk {
 		this.position = position;
 		this.tiles = new ArrayList<>();
 		generate();
-		// System.out.println("Chunk [" + position.x + ", " + position.y + "]");
 	}
 
 	private void generate() {

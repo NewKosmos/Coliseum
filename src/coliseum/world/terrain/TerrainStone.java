@@ -1,6 +1,7 @@
 package coliseum.world.terrain;
 
 import coliseum.entities.components.*;
+import coliseum.world.*;
 import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
@@ -9,7 +10,7 @@ import flounder.space.*;
 import flounder.textures.*;
 
 public class TerrainStone extends Entity {
-	public TerrainStone(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+	public TerrainStone(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation, Tile tile) {
 		super(structure, position, rotation);
 
 		Model model = Model.newModel(new MyFile(MyFile.RES_FOLDER, "terrains", "stone", "stone.obj")).create();
@@ -18,5 +19,6 @@ public class TerrainStone extends Entity {
 		new ComponentModel(this, model, 2.0f, texture, 0);
 		new ComponentCollider(this);
 		new ComponentCollision(this);
+		new ComponentTerrain(this, tile);
 	}
 }

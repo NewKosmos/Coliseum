@@ -24,9 +24,9 @@ public class ColiseumRenderer extends IRendererMaster {
 	private GuiRenderer guiRenderer;
 	private FontRenderer fontRenderer;
 
-	private FBO multisamplingFBO;
-	private FBO nonsampledFBO;
+	private FBO rendererFBO;
 
+	private FilterFXAA filterFXAA;
 	private FilterTiltShift filterTiltShift;
 
 	public ColiseumRenderer() {
@@ -40,11 +40,9 @@ public class ColiseumRenderer extends IRendererMaster {
 		this.guiRenderer = new GuiRenderer();
 		this.fontRenderer = new FontRenderer();
 
-		this.multisamplingFBO = FBO.newFBO(1.0f).depthBuffer(DepthBufferType.TEXTURE).antialias(
-				Coliseum.configMain.getIntWithDefault("samples", 4, () -> multisamplingFBO.getSamples())
-		).create();
-		this.nonsampledFBO = FBO.newFBO(1.0f).depthBuffer(DepthBufferType.TEXTURE).create();
+		this.rendererFBO = FBO.newFBO(1.0f).depthBuffer(DepthBufferType.TEXTURE).create();
 
+		this.filterFXAA = new FilterFXAA();
 		this.filterTiltShift = new FilterTiltShift(0.75f, 1.1f, 0.004f, 3.0f);
 	}
 
@@ -68,20 +66,11 @@ public class ColiseumRenderer extends IRendererMaster {
 	}
 
 	private void bindRelevantFBO() {
-		if (FlounderDisplay.isAntialiasing()) {
-			multisamplingFBO.bindFrameBuffer();
-		} else {
-			nonsampledFBO.bindFrameBuffer();
-		}
+		rendererFBO.bindFrameBuffer();
 	}
 
 	private void unbindRelevantFBO() {
-		if (FlounderDisplay.isAntialiasing()) {
-			multisamplingFBO.unbindFrameBuffer();
-			multisamplingFBO.resolveFBO(nonsampledFBO);
-		} else {
-			nonsampledFBO.unbindFrameBuffer();
-		}
+		rendererFBO.unbindFrameBuffer();
 	}
 
 	private void renderScene(Vector4f clipPlane, Colour clearColour) {
@@ -94,7 +83,12 @@ public class ColiseumRenderer extends IRendererMaster {
 	}
 
 	private void renderPost(boolean isPaused, float blurFactor) {
-		FBO output = nonsampledFBO;
+		FBO output = rendererFBO;
+
+		if (FlounderDisplay.isAntialiasing()) {
+			filterFXAA.applyFilter(output.getColourTexture(0));
+			output = filterFXAA.fbo;
+		}
 
 		filterTiltShift.applyFilter(output.getColourTexture(0));
 		output = filterTiltShift.fbo;
@@ -113,9 +107,9 @@ public class ColiseumRenderer extends IRendererMaster {
 		guiRenderer.dispose();
 		fontRenderer.dispose();
 
-		multisamplingFBO.delete();
-		nonsampledFBO.delete();
+		rendererFBO.delete();
 
+		filterFXAA.dispose();
 		filterTiltShift.dispose();
 	}
 
