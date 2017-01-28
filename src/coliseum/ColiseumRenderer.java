@@ -1,8 +1,8 @@
 package coliseum;
 
 import coliseum.entities.*;
+import coliseum.shadows.*;
 import coliseum.skybox.*;
-import coliseum.world.*;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.fbos.*;
@@ -14,6 +14,7 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
 import flounder.post.filters.*;
+import flounder.post.piplines.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
 
@@ -22,6 +23,7 @@ public class ColiseumRenderer extends IRendererMaster {
 	private static final Colour CLEAR_COLOUR = new Colour(0.0f, 0.0f, 0.0f);
 
 	private SkyboxRenderer skyboxRenderer;
+	private ShadowRenderer shadowRenderer;
 	private EntitiesRenderer entitiesRenderer;
 	private BoundingRenderer boundingRenderer;
 	private GuiRenderer guiRenderer;
@@ -30,6 +32,7 @@ public class ColiseumRenderer extends IRendererMaster {
 	private FBO rendererFBO;
 
 	private FilterFXAA filterFXAA;
+	private FilterCRT filterCRT;
 	private FilterTiltShift filterTiltShift;
 
 	public ColiseumRenderer() {
@@ -39,6 +42,7 @@ public class ColiseumRenderer extends IRendererMaster {
 	@Override
 	public void init() {
 		this.skyboxRenderer = new SkyboxRenderer();
+		this.shadowRenderer = new ShadowRenderer();
 		this.entitiesRenderer = new EntitiesRenderer();
 		this.boundingRenderer = new BoundingRenderer();
 		this.guiRenderer = new GuiRenderer();
@@ -47,11 +51,15 @@ public class ColiseumRenderer extends IRendererMaster {
 		this.rendererFBO = FBO.newFBO(1.0f).depthBuffer(DepthBufferType.TEXTURE).create();
 
 		this.filterFXAA = new FilterFXAA();
+		this.filterCRT = new FilterCRT(0.175f, 0.175f, 920.0f);
 		this.filterTiltShift = new FilterTiltShift(0.75f, 1.1f, 0.004f, 3.0f);
 	}
 
 	@Override
 	public void render() {
+		/* Shadow rendering. */
+		shadowRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
+
 		/* Binds the relevant FBO. */
 		bindRelevantFBO();
 
@@ -77,6 +85,10 @@ public class ColiseumRenderer extends IRendererMaster {
 		rendererFBO.unbindFrameBuffer();
 	}
 
+	public ShadowRenderer getShadowRenderer() {
+		return shadowRenderer;
+	}
+
 	private void renderScene(Vector4f clipPlane, Colour clearColour) {
 		/* Clear and update. */
 		ICamera camera = FlounderCamera.getCamera();
@@ -90,13 +102,16 @@ public class ColiseumRenderer extends IRendererMaster {
 	private void renderPost(boolean isPaused, float blurFactor) {
 		FBO output = rendererFBO;
 
-		//	if (FlounderDisplay.isAntialiasing()) {
-		//		filterFXAA.applyFilter(output.getColourTexture(0));
-		//		output = filterFXAA.fbo;
-		//	}
+		filterTiltShift.applyFilter(output.getColourTexture(0));
+		output = filterTiltShift.fbo;
 
-		//	filterTiltShift.applyFilter(output.getColourTexture(0));
-		//	output = filterTiltShift.fbo;
+		//	filterCRT.applyFilter(output.getColourTexture(0));
+		//	output = filterCRT.fbo;
+
+		if (FlounderDisplay.isAntialiasing()) {
+			filterFXAA.applyFilter(output.getColourTexture(0));
+			output = filterFXAA.fbo;
+		}
 
 		output.blitToScreen();
 	}
@@ -108,6 +123,7 @@ public class ColiseumRenderer extends IRendererMaster {
 	@Override
 	public void dispose() {
 		skyboxRenderer.dispose();
+		shadowRenderer.dispose();
 		entitiesRenderer.dispose();
 		boundingRenderer.dispose();
 		guiRenderer.dispose();
@@ -116,6 +132,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		rendererFBO.delete();
 
 		filterFXAA.dispose();
+		filterCRT.dispose();
 		filterTiltShift.dispose();
 	}
 

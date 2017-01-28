@@ -2,6 +2,7 @@ package coliseum.world;
 
 import coliseum.world.terrain.*;
 import flounder.entities.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
@@ -9,15 +10,17 @@ import flounder.physics.bounding.*;
 import java.util.*;
 
 /**
- * A hexagonal chunk based off of the article: http://stackoverflow.com/questions/2459402/hexagonal-grid-coordinates-to-pixel-coordinates
+ * A hexagonal chunk.
+ * http://www.redblobgames.com/grids/hexagons/#range
+ * http://stackoverflow.com/questions/2459402/hexagonal-grid-coordinates-to-pixel-coordinates
  */
 public class Chunk {
 	public static final float[][] GENERATE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
 
 	public static final int HEXAGON_SIDE_COUNT = 6; // The number of sides for each figure (hexagon).
 	public static final float HEXAGON_SIDE_LENGTH = 2.0f; //  Each tile can be broken into equilateral triangles with sides of length.
-	public static final float HEXAGON_HEIGHT = (float) Math.sqrt(2.0) * 2.0f; // The height for the hexagon figure.
-	public static final int CHUNK_RADIUS = 4; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
+
+	public static final int CHUNK_RADIUS = 7; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
 
 	private Vector2f position;
 	private List<Entity> tiles;
@@ -62,10 +65,23 @@ public class Chunk {
 	}
 
 	private void generateTile(Vector2f position) {
-		if (tiles.size() == 0) {
-			tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, 0.0f, position.y), new Vector3f(), this));
-		} else {
-			tiles.add(new TerrainGrass(FlounderEntities.getEntities(), new Vector3f(position.x, 0.0f, position.y), new Vector3f(), this));
+		//if (tiles.size() == 0) {
+		//	tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, 0.0f, position.y), new Vector3f(), this));
+		//} else {
+		//	tiles.add(new TerrainWater(FlounderEntities.getEntities(), new Vector3f(position.x, 0.0f, position.y), new Vector3f(), this));
+		//}
+
+		float chance = Maths.randomInRange(0.0f, 4.0f);
+		float height = Math.random() > 0.9 ? (2.0f * (float) Math.sqrt(2.0f)) : 0.0f;
+
+		if (chance > 3.0f) {
+			tiles.add(new TerrainWater(FlounderEntities.getEntities(), new Vector3f(position.x, height, position.y), new Vector3f(), this));
+		} else if (chance > 2.0f) {
+			tiles.add(new TerrainSand(FlounderEntities.getEntities(), new Vector3f(position.x, height, position.y), new Vector3f(), this));
+		} else if (chance > 1.0f) {
+			tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, height, position.y), new Vector3f(), this));
+		} else if (chance > 0.0f) {
+			tiles.add(new TerrainGrass(FlounderEntities.getEntities(), new Vector3f(position.x, height, position.y), new Vector3f(), this));
 		}
 	}
 

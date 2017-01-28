@@ -1,12 +1,15 @@
 package coliseum.entities;
 
+import coliseum.*;
 import coliseum.entities.components.*;
+import coliseum.shadows.*;
 import coliseum.world.*;
 import flounder.animation.*;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.entities.*;
 import flounder.helpers.*;
+import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
@@ -75,6 +78,10 @@ public class EntitiesRenderer extends IRenderer {
 			shader.getUniformFloat("fogGradient").loadFloat(2.0f);
 		}
 
+		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.SHADOW_MAP_SIZE);
+		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
+		shader.getUniformFloat("shadowDistance").loadFloat(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
+
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();
 		OpenGlUtils.enableAlphaBlending();
@@ -110,7 +117,10 @@ public class EntitiesRenderer extends IRenderer {
 			shader.getUniformFloat("darkness").loadFloat(0.0f);
 		}
 
+		OpenGlUtils.bindTexture(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
+
 		shader.getUniformMat4("modelMatrix").loadMat4(componentModel.getModelMatrix());
+		shader.getUniformBool("animated").loadBoolean(false);
 
 		glDrawElements(GL_TRIANGLES, componentModel.getModel().getVaoLength(), GL_UNSIGNED_INT, 0);
 		OpenGlUtils.unbindVAO(0, 1, 2, 3);

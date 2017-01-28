@@ -1,5 +1,6 @@
 package coliseum;
 
+import coliseum.uis.*;
 import coliseum.uis.console.*;
 import flounder.devices.*;
 import flounder.fonts.*;
@@ -7,6 +8,8 @@ import flounder.guis.*;
 import flounder.physics.bounding.*;
 
 public class ColiseumGuis extends IGuiMaster {
+	private MasterOverlay masterOverlay;
+
 	private ConsoleUi consoleUi;
 
 	public ColiseumGuis() {
@@ -15,6 +18,9 @@ public class ColiseumGuis extends IGuiMaster {
 
 	@Override
 	public void init() {
+		this.masterOverlay = new MasterOverlay();
+		FlounderGuis.addComponent(masterOverlay, 0.0f, 0.0f, 1.0f, 1.0f);
+
 		//	this.consoleUi = new ConsoleUi();
 		//	FlounderGuis.addComponent(consoleUi, 0.0f, 0.0f, 1.0f, 1.0f);
 	}

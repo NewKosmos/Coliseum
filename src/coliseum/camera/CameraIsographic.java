@@ -257,8 +257,8 @@ public class CameraIsographic extends ICamera {
 	}
 
 	private void updateProjectionMatrix() {
-		//Matrix4f.perspectiveMatrix(FIELD_OF_VIEW, FlounderDisplay.getAspectRatio(), NEAR_PLANE, FAR_PLANE, projectionMatrix);
-		Matrix4f.orthographicMatrix(-FlounderDisplay.getAspectRatio(), FlounderDisplay.getAspectRatio(), -1.0f, 1.0f, NEAR_PLANE, FAR_PLANE, projectionMatrix);
+		Matrix4f.perspectiveMatrix(FIELD_OF_VIEW, FlounderDisplay.getAspectRatio(), NEAR_PLANE, FAR_PLANE, projectionMatrix);
+		//	Matrix4f.orthographicMatrix(-FlounderDisplay.getAspectRatio(), FlounderDisplay.getAspectRatio(), -1.0f, 1.0f, NEAR_PLANE, FAR_PLANE, projectionMatrix);
 	}
 
 	@Override

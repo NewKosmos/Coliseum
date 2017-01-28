@@ -24,8 +24,8 @@ public class Coliseum extends FlounderFramework {
 		FlounderDisplay.setup(configMain.getIntWithDefault("width", 1080, FlounderDisplay::getWindowWidth),
 				configMain.getIntWithDefault("height", 720, FlounderDisplay::getWindowHeight),
 				"Coliseum", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon.png")},
-				configMain.getBooleanWithDefault("vsync", true, FlounderDisplay::isVSync),
-				configMain.getBooleanWithDefault("antialias", false, FlounderDisplay::isAntialiasing),
+				configMain.getBooleanWithDefault("vsync", false, FlounderDisplay::isVSync),
+				configMain.getBooleanWithDefault("antialias", true, FlounderDisplay::isAntialiasing),
 				configMain.getIntWithDefault("samples", 0, FlounderDisplay::getSamples),
 				configMain.getBooleanWithDefault("fullscreen", false, FlounderDisplay::isFullscreen),
 				false

@@ -160,10 +160,6 @@ public class ComponentModel extends IComponentEntity {
 		return new Vector2f((float) row / (float) texture.getNumberOfRows(), (float) column / (float) texture.getNumberOfRows());
 	}
 
-	public void setTextureIndex(int index) {
-		this.textureIndex = index;
-	}
-
 	@Override
 	public IBounding getBounding() {
 		return null;

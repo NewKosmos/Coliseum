@@ -46,9 +46,9 @@ public class SkyboxRenderer extends IRenderer {
 		shader.getUniformMat4("projectionMatrix").loadMat4(camera.getProjectionMatrix());
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
 
-		shader.getUniformVec4("colour1").loadVec4(ColiseumWorld.getSkyColour());
+		shader.getUniformVec4("colour1").loadVec4(ColiseumWorld.getSkyCycle().getSkyColour());
 		shader.getUniformVec4("colour2").loadVec4(1.0f, 1.0f, 1.0f, 1.0f);
-		shader.getUniformFloat("dayFactor").loadFloat(ColiseumWorld.getDayFactor());
+		shader.getUniformFloat("dayFactor").loadFloat(ColiseumWorld.getSkyCycle().getDayFactor());
 
 		OpenGlUtils.bindVAO(vao, 0);
 
