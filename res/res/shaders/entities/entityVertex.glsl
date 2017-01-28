@@ -53,7 +53,7 @@ void main(void) {
 
 	vec4 worldPosition = modelMatrix * totalLocalPos;
 	mat4 modelViewMatrix = viewMatrix * modelMatrix;
-	pass_positionRelativeToCam = modelViewMatrix * totalLocalPos;
+	pass_positionRelativeToCam = viewMatrix * worldPosition;
 
 	gl_ClipDistance[0] = dot(worldPosition, clipPlane);
 	gl_Position = projectionMatrix * pass_positionRelativeToCam;

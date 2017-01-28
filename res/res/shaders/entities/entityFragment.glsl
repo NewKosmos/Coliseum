@@ -76,15 +76,7 @@ void main(void) {
 	vec4 diffuseColour = texture(diffuseMap, pass_textureCoords);
 	vec3 unitNormal = normalize(pass_surfaceNormal);
 
-	float diffuseLight = max(dot(-lightDirection, unitNormal), 0.0) * lightBias.x + lightBias.y;
-
-	if (diffuseColour.a < 0.4){
-		out_colour = vec4(0.0);
-		discard;
-	}
-
-//	float s = shadow();
-//	out_colour = vec4(s,s,s,1.0);
+	float diffuseLight = 1.0; //max(dot(-lightDirection, unitNormal), 0.0) * lightBias.x + lightBias.y;
 
 	out_colour = vec4(diffuseColour.rgb * diffuseLight * shadow() * (-(darkness - 0.5) + 0.5), diffuseColour.a);
 	out_colour = mix(vec4(fogColour, 1.0), out_colour, visibility());

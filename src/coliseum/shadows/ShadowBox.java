@@ -43,9 +43,9 @@ public class ShadowBox {
 	 */
 	public boolean isInBox(Vector3f position, float radius) { // Unused
 		Vector4f entityPos = Matrix4f.transform(lightViewMatrix, new Vector4f(position.getX(), position.getY(), position.getZ(), 1f), null);
-		float closestX = (float) Maths.clamp(entityPos.x, minX, maxX);
-		float closestY = (float) Maths.clamp(entityPos.y, minY, maxY);
-		float closestZ = (float) Maths.clamp(entityPos.z, minZ, maxZ);
+		float closestX = Maths.clamp(entityPos.x, minX, maxX);
+		float closestY = Maths.clamp(entityPos.y, minY, maxY);
+		float closestZ = Maths.clamp(entityPos.z, minZ, maxZ);
 		Vector3f closestPoint = new Vector3f(closestX, closestY, closestZ);
 		Vector3f center = new Vector3f(entityPos.x, entityPos.y, entityPos.z);
 		float disSquared = Vector3f.subtract(center, closestPoint, null).lengthSquared();
@@ -124,8 +124,8 @@ public class ShadowBox {
 	 */
 	private Matrix4f calculateCameraRotationMatrix(ICamera camera) {
 		Matrix4f rotation = new Matrix4f();
-		Matrix4f.rotate(rotation, new Vector3f(0.0f, 1.0f, 0.0f), degreesToRadians(camera.getRotation().y), rotation);
-		Matrix4f.rotate(rotation, new Vector3f(1.0f, 0.0f, 0.0f), degreesToRadians(-camera.getRotation().x), rotation);
+		Matrix4f.rotate(rotation, new Vector3f(0.0f, 1.0f, 0.0f), degreesToRadians(camera.getRotation().getY()), rotation);
+		Matrix4f.rotate(rotation, new Vector3f(1.0f, 0.0f, 0.0f), degreesToRadians(-camera.getRotation().getX()), rotation);
 		return rotation;
 	}
 

@@ -22,7 +22,7 @@ import static org.lwjgl.opengl.GL20.*;
 public class ShadowRenderer extends IRenderer {
 	private static final MyFile VERTEX_SHADER = new MyFile(Shader.SHADERS_LOC, "shadows", "shadowVertex.glsl");
 	private static final MyFile FRAGMENT_SHADER = new MyFile(Shader.SHADERS_LOC, "shadows", "shadowFragment.glsl");
-	public static final int SHADOW_MAP_SIZE = 4096;
+	public static final int SHADOW_MAP_SIZE = 4096 * 4;
 
 	private Shader shader;
 
@@ -50,18 +50,6 @@ public class ShadowRenderer extends IRenderer {
 
 		shadowFBO = FBO.newFBO(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).noColourBuffer().depthBuffer(DepthBufferType.TEXTURE).create();
 		shadowBox = new ShadowBox(lightViewMatrix);
-	}
-
-	/**
-	 * Create the offset for part of the conversion to shadow map space.
-	 *
-	 * @return The offset as a matrix.
-	 */
-	private static Matrix4f createOffset() {
-		Matrix4f offset = new Matrix4f();
-		Matrix4f.translate(offset, new Vector3f(0.5f, 0.5f, 0.5f), offset);
-		Matrix4f.scale(offset, new Vector3f(0.5f, 0.5f, 0.5f), offset);
-		return offset;
 	}
 
 	@Override
@@ -98,8 +86,8 @@ public class ShadowRenderer extends IRenderer {
 		updateLightViewMatrix(lightDirection, shadowBox.getCenter());
 		Matrix4f.multiply(projectionMatrix, lightViewMatrix, projectionViewMatrix);
 
-		shader.start();
 		shadowFBO.bindFrameBuffer();
+		shader.start();
 
 		OpenGlUtils.prepareNewRenderParse(0.0f, 0.0f, 0.0f);
 		OpenGlUtils.antialias(false);
@@ -116,10 +104,22 @@ public class ShadowRenderer extends IRenderer {
 	 */
 	private void updateOrthographicProjectionMatrix(float width, float height, float length) {
 		projectionMatrix.setIdentity();
-		projectionMatrix.m00 = 2.0f / width;
-		projectionMatrix.m11 = 2.0f / height;
-		projectionMatrix.m22 = -2.0f / length;
-		projectionMatrix.m33 = 1.0f;
+		projectionMatrix.m00 = 2f / width;
+		projectionMatrix.m11 = 2f / height;
+		projectionMatrix.m22 = -2f / length;
+		projectionMatrix.m33 = 1;
+	}
+
+	/**
+	 * Create the offset for part of the conversion to shadow map space.
+	 *
+	 * @return The offset as a matrix.
+	 */
+	private static Matrix4f createOffset() {
+		Matrix4f offset = new Matrix4f();
+		Matrix4f.translate(offset, new Vector3f(0.5f, 0.5f, 0.5f), offset);
+		Matrix4f.scale(offset, new Vector3f(0.5f, 0.5f, 0.5f), offset);
+		return offset;
 	}
 
 	/**
@@ -134,14 +134,12 @@ public class ShadowRenderer extends IRenderer {
 		lightViewMatrix.setIdentity();
 		float h = new Vector2f(direction.x, direction.z).length();
 		float pitch = (float) Math.acos(h);
-		Matrix4f.rotate(lightViewMatrix, new Vector3f(1.0f, 0.0f, 0.0f), pitch, lightViewMatrix);
-		float yaw = (float) Math.toDegrees((float) Math.atan(direction.x / direction.z));
-
-		if (direction.z > 0.0f) {
-			yaw -= 180.0f;
+		Matrix4f.rotate(lightViewMatrix, new Vector3f(1, 0, 0), pitch, lightViewMatrix);
+		float yaw = (float) Math.toDegrees(((float) Math.atan(direction.x / direction.z)));
+		if (direction.z > 0) {
+			yaw -= 180;
 		}
-
-		Matrix4f.rotate(lightViewMatrix, new Vector3f(0.0f, 1.0f, 0.0f), (float) -Math.toRadians(yaw), lightViewMatrix);
+		Matrix4f.rotate(lightViewMatrix, new Vector3f(0, 1, 0), (float) -Math.toRadians(yaw), lightViewMatrix);
 		Matrix4f.translate(lightViewMatrix, position, lightViewMatrix);
 	}
 
