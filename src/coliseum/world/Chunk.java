@@ -2,8 +2,6 @@ package coliseum.world;
 
 import coliseum.world.terrain.*;
 import flounder.entities.*;
-import flounder.logger.*;
-import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
@@ -16,16 +14,17 @@ import java.util.*;
 public class Chunk {
 	public static final float[][] GENERATE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
 
-	public static final int SIDE_COUNT = 6; // The number of sides for each figure (hexagon).
-	public static final float SIDE_LENGTH = 2.0f; //  Each tile can be broken into equilateral triangles with sides of length. (0.015f)
-	public static final int CHUNK_RADIUS = 6; // The amount of tiles that make up the radius.
+	public static final int HEXAGON_SIDE_COUNT = 6; // The number of sides for each figure (hexagon).
+	public static final float HEXAGON_SIDE_LENGTH = 2.0f; //  Each tile can be broken into equilateral triangles with sides of length.
+	public static final float HEXAGON_HEIGHT = (float) Math.sqrt(2.0) * 2.0f; // The height for the hexagon figure.
+	public static final int CHUNK_RADIUS = 4; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
 
 	private Vector2f position;
 	private List<Entity> tiles;
 	private boolean tilesChanged;
 	private AABB aabb;
 
-	private float visibility;
+	private float darkness;
 
 	public Chunk(Vector2f position) {
 		this.position = position;
@@ -33,7 +32,7 @@ public class Chunk {
 		this.tilesChanged = true;
 		this.aabb = new AABB();
 
-		this.visibility = 0.0f;
+		this.darkness = 0.0f;
 
 		generate();
 	}
@@ -44,10 +43,10 @@ public class Chunk {
 			float r = 0;
 			float g = -i;
 			float b = i;
-			generateTile(Vector2f.add(position, calculateXY(new Vector3f(r, g, b), SIDE_LENGTH, null), null));
+			generateTile(Vector2f.add(position, calculateXY(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null), null));
 
-			for (int j = 0; j < SIDE_COUNT; j++) {
-				if (j == SIDE_COUNT - 1) {
+			for (int j = 0; j < HEXAGON_SIDE_COUNT; j++) {
+				if (j == HEXAGON_SIDE_COUNT - 1) {
 					shapesOnEdge = i - 1;
 				}
 
@@ -56,26 +55,15 @@ public class Chunk {
 					r = r + GENERATE_DELTAS[j][0];
 					g = g + GENERATE_DELTAS[j][1];
 					b = b + GENERATE_DELTAS[j][2];
-					generateTile(Vector2f.add(position, calculateXY(new Vector3f(r, g, b), SIDE_LENGTH, null), null));
+					generateTile(Vector2f.add(position, calculateXY(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null), null));
 				}
 			}
 		}
 	}
 
 	private void generateTile(Vector2f position) {
-		// tiles.size() == 0 ? 2.0f : 0.0f
-		//for (int h = 0; h < height; h++) {
-		//	float y = (float) (2.0 * Math.sqrt(2.0)) * (h + 1);
-		//	tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, y, position.y), new Vector3f(), this));
-		//}
-
-		float random = (float) Math.random() * 2.0f;
-
-		if (random >= 0.80f) {
-			tiles.add(new TerrainWater(FlounderEntities.getEntities(), new Vector3f(position.x, -0.175f, position.y), new Vector3f(), this));
-		} else if (random >= 0.65f) {
+		if (tiles.size() == 0) {
 			tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, 0.0f, position.y), new Vector3f(), this));
-			tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, random, position.y), new Vector3f(), this));
 		} else {
 			tiles.add(new TerrainGrass(FlounderEntities.getEntities(), new Vector3f(position.x, 0.0f, position.y), new Vector3f(), this));
 		}
@@ -85,6 +73,15 @@ public class Chunk {
 		if (tilesChanged) {
 			recalculate();
 			tilesChanged = false;
+		}
+
+		if (playerPosition != null) {
+			//	double distance = Math.sqrt(Math.pow(position.x - playerPosition.x, 2.0) + Math.pow(position.y - playerPosition.y, 2.0));
+			//	if (distance >= 30.0) {
+			//		darkness = 0.7f;
+			//	} else {
+			//		darkness = 0.0f;
+			//	}
 		}
 
 		FlounderBounding.addShapeRender(aabb);
@@ -145,7 +142,7 @@ public class Chunk {
 		tilesChanged = true;
 	}
 
-	public float getVisibility() {
-		return visibility;
+	public float getDarkness() {
+		return darkness;
 	}
 }

@@ -1,6 +1,7 @@
 package coliseum;
 
 import coliseum.entities.*;
+import coliseum.skybox.*;
 import coliseum.world.*;
 import flounder.camera.*;
 import flounder.devices.*;
@@ -18,7 +19,9 @@ import flounder.renderer.*;
 
 public class ColiseumRenderer extends IRendererMaster {
 	private static final Vector4f POSITIVE_INFINITY = new Vector4f(0.0f, 1.0f, 0.0f, Float.POSITIVE_INFINITY);
+	private static final Colour CLEAR_COLOUR = new Colour(0.0f, 0.0f, 0.0f);
 
+	private SkyboxRenderer skyboxRenderer;
 	private EntitiesRenderer entitiesRenderer;
 	private BoundingRenderer boundingRenderer;
 	private GuiRenderer guiRenderer;
@@ -35,6 +38,7 @@ public class ColiseumRenderer extends IRendererMaster {
 
 	@Override
 	public void init() {
+		this.skyboxRenderer = new SkyboxRenderer();
 		this.entitiesRenderer = new EntitiesRenderer();
 		this.boundingRenderer = new BoundingRenderer();
 		this.guiRenderer = new GuiRenderer();
@@ -52,7 +56,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		bindRelevantFBO();
 
 		/* Scene rendering. */
-		renderScene(POSITIVE_INFINITY, ColiseumWorld.getSkyColour());
+		renderScene(POSITIVE_INFINITY, CLEAR_COLOUR);
 
 		/* Post rendering. */
 		renderPost(FlounderGuis.getGuiMaster().isGamePaused(), FlounderGuis.getGuiMaster().getBlurFactor());
@@ -78,6 +82,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		ICamera camera = FlounderCamera.getCamera();
 		OpenGlUtils.prepareNewRenderParse(clearColour);
 
+		skyboxRenderer.render(clipPlane, camera);
 		entitiesRenderer.render(clipPlane, camera);
 		boundingRenderer.render(clipPlane, camera);
 	}
@@ -85,13 +90,13 @@ public class ColiseumRenderer extends IRendererMaster {
 	private void renderPost(boolean isPaused, float blurFactor) {
 		FBO output = rendererFBO;
 
-		if (FlounderDisplay.isAntialiasing()) {
-			filterFXAA.applyFilter(output.getColourTexture(0));
-			output = filterFXAA.fbo;
-		}
+		//	if (FlounderDisplay.isAntialiasing()) {
+		//		filterFXAA.applyFilter(output.getColourTexture(0));
+		//		output = filterFXAA.fbo;
+		//	}
 
-		filterTiltShift.applyFilter(output.getColourTexture(0));
-		output = filterTiltShift.fbo;
+		//	filterTiltShift.applyFilter(output.getColourTexture(0));
+		//	output = filterTiltShift.fbo;
 
 		output.blitToScreen();
 	}
@@ -102,6 +107,7 @@ public class ColiseumRenderer extends IRendererMaster {
 
 	@Override
 	public void dispose() {
+		skyboxRenderer.dispose();
 		entitiesRenderer.dispose();
 		boundingRenderer.dispose();
 		guiRenderer.dispose();

@@ -30,6 +30,10 @@ public class ComponentTerrain extends IComponentEntity {
 		return null;
 	}
 
+	public float getDarkness() {
+		return chunk.getDarkness();
+	}
+
 	@Override
 	public void dispose() {
 	}

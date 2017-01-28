@@ -1,5 +1,6 @@
 package coliseum.world;
 
+import flounder.camera.*;
 import flounder.entities.*;
 import flounder.framework.*;
 import flounder.lights.*;
@@ -12,6 +13,8 @@ import flounder.visual.*;
 import java.util.*;
 
 public class ColiseumWorld extends IModule {
+	public static final float[][] GENERATE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
+
 	private static final ColiseumWorld INSTANCE = new ColiseumWorld();
 	public static final String PROFILE_TAB_NAME = "Coliseum World";
 
@@ -19,6 +22,7 @@ public class ColiseumWorld extends IModule {
 
 	private List<Chunk> chunks;
 
+	private float dayFactor;
 	private Colour skyColourDay;
 	private Colour skyColourNight;
 	private Colour skyColour;
@@ -31,32 +35,36 @@ public class ColiseumWorld extends IModule {
 
 		this.chunks = new ArrayList<>();
 
+		this.dayFactor = 0.0f;
 		this.skyColourDay = new Colour(0.0f, 0.498f, 1.0f);
 		this.skyColourNight = new Colour(0.01f, 0.01f, 0.01f);
 		this.skyColour = new Colour(skyColourDay);
-		this.skyDriver = new SinWaveDriver(0.0f, 1.0f, 60.0f);
+		this.skyDriver = new SinWaveDriver(0.0f, 100.0f, 60.0f);
 	}
 
 	@Override
 	public void init() {
-		for (int i = 0; i < 2; i++) {
+		// Chunk.HEXAGON_SIDE_LENGTH * Chunk.CHUNK_RADIUS
+		final float TESTING = 10.0f;
+
+		for (int i = 0; i < 1; i++) {
 			int shapesOnEdge = i;
 			float r = 0;
 			float g = -i;
 			float b = i;
-			chunks.add(new Chunk(Chunk.calculateXY(new Vector3f(r, g, b), Chunk.SIDE_LENGTH * Chunk.CHUNK_RADIUS, null)));
+			chunks.add(new Chunk(Chunk.calculateXY(new Vector3f(r, g, b), TESTING, null)));
 
-			for (int j = 0; j < Chunk.SIDE_COUNT; j++) {
-				if (j == Chunk.SIDE_COUNT - 1) {
+			for (int j = 0; j < Chunk.HEXAGON_SIDE_COUNT; j++) {
+				if (j == Chunk.HEXAGON_SIDE_COUNT - 1) {
 					shapesOnEdge = i - 1;
 				}
 
 				for (int w = 0; w < shapesOnEdge; w++) {
 					// r + g + b = 0
-					r = r + Chunk.GENERATE_DELTAS[j][0];
-					g = g + Chunk.GENERATE_DELTAS[j][1];
-					b = b + Chunk.GENERATE_DELTAS[j][2];
-					chunks.add(new Chunk(Chunk.calculateXY(new Vector3f(r, g, b), Chunk.SIDE_LENGTH * Chunk.CHUNK_RADIUS, null)));
+					r = r + GENERATE_DELTAS[j][0];
+					g = g + GENERATE_DELTAS[j][1];
+					b = b + GENERATE_DELTAS[j][2];
+					chunks.add(new Chunk(Chunk.calculateXY(new Vector3f(r, g, b), TESTING, null)));
 				}
 			}
 		}
@@ -72,11 +80,16 @@ public class ColiseumWorld extends IModule {
 
 	@Override
 	public void update() {
-		Colour.interpolate(skyColourDay, skyColourNight, skyDriver.update(FlounderFramework.getDelta()), skyColour);
+		dayFactor = (float) (skyDriver.update(FlounderFramework.getDelta()) / 100.0);
+		Colour.interpolate(skyColourDay, skyColourNight, dayFactor, skyColour);
 		fog.setFogColour(skyColour);
 
 		for (Chunk chunk : chunks) {
-			chunk.update(null);
+			if (FlounderCamera.getPlayer() != null) {
+				chunk.update(FlounderCamera.getPlayer().getPosition());
+			} else {
+				chunk.update(null);
+			}
 		}
 	}
 
@@ -95,6 +108,10 @@ public class ColiseumWorld extends IModule {
 
 	public static Colour getSkyColour() {
 		return INSTANCE.skyColour;
+	}
+
+	public static float getDayFactor() {
+		return INSTANCE.dayFactor;
 	}
 
 	@Override

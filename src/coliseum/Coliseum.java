@@ -17,7 +17,7 @@ public class Coliseum extends FlounderFramework {
 	public static Config configMain;
 
 	public Coliseum() {
-		super("Coliseum", -1, new ColiseumInterface(), new ColiseumRenderer(), new CameraIsographic(), new ColiseumGuis()); // , new ColiseumMusic()
+		super("Coliseum", -1, new ColiseumInterface(), new ColiseumRenderer(), new CameraIsographic(), new PlayerBasic(), new ColiseumGuis()); // , new ColiseumMusic()
 
 		configMain = new Config(new MyFile(FlounderFramework.getRoamingFolder(), "configs", "settings.conf"));
 

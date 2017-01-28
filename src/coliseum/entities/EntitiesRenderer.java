@@ -82,6 +82,7 @@ public class EntitiesRenderer extends IRenderer {
 
 	private void renderEntity(Entity entity) {
 		ComponentModel componentModel = (ComponentModel) entity.getComponent(ComponentModel.ID);
+		ComponentTerrain componentTerrain = (ComponentTerrain) entity.getComponent(ComponentTerrain.ID);
 
 		if (componentModel == null || componentModel.getModel() == null) {
 			return;
@@ -101,6 +102,12 @@ public class EntitiesRenderer extends IRenderer {
 			shader.getUniformFloat("atlasRows").loadFloat(textureUndefined.getNumberOfRows());
 			shader.getUniformVec2("atlasOffset").loadVec2(0, 0);
 			OpenGlUtils.cullBackFaces(false);
+		}
+
+		if (componentTerrain != null) {
+			shader.getUniformFloat("darkness").loadFloat(componentTerrain.getDarkness());
+		} else {
+			shader.getUniformFloat("darkness").loadFloat(0.0f);
 		}
 
 		shader.getUniformMat4("modelMatrix").loadMat4(componentModel.getModelMatrix());

@@ -13,6 +13,7 @@ uniform vec3 lightDirection;
 uniform vec3 fogColour;
 uniform float fogDensity;
 uniform float fogGradient;
+uniform float darkness;
 
 //---------OUT------------
 layout(location = 0) out vec4 out_colour;
@@ -37,6 +38,6 @@ void main(void) {
 		discard;
 	}
 
-	out_colour = vec4(diffuseColour.rgb * diffuseLight, diffuseColour.a);
+	out_colour = vec4(diffuseColour.rgb * diffuseLight * (-(darkness - 0.5) + 0.5), diffuseColour.a);
 	out_colour = mix(vec4(fogColour, 1.0), out_colour, visibility());
 }
