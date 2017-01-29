@@ -26,6 +26,7 @@ public class MasterOverlay extends GuiComponent {
 		fpsText = createStatus("FPS: 0", 0.02f);
 		upsText = createStatus("UPS: 0", 0.06f);
 		positionText = createStatus("POSITION: [0, 0, 0]", 0.11f);
+		createStatus("C TO TOGGLE EFFECTS", 0.16f);
 
 		crossHair = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "guis", "crosshair.png")).create());
 		crossHair.getTexture().setNumberOfRows(4);

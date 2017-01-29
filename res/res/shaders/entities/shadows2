@@ -1,0 +1,16 @@
+    float totalTextels = (SHADOW_PCF * 2.0 + 1) * (SHADOW_PCF * 2.0 + 1.0);
+    float texelSize = 1.0 / shadowMapSize;
+    float total = 0.0;
+
+    for (int x = -SHADOW_PCF; x <= SHADOW_PCF; x++) {
+        for (int y = -SHADOW_PCF; y <= SHADOW_PCF; y++) {
+            float shadowValue = texture(shadowMap, pass_shadowCoords.xy + vec2(x, y) * texelSize).r;
+
+            if (pass_shadowCoords.z > shadowValue + SHADOW_BIAS) {
+                total += 1.0;
+            }
+        }
+    }
+
+    total /= totalTextels;
+    return 1.0 - (total * SHADOW_DARKNESS * pass_shadowCoords.w);

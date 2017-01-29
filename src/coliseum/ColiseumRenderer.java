@@ -5,10 +5,12 @@ import coliseum.shadows.*;
 import coliseum.skybox.*;
 import flounder.camera.*;
 import flounder.devices.*;
+import flounder.events.*;
 import flounder.fbos.*;
 import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.helpers.*;
+import flounder.inputs.*;
 import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
@@ -16,6 +18,7 @@ import flounder.physics.bounding.*;
 import flounder.post.filters.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
+import org.lwjgl.glfw.*;
 
 public class ColiseumRenderer extends IRendererMaster {
 	private static final Vector4f POSITIVE_INFINITY = new Vector4f(0.0f, 1.0f, 0.0f, Float.POSITIVE_INFINITY);
@@ -33,6 +36,7 @@ public class ColiseumRenderer extends IRendererMaster {
 	private FilterFXAA filterFXAA;
 	private FilterCRT filterCRT;
 	private FilterTiltShift filterTiltShift;
+	private int effect;
 
 	public ColiseumRenderer() {
 		super(FlounderLogger.class, FlounderProfiler.class, FlounderDisplay.class);
@@ -50,8 +54,27 @@ public class ColiseumRenderer extends IRendererMaster {
 		this.rendererFBO = FBO.newFBO(1.0f).depthBuffer(DepthBufferType.TEXTURE).create();
 
 		this.filterFXAA = new FilterFXAA();
-		this.filterCRT = new FilterCRT(0.175f, 0.175f, 920.0f);
+		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.05f);
 		this.filterTiltShift = new FilterTiltShift(0.75f, 1.1f, 0.004f, 3.0f);
+		this.effect = 0;
+
+		FlounderEvents.addEvent(new IEvent() {
+			private KeyButton c = new KeyButton(GLFW.GLFW_KEY_C);
+
+			@Override
+			public boolean eventTriggered() {
+				return c.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				effect++;
+
+				if (effect > 1) {
+					effect = 0;
+				}
+			}
+		});
 	}
 
 	@Override
@@ -69,8 +92,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		renderPost(FlounderGuis.getGuiMaster().isGamePaused(), FlounderGuis.getGuiMaster().getBlurFactor());
 
 		/* Scene independents. */
-		guisRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
-		fontRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
+		// renderIndependents();
 
 		/* Unbinds the FBO. */
 		unbindRelevantFBO();
@@ -98,14 +120,28 @@ public class ColiseumRenderer extends IRendererMaster {
 		boundingRenderer.render(clipPlane, camera);
 	}
 
+	private void renderIndependents() {
+		guisRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
+		fontRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
+	}
+
 	private void renderPost(boolean isPaused, float blurFactor) {
+		boolean independentsRendered = false;
 		FBO output = rendererFBO;
 
-		filterTiltShift.applyFilter(output.getColourTexture(0));
-		output = filterTiltShift.fbo;
-
-		//	filterCRT.applyFilter(output.getColourTexture(0));
-		//	output = filterCRT.fbo;
+		switch (effect) {
+			case 0:
+				filterTiltShift.applyFilter(output.getColourTexture(0));
+				output = filterTiltShift.fbo;
+				break;
+			case 1:
+				/* Scene independents. */
+				renderIndependents();
+				independentsRendered = true;
+				filterCRT.applyFilter(output.getColourTexture(0));
+				output = filterCRT.fbo;
+				break;
+		}
 
 		if (FlounderDisplay.isAntialiasing()) {
 			filterFXAA.applyFilter(output.getColourTexture(0));
@@ -113,6 +149,11 @@ public class ColiseumRenderer extends IRendererMaster {
 		}
 
 		output.blitToScreen();
+
+		if (!independentsRendered) {
+			/* Scene independents. */
+			renderIndependents();
+		}
 	}
 
 	@Override
