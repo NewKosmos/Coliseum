@@ -1,6 +1,5 @@
 package coliseum;
 
-import coliseum.clouds.*;
 import coliseum.entities.*;
 import coliseum.shadows.*;
 import coliseum.skybox.*;
@@ -24,7 +23,6 @@ public class ColiseumRenderer extends IRendererMaster {
 
 	private ShadowRenderer shadowRenderer;
 	private SkyboxRenderer skyboxRenderer;
-	private CloudsRenderer cloudsRenderer;
 	private EntitiesRenderer entitiesRenderer;
 	private BoundingRenderer boundingRenderer;
 	private GuisRenderer guisRenderer;
@@ -44,7 +42,6 @@ public class ColiseumRenderer extends IRendererMaster {
 	public void init() {
 		this.shadowRenderer = new ShadowRenderer();
 		this.skyboxRenderer = new SkyboxRenderer();
-		this.cloudsRenderer = new CloudsRenderer();
 		this.entitiesRenderer = new EntitiesRenderer();
 		this.boundingRenderer = new BoundingRenderer();
 		this.guisRenderer = new GuisRenderer();
@@ -97,7 +94,6 @@ public class ColiseumRenderer extends IRendererMaster {
 		OpenGlUtils.prepareNewRenderParse(clearColour);
 
 		skyboxRenderer.render(clipPlane, camera);
-		cloudsRenderer.render(clipPlane, camera);
 		entitiesRenderer.render(clipPlane, camera);
 		boundingRenderer.render(clipPlane, camera);
 	}
@@ -127,7 +123,6 @@ public class ColiseumRenderer extends IRendererMaster {
 	public void dispose() {
 		shadowRenderer.dispose();
 		skyboxRenderer.dispose();
-		cloudsRenderer.dispose();
 		entitiesRenderer.dispose();
 		boundingRenderer.dispose();
 		guisRenderer.dispose();

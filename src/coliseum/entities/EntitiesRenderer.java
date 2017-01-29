@@ -81,7 +81,7 @@ public class EntitiesRenderer extends IRenderer {
 
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();
-		OpenGlUtils.enableAlphaBlending();
+		OpenGlUtils.disableBlending();
 		OpenGlUtils.cullBackFaces(true);
 	}
 

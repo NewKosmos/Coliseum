@@ -3,6 +3,7 @@
 //---------CONSTANT------------
 const int MAX_JOINTS = 50;
 const int MAX_WEIGHTS = 3;
+const float SHADOW_TRANSITION = 10.0;
 
 //---------IN------------
 layout(location = 0) in vec3 in_position;
@@ -69,7 +70,7 @@ void main(void) {
 
 	pass_shadowCoords = shadowSpaceMatrix * worldPosition;
 	float distanceAway = length(pass_positionRelativeToCam.xyz);
-    distanceAway = distanceAway - ((shadowDistance * 2.0) - (shadowDistance));
-    distanceAway = distanceAway / shadowDistance;
+    distanceAway = distanceAway - ((shadowDistance * 2.0) - SHADOW_TRANSITION);
+    distanceAway = distanceAway / SHADOW_TRANSITION;
     pass_shadowCoords.w = clamp(1.0 - distanceAway, 0.0, 1.0);
 }

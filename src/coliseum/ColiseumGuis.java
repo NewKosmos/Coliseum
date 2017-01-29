@@ -18,8 +18,8 @@ public class ColiseumGuis extends IGuiMaster {
 
 	@Override
 	public void init() {
-		//this.masterOverlay = new MasterOverlay();
-		//FlounderGuis.addComponent(masterOverlay, 0.0f, 0.0f, 1.0f, 1.0f);
+		this.masterOverlay = new MasterOverlay();
+		FlounderGuis.addComponent(masterOverlay, 0.0f, 0.0f, 1.0f, 1.0f);
 
 		//	this.consoleUi = new ConsoleUi();
 		//	FlounderGuis.addComponent(consoleUi, 0.0f, 0.0f, 1.0f, 1.0f);

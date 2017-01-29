@@ -5,7 +5,10 @@ import flounder.devices.*;
 import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.parsing.*;
+import flounder.physics.bounding.*;
+import flounder.profiling.*;
 import flounder.resources.*;
+import flounder.textures.*;
 
 public class Coliseum extends FlounderFramework {
 	public static void main(String[] args) {
@@ -30,6 +33,9 @@ public class Coliseum extends FlounderFramework {
 				configMain.getBooleanWithDefault("fullscreen", false, FlounderDisplay::isFullscreen),
 				false
 		);
+		FlounderBounding.toggle(Coliseum.configMain.getBooleanWithDefault("boundings_render", false, FlounderBounding::renders));
+		FlounderProfiler.toggle(Coliseum.configMain.getBooleanWithDefault("profiler_open", false, FlounderProfiler::isOpen));
+		FlounderTextures.setAnisotropyLevel(Coliseum.configMain.getFloatWithDefault("anisotropy_level", 4, FlounderTextures::getAnisotropyLevel));
 		TextBuilder.DEFAULT_TYPE = FlounderFonts.FFF_FORWARD;
 
 		//	new Chunk(new Vector2f());

@@ -1,7 +1,9 @@
 #version 130
 
 //---------CONSTANT------------
-const float shadowDarkness = 0.7;
+const int SHADOW_PCF = 2;
+const float SHADOW_BIAS = 0.0002;
+const float SHADOW_DARKNESS = 0.7;
 
 //---------IN------------
 in vec4 pass_positionRelativeToCam;
@@ -26,35 +28,34 @@ layout(location = 0) out vec4 out_colour;
 
 //---------SHADOW------------
 float shadow(void) {
-    const float bias = 0.0001;
 	float shadowTexelSize = 1.0 / shadowMapSize;
 	float shadowHalfw = shadowTexelSize * 0.5;
 	float shadowTotal = 0.0;
 	float shadowValue = 0.0;
 	float shadowShadeFactor;
-	shadowValue = texture(shadowMap, pass_shadowCoords.xy + vec2(0 + shadowHalfw, 0 + shadowHalfw)).r + bias;
+	shadowValue = texture(shadowMap, pass_shadowCoords.xy + vec2(0 + shadowHalfw, 0 + shadowHalfw)).r;
 
     if (pass_shadowCoords.x > 0.0 && pass_shadowCoords.x < 1.0 && pass_shadowCoords.y > 0.0 && pass_shadowCoords.y < 1.0 && pass_shadowCoords.z > 0.0 && pass_shadowCoords.z < 1.0) {
-        if (shadowValue < pass_shadowCoords.z) {
-            shadowTotal += shadowDarkness * pass_shadowCoords.w;
+        if (shadowValue + SHADOW_BIAS < pass_shadowCoords.z) {
+            shadowTotal += SHADOW_DARKNESS * pass_shadowCoords.w;
         }
 
-        shadowValue = texture(shadowMap, pass_shadowCoords.xy + vec2(shadowTexelSize + shadowHalfw, 0 + shadowHalfw)).r + bias;
+        shadowValue = texture(shadowMap, pass_shadowCoords.xy + vec2(shadowTexelSize + shadowHalfw, 0 + shadowHalfw)).r;
 
-        if (shadowValue < pass_shadowCoords.z) {
-            shadowTotal += shadowDarkness * pass_shadowCoords.w;
+        if (shadowValue  + SHADOW_BIAS< pass_shadowCoords.z) {
+            shadowTotal += SHADOW_DARKNESS * pass_shadowCoords.w;
         }
 
-        shadowValue = texture(shadowMap, pass_shadowCoords.xy + vec2(0 + shadowHalfw, shadowTexelSize + shadowHalfw)).r + bias;
+        shadowValue = texture(shadowMap, pass_shadowCoords.xy + vec2(0 + shadowHalfw, shadowTexelSize + shadowHalfw)).r;
 
-        if (shadowValue < pass_shadowCoords.z) {
-            shadowTotal += shadowDarkness * pass_shadowCoords.w;
+        if (shadowValue + SHADOW_BIAS < pass_shadowCoords.z) {
+            shadowTotal += SHADOW_DARKNESS * pass_shadowCoords.w;
         }
 
-        shadowValue = texture(shadowMap, pass_shadowCoords.xy + vec2(shadowTexelSize + shadowHalfw, shadowTexelSize + shadowHalfw)).r + bias;
+        shadowValue = texture(shadowMap, pass_shadowCoords.xy + vec2(shadowTexelSize + shadowHalfw, shadowTexelSize + shadowHalfw)).r;
 
-        if (shadowValue < pass_shadowCoords.z) {
-            shadowTotal += shadowDarkness * pass_shadowCoords.w;
+        if (shadowValue + SHADOW_BIAS < pass_shadowCoords.z) {
+            shadowTotal += SHADOW_DARKNESS * pass_shadowCoords.w;
         }
 
         shadowShadeFactor = 1.0 - (shadowTotal / 4.0);

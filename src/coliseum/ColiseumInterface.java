@@ -8,6 +8,7 @@ import flounder.inputs.*;
 import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.standard.*;
+import flounder.textures.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -61,9 +62,6 @@ public class ColiseumInterface extends IStandard {
 				OpenGlUtils.goWireframe(!OpenGlUtils.isInWireframe());
 			}
 		});
-
-		FlounderBounding.toggle(Coliseum.configMain.getBooleanWithDefault("boundings_render", false, FlounderBounding::renders));
-		FlounderProfiler.toggle(Coliseum.configMain.getBooleanWithDefault("profiler_open", false, FlounderProfiler::isOpen));
 	}
 
 	@Override
