@@ -15,18 +15,19 @@ import static org.lwjgl.glfw.GLFW.*;
 public class CameraIsographic extends ICamera {
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 685.0f;
-	private static final float FIELD_OF_VIEW = 60.0f;
+	private static final float FIELD_OF_VIEW = 70.0f;
 
 	private static final float ZOOM_AGILITY = 8.0f;
 	private static final float ROTATE_AGILITY = 6.0f;
 	private static final float PITCH_AGILITY = 8.0f;
 
 	private static final float CAMERA_AIM_OFFSET = 0.0f;
-	private static final float MAX_ANGLE_OF_ELEVATION = 1.5f;
-	private static final float PITCH_OFFSET = 3.0f;
+	private static final float MAX_ANGLE_OF_ELEVATION = (float) Math.PI / 2.0f;
+	private static final float MIN_ANGLE_OF_ELEVATION = -(float) Math.PI / 12.0f;
+	private static final float PITCH_OFFSET = 0.0f;
 	private static final float MINIMUM_ZOOM = 0.0f;
-	private static final float MAXIMUM_ZOOM = 500.0f;
-	private static final float NORMAL_ZOOM = 25.0f;
+	private static final float MAXIMUM_ZOOM = 128.0f;
+	private static final float NORMAL_ZOOM = 28.0f;
 
 	private static final float MAX_HORIZONTAL_CHANGE = 500.0f;
 	private static final float MAX_VERTICAL_CHANGE = 5.0f;
@@ -172,8 +173,8 @@ public class CameraIsographic extends ICamera {
 
 		if (targetElevation >= MAX_ANGLE_OF_ELEVATION) {
 			targetElevation = MAX_ANGLE_OF_ELEVATION;
-		} else if (targetElevation <= 0) {
-			targetElevation = 0;
+		} else if (targetElevation <= MIN_ANGLE_OF_ELEVATION) {
+			targetElevation = MIN_ANGLE_OF_ELEVATION;
 		}
 	}
 
@@ -257,9 +258,8 @@ public class CameraIsographic extends ICamera {
 	}
 
 	private void updateProjectionMatrix() {
-	//	Matrix4f.perspectiveMatrix(FIELD_OF_VIEW, FlounderDisplay.getAspectRatio(), NEAR_PLANE, FAR_PLANE, projectionMatrix);
-		Matrix4f.orthographicMatrix(-FlounderDisplay.getAspectRatio(), FlounderDisplay.getAspectRatio(), -1.0f, 1.0f, NEAR_PLANE, FAR_PLANE, projectionMatrix);
-		//Matrix4f.isometricMatrix(FIELD_OF_VIEW, FlounderDisplay.getAspectRatio(), NEAR_PLANE, FAR_PLANE, projectionMatrix);
+		Matrix4f.perspectiveMatrix(FIELD_OF_VIEW, FlounderDisplay.getAspectRatio(), NEAR_PLANE, FAR_PLANE, projectionMatrix);
+		//	Matrix4f.orthographicMatrix(-FlounderDisplay.getAspectRatio(), FlounderDisplay.getAspectRatio(), -1.0f, 1.0f, NEAR_PLANE, FAR_PLANE, projectionMatrix);
 	}
 
 	@Override

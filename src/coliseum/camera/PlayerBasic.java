@@ -13,7 +13,7 @@ public class PlayerBasic extends IPlayer {
 
 	@Override
 	public void init() {
-		this.position = new Vector3f();
+		this.position = new Vector3f(0,5,0);
 		this.rotation = new Vector3f();
 	}
 

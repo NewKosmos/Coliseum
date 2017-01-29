@@ -16,16 +16,14 @@ public class ShadowBox {
 	private static final Vector4f FORWARD = new Vector4f(0.0f, 0.0f, -1.0f, 0.0f);
 
 	private static final float OFFSET = 10.0f;
-	private static final float SHADOW_DISTANCE = 100.0f;
+	private static final float SHADOW_DISTANCE = 40.0f;
 
 	private Matrix4f lightViewMatrix;
+	private float shadowDistance;
 
 	private float minX, maxX;
 	private float minY, maxY;
 	private float minZ, maxZ;
-
-	private float shadowDistance;
-
 	private float farHeight, farWidth, nearHeight, nearWidth;
 
 	/**
@@ -35,6 +33,7 @@ public class ShadowBox {
 	 */
 	protected ShadowBox(Matrix4f lightViewMatrix) {
 		this.lightViewMatrix = lightViewMatrix;
+		this.shadowDistance = SHADOW_DISTANCE;
 	}
 
 	/**
@@ -50,6 +49,7 @@ public class ShadowBox {
 
 		Matrix4f rotation = calculateCameraRotationMatrix(camera);
 		Vector3f forwardVector = new Vector3f(Matrix4f.transform(rotation, FORWARD, null));
+
 		Vector3f toFar = new Vector3f(forwardVector);
 		toFar.scale(shadowDistance);
 		Vector3f toNear = new Vector3f(forwardVector);
@@ -123,8 +123,8 @@ public class ShadowBox {
 	 */
 	private Matrix4f calculateCameraRotationMatrix(ICamera camera) {
 		Matrix4f rotation = new Matrix4f();
-		Matrix4f.rotate(rotation, new Vector3f(0.0f, 1.0f, 0.0f), (float) Math.toRadians(camera.getRotation().getY()), rotation);
-		Matrix4f.rotate(rotation, new Vector3f(1.0f, 0.0f, 0.0f), (float) Math.toRadians(-camera.getRotation().getX()), rotation);
+		Matrix4f.rotate(rotation, new Vector3f(0.0f, 1.0f, 0.0f), (float) Math.toRadians(camera.getRotation().y), rotation);
+		Matrix4f.rotate(rotation, new Vector3f(1.0f, 0.0f, 0.0f), (float) Math.toRadians(-camera.getRotation().x), rotation);
 		return rotation;
 	}
 
@@ -147,6 +147,7 @@ public class ShadowBox {
 		Vector3f farBottom = Vector3f.add(centreFar, new Vector3f(downVector.x * farHeight, downVector.y * farHeight, downVector.z * farHeight), null);
 		Vector3f nearTop = Vector3f.add(centreNear, new Vector3f(upVector.x * nearHeight, upVector.y * nearHeight, upVector.z * nearHeight), null);
 		Vector3f nearBottom = Vector3f.add(centreNear, new Vector3f(downVector.x * nearHeight, downVector.y * nearHeight, downVector.z * nearHeight), null);
+
 		Vector4f[] points = new Vector4f[8];
 		points[0] = calculateLightSpaceFrustumCorner(farTop, rightVector, farWidth);
 		points[1] = calculateLightSpaceFrustumCorner(farTop, leftVector, farWidth);
@@ -183,8 +184,8 @@ public class ShadowBox {
 	 *
 	 * @return {@code true} if the sphere intersects the box.
 	 */
-	public boolean isInBox(Vector3f position, float radius) { // Unused
-		Vector4f entityPos = Matrix4f.transform(lightViewMatrix, new Vector4f(position.getX(), position.getY(), position.getZ(), 1f), null);
+	public boolean isInBox(Vector3f position, float radius) {
+		Vector4f entityPos = Matrix4f.transform(lightViewMatrix, new Vector4f(position.getX(), position.getY(), position.getZ(), 1.0f), null);
 		float closestX = Maths.clamp(entityPos.x, minX, maxX);
 		float closestY = Maths.clamp(entityPos.y, minY, maxY);
 		float closestZ = Maths.clamp(entityPos.z, minZ, maxZ);
@@ -196,17 +197,17 @@ public class ShadowBox {
 
 	/**
 	 * Gets the centre of the shadow box (orthographic projection area).
-	 * 
+	 *
 	 * @return The centre of the shadow box.
 	 */
 	protected Vector3f getCenter() {
 		float x = (minX + maxX) / 2.0f;
 		float y = (minY + maxY) / 2.0f;
 		float z = (minZ + maxZ) / 2.0f;
-		Vector4f cen = new Vector4f(x, y, z, 1.0f);
+		Vector4f centre = new Vector4f(x, y, z, 1.0f);
 		Matrix4f invertedLight = new Matrix4f();
 		Matrix4f.invert(lightViewMatrix, invertedLight);
-		return new Vector3f(Matrix4f.transform(invertedLight, cen, null));
+		return new Vector3f(Matrix4f.transform(invertedLight, centre, null));
 	}
 
 	/**

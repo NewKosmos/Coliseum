@@ -29,6 +29,8 @@ public class ColiseumWorld extends IModule {
 
 	@Override
 	public void init() {
+		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0, 1, 0), new Vector3f());
+
 		for (int i = 0; i < 1; i++) {
 			int shapesOnEdge = i;
 			float r = 0;

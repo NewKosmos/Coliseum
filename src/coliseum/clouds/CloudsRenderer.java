@@ -44,9 +44,9 @@ public class CloudsRenderer extends IRenderer {
 			return;
 		}
 
-		prepareRendering(clipPlane, camera);
-		renderClouds();
-		endRendering();
+		//	prepareRendering(clipPlane, camera);
+		//	renderClouds();
+		//	endRendering();
 	}
 
 	private void prepareRendering(Vector4f clipPlane, ICamera camera) {
@@ -65,10 +65,6 @@ public class CloudsRenderer extends IRenderer {
 			shader.getUniformFloat("fogGradient").loadFloat(2.0f);
 		}
 
-		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.SHADOW_MAP_SIZE);
-		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
-		shader.getUniformFloat("shadowDistance").loadFloat(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
-
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();
 		OpenGlUtils.enableAlphaBlending();
@@ -76,11 +72,9 @@ public class CloudsRenderer extends IRenderer {
 
 	private void renderClouds() {
 		OpenGlUtils.bindVAO(model.getVaoID(), 0, 1);
-		OpenGlUtils.cullBackFaces(false);
+		OpenGlUtils.cullBackFaces(true);
 
 		OpenGlUtils.bindTexture(textureClouds, 0);
-
-		OpenGlUtils.bindTexture(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
 
 		Matrix4f.transformationMatrix(new Vector3f(0.0f, -8.0f, 0.0f), new Vector3f(), 128.0f, modelMatrix);
 

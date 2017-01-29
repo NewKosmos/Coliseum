@@ -82,30 +82,51 @@ public class EntitiesRenderer extends IRenderer {
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();
 		OpenGlUtils.enableAlphaBlending();
+		OpenGlUtils.cullBackFaces(true);
 	}
 
 	private void renderEntity(Entity entity) {
 		ComponentModel componentModel = (ComponentModel) entity.getComponent(ComponentModel.ID);
+		ComponentAnimation componentAnimation = (ComponentAnimation) entity.getComponent(ComponentAnimation.ID);
 		ComponentTerrain componentTerrain = (ComponentTerrain) entity.getComponent(ComponentTerrain.ID);
+		final int vaoLength;
 
-		if (componentModel == null || componentModel.getModel() == null) {
+		if (componentModel != null && componentModel.getModel() != null) {
+			OpenGlUtils.bindVAO(componentModel.getModel().getVaoID(), 0, 1, 2, 3);
+			shader.getUniformBool("animated").loadBoolean(false);
+			shader.getUniformMat4("modelMatrix").loadMat4(componentModel.getModelMatrix());
+			vaoLength = componentModel.getModel().getVaoLength();
+		} else if (componentAnimation != null && componentAnimation.getModel() != null) {
+			OpenGlUtils.bindVAO(componentAnimation.getModel().getVaoID(), 0, 1, 2, 3, 4, 5);
+			shader.getUniformBool("animated").loadBoolean(true);
+			shader.getUniformMat4("modelMatrix").loadMat4(componentAnimation.getModelMatrix());
+			vaoLength = componentAnimation.getModel().getVaoLength();
+		} else {
+			// No model, so no render!
 			return;
 		}
 
-		OpenGlUtils.bindVAO(componentModel.getModel().getVaoID(), 0, 1, 2, 3);
-
-		if (componentModel.getTexture() != null) {
+		if (componentModel != null && componentModel.getTexture() != null) {
 			OpenGlUtils.bindTexture(componentModel.getTexture(), 0);
 			shader.getUniformFloat("atlasRows").loadFloat(componentModel.getTexture().getNumberOfRows());
 			shader.getUniformVec2("atlasOffset").loadVec2(componentModel.getTextureOffset());
-
-			// Face culling if the object has transparency.
-			OpenGlUtils.cullBackFaces(true);
+		} else if (componentAnimation != null && componentAnimation.getTexture() != null) {
+			OpenGlUtils.bindTexture(componentAnimation.getTexture(), 0);
+			shader.getUniformFloat("atlasRows").loadFloat(componentAnimation.getTexture().getNumberOfRows());
+			shader.getUniformVec2("atlasOffset").loadVec2(componentAnimation.getTextureOffset());
 		} else {
+			// No texture, so load a 'undefined' texture.
 			OpenGlUtils.bindTexture(textureUndefined, 0);
 			shader.getUniformFloat("atlasRows").loadFloat(textureUndefined.getNumberOfRows());
 			shader.getUniformVec2("atlasOffset").loadVec2(0, 0);
-			OpenGlUtils.cullBackFaces(false);
+		}
+
+		OpenGlUtils.bindTexture(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
+
+		if (componentAnimation != null) {
+			for (int i = 0; i < componentAnimation.getJointTransforms().length; i++) {
+				shader.getUniformMat4("jointTransforms[" + i + "]").loadMat4(componentAnimation.getJointTransforms()[i]);
+			}
 		}
 
 		if (componentTerrain != null) {
@@ -114,13 +135,8 @@ public class EntitiesRenderer extends IRenderer {
 			shader.getUniformFloat("darkness").loadFloat(0.0f);
 		}
 
-		OpenGlUtils.bindTexture(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
-
-		shader.getUniformMat4("modelMatrix").loadMat4(componentModel.getModelMatrix());
-		shader.getUniformBool("animated").loadBoolean(false);
-
-		glDrawElements(GL_TRIANGLES, componentModel.getModel().getVaoLength(), GL_UNSIGNED_INT, 0);
-		OpenGlUtils.unbindVAO(0, 1, 2, 3);
+		glDrawElements(GL_TRIANGLES, vaoLength, GL_UNSIGNED_INT, 0);
+		OpenGlUtils.unbindVAO(0, 1, 2, 3, 4, 5);
 	}
 
 	private void endRendering() {
