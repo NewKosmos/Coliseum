@@ -21,7 +21,7 @@ void main(void) {
 	pass_positionRelativeToCam = viewMatrix * worldPosition;
 
 	gl_ClipDistance[0] = dot(worldPosition, clipPlane);
-	gl_Position = projectionMatrix * viewMatrix * vec4(in_position, 1.0);
+	gl_Position = projectionMatrix * pass_positionRelativeToCam;
 
 	pass_textureCoords = in_textureCoords;
 }

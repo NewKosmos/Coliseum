@@ -24,5 +24,6 @@ void main(void) {
 	vec4 diffuseColour = texture(diffuseMap, pass_textureCoords);
 
 	// Creates the output image.
+	out_colour = vec4(1, 0, 0, 1);
 	out_colour = mix(vec4(fogColour, 1.0), diffuseColour * darkness, visibility());
 }

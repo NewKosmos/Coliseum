@@ -4,6 +4,7 @@ import coliseum.world.*;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.helpers.*;
+import flounder.logger.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
@@ -71,9 +72,9 @@ public class CloudsRenderer extends IRenderer {
 		OpenGlUtils.bindVAO(model.getVaoID(), 0, 1);
 		OpenGlUtils.cullBackFaces(false);
 
-		OpenGlUtils.bindTexture(textureClouds, 1);
+		OpenGlUtils.bindTexture(textureClouds, 0);
 
-		Matrix4f.transformationMatrix(new Vector3f(), new Vector3f(), 100.0f, modelMatrix);
+		Matrix4f.transformationMatrix(new Vector3f(0.0f, -10.0f, 0.0f), new Vector3f(), 128.0f, modelMatrix);
 
 		shader.getUniformMat4("modelMatrix").loadMat4(modelMatrix);
 		shader.getUniformFloat("darkness").loadFloat(1.0f);
