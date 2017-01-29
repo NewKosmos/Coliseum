@@ -1,12 +1,11 @@
 package coliseum.shadows;
 
 import coliseum.entities.components.*;
-import coliseum.shadows.*;
+import coliseum.world.*;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.fbos.*;
 import flounder.helpers.*;
-import flounder.logger.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
@@ -79,11 +78,8 @@ public class ShadowRenderer extends IRenderer {
 
 	private void prepareRendering(Vector4f clipPlane, ICamera camera) {
 		shadowBox.update(camera);
-		//Vector3f lightDirection = Environment.getLights().get(0).getPosition();
-		Vector3f lightDirection = new Vector3f(1000000, 1500000, -1000000);
-
 		updateOrthographicProjectionMatrix(shadowBox.getWidth(), shadowBox.getHeight(), shadowBox.getLength());
-		updateLightViewMatrix(lightDirection, shadowBox.getCenter());
+		updateLightViewMatrix(ColiseumWorld.getSkyCycle().getLightDirection(), shadowBox.getCenter());
 		Matrix4f.multiply(projectionMatrix, lightViewMatrix, projectionViewMatrix);
 
 		shadowFBO.bindFrameBuffer();

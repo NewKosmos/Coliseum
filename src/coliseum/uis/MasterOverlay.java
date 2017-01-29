@@ -72,8 +72,8 @@ public class MasterOverlay extends GuiComponent {
 
 	@Override
 	protected void getGuiTextures(List<GuiTexture> guiTextures) {
-		if (isShown()) {
-			guiTextures.add(crossHair);
-		}
+		//if (isShown()) {
+		//	guiTextures.add(crossHair);
+		//}
 	}
 }

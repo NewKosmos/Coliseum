@@ -8,7 +8,6 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
 import flounder.textures.*;
-import flounder.visual.*;
 
 import java.util.*;
 

@@ -7,7 +7,9 @@ import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 
 /**
- * Represents the 3D area of the world in which engine.shadows will be cast (basically represents the orthographic projection area for the shadow renderObjects pass). It can be updated each frame to optimise the area, making it as small as possible (to allow for optimal shadow map resolution) while not being too small to avoid objects not having engine.shadows when they should. This class also provides functionality to test whether an object is inside this shadow box. Everything inside the box will be rendered to the shadow map in the shadow renderObjects pass.
+ * Represents the 3D area of the world in which engine.shadows will be cast (basically represents the orthographic projection area for the shadow renderObjects pass).
+ * It can be updated each frame to optimise the area, making it as small as possible (to allow for optimal shadow map resolution) while not being too small to avoid objects not having shadows when they should.
+ * This class also provides functionality to test whether an object is inside this shadow box. Everything inside the box will be rendered to the shadow map in the shadow renderObjects pass.
  */
 public class ShadowBox {
 	private static final float OFFSET = 10.0f;
@@ -34,26 +36,9 @@ public class ShadowBox {
 	}
 
 	/**
-	 * Test if a bounding sphere intersects the shadow box. Can be used to decide which engine.entities should be rendered in the shadow renderObjects pass.
-	 *
-	 * @param position The center of the bounding sphere in world space.
-	 * @param radius The radius of the bounding sphere.
-	 *
-	 * @return {@code true} if the sphere intersects the box.
-	 */
-	public boolean isInBox(Vector3f position, float radius) { // Unused
-		Vector4f entityPos = Matrix4f.transform(lightViewMatrix, new Vector4f(position.getX(), position.getY(), position.getZ(), 1f), null);
-		float closestX = Maths.clamp(entityPos.x, minX, maxX);
-		float closestY = Maths.clamp(entityPos.y, minY, maxY);
-		float closestZ = Maths.clamp(entityPos.z, minZ, maxZ);
-		Vector3f closestPoint = new Vector3f(closestX, closestY, closestZ);
-		Vector3f center = new Vector3f(entityPos.x, entityPos.y, entityPos.z);
-		float disSquared = Vector3f.subtract(center, closestPoint, null).lengthSquared();
-		return disSquared < radius * radius;
-	}
-
-	/**
-	 * Updates the bounds of the shadow box based on the light direction and the camera's view frustum, to make sure that the box covers the smallest area possible while still ensuring that everything inside the camera's view (and in range) will be shadowed.
+	 * Updates the bounds of the shadow box based on the light direction and the camera's view frustum.
+	 * Will make sure that the box covers the smallest area possible while still ensuring that everything.
+	 * Objects inside the camera's view (and in range) will be shadowed.
 	 *
 	 * @param camera The camera object to be used when calculating the shadow boxes size.
 	 */
@@ -67,10 +52,10 @@ public class ShadowBox {
 		toFar.scale(shadowDistance);
 		Vector3f toNear = new Vector3f(forwardVector);
 		toNear.scale(camera.getNearPlane());
-		Vector3f centerNear = Vector3f.add(toNear, camera.getPosition(), null);
-		Vector3f centerFar = Vector3f.add(toFar, camera.getPosition(), null);
+		Vector3f centreNear = Vector3f.add(toNear, camera.getPosition(), null);
+		Vector3f centreFar = Vector3f.add(toFar, camera.getPosition(), null);
 
-		Vector4f[] points = calculateFrustumVertices(rotation, forwardVector, centerNear, centerFar);
+		Vector4f[] points = calculateFrustumVertices(rotation, forwardVector, centreNear, centreFar);
 
 		boolean first = true;
 
@@ -108,10 +93,20 @@ public class ShadowBox {
 		maxZ += OFFSET;
 	}
 
+	/**
+	 * Updates the shadow distance.
+	 *
+	 * @param camera The camera object.
+	 */
 	private void updateShadowDistance(ICamera camera) {
-		shadowDistance = 75; //camera.getAimDistance() * 2.0f;
+		shadowDistance = 50.0f; //camera.getAimDistance() * 2.0f;
 	}
 
+	/**
+	 * Updates the widths and heights of the box panes.
+	 *
+	 * @param camera The camera object.
+	 */
 	private void updateWidthsAndHeights(ICamera camera) {
 		farWidth = (float) (shadowDistance * Math.tan(Math.toRadians(camera.getFOV())));
 		nearWidth = (float) (camera.getNearPlane() * Math.tan(Math.toRadians(camera.getFOV())));
@@ -120,17 +115,15 @@ public class ShadowBox {
 	}
 
 	/**
+	 * Calculates the rotation of the camera represented as a matrix.
+	 *
 	 * @return The rotation of the camera represented as a matrix.
 	 */
 	private Matrix4f calculateCameraRotationMatrix(ICamera camera) {
 		Matrix4f rotation = new Matrix4f();
-		Matrix4f.rotate(rotation, new Vector3f(0.0f, 1.0f, 0.0f), degreesToRadians(camera.getRotation().getY()), rotation);
-		Matrix4f.rotate(rotation, new Vector3f(1.0f, 0.0f, 0.0f), degreesToRadians(-camera.getRotation().getX()), rotation);
+		Matrix4f.rotate(rotation, new Vector3f(0.0f, 1.0f, 0.0f), (float) Math.toRadians(camera.getRotation().getY()), rotation);
+		Matrix4f.rotate(rotation, new Vector3f(1.0f, 0.0f, 0.0f), (float) Math.toRadians(-camera.getRotation().getX()), rotation);
 		return rotation;
-	}
-
-	public static float degreesToRadians(float degrees) {
-		return degrees * (float) (Math.PI / 180.0);
 	}
 
 	/**
@@ -138,20 +131,20 @@ public class ShadowBox {
 	 *
 	 * @param rotation - camera's rotation.
 	 * @param forwardVector - the direction that the camera is aiming, and thus the direction of the frustum.
-	 * @param centerNear - the center point of the frustum's near plane.
-	 * @param centerFar - the center point of the frustum's far plane.
+	 * @param centreNear - the centre point of the frustum's near plane.
+	 * @param centreFar - the centre point of the frustum's far plane.
 	 *
 	 * @return The vertices of the frustum in light space.
 	 */
-	private Vector4f[] calculateFrustumVertices(Matrix4f rotation, Vector3f forwardVector, Vector3f centerNear, Vector3f centerFar) {
+	private Vector4f[] calculateFrustumVertices(Matrix4f rotation, Vector3f forwardVector, Vector3f centreNear, Vector3f centreFar) {
 		Vector3f upVector = new Vector3f(Matrix4f.transform(rotation, UP, null));
 		Vector3f rightVector = Vector3f.cross(forwardVector, upVector, null);
 		Vector3f downVector = new Vector3f(-upVector.x, -upVector.y, -upVector.z);
 		Vector3f leftVector = new Vector3f(-rightVector.x, -rightVector.y, -rightVector.z);
-		Vector3f farTop = Vector3f.add(centerFar, new Vector3f(upVector.x * farHeight, upVector.y * farHeight, upVector.z * farHeight), null);
-		Vector3f farBottom = Vector3f.add(centerFar, new Vector3f(downVector.x * farHeight, downVector.y * farHeight, downVector.z * farHeight), null);
-		Vector3f nearTop = Vector3f.add(centerNear, new Vector3f(upVector.x * nearHeight, upVector.y * nearHeight, upVector.z * nearHeight), null);
-		Vector3f nearBottom = Vector3f.add(centerNear, new Vector3f(downVector.x * nearHeight, downVector.y * nearHeight, downVector.z * nearHeight), null);
+		Vector3f farTop = Vector3f.add(centreFar, new Vector3f(upVector.x * farHeight, upVector.y * farHeight, upVector.z * farHeight), null);
+		Vector3f farBottom = Vector3f.add(centreFar, new Vector3f(downVector.x * farHeight, downVector.y * farHeight, downVector.z * farHeight), null);
+		Vector3f nearTop = Vector3f.add(centreNear, new Vector3f(upVector.x * nearHeight, upVector.y * nearHeight, upVector.z * nearHeight), null);
+		Vector3f nearBottom = Vector3f.add(centreNear, new Vector3f(downVector.x * nearHeight, downVector.y * nearHeight, downVector.z * nearHeight), null);
 		Vector4f[] points = new Vector4f[8];
 		points[0] = calculateLightSpaceFrustumCorner(farTop, rightVector, farWidth);
 		points[1] = calculateLightSpaceFrustumCorner(farTop, leftVector, farWidth);
@@ -167,7 +160,7 @@ public class ShadowBox {
 	/**
 	 * Calculates one of the corner vertices of the view frustum in world space and converts it to light space.
 	 *
-	 * @param startPoint The starting center point on the view frustum.
+	 * @param startPoint The starting centre point on the view frustum.
 	 * @param direction The direction of the corner from the start point.
 	 * @param width The distance of the corner from the start point.
 	 *
@@ -181,7 +174,28 @@ public class ShadowBox {
 	}
 
 	/**
-	 * @return The center of the shadow box (orthographic projection area).
+	 * Test if a bounding sphere intersects the shadow box. Can be used to decide which engine.entities should be rendered in the shadow renderObjects pass.
+	 *
+	 * @param position The centre of the bounding sphere in world space.
+	 * @param radius The radius of the bounding sphere.
+	 *
+	 * @return {@code true} if the sphere intersects the box.
+	 */
+	public boolean isInBox(Vector3f position, float radius) { // Unused
+		Vector4f entityPos = Matrix4f.transform(lightViewMatrix, new Vector4f(position.getX(), position.getY(), position.getZ(), 1f), null);
+		float closestX = Maths.clamp(entityPos.x, minX, maxX);
+		float closestY = Maths.clamp(entityPos.y, minY, maxY);
+		float closestZ = Maths.clamp(entityPos.z, minZ, maxZ);
+		Vector3f closestPoint = new Vector3f(closestX, closestY, closestZ);
+		Vector3f centre = new Vector3f(entityPos.x, entityPos.y, entityPos.z);
+		float disSquared = Vector3f.subtract(centre, closestPoint, null).lengthSquared();
+		return disSquared < radius * radius;
+	}
+
+	/**
+	 * Gets the centre of the shadow box (orthographic projection area).
+	 * 
+	 * @return The centre of the shadow box.
 	 */
 	protected Vector3f getCenter() {
 		float x = (minX + maxX) / 2.0f;
@@ -194,26 +208,37 @@ public class ShadowBox {
 	}
 
 	/**
-	 * @return The width of the shadow box (orthographic projection area).
+	 * Gets the width of the shadow box (orthographic projection area).
+	 *
+	 * @return The width of the shadow box.
 	 */
 	protected float getWidth() {
 		return maxX - minX;
 	}
 
 	/**
-	 * @return The height of the shadow box (orthographic projection area).
+	 * Gets the height of the shadow box (orthographic projection area).
+	 *
+	 * @return The height of the shadow box.
 	 */
 	protected float getHeight() {
 		return maxY - minY;
 	}
 
 	/**
-	 * @return The length of the shadow box (orthographic projection area).
+	 * Gets the length of the shadow box (orthographic projection area).
+	 *
+	 * @return The length of the shadow box.
 	 */
 	protected float getLength() {
 		return maxZ - minZ;
 	}
 
+	/**
+	 * Gets the distance the shadow extends.
+	 *
+	 * @return The distance the shadow extends.
+	 */
 	protected float getShadowDistance() {
 		return shadowDistance;
 	}

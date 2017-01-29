@@ -20,7 +20,7 @@ public class Chunk {
 	public static final int HEXAGON_SIDE_COUNT = 6; // The number of sides for each figure (hexagon).
 	public static final float HEXAGON_SIDE_LENGTH = 2.0f; //  Each tile can be broken into equilateral triangles with sides of length.
 
-	public static final int CHUNK_RADIUS = 14; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
+	public static final int CHUNK_RADIUS = 9; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
 
 	private Vector2f position;
 	private List<Entity> tiles;
@@ -72,7 +72,7 @@ public class Chunk {
 		//}
 
 		float chance = Maths.randomInRange(0.0f, 4.0f);
-		float height = Math.random() > 0.9 ? (2.0f * (float) Math.sqrt(2.0f)) : 0.0f;
+		float height = Math.random() > 0.875 ? (2.0f * (float) Math.sqrt(2.0f)) : 0.0f;
 
 		if (height > 0.0f) {
 			tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, 0.0f, position.y), new Vector3f(), this));

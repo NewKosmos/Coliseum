@@ -9,7 +9,6 @@ import flounder.camera.*;
 import flounder.devices.*;
 import flounder.entities.*;
 import flounder.helpers.*;
-import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
