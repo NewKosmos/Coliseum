@@ -2,6 +2,8 @@ package coliseum.world;
 
 import coliseum.world.terrain.*;
 import flounder.entities.*;
+import flounder.loaders.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
@@ -38,6 +40,7 @@ public class Chunk {
 		this.darkness = 0.0f;
 
 		generate();
+		FlounderLogger.log("Chunk[ " + position.x + ", " + position.y + " ]: Size = " + tiles.size());
 	}
 
 	private void generate() {
@@ -72,20 +75,22 @@ public class Chunk {
 		//}
 
 		float chance = Maths.randomInRange(0.0f, 4.0f);
-		float height = Math.random() > 0.875 ? (2.0f * (float) Math.sqrt(2.0f)) : 0.0f;
-
-		if (height > 0.0f) {
-			tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, 0.0f, position.y), new Vector3f(), this));
-		}
+		float height = Math.random() > 0.75 ? (2.0f * (float) Math.sqrt(2.0f)) : 0.0f;
 
 		if (chance > 3.0f) {
-			tiles.add(new TerrainWater(FlounderEntities.getEntities(), new Vector3f(position.x, height, position.y), new Vector3f(), this));
-		} else if (chance > 2.0f) {
-			tiles.add(new TerrainSand(FlounderEntities.getEntities(), new Vector3f(position.x, height, position.y), new Vector3f(), this));
-		} else if (chance > 1.0f) {
-			tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, height, position.y), new Vector3f(), this));
-		} else if (chance > 0.0f) {
-			tiles.add(new TerrainGrass(FlounderEntities.getEntities(), new Vector3f(position.x, height, position.y), new Vector3f(), this));
+			tiles.add(new TerrainWater(FlounderEntities.getEntities(), new Vector3f(position.x, 0.0f, position.y), new Vector3f(), this));
+		} else {
+			if (height > 0.0f) {
+				tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, 0.0f, position.y), new Vector3f(), this));
+			}
+
+			if (chance > 2.0f) {
+				tiles.add(new TerrainSand(FlounderEntities.getEntities(), new Vector3f(position.x, height, position.y), new Vector3f(), this));
+			} else if (chance > 1.0f) {
+				tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, height, position.y), new Vector3f(), this));
+			} else if (chance > 0.0f) {
+				tiles.add(new TerrainGrass(FlounderEntities.getEntities(), new Vector3f(position.x, height, position.y), new Vector3f(), this));
+			}
 		}
 	}
 

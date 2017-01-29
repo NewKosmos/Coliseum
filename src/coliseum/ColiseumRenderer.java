@@ -1,5 +1,6 @@
 package coliseum;
 
+import coliseum.clouds.*;
 import coliseum.entities.*;
 import coliseum.shadows.*;
 import coliseum.skybox.*;
@@ -21,11 +22,12 @@ public class ColiseumRenderer extends IRendererMaster {
 	private static final Vector4f POSITIVE_INFINITY = new Vector4f(0.0f, 1.0f, 0.0f, Float.POSITIVE_INFINITY);
 	private static final Colour CLEAR_COLOUR = new Colour(0.0f, 0.0f, 0.0f);
 
-	private SkyboxRenderer skyboxRenderer;
 	private ShadowRenderer shadowRenderer;
+	private SkyboxRenderer skyboxRenderer;
+	private CloudsRenderer cloudsRenderer;
 	private EntitiesRenderer entitiesRenderer;
 	private BoundingRenderer boundingRenderer;
-	private GuiRenderer guiRenderer;
+	private GuisRenderer guisRenderer;
 	private FontRenderer fontRenderer;
 
 	private FBO rendererFBO;
@@ -40,11 +42,12 @@ public class ColiseumRenderer extends IRendererMaster {
 
 	@Override
 	public void init() {
-		this.skyboxRenderer = new SkyboxRenderer();
 		this.shadowRenderer = new ShadowRenderer();
+		this.skyboxRenderer = new SkyboxRenderer();
+		this.cloudsRenderer = new CloudsRenderer();
 		this.entitiesRenderer = new EntitiesRenderer();
 		this.boundingRenderer = new BoundingRenderer();
-		this.guiRenderer = new GuiRenderer();
+		this.guisRenderer = new GuisRenderer();
 		this.fontRenderer = new FontRenderer();
 
 		this.rendererFBO = FBO.newFBO(1.0f).depthBuffer(DepthBufferType.TEXTURE).create();
@@ -69,7 +72,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		renderPost(FlounderGuis.getGuiMaster().isGamePaused(), FlounderGuis.getGuiMaster().getBlurFactor());
 
 		/* Scene independents. */
-		guiRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
+		guisRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
 		fontRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
 
 		/* Unbinds the FBO. */
@@ -94,6 +97,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		OpenGlUtils.prepareNewRenderParse(clearColour);
 
 		skyboxRenderer.render(clipPlane, camera);
+		cloudsRenderer.render(clipPlane, camera);
 		entitiesRenderer.render(clipPlane, camera);
 		boundingRenderer.render(clipPlane, camera);
 	}
@@ -121,11 +125,12 @@ public class ColiseumRenderer extends IRendererMaster {
 
 	@Override
 	public void dispose() {
-		skyboxRenderer.dispose();
 		shadowRenderer.dispose();
+		skyboxRenderer.dispose();
+		cloudsRenderer.dispose();
 		entitiesRenderer.dispose();
 		boundingRenderer.dispose();
-		guiRenderer.dispose();
+		guisRenderer.dispose();
 		fontRenderer.dispose();
 
 		rendererFBO.delete();

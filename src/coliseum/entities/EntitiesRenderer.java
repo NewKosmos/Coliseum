@@ -25,8 +25,6 @@ import static org.lwjgl.opengl.GL20.*;
  * A renderer that is used to render entity's.
  */
 public class EntitiesRenderer extends IRenderer {
-	private static final int NUMBER_LIGHTS = 4;
-
 	private static final MyFile VERTEX_SHADER = new MyFile(Shader.SHADERS_LOC, "entities", "entityVertex.glsl");
 	private static final MyFile FRAGMENT_SHADER = new MyFile(Shader.SHADERS_LOC, "entities", "entityFragment.glsl");
 

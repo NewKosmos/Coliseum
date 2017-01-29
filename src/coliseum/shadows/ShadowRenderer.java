@@ -21,7 +21,7 @@ import static org.lwjgl.opengl.GL20.*;
 public class ShadowRenderer extends IRenderer {
 	private static final MyFile VERTEX_SHADER = new MyFile(Shader.SHADERS_LOC, "shadows", "shadowVertex.glsl");
 	private static final MyFile FRAGMENT_SHADER = new MyFile(Shader.SHADERS_LOC, "shadows", "shadowFragment.glsl");
-	public static final int SHADOW_MAP_SIZE = 4096 * 4;
+	public static final int SHADOW_MAP_SIZE = 4096 * 3;
 
 	private Shader shader;
 
@@ -146,7 +146,7 @@ public class ShadowRenderer extends IRenderer {
 
 	@Override
 	public void profile() {
-		FlounderProfiler.add("Shadows", "Render Time", getRenderTime());
+		FlounderProfiler.add("Shadows", "Render Time", super.getRenderTime());
 	}
 
 	/**

@@ -29,7 +29,7 @@ public class SkyCycle {
 		dayFactor = (float) (skyDriver.update(FlounderFramework.getDelta()) / 100.0);
 		Colour.interpolate(SKY_COLOUR_DAY, SKY_COLOUR_NIGHT, dayFactor, skyColour);
 
-	//	Vector3f.rotate(SUN_POSITION, new Vector3f(0.0f, dayFactor * 360.0f, 0.0f), lightDirection);
+		Vector3f.rotate(SUN_POSITION, new Vector3f(0.0f, dayFactor * 360.0f, 0.0f), lightDirection);
 	}
 
 	public float getDayFactor() {

@@ -8,10 +8,10 @@ uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 
 //---------OUT------------
-out float pass_height;
+out vec3 pass_position;
 
 //---------MAIN------------
 void main(void) {
 	gl_Position = projectionMatrix * viewMatrix * vec4(in_position, 1.0);
- 	pass_height = in_position.y;
+ 	pass_position = in_position;
 }

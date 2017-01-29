@@ -16,13 +16,13 @@ layout(location = 5) in vec3 in_weights;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform vec4 clipPlane;
+uniform mat4 modelMatrix;
 uniform mat4 shadowSpaceMatrix;
 uniform float shadowDistance;
 
 uniform mat4 jointTransforms[MAX_JOINTS];
 uniform bool animated;
 
-uniform mat4 modelMatrix;
 uniform float atlasRows;
 uniform vec2 atlasOffset;
 
@@ -65,7 +65,7 @@ void main(void) {
 	mat3 toTangentSpace = mat3(tang.x, bitang.x, norm.x, tang.y, bitang.y, norm.y, tang.z, bitang.z, norm.z);
 
 	pass_textureCoords = (in_textureCoords / atlasRows) + atlasOffset;
-	pass_surfaceNormal = totalNormal.xyz;// (modelMatrix * totalNormal).xyz; // toTangentSpace * surfaceNormal;
+	pass_surfaceNormal = totalNormal.xyz; // (modelMatrix * totalNormal).xyz; // toTangentSpace * surfaceNormal;
 
 	pass_shadowCoords = shadowSpaceMatrix * worldPosition;
 	float distanceAway = length(pass_positionRelativeToCam.xyz);

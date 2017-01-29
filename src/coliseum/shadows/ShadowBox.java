@@ -12,9 +12,11 @@ import flounder.maths.vectors.*;
  * This class also provides functionality to test whether an object is inside this shadow box. Everything inside the box will be rendered to the shadow map in the shadow renderObjects pass.
  */
 public class ShadowBox {
+	private static final Vector4f UP = new Vector4f(0.0f, 1.0f, 0.0f, 0.0f);
+	private static final Vector4f FORWARD = new Vector4f(0.0f, 0.0f, -1.0f, 0.0f);
+
 	private static final float OFFSET = 10.0f;
-	private static final Vector4f UP = new Vector4f(0, 1, 0, 0);
-	private static final Vector4f FORWARD = new Vector4f(0, 0, -1, 0);
+	private static final float SHADOW_DISTANCE = 100.0f;
 
 	private Matrix4f lightViewMatrix;
 
@@ -99,7 +101,7 @@ public class ShadowBox {
 	 * @param camera The camera object.
 	 */
 	private void updateShadowDistance(ICamera camera) {
-		shadowDistance = 50.0f; //camera.getAimDistance() * 2.0f;
+		shadowDistance = SHADOW_DISTANCE; //camera.getAimDistance() * 2.0f;
 	}
 
 	/**

@@ -1,9 +1,7 @@
 #version 130
 
 //---------CONSTANT------------
-const vec2 lightBias = vec2(0.7, 0.6);
-const float tileAmount = 50.0;
-const float shadowDarkness = 0.6;
+const float shadowDarkness = 0.7;
 
 //---------IN------------
 in vec4 pass_positionRelativeToCam;

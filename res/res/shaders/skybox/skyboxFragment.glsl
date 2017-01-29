@@ -2,9 +2,10 @@
 
 //---------INCLUDES------------
 #include "maths.glsl"
+#include "noise.glsl"
 
 //---------IN------------
-in float pass_height;
+in vec3 pass_position;
 
 //---------UNIFORM------------
 uniform vec4 colour1;
@@ -17,11 +18,12 @@ layout(location = 0) out vec4 out_colour;
 //---------MAIN------------
 void main(void) {
     // Calculates the star colours.
+	//float w = snoise(pass_position);
 	vec2 x = gl_FragCoord.xy;
 	vec3 a = vec3(max((fract(dot(sin(x), x)) - 0.99) * 90.0, 0.0));
 
 	// Calculates the skybox fade factor.
-	float fadeFactor = 1.0 - smoothlyStep(-256.0, 72.0, pass_height);
+	float fadeFactor = 1.0 - smoothlyStep(-256.0, 72.0, pass_position.y);
 
 	// Creates the output image.
 	out_colour = mix(colour1, vec4(a, 1.0), dayFactor);
