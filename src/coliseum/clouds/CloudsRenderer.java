@@ -1,5 +1,7 @@
 package coliseum.clouds;
 
+import coliseum.*;
+import coliseum.shadows.*;
 import coliseum.world.*;
 import flounder.camera.*;
 import flounder.devices.*;
@@ -63,6 +65,10 @@ public class CloudsRenderer extends IRenderer {
 			shader.getUniformFloat("fogGradient").loadFloat(2.0f);
 		}
 
+		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.SHADOW_MAP_SIZE);
+		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
+		shader.getUniformFloat("shadowDistance").loadFloat(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
+
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();
 		OpenGlUtils.enableAlphaBlending();
@@ -74,10 +80,12 @@ public class CloudsRenderer extends IRenderer {
 
 		OpenGlUtils.bindTexture(textureClouds, 0);
 
-		Matrix4f.transformationMatrix(new Vector3f(0.0f, -10.0f, 0.0f), new Vector3f(), 128.0f, modelMatrix);
+		OpenGlUtils.bindTexture(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
+
+		Matrix4f.transformationMatrix(new Vector3f(0.0f, -8.0f, 0.0f), new Vector3f(), 128.0f, modelMatrix);
 
 		shader.getUniformMat4("modelMatrix").loadMat4(modelMatrix);
-		shader.getUniformFloat("darkness").loadFloat(1.0f);
+		shader.getUniformFloat("darkness").loadFloat(0.0f);
 
 		glDrawElements(GL_TRIANGLES, model.getVaoLength(), GL_UNSIGNED_INT, 0);
 		OpenGlUtils.unbindVAO(0, 1);
