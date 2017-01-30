@@ -1,27 +1,38 @@
 package coliseum.chunks;
 
-import flounder.maths.vectors.*;
 import flounder.models.*;
+import flounder.resources.*;
 import flounder.textures.*;
 
-public class Tile implements Comparable<Tile> {
-	private Vector3f position;
+public class Tile {
+	public static final Tile TILE_GRASS = new Tile(
+			Model.newModel(new MyFile(MyFile.RES_FOLDER, "terrains", "grass", "grass.obj")).create(),
+			Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "grass", "grass.png")).clampEdges().create()
+	);
+	public static final Tile TILE_STONE = new Tile(
+			Model.newModel(new MyFile(MyFile.RES_FOLDER, "terrains", "stone", "stone.obj")).create(),
+			Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "stone", "stone.png")).clampEdges().create()
+	);
+	public static final Tile TILE_SAND = new Tile(
+			Model.newModel(new MyFile(MyFile.RES_FOLDER, "terrains", "sand", "sand.obj")).create(),
+			Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "sand", "sand.png")).clampEdges().create()
+	);
+	public static final Tile TILE_WATER = new Tile(
+			Model.newModel(new MyFile(MyFile.RES_FOLDER, "terrains", "water", "water.obj")).create(),
+			Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "water", "water.png")).clampEdges().create()
+	);
+	public static final Tile TILE_ROCK_GEM = new Tile(
+			Model.newModel(new MyFile(MyFile.RES_FOLDER, "terrains", "rockGem", "rockGem.obj")).create(),
+			Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "rockGem", "rockGem.png")).clampEdges().create()
+	);
+
+
 	private Model model;
 	private Texture texture;
 
-	protected Tile(Vector3f position, Model model, Texture texture) {
-		this.position = position;
+	protected Tile(Model model, Texture texture) {
 		this.model = model;
 		this.texture = texture;
-
-		//	Entity e = new Entity(FlounderEntities.getEntities(), position, new Vector3f());
-		//	new ComponentModel(e, model, 2.0f, texture, 0);
-		//	new ComponentCollider(e);
-		//	new ComponentCollision(e);
-	}
-
-	public Vector3f getPosition() {
-		return position;
 	}
 
 	public Model getModel() {
@@ -30,10 +41,5 @@ public class Tile implements Comparable<Tile> {
 
 	public Texture getTexture() {
 		return texture;
-	}
-
-	@Override
-	public int compareTo(Tile o) {
-		return ((Float) position.lengthSquared()).compareTo(o.position.lengthSquared());
 	}
 }

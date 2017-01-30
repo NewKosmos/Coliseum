@@ -3,9 +3,12 @@ package coliseum;
 import coliseum.uis.*;
 import coliseum.uis.console.*;
 import flounder.devices.*;
+import flounder.events.*;
 import flounder.fonts.*;
 import flounder.guis.*;
+import flounder.inputs.*;
 import flounder.physics.bounding.*;
+import org.lwjgl.glfw.*;
 
 public class ColiseumGuis extends IGuiMaster {
 	private MasterOverlay masterOverlay;
@@ -23,6 +26,20 @@ public class ColiseumGuis extends IGuiMaster {
 
 		//	this.consoleUi = new ConsoleUi();
 		//	FlounderGuis.addComponent(consoleUi, 0.0f, 0.0f, 1.0f, 1.0f);
+
+		FlounderEvents.addEvent(new IEvent() {
+			private KeyButton k = new KeyButton(GLFW.GLFW_KEY_ESCAPE);
+
+			@Override
+			public boolean eventTriggered() {
+				return k.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				masterOverlay.show(!masterOverlay.isShown());
+			}
+		});
 	}
 
 	@Override

@@ -10,18 +10,15 @@ public class ComponentTerrain extends IComponentEntity {
 	public static final int ID = EntityIDAssigner.getId();
 
 	private Chunk chunk;
-	private float height;
 
-	public ComponentTerrain(Entity entity, Chunk chunk, float height) {
+	public ComponentTerrain(Entity entity, Chunk chunk) {
 		super(entity, ID);
 		this.chunk = chunk;
-		this.height = height;
 	}
 
 	public ComponentTerrain(Entity entity, EntityTemplate template) {
 		super(entity, ID);
 		this.chunk = null;
-		this.height = (float) Math.sqrt(2.0f) * 2.0f;
 	}
 
 	@Override
@@ -31,10 +28,6 @@ public class ComponentTerrain extends IComponentEntity {
 	@Override
 	public IBounding getBounding() {
 		return null;
-	}
-
-	public float getHeight() {
-		return height;
 	}
 
 	public float getDarkness() {

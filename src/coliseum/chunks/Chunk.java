@@ -1,12 +1,11 @@
 package coliseum.chunks;
 
-import flounder.events.*;
-import flounder.helpers.*;
-import flounder.inputs.*;
+import coliseum.entities.components.*;
+import flounder.entities.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
-import org.lwjgl.glfw.*;
+import flounder.space.*;
 
 import java.util.*;
 
@@ -15,70 +14,87 @@ import java.util.*;
  * http://www.redblobgames.com/grids/hexagons/#range
  * http://stackoverflow.com/questions/2459402/hexagonal-grid-coordinates-to-pixel-coordinates
  */
-public class Chunk {
-	private Vector2f position;
-	private List<Tile> tiles;
+public class Chunk extends Entity {
+	private Map<Tile, List<Vector3f>> tiles;
 	private ChunkMesh chunkMesh;
-	//	private boolean tilesChanged;
+	private boolean tilesChanged;
 	private float darkness;
 
-	public Chunk(Vector2f position) {
-		this.position = position;
-		this.tiles = new ArrayList<>();
+	public Chunk(ISpatialStructure<Entity> structure, Vector3f position) {
+		super(structure, position, new Vector3f());
+		this.tiles = new HashMap<>();
 		this.chunkMesh = new ChunkMesh(this);
-//		this.tilesChanged = true;
+		this.tilesChanged = true;
 		this.darkness = 0.0f;
 
-		FlounderLogger.log("Chunk[ " + position.x + ", " + position.y + " ]: Size = " + tiles.size());
 		ChunkGenerator.generate(this);
-		this.tiles = ArraySorting.quickSort(tiles);
-
-		FlounderEvents.addEvent(new IEvent() {
-			private KeyButton k = new KeyButton(GLFW.GLFW_KEY_R);
-
-			@Override
-			public boolean eventTriggered() {
-				return k.wasDown();
-			}
-
-			@Override
-			public void onEvent() {
-				chunkMesh.rebuildAABB();
-				chunkMesh.rebuildMesh();
-			}
-		});
+		FlounderLogger.log("Chunk[ " + position.x + ", " + position.y + " ]: Size = " + tiles.size());
 	}
 
 	public void update(Vector3f playerPosition) {
-		/*if (tilesChanged) {
-			chunkMesh.rebuildAABB();
+		// Builds or rebulds this chunks mesh.
+		if (tilesChanged || chunkMesh.getModel() == null) {
 			chunkMesh.rebuildMesh();
+			chunkMesh.rebuildAABB();
 			tilesChanged = false;
-		}*/
-
-		if (playerPosition != null) {
-			//	double distance = Math.sqrt(Math.pow(position.x - playerPosition.x, 2.0) + Math.pow(position.y - playerPosition.y, 2.0));
-			//	if (distance >= 30.0) {
-			//		darkness = 0.7f;
-			//	} else {
-			//		darkness = 0.0f;
-			//	}
 		}
 
+		// Updates the darkness of this chunk.
+		if (playerPosition != null) {
+			double distance = Math.sqrt(Math.pow(getPosition().x - playerPosition.x, 2.0) + Math.pow(getPosition().y - playerPosition.y, 2.0));
+
+			if (distance >= 30.0) {
+				darkness = 0.7f;
+			} else {
+				darkness = 0.0f;
+			}
+		}
+
+		// Adds this mesh AABB to the bounding render pool.
 		FlounderBounding.addShapeRender(chunkMesh.getAABB());
 	}
 
-	public Vector2f getPosition() {
-		return position;
-	}
-
-	public List<Tile> getTiles() {
+	public Map<Tile, List<Vector3f>> getTiles() {
 		return tiles;
 	}
 
-	public void addTile(Tile tile) {
-		tiles.add(tile);
-		//	tilesChanged = true;
+	public void addTile(Tile tile, Vector3f position) {
+		if (tile == null && position == null) {
+			return;
+		}
+
+		if (tiles.containsKey(tile)) {
+			tiles.get(tile).add(position);
+		} else {
+			List<Vector3f> list = new ArrayList<>();
+			list.add(position);
+			tiles.put(tile, list);
+		}
+
+		tilesChanged = true;
+	}
+
+	public void removeTile(Vector3f position) {
+		if (position == null) {
+			return;
+		}
+
+		for (Tile tile : tiles.keySet()) {
+			Iterator<Vector3f> iterator = tiles.get(tile).iterator();
+
+			while (iterator.hasNext()) {
+				Vector3f next = iterator.next();
+
+				if (next.equals(position)) {
+					iterator.remove();
+					tilesChanged = true;
+				}
+			}
+		}
+	}
+
+	public ChunkMesh getChunkMesh() {
+		return chunkMesh;
 	}
 
 	public float getDarkness() {

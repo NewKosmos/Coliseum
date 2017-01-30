@@ -84,7 +84,7 @@ public class ComponentCollider extends IComponentEntity {
 
 			if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().getMeshData() != null && componentModel.getModel().getMeshData().getAABB() != null) {
 				AABB.recalculate(componentModel.getModel().getMeshData().getAABB(), super.getEntity().getPosition(), super.getEntity().getRotation(), componentModel.getScale(), aabb);
-				QuickHull.recalculate(componentModel.getModel().getMeshData().getHull(), hull, super.getEntity().getPosition(), super.getEntity().getRotation(), componentModel.getScale());
+			//	QuickHull.recalculate(componentModel.getModel().getMeshData().getHull(), hull, super.getEntity().getPosition(), super.getEntity().getRotation(), componentModel.getScale());
 			}
 
 			// TODO: Calculate the AABBs and Hulls from animated models.

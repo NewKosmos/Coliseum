@@ -23,6 +23,14 @@ public class ChunkMesh {
 
 	protected void rebuildMesh() {
 		//
+		if (model != null) {
+			model.delete();
+		}
+
+		model = null;
+
+		//
+		AABB modelAABB = new AABB();
 		List<Float> verticesList = new ArrayList<>();
 		List<Float> textureCoordsList = new ArrayList<>();
 		List<Float> normalsList = new ArrayList<>();
@@ -32,38 +40,72 @@ public class ChunkMesh {
 		//
 		int iterativeSize = 0;
 
-		for (Tile tile : chunk.getTiles()) {
-			Model model = tile.getModel();
-			int currentPosID = 0;
-			int maxIndex = 0;
+		for (Tile tile : chunk.getTiles().keySet()) {
+			for (Vector3f vector : chunk.getTiles().get(tile)) {
+				Model model = tile.getModel();
+				int currentPosID = 0;
+				int maxIndex = 0;
 
-			for (int i = 0; i < model.getMeshData().getVertices().length; i++) {
-				float vertexOffset = (currentPosID == 0) ? tile.getPosition().x : (currentPosID == 1) ? tile.getPosition().y : tile.getPosition().z;
-				currentPosID = (currentPosID == 2) ? 0 : currentPosID + 1;
-				verticesList.add(model.getMeshData().getVertices()[i] + (vertexOffset / 2.0f));
-			}
-
-			for (int i = 0; i < model.getMeshData().getTextures().length; i++) {
-				textureCoordsList.add(model.getMeshData().getTextures()[i]);
-			}
-
-			for (int i = 0; i < model.getMeshData().getNormals().length; i++) {
-				normalsList.add(model.getMeshData().getNormals()[i]);
-			}
-
-			for (int i = 0; i < model.getMeshData().getTangents().length; i++) {
-				tangentsList.add(model.getMeshData().getTangents()[i]);
-			}
-
-			for (int i = 0; i < model.getMeshData().getIndices().length; i++) {
-				if (maxIndex < model.getMeshData().getIndices()[i]) {
-					maxIndex = model.getMeshData().getIndices()[i];
+				if (model == null || model.getMeshData() == null) {
+					return;
 				}
 
-				indicesList.add(model.getMeshData().getIndices()[i] + iterativeSize);
-			}
+				//
+				for (int i = 0; i < model.getMeshData().getVertices().length; i++) {
+					float vertexOffset = (currentPosID == 0) ? vector.x : (currentPosID == 1) ? vector.y : vector.z;
+					currentPosID = (currentPosID == 2) ? 0 : currentPosID + 1;
 
-			iterativeSize += maxIndex + 1;
+					float vertex = model.getMeshData().getVertices()[i] + (vertexOffset / 2.0f);
+					verticesList.add(vertex);
+
+					switch (currentPosID) {
+						case (0):
+							if (vertex > modelAABB.getMaxExtents().x) {
+								modelAABB.getMaxExtents().x = vertex;
+							} else if (vertex < modelAABB.getMinExtents().x) {
+								modelAABB.getMinExtents().x = vertex;
+							}
+							break;
+						case (1):
+							if (vertex > modelAABB.getMaxExtents().y) {
+								modelAABB.getMaxExtents().y = vertex;
+							} else if (vertex < modelAABB.getMinExtents().y) {
+								modelAABB.getMinExtents().y = vertex;
+							}
+							break;
+						case (2):
+							if (vertex > modelAABB.getMaxExtents().z) {
+								modelAABB.getMaxExtents().z = vertex;
+							} else if (vertex < modelAABB.getMinExtents().z) {
+								modelAABB.getMinExtents().z = vertex;
+							}
+							break;
+					}
+				}
+
+				for (int i = 0; i < model.getMeshData().getTextures().length; i++) {
+					textureCoordsList.add(model.getMeshData().getTextures()[i]);
+				}
+
+				for (int i = 0; i < model.getMeshData().getNormals().length; i++) {
+					normalsList.add(model.getMeshData().getNormals()[i]);
+				}
+
+				for (int i = 0; i < model.getMeshData().getTangents().length; i++) {
+					tangentsList.add(model.getMeshData().getTangents()[i]);
+				}
+
+				for (int i = 0; i < model.getMeshData().getIndices().length; i++) {
+					if (maxIndex < model.getMeshData().getIndices()[i]) {
+						maxIndex = model.getMeshData().getIndices()[i];
+					}
+
+					indicesList.add(model.getMeshData().getIndices()[i] + iterativeSize);
+				}
+
+				//
+				iterativeSize += maxIndex + 1;
+			}
 		}
 
 		//
@@ -133,7 +175,7 @@ public class ChunkMesh {
 
 			@Override
 			public AABB getAABB() {
-				return aabb;
+				return modelAABB;
 			}
 
 			@Override
@@ -143,37 +185,17 @@ public class ChunkMesh {
 		};
 
 		this.model = Model.newModel(manual).create();
-
-
-		Entity e = new Entity(FlounderEntities.getEntities(), new Vector3f(), new Vector3f());
-		new ComponentModel(e, model, 2.0f, chunk.getTiles().get(0).getTexture(), 0);
-		//	new ComponentCollider(e);
-		//	new ComponentCollision(e);
+		new ComponentModel(chunk, model, 2.0f, Tile.TILE_GRASS.getTexture(), 0);
+		new ComponentCollider(chunk);
+		new ComponentCollision(chunk);
 	}
 
 	protected void rebuildAABB() {
-		// TODO: Make AABB from mesh!
-		/*for (Tile tile : chunk.getTiles()) {
-			AABB aabb = (AABB) tile.getBounding();
+		if (model == null || model.getMeshData() == null) {
+			return;
+		}
 
-			if (aabb.getMinExtents().x < this.aabb.getMinExtents().x) {
-				this.aabb.getMinExtents().x = aabb.getMinExtents().x;
-			} else if (aabb.getMaxExtents().x > this.aabb.getMaxExtents().x) {
-				this.aabb.getMaxExtents().x = aabb.getMaxExtents().x;
-			}
-
-			if (aabb.getMinExtents().y < this.aabb.getMinExtents().y) {
-				this.aabb.getMinExtents().y = aabb.getMinExtents().y;
-			} else if (aabb.getMaxExtents().y > this.aabb.getMaxExtents().y) {
-				this.aabb.getMaxExtents().y = aabb.getMaxExtents().y;
-			}
-
-			if (aabb.getMinExtents().z < this.aabb.getMinExtents().z) {
-				this.aabb.getMinExtents().z = aabb.getMinExtents().z;
-			} else if (aabb.getMaxExtents().z > this.aabb.getMaxExtents().z) {
-				this.aabb.getMaxExtents().z = aabb.getMaxExtents().z;
-			}
-		}*/
+		AABB.recalculate(model.getMeshData().getAABB(), new Vector3f(), new Vector3f(), 2.0f, aabb);
 	}
 
 	public Chunk getChunk() {
@@ -186,5 +208,9 @@ public class ChunkMesh {
 
 	public AABB getAABB() {
 		return aabb;
+	}
+
+	public void delete() {
+		model.delete();
 	}
 }

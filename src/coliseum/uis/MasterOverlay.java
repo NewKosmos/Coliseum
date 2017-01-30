@@ -27,6 +27,7 @@ public class MasterOverlay extends GuiComponent {
 		upsText = createStatus("UPS: 0", 0.06f);
 		positionText = createStatus("POSITION: [0, 0, 0]", 0.11f);
 		createStatus("C TO TOGGLE EFFECTS", 0.16f);
+		createStatus("ESC TO HIDE HUD", 0.20f);
 
 		crossHair = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "guis", "crosshair.png")).create());
 		crossHair.getTexture().setNumberOfRows(4);
@@ -50,10 +51,6 @@ public class MasterOverlay extends GuiComponent {
 		text.setBorder(new ConstantDriver(0.04f));
 		super.addText(text, 0.01f, 0.01f + yPos, 0.5f);
 		return text;
-	}
-
-	@Override
-	public void show(boolean visible) {
 	}
 
 	@Override
