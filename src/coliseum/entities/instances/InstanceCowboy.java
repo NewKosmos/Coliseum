@@ -1,4 +1,4 @@
-package coliseum.world;
+package coliseum.entities.instances;
 
 import coliseum.entities.components.*;
 import flounder.animation.*;
@@ -10,11 +10,11 @@ import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
 
-public class InstanceDerpWalk extends Entity {
-	private static final MyFile colladaFile = new MyFile(FlounderEntities.ENTITIES_FOLDER, "derpWalk.dae");
-	private static final Texture texture = null; // Texture.newTexture(new MyFile(FlounderEntities.ENTITIES_FOLDER, "derpWalk.png")).create();
+public class InstanceCowboy extends Entity {
+	private static final MyFile colladaFile = new MyFile(FlounderEntities.ENTITIES_FOLDER, "cowboy", "cowboy.dae");
+	private static final Texture texture = Texture.newTexture(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cowboy", "cowboy.png")).create();
 
-	public InstanceDerpWalk(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+	public InstanceCowboy(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 
 		ModelAnimated modelAnimated = FlounderCollada.loadCollada(colladaFile);
@@ -22,8 +22,8 @@ public class InstanceDerpWalk extends Entity {
 		AnimationData animationData = FlounderCollada.loadAnimation(colladaFile);
 		Animation animation = FlounderAnimation.loadAnimation(animationData);
 
-		//	new ComponentCollision(this);
-		//	new ComponentCollider(this);
+		// ComponentCollider componentCollider = new ComponentCollider(this);
+		// ComponentCollision componentCollision = new ComponentCollision(this);
 		ComponentAnimation componentAnimation = new ComponentAnimation(this, modelAnimated, 1.0f, texture, 1);
 		componentAnimation.doAnimation(animation);
 	}

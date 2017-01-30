@@ -1,5 +1,7 @@
 package coliseum.world;
 
+import coliseum.chunks.*;
+import coliseum.entities.*;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.framework.*;
@@ -17,78 +19,32 @@ public class ColiseumWorld extends IModule {
 
 	private Fog fog;
 	private SkyCycle skyCycle;
-	private List<Chunk> chunks;
+	private ChunksManager chunksManager;
 
 	public ColiseumWorld() {
 		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderBounding.class, FlounderTextures.class, FlounderEntities.class);
-
-		this.fog = new Fog(new Colour(), 0.003f, 2.0f, 0.0f, 50.0f);
-		this.skyCycle = new SkyCycle();
-		this.chunks = new ArrayList<>();
 	}
 
 	@Override
 	public void init() {
-	//	new InstanceDerpWalk(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
-		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
-		// new InstanceCloud(FlounderEntities.getEntities(), new Vector3f(0.0f, -8.0f, 0.0f), new Vector3f());
-
-		for (int i = 0; i < 1; i++) {
-			int shapesOnEdge = i;
-			float r = 0;
-			float g = -i;
-			float b = i;
-			chunks.add(new Chunk(Chunk.calculateXY(new Vector3f(r, g, b), Chunk.HEXAGON_SIDE_LENGTH * Chunk.CHUNK_RADIUS, null)));
-
-			for (int j = 0; j < Chunk.HEXAGON_SIDE_COUNT; j++) {
-				if (j == Chunk.HEXAGON_SIDE_COUNT - 1) {
-					shapesOnEdge = i - 1;
-				}
-
-				for (int w = 0; w < shapesOnEdge; w++) {
-					// r + g + b = 0
-					r = r + Chunk.GENERATE_DELTAS[j][0];
-					g = g + Chunk.GENERATE_DELTAS[j][1];
-					b = b + Chunk.GENERATE_DELTAS[j][2];
-					chunks.add(new Chunk(Chunk.calculateXY(new Vector3f(r, g, b), Chunk.HEXAGON_SIDE_LENGTH * Chunk.CHUNK_RADIUS, null)));
-				}
-			}
-		}
-
-		/*chunks.add(new Chunk(new Vector2f(0.0f, 0.0f)));
-		chunks.add(new Chunk(new Vector2f(10.392304f, 18.0f)));
-		chunks.add(new Chunk(new Vector2f(20.784609f, 0.0f)));
-		chunks.add(new Chunk(new Vector2f(10.392304f, -18.0f)));
-		chunks.add(new Chunk(new Vector2f(-10.392304f, -18.0f)));
-		chunks.add(new Chunk(new Vector2f(-20.784609f, 0.0f)));
-		chunks.add(new Chunk(new Vector2f(-10.392304f, 18.0f)));*/
+		this.fog = new Fog(new Colour(), 0.003f, 2.0f, 0.0f, 50.0f);
+		this.skyCycle = new SkyCycle();
+		this.chunksManager = new ChunksManager();
 	}
 
 	@Override
 	public void update() {
 		skyCycle.update();
 		fog.setFogColour(skyCycle.getSkyColour());
-
-		for (Chunk chunk : chunks) {
-			if (FlounderCamera.getPlayer() != null) {
-				chunk.update(FlounderCamera.getPlayer().getPosition());
-			} else {
-				chunk.update(null);
-			}
-		}
+		chunksManager.update();
 	}
 
 	@Override
 	public void profile() {
-
 	}
 
 	public static Fog getFog() {
 		return INSTANCE.fog;
-	}
-
-	public static void addFog(Fog fog) {
-		INSTANCE.fog = fog;
 	}
 
 	public static SkyCycle getSkyCycle() {
@@ -102,6 +58,6 @@ public class ColiseumWorld extends IModule {
 
 	@Override
 	public void dispose() {
-
+		chunksManager.dispose();
 	}
 }

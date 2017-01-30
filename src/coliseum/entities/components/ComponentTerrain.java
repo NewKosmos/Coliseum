@@ -1,6 +1,6 @@
 package coliseum.entities.components;
 
-import coliseum.world.*;
+import coliseum.chunks.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.entities.template.*;

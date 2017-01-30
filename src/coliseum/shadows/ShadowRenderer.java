@@ -134,6 +134,10 @@ public class ShadowRenderer extends IRenderer {
 		final int vaoLength;
 
 		if (componentModel != null && componentModel.getModel() != null) {
+			if (componentModel.isIgnoringShadows()) {
+				return;
+			}
+
 			OpenGlUtils.bindVAO(componentModel.getModel().getVaoID(), 0);
 			shader.getUniformBool("animated").loadBoolean(false);
 			Matrix4f mvpMatrix = Matrix4f.multiply(projectionViewMatrix, componentModel.getModelMatrix(), null);

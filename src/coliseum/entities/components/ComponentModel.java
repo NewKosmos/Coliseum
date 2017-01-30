@@ -24,6 +24,9 @@ public class ComponentModel extends IComponentEntity {
 	private Texture texture;
 	private int textureIndex;
 
+	private boolean ignoreShadows;
+	private boolean ignoreFog;
+
 	/**
 	 * Creates a new ComponentModel.
 	 *
@@ -41,6 +44,9 @@ public class ComponentModel extends IComponentEntity {
 
 		this.texture = texture;
 		this.textureIndex = textureIndex;
+
+		this.ignoreShadows = false;
+		this.ignoreFog = false;
 	}
 
 	/**
@@ -158,6 +164,22 @@ public class ComponentModel extends IComponentEntity {
 		int column = textureIndex % texture.getNumberOfRows();
 		int row = textureIndex / texture.getNumberOfRows();
 		return new Vector2f((float) row / (float) texture.getNumberOfRows(), (float) column / (float) texture.getNumberOfRows());
+	}
+
+	public boolean isIgnoringShadows() {
+		return ignoreShadows;
+	}
+
+	public void setIgnoreShadows(boolean ignoreShadows) {
+		this.ignoreShadows = ignoreShadows;
+	}
+
+	public boolean isIgnoringFog() {
+		return ignoreFog;
+	}
+
+	public void setIgnoreFog(boolean ignoreFog) {
+		this.ignoreFog = ignoreFog;
 	}
 
 	@Override

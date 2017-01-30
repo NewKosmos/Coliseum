@@ -1,7 +1,7 @@
-package coliseum.world.terrain;
+package coliseum.entities.instances.terrain;
 
+import coliseum.chunks.*;
 import coliseum.entities.components.*;
-import coliseum.world.*;
 import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
@@ -15,9 +15,8 @@ public class TerrainRockGem extends Entity {
 
 	public TerrainRockGem(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation, Chunk chunk) {
 		super(structure, position, rotation);
-		new ComponentModel(this, model, 2.0f, texture, 0);
-		new ComponentCollider(this);
-		new ComponentCollision(this);
-		new ComponentTerrain(this, chunk, (float) Math.sqrt(2.0f) * 2.0f);
+		ComponentModel componentModel = new ComponentModel(this, model, 2.0f, texture, 0);
+		ComponentCollider componentCollider = new ComponentCollider(this);
+		ComponentCollision componentCollision = new ComponentCollision(this);
 	}
 }

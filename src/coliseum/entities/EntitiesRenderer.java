@@ -81,8 +81,7 @@ public class EntitiesRenderer extends IRenderer {
 
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();
-		OpenGlUtils.disableBlending();
-		OpenGlUtils.cullBackFaces(true);
+		OpenGlUtils.enableAlphaBlending();
 	}
 
 	private void renderEntity(Entity entity) {
@@ -96,11 +95,15 @@ public class EntitiesRenderer extends IRenderer {
 			shader.getUniformBool("animated").loadBoolean(false);
 			shader.getUniformMat4("modelMatrix").loadMat4(componentModel.getModelMatrix());
 			vaoLength = componentModel.getModel().getVaoLength();
+			shader.getUniformBool("ignoreShadows").loadBoolean(componentModel.isIgnoringShadows());
+			shader.getUniformBool("ignoreFog").loadBoolean(componentModel.isIgnoringFog());
 		} else if (componentAnimation != null && componentAnimation.getModel() != null) {
 			OpenGlUtils.bindVAO(componentAnimation.getModel().getVaoID(), 0, 1, 2, 3, 4, 5);
 			shader.getUniformBool("animated").loadBoolean(true);
 			shader.getUniformMat4("modelMatrix").loadMat4(componentAnimation.getModelMatrix());
 			vaoLength = componentAnimation.getModel().getVaoLength();
+			shader.getUniformBool("ignoreShadows").loadBoolean(false);
+			shader.getUniformBool("ignoreFog").loadBoolean(false);
 		} else {
 			// No model, so no render!
 			return;
@@ -110,15 +113,18 @@ public class EntitiesRenderer extends IRenderer {
 			OpenGlUtils.bindTexture(componentModel.getTexture(), 0);
 			shader.getUniformFloat("atlasRows").loadFloat(componentModel.getTexture().getNumberOfRows());
 			shader.getUniformVec2("atlasOffset").loadVec2(componentModel.getTextureOffset());
+			OpenGlUtils.cullBackFaces(!componentModel.getTexture().hasTransparency());
 		} else if (componentAnimation != null && componentAnimation.getTexture() != null) {
 			OpenGlUtils.bindTexture(componentAnimation.getTexture(), 0);
 			shader.getUniformFloat("atlasRows").loadFloat(componentAnimation.getTexture().getNumberOfRows());
 			shader.getUniformVec2("atlasOffset").loadVec2(componentAnimation.getTextureOffset());
+			OpenGlUtils.cullBackFaces(!componentAnimation.getTexture().hasTransparency());
 		} else {
 			// No texture, so load a 'undefined' texture.
 			OpenGlUtils.bindTexture(textureUndefined, 0);
 			shader.getUniformFloat("atlasRows").loadFloat(textureUndefined.getNumberOfRows());
 			shader.getUniformVec2("atlasOffset").loadVec2(0, 0);
+			OpenGlUtils.cullBackFaces(!textureUndefined.hasTransparency());
 		}
 
 		OpenGlUtils.bindTexture(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
