@@ -34,6 +34,7 @@ public class ColiseumRenderer extends IRendererMaster {
 	private FBO rendererFBO;
 
 	private FilterFXAA filterFXAA;
+	private FilterPixel filterPixel;
 	private FilterCRT filterCRT;
 	private FilterTiltShift filterTiltShift;
 	private int effect;
@@ -54,6 +55,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		this.rendererFBO = FBO.newFBO(1.0f).depthBuffer(DepthBufferType.TEXTURE).create();
 
 		this.filterFXAA = new FilterFXAA();
+		this.filterPixel = new FilterPixel(4.0f);
 		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.05f);
 		this.filterTiltShift = new FilterTiltShift(0.75f, 1.1f, 0.004f, 3.0f);
 		this.effect = 1;
@@ -140,6 +142,8 @@ public class ColiseumRenderer extends IRendererMaster {
 				/* Scene independents. */
 				renderIndependents();
 				independentsRendered = true;
+				filterPixel.applyFilter(output.getColourTexture(0));
+				output = filterPixel.fbo;
 				filterCRT.applyFilter(output.getColourTexture(0));
 				output = filterCRT.fbo;
 				break;
@@ -174,6 +178,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		rendererFBO.delete();
 
 		filterFXAA.dispose();
+		filterPixel.dispose();
 		filterCRT.dispose();
 		filterTiltShift.dispose();
 	}

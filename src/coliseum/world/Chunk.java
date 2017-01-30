@@ -1,11 +1,14 @@
 package coliseum.world;
 
+import coliseum.entities.components.*;
 import coliseum.world.terrain.*;
 import flounder.entities.*;
 import flounder.loaders.*;
 import flounder.logger.*;
+import flounder.materials.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
+import flounder.models.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
 
@@ -84,6 +87,7 @@ public class Chunk {
 
 		if (chance > 3.0f) {
 			tiles.add(new TerrainWater(FlounderEntities.getEntities(), new Vector3f(position.x, 0.0f, position.y), new Vector3f(), this));
+			height = 0.0f;
 		} else {
 			if (height > 0.0f) {
 				tiles.add(new TerrainStone(FlounderEntities.getEntities(), new Vector3f(position.x, 0.0f, position.y), new Vector3f(), this));
@@ -97,11 +101,84 @@ public class Chunk {
 				tiles.add(new TerrainGrass(FlounderEntities.getEntities(), new Vector3f(position.x, height, position.y), new Vector3f(), this));
 			}
 		}
+
+		if (Math.random() > 0.98) {
+			tiles.add(new TerrainRockGem(FlounderEntities.getEntities(), new Vector3f(position.x, height, position.y), new Vector3f(), this));
+		}
+	}
+
+	private Model meshChunk() {
+		List<Model> tileModels = new ArrayList<>();
+
+		for (Entity tile : tiles) {
+			ComponentModel componentModel = (ComponentModel) tile.getComponent(ComponentModel.ID);
+
+			if (componentModel != null && componentModel.getModel() != null) {
+				tileModels.add(componentModel.getModel());
+			}
+		}
+
+		recalculateAABB();
+
+		float[] vertices = null;
+		float[] textureCoords = null;
+		float[] normals = null;
+		float[] tangents = null;
+		int[] indices = null;
+
+		ModelBuilder.LoadManual manual = new ModelBuilder.LoadManual() {
+			@Override
+			public String getModelName() {
+				return "chunk" + position.x + "u" + position.y;
+			}
+
+			@Override
+			public float[] getVertices() {
+				return vertices;
+			}
+
+			@Override
+			public float[] getTextureCoords() {
+				return textureCoords;
+			}
+
+			@Override
+			public float[] getNormals() {
+				return normals;
+			}
+
+			@Override
+			public float[] getTangents() {
+				return tangents;
+			}
+
+			@Override
+			public int[] getIndices() {
+				return indices;
+			}
+
+			@Override
+			public Material[] getMaterials() {
+				return null;
+			}
+
+			@Override
+			public AABB getAABB() {
+				return aabb;
+			}
+
+			@Override
+			public QuickHull getHull() {
+				return null;
+			}
+		};
+
+		return Model.newModel(manual).create();
 	}
 
 	public void update(Vector3f playerPosition) {
 		if (tilesChanged) {
-			recalculate();
+			recalculateAABB();
 			tilesChanged = false;
 		}
 
@@ -117,7 +194,7 @@ public class Chunk {
 		FlounderBounding.addShapeRender(aabb);
 	}
 
-	public void recalculate() {
+	public void recalculateAABB() {
 		for (Entity tile : tiles) {
 			tile.update();
 			AABB aabb = (AABB) tile.getBounding();

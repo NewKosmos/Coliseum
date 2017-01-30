@@ -10,11 +10,11 @@ import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
 
-public class InstanceCowboy extends Entity {
-	private static final MyFile colladaFile = new MyFile(FlounderEntities.ENTITIES_FOLDER, "cowboy", "cowboy.dae");
-	private static final Texture texture = Texture.newTexture(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cowboy", "cowboy.png")).create();
+public class InstanceDerpWalk extends Entity {
+	private static final MyFile colladaFile = new MyFile(FlounderEntities.ENTITIES_FOLDER, "derpWalk.dae");
+	private static final Texture texture = null; // Texture.newTexture(new MyFile(FlounderEntities.ENTITIES_FOLDER, "derpWalk.png")).create();
 
-	public InstanceCowboy(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+	public InstanceDerpWalk(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 
 		ModelAnimated modelAnimated = FlounderCollada.loadCollada(colladaFile);

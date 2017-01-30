@@ -26,7 +26,7 @@ public class Coliseum extends FlounderFramework {
 
 		FlounderDisplay.setup(configMain.getIntWithDefault("width", 1080, FlounderDisplay::getWindowWidth),
 				configMain.getIntWithDefault("height", 720, FlounderDisplay::getWindowHeight),
-				"Coliseum", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon.png")},
+				"Coliseum", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
 				configMain.getBooleanWithDefault("vsync", false, FlounderDisplay::isVSync),
 				configMain.getBooleanWithDefault("antialias", true, FlounderDisplay::isAntialiasing),
 				configMain.getIntWithDefault("samples", 0, FlounderDisplay::getSamples),
@@ -37,9 +37,6 @@ public class Coliseum extends FlounderFramework {
 		FlounderProfiler.toggle(Coliseum.configMain.getBooleanWithDefault("profiler_open", false, FlounderProfiler::isOpen));
 		FlounderTextures.setAnisotropyLevel(Coliseum.configMain.getFloatWithDefault("anisotropy_level", 4, FlounderTextures::getAnisotropyLevel));
 		TextBuilder.DEFAULT_TYPE = FlounderFonts.FFF_FORWARD;
-
-		//	new Chunk(new Vector2f());
-		//	System.exit(0);
 	}
 
 	protected static void closeConfigs() {
