@@ -56,7 +56,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		this.filterFXAA = new FilterFXAA();
 		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.05f);
 		this.filterTiltShift = new FilterTiltShift(0.75f, 1.1f, 0.004f, 3.0f);
-		this.effect = 0;
+		this.effect = 1;
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton c = new KeyButton(GLFW.GLFW_KEY_C);
@@ -70,7 +70,7 @@ public class ColiseumRenderer extends IRendererMaster {
 			public void onEvent() {
 				effect++;
 
-				if (effect > 1) {
+				if (effect > 2) {
 					effect = 0;
 				}
 			}
@@ -131,10 +131,12 @@ public class ColiseumRenderer extends IRendererMaster {
 
 		switch (effect) {
 			case 0:
+				break;
+			case 1:
 				filterTiltShift.applyFilter(output.getColourTexture(0));
 				output = filterTiltShift.fbo;
 				break;
-			case 1:
+			case 2:
 				/* Scene independents. */
 				renderIndependents();
 				independentsRendered = true;

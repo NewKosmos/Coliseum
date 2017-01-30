@@ -1,5 +1,6 @@
 package coliseum.shadows;
 
+import coliseum.*;
 import coliseum.entities.components.*;
 import coliseum.world.*;
 import flounder.camera.*;
@@ -21,7 +22,7 @@ import static org.lwjgl.opengl.GL20.*;
 public class ShadowRenderer extends IRenderer {
 	private static final MyFile VERTEX_SHADER = new MyFile(Shader.SHADERS_LOC, "shadows", "shadowVertex.glsl");
 	private static final MyFile FRAGMENT_SHADER = new MyFile(Shader.SHADERS_LOC, "shadows", "shadowFragment.glsl");
-	public static final int SHADOW_MAP_SIZE = 4096 * 4;
+	public static final int SHADOW_MAP_SIZE = Coliseum.configMain.getIntWithDefault("shadow_map_size", 4096 * 4, ShadowRenderer::getShadowMapSize);
 
 	private Shader shader;
 
@@ -196,13 +197,16 @@ public class ShadowRenderer extends IRenderer {
 		return Matrix4f.multiply(offset, projectionViewMatrix, null);
 	}
 
+	public static int getShadowMapSize() {
+		return SHADOW_MAP_SIZE;
+	}
+
 	/**
 	 * @return The light's "view" matrix.
 	 */
 	protected Matrix4f getLightSpaceTransform() {
 		return lightViewMatrix;
 	}
-
 
 	@Override
 	public void dispose() {
