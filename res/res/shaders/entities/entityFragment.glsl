@@ -88,6 +88,9 @@ void main(void) {
 
 	if (!ignoreShadows) {
 	    shadeFactor = shadow();
+	} else {
+        const vec2 lightBias = vec2(0.7, 0.6);
+	    shadeFactor = max(dot(-lightDirection, unitNormal), 0.0) * lightBias.x + lightBias.y;
 	}
 
 	if (!ignoreFog) {

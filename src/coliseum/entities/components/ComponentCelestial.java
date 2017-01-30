@@ -24,6 +24,9 @@ public class ComponentCelestial extends IComponentEntity {
 		getEntity().getPosition().set(ColiseumWorld.getSkyCycle().getLightDirection());
 		Vector3f.multiply(getEntity().getPosition(), startPosition, getEntity().getPosition());
 
+		if (FlounderCamera.getCamera() != null) {
+			Vector3f.add(getEntity().getPosition(), FlounderCamera.getCamera().getPosition(), getEntity().getPosition());
+		}
 	}
 
 	@Override

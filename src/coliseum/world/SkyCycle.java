@@ -1,6 +1,7 @@
 package coliseum.world;
 
 import flounder.framework.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;
@@ -10,25 +11,25 @@ public class SkyCycle {
 	private static final Colour SKY_COLOUR_SUNRISE = new Colour(0.9921f, 0.490f, 0.004f);
 	private static final Colour SKY_COLOUR_NIGHT = new Colour(0.01f, 0.01f, 0.01f);
 
-	private static final Vector3f SUN_POSITION = new Vector3f(0, 200.0f, 0);
-	private static final float DAY_NIGHT_CYCLE = 60.0f; // The day/night length (sec)
+	private static final Vector3f SUN_POSITION = new Vector3f(0.0f, -200.0f, 0.0f);
+	private static final float DAY_NIGHT_CYCLE = 120.0f; // The day/night length (sec)
 
 	private float dayFactor;
+	private LinearDriver dayDriver;
+
 	private Colour skyColour;
 	private Vector3f lightDirection;
 
 	public SkyCycle() {
 		this.dayFactor = 0.0f;
+		this.dayDriver = new LinearDriver(0.0f, 100.0f, DAY_NIGHT_CYCLE);
+
 		this.skyColour = new Colour(SKY_COLOUR_DAY);
 		this.lightDirection = new Vector3f(SUN_POSITION);
 	}
 
 	public void update() {
-		dayFactor = FlounderFramework.getTimeSec() / DAY_NIGHT_CYCLE;
-
-		if (dayFactor >= DAY_NIGHT_CYCLE) {
-			dayFactor -= DAY_NIGHT_CYCLE;
-		}
+		dayFactor = dayDriver.update(FlounderFramework.getDelta()) / 100.0f;
 
 		Colour.interpolate(SKY_COLOUR_DAY, SKY_COLOUR_NIGHT, dayFactor, skyColour);
 

@@ -20,8 +20,8 @@ public class ChunksManager {
 		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
 		// new InstanceCloud(FlounderEntities.getEntities(), new Vector3f(0.0f, -8.0f, 0.0f), new Vector3f());
 
-		new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(100.0f, 100.0f, 100.0f), new Vector3f(0.0f, 0.0f, 0.0f));
-		new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-100.0f, -100.0f, -100.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+		new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+		new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-200.0f, -200.0f, -200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 
 		for (int i = 0; i < 1; i++) {
 			int shapesOnEdge = i;

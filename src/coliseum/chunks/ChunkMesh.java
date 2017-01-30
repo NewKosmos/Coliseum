@@ -21,7 +21,7 @@ public class ChunkMesh {
 	}
 
 	protected void rebuildMesh() {
-		/*List<Model> tileModels = new ArrayList<>();
+		List<Model> tileModels = new ArrayList<>();
 
 		for (Entity tile : chunk.getTiles()) {
 			ComponentModel componentModel = (ComponentModel) tile.getComponent(ComponentModel.ID);
@@ -31,11 +31,11 @@ public class ChunkMesh {
 			}
 		}
 
-		float[] vertices = null;
-		float[] textureCoords = null;
-		float[] normals = null;
-		float[] tangents = null;
-		int[] indices = null;
+		float[] vertices = new float[0];
+		float[] textureCoords = new float[0];
+		float[] normals = new float[0];
+		float[] tangents = new float[0];
+		int[] indices = new int[0];
 
 		ModelBuilder.LoadManual manual = new ModelBuilder.LoadManual() {
 			@Override
@@ -84,15 +84,13 @@ public class ChunkMesh {
 			}
 		};
 
-		this.model = Model.newModel(manual).create();*/
+		this.model = Model.newModel(manual).create();
 	}
 
 	protected void rebuildAABB() {
 		// TODO: Make AABB from mesh!
 		for (Entity tile : chunk.getTiles()) {
 			AABB aabb = (AABB) tile.getBounding();
-
-			FlounderLogger.log(tile);
 
 			if (aabb.getMinExtents().x < this.aabb.getMinExtents().x) {
 				this.aabb.getMinExtents().x = aabb.getMinExtents().x;

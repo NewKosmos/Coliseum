@@ -23,7 +23,7 @@ public class CameraIsographic extends ICamera {
 
 	private static final float CAMERA_AIM_OFFSET = 0.0f;
 	private static final float MAX_ANGLE_OF_ELEVATION = (float) Math.PI / 2.0f;
-	private static final float MIN_ANGLE_OF_ELEVATION = -(float) Math.PI / 12.0f;
+	private static final float MIN_ANGLE_OF_ELEVATION = -(float) Math.PI / 2.0f;
 	private static final float PITCH_OFFSET = 0.0f;
 	private static final float MINIMUM_ZOOM = 0.0f;
 	private static final float MAXIMUM_ZOOM = 128.0f;
