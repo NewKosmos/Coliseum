@@ -5,10 +5,7 @@ import flounder.devices.*;
 import flounder.events.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
-import flounder.physics.bounding.*;
-import flounder.profiling.*;
 import flounder.standard.*;
-import flounder.textures.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 

@@ -1,9 +1,12 @@
 package coliseum.chunks;
 
-import flounder.entities.*;
+import flounder.events.*;
+import flounder.helpers.*;
+import flounder.inputs.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
+import org.lwjgl.glfw.*;
 
 import java.util.*;
 
@@ -14,28 +17,44 @@ import java.util.*;
  */
 public class Chunk {
 	private Vector2f position;
-	private List<Entity> tiles;
+	private List<Tile> tiles;
 	private ChunkMesh chunkMesh;
-	private boolean tilesChanged;
+	//	private boolean tilesChanged;
 	private float darkness;
 
 	public Chunk(Vector2f position) {
 		this.position = position;
 		this.tiles = new ArrayList<>();
 		this.chunkMesh = new ChunkMesh(this);
-		this.tilesChanged = true;
+//		this.tilesChanged = true;
 		this.darkness = 0.0f;
 
 		FlounderLogger.log("Chunk[ " + position.x + ", " + position.y + " ]: Size = " + tiles.size());
 		ChunkGenerator.generate(this);
+		this.tiles = ArraySorting.quickSort(tiles);
+
+		FlounderEvents.addEvent(new IEvent() {
+			private KeyButton k = new KeyButton(GLFW.GLFW_KEY_R);
+
+			@Override
+			public boolean eventTriggered() {
+				return k.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				chunkMesh.rebuildAABB();
+				chunkMesh.rebuildMesh();
+			}
+		});
 	}
 
 	public void update(Vector3f playerPosition) {
-		if (tilesChanged) {
+		/*if (tilesChanged) {
 			chunkMesh.rebuildAABB();
 			chunkMesh.rebuildMesh();
 			tilesChanged = false;
-		}
+		}*/
 
 		if (playerPosition != null) {
 			//	double distance = Math.sqrt(Math.pow(position.x - playerPosition.x, 2.0) + Math.pow(position.y - playerPosition.y, 2.0));
@@ -53,13 +72,13 @@ public class Chunk {
 		return position;
 	}
 
-	public List<Entity> getTiles() {
+	public List<Tile> getTiles() {
 		return tiles;
 	}
 
-	public void addTile(Entity tile) {
+	public void addTile(Tile tile) {
 		tiles.add(tile);
-		tilesChanged = true;
+		//	tilesChanged = true;
 	}
 
 	public float getDarkness() {
