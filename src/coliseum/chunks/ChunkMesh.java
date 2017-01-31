@@ -186,8 +186,8 @@ public class ChunkMesh {
 
 		this.model = Model.newModel(manual).create();
 		new ComponentModel(chunk, model, 2.0f, Tile.TILE_GRASS.getTexture(), 0);
-		new ComponentCollider(chunk);
-		new ComponentCollision(chunk);
+	//	new ComponentCollider(chunk);
+	//	new ComponentCollision(chunk);
 	}
 
 	protected void rebuildAABB() {
