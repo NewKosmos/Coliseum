@@ -1,6 +1,5 @@
 package coliseum.chunks;
 
-import coliseum.entities.components.*;
 import flounder.entities.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
@@ -34,8 +33,7 @@ public class Chunk extends Entity {
 	public void update(Vector3f playerPosition) {
 		// Builds or rebulds this chunks mesh.
 		if (tilesChanged || chunkMesh.getModel() == null) {
-			chunkMesh.rebuildMesh();
-			chunkMesh.rebuildAABB();
+			chunkMesh.rebuild();
 			tilesChanged = false;
 		}
 

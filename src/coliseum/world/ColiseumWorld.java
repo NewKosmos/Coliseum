@@ -38,7 +38,10 @@ public class ColiseumWorld extends IModule {
 
 		skyCycle.update();
 		fog.setFogColour(skyCycle.getSkyColour());
-		chunksManager.update();
+
+		if (chunksManager != null) {
+			chunksManager.update();
+		}
 	}
 
 	@Override
@@ -61,6 +64,10 @@ public class ColiseumWorld extends IModule {
 	@Override
 	public void dispose() {
 		worldGenerated = false;
-		chunksManager.dispose();
+
+		if (chunksManager != null) {
+			chunksManager.dispose();
+			chunksManager = null;
+		}
 	}
 }

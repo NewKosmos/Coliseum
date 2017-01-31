@@ -1,6 +1,5 @@
 package coliseum.entities.components;
 
-import coliseum.world.*;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;

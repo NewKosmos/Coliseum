@@ -1,9 +1,6 @@
 package coliseum.chunks;
 
 import flounder.maths.vectors.*;
-import flounder.models.*;
-import flounder.resources.*;
-import flounder.textures.*;
 
 public class ChunkGenerator {
 	protected static final float[][] GENERATE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
@@ -11,7 +8,7 @@ public class ChunkGenerator {
 	protected static final int HEXAGON_SIDE_COUNT = 6; // The number of sides for each figure (hexagon).
 	protected static final float HEXAGON_SIDE_LENGTH = 2.0f; //  Each tile can be broken into equilateral triangles with sides of length.
 
-	protected static final int CHUNK_RADIUS = 19; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
+	protected static final int CHUNK_RADIUS = 13; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
 
 	protected static void generate(Chunk chunk) {
 		for (int i = 0; i < CHUNK_RADIUS; i++) {

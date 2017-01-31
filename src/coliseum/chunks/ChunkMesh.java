@@ -1,8 +1,8 @@
 package coliseum.chunks;
 
 import coliseum.entities.components.*;
-import flounder.entities.*;
 import flounder.framework.*;
+import flounder.logger.*;
 import flounder.materials.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
@@ -18,16 +18,17 @@ public class ChunkMesh {
 	protected ChunkMesh(Chunk chunk) {
 		this.chunk = chunk;
 		this.model = null;
-		this.aabb = new AABB();
+		this.aabb = null;
 	}
 
-	protected void rebuildMesh() {
+	protected void rebuild() {
 		//
 		if (model != null) {
 			model.delete();
 		}
 
 		model = null;
+		aabb = null;
 
 		//
 		AABB modelAABB = new AABB();
@@ -53,8 +54,6 @@ public class ChunkMesh {
 				//
 				for (int i = 0; i < model.getMeshData().getVertices().length; i++) {
 					float vertexOffset = (currentPosID == 0) ? vector.x : (currentPosID == 1) ? vector.y : vector.z;
-					currentPosID = (currentPosID == 2) ? 0 : currentPosID + 1;
-
 					float vertex = model.getMeshData().getVertices()[i] + (vertexOffset / 2.0f);
 					verticesList.add(vertex);
 
@@ -81,6 +80,8 @@ public class ChunkMesh {
 							}
 							break;
 					}
+
+					currentPosID = (currentPosID == 2) ? 0 : currentPosID + 1;
 				}
 
 				for (int i = 0; i < model.getMeshData().getTextures().length; i++) {
@@ -186,16 +187,8 @@ public class ChunkMesh {
 
 		this.model = Model.newModel(manual).create();
 		new ComponentModel(chunk, model, 2.0f, Tile.TILE_GRASS.getTexture(), 0);
-	//	new ComponentCollider(chunk);
-	//	new ComponentCollision(chunk);
-	}
-
-	protected void rebuildAABB() {
-		if (model == null || model.getMeshData() == null) {
-			return;
-		}
-
-		AABB.recalculate(model.getMeshData().getAABB(), new Vector3f(), new Vector3f(), 2.0f, aabb);
+		//	new ComponentCollider(chunk);
+		//	new ComponentCollision(chunk);
 	}
 
 	public Chunk getChunk() {
@@ -207,6 +200,11 @@ public class ChunkMesh {
 	}
 
 	public AABB getAABB() {
+		if (aabb == null && model != null && model.getMeshData() != null) {
+			this.aabb = new AABB();
+			AABB.recalculate(model.getMeshData().getAABB(), new Vector3f(), new Vector3f(), 2.0f, aabb);
+		}
+
 		return aabb;
 	}
 
