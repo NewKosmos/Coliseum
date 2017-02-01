@@ -60,7 +60,7 @@ public class ChunkGenerator {
 			}
 		}*/
 
-		chunk.addTile(Tile.TILE_SAND, new Vector3f(position.x, 0.0f, position.y));
+		chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, 0.0f, position.y));
 
 		//if (Math.random() > 0.98) {
 		//	chunk.addTile(Tile.TILE_ROCK_GEM, new Vector3f(position.x, height, position.y));

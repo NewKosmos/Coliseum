@@ -22,7 +22,7 @@ public class ChunkMesh {
 	}
 
 	protected void rebuild() {
-		//
+		// Removes old models and AABBs.
 		if (model != null) {
 			model.delete();
 		}
@@ -30,27 +30,31 @@ public class ChunkMesh {
 		model = null;
 		aabb = null;
 
-		//
-		List<TilesMesh> tilesMeshes = new ArrayList<>();
-		chunk.getTiles().keySet().forEach(tile -> {
-			if (tile.getModel() != null && tile.getModel().getMeshData() != null) {
-				tilesMeshes.add(new TilesMesh(tile, chunk.getTiles().get(tile)));
+		// Makes sure all tile models have been loaded, and have data.
+		for (Tile tile : chunk.getTiles().keySet()) {
+			if (tile.getModel() == null || tile.getModel().getMeshData() == null) {
+				return;
 			}
-		});
-
-		//
-		if (tilesMeshes.size() != chunk.getTiles().size()) {
-			return;
 		}
 
-		//
+		// Loads all tiles into a tile mesh with all positional instances within the chunk.
+		List<TilesMesh> tilesMeshes = new ArrayList<>();
+		int accumulator = 0;
+
+		for (Tile tile : chunk.getTiles().keySet()) {
+			TilesMesh tilesMesh = new TilesMesh(tile, chunk.getTiles().get(tile), accumulator);
+			accumulator += tilesMesh.getAccumulator();
+			tilesMeshes.add(tilesMesh);
+		}
+
+		// Takes all tile mesh data and appends the Number arrays together to create data for the chunk mesh.
 		float[] vertices = TilesMesh.mergeF(tilesMeshes, TilesMesh::getVertices);
 		float[] textures = TilesMesh.mergeF(tilesMeshes, TilesMesh::getTextures);
 		float[] normals = TilesMesh.mergeF(tilesMeshes, TilesMesh::getNormals);
 		float[] tangents = TilesMesh.mergeF(tilesMeshes, TilesMesh::getTangents);
 		int[] indices = TilesMesh.mergeI(tilesMeshes, TilesMesh::getIndices);
 
-		//
+		// Calculates new AABB bounds from the minimum and maximum vertex vector component positions.
 		AABB modelAABB = new AABB();
 		int currentPosID = 0;
 
@@ -82,7 +86,7 @@ public class ChunkMesh {
 					break;
 			}
 
-			//
+			// Updates the current pos ID, this is used to keep track of what position component is looked at (0=X, 1=Y, 2=Z).
 			currentPosID++;
 
 			if (currentPosID > 2) {
@@ -90,7 +94,7 @@ public class ChunkMesh {
 			}
 		}
 
-		//
+		// Then all model data is used to create a manual model loader, a hull is not generated and materials are baked into the textures.
 		ModelBuilder.LoadManual manual = new ModelBuilder.LoadManual() {
 			@Override public String getModelName() { return "chunk" + chunk.getPosition().x + "u" + chunk.getPosition().y + FlounderFramework.getTimeSec(); }
 			@Override public float[] getVertices() { return vertices; }
@@ -103,14 +107,15 @@ public class ChunkMesh {
 			@Override public QuickHull getHull() { return null; }
 		};
 
-		//
+		// Logs how many vertices and indices are in the chunk model.
 		FlounderLogger.log("Vertices = " + (vertices.length / 3) + ", Indices = " + indices.length);
 
-		//
+		// The model is then loaded into a object and OpenGL.
 		this.model = Model.newModel(manual).create();
-		new ComponentModel(chunk, model, 2.0f, Tile.TILE_GRASS.getTexture(), 0);
-		//	new ComponentCollider(chunk);
-		//	new ComponentCollision(chunk);
+
+		// The chunks model component is also updated.
+		ComponentModel componentModel = (ComponentModel) chunk.getComponent(ComponentModel.ID);
+		componentModel.setModel(model);
 	}
 
 	public Chunk getChunk() {

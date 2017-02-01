@@ -1,5 +1,6 @@
 package coliseum.chunks;
 
+import coliseum.entities.components.*;
 import flounder.entities.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
@@ -25,6 +26,10 @@ public class Chunk extends Entity {
 		this.chunkMesh = new ChunkMesh(this);
 		this.tilesChanged = true;
 		this.darkness = 0.0f;
+
+		new ComponentModel(this, null, 2.0f, Tile.TILE_GRASS.getTexture(), 0);
+		new ComponentCollider(this);
+		new ComponentCollision(this);
 
 		ChunkGenerator.generate(this);
 		FlounderLogger.log("Chunk[ " + position.x + ", " + position.y + " ]");
