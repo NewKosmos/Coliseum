@@ -7,6 +7,7 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.fbos.*;
 import flounder.helpers.*;
+import flounder.logger.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
@@ -22,7 +23,7 @@ import static org.lwjgl.opengl.GL20.*;
 public class ShadowRenderer extends IRenderer {
 	private static final MyFile VERTEX_SHADER = new MyFile(Shader.SHADERS_LOC, "shadows", "shadowVertex.glsl");
 	private static final MyFile FRAGMENT_SHADER = new MyFile(Shader.SHADERS_LOC, "shadows", "shadowFragment.glsl");
-	public static final int SHADOW_MAP_SIZE = Coliseum.configMain.getIntWithDefault("shadow_map_size", 4096 * 4, ShadowRenderer::getShadowMapSize);
+	public static final int SHADOW_MAP_SIZE = Coliseum.configMain.getIntWithDefault("shadow_map_size", Math.min(FBO.getMaxFBOSize(), 4096 * 4), ShadowRenderer::getShadowMapSize);
 
 	private Shader shader;
 

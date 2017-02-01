@@ -36,7 +36,7 @@ public class PlayerBasic extends IPlayer {
 		this.currentSpeed = 0.0f;
 		this.currentTurnSpeed = 0.0f;
 		this.inputForward = new CompoundAxis(new ButtonAxis(upKeyButtons, downKeyButtons), new JoystickAxis(0, 1));
-		this.inputTurn = new CompoundAxis(new ButtonAxis(leftKeyButtons, rightKeyButtons), new JoystickAxis(0, 3));
+		this.inputTurn = new CompoundAxis(new ButtonAxis(leftKeyButtons, rightKeyButtons), new JoystickAxis(0, 0));
 	}
 
 	@Override

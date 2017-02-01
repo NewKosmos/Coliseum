@@ -24,6 +24,7 @@ public class InstanceDerpWalk extends Entity {
 
 		// ComponentCollider componentCollider = new ComponentCollider(this);
 		// ComponentCollision componentCollision = new ComponentCollision(this);
+		ComponentPlayer componentPlayer = new ComponentPlayer(this);
 		ComponentAnimation componentAnimation = new ComponentAnimation(this, modelAnimated, 1.0f, texture, 1);
 		componentAnimation.doAnimation(animation);
 	}

@@ -30,6 +30,7 @@ public class EntitiesRenderer extends IRenderer {
 
 	private Shader shader;
 	private Texture textureUndefined;
+	public static final Vector3f LIGHT_DIR = new Vector3f(0.2f, -0.3f, -0.8f);
 
 	/**
 	 * Creates a new entity renderer.
@@ -63,7 +64,7 @@ public class EntitiesRenderer extends IRenderer {
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 
-		shader.getUniformVec3("lightDirection").loadVec3(AnimationSettings.LIGHT_DIR);
+		shader.getUniformVec3("lightDirection").loadVec3(LIGHT_DIR);
 
 		if (ColiseumWorld.getFog() != null) {
 			shader.getUniformVec3("fogColour").loadVec3(ColiseumWorld.getFog().getFogColour());

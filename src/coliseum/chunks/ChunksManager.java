@@ -16,7 +16,7 @@ public class ChunksManager {
 	}
 
 	public void generate() {
-		//	new InstanceDerpWalk(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
+		// new InstanceDerpWalk(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
 		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
 		// new InstanceCloud(FlounderEntities.getEntities(), new Vector3f(0.0f, -8.0f, 0.0f), new Vector3f());
 

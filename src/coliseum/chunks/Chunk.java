@@ -27,7 +27,7 @@ public class Chunk extends Entity {
 		this.darkness = 0.0f;
 
 		ChunkGenerator.generate(this);
-		FlounderLogger.log("Chunk[ " + position.x + ", " + position.y + " ]: Size = " + tiles.size());
+		FlounderLogger.log("Chunk[ " + position.x + ", " + position.y + " ]");
 	}
 
 	public void update(Vector3f playerPosition) {
