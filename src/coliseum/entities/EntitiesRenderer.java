@@ -130,6 +130,8 @@ public class EntitiesRenderer extends IRenderer {
 
 		OpenGlUtils.bindTexture(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
 
+		OpenGlUtils.cullBackFaces(false); // TODO: Remove
+
 		if (componentAnimation != null) {
 			for (int i = 0; i < componentAnimation.getJointTransforms().length; i++) {
 				shader.getUniformMat4("jointTransforms[" + i + "]").loadMat4(componentAnimation.getJointTransforms()[i]);

@@ -28,13 +28,13 @@ public class TilesMesh {
 		FlounderLogger.log("Max Index: " + tileModelMaxIndex);
 
 		// Changed from array form into array tile vertex.
-		for (int i = 0; i < positions.size(); i++) {
+	//	for (int i = 0; i < positions.size(); i++) {
 			for (int j = 0; j < tile.getModel().getMeshData().getIndices().length; j++) {
 				int index = tile.getModel().getMeshData().getIndices()[j];
 
-				float vertex0 = tile.getModel().getMeshData().getVertices()[index * 3] + positions.get(i).x;
-				float vertex1 = tile.getModel().getMeshData().getVertices()[index * 3 + 1] + positions.get(i).y;
-				float vertex2 = tile.getModel().getMeshData().getVertices()[index * 3 + 2] + positions.get(i).z;
+				float vertex0 = tile.getModel().getMeshData().getVertices()[index * 3];// + positions.get(i).x;
+				float vertex1 = tile.getModel().getMeshData().getVertices()[index * 3 + 1];// + positions.get(i).y;
+				float vertex2 = tile.getModel().getMeshData().getVertices()[index * 3 + 2];// + positions.get(i).z;
 
 				float texture0 = tile.getModel().getMeshData().getTextures()[index * 2];
 				float texture1 = tile.getModel().getMeshData().getTextures()[index * 2 + 1];
@@ -48,14 +48,14 @@ public class TilesMesh {
 				float tangent2 = tile.getModel().getMeshData().getTangents()[index * 3 + 2];
 
 				tileVertices.add(new TileVertex(
-						index + ((tileModelMaxIndex + 1) * j),
+						index, //  + ((tileModelMaxIndex + 1) * j)
 						vertex0, vertex1, vertex2, texture0, texture1, normal0, normal1, normal2, tangent0, tangent1, tangent2
 				));
 			}
-		}
+	//	}
 
 		// Sorts the vertices.
-		// this.tileVertices = ArraySorting.quickSort(tileVertices);
+	//	this.tileVertices = ArraySorting.quickSort(tileVertices);
 	}
 
 	public Float[] getVertices() {
@@ -68,21 +68,31 @@ public class TilesMesh {
 		}
 
 		return result;
+		/*Float[] result = new Float[tile.getModel().getMeshData().getVertices().length];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = tile.getModel().getMeshData().getVertices()[i];
+		}
+		return result;*/
 	}
 
 	public Float[] getTextures() {
-		Float[] result = new Float[tileVertices.size() * 2];
+		/*Float[] result = new Float[tileVertices.size() * 2];
 
 		for (int i = 0; i < tileVertices.size(); i++) {
 			result[i * 2] = tileVertices.get(i).textures.x;
 			result[i * 2 + 1] = tileVertices.get(i).textures.y;
 		}
 
+		return result;*/
+		Float[] result = new Float[tile.getModel().getMeshData().getTextures().length];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = tile.getModel().getMeshData().getTextures()[i];
+		}
 		return result;
 	}
 
 	public Float[] getNormals() {
-		Float[] result = new Float[tileVertices.size() * 3];
+		/*Float[] result = new Float[tileVertices.size() * 3];
 
 		for (int i = 0; i < tileVertices.size(); i++) {
 			result[i * 3] = tileVertices.get(i).normals.x;
@@ -90,11 +100,16 @@ public class TilesMesh {
 			result[i * 3 + 2] = tileVertices.get(i).normals.z;
 		}
 
+		return result;*/
+		Float[] result = new Float[tile.getModel().getMeshData().getNormals().length];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = tile.getModel().getMeshData().getNormals()[i];
+		}
 		return result;
 	}
 
 	public Float[] getTangents() {
-		Float[] result = new Float[tileVertices.size() * 3];
+		/*Float[] result = new Float[tileVertices.size() * 3];
 
 		for (int i = 0; i < tileVertices.size(); i++) {
 			result[i * 3] = tileVertices.get(i).tangents.x;
@@ -102,6 +117,11 @@ public class TilesMesh {
 			result[i * 3 + 2] = tileVertices.get(i).tangents.z;
 		}
 
+		return result;*/
+		Float[] result = new Float[tile.getModel().getMeshData().getTangents().length];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = tile.getModel().getMeshData().getTangents()[i];
+		}
 		return result;
 	}
 
@@ -113,6 +133,11 @@ public class TilesMesh {
 		}
 
 		return result;
+	//	Integer[] result = new Integer[tile.getModel().getMeshData().getIndices().length];
+	//	for (int i = 0; i < result.length; i++) {
+	//		result[i] = tile.getModel().getMeshData().getIndices()[i];
+	//	}
+	//	return result;
 	}
 
 	public static float[] mergeF(List<TilesMesh> tiles, Function<TilesMesh, Float[]> pass) {
