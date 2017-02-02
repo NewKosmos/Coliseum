@@ -52,18 +52,17 @@ void main(void) {
 	}
 
 	vec4 worldPosition = modelMatrix * totalLocalPos;
-	mat4 modelViewMatrix = viewMatrix * modelMatrix;
+//	mat4 modelViewMatrix = viewMatrix * modelMatrix;
 	pass_positionRelativeToCam = viewMatrix * worldPosition;
 
 	gl_ClipDistance[0] = dot(worldPosition, clipPlane);
 	gl_Position = projectionMatrix * pass_positionRelativeToCam;
 
-	vec3 surfaceNormal = (modelViewMatrix * totalNormal).xyz;
-
-	vec3 norm = normalize(surfaceNormal);
-	vec3 tang = normalize((modelViewMatrix * vec4(in_tangent, 0.0)).xyz);
-	vec3 bitang = normalize(cross(norm, tang));
-	mat3 toTangentSpace = mat3(tang.x, bitang.x, norm.x, tang.y, bitang.y, norm.y, tang.z, bitang.z, norm.z);
+//	vec3 surfaceNormal = (modelViewMatrix * totalNormal).xyz;
+//	vec3 norm = normalize(surfaceNormal);
+//	vec3 tang = normalize((modelViewMatrix * vec4(in_tangent, 0.0)).xyz);
+//	vec3 bitang = normalize(cross(norm, tang));
+//	mat3 toTangentSpace = mat3(tang.x, bitang.x, norm.x, tang.y, bitang.y, norm.y, tang.z, bitang.z, norm.z);
 
 	pass_textureCoords = (in_textureCoords / atlasRows) + atlasOffset;
 	pass_surfaceNormal = totalNormal.xyz; // (modelMatrix * totalNormal).xyz; // toTangentSpace * surfaceNormal;

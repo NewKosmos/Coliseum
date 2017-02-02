@@ -121,7 +121,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		OpenGlUtils.prepareNewRenderParse(clearColour);
 
 		skyboxRenderer.render(clipPlane, camera);
-		//	entitiesRenderer.render(clipPlane, camera);
+		entitiesRenderer.render(clipPlane, camera);
 		waterRenderer.render(clipPlane, camera);
 		boundingRenderer.render(clipPlane, camera);
 	}

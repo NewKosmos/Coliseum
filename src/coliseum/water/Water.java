@@ -1,6 +1,8 @@
 package coliseum.water;
 
 import flounder.loaders.*;
+import flounder.maths.matrices.*;
+import flounder.maths.vectors.*;
 import flounder.processing.*;
 import flounder.processing.opengl.*;
 
@@ -19,17 +21,30 @@ public class Water {
 
 	private int vao;
 	private int vertexCount;
-	private float height;
 	private boolean loaded;
+
+	private Vector3f position;
+	private Vector3f rotation;
+	private float scale;
+	private Matrix4f modelMatrix;
 
 	/**
 	 * Generates a new water mesh.
 	 *
-	 * @param height The height of the water plane.
+	 * @param position The position of the water plane.
+	 * @param rotation The rotation of the water plane.
+	 * @param scale The scale of the water plane.
 	 */
-	public Water(float height) {
-		this.height = height;
+	public Water(Vector3f position, Vector3f rotation, float scale) {
+		this.vao = 0;
+		this.vertexCount = 0;
+		this.position = position;
+		this.rotation = rotation;
+		this.scale = scale;
 		this.loaded = false;
+
+		this.modelMatrix = new Matrix4f();
+
 		generateMesh();
 	}
 
@@ -49,17 +64,6 @@ public class Water {
 	}
 
 	/**
-	 * @return The average height of the water plane.
-	 */
-	public float getHeight() {
-		return height;
-	}
-
-	public boolean isLoaded() {
-		return loaded;
-	}
-
-	/**
 	 * @return The VAO's ID.
 	 */
 	protected int getVao() {
@@ -71,6 +75,40 @@ public class Water {
 	 */
 	protected int getVertexCount() {
 		return vertexCount;
+	}
+
+	public boolean isLoaded() {
+		return loaded;
+	}
+
+	public Vector3f getPosition() {
+		return position;
+	}
+
+	public void setPosition(Vector3f position) {
+		this.position = position;
+	}
+
+	public Vector3f getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(Vector3f rotation) {
+		this.rotation = rotation;
+	}
+
+	public float getScale() {
+		return scale;
+	}
+
+	public void setScale(float scale) {
+		this.scale = scale;
+	}
+
+	public Matrix4f getModelMatrix() {
+		modelMatrix.setIdentity();
+		Matrix4f.transformationMatrix(position, rotation, scale, modelMatrix);
+		return modelMatrix;
 	}
 
 	public void delete() {
