@@ -96,15 +96,50 @@ public class ChunkMesh {
 
 		// Then all model data is used to create a manual model loader, a hull is not generated and materials are baked into the textures.
 		ModelBuilder.LoadManual manual = new ModelBuilder.LoadManual() {
-			@Override public String getModelName() { return "chunk" + chunk.getPosition().x + "u" + chunk.getPosition().y + FlounderFramework.getTimeSec(); }
-			@Override public float[] getVertices() { return vertices; }
-			@Override public float[] getTextureCoords() { return textures; }
-			@Override public float[] getNormals() { return normals; }
-			@Override public float[] getTangents() { return tangents; }
-			@Override public int[] getIndices() { return indices; }
-			@Override public Material[] getMaterials() { return null; }
-			@Override public AABB getAABB() { return modelAABB; }
-			@Override public QuickHull getHull() { return null; }
+			@Override
+			public String getModelName() {
+				return "chunk" + chunk.getPosition().x + "u" + chunk.getPosition().y + FlounderFramework.getTimeSec();
+			}
+
+			@Override
+			public float[] getVertices() {
+				return vertices;
+			}
+
+			@Override
+			public float[] getTextureCoords() {
+				return textures;
+			}
+
+			@Override
+			public float[] getNormals() {
+				return normals;
+			}
+
+			@Override
+			public float[] getTangents() {
+				return tangents;
+			}
+
+			@Override
+			public int[] getIndices() {
+				return indices;
+			}
+
+			@Override
+			public Material[] getMaterials() {
+				return null;
+			}
+
+			@Override
+			public AABB getAABB() {
+				return modelAABB;
+			}
+
+			@Override
+			public QuickHull getHull() {
+				return null;
+			}
 		};
 
 		// Logs how many vertices and indices are in the chunk model.

@@ -14,8 +14,8 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class CameraIsographic extends ICamera {
 	private static final float NEAR_PLANE = 0.1f;
-	private static final float FAR_PLANE = 685.0f;
-	private static final float FIELD_OF_VIEW = 60.0f;
+	private static final float FAR_PLANE = 700.0f;
+	private static final float FIELD_OF_VIEW = 45.0f;
 
 	private static final float ZOOM_AGILITY = 8.0f;
 	private static final float ROTATE_AGILITY = 6.0f;
@@ -259,7 +259,7 @@ public class CameraIsographic extends ICamera {
 
 	private void updateProjectionMatrix() {
 		Matrix4f.perspectiveMatrix(FIELD_OF_VIEW, FlounderDisplay.getAspectRatio(), NEAR_PLANE, FAR_PLANE, projectionMatrix);
-	//	Matrix4f.orthographicMatrix(-FlounderDisplay.getAspectRatio(), FlounderDisplay.getAspectRatio(), -1.0f, 1.0f, NEAR_PLANE, FAR_PLANE, projectionMatrix);
+		//	Matrix4f.orthographicMatrix(-FlounderDisplay.getAspectRatio(), FlounderDisplay.getAspectRatio(), -1.0f, 1.0f, NEAR_PLANE, FAR_PLANE, projectionMatrix);
 	}
 
 	@Override

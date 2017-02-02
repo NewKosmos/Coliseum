@@ -2,7 +2,6 @@
 
 //---------INCLUDES------------
 #include "maths.glsl"
-#include "noise.glsl"
 
 //---------IN------------
 in vec3 pass_position;

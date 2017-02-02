@@ -1,6 +1,5 @@
 package coliseum.chunks;
 
-import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
 
@@ -67,7 +66,7 @@ public class TilesMesh {
 				indicesList.add(indices[i] + perviousAccumulator + accumulator);
 			}
 
-			accumulator+= tileModelMaxIndex + 1;
+			accumulator += tileModelMaxIndex + 1;
 		}
 
 		// Changed from array form into array tile vertex.
@@ -126,11 +125,11 @@ public class TilesMesh {
 			result[i] = verticesList.get(i);
 		}
 		return result;
-	//	Float[] result = new Float[tile.getModel().getMeshData().getVertices().length];
-	//	for (int i = 0; i < result.length; i++) {
-	//		result[i] = tile.getModel().getMeshData().getVertices()[i];
-	//	}
-	//	return result;
+		//	Float[] result = new Float[tile.getModel().getMeshData().getVertices().length];
+		//	for (int i = 0; i < result.length; i++) {
+		//		result[i] = tile.getModel().getMeshData().getVertices()[i];
+		//	}
+		//	return result;
 	}
 
 	public Float[] getTextures() {
@@ -149,11 +148,11 @@ public class TilesMesh {
 			result[i] = textureCoordsList.get(i);
 		}
 		return result;
-	//	Float[] result = new Float[tile.getModel().getMeshData().getTextures().length];
-	//	for (int i = 0; i < result.length; i++) {
-	//		result[i] = tile.getModel().getMeshData().getTextures()[i];
-	//	}
-	//	return result;
+		//	Float[] result = new Float[tile.getModel().getMeshData().getTextures().length];
+		//	for (int i = 0; i < result.length; i++) {
+		//		result[i] = tile.getModel().getMeshData().getTextures()[i];
+		//	}
+		//	return result;
 	}
 
 	public Float[] getNormals() {
@@ -173,11 +172,11 @@ public class TilesMesh {
 			result[i] = normalsList.get(i);
 		}
 		return result;
-	//	Float[] result = new Float[tile.getModel().getMeshData().getNormals().length];
-	//	for (int i = 0; i < result.length; i++) {
-	//		result[i] = tile.getModel().getMeshData().getNormals()[i];
-	//	}
-	//	return result;
+		//	Float[] result = new Float[tile.getModel().getMeshData().getNormals().length];
+		//	for (int i = 0; i < result.length; i++) {
+		//		result[i] = tile.getModel().getMeshData().getNormals()[i];
+		//	}
+		//	return result;
 	}
 
 	public Float[] getTangents() {
@@ -197,11 +196,11 @@ public class TilesMesh {
 			result[i] = tangentsList.get(i);
 		}
 		return result;
-	//	Float[] result = new Float[tile.getModel().getMeshData().getTangents().length];
-	//	for (int i = 0; i < result.length; i++) {
-	//		result[i] = tile.getModel().getMeshData().getTangents()[i];
-	//	}
-	//	return result;
+		//	Float[] result = new Float[tile.getModel().getMeshData().getTangents().length];
+		//	for (int i = 0; i < result.length; i++) {
+		//		result[i] = tile.getModel().getMeshData().getTangents()[i];
+		//	}
+		//	return result;
 	}
 
 	public Integer[] getIndices() {
@@ -217,11 +216,11 @@ public class TilesMesh {
 			result[i] = indicesList.get(i);
 		}
 		return result;
-	//	Integer[] result = new Integer[tile.getModel().getMeshData().getIndices().length];
-	//	for (int i = 0; i < result.length; i++) {
-	//		result[i] = tile.getModel().getMeshData().getIndices()[i];
-	//	}
-	//	return result;
+		//	Integer[] result = new Integer[tile.getModel().getMeshData().getIndices().length];
+		//	for (int i = 0; i < result.length; i++) {
+		//		result[i] = tile.getModel().getMeshData().getIndices()[i];
+		//	}
+		//	return result;
 	}
 
 	public int getAccumulator() {
@@ -272,15 +271,15 @@ public class TilesMesh {
 		return result;
 	}
 
-	public class TileVertex  implements Comparable<TileVertex> {
+	public class TileVertex implements Comparable<TileVertex> {
 		protected final int index;
 		protected final Vector3f position;
 		protected final Vector2f textures;
 		protected final Vector3f normals;
 		protected final Vector3f tangents;
 
-		TileVertex (int index, float vertex0, float vertex1, float vertex2, float texture0, float texture1,
-		            float normal0, float normal1, float normal2, float tangent0, float tangent1, float tangent2) {
+		TileVertex(int index, float vertex0, float vertex1, float vertex2, float texture0, float texture1,
+		           float normal0, float normal1, float normal2, float tangent0, float tangent1, float tangent2) {
 			this.index = index;
 			this.position = new Vector3f(vertex0, vertex1, vertex2);
 			this.textures = new Vector2f(texture0, texture1);

@@ -4,7 +4,6 @@ import coliseum.*;
 import coliseum.entities.components.*;
 import coliseum.shadows.*;
 import coliseum.world.*;
-import flounder.animation.*;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.entities.*;

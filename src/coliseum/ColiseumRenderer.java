@@ -3,6 +3,7 @@ package coliseum;
 import coliseum.entities.*;
 import coliseum.shadows.*;
 import coliseum.skybox.*;
+import coliseum.water.*;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.events.*;
@@ -27,6 +28,7 @@ public class ColiseumRenderer extends IRendererMaster {
 	private ShadowRenderer shadowRenderer;
 	private SkyboxRenderer skyboxRenderer;
 	private EntitiesRenderer entitiesRenderer;
+	private WaterRenderer waterRenderer;
 	private BoundingRenderer boundingRenderer;
 	private GuisRenderer guisRenderer;
 	private FontRenderer fontRenderer;
@@ -48,6 +50,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		this.shadowRenderer = new ShadowRenderer();
 		this.skyboxRenderer = new SkyboxRenderer();
 		this.entitiesRenderer = new EntitiesRenderer();
+		this.waterRenderer = new WaterRenderer();
 		this.boundingRenderer = new BoundingRenderer();
 		this.guisRenderer = new GuisRenderer();
 		this.fontRenderer = new FontRenderer();
@@ -118,7 +121,8 @@ public class ColiseumRenderer extends IRendererMaster {
 		OpenGlUtils.prepareNewRenderParse(clearColour);
 
 		skyboxRenderer.render(clipPlane, camera);
-		entitiesRenderer.render(clipPlane, camera);
+		//	entitiesRenderer.render(clipPlane, camera);
+		waterRenderer.render(clipPlane, camera);
 		boundingRenderer.render(clipPlane, camera);
 	}
 
@@ -171,6 +175,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		shadowRenderer.dispose();
 		skyboxRenderer.dispose();
 		entitiesRenderer.dispose();
+		waterRenderer.dispose();
 		boundingRenderer.dispose();
 		guisRenderer.dispose();
 		fontRenderer.dispose();
