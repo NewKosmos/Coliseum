@@ -21,6 +21,9 @@ import flounder.profiling.*;
 import flounder.renderer.*;
 import org.lwjgl.glfw.*;
 
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.*;
+
 public class ColiseumRenderer extends IRendererMaster {
 	private static final Vector4f POSITIVE_INFINITY = new Vector4f(0.0f, 1.0f, 0.0f, Float.POSITIVE_INFINITY);
 	private static final Colour CLEAR_COLOUR = new Colour(0.0f, 0.0f, 0.0f);
@@ -84,6 +87,18 @@ public class ColiseumRenderer extends IRendererMaster {
 
 	@Override
 	public void render() {
+		/* Water Reflection & Refraction */
+		glEnable(GL_CLIP_DISTANCE0);
+		{
+			FlounderCamera.getCamera().reflect(waterRenderer.getWater().getPosition().y);
+			waterRenderer.getReflectionFBO().bindFrameBuffer();
+			Vector4f clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, -waterRenderer.getWater().getPosition().y);
+			renderScene(clipPlane, CLEAR_COLOUR);
+			waterRenderer.getReflectionFBO().unbindFrameBuffer();
+			FlounderCamera.getCamera().reflect(waterRenderer.getWater().getPosition().y);
+		}
+		glDisable(GL_CLIP_DISTANCE0);
+
 		/* Shadow rendering. */
 		shadowRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
 

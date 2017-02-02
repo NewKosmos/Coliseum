@@ -26,6 +26,7 @@ uniform float squareSize;
 out vec4 pass_positionRelativeToCam;
 out vec3 pass_surfaceNormal;
 out vec4 pass_shadowCoords;
+out vec4 pass_clipSpace;
 
 //---------WAVE OFFSET------------
 float generateOffset(float x, float z, float val1, float val2){
@@ -65,6 +66,8 @@ void main(void) {
 	thisVertex += generateVertexOffset(thisVertex.x, thisVertex.z);
 	otherVertex1 += generateVertexOffset(otherVertex1.x, otherVertex1.z);
 	otherVertex2 += generateVertexOffset(otherVertex2.x, otherVertex2.z);
+
+    pass_clipSpace = projectionMatrix * viewMatrix * vec4(thisVertex, 1.0);
 
 	vec4 worldPosition = modelMatrix * vec4(thisVertex, 1.0);
 	pass_positionRelativeToCam = viewMatrix * worldPosition;

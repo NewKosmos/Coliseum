@@ -23,6 +23,7 @@ uniform float fogDensity;
 uniform float fogGradient;
 
 uniform bool ignoreShadows;
+uniform bool ignoreLighting;
 uniform bool ignoreFog;
 
 //---------OUT------------
@@ -42,7 +43,7 @@ void main(void) {
 
 	if (!ignoreShadows) {
 	    shadeFactor = shadow(shadowMap, pass_shadowCoords, shadowMapSize);
-	} else {
+	} else if (!ignoreLighting) {
 	    shadeFactor = max(dot(-lightDirection, unitNormal), 0.0) * LIGHT_BIAS.x + LIGHT_BIAS.y;
 	}
 

@@ -281,6 +281,9 @@ public class CameraIsographic extends ICamera {
 
 	@Override
 	public void reflect(float waterHeight) {
+		position.y -= 2.0f * (position.y - waterHeight);
+		rotation.x = -rotation.x;
+		updateViewMatrix();
 	}
 
 	@Override

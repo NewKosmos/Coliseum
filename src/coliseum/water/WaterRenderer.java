@@ -5,6 +5,7 @@ import coliseum.entities.*;
 import coliseum.shadows.*;
 import coliseum.world.*;
 import flounder.camera.*;
+import flounder.fbos.*;
 import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.maths.vectors.*;
@@ -20,11 +21,13 @@ public class WaterRenderer extends IRenderer {
 	private static final MyFile VERTEX_SHADER = new MyFile(Shader.SHADERS_LOC, "water", "waterVertex.glsl");
 	private static final MyFile FRAGMENT_SHADER = new MyFile(Shader.SHADERS_LOC, "water", "waterFragment.glsl");
 
+	private FBO reflectionFBO;
 	private Shader shader;
 	private Water water;
 	private float waveTime;
 
 	public WaterRenderer() {
+		this.reflectionFBO = FBO.newFBO(1080, 720).disableTextureWrap().withAlphaChannel(false).create();
 		this.shader = Shader.newShader("water").setShaderTypes(
 				new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER),
 				new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)
@@ -53,7 +56,7 @@ public class WaterRenderer extends IRenderer {
 		shader.getUniformMat4("modelMatrix").loadMat4(water.getModelMatrix());
 
 		shader.getUniformVec3("lightDirection").loadVec3(EntitiesRenderer.LIGHT_DIR);
-		shader.getUniformVec3("diffuseColour").loadVec3(water.getColour());
+		shader.getUniformVec4("diffuseColour").loadVec4(water.getColour().r, water.getColour().g, water.getColour().b, 0.4f);
 
 		if (ColiseumWorld.getFog() != null) {
 			shader.getUniformVec3("fogColour").loadVec3(ColiseumWorld.getFog().getFogColour());
@@ -69,6 +72,7 @@ public class WaterRenderer extends IRenderer {
 		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
 		shader.getUniformFloat("shadowDistance").loadFloat(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
 
+		OpenGlUtils.bindTexture(reflectionFBO.getColourTexture(0), GL_TEXTURE_2D, 0);
 		OpenGlUtils.bindTexture(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
 
 		shader.getUniformFloat("waveLength").loadFloat(Water.WAVE_LENGTH);
@@ -86,8 +90,16 @@ public class WaterRenderer extends IRenderer {
 	}
 
 	private void updateWaveTime() {
-		waveTime += FlounderFramework.getDelta();
+		waveTime += FlounderFramework.getDeltaRender();
 		waveTime %= Water.WAVE_SPEED;
+	}
+
+	public FBO getReflectionFBO() {
+		return reflectionFBO;
+	}
+
+	public Water getWater() {
+		return water;
 	}
 
 	@Override
@@ -97,6 +109,7 @@ public class WaterRenderer extends IRenderer {
 
 	@Override
 	public void dispose() {
+		reflectionFBO.delete();
 		shader.dispose();
 		water.delete();
 	}

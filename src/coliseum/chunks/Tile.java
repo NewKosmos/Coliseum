@@ -26,7 +26,7 @@ public class Tile {
 			Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "rockGem", "rockGem.png")).clampEdges().create()
 	);
 
-	public static final Texture TESTING = TILE_STONE.texture;//Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "testing.png")).clampEdges().create();
+	public static final Texture TESTING = TILE_GRASS.texture;//Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "testing.png")).clampEdges().create();
 
 
 	private Model model;
