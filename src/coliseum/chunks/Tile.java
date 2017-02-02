@@ -17,16 +17,16 @@ public class Tile {
 			Model.newModel(new MyFile(MyFile.RES_FOLDER, "terrains", "sand", "sand.obj")).create(),
 			Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "sand", "sand.png")).clampEdges().create()
 	);
-	public static final Tile TILE_WATER = new Tile(
-			Model.newModel(new MyFile(MyFile.RES_FOLDER, "terrains", "water", "water.obj")).create(),
-			Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "water", "water.png")).clampEdges().create()
+	public static final Tile TILE_SNOW = new Tile(
+			Model.newModel(new MyFile(MyFile.RES_FOLDER, "terrains", "snow", "snow.obj")).create(),
+			Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "snow", "snow.png")).clampEdges().create()
 	);
 	public static final Tile TILE_ROCK_GEM = new Tile(
 			Model.newModel(new MyFile(MyFile.RES_FOLDER, "terrains", "rockGem", "rockGem.obj")).create(),
 			Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "rockGem", "rockGem.png")).clampEdges().create()
 	);
 
-	public static final Texture TESTING = TILE_SAND.texture;//Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "testing.png")).clampEdges().create();
+	public static final Texture TESTING = TILE_STONE.texture;//Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "testing.png")).clampEdges().create();
 
 
 	private Model model;

@@ -43,10 +43,7 @@ public class ChunkGenerator {
 			height = 0.0f;
 		}
 
-		if (chance > 3.0f) {
-			chunk.addTile(Tile.TILE_WATER, new Vector3f(position.x, 0.0f, position.y));
-			height = 0.0f;
-		} else {
+		{
 			//if (height > 0.0f) {
 			//	chunk.addTile(Tile.TILE_STONE, new Vector3f(position.x, 0.0f, position.y));
 			//}

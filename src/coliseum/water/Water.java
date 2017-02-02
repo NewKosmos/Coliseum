@@ -12,8 +12,8 @@ import flounder.processing.opengl.*;
  */
 public class Water {
 	protected static final float WAVE_SPEED = 12.0f;
-	protected static final float WAVE_LENGTH = 6.0f;
-	protected static final float AMPLITUDE = 0.40f;
+	protected static final float WAVE_LENGTH = 5.0f;
+	protected static final float AMPLITUDE = 0.50f;
 
 	protected static final float SQUARE_SIZE = 2.0f;
 	protected static final int VERTEX_COUNT = 31;

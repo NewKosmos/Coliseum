@@ -14,7 +14,7 @@ public class InstanceSun extends Entity {
 
 	public InstanceSun(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
-		ComponentModel componentModel = new ComponentModel(this, model, 25.0f, texture, 0);
+		ComponentModel componentModel = new ComponentModel(this, model, 30.0f, texture, 0);
 		componentModel.setIgnoreShadows(true);
 		componentModel.setIgnoreFog(true);
 		ComponentCelestial componentCelestial = new ComponentCelestial(this);

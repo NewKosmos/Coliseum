@@ -14,7 +14,7 @@ public class InstanceMoon extends Entity {
 
 	public InstanceMoon(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
-		ComponentModel componentModel = new ComponentModel(this, model, 10.0f, texture, 0);
+		ComponentModel componentModel = new ComponentModel(this, model, 8.5f, texture, 0);
 		componentModel.setIgnoreShadows(true);
 		componentModel.setIgnoreFog(true);
 		ComponentCelestial componentCelestial = new ComponentCelestial(this);
