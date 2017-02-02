@@ -36,7 +36,7 @@ public class ChunkGenerator {
 
 	protected static void generateTile(Chunk chunk, Vector2f position) {
 		float chance = (float) Math.random() * 4.0f;
-		float height = Math.random() > 0.85 ? (2.0f * (float) Math.sqrt(2.0f)) : 0.0f;
+		float height = Math.random() > 0.4 ? -(2.0f * (float) Math.sqrt(2.0f)) : 0.0f;
 
 		if (Math.abs(position.x) < 5 && Math.abs(position.y) < 5) {
 			chance = 0.0f;

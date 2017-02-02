@@ -27,7 +27,7 @@ public class Chunk extends Entity {
 		this.tilesChanged = true;
 		this.darkness = 0.0f;
 
-		new ComponentModel(this, null, 2.0f, Tile.TILE_GRASS.getTexture(), 0);
+		new ComponentModel(this, null, 2.0f, Tile.TESTING, 0);
 		//	new ComponentCollider(this);
 		//	new ComponentCollision(this);
 

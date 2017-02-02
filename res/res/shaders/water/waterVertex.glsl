@@ -66,7 +66,7 @@ void main(void) {
 	otherVertex1 += generateVertexOffset(otherVertex1.x, otherVertex1.z);
 	otherVertex2 += generateVertexOffset(otherVertex2.x, otherVertex2.z);
 
-	vec4 worldPosition = vec4(thisVertex, 1.0); // modelMatrix *
+	vec4 worldPosition = modelMatrix * vec4(thisVertex, 1.0);
 	pass_positionRelativeToCam = viewMatrix * worldPosition;
 
 	gl_ClipDistance[0] = dot(worldPosition, clipPlane);

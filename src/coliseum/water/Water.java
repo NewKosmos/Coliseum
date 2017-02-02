@@ -1,6 +1,7 @@
 package coliseum.water;
 
 import flounder.loaders.*;
+import flounder.maths.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.processing.*;
@@ -10,18 +11,18 @@ import flounder.processing.opengl.*;
  * Represents the physical mesh for all the water at a certain height in the scene.
  */
 public class Water {
-	public static final float WAVE_SPEED = 48.0f;
-	public static final float WAVELENGTH = 12.0f;
-	public static final float AMPLITUDE = 1.20f;
+	protected static final float WAVE_SPEED = 12.0f;
+	protected static final float WAVE_LENGTH = 6.0f;
+	protected static final float AMPLITUDE = 0.40f;
 
-	public static final float SQUARE_SIZE = 4.0f;
-	public static final float HEIGHT = -1.0f;
-
-	public static final int VERTEX_COUNT = 41;
+	protected static final float SQUARE_SIZE = 2.0f;
+	protected static final int VERTEX_COUNT = 31;
 
 	private int vao;
 	private int vertexCount;
 	private boolean loaded;
+
+	private Colour colour;
 
 	private Vector3f position;
 	private Vector3f rotation;
@@ -38,11 +39,13 @@ public class Water {
 	public Water(Vector3f position, Vector3f rotation, float scale) {
 		this.vao = 0;
 		this.vertexCount = 0;
+		this.loaded = false;
+
+		this.colour = new Colour(61, 174, 255, true);
+
 		this.position = position;
 		this.rotation = rotation;
 		this.scale = scale;
-		this.loaded = false;
-
 		this.modelMatrix = new Matrix4f();
 
 		generateMesh();
@@ -79,6 +82,10 @@ public class Water {
 
 	public boolean isLoaded() {
 		return loaded;
+	}
+
+	public Colour getColour() {
+		return colour;
 	}
 
 	public Vector3f getPosition() {

@@ -24,12 +24,13 @@ import static org.lwjgl.opengl.GL20.*;
  * A renderer that is used to render entity's.
  */
 public class EntitiesRenderer extends IRenderer {
+	public static final Vector3f LIGHT_DIR = new Vector3f(0.2f, -0.3f, -0.8f); // TODO: Get rid of.
+
 	private static final MyFile VERTEX_SHADER = new MyFile(Shader.SHADERS_LOC, "entities", "entityVertex.glsl");
 	private static final MyFile FRAGMENT_SHADER = new MyFile(Shader.SHADERS_LOC, "entities", "entityFragment.glsl");
 
 	private Shader shader;
 	private Texture textureUndefined;
-	public static final Vector3f LIGHT_DIR = new Vector3f(0.2f, -0.3f, -0.8f);
 
 	/**
 	 * Creates a new entity renderer.
@@ -128,8 +129,6 @@ public class EntitiesRenderer extends IRenderer {
 		}
 
 		OpenGlUtils.bindTexture(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
-
-		OpenGlUtils.cullBackFaces(false); // TODO: Remove
 
 		if (componentAnimation != null) {
 			for (int i = 0; i < componentAnimation.getJointTransforms().length; i++) {
