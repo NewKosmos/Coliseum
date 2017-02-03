@@ -9,13 +9,12 @@ in vec4 pass_positionRelativeToCam;
 in vec3 pass_surfaceNormal;
 in vec4 pass_shadowCoords;
 in vec4 pass_clipSpace;
+in float pass_brightness;
 
 //---------UNIFORM------------
 layout(binding = 0) uniform sampler2D reflectionMap;
 layout(binding = 1) uniform sampler2D shadowMap;
-
 uniform vec4 diffuseColour;
-uniform vec3 lightDirection;
 
 uniform float shadowMapSize;
 uniform vec3 fogColour;
@@ -38,10 +37,8 @@ vec2 getReflectionTexCoords(vec2 normalizedDeviceCoords){
 
 //---------MAIN------------
 void main(void) {
-	vec3 unitNormal = normalize(pass_surfaceNormal);
-
 	float fogFactor = visibility(pass_positionRelativeToCam, fogDensity, fogGradient);
-	float shadeFactor = max(dot(-lightDirection, unitNormal), 0.0) * LIGHT_BIAS.x + LIGHT_BIAS.y;
+	float shadeFactor = pass_brightness;
 
 	if (!ignoreShadows) {
 	    shadeFactor = shadeFactor * shadow(shadowMap, pass_shadowCoords, shadowMapSize);

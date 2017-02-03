@@ -9,13 +9,13 @@ in vec4 pass_positionRelativeToCam;
 in vec2 pass_textureCoords;
 in vec3 pass_surfaceNormal;
 in vec4 pass_shadowCoords;
+in float pass_brightness;
 
 //---------UNIFORM------------
 layout(binding = 0) uniform sampler2D diffuseMap;
 layout(binding = 1) uniform sampler2D shadowMap;
 uniform bool useNormalMap;
 uniform float transparency;
-uniform vec3 lightDirection;
 uniform float shadowMapSize;
 uniform float darkness;
 uniform vec3 fogColour;
@@ -23,7 +23,6 @@ uniform float fogDensity;
 uniform float fogGradient;
 
 uniform bool ignoreShadows;
-uniform bool ignoreLighting;
 uniform bool ignoreFog;
 
 //---------OUT------------
@@ -32,19 +31,17 @@ layout(location = 0) out vec4 out_colour;
 //---------MAIN------------
 void main(void) {
 	vec4 diffuseColour = texture(diffuseMap, pass_textureCoords);
-	vec3 unitNormal = normalize(pass_surfaceNormal);
-	float shadeFactor = 1.0;
-	float fogFactor = 1.0;
 
 	if (diffuseColour.a < 0.4){
 		out_colour = vec4(0.0);
 		discard;
 	}
 
+	float shadeFactor = pass_brightness;
+	float fogFactor = 1.0;
+
 	if (!ignoreShadows) {
 	    shadeFactor = shadow(shadowMap, pass_shadowCoords, shadowMapSize);
-	} else if (!ignoreLighting) {
-	    shadeFactor = max(dot(-lightDirection, unitNormal), 0.0) * LIGHT_BIAS.x + LIGHT_BIAS.y;
 	}
 
 	if (!ignoreFog) {

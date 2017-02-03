@@ -38,7 +38,7 @@ public class SkyCycle {
 		Colour.interpolate(SKY_COLOUR_DAY, SKY_COLOUR_NIGHT, dayFactor, skyColour);
 
 		Vector3f.rotate(sunPosition, new Vector3f(dayFactor * 360.0f, 0.0f, 0.0f), lightDirection);
-	//	Vector3f.rotate(lightDir, new Vector3f(dayFactor * 360.0f, 0.0f, 0.0f), lightDir);
+		//	Vector3f.rotate(lightDir, new Vector3f(dayFactor * 360.0f, 0.0f, 0.0f), lightDir);
 	}
 
 	public float getDayFactor() {

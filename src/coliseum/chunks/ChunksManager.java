@@ -38,12 +38,12 @@ public class ChunksManager {
 		new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 		new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-200.0f, -200.0f, -200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 
-		/*for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 1; i++) {
 			int shapesOnEdge = i;
 			float r = 0;
 			float g = -i;
 			float b = i;
-			chunks.add(new Chunk(FlounderEntities.getEntities(), ChunkMaths.calculateXY(new Vector3f(r, g, b), ChunkGenerator.HEXAGON_SIDE_LENGTH * ChunkGenerator.CHUNK_RADIUS, null).toVector3f()));
+			chunks.add(new Chunk(FlounderEntities.getEntities(), ChunkMaths.calculateXY(new Vector3f(r, g, b), ChunkGenerator.HEXAGON_SIDE_LENGTH * ChunkGenerator.CHUNK_RADIUS, null)));
 
 			for (int j = 0; j < ChunkGenerator.HEXAGON_SIDE_COUNT; j++) {
 				if (j == ChunkGenerator.HEXAGON_SIDE_COUNT - 1) {
@@ -55,10 +55,10 @@ public class ChunksManager {
 					r = r + ChunkGenerator.GENERATE_DELTAS[j][0];
 					g = g + ChunkGenerator.GENERATE_DELTAS[j][1];
 					b = b + ChunkGenerator.GENERATE_DELTAS[j][2];
-					chunks.add(new Chunk(FlounderEntities.getEntities(), ChunkMaths.calculateXY(new Vector3f(r, g, b), ChunkGenerator.HEXAGON_SIDE_LENGTH * ChunkGenerator.CHUNK_RADIUS, null).toVector3f()));
+					chunks.add(new Chunk(FlounderEntities.getEntities(), ChunkMaths.calculateXY(new Vector3f(r, g, b), ChunkGenerator.HEXAGON_SIDE_LENGTH * ChunkGenerator.CHUNK_RADIUS, null)));
 				}
 			}
-		}*/
+		}
 
 		//chunks.add(new Chunk(new Vector2f(0.0f, 0.0f)));
 		//chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector3f(10.392304f, 0.0f, 18.0f)));
@@ -67,7 +67,8 @@ public class ChunksManager {
 		//chunks.add(new Chunk(new Vector2f(-10.392304f, -18.0f)));
 		//chunks.add(new Chunk(new Vector2f(-20.784609f, 0.0f)));
 		//chunks.add(new Chunk(new Vector2f(-10.392304f, 18.0f)));
-		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector3f(15.f, 0.0f, 30.0f)));
+
+		//	chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector3f(15.f, 0.0f, 30.0f)));
 	}
 
 	public void update() {

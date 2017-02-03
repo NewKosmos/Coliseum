@@ -25,7 +25,6 @@ public class ComponentModel extends IComponentEntity {
 	private int textureIndex;
 
 	private boolean ignoreShadows;
-	private boolean ignoreLighting;
 	private boolean ignoreFog;
 
 	/**
@@ -47,7 +46,6 @@ public class ComponentModel extends IComponentEntity {
 		this.textureIndex = textureIndex;
 
 		this.ignoreShadows = false;
-		this.ignoreLighting = false;
 		this.ignoreFog = false;
 	}
 
@@ -174,14 +172,6 @@ public class ComponentModel extends IComponentEntity {
 
 	public void setIgnoreShadows(boolean ignoreShadows) {
 		this.ignoreShadows = ignoreShadows;
-	}
-
-	public boolean isIgnoreLighting() {
-		return ignoreLighting;
-	}
-
-	public void setIgnoreLighting(boolean ignoreLighting) {
-		this.ignoreLighting = ignoreLighting;
 	}
 
 	public boolean isIgnoringFog() {

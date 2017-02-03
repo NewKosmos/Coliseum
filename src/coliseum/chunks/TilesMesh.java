@@ -1,6 +1,5 @@
 package coliseum.chunks;
 
-import flounder.logger.*;
 import flounder.maths.vectors.*;
 
 import java.util.*;
@@ -31,7 +30,6 @@ public class TilesMesh {
 			tileModelMaxIndex = (tileModelMaxIndex < tile.getModel().getMeshData().getIndices()[i]) ? tile.getModel().getMeshData().getIndices()[i] : tileModelMaxIndex;
 		}
 
-		FlounderLogger.log("Max Index: " + tileModelMaxIndex);
 		this.accumulator = 0;
 
 		//

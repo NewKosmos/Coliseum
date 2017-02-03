@@ -5,10 +5,13 @@ import flounder.maths.vectors.*;
 public class ChunkGenerator {
 	protected static final float[][] GENERATE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
 
-	protected static final int HEXAGON_SIDE_COUNT = 6; // The number of sides for each figure (hexagon).
-	protected static final float HEXAGON_SIDE_LENGTH = 2.0f; //  Each tile can be broken into equilateral triangles with sides of length.
+	public static final int HEXAGON_SIDE_COUNT = 6; // The number of sides for each figure (hexagon).
+	public static final float HEXAGON_SIDE_LENGTH = 2.0f; //  Each tile can be broken into equilateral triangles with sides of length.
 
-	protected static final int CHUNK_RADIUS = 9; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
+	public static final int CHUNK_RADIUS = 9; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
+	public static final float CHUNK_SCALE = 2.0f; // The model scale size used for each chunk.
+
+	public static final float CHUNK_WORLD_SIZE = ChunkGenerator.CHUNK_SCALE * (float) Math.sqrt(3.0) * (ChunkGenerator.CHUNK_RADIUS - 0.5f); // The overall world radius footprint per chunk.
 
 	protected static void generate(Chunk chunk) {
 		for (int i = 0; i < CHUNK_RADIUS; i++) {
@@ -36,7 +39,7 @@ public class ChunkGenerator {
 
 	protected static void generateTile(Chunk chunk, Vector2f position) {
 		float chance = (float) Math.random() * 4.0f;
-		float height = Math.random() > 0.4 ? -(2.0f * (float) Math.sqrt(2.0f)) : 0.0f;
+		float height = Math.random() > 0.35 ? -(ChunkGenerator.CHUNK_SCALE * (float) Math.sqrt(2.0f)) : 0.0f;
 
 		if (Math.abs(position.x) < 5 && Math.abs(position.y) < 5) {
 			chance = 0.0f;

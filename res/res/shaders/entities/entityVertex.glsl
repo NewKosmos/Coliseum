@@ -17,6 +17,10 @@ uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform vec4 clipPlane;
 uniform mat4 modelMatrix;
+
+uniform vec3 lightDirection;
+uniform vec2 lightBias;
+
 uniform mat4 shadowSpaceMatrix;
 uniform float shadowDistance;
 uniform float shadowTransition;
@@ -32,6 +36,7 @@ out vec4 pass_positionRelativeToCam;
 out vec2 pass_textureCoords;
 out vec3 pass_surfaceNormal;
 out vec4 pass_shadowCoords;
+out float pass_brightness;
 
 //---------MAIN------------
 void main(void) {
@@ -65,11 +70,13 @@ void main(void) {
 //	mat3 toTangentSpace = mat3(tang.x, bitang.x, norm.x, tang.y, bitang.y, norm.y, tang.z, bitang.z, norm.z);
 
 	pass_textureCoords = (in_textureCoords / atlasRows) + atlasOffset;
-	pass_surfaceNormal = totalNormal.xyz; // (modelMatrix * totalNormal).xyz; // toTangentSpace * surfaceNormal;
+	pass_surfaceNormal = normalize(totalNormal.xyz); // (modelMatrix * totalNormal).xyz; // toTangentSpace * surfaceNormal;
 
 	pass_shadowCoords = shadowSpaceMatrix * worldPosition;
 	float distanceAway = length(pass_positionRelativeToCam.xyz);
     distanceAway = distanceAway - ((shadowDistance * 2.0) - shadowTransition);
     distanceAway = distanceAway / shadowTransition;
     pass_shadowCoords.w = clamp(1.0 - distanceAway, 0.0, 1.0);
+
+    pass_brightness = max(dot(-lightDirection, pass_surfaceNormal), 0.0) * lightBias.x + lightBias.y;
 }

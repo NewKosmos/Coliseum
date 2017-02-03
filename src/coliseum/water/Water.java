@@ -1,5 +1,6 @@
 package coliseum.water;
 
+import coliseum.chunks.*;
 import flounder.loaders.*;
 import flounder.maths.*;
 import flounder.maths.matrices.*;
@@ -14,12 +15,14 @@ import java.util.*;
  * Represents the physical mesh for all the water at a certain height in the scene.
  */
 public class Water {
-	protected static final float WAVE_SPEED = 12.0f;
+	protected static final float COLOUR_INTENSITY = 0.7f;
+
+	protected static final float WAVE_SPEED = 10.0f;
 	protected static final float WAVE_LENGTH = 5.0f;
 	protected static final float AMPLITUDE = 0.50f;
 
-	protected static final float SQUARE_SIZE = 2.0f;
-	protected static final int VERTEX_COUNT = 31;
+	protected static final float SQUARE_SIZE = 0.5f * (float) Math.sqrt(3.0) * ChunkGenerator.HEXAGON_SIDE_LENGTH;
+	protected static final int VERTEX_COUNT = 35; // Should create a AABB of size 'ChunkGenerator.CHUNK_WORLD_SIZE'.
 
 	private int vao;
 	private int vertexCount;
@@ -46,7 +49,7 @@ public class Water {
 		this.loaded = false;
 
 		this.aabb = new AABB(new Vector3f(0.0f, -1.0f, 0.0f), new Vector3f(0.0f, 1.0f, 0.0f));
-		this.colour = new Colour(61, 174, 255, true);
+		this.colour = new Colour(0.2392f, 0.6824f, 1.0f, COLOUR_INTENSITY);
 
 		this.position = position;
 		this.rotation = rotation;
@@ -86,14 +89,18 @@ public class Water {
 		}
 
 		vertexCount = array.length / 3;
-		FlounderProcessors.sendRequest((RequestOpenGL)() -> {
+		FlounderProcessors.sendRequest((RequestOpenGL) () -> {
 			vao = FlounderLoader.createInterleavedVAO(array, 3);
 			loaded = true;
 		});
 
-		// position.x -= 30.0f;
-		// position.z -= 30.0f;
+		position.x -= aabb.getMaxExtents().x / 2.0f;
+		position.z -= aabb.getMaxExtents().z / 2.0f;
 		AABB.recalculate(aabb, position, rotation, scale, aabb);
+
+		System.out.println(VERTEX_COUNT);
+		System.out.println(aabb);
+		System.out.println(ChunkGenerator.CHUNK_WORLD_SIZE);
 	}
 
 	private void storeQuad1(List<Float> vertices, int topLeft, int topRight, int bottomLeft, int bottomRight, boolean mixed) {
@@ -141,8 +148,6 @@ public class Water {
 		int gridZ = index / Water.VERTEX_COUNT;
 		float x = gridX * Water.SQUARE_SIZE;
 		float z = gridZ * Water.SQUARE_SIZE;
-
-		// FlounderLogger.log("[ " + x + ", " + z + " ]");
 
 		if (x > aabb.getMaxExtents().x) {
 			aabb.getMaxExtents().x = x;
@@ -236,7 +241,7 @@ public class Water {
 	}
 
 	public void delete() {
-		FlounderProcessors.sendRequest((RequestOpenGL)() -> {
+		FlounderProcessors.sendRequest((RequestOpenGL) () -> {
 			loaded = false;
 			FlounderLoader.deleteVAOFromCache(vao);
 		});

@@ -16,7 +16,6 @@ public class InstanceSun extends Entity {
 		super(structure, position, rotation);
 		ComponentModel componentModel = new ComponentModel(this, model, 30.0f, texture, 0);
 		componentModel.setIgnoreShadows(true);
-		componentModel.setIgnoreLighting(true);
 		componentModel.setIgnoreFog(true);
 		ComponentCelestial componentCelestial = new ComponentCelestial(this);
 	}

@@ -1,7 +1,6 @@
 package coliseum.water;
 
 import coliseum.*;
-import coliseum.entities.*;
 import coliseum.shadows.*;
 import coliseum.world.*;
 import flounder.camera.*;
@@ -63,7 +62,7 @@ public class WaterRenderer extends IRenderer {
 		shader.getUniformMat4("modelMatrix").loadMat4(water.getModelMatrix());
 
 		shader.getUniformVec3("lightDirection").loadVec3(ColiseumWorld.getSkyCycle().getLightDir());
-		shader.getUniformVec4("diffuseColour").loadVec4(water.getColour().r, water.getColour().g, water.getColour().b, 0.4f);
+		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f);
 
 		if (ColiseumWorld.getFog() != null) {
 			shader.getUniformVec3("fogColour").loadVec3(ColiseumWorld.getFog().getFogColour());
@@ -90,12 +89,13 @@ public class WaterRenderer extends IRenderer {
 			OpenGlUtils.bindTexture(reflectionFBO.getColourTexture(0), GL_TEXTURE_2D, 0);
 		}
 
+		shader.getUniformFloat("waveTime").loadFloat(waveTime / Water.WAVE_SPEED);
 		shader.getUniformFloat("waveLength").loadFloat(Water.WAVE_LENGTH);
 		shader.getUniformFloat("amplitude").loadFloat(Water.AMPLITUDE);
 		shader.getUniformFloat("squareSize").loadFloat(Water.SQUARE_SIZE);
 		shader.getUniformFloat("waterHeight").loadFloat(water.getPosition().y);
 
-		shader.getUniformFloat("waveTime").loadFloat(waveTime / Water.WAVE_SPEED);
+		shader.getUniformVec4("diffuseColour").loadVec4(water.getColour());
 
 		glDrawArrays(GL_TRIANGLES, 0, water.getVertexCount());
 

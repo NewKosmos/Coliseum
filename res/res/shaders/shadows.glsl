@@ -3,8 +3,6 @@ const int SHADOW_PCF = 2;
 const float SHADOW_BIAS = 0.0002;
 const float SHADOW_DARKNESS = 0.6;
 
-const vec2 LIGHT_BIAS = vec2(0.7, 0.6);
-
 //---------SHADOW------------
 float shadow(sampler2D shadowMap, vec4 shadowCoords, float shadowMapSize) {
 	float shadowTexelSize = 1.0 / shadowMapSize;

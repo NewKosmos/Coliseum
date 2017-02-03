@@ -20,14 +20,14 @@ public class Chunk extends Entity {
 	private boolean tilesChanged;
 	private float darkness;
 
-	public Chunk(ISpatialStructure<Entity> structure, Vector3f position) {
-		super(structure, position, new Vector3f());
+	public Chunk(ISpatialStructure<Entity> structure, Vector2f position) {
+		super(structure, new Vector3f(position.x, 0.0f, position.y), new Vector3f());
 		this.tiles = new HashMap<>();
 		this.chunkMesh = new ChunkMesh(this);
 		this.tilesChanged = true;
 		this.darkness = 0.0f;
 
-		new ComponentModel(this, null, 2.0f, Tile.TESTING, 0);
+		new ComponentModel(this, null, ChunkGenerator.CHUNK_SCALE, Tile.TESTING, 0);
 		//	new ComponentCollider(this);
 		//	new ComponentCollision(this);
 
