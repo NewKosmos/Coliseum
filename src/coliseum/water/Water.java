@@ -15,7 +15,7 @@ import java.util.*;
  * Represents the physical mesh for all the water at a certain height in the scene.
  */
 public class Water {
-	protected static final float COLOUR_INTENSITY = 0.7f;
+	protected static final float COLOUR_INTENSITY = 0.7f; // 0 being 100% reflective, 0% disables reflections.
 
 	protected static final float WAVE_SPEED = 10.0f;
 	protected static final float WAVE_LENGTH = 5.0f;
@@ -55,6 +55,24 @@ public class Water {
 		this.rotation = rotation;
 		this.scale = scale;
 		this.modelMatrix = new Matrix4f();
+
+		/*FlounderEvents.addEvent(new IEvent() {
+			private KeyButton keyButton = new KeyButton(GLFW.GLFW_KEY_I);
+
+			@Override
+			public boolean eventTriggered() {
+				return keyButton.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				if (colour.a == 1.0f) {
+					colour.a = COLOUR_INTENSITY;
+				} else {
+					colour.a = 1.0f;
+				}
+			}
+		});*/
 
 		generateMesh();
 	}

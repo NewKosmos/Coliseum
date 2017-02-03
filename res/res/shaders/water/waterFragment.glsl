@@ -37,8 +37,8 @@ vec2 getReflectionTexCoords(vec2 normalizedDeviceCoords){
 
 //---------MAIN------------
 void main(void) {
-	float fogFactor = visibility(pass_positionRelativeToCam, fogDensity, fogGradient);
 	float shadeFactor = pass_brightness;
+	float fogFactor = visibility(pass_positionRelativeToCam, fogDensity, fogGradient);
 
 	if (!ignoreShadows) {
 	    shadeFactor = shadeFactor * shadow(shadowMap, pass_shadowCoords, shadowMapSize);

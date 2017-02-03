@@ -89,15 +89,18 @@ public class ColiseumRenderer extends IRendererMaster {
 	public void render() {
 		/* Water Reflection & Refraction */
 		if (waterRenderer.reflectionsEnabled()) {
+			FlounderCamera.getCamera().reflect(waterRenderer.getWater().getPosition().y);
+			shadowRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
+
 			glEnable(GL_CLIP_DISTANCE0);
 			{
-				FlounderCamera.getCamera().reflect(waterRenderer.getWater().getPosition().y);
 				waterRenderer.getReflectionFBO().bindFrameBuffer();
-				renderScene(new Vector4f(0.0f, 1.0f, 0.0f, -waterRenderer.getWater().getPosition().y), CLEAR_COLOUR);
+				renderScene(new Vector4f(0.0f, 1.0f, 0.0f, -waterRenderer.getWater().getPosition().y), CLEAR_COLOUR, true);
 				waterRenderer.getReflectionFBO().unbindFrameBuffer();
-				FlounderCamera.getCamera().reflect(waterRenderer.getWater().getPosition().y);
 			}
 			glDisable(GL_CLIP_DISTANCE0);
+
+			FlounderCamera.getCamera().reflect(waterRenderer.getWater().getPosition().y);
 		}
 
 		/* Shadow rendering. */
@@ -107,7 +110,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		bindRelevantFBO();
 
 		/* Scene rendering. */
-		renderScene(POSITIVE_INFINITY, CLEAR_COLOUR);
+		renderScene(POSITIVE_INFINITY, CLEAR_COLOUR, false);
 
 		/* Post rendering. */
 		renderPost(FlounderGuis.getGuiMaster().isGamePaused(), FlounderGuis.getGuiMaster().getBlurFactor());
@@ -131,15 +134,18 @@ public class ColiseumRenderer extends IRendererMaster {
 		return shadowRenderer;
 	}
 
-	private void renderScene(Vector4f clipPlane, Colour clearColour) {
+	private void renderScene(Vector4f clipPlane, Colour clearColour, boolean waterPass) {
 		/* Clear and update. */
 		ICamera camera = FlounderCamera.getCamera();
 		OpenGlUtils.prepareNewRenderParse(clearColour);
 
 		skyboxRenderer.render(clipPlane, camera);
 		entitiesRenderer.render(clipPlane, camera);
-		waterRenderer.render(clipPlane, camera);
-		boundingRenderer.render(clipPlane, camera);
+
+		if (!waterPass) {
+			waterRenderer.render(clipPlane, camera);
+			boundingRenderer.render(clipPlane, camera);
+		}
 	}
 
 	private void renderIndependents() {

@@ -30,7 +30,7 @@ public class WaterRenderer extends IRenderer {
 	private boolean enableReflections;
 
 	public WaterRenderer() {
-		this.reflectionFBO = FBO.newFBO(0.5f).disableTextureWrap().create();
+		this.reflectionFBO = FBO.newFBO(0.618f).disableTextureWrap().depthBuffer(DepthBufferType.RENDER_BUFFER).create();
 		this.shader = Shader.newShader("water").setShaderTypes(
 				new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER),
 				new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)
@@ -128,7 +128,7 @@ public class WaterRenderer extends IRenderer {
 	}
 
 	public boolean reflectionsEnabled() {
-		return enableReflections;
+		return enableReflections && water.getColour().a != 1.0f;
 	}
 
 	public void setReflectionsEnabled(boolean enableReflections) {
