@@ -88,16 +88,17 @@ public class ColiseumRenderer extends IRendererMaster {
 	@Override
 	public void render() {
 		/* Water Reflection & Refraction */
-		glEnable(GL_CLIP_DISTANCE0);
-		{
-			FlounderCamera.getCamera().reflect(waterRenderer.getWater().getPosition().y);
-			waterRenderer.getReflectionFBO().bindFrameBuffer();
-			Vector4f clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, -waterRenderer.getWater().getPosition().y);
-			renderScene(clipPlane, CLEAR_COLOUR);
-			waterRenderer.getReflectionFBO().unbindFrameBuffer();
-			FlounderCamera.getCamera().reflect(waterRenderer.getWater().getPosition().y);
+		if (waterRenderer.reflectionsEnabled()) {
+			glEnable(GL_CLIP_DISTANCE0);
+			{
+				FlounderCamera.getCamera().reflect(waterRenderer.getWater().getPosition().y);
+				waterRenderer.getReflectionFBO().bindFrameBuffer();
+				renderScene(new Vector4f(0.0f, 1.0f, 0.0f, -waterRenderer.getWater().getPosition().y), CLEAR_COLOUR);
+				waterRenderer.getReflectionFBO().unbindFrameBuffer();
+				FlounderCamera.getCamera().reflect(waterRenderer.getWater().getPosition().y);
+			}
+			glDisable(GL_CLIP_DISTANCE0);
 		}
-		glDisable(GL_CLIP_DISTANCE0);
 
 		/* Shadow rendering. */
 		shadowRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());

@@ -9,6 +9,7 @@ import flounder.fbos.*;
 import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.maths.vectors.*;
+import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
 import flounder.resources.*;
@@ -26,14 +27,20 @@ public class WaterRenderer extends IRenderer {
 	private Water water;
 	private float waveTime;
 
+	private boolean enableShadows;
+	private boolean enableReflections;
+
 	public WaterRenderer() {
-		this.reflectionFBO = FBO.newFBO(1080, 720).disableTextureWrap().withAlphaChannel(false).create();
+		this.reflectionFBO = FBO.newFBO(0.5f).disableTextureWrap().create();
 		this.shader = Shader.newShader("water").setShaderTypes(
 				new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER),
 				new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)
 		).create();
-		this.water = new Water(new Vector3f(0.0f, -0.8f, 0.0f), new Vector3f(), 1.0f);
+		this.water = new Water(new Vector3f(0.0f, -0.5f, 0.0f), new Vector3f(), 1.0f);
 		this.waveTime = 0.0f;
+
+		this.enableShadows = true;
+		this.enableReflections = true;
 	}
 
 	@Override
@@ -68,12 +75,20 @@ public class WaterRenderer extends IRenderer {
 			shader.getUniformFloat("fogGradient").loadFloat(2.0f);
 		}
 
-		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.SHADOW_MAP_SIZE);
-		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
-		shader.getUniformFloat("shadowDistance").loadFloat(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
+		shader.getUniformBool("ignoreShadows").loadBoolean(!enableShadows);
+		shader.getUniformBool("ignoreReflections").loadBoolean(!enableReflections);
 
-		OpenGlUtils.bindTexture(reflectionFBO.getColourTexture(0), GL_TEXTURE_2D, 0);
-		OpenGlUtils.bindTexture(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
+		if (enableShadows) {
+			shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.SHADOW_MAP_SIZE);
+			shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
+			shader.getUniformFloat("shadowDistance").loadFloat(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
+			shader.getUniformFloat("shadowTransition").loadFloat(10.0f);
+			OpenGlUtils.bindTexture(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
+		}
+
+		if (enableReflections) {
+			OpenGlUtils.bindTexture(reflectionFBO.getColourTexture(0), GL_TEXTURE_2D, 0);
+		}
 
 		shader.getUniformFloat("waveLength").loadFloat(Water.WAVE_LENGTH);
 		shader.getUniformFloat("amplitude").loadFloat(Water.AMPLITUDE);
@@ -87,6 +102,8 @@ public class WaterRenderer extends IRenderer {
 		OpenGlUtils.disableBlending();
 		OpenGlUtils.unbindVAO(0);
 		shader.stop();
+
+		FlounderBounding.addShapeRender(water.getAABB());
 	}
 
 	private void updateWaveTime() {
@@ -100,6 +117,22 @@ public class WaterRenderer extends IRenderer {
 
 	public Water getWater() {
 		return water;
+	}
+
+	public boolean shadowsEnabled() {
+		return enableShadows;
+	}
+
+	public void setShadowsEnabled(boolean enableShadows) {
+		this.enableShadows = enableShadows;
+	}
+
+	public boolean reflectionsEnabled() {
+		return enableReflections;
+	}
+
+	public void setReflectionsEnabled(boolean enableReflections) {
+		this.enableReflections = enableReflections;
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package coliseum.chunks;
 import coliseum.entities.instances.*;
 import flounder.camera.*;
 import flounder.entities.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 
 import java.util.*;
@@ -17,14 +18,20 @@ public class ChunksManager {
 
 	public void generate() {
 		// new InstanceDerpWalk(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
-		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, -1.5f, 0.0f), new Vector3f());
+		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.5f, 0.0f), new Vector3f());
 		// new InstanceRobit(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
-		// new InstanceCloud(FlounderEntities.getEntities(), new Vector3f(0.0f, -8.0f, 0.0f), new Vector3f());
+		// new InstanceClouds(FlounderEntities.getEntities(), new Vector3f(0.0f, -8.0f, 0.0f), new Vector3f());
+
+		for (int x = -3; x < 7; x++) {
+			for (int y = -3; y < 7; y++) {
+				new InstanceCloud(FlounderEntities.getEntities(), new Vector3f(x * (float) Math.random() * 50.0f, 20.0f, y * (float) Math.random() * 50.0f), new Vector3f(0.0f, Maths.randomInRange(0.0f, 360.0f), Maths.randomInRange(0.0f, 180.0f)), (float) Math.random() * 2.0f + 0.5f);
+			}
+		}
 
 		new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 		new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-200.0f, -200.0f, -200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 
-		for (int i = 0; i < 1; i++) {
+		/*for (int i = 0; i < 1; i++) {
 			int shapesOnEdge = i;
 			float r = 0;
 			float g = -i;
@@ -44,15 +51,16 @@ public class ChunksManager {
 					chunks.add(new Chunk(FlounderEntities.getEntities(), ChunkMaths.calculateXY(new Vector3f(r, g, b), ChunkGenerator.HEXAGON_SIDE_LENGTH * ChunkGenerator.CHUNK_RADIUS, null).toVector3f()));
 				}
 			}
-		}
+		}*/
 
-		/*chunks.add(new Chunk(new Vector2f(0.0f, 0.0f)));
-		chunks.add(new Chunk(new Vector2f(10.392304f, 18.0f)));
-		chunks.add(new Chunk(new Vector2f(20.784609f, 0.0f)));
-		chunks.add(new Chunk(new Vector2f(10.392304f, -18.0f)));
-		chunks.add(new Chunk(new Vector2f(-10.392304f, -18.0f)));
-		chunks.add(new Chunk(new Vector2f(-20.784609f, 0.0f)));
-		chunks.add(new Chunk(new Vector2f(-10.392304f, 18.0f)));*/
+		//chunks.add(new Chunk(new Vector2f(0.0f, 0.0f)));
+		//chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector3f(10.392304f, 0.0f, 18.0f)));
+		//chunks.add(new Chunk(new Vector2f(20.784609f, 0.0f)));
+		//chunks.add(new Chunk(new Vector2f(10.392304f, -18.0f)));
+		//chunks.add(new Chunk(new Vector2f(-10.392304f, -18.0f)));
+		//chunks.add(new Chunk(new Vector2f(-20.784609f, 0.0f)));
+		//chunks.add(new Chunk(new Vector2f(-10.392304f, 18.0f)));
+		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector3f(15.f, 0.0f, 30.0f)));
 	}
 
 	public void update() {

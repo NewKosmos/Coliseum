@@ -22,6 +22,9 @@ uniform vec3 fogColour;
 uniform float fogDensity;
 uniform float fogGradient;
 
+uniform bool ignoreShadows;
+uniform bool ignoreReflections;
+
 //---------OUT------------
 layout(location = 0) out vec4 out_colour;
 
@@ -37,15 +40,22 @@ vec2 getReflectionTexCoords(vec2 normalizedDeviceCoords){
 void main(void) {
 	vec3 unitNormal = normalize(pass_surfaceNormal);
 
-	vec2 normalizedDeviceCoords = (pass_clipSpace.xy / pass_clipSpace.w) / 2.0 + 0.5;
-	vec2 reflectionTextureCoords = getReflectionTexCoords(normalizedDeviceCoords);
-	vec3 reflectionColour = texture(reflectionMap, reflectionTextureCoords).rgb;
-
 	float fogFactor = visibility(pass_positionRelativeToCam, fogDensity, fogGradient);
 	float shadeFactor = max(dot(-lightDirection, unitNormal), 0.0) * LIGHT_BIAS.x + LIGHT_BIAS.y;
-	shadeFactor = shadeFactor * shadow(shadowMap, pass_shadowCoords, shadowMapSize);
 
-	out_colour = vec4(mix(reflectionColour, diffuseColour.rgb, diffuseColour.a), 1.0f);
+	if (!ignoreShadows) {
+	    shadeFactor = shadeFactor * shadow(shadowMap, pass_shadowCoords, shadowMapSize);
+	}
+
+    if (!ignoreReflections) {
+        vec2 normalizedDeviceCoords = (pass_clipSpace.xy / pass_clipSpace.w) / 2.0 + 0.5;
+        vec2 reflectionTextureCoords = getReflectionTexCoords(normalizedDeviceCoords);
+        vec3 reflectionColour = texture(reflectionMap, reflectionTextureCoords).rgb;
+        out_colour = vec4(mix(reflectionColour, diffuseColour.rgb, diffuseColour.a), 1.0f);
+	} else {
+        out_colour = vec4(diffuseColour.rgb, 1.0f);
+	}
+
 	out_colour = vec4(out_colour.rgb * shadeFactor, 1.0f);
 	out_colour = mix(vec4(fogColour, 1.0), out_colour, fogFactor);
 }
