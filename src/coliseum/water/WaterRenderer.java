@@ -36,7 +36,7 @@ public class WaterRenderer extends IRenderer {
 				new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER),
 				new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)
 		).create();
-		this.water = new Water(new Vector3f(0.0f, -0.5f, 0.0f), new Vector3f(), 1.0f);
+		this.water = new Water(new Vector3f(0.0f, -0.4f, 0.0f), new Vector3f(), 1.0f);
 		this.waveTime = 0.0f;
 
 		this.enableShadows = true;
@@ -62,7 +62,7 @@ public class WaterRenderer extends IRenderer {
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 		shader.getUniformMat4("modelMatrix").loadMat4(water.getModelMatrix());
 
-		shader.getUniformVec3("lightDirection").loadVec3(EntitiesRenderer.LIGHT_DIR);
+		shader.getUniformVec3("lightDirection").loadVec3(ColiseumWorld.getSkyCycle().getLightDir());
 		shader.getUniformVec4("diffuseColour").loadVec4(water.getColour().r, water.getColour().g, water.getColour().b, 0.4f);
 
 		if (ColiseumWorld.getFog() != null) {

@@ -1,7 +1,7 @@
 //---------CONSTANT------------
 const int SHADOW_PCF = 2;
 const float SHADOW_BIAS = 0.0002;
-const float SHADOW_DARKNESS = 0.7;
+const float SHADOW_DARKNESS = 0.6;
 
 const vec2 LIGHT_BIAS = vec2(0.7, 0.6);
 

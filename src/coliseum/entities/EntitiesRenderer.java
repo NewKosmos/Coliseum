@@ -24,8 +24,6 @@ import static org.lwjgl.opengl.GL20.*;
  * A renderer that is used to render entity's.
  */
 public class EntitiesRenderer extends IRenderer {
-	public static final Vector3f LIGHT_DIR = new Vector3f(0.2f, -0.3f, -0.8f); // TODO: Get rid of.
-
 	private static final MyFile VERTEX_SHADER = new MyFile(Shader.SHADERS_LOC, "entities", "entityVertex.glsl");
 	private static final MyFile FRAGMENT_SHADER = new MyFile(Shader.SHADERS_LOC, "entities", "entityFragment.glsl");
 
@@ -64,7 +62,7 @@ public class EntitiesRenderer extends IRenderer {
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 
-		shader.getUniformVec3("lightDirection").loadVec3(LIGHT_DIR);
+		shader.getUniformVec3("lightDirection").loadVec3(ColiseumWorld.getSkyCycle().getLightDir());
 
 		if (ColiseumWorld.getFog() != null) {
 			shader.getUniformVec3("fogColour").loadVec3(ColiseumWorld.getFog().getFogColour());

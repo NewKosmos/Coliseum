@@ -20,11 +20,18 @@ public class ChunksManager {
 		// new InstanceDerpWalk(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
 		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.5f, 0.0f), new Vector3f());
 		// new InstanceRobit(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
-		// new InstanceClouds(FlounderEntities.getEntities(), new Vector3f(0.0f, -8.0f, 0.0f), new Vector3f());
 
 		for (int x = -3; x < 7; x++) {
 			for (int y = -3; y < 7; y++) {
-				new InstanceCloud(FlounderEntities.getEntities(), new Vector3f(x * (float) Math.random() * 50.0f, 20.0f, y * (float) Math.random() * 50.0f), new Vector3f(0.0f, Maths.randomInRange(0.0f, 360.0f), Maths.randomInRange(0.0f, 180.0f)), (float) Math.random() * 2.0f + 0.5f);
+				new InstanceCloud(FlounderEntities.getEntities(), new Vector3f(
+						(x * 50.0f) + Maths.randomInRange(-15.0f, 15.0f),
+						24.0f,
+						(y * 50.0f) + Maths.randomInRange(-15.0f, 15.0f)
+				), new Vector3f(
+						0.0f,
+						Maths.randomInRange(0.0f, 360.0f),
+						Maths.randomInRange(0.0f, 180.0f)
+				), Maths.randomInRange(1.5f, 4.0f));
 			}
 		}
 
