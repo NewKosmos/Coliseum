@@ -78,5 +78,6 @@ void main(void) {
     distanceAway = distanceAway / shadowTransition;
     pass_shadowCoords.w = clamp(1.0 - distanceAway, 0.0, 1.0);
 
-    pass_brightness = max(dot(-lightDirection, pass_surfaceNormal), 0.0) * lightBias.x + lightBias.y;
+	vec3 surfaceNormal = normalize((modelMatrix * vec4(pass_surfaceNormal, 0.0)).xyz);
+    pass_brightness = max(dot(-lightDirection, surfaceNormal), 0.0) * lightBias.x + lightBias.y;
 }
