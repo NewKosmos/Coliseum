@@ -38,10 +38,10 @@ public class ChunksManager {
 			}
 		}
 
-		List<ParticleTemplate> templates = new ArrayList<>();
-		templates.add(ColiseumParticles.load("snow"));
-		ParticleSystem system = new ParticleSystem(templates, new SpawnCircle(75.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 150, 0.5f, 0.75f);
-		system.setSystemCentre(new Vector3f(0.0f, 30.0f, 0.0f));
+		//	List<ParticleTemplate> templates = new ArrayList<>();
+		//	templates.add(ColiseumParticles.load("rain"));
+		//	ParticleSystem system = new ParticleSystem(templates, new SpawnCircle(75.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 150, 0.5f, 0.75f);
+		//	system.setSystemCentre(new Vector3f(0.0f, 30.0f, 0.0f));
 
 		for (int i = 0; i < 1; i++) {
 			int shapesOnEdge = i;
