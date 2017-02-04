@@ -3,6 +3,7 @@ package coliseum;
 import coliseum.world.*;
 import flounder.devices.*;
 import flounder.events.*;
+import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
 import flounder.standard.*;
@@ -13,6 +14,7 @@ public class ColiseumInterface extends IStandard {
 	private KeyButton screenshot;
 	private KeyButton fullscreen;
 	private KeyButton polygons;
+	private KeyButton closeWindow;
 
 	public ColiseumInterface() {
 		super(FlounderDisplay.class, FlounderKeyboard.class, ColiseumWorld.class);
@@ -23,6 +25,7 @@ public class ColiseumInterface extends IStandard {
 		this.screenshot = new KeyButton(GLFW_KEY_F2);
 		this.fullscreen = new KeyButton(GLFW_KEY_F11);
 		this.polygons = new KeyButton(GLFW_KEY_P);
+		this.closeWindow = new KeyButton(GLFW_KEY_DELETE);
 
 		FlounderEvents.addEvent(new IEvent() {
 			@Override
@@ -57,6 +60,18 @@ public class ColiseumInterface extends IStandard {
 			@Override
 			public void onEvent() {
 				OpenGlUtils.goWireframe(!OpenGlUtils.isInWireframe());
+			}
+		});
+
+		FlounderEvents.addEvent(new IEvent() {
+			@Override
+			public boolean eventTriggered() {
+				return closeWindow.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				FlounderFramework.requestClose();
 			}
 		});
 	}

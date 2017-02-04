@@ -14,13 +14,14 @@ in float pass_brightness;
 //---------UNIFORM------------
 layout(binding = 0) uniform sampler2D diffuseMap;
 layout(binding = 1) uniform sampler2D shadowMap;
-uniform bool useNormalMap;
 uniform float transparency;
-uniform float shadowMapSize;
 uniform float darkness;
+
+uniform float shadowMapSize;
 uniform vec3 fogColour;
 uniform float fogDensity;
 uniform float fogGradient;
+uniform vec3 dayNightColour;
 
 uniform bool ignoreShadows;
 uniform bool ignoreFog;

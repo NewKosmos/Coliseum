@@ -40,11 +40,6 @@ public class ColiseumWorld extends IModule {
 
 		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 		this.entitySun = new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-200.0f, -200.0f, -200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
-
-		List<ParticleTemplate> templates = new ArrayList<>();
-		templates.add(ColiseumParticles.load("snow"));
-		ParticleSystem system = new ParticleSystem(templates, new SpawnCircle(35.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 150, 0.5f, 0.75f);
-		system.setSystemCentre(new Vector3f(0.0f, 24.0f, 0.0f));
 	}
 
 	@Override

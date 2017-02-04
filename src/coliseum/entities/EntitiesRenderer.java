@@ -65,6 +65,12 @@ public class EntitiesRenderer extends IRenderer {
 		shader.getUniformVec3("lightDirection").loadVec3(ColiseumWorld.getSkyCycle().getLightDirection());
 		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f);
 
+		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.SHADOW_MAP_SIZE);
+		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
+		shader.getUniformFloat("shadowDistance").loadFloat(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
+		shader.getUniformFloat("shadowTransition").loadFloat(10.0f);
+		OpenGlUtils.bindTexture(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
+
 		if (ColiseumWorld.getFog() != null) {
 			shader.getUniformVec3("fogColour").loadVec3(ColiseumWorld.getFog().getFogColour());
 			shader.getUniformFloat("fogDensity").loadFloat(ColiseumWorld.getFog().getFogDensity());
@@ -74,11 +80,6 @@ public class EntitiesRenderer extends IRenderer {
 			shader.getUniformFloat("fogDensity").loadFloat(0.003f);
 			shader.getUniformFloat("fogGradient").loadFloat(2.0f);
 		}
-
-		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.SHADOW_MAP_SIZE);
-		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
-		shader.getUniformFloat("shadowDistance").loadFloat(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
-		shader.getUniformFloat("shadowTransition").loadFloat(10.0f);
 
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();
@@ -110,6 +111,8 @@ public class EntitiesRenderer extends IRenderer {
 			return;
 		}
 
+		shader.getUniformVec3("dayNightColour").loadVec3(ColiseumWorld.getSkyCycle().getSkyColour());
+
 		if (componentModel != null && componentModel.getTexture() != null) {
 			OpenGlUtils.bindTexture(componentModel.getTexture(), 0);
 			shader.getUniformFloat("atlasRows").loadFloat(componentModel.getTexture().getNumberOfRows());
@@ -127,8 +130,6 @@ public class EntitiesRenderer extends IRenderer {
 			shader.getUniformVec2("atlasOffset").loadVec2(0, 0);
 			OpenGlUtils.cullBackFaces(!textureUndefined.hasTransparency());
 		}
-
-		OpenGlUtils.bindTexture(((ColiseumRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
 
 		if (componentAnimation != null) {
 			for (int i = 0; i < componentAnimation.getJointTransforms().length; i++) {

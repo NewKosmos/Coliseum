@@ -17,9 +17,11 @@ layout(binding = 1) uniform sampler2D shadowMap;
 uniform vec4 diffuseColour;
 
 uniform float shadowMapSize;
+
 uniform vec3 fogColour;
 uniform float fogDensity;
 uniform float fogGradient;
+uniform vec3 dayNightColour;
 
 uniform bool ignoreShadows;
 uniform bool ignoreReflections;

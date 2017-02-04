@@ -4,6 +4,8 @@ import coliseum.*;
 import coliseum.shadows.*;
 import coliseum.world.*;
 import flounder.camera.*;
+import flounder.devices.*;
+import flounder.entities.*;
 import flounder.fbos.*;
 import flounder.framework.*;
 import flounder.helpers.*;
@@ -30,7 +32,7 @@ public class WaterRenderer extends IRenderer {
 	private boolean enableReflections;
 
 	public WaterRenderer() {
-		this.reflectionFBO = FBO.newFBO(0.618f).disableTextureWrap().depthBuffer(DepthBufferType.RENDER_BUFFER).create();
+		this.reflectionFBO = FBO.newFBO(0.3f).disableTextureWrap().depthBuffer(DepthBufferType.RENDER_BUFFER).create();
 		this.shader = Shader.newShader("water").setShaderTypes(
 				new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER),
 				new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)
@@ -42,40 +44,16 @@ public class WaterRenderer extends IRenderer {
 		this.enableReflections = true;
 	}
 
-	@Override
-	public void renderObjects(Vector4f clipPlane, ICamera camera) {
-		if (!shader.isLoaded() || !water.isLoaded()) {
-			return;
-		}
-
-		shader.start();
-		OpenGlUtils.cullBackFaces(false);
-		OpenGlUtils.antialias(true);
-		OpenGlUtils.bindVAO(water.getVao(), 0);
-		OpenGlUtils.enableAlphaBlending();
-
+	private void prepareRendering(Vector4f clipPlane, ICamera camera) {
 		updateWaveTime();
 
+		shader.start();
 		shader.getUniformMat4("projectionMatrix").loadMat4(camera.getProjectionMatrix());
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
-		shader.getUniformMat4("modelMatrix").loadMat4(water.getModelMatrix());
 
 		shader.getUniformVec3("lightDirection").loadVec3(ColiseumWorld.getSkyCycle().getLightDirection());
 		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f);
-
-		if (ColiseumWorld.getFog() != null) {
-			shader.getUniformVec3("fogColour").loadVec3(ColiseumWorld.getFog().getFogColour());
-			shader.getUniformFloat("fogDensity").loadFloat(ColiseumWorld.getFog().getFogDensity());
-			shader.getUniformFloat("fogGradient").loadFloat(ColiseumWorld.getFog().getFogGradient());
-		} else {
-			shader.getUniformVec3("fogColour").loadVec3(1.0f, 1.0f, 1.0f);
-			shader.getUniformFloat("fogDensity").loadFloat(0.003f);
-			shader.getUniformFloat("fogGradient").loadFloat(2.0f);
-		}
-
-		shader.getUniformBool("ignoreShadows").loadBoolean(!enableShadows);
-		shader.getUniformBool("ignoreReflections").loadBoolean(!enableReflections);
 
 		if (enableShadows) {
 			shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.SHADOW_MAP_SIZE);
@@ -89,21 +67,59 @@ public class WaterRenderer extends IRenderer {
 			OpenGlUtils.bindTexture(reflectionFBO.getColourTexture(0), GL_TEXTURE_2D, 0);
 		}
 
+		if (ColiseumWorld.getFog() != null) {
+			shader.getUniformVec3("fogColour").loadVec3(ColiseumWorld.getFog().getFogColour());
+			shader.getUniformFloat("fogDensity").loadFloat(ColiseumWorld.getFog().getFogDensity());
+			shader.getUniformFloat("fogGradient").loadFloat(ColiseumWorld.getFog().getFogGradient());
+		} else {
+			shader.getUniformVec3("fogColour").loadVec3(1.0f, 1.0f, 1.0f);
+			shader.getUniformFloat("fogDensity").loadFloat(0.003f);
+			shader.getUniformFloat("fogGradient").loadFloat(2.0f);
+		}
+
+		shader.getUniformVec3("dayNightColour").loadVec3(ColiseumWorld.getSkyCycle().getSkyColour());
+
+		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
+		OpenGlUtils.enableDepthTesting();
+	}
+
+	@Override
+	public void renderObjects(Vector4f clipPlane, ICamera camera) {
+		if (!shader.isLoaded() || !water.isLoaded()) {
+			return;
+		}
+
+		prepareRendering(clipPlane, camera);
+		renderWater(water);
+		endRendering();
+
+	}
+
+	private void renderWater(Water water) {
+		OpenGlUtils.bindVAO(water.getVao(), 0);
+
+		shader.getUniformMat4("modelMatrix").loadMat4(water.getModelMatrix());
+
+		shader.getUniformVec4("diffuseColour").loadVec4(water.getColour());
+
 		shader.getUniformFloat("waveTime").loadFloat(waveTime / Water.WAVE_SPEED);
 		shader.getUniformFloat("waveLength").loadFloat(Water.WAVE_LENGTH);
 		shader.getUniformFloat("amplitude").loadFloat(Water.AMPLITUDE);
 		shader.getUniformFloat("squareSize").loadFloat(Water.SQUARE_SIZE);
 		shader.getUniformFloat("waterHeight").loadFloat(water.getPosition().y);
 
-		shader.getUniformVec4("diffuseColour").loadVec4(water.getColour());
+		shader.getUniformBool("ignoreShadows").loadBoolean(!enableShadows);
+		shader.getUniformBool("ignoreReflections").loadBoolean(!enableReflections);
 
 		glDrawArrays(GL_TRIANGLES, 0, water.getVertexCount());
 
 		OpenGlUtils.disableBlending();
 		OpenGlUtils.unbindVAO(0);
-		shader.stop();
+	}
 
-		FlounderBounding.addShapeRender(water.getAABB());
+	private void endRendering() {
+		//	FlounderBounding.addShapeRender(water.getAABB());
+		shader.stop();
 	}
 
 	private void updateWaveTime() {

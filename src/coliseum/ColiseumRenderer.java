@@ -85,7 +85,7 @@ public class ColiseumRenderer extends IRendererMaster {
 				effect++;
 
 				if (effect > 3) {
-					effect = 0;
+					effect = 1;
 				}
 			}
 		});

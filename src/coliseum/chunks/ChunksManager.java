@@ -1,6 +1,9 @@
 package coliseum.chunks;
 
 import coliseum.entities.instances.*;
+import coliseum.particles.*;
+import coliseum.particles.loading.*;
+import coliseum.particles.spawns.*;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.maths.*;
@@ -21,19 +24,24 @@ public class ChunksManager {
 		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.5f, 0.0f), new Vector3f());
 		// new InstanceRobit(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
 
-		for (int x = -3; x < 7; x++) {
-			for (int y = -3; y < 7; y++) {
+		for (int x = -2; x <= 2; x++) {
+			for (int y = -2; y <= 2; y++) {
 				new InstanceCloud(FlounderEntities.getEntities(), new Vector3f(
-						(x * 50.0f) + Maths.randomInRange(-15.0f, 15.0f),
-						24.0f,
-						(y * 50.0f) + Maths.randomInRange(-15.0f, 15.0f)
+						(x * 55.0f) + Maths.randomInRange(-20.0f, 20.0f),
+						24.0f + Maths.randomInRange(-1.25f, 6.05f),
+						(y * 55.0f) + Maths.randomInRange(-20.0f, 20.0f)
 				), new Vector3f(
 						0.0f,
 						Maths.randomInRange(0.0f, 360.0f),
 						Maths.randomInRange(0.0f, 180.0f)
-				), Maths.randomInRange(1.5f, 4.0f));
+				), Maths.randomInRange(2.0f, 4.5f));
 			}
 		}
+
+		List<ParticleTemplate> templates = new ArrayList<>();
+		templates.add(ColiseumParticles.load("snow"));
+		ParticleSystem system = new ParticleSystem(templates, new SpawnCircle(75.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 150, 0.5f, 0.75f);
+		system.setSystemCentre(new Vector3f(0.0f, 30.0f, 0.0f));
 
 		for (int i = 0; i < 1; i++) {
 			int shapesOnEdge = i;
