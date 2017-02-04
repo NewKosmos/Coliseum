@@ -33,7 +33,7 @@ public class SkyCycle {
 	}
 
 	public void update() {
-		dayFactor = 0.2f; // dayDriver.update(FlounderFramework.getDelta()) / 100.0f;
+		dayFactor = dayDriver.update(FlounderFramework.getDelta()) / 100.0f; // 0.2f; // 
 
 		Colour.interpolate(SKY_COLOUR_DAY, SKY_COLOUR_NIGHT, dayFactor, skyColour);
 

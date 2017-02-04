@@ -77,7 +77,7 @@ public class ShadowRenderer extends IRenderer {
 		shader.start();
 
 		OpenGlUtils.prepareNewRenderParse(0.0f, 0.0f, 0.0f);
-		OpenGlUtils.antialias(false);
+		OpenGlUtils.antialias(true);
 		OpenGlUtils.cullBackFaces(true);
 		OpenGlUtils.enableDepthTesting();
 	}

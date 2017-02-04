@@ -164,13 +164,13 @@ public class ColiseumRenderer extends IRendererMaster {
 			case 0:
 				break;
 			case 1:
+				filterTiltShift.applyFilter(output.getColourTexture(0));
+				output = filterTiltShift.fbo;
+				break;
+			case 2:
 				filterLensFlare.setSunPositon(ColiseumWorld.getEntitySun().getPosition());
 				filterLensFlare.applyFilter(output.getColourTexture(0));
 				output = filterLensFlare.fbo;
-				break;
-			case 2:
-				filterTiltShift.applyFilter(output.getColourTexture(0));
-				output = filterTiltShift.fbo;
 				break;
 			case 3:
 				/* Scene independents. */

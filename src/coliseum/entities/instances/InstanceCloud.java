@@ -16,5 +16,6 @@ public class InstanceCloud extends Entity {
 		super(structure, position, rotation);
 		ComponentModel componentModel = new ComponentModel(this, model, scale, texture, 0);
 		componentModel.setIgnoreShadows(true);
+		ComponentCloud componentCloud = new ComponentCloud(this);
 	}
 }

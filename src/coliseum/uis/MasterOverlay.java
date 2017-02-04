@@ -1,12 +1,15 @@
 package coliseum.uis;
 
 import coliseum.*;
+import coliseum.world.*;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.maths.*;
+import flounder.maths.matrices.*;
+import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import flounder.visual.*;
@@ -62,16 +65,16 @@ public class MasterOverlay extends GuiComponent {
 			updateText = false;
 		}
 
-		float size = (66.6f / (FlounderDisplay.getWidth() + FlounderDisplay.getHeight()));
-		crossHair.setPosition((FlounderDisplay.getAspectRatio() / 2.0f) + super.getPosition().x, 0.5f, size, size);
-		crossHair.update();
-		crossHair.setColourOffset(GuiTextButton.HOVER_COLOUR);
+			float size = (66.6f / (FlounderDisplay.getWidth() + FlounderDisplay.getHeight()));
+			crossHair.setPosition((FlounderDisplay.getAspectRatio() / 2.0f) + super.getPosition().x, 0.5f, size, size);
+			crossHair.update();
+			crossHair.setColourOffset(GuiTextButton.HOVER_COLOUR);
 	}
 
 	@Override
 	protected void getGuiTextures(List<GuiTexture> guiTextures) {
-		//if (isShown()) {
-		//	guiTextures.add(crossHair);
-		//}
+	//	if (isShown()) {
+	//		guiTextures.add(crossHair);
+	//	}
 	}
 }

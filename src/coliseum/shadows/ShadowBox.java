@@ -15,8 +15,8 @@ public class ShadowBox {
 	private static final Vector4f UP = new Vector4f(0.0f, 1.0f, 0.0f, 0.0f);
 	private static final Vector4f FORWARD = new Vector4f(0.0f, 0.0f, -1.0f, 0.0f);
 
-	private static final float OFFSET = 5.0f;
-	private static final float SHADOW_DISTANCE = 60.0f;
+	private static final float OFFSET = 10.0f;
+	private static final float SHADOW_DISTANCE = 80.0f;
 
 	private Matrix4f lightViewMatrix;
 	private float shadowDistance;
@@ -44,7 +44,6 @@ public class ShadowBox {
 	 * @param camera The camera object to be used when calculating the shadow boxes size.
 	 */
 	protected void update(ICamera camera) {
-		updateShadowDistance(camera);
 		updateWidthsAndHeights(camera);
 
 		Matrix4f rotation = calculateCameraRotationMatrix(camera);
@@ -93,15 +92,6 @@ public class ShadowBox {
 		}
 
 		maxZ += OFFSET;
-	}
-
-	/**
-	 * Updates the shadow distance.
-	 *
-	 * @param camera The camera object.
-	 */
-	private void updateShadowDistance(ICamera camera) {
-		shadowDistance = SHADOW_DISTANCE; //camera.getAimDistance() * 2.0f;
 	}
 
 	/**

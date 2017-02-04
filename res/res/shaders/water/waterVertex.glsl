@@ -48,13 +48,13 @@ vec4 generateVertexOffset(float x, float z){
 vec4 decode(float n){
 	float delta = mod(n, 3.0);
 	float z2 = delta - 1.0;
-	n =  (n - delta) / 3.0;
+	n = (n - delta) / 3.0;
 	delta = mod(n, 3.0);
 	float x2 = delta - 1.0;
-	n =  (n - delta) / 3.0;
+	n = (n - delta) / 3.0;
 	delta = mod(n, 3.0);
 	float z1 = delta - 1.0;
-	n =  (n - delta) / 3.0;
+	n = (n - delta) / 3.0;
 	float x1 = n - 1.0;
 	return vec4(x1, z1, x2, z2);
 }
