@@ -62,7 +62,7 @@ public class EntitiesRenderer extends IRenderer {
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 
-		shader.getUniformVec3("lightDirection").loadVec3(ColiseumWorld.getSkyCycle().getLightDir());
+		shader.getUniformVec3("lightDirection").loadVec3(ColiseumWorld.getSkyCycle().getLightDirection());
 		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f);
 
 		if (ColiseumWorld.getFog() != null) {

@@ -5,7 +5,6 @@ import flounder.camera.*;
 import flounder.devices.*;
 import flounder.helpers.*;
 import flounder.loaders.*;
-import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
 import flounder.renderer.*;

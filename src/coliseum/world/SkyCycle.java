@@ -13,7 +13,6 @@ public class SkyCycle {
 	private static final float DAY_NIGHT_CYCLE = 120.0f; // The day/night length (sec)
 
 	private Vector3f sunPosition;
-	private Vector3f lightDir;
 
 	private float dayFactor;
 	private LinearDriver dayDriver;
@@ -22,8 +21,7 @@ public class SkyCycle {
 	private Vector3f lightDirection;
 
 	public SkyCycle() {
-		this.sunPosition = new Vector3f(0.0f, -1.0f, 0.0f);
-		this.lightDir = new Vector3f(0.2f, -0.3f, -0.8f);
+		this.sunPosition = new Vector3f(0.2f, -0.3f, -0.8f);
 
 		this.dayFactor = 0.0f;
 		this.dayDriver = new LinearDriver(0.0f, 100.0f, DAY_NIGHT_CYCLE);
@@ -38,7 +36,6 @@ public class SkyCycle {
 		Colour.interpolate(SKY_COLOUR_DAY, SKY_COLOUR_NIGHT, dayFactor, skyColour);
 
 		Vector3f.rotate(sunPosition, new Vector3f(dayFactor * 360.0f, 0.0f, 0.0f), lightDirection);
-		//	Vector3f.rotate(lightDir, new Vector3f(dayFactor * 360.0f, 0.0f, 0.0f), lightDir);
 	}
 
 	public float getDayFactor() {
@@ -51,9 +48,5 @@ public class SkyCycle {
 
 	public Vector3f getLightDirection() {
 		return lightDirection;
-	}
-
-	public Vector3f getLightDir() {
-		return lightDir;
 	}
 }

@@ -1,6 +1,7 @@
 package coliseum;
 
 import coliseum.entities.*;
+import coliseum.particles.*;
 import coliseum.shadows.*;
 import coliseum.skybox.*;
 import coliseum.water.*;
@@ -32,6 +33,7 @@ public class ColiseumRenderer extends IRendererMaster {
 	private ShadowRenderer shadowRenderer;
 	private SkyboxRenderer skyboxRenderer;
 	private EntitiesRenderer entitiesRenderer;
+	private ParticleRenderer particleRenderer;
 	private WaterRenderer waterRenderer;
 	private BoundingRenderer boundingRenderer;
 	private GuisRenderer guisRenderer;
@@ -55,6 +57,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		this.shadowRenderer = new ShadowRenderer();
 		this.skyboxRenderer = new SkyboxRenderer();
 		this.entitiesRenderer = new EntitiesRenderer();
+		this.particleRenderer = new ParticleRenderer();
 		this.waterRenderer = new WaterRenderer();
 		this.boundingRenderer = new BoundingRenderer();
 		this.guisRenderer = new GuisRenderer();
@@ -144,6 +147,7 @@ public class ColiseumRenderer extends IRendererMaster {
 
 		skyboxRenderer.render(clipPlane, camera);
 		entitiesRenderer.render(clipPlane, camera);
+		particleRenderer.render(clipPlane, camera);
 
 		if (!waterPass) {
 			waterRenderer.render(clipPlane, camera);
@@ -204,6 +208,7 @@ public class ColiseumRenderer extends IRendererMaster {
 	public void dispose() {
 		shadowRenderer.dispose();
 		skyboxRenderer.dispose();
+		particleRenderer.dispose();
 		entitiesRenderer.dispose();
 		waterRenderer.dispose();
 		boundingRenderer.dispose();
