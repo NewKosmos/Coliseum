@@ -35,9 +35,6 @@ public class ChunksManager {
 			}
 		}
 
-		new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
-		new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-200.0f, -200.0f, -200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
-
 		for (int i = 0; i < 1; i++) {
 			int shapesOnEdge = i;
 			float r = 0;

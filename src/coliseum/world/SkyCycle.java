@@ -22,7 +22,7 @@ public class SkyCycle {
 	private Vector3f lightDirection;
 
 	public SkyCycle() {
-		this.sunPosition = new Vector3f(0.0f, -200.0f, 0.0f);
+		this.sunPosition = new Vector3f(0.0f, -1.0f, 0.0f);
 		this.lightDir = new Vector3f(0.2f, -0.3f, -0.8f);
 
 		this.dayFactor = 0.0f;
@@ -33,7 +33,7 @@ public class SkyCycle {
 	}
 
 	public void update() {
-		dayFactor = dayDriver.update(FlounderFramework.getDelta()) / 100.0f;
+		dayFactor = 0.2f; // dayDriver.update(FlounderFramework.getDelta()) / 100.0f;
 
 		Colour.interpolate(SKY_COLOUR_DAY, SKY_COLOUR_NIGHT, dayFactor, skyColour);
 

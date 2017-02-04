@@ -1,10 +1,14 @@
 package coliseum.world;
 
 import coliseum.chunks.*;
+import coliseum.entities.instances.*;
 import flounder.entities.*;
 import flounder.framework.*;
+import flounder.helpers.*;
 import flounder.lights.*;
+import flounder.logger.*;
 import flounder.maths.*;
+import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
 import flounder.textures.*;
 
@@ -15,6 +19,9 @@ public class ColiseumWorld extends IModule {
 	private Fog fog;
 	private SkyCycle skyCycle;
 	private ChunksManager chunksManager;
+
+	private Entity entitySun;
+	private Entity entityMoon;
 
 	private boolean worldGenerated;
 
@@ -27,6 +34,9 @@ public class ColiseumWorld extends IModule {
 	public void init() {
 		this.fog = new Fog(new Colour(), 0.003f, 2.0f, 0.0f, 50.0f);
 		this.skyCycle = new SkyCycle();
+
+		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+		this.entitySun = new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-200.0f, -200.0f, -200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 	}
 
 	@Override
@@ -54,6 +64,14 @@ public class ColiseumWorld extends IModule {
 
 	public static SkyCycle getSkyCycle() {
 		return INSTANCE.skyCycle;
+	}
+
+	public static Entity getEntitySun() {
+		return INSTANCE.entitySun;
+	}
+
+	public static Entity getEntityMoon() {
+		return INSTANCE.entityMoon;
 	}
 
 	@Override

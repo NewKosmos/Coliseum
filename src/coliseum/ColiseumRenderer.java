@@ -4,6 +4,7 @@ import coliseum.entities.*;
 import coliseum.shadows.*;
 import coliseum.skybox.*;
 import coliseum.water.*;
+import coliseum.world.*;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.events.*;
@@ -41,6 +42,7 @@ public class ColiseumRenderer extends IRendererMaster {
 	private FilterFXAA filterFXAA;
 	private FilterPixel filterPixel;
 	private FilterCRT filterCRT;
+	private FilterLensFlare filterLensFlare;
 	private FilterTiltShift filterTiltShift;
 	private int effect;
 
@@ -63,6 +65,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		this.filterFXAA = new FilterFXAA();
 		this.filterPixel = new FilterPixel(4.0f);
 		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.05f);
+		this.filterLensFlare = new FilterLensFlare();
 		this.filterTiltShift = new FilterTiltShift(0.75f, 1.1f, 0.004f, 3.0f);
 		this.effect = 1;
 
@@ -78,7 +81,7 @@ public class ColiseumRenderer extends IRendererMaster {
 			public void onEvent() {
 				effect++;
 
-				if (effect > 2) {
+				if (effect > 3) {
 					effect = 0;
 				}
 			}
@@ -161,10 +164,15 @@ public class ColiseumRenderer extends IRendererMaster {
 			case 0:
 				break;
 			case 1:
+				filterLensFlare.setSunPositon(ColiseumWorld.getEntitySun().getPosition());
+				filterLensFlare.applyFilter(output.getColourTexture(0));
+				output = filterLensFlare.fbo;
+				break;
+			case 2:
 				filterTiltShift.applyFilter(output.getColourTexture(0));
 				output = filterTiltShift.fbo;
 				break;
-			case 2:
+			case 3:
 				/* Scene independents. */
 				renderIndependents();
 				independentsRendered = true;
@@ -207,6 +215,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		filterFXAA.dispose();
 		filterPixel.dispose();
 		filterCRT.dispose();
+		filterLensFlare.dispose();
 		filterTiltShift.dispose();
 	}
 
