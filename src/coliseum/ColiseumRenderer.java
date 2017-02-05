@@ -70,7 +70,7 @@ public class ColiseumRenderer extends IRendererMaster {
 		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.05f);
 		this.filterLensFlare = new FilterLensFlare();
 		this.filterTiltShift = new FilterTiltShift(0.75f, 1.1f, 0.004f, 3.0f);
-		this.effect = 1;
+		this.effect = 2;
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton c = new KeyButton(GLFW.GLFW_KEY_C);
@@ -85,7 +85,7 @@ public class ColiseumRenderer extends IRendererMaster {
 				effect++;
 
 				if (effect > 3) {
-					effect = 1;
+					effect = 0;
 				}
 			}
 		});

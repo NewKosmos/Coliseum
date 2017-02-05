@@ -1,7 +1,6 @@
 package coliseum.world;
 
 import flounder.framework.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;

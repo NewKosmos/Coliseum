@@ -1,9 +1,6 @@
 package coliseum.chunks;
 
 import coliseum.entities.instances.*;
-import coliseum.particles.*;
-import coliseum.particles.loading.*;
-import coliseum.particles.spawns.*;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.maths.*;

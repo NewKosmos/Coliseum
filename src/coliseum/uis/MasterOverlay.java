@@ -1,6 +1,7 @@
 package coliseum.uis;
 
 import coliseum.*;
+import coliseum.world.*;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.fonts.*;
@@ -18,6 +19,7 @@ public class MasterOverlay extends GuiComponent {
 	private Text fpsText;
 	private Text upsText;
 	private Text positionText;
+	private Text timeText;
 	private boolean updateText;
 
 	private GuiTexture crossHair;
@@ -25,9 +27,10 @@ public class MasterOverlay extends GuiComponent {
 	public MasterOverlay() {
 		fpsText = createStatus("FPS: 0", 0.02f);
 		upsText = createStatus("UPS: 0", 0.06f);
-		positionText = createStatus("POSITION: [0, 0, 0]", 0.11f);
-		createStatus("C TO TOGGLE EFFECTS", 0.16f);
-		createStatus("ESC TO HIDE HUD", 0.20f);
+		positionText = createStatus("POSITION: [0, 0, 0]", 0.10f);
+		timeText = createStatus("TIME: 0", 0.14f);
+		createStatus("C TO TOGGLE EFFECTS", 0.19f);
+		createStatus("ESC TO HIDE HUD", 0.23f);
 
 		crossHair = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "guis", "crosshair.png")).create());
 		crossHair.getTexture().setNumberOfRows(4);
@@ -59,6 +62,7 @@ public class MasterOverlay extends GuiComponent {
 			fpsText.setText("FPS: " + Maths.roundToPlace(1.0f / FlounderFramework.getDeltaRender(), 1));
 			upsText.setText("UPS: " + Maths.roundToPlace(1.0f / FlounderFramework.getDelta(), 1));
 			positionText.setText("POSITION: [" + (FlounderCamera.getPlayer() == null ? "NULL" : Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().x, 1) + ", " + Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().y, 1) + ", " + Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().z, 1) + "]"));
+			timeText.setText("TIME: " + ColiseumWorld.getSkyCycle().getDayFactor());
 			updateText = false;
 		}
 

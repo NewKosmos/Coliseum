@@ -1,16 +1,22 @@
 package coliseum;
 
 import coliseum.world.*;
+import com.codedisaster.steamworks.*;
 import flounder.devices.*;
 import flounder.events.*;
 import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
+import flounder.logger.*;
+import flounder.resources.*;
+import flounder.sounds.*;
 import flounder.standard.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class ColiseumInterface extends IStandard {
+	private Playlist gamePlaylist;
+
 	private KeyButton screenshot;
 	private KeyButton fullscreen;
 	private KeyButton polygons;
@@ -22,6 +28,11 @@ public class ColiseumInterface extends IStandard {
 
 	@Override
 	public void init() {
+		gamePlaylist = new Playlist();
+		gamePlaylist.addMusic(Sound.loadSoundInBackground(new MyFile(MyFile.RES_FOLDER, "music", "09-hitori-bocchi-1b.wav"), 0.80f, 1.0f));
+		FlounderSound.getMusicPlayer().playMusicPlaylist(gamePlaylist, true, 4.0f, 10.0f);
+		// FlounderSound.getMusicPlayer().unpauseTrack();
+
 		this.screenshot = new KeyButton(GLFW_KEY_F2);
 		this.fullscreen = new KeyButton(GLFW_KEY_F11);
 		this.polygons = new KeyButton(GLFW_KEY_P);
@@ -74,11 +85,23 @@ public class ColiseumInterface extends IStandard {
 				FlounderFramework.requestClose();
 			}
 		});
+
+		try {
+			if (!SteamAPI.init()) {
+				// Steamworks initialization error, e.g. Steam client not running
+			}
+		} catch (SteamException e) {
+			FlounderLogger.exception(e);
+		}
+
+		SteamAPI.printDebugInfo(System.out);
 	}
 
 	@Override
 	public void update() {
-
+		if (SteamAPI.isSteamRunning()) {
+			SteamAPI.runCallbacks();
+		}
 	}
 
 	@Override
@@ -88,6 +111,7 @@ public class ColiseumInterface extends IStandard {
 
 	@Override
 	public void dispose() {
+		SteamAPI.shutdown();
 		Coliseum.closeConfigs();
 	}
 

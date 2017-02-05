@@ -3,8 +3,6 @@ package coliseum.world;
 import coliseum.chunks.*;
 import coliseum.entities.instances.*;
 import coliseum.particles.*;
-import coliseum.particles.loading.*;
-import coliseum.particles.spawns.*;
 import flounder.entities.*;
 import flounder.framework.*;
 import flounder.lights.*;
@@ -12,8 +10,6 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
 import flounder.textures.*;
-
-import java.util.*;
 
 public class ColiseumWorld extends IModule {
 	private static final ColiseumWorld INSTANCE = new ColiseumWorld();
