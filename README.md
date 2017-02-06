@@ -1,2 +1,2 @@
-# Coliseum
-Coliseum is a simple 2D game meant to demo future Flounder features.
+# New Kosmos
+New Kosmos is a low poly 3D exploration and building game running from the Flounder Engine.
