@@ -78,7 +78,6 @@ public class MasterOverlay extends GuiComponent {
 		float size = (66.6f / (FlounderDisplay.getWidth() + FlounderDisplay.getHeight()));
 		crossHair.setPosition((FlounderDisplay.getAspectRatio() / 2.0f) + super.getPosition().x, 0.5f, size, size);
 		crossHair.update();
-		crossHair.setColourOffset(GuiTextButton.HOVER_COLOUR);
 	}
 
 	@Override
