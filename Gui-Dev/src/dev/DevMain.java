@@ -24,6 +24,6 @@ public class DevMain extends FlounderFramework {
 	public DevMain() {
 		super("devguis", -1, new DevInterface(), new DevRenderer(), new DevGuis());
 		FlounderDisplay.setup(1080, 720, "Dev Guis", new MyFile[]{}, false, false, 0, false, false);
-		TextBuilder.DEFAULT_TYPE = FlounderFonts.FFF_FORWARD;
+		TextBuilder.DEFAULT_TYPE = FlounderFonts.SEGO_UI;
 	}
 }

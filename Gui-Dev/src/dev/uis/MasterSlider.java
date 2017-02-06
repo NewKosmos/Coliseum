@@ -57,11 +57,11 @@ public class MasterSlider extends GuiComponent {
 		addComponent(menuStart, 0.0f, 0.0f, 1.0f, 1.0f);
 		addComponent(menuPause, 0.0f, 0.0f, 1.0f, 1.0f);
 
-		if (FlounderFramework.isRunningFromJar()) {
+	//	if (FlounderFramework.isRunningFromJar()) {
 			this.menuActive = menuStart;
-		} else {
-			this.menuActive = menuPause;
-		}
+	//	} else {
+	//		this.menuActive = menuPause;
+	//	}
 
 		this.menuActive.show(true);
 
@@ -187,7 +187,7 @@ public class MasterSlider extends GuiComponent {
 	}
 
 	public static GuiTextButton createButton(String textString, float yPos, GuiComponent component) {
-		Text text = Text.newText(textString).textAlign(GuiAlign.LEFT).setFontSize(MasterSlider.FONT_SIZE).create();
+		Text text = Text.newText(textString).textAlign(GuiAlign.CENTRE).setFontSize(MasterSlider.FONT_SIZE).create();
 		text.setColour(MasterSlider.TEXT_COLOUR);
 		text.setBorderColour(0.15f, 0.15f, 0.15f);
 		text.setBorder(new ConstantDriver(0.04f));

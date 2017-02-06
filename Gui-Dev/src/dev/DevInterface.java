@@ -18,6 +18,7 @@ import flounder.standard.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class DevInterface extends IStandard {
+	private KeyButton screenshot;
 	private KeyButton closeWindow;
 
 	public DevInterface() {
@@ -26,7 +27,20 @@ public class DevInterface extends IStandard {
 
 	@Override
 	public void init() {
+		this.screenshot = new KeyButton(GLFW_KEY_F2);
 		this.closeWindow = new KeyButton(GLFW_KEY_DELETE);
+
+		FlounderEvents.addEvent(new IEvent() {
+			@Override
+			public boolean eventTriggered() {
+				return screenshot.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				FlounderDisplay.screenshot();
+			}
+		});
 
 		FlounderEvents.addEvent(new IEvent() {
 			@Override
