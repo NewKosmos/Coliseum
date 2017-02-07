@@ -17,7 +17,7 @@ import flounder.visual.*;
 import java.util.*;
 
 public class MasterMenu extends GuiComponent {
-	protected static final float SLIDE_TIME = 0.85f;
+	protected static final float SLIDE_TIME = 0.75f;
 
 	private MasterSlider masterSlider;
 

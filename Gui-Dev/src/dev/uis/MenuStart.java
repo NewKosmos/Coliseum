@@ -9,7 +9,9 @@
 
 package dev.uis;
 
+import dev.uis.screens.*;
 import flounder.devices.*;
+import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.maths.vectors.*;
@@ -26,6 +28,11 @@ public class MenuStart extends GuiComponent {
 	private MasterMenu superMenu;
 	private MasterSlider masterSlider;
 
+	private ScreenAddons screenAddons;
+	private ScreenMultiplayer screenMultiplayer;
+	private ScreenOffline screenOffline;
+	private ScreenSettings screenSettings;
+
 	private LinearDriver paralaxDriver;
 	private Vector2f paralaxPosition;
 	private GuiTexture t1 = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "1.png")).create());
@@ -37,6 +44,11 @@ public class MenuStart extends GuiComponent {
 		this.superMenu = superMenu;
 		this.masterSlider = masterSlider;
 
+		this.screenAddons = new ScreenAddons(masterSlider);
+		this.screenMultiplayer = new ScreenMultiplayer(masterSlider);
+		this.screenOffline = new ScreenOffline(masterSlider);
+		this.screenSettings = new ScreenSettings(masterSlider);
+
 		this.paralaxDriver = new LinearDriver(0.0f, 360.0f, PARALAX_PERIOD);
 		this.paralaxPosition = new Vector2f();
 
@@ -46,21 +58,48 @@ public class MenuStart extends GuiComponent {
 
 		createPlayButton(currentY -= MasterSlider.BUTTONS_Y_SEPARATION);*/
 
-		createPlayButton(0.1f);
-		createQuitButton(0.2f);
+		createOfflineButton(0.1f);
+		createMultiplayerButton(0.2f);
+		createSettingsButton(0.3f);
+		createAddonsButton(0.4f);
+		createQuitButton(0.5f);
+
+		Text text0 = Text.newText("New Kosmos").textAlign(GuiAlign.CENTRE).setFontSize(3.0f).create();
+		text0.setColour(MasterSlider.TEXT_COLOUR);
+		addText(text0, 0.5f, 0.8f, 1.0f);
+
+		Text text1 = Text.newText("Created with the Flounder Engine").textAlign(GuiAlign.CENTRE).setFontSize(1.2f).create();
+		text1.setColour(MasterSlider.TEXT_COLOUR);
+		addText(text1, 0.5f, 0.9f, 1.0f);
+
+		Text text2 = Text.newText("Copyright (C) 2017, Equilibrium Games - All Rights Reserved").textAlign(GuiAlign.CENTRE).setFontSize(1.0f).create();
+		text2.setColour(MasterSlider.TEXT_COLOUR);
+		addText(text2, 0.5f, 0.95f, 1.0f);
+	}
+
+	private void createOfflineButton(float yPos) {
+		GuiTextButton button = MasterSlider.createButton("Offline", yPos, this);
+		button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenOffline, true));
+	}
+
+	private void createMultiplayerButton(float yPos) {
+		GuiTextButton button = MasterSlider.createButton("Multiplayer", yPos, this);
+		button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenMultiplayer, true));
+	}
+
+	private void createSettingsButton(float yPos) {
+		GuiTextButton button = MasterSlider.createButton("Settings", yPos, this);
+		button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenSettings, true));
+	}
+
+	private void createAddonsButton(float yPos) {
+		GuiTextButton button = MasterSlider.createButton("Addons", yPos, this);
+		button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenAddons, true));
 	}
 
 	private void createQuitButton(float yPos) {
 		GuiTextButton button = MasterSlider.createButton("Quit", yPos, this);
 		button.addLeftListener(FlounderFramework::requestClose);
-		button.addRightListener(null);
-	}
-
-	private void createPlayButton(float yPos) {
-		//	GuiCheckbox checkbox = MasterSlider.createCheckbox("Testing", GuiAlign.LEFT, yPos - MasterSlider.BUTTONS_Y_SEPARATION, false, this);
-		GuiTextButton button = MasterSlider.createButton("Play", yPos, this);
-		//	button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenPlay, true));
-		//	button.addRightListener(null);
 	}
 
 	@Override

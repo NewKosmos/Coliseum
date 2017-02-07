@@ -24,7 +24,7 @@ public class MasterSlider extends GuiComponent {
 	public static final Colour TEXT_COLOUR = new Colour(0.85f, 0.85f, 0.85f);
 	public static KeyButton BACK_KEY = new KeyButton(GLFW.GLFW_KEY_BACKSPACE);
 
-	public static final float FONT_SIZE = 1.475f;
+	public static final float FONT_SIZE = 2.0f;
 
 	public static final float BUTTONS_Y_SEPARATION = 0.19f;
 	public static final float BUTTONS_Y_SIZE = 0.2f;
@@ -189,10 +189,9 @@ public class MasterSlider extends GuiComponent {
 	public static GuiTextButton createButton(String textString, float yPos, GuiComponent component) {
 		Text text = Text.newText(textString).textAlign(GuiAlign.CENTRE).setFontSize(MasterSlider.FONT_SIZE).create();
 		text.setColour(MasterSlider.TEXT_COLOUR);
-		text.setBorderColour(0.15f, 0.15f, 0.15f);
-		text.setBorder(new ConstantDriver(0.04f));
+		component.addText(text, 0.5f, yPos, 1.0f);
 		GuiTextButton button = new GuiTextButton(text);
-		component.addComponent(button, 0.5f, yPos, 1.0f, 1.0f);
+		component.addComponent(button, 0.5f, 0.5f, 1.0f, 1.0f);
 		return button;
 	}
 
