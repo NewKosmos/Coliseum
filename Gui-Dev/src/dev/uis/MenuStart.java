@@ -143,10 +143,10 @@ public class MenuStart extends GuiComponent {
 	@Override
 	protected void getGuiTextures(List<GuiTexture> guiTextures) {
 		//if (isShown()) {
-			guiTextures.add(t1);
-			guiTextures.add(t2);
-			guiTextures.add(t3);
-			guiTextures.add(t4);
+		guiTextures.add(t1);
+		guiTextures.add(t2);
+		guiTextures.add(t3);
+		guiTextures.add(t4);
 		//}
 	}
 }

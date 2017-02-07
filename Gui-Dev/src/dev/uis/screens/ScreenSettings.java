@@ -53,27 +53,27 @@ public class ScreenSettings extends GuiComponent {
 
 	private void createAudioOption(float yPos, GuiComponent component) {
 		GuiTextButton button = MasterSlider.createButton("Audio", yPos, component);
-	//	button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenOptionsAudio, true));
+		//	button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenOptionsAudio, true));
 	}
 
 	private void createDevelopersOption(float yPos, GuiComponent component) {
 		GuiTextButton button = MasterSlider.createButton("Developer", yPos, component);
-	//	button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenOptionsDeveloper, true));
+		//	button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenOptionsDeveloper, true));
 	}
 
 	private void createGraphicsOption(float yPos, GuiComponent component) {
 		GuiTextButton button = MasterSlider.createButton("Graphics", yPos, component);
-	//	button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenOptionsGraphics, true));
+		//	button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenOptionsGraphics, true));
 	}
 
 	private void createEffectsOption(float yPos, GuiComponent component) {
 		GuiTextButton button = MasterSlider.createButton("Effects", yPos, component);
-	//	button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenOptionsEffects, true));
+		//	button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenOptionsEffects, true));
 	}
 
 	private void createInputsOption(float yPos, GuiComponent component) {
 		GuiTextButton button = MasterSlider.createButton("Inputs", yPos, component);
-	//	button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenOptionsInputs, true));
+		//	button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenOptionsInputs, true));
 	}
 
 	private void createBackOption(float yPos) {

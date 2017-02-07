@@ -11,21 +11,30 @@ package kosmos.chunks;
 
 import flounder.camera.*;
 import flounder.entities.*;
+import flounder.framework.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
+import flounder.physics.bounding.*;
+import flounder.profiling.*;
+import flounder.textures.*;
 import kosmos.entities.instances.*;
 
 import java.util.*;
 
-public class ChunksManager {
+public class KosmosChunks extends IModule {
+	private static final KosmosChunks INSTANCE = new KosmosChunks();
+	public static final String PROFILE_TAB_NAME = "Kosmos Chunks";
+
 	private List<Chunk> chunks;
 
-	public ChunksManager() {
-		this.chunks = new ArrayList<>();
-		generate();
+	public KosmosChunks() {
+		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderBounding.class, FlounderTextures.class);
 	}
 
-	public void generate() {
+	@Override
+	public void init() {
+		this.chunks = new ArrayList<>();
+
 		// new InstanceDerpWalk(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
 		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.5f, 0.0f), new Vector3f());
 		// new InstanceRobit(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
@@ -49,12 +58,12 @@ public class ChunksManager {
 		//	ParticleSystem system = new ParticleSystem(templates, new SpawnCircle(75.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 150, 0.5f, 0.75f);
 		//	system.setSystemCentre(new Vector3f(0.0f, 30.0f, 0.0f));
 
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 2; i++) {
 			int shapesOnEdge = i;
 			float r = 0;
 			float g = -i;
 			float b = i;
-			chunks.add(new Chunk(FlounderEntities.getEntities(), ChunkMaths.calculateXY(new Vector3f(r, g, b), ChunkGenerator.HEXAGON_SIDE_LENGTH * ChunkGenerator.CHUNK_RADIUS, null)));
+			chunks.add(new Chunk(FlounderEntities.getEntities(), Chunk.worldSpace2D(new Vector3f(r, g, b), ChunkGenerator.HEXAGON_SIDE_LENGTH * ChunkGenerator.CHUNK_RADIUS, null)));
 
 			for (int j = 0; j < ChunkGenerator.HEXAGON_SIDE_COUNT; j++) {
 				if (j == ChunkGenerator.HEXAGON_SIDE_COUNT - 1) {
@@ -66,7 +75,7 @@ public class ChunksManager {
 					r = r + ChunkGenerator.GENERATE_DELTAS[j][0];
 					g = g + ChunkGenerator.GENERATE_DELTAS[j][1];
 					b = b + ChunkGenerator.GENERATE_DELTAS[j][2];
-					chunks.add(new Chunk(FlounderEntities.getEntities(), ChunkMaths.calculateXY(new Vector3f(r, g, b), ChunkGenerator.HEXAGON_SIDE_LENGTH * ChunkGenerator.CHUNK_RADIUS, null)));
+					chunks.add(new Chunk(FlounderEntities.getEntities(), Chunk.worldSpace2D(new Vector3f(r, g, b), ChunkGenerator.HEXAGON_SIDE_LENGTH * ChunkGenerator.CHUNK_RADIUS, null)));
 				}
 			}
 		}
@@ -82,6 +91,7 @@ public class ChunksManager {
 		//	chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector3f(15.f, 0.0f, 30.0f)));
 	}
 
+	@Override
 	public void update() {
 		for (Chunk chunk : chunks) {
 			if (FlounderCamera.getPlayer() != null) {
@@ -92,11 +102,21 @@ public class ChunksManager {
 		}
 	}
 
+	@Override
+	public void profile() {
+		FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Size", chunks.size());
+	}
+
 	public List<Chunk> getChunks() {
 		return chunks;
 	}
 
-	public void dispose() {
+	@Override
+	public IModule getInstance() {
+		return INSTANCE;
+	}
 
+	@Override
+	public void dispose() {
 	}
 }

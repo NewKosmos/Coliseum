@@ -7,35 +7,45 @@
  * Proprietary and confidential
  */
 
-package kosmos.chunks.biome;
+package kosmos.chunks.biomes;
 
-import kosmos.chunks.*;
+import kosmos.chunks.tiles.*;
 import kosmos.particles.*;
 import kosmos.particles.loading.*;
 
-public class BiomeSnow implements IBiome {
+public class BiomeGrass implements IBiome {
+	@Override
+	public String getBiomeName() {
+		return "grass";
+	}
+
 	@Override
 	public Tile getMainTile() {
-		return Tile.TILE_SNOW;
+		return Tile.TILE_GRASS;
+	}
+
+	@Override
+	public Tile[] getOreTiles() {
+		return new Tile[] { Tile.TILE_ROCK_GEM };
 	}
 
 	@Override
 	public ParticleTemplate getWeatherParticle() {
-		return KosmosParticles.load("snow");
+		return KosmosParticles.load("rain");
 	}
 
 	@Override
 	public float getTempDay() {
-		return -0.5f;
+		return 20.9f;
 	}
 
 	@Override
 	public float getTempNight() {
-		return -3.0f;
+		return 12.4f;
 	}
 
 	@Override
 	public float getHumidity() {
-		return 23.0f;
+		return 61.0f;
 	}
 }

@@ -7,16 +7,26 @@
  * Proprietary and confidential
  */
 
-package kosmos.chunks.biome;
+package kosmos.chunks.biomes;
 
-import kosmos.chunks.*;
+import kosmos.chunks.tiles.*;
 import kosmos.particles.*;
 import kosmos.particles.loading.*;
 
-public class BiomeBeach implements IBiome {
+public class BiomeRiver implements IBiome {
+	@Override
+	public String getBiomeName() {
+		return "river";
+	}
+
 	@Override
 	public Tile getMainTile() {
-		return Tile.TILE_SAND;
+		return null;
+	}
+
+	@Override
+	public Tile[] getOreTiles() {
+		return new Tile[] { };
 	}
 
 	@Override
@@ -26,16 +36,16 @@ public class BiomeBeach implements IBiome {
 
 	@Override
 	public float getTempDay() {
-		return 23.0f;
+		return 21.0f;
 	}
 
 	@Override
 	public float getTempNight() {
-		return 14.0f;
+		return 19.0f;
 	}
 
 	@Override
 	public float getHumidity() {
-		return 89.0f;
+		return 94.0f;
 	}
 }

@@ -14,28 +14,22 @@ import flounder.framework.*;
 import flounder.lights.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
-import flounder.physics.bounding.*;
-import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.entities.instances.*;
 import kosmos.particles.*;
 
 public class KosmosWorld extends IModule {
 	private static final KosmosWorld INSTANCE = new KosmosWorld();
-	public static final String PROFILE_TAB_NAME = "NewKosmos World";
+	public static final String PROFILE_TAB_NAME = "Kosmos World";
 
 	private Fog fog;
 	private SkyCycle skyCycle;
-	private ChunksManager chunksManager;
 
 	private Entity entitySun;
 	private Entity entityMoon;
 
-	private boolean worldGenerated;
-
 	public KosmosWorld() {
-		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderBounding.class, FlounderTextures.class, FlounderEntities.class, KosmosParticles.class);
-		this.worldGenerated = false;
+		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEntities.class, KosmosParticles.class, KosmosChunks.class);
 	}
 
 	@Override
@@ -49,17 +43,8 @@ public class KosmosWorld extends IModule {
 
 	@Override
 	public void update() {
-		if (!worldGenerated) {
-			this.chunksManager = new ChunksManager();
-			worldGenerated = true;
-		}
-
 		skyCycle.update();
 		fog.setFogColour(skyCycle.getSkyColour());
-
-		if (chunksManager != null) {
-			chunksManager.update();
-		}
 	}
 
 	@Override
@@ -89,11 +74,5 @@ public class KosmosWorld extends IModule {
 
 	@Override
 	public void dispose() {
-		worldGenerated = false;
-
-		if (chunksManager != null) {
-			chunksManager.dispose();
-			chunksManager = null;
-		}
 	}
 }

@@ -7,9 +7,10 @@
  * Proprietary and confidential
  */
 
-package kosmos.chunks;
+package kosmos.chunks.meshing;
 
 import flounder.maths.vectors.*;
+import kosmos.chunks.tiles.*;
 
 import java.util.*;
 import java.util.function.*;

@@ -57,11 +57,11 @@ public class MasterSlider extends GuiComponent {
 		addComponent(menuStart, 0.0f, 0.0f, 1.0f, 1.0f);
 		addComponent(menuPause, 0.0f, 0.0f, 1.0f, 1.0f);
 
-	//	if (FlounderFramework.isRunningFromJar()) {
-			this.menuActive = menuStart;
-	//	} else {
-	//		this.menuActive = menuPause;
-	//	}
+		//	if (FlounderFramework.isRunningFromJar()) {
+		this.menuActive = menuStart;
+		//	} else {
+		//		this.menuActive = menuPause;
+		//	}
 
 		this.menuActive.show(true);
 

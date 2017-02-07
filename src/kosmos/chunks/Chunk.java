@@ -14,6 +14,8 @@ import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
 import flounder.space.*;
+import kosmos.chunks.meshing.*;
+import kosmos.chunks.tiles.*;
 import kosmos.entities.components.*;
 
 import java.util.*;
@@ -36,7 +38,7 @@ public class Chunk extends Entity {
 		this.tilesChanged = true;
 		this.darkness = 0.0f;
 
-		new ComponentModel(this, null, ChunkGenerator.CHUNK_SCALE, Tile.TESTING, 0);
+		new ComponentModel(this, null, ChunkGenerator.CHUNK_SCALE, (position.x == 0 && position.y == 0) ? Tile.TILE_STONE.getTexture() : Tile.TILE_SNOW.getTexture(), 0);
 		//	new ComponentCollider(this);
 		//	new ComponentCollision(this);
 
@@ -111,5 +113,26 @@ public class Chunk extends Entity {
 
 	public float getDarkness() {
 		return darkness;
+	}
+
+	public static Vector3f hexagonSpace(Vector2f position, float length, Vector3f destination) {
+		if (destination == null) {
+			destination = new Vector3f();
+		}
+
+		destination.x = (((float) Math.sqrt(3.0f) / 3.0f) * position.x - (position.y / 3.0f)) / length;
+		destination.y = -(((float) Math.sqrt(3.0f) / 3.0f) * position.x + (position.y / 3.0f)) / length;
+		destination.z = (2.0f / 3.0f) * position.y / length;
+		return destination;
+	}
+
+	public static Vector2f worldSpace2D(Vector3f position, float length, Vector2f destination) {
+		if (destination == null) {
+			destination = new Vector2f();
+		}
+
+		destination.x = (float) Math.sqrt(3.0f) * length * ((position.z / 2.0f) + position.x);
+		destination.y = (3.0f / 2.0f) * length * position.z;
+		return destination;
 	}
 }

@@ -31,7 +31,7 @@ import java.util.*;
  */
 public class KosmosParticles extends IModule {
 	private static final KosmosParticles INSTANCE = new KosmosParticles();
-	public static final String PROFILE_TAB_NAME = "Ebon Particles";
+	public static final String PROFILE_TAB_NAME = "Kosmos Particles";
 
 	public static final MyFile PARTICLES_LOC = new MyFile(MyFile.RES_FOLDER, "particles");
 	public static final float MAX_ELAPSED_TIME = 5.0f;

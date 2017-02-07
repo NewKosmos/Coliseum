@@ -79,7 +79,7 @@ public class KosmosRenderer extends IRendererMaster {
 		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.05f);
 		this.filterLensFlare = new FilterLensFlare();
 		this.filterTiltShift = new FilterTiltShift(0.75f, 1.1f, 0.004f, 3.0f);
-		this.effect = 2;
+		this.effect = 1;
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton c = new KeyButton(GLFW.GLFW_KEY_C);

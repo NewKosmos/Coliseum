@@ -7,7 +7,7 @@
  * Proprietary and confidential
  */
 
-package kosmos.chunks;
+package kosmos.chunks.meshing;
 
 import flounder.framework.*;
 import flounder.logger.*;
@@ -15,6 +15,8 @@ import flounder.materials.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
+import kosmos.chunks.*;
+import kosmos.chunks.tiles.*;
 import kosmos.entities.components.*;
 
 import java.util.*;
@@ -24,13 +26,13 @@ public class ChunkMesh {
 	private Model model;
 	private AABB aabb;
 
-	protected ChunkMesh(Chunk chunk) {
+	public ChunkMesh(Chunk chunk) {
 		this.chunk = chunk;
 		this.model = null;
 		this.aabb = null;
 	}
 
-	protected void rebuild() {
+	public void rebuild() {
 		// Removes old models and AABBs.
 		if (model != null) {
 			model.delete();
