@@ -14,6 +14,7 @@ import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
 import flounder.space.*;
+import flounder.textures.*;
 import kosmos.chunks.meshing.*;
 import kosmos.chunks.tiles.*;
 import kosmos.entities.components.*;
@@ -31,14 +32,14 @@ public class Chunk extends Entity {
 	private boolean tilesChanged;
 	private float darkness;
 
-	public Chunk(ISpatialStructure<Entity> structure, Vector2f position) {
+	public Chunk(ISpatialStructure<Entity> structure, Vector2f position, Texture texture) {
 		super(structure, new Vector3f(position.x, 0.0f, position.y), new Vector3f());
 		this.tiles = new HashMap<>();
 		this.chunkMesh = new ChunkMesh(this);
 		this.tilesChanged = true;
 		this.darkness = 0.0f;
 
-		new ComponentModel(this, null, ChunkGenerator.CHUNK_SCALE, (position.x == 0 && position.y == 0) ? Tile.TILE_STONE.getTexture() : Tile.TILE_SNOW.getTexture(), 0);
+		new ComponentModel(this, null, ChunkGenerator.CHUNK_SCALE, texture, 0);
 		//	new ComponentCollider(this);
 		//	new ComponentCollision(this);
 
