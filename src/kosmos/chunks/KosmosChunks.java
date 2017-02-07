@@ -53,12 +53,12 @@ public class KosmosChunks extends IModule {
 			}
 		}
 
-		//	List<ParticleTemplate> templates = new ArrayList<>();
-		//	templates.add(KosmosParticles.load("rain"));
-		//	ParticleSystem system = new ParticleSystem(templates, new SpawnCircle(75.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 150, 0.5f, 0.75f);
-		//	system.setSystemCentre(new Vector3f(0.0f, 30.0f, 0.0f));
+		// List<ParticleTemplate> templates = new ArrayList<>();
+		// templates.add(KosmosParticles.load("rain"));
+		// ParticleSystem system = new ParticleSystem(templates, new SpawnCircle(75.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 150, 0.5f, 0.75f);
+		// system.setSystemCentre(new Vector3f(0.0f, 30.0f, 0.0f));
 
-		for (int i = 0; i < 2; i++) {
+		/*for (int i = 0; i < 2; i++) {
 			int shapesOnEdge = i;
 			float r = 0;
 			float g = -i;
@@ -78,6 +78,15 @@ public class KosmosChunks extends IModule {
 					chunks.add(new Chunk(FlounderEntities.getEntities(), Chunk.worldSpace2D(new Vector3f(r, g, b), ChunkGenerator.HEXAGON_SIDE_LENGTH * ChunkGenerator.CHUNK_RADIUS, null)));
 				}
 			}
+		}*/
+
+		for (int x = -3; x < 3; x++) {
+			for (int y = -3; y < 3; y++) {
+				float chunkX = (x * ChunkGenerator.CHUNK_WORLD_SIZE) - ((y % 2 == 0) ? ChunkGenerator.CHUNK_WORLD_SIZE * 0.5f : 0.0f);
+				float chunkY = (y * (float) Math.sqrt(3.0) * ChunkGenerator.CHUNK_WORLD_SIZE);
+				chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(chunkX, chunkY)));
+
+			}
 		}
 
 		//chunks.add(new Chunk(new Vector2f(0.0f, 0.0f)));
@@ -87,8 +96,6 @@ public class KosmosChunks extends IModule {
 		//chunks.add(new Chunk(new Vector2f(-10.392304f, -18.0f)));
 		//chunks.add(new Chunk(new Vector2f(-20.784609f, 0.0f)));
 		//chunks.add(new Chunk(new Vector2f(-10.392304f, 18.0f)));
-
-		//	chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector3f(15.f, 0.0f, 30.0f)));
 	}
 
 	@Override

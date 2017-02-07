@@ -120,9 +120,9 @@ public class Chunk extends Entity {
 			destination = new Vector3f();
 		}
 
-		destination.x = (((float) Math.sqrt(3.0f) / 3.0f) * position.x - (position.y / 3.0f)) / length;
-		destination.y = -(((float) Math.sqrt(3.0f) / 3.0f) * position.x + (position.y / 3.0f)) / length;
-		destination.z = (2.0f / 3.0f) * position.y / length;
+		destination.x = 0.0f;
+		destination.y = 0.0f;
+		destination.z = 0.0f;
 		return destination;
 	}
 
@@ -131,8 +131,8 @@ public class Chunk extends Entity {
 			destination = new Vector2f();
 		}
 
-		destination.x = (float) Math.sqrt(3.0f) * length * ((position.z / 2.0f) + position.x);
-		destination.y = (3.0f / 2.0f) * length * position.z;
+		destination.x = position.x * length;
+		destination.y = position.y * length;
 		return destination;
 	}
 }

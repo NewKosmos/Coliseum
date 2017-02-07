@@ -5,7 +5,7 @@ const float SHADOW_DARKNESS = 0.6;
 
 //---------SHADOW------------
 float shadow(sampler2D shadowMap, vec4 shadowCoords, float shadowMapSize) {
-	/*float shadowTexelSize = 1.0 / shadowMapSize;
+	float shadowTexelSize = 1.0 / shadowMapSize;
 	float shadowHalfw = shadowTexelSize * 0.5;
 	float shadowTotal = 0.0;
 	float shadowValue = 0.0;
@@ -40,9 +40,9 @@ float shadow(sampler2D shadowMap, vec4 shadowCoords, float shadowMapSize) {
         shadowShadeFactor = 1.0;
     }
 
-    return shadowShadeFactor;*/
+    return shadowShadeFactor;
 
-    float totalTextels = (SHADOW_PCF * 2.0 + 1.0) * (SHADOW_PCF * 2.0 + 1.0);
+    /*float totalTextels = (SHADOW_PCF * 2.0 + 1.0) * (SHADOW_PCF * 2.0 + 1.0);
     float texelSize = 1.0 / shadowMapSize;
     float total = 0.0;
 
@@ -57,5 +57,5 @@ float shadow(sampler2D shadowMap, vec4 shadowCoords, float shadowMapSize) {
     }
 
     total /= totalTextels;
-    return 1.0 - (total * SHADOW_DARKNESS * shadowCoords.w);
+    return 1.0 - (total * SHADOW_DARKNESS * shadowCoords.w);*/
 }
