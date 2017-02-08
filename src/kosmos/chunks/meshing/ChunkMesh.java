@@ -154,7 +154,7 @@ public class ChunkMesh {
 		};
 
 		// Logs how many vertices and indices are in the chunk model.
-		FlounderLogger.log("Vertices = " + (vertices.length / 3) + ", Indices = " + indices.length);
+	//	FlounderLogger.log("Vertices = " + (vertices.length / 3) + ", Indices = " + indices.length);
 
 		// The model is then loaded into a object and OpenGL.
 		this.model = Model.newModel(manual).create();

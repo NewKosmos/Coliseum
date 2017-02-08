@@ -12,6 +12,7 @@ package kosmos.chunks;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.framework.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
@@ -82,45 +83,37 @@ public class KosmosChunks extends IModule {
 		}*/
 
 		// http://www.java-gaming.org/topics/getting-the-chunk-of-a-hex/37645/view.html
-		for (int x = -3; x < 3; x++) {
-			for (int y = -3; y < 3; y++) {
+		for (int a = -3; a < 3; a++) {
+			for (int b = -3; b < 3; b++) {
 				// float chunkX = (x * ChunkGenerator.CHUNK_WORLD_SIZE) - ((y % 2 == 0) ? ChunkGenerator.CHUNK_WORLD_SIZE * (2.0f / 3.0f) : 0.0f);
 				// float chunkY = (y * (float) Math.sqrt(3.0) * ChunkGenerator.CHUNK_WORLD_SIZE);
 
-				// TODO: Make this math work.
-				float HEX_X_DX = 70.0f;
+				double sx = 70.0;
+				double sy = 65.0;
+				double x = a * sx;
+				double y = b * sy;
+				double l = 5;
+				double w = 2;
+				//double chunkX = ((2.0 * l * x * Math.sqrt(2.0)) + (y * Math.sqrt(3.0))) / ((2.0 * Math.sqrt(2.0) * l * l) - (2.0 * Math.sqrt(2.0) * l));
+				//double chunkY = ((2.0 * x * w * Math.sqrt(2.0)) + (y * l * Math.sqrt(3.0)) - (y * Math.sqrt(3.0))) / ((3.0 * l * l) - (3.0 * l));
+				double chunkX = ((x * Math.sqrt(2.0)) + (y * (1.0 / 2.0) * Math.sqrt(2.0) / l)) / (Math.sqrt(2.0) * (l - 1.0));
+				double chunkY = ((x * (3.0 / 2.0) * w / (l - 1.0)) + (y * (3.0 / 2.0))) / ((3.0 / 2.0) * l);
 
-				float HEX_Y_DX = 35.0f;
-				float HEX_Y_DY = 56.25f;
-
-				int CHUNK_LENGTH = 5;
-				int CHUNK_SIZE = 2;
-
-				float size_x = HEX_X_DX * (CHUNK_LENGTH - 1);
-				float size_y = HEX_Y_DY * CHUNK_LENGTH;
-
-				float x_dx = HEX_X_DX;
-				float x_dy = HEX_Y_DX / CHUNK_LENGTH;
-
-				float y_dx = HEX_Y_DY * CHUNK_SIZE / (CHUNK_LENGTH - 1);
-				float y_dy = HEX_Y_DY;
-
-				float chunkX = ((float) x * x_dx + (float) y * x_dy) / size_x;
-				float chunkY = ((float) x * y_dx + (float) y * y_dy) / size_y;
+				FlounderLogger.log("Chunk[ " + x + ", " + y + " ]: { " + chunkX + ", " + chunkY + " }.");
 
 				Texture t = (x == 0 && y == 0) ? Tile.TILE_STONE.getTexture() : Tile.TILE_SNOW.getTexture();
-				chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(chunkX, chunkY), t));
+				chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f((float) chunkX, (float) chunkY), t));
 
 			}
 		}
 
-		//chunks.add(new Chunk(new Vector2f(0.0f, 0.0f)));
-		//chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector3f(10.392304f, 0.0f, 18.0f)));
-		//chunks.add(new Chunk(new Vector2f(20.784609f, 0.0f)));
-		//chunks.add(new Chunk(new Vector2f(10.392304f, -18.0f)));
-		//chunks.add(new Chunk(new Vector2f(-10.392304f, -18.0f)));
-		//chunks.add(new Chunk(new Vector2f(-20.784609f, 0.0f)));
-		//chunks.add(new Chunk(new Vector2f(-10.392304f, 18.0f)));
+		//chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(0.0f, 0.0f), Tile.TILE_GRASS.getTexture()));
+		//chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector3f(10.392304f, 0.0f, 18.0f), Tile.TILE_SNOW.getTexture())));
+		//chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(20.784609f, 0.0f), Tile.TILE_SNOW.getTexture())));
+		//chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(10.392304f, -18.0f), Tile.TILE_SNOW.getTexture())));
+		//chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(-10.392304f, -18.0f), Tile.TILE_SNOW.getTexture())));
+		//chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(-20.784609f, 0.0f), Tile.TILE_SNOW.getTexture())));
+		//chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(-10.392304f, 18.0f), Tile.TILE_SNOW.getTexture())));
 	}
 
 	@Override
