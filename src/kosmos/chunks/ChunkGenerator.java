@@ -21,7 +21,7 @@ public class ChunkGenerator {
 	public static final int CHUNK_RADIUS = 3; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
 	public static final float CHUNK_SCALE = 2.0f; // The model scale size used for each chunk.
 
-	public static final float CHUNK_WORLD_SIZE = ChunkGenerator.CHUNK_SCALE * (float) Math.sqrt(3.0) * (ChunkGenerator.CHUNK_RADIUS - 0.5f); // The overall world radius footprint per chunk.
+	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * ChunkGenerator.CHUNK_SCALE * ChunkGenerator.CHUNK_RADIUS; // The overall world radius footprint per chunk.
 
 	protected static void generate(Chunk chunk) {
 		for (int i = 0; i < CHUNK_RADIUS; i++) {

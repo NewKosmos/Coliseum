@@ -83,7 +83,7 @@ public class KosmosChunks extends IModule {
 		}*/
 
 		// http://www.java-gaming.org/topics/getting-the-chunk-of-a-hex/37645/view.html
-		for (int a = -3; a < 3; a++) {
+	/*	for (int a = -3; a < 3; a++) {
 			for (int b = -3; b < 3; b++) {
 				// float chunkX = (x * ChunkGenerator.CHUNK_WORLD_SIZE) - ((y % 2 == 0) ? ChunkGenerator.CHUNK_WORLD_SIZE * (2.0f / 3.0f) : 0.0f);
 				// float chunkY = (y * (float) Math.sqrt(3.0) * ChunkGenerator.CHUNK_WORLD_SIZE);
@@ -108,6 +108,17 @@ public class KosmosChunks extends IModule {
 				chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f((float) chunkX, (float) chunkY), t));
 
 			}
+		}*/
+
+		Chunk parent = new Chunk(FlounderEntities.getEntities(), new Vector2f(0.0f, 0.0f), Tile.TILE_GRASS.getTexture());
+		chunks.add(parent);
+
+		for (int i = 0; i < 6; i++) {
+			double theta = ((360.0 / 6.0) * (i+1)) + 30.0;
+			Vector2f position = new Vector2f(1.5f * ChunkGenerator.CHUNK_WORLD_SIZE, 0.0f);
+			Vector2f.rotate(position, (float) theta, position);
+			Vector2f.add(position, parent.getPosition().toVector2f(), position);
+			chunks.add(new Chunk(FlounderEntities.getEntities(), position, Tile.TILE_SNOW.getTexture()));
 		}
 
 		//chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(0.0f, 0.0f), Tile.TILE_GRASS.getTexture()));
