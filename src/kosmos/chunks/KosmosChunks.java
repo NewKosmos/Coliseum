@@ -88,16 +88,19 @@ public class KosmosChunks extends IModule {
 				// float chunkX = (x * ChunkGenerator.CHUNK_WORLD_SIZE) - ((y % 2 == 0) ? ChunkGenerator.CHUNK_WORLD_SIZE * (2.0f / 3.0f) : 0.0f);
 				// float chunkY = (y * (float) Math.sqrt(3.0) * ChunkGenerator.CHUNK_WORLD_SIZE);
 
-				double sx = 70.0;
-				double sy = 65.0;
+				double sx = 24.0;
+				double sy = 60.0;
 				double x = a * sx;
 				double y = b * sy;
-				double l = 5;
-				double w = 2;
+				double l = 4.0;
+				double w = 2.0;
 				//double chunkX = ((2.0 * l * x * Math.sqrt(2.0)) + (y * Math.sqrt(3.0))) / ((2.0 * Math.sqrt(2.0) * l * l) - (2.0 * Math.sqrt(2.0) * l));
 				//double chunkY = ((2.0 * x * w * Math.sqrt(2.0)) + (y * l * Math.sqrt(3.0)) - (y * Math.sqrt(3.0))) / ((3.0 * l * l) - (3.0 * l));
-				double chunkX = ((x * Math.sqrt(2.0)) + (y * (1.0 / 2.0) * Math.sqrt(2.0) / l)) / (Math.sqrt(2.0) * (l - 1.0));
-				double chunkY = ((x * (3.0 / 2.0) * w / (l - 1.0)) + (y * (3.0 / 2.0))) / ((3.0 / 2.0) * l);
+				//double chunkX = ((x * Math.sqrt(2.0)) + (y * (1.0 / 2.0) * Math.sqrt(2.0) / l)) / (Math.sqrt(2.0) * (l - 1.0));
+				//double chunkY = ((x * (3.0 / 2.0) * w / (l - 1.0)) + (y * (3.0 / 2.0))) / ((3.0 / 2.0) * l);
+
+				double chunkX = ((2.0 * l * x) + y) / (2.0 * l * (l - 1.0));
+				double chunkY = (((w * x) / (l - 1.0)) + y) / (l);
 
 				FlounderLogger.log("Chunk[ " + x + ", " + y + " ]: { " + chunkX + ", " + chunkY + " }.");
 
