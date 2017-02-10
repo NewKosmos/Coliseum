@@ -60,63 +60,15 @@ public class KosmosChunks extends IModule {
 		// ParticleSystem system = new ParticleSystem(templates, new SpawnCircle(75.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 150, 0.5f, 0.75f);
 		// system.setSystemCentre(new Vector3f(0.0f, 30.0f, 0.0f));
 
-		/*for (int i = 0; i < 2; i++) {
-			int shapesOnEdge = i;
-			float r = 0;
-			float g = -i;
-			float b = i;
-			chunks.add(new Chunk(FlounderEntities.getEntities(), Chunk.worldSpace2D(new Vector3f(r, g, b), ChunkGenerator.HEXAGON_SIDE_LENGTH * ChunkGenerator.CHUNK_RADIUS, null)));
-
-			for (int j = 0; j < ChunkGenerator.HEXAGON_SIDE_COUNT; j++) {
-				if (j == ChunkGenerator.HEXAGON_SIDE_COUNT - 1) {
-					shapesOnEdge = i - 1;
-				}
-
-				for (int w = 0; w < shapesOnEdge; w++) {
-					// r + g + b = 0
-					r = r + ChunkGenerator.GENERATE_DELTAS[j][0];
-					g = g + ChunkGenerator.GENERATE_DELTAS[j][1];
-					b = b + ChunkGenerator.GENERATE_DELTAS[j][2];
-					chunks.add(new Chunk(FlounderEntities.getEntities(), Chunk.worldSpace2D(new Vector3f(r, g, b), ChunkGenerator.HEXAGON_SIDE_LENGTH * ChunkGenerator.CHUNK_RADIUS, null)));
-				}
-			}
-		}*/
-
-		// http://www.java-gaming.org/topics/getting-the-chunk-of-a-hex/37645/view.html
-	/*	for (int a = -3; a < 3; a++) {
-			for (int b = -3; b < 3; b++) {
-				// float chunkX = (x * ChunkGenerator.CHUNK_WORLD_SIZE) - ((y % 2 == 0) ? ChunkGenerator.CHUNK_WORLD_SIZE * (2.0f / 3.0f) : 0.0f);
-				// float chunkY = (y * (float) Math.sqrt(3.0) * ChunkGenerator.CHUNK_WORLD_SIZE);
-
-				double sx = 24.0;
-				double sy = 60.0;
-				double x = a * sx;
-				double y = b * sy;
-				double l = 4.0;
-				double w = 2.0;
-				//double chunkX = ((2.0 * l * x * Math.sqrt(2.0)) + (y * Math.sqrt(3.0))) / ((2.0 * Math.sqrt(2.0) * l * l) - (2.0 * Math.sqrt(2.0) * l));
-				//double chunkY = ((2.0 * x * w * Math.sqrt(2.0)) + (y * l * Math.sqrt(3.0)) - (y * Math.sqrt(3.0))) / ((3.0 * l * l) - (3.0 * l));
-				//double chunkX = ((x * Math.sqrt(2.0)) + (y * (1.0 / 2.0) * Math.sqrt(2.0) / l)) / (Math.sqrt(2.0) * (l - 1.0));
-				//double chunkY = ((x * (3.0 / 2.0) * w / (l - 1.0)) + (y * (3.0 / 2.0))) / ((3.0 / 2.0) * l);
-
-				double chunkX = ((2.0 * l * x) + y) / (2.0 * l * (l - 1.0));
-				double chunkY = (((w * x) / (l - 1.0)) + y) / (l);
-
-				FlounderLogger.log("Chunk[ " + x + ", " + y + " ]: { " + chunkX + ", " + chunkY + " }.");
-
-				Texture t = (x == 0 && y == 0) ? Tile.TILE_STONE.getTexture() : Tile.TILE_SNOW.getTexture();
-				chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f((float) chunkX, (float) chunkY), t));
-
-			}
-		}*/
-
 		Chunk parent = new Chunk(FlounderEntities.getEntities(), new Vector2f(0.0f, 0.0f), Tile.TILE_GRASS.getTexture());
 		chunks.add(parent);
 
 		for (int i = 0; i < 6; i++) {
-			double theta = ((360.0 / 6.0) * (i+1)) + 30.0;
-			Vector2f position = new Vector2f(1.5f * ChunkGenerator.CHUNK_WORLD_SIZE, 0.0f);
-			Vector2f.rotate(position, (float) theta, position);
+			double theta = ((360.0 / 6.0) * (i + 1));
+			FlounderLogger.log("[" + i + "]: " + theta);
+			Vector2f position = new Vector2f();
+			position.x = (ChunkGenerator.CHUNK_WORLD_SIZE) * (float) Math.cos(Math.toRadians(theta));
+			position.y = (ChunkGenerator.CHUNK_WORLD_SIZE) * (float) Math.sin(Math.toRadians(theta));
 			Vector2f.add(position, parent.getPosition().toVector2f(), position);
 			chunks.add(new Chunk(FlounderEntities.getEntities(), position, Tile.TILE_SNOW.getTexture()));
 		}
