@@ -10,7 +10,6 @@
 package kosmos.chunks.meshing;
 
 import flounder.framework.*;
-import flounder.materials.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
@@ -139,11 +138,6 @@ public class ChunkMesh {
 			@Override
 			public boolean isSmoothShading() {
 				return false;
-			}
-
-			@Override
-			public Material[] getMaterials() {
-				return null;
 			}
 
 			@Override

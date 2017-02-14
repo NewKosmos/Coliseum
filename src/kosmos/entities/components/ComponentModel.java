@@ -12,7 +12,6 @@ package kosmos.entities.components;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.entities.template.*;
-import flounder.materials.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
@@ -96,11 +95,6 @@ public class ComponentModel extends IComponentEntity {
 			@Override
 			public boolean isSmoothShading() {
 				return false;
-			}
-
-			@Override
-			public Material[] getMaterials() {
-				return new Material[]{}; // TODO: Save and load materials!
 			}
 
 			@Override
