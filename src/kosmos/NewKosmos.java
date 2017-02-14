@@ -42,9 +42,9 @@ public class NewKosmos extends FlounderFramework {
 				configMain.getBooleanWithDefault("fullscreen", false, FlounderDisplay::isFullscreen),
 				false
 		);
+		FlounderTextures.setup(NewKosmos.configMain.getFloatWithDefault("anisotropy_level", 4, FlounderTextures::getAnisotropyLevel));
 		FlounderBounding.toggle(NewKosmos.configMain.getBooleanWithDefault("boundings_render", false, FlounderBounding::renders));
 		FlounderProfiler.toggle(NewKosmos.configMain.getBooleanWithDefault("profiler_open", false, FlounderProfiler::isOpen));
-		FlounderTextures.setAnisotropyLevel(NewKosmos.configMain.getFloatWithDefault("anisotropy_level", 4, FlounderTextures::getAnisotropyLevel));
 		TextBuilder.DEFAULT_TYPE = FlounderFonts.FFF_FORWARD;
 	}
 

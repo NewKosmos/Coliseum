@@ -35,7 +35,7 @@ public class ComponentAnimation extends IComponentEntity {
 	private float scale;
 	private Matrix4f modelMatrix;
 
-	private Texture texture;
+	private TextureObject texture;
 	private int textureIndex;
 
 	private Animator animator;
@@ -49,7 +49,7 @@ public class ComponentAnimation extends IComponentEntity {
 	 * @param texture The diffuse texture for the entity.
 	 * @param textureIndex What texture index this entity should renderObjects from (0 default).
 	 */
-	public ComponentAnimation(Entity entity, ModelAnimated model, float scale, Texture texture, int textureIndex) {
+	public ComponentAnimation(Entity entity, ModelAnimated model, float scale, TextureObject texture, int textureIndex) {
 		super(entity, ID);
 		this.model = model;
 		this.scale = scale;
@@ -242,8 +242,7 @@ public class ComponentAnimation extends IComponentEntity {
 		this.scale = Float.parseFloat(template.getValue(this, "Scale"));
 
 		if (!template.getValue(this, "Texture").equals("null")) {
-			this.texture = Texture.newTexture(new MyFile(template.getValue(this, "Texture"))).create();
-			this.texture.setNumberOfRows(Integer.parseInt(template.getValue(this, "TextureNumRows")));
+			this.texture = TextureFactory.newBuilder().setFile(new MyFile(template.getValue(this, "Texture"))).setNumberOfRows(Integer.parseInt(template.getValue(this, "TextureNumRows"))).create();
 		}
 	}
 
@@ -363,11 +362,11 @@ public class ComponentAnimation extends IComponentEntity {
 	 *
 	 * @return The diffuse texture for this entity.
 	 */
-	public Texture getTexture() {
+	public TextureObject getTexture() {
 		return texture;
 	}
 
-	public void setTexture(Texture texture) {
+	public void setTexture(TextureObject texture) {
 		this.texture = texture;
 	}
 

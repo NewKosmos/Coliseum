@@ -17,7 +17,7 @@ import flounder.textures.*;
  */
 public class ParticleTemplate {
 	private String name;
-	private Texture texture;
+	private TextureObject texture;
 	private float lifeLength;
 	private float scale;
 
@@ -29,7 +29,7 @@ public class ParticleTemplate {
 	 * @param lifeLength The averaged life length for the particle.
 	 * @param scale The averaged scale for the particle.
 	 */
-	public ParticleTemplate(String name, Texture texture, float lifeLength, float scale) {
+	public ParticleTemplate(String name, TextureObject texture, float lifeLength, float scale) {
 		this.name = name;
 		this.texture = texture;
 		this.lifeLength = lifeLength;
@@ -53,7 +53,7 @@ public class ParticleTemplate {
 		this.name = name;
 	}
 
-	public void setTexture(Texture texture) {
+	public void setTexture(TextureObject texture) {
 		this.texture = texture;
 	}
 
@@ -69,7 +69,7 @@ public class ParticleTemplate {
 		return name;
 	}
 
-	public Texture getTexture() {
+	public TextureObject getTexture() {
 		return texture;
 	}
 

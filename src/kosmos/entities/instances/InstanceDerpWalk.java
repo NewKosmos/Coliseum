@@ -21,7 +21,7 @@ import kosmos.entities.components.*;
 
 public class InstanceDerpWalk extends Entity {
 	private static final MyFile colladaFile = new MyFile(FlounderEntities.ENTITIES_FOLDER, "derpWalk", "derpWalk.dae");
-	private static final Texture texture = null; // Texture.newTexture(new MyFile(FlounderEntities.ENTITIES_FOLDER, "derpWalk", "derpWalk.png")).create();
+	private static final TextureObject texture = null; // TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "derpWalk", "derpWalk.png")).create();
 
 	public InstanceDerpWalk(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);

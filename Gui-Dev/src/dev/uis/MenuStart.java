@@ -35,10 +35,10 @@ public class MenuStart extends GuiComponent {
 
 	private LinearDriver paralaxDriver;
 	private Vector2f paralaxPosition;
-	private GuiTexture t1 = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "1.png")).create());
-	private GuiTexture t2 = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "2.png")).create());
-	private GuiTexture t3 = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "3.png")).create());
-	private GuiTexture t4 = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "4.png")).create());
+	private GuiTexture t1 = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "1.png")).create());
+	private GuiTexture t2 = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "2.png")).create());
+	private GuiTexture t3 = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "3.png")).create());
+	private GuiTexture t4 = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "4.png")).create());
 
 	public MenuStart(MasterMenu superMenu, MasterSlider masterSlider) {
 		this.superMenu = superMenu;

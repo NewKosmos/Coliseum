@@ -32,7 +32,7 @@ public class Chunk extends Entity {
 	private boolean tilesChanged;
 	private float darkness;
 
-	public Chunk(ISpatialStructure<Entity> structure, Vector2f position, Texture texture) {
+	public Chunk(ISpatialStructure<Entity> structure, Vector2f position, TextureObject texture) {
 		super(structure, new Vector3f(position.x, 0.0f, position.y), new Vector3f());
 		this.tiles = new HashMap<>();
 		this.chunkMesh = new ChunkMesh(this);

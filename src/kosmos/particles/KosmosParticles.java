@@ -190,8 +190,7 @@ public class KosmosParticles extends IModule {
 					}
 				}
 
-				Texture texture = Texture.newTexture(new MyFile(textureFile)).create();
-				texture.setNumberOfRows(Integer.parseInt(numberOfRows));
+				TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(textureFile)).setNumberOfRows(Integer.parseInt(numberOfRows)).create();
 				data = new ParticleTemplate(particleName, texture, Float.parseFloat(lifeLength), Float.parseFloat(scale));
 			} catch (IOException e) {
 				FlounderLogger.error("File reader for particle " + saveFile.getPath() + " did not execute successfully!");

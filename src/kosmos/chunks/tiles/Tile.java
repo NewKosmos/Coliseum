@@ -17,29 +17,29 @@ import flounder.textures.*;
 public class Tile {
 	public static final Tile TILE_GRASS = new Tile(
 			ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "grass", "grass.obj")).create(),
-			Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "grass", "grass.png")).clampEdges().create()
+			TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "grass", "grass.png")).clampEdges().create()
 	);
 	public static final Tile TILE_STONE = new Tile(
 			ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "stone", "stone.obj")).create(),
-			Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "stone", "stone.png")).clampEdges().create()
+			TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "stone", "stone.png")).clampEdges().create()
 	);
 	public static final Tile TILE_SAND = new Tile(
 			ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "sand", "sand.obj")).create(),
-			Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "sand", "sand.png")).clampEdges().create()
+			TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "sand", "sand.png")).clampEdges().create()
 	);
 	public static final Tile TILE_SNOW = new Tile(
 			ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "snow", "snow.obj")).create(),
-			Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "snow", "snow.png")).clampEdges().create()
+			TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "snow", "snow.png")).clampEdges().create()
 	);
 	public static final Tile TILE_ROCK_GEM = new Tile(
 			ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "rockGem", "rockGem.obj")).create(),
-			Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "terrains", "rockGem", "rockGem.png")).clampEdges().create()
+			TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "rockGem", "rockGem.png")).clampEdges().create()
 	);
 
 	private ModelObject model;
-	private Texture texture;
+	private TextureObject texture;
 
-	protected Tile(ModelObject model, Texture texture) {
+	protected Tile(ModelObject model, TextureObject texture) {
 		this.model = model;
 		this.texture = texture;
 	}
@@ -48,7 +48,7 @@ public class Tile {
 		return model;
 	}
 
-	public Texture getTexture() {
+	public TextureObject getTexture() {
 		return texture;
 	}
 

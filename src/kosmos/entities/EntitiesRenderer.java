@@ -37,7 +37,7 @@ public class EntitiesRenderer extends IRenderer {
 	private static final MyFile FRAGMENT_SHADER = new MyFile(Shader.SHADERS_LOC, "entities", "entityFragment.glsl");
 
 	private Shader shader;
-	private Texture textureUndefined;
+	private TextureObject textureUndefined;
 
 	/**
 	 * Creates a new entity renderer.
@@ -47,7 +47,7 @@ public class EntitiesRenderer extends IRenderer {
 				new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER),
 				new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)
 		).create();
-		textureUndefined = Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "undefined.png")).create();
+		textureUndefined = TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "undefined.png")).create();
 	}
 
 	@Override
@@ -126,18 +126,18 @@ public class EntitiesRenderer extends IRenderer {
 			OpenGlUtils.bindTexture(componentModel.getTexture(), 0);
 			shader.getUniformFloat("atlasRows").loadFloat(componentModel.getTexture().getNumberOfRows());
 			shader.getUniformVec2("atlasOffset").loadVec2(componentModel.getTextureOffset());
-			OpenGlUtils.cullBackFaces(!componentModel.getTexture().hasTransparency());
+			OpenGlUtils.cullBackFaces(!componentModel.getTexture().hasAlpha());
 		} else if (componentAnimation != null && componentAnimation.getTexture() != null) {
 			OpenGlUtils.bindTexture(componentAnimation.getTexture(), 0);
 			shader.getUniformFloat("atlasRows").loadFloat(componentAnimation.getTexture().getNumberOfRows());
 			shader.getUniformVec2("atlasOffset").loadVec2(componentAnimation.getTextureOffset());
-			OpenGlUtils.cullBackFaces(!componentAnimation.getTexture().hasTransparency());
+			OpenGlUtils.cullBackFaces(!componentAnimation.getTexture().hasAlpha());
 		} else {
 			// No texture, so load a 'undefined' texture.
 			OpenGlUtils.bindTexture(textureUndefined, 0);
 			shader.getUniformFloat("atlasRows").loadFloat(textureUndefined.getNumberOfRows());
 			shader.getUniformVec2("atlasOffset").loadVec2(0, 0);
-			OpenGlUtils.cullBackFaces(!textureUndefined.hasTransparency());
+			OpenGlUtils.cullBackFaces(!textureUndefined.hasAlpha());
 		}
 
 		if (componentAnimation != null) {

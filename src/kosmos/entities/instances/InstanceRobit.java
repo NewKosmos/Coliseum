@@ -19,7 +19,7 @@ import kosmos.entities.components.*;
 
 public class InstanceRobit extends Entity {
 	private static final ModelObject model = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "robit", "robit.obj")).create();
-	private static final Texture texture = Texture.newTexture(new MyFile(FlounderEntities.ENTITIES_FOLDER, "robit", "robit.png")).create();
+	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "robit", "robit.png")).create();
 
 	public InstanceRobit(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);

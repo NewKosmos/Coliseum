@@ -41,8 +41,7 @@ public class MasterOverlay extends GuiComponent {
 		createStatus("C TO TOGGLE EFFECTS", 0.19f);
 		createStatus("ESC TO HIDE HUD", 0.23f);
 
-		crossHair = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "guis", "crosshair.png")).create());
-		crossHair.getTexture().setNumberOfRows(4);
+		crossHair = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "crosshair.png")).setNumberOfRows(4).create());
 		crossHair.setSelectedRow(NewKosmos.configMain.getIntWithDefault("crosshair", 1, () -> crossHair.getSelectedRow()));
 
 		Timer timer = new Timer();

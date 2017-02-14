@@ -46,16 +46,12 @@ public class ConsoleUi extends GuiComponent {
 	private boolean windowClosed;
 
 	public ConsoleUi() {
-		textureTopBar = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "guis", "console_top.png")).create());
-		textureTopBar.getTexture().setHasTransparency(true);
-		textureBody = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "guis", "console_body.png")).create());
-		textureBody.getTexture().setHasTransparency(true);
-		textureInput = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "guis", "console_input.png")).create());
-		textureInput.getTexture().setHasTransparency(true);
-		textureClose = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "guis", "console_circle.png")).create());
-		textureClose.getTexture().setHasTransparency(true);
-		textureLock = new GuiTexture(Texture.newTexture(new MyFile(MyFile.RES_FOLDER, "guis", "console_circle.png")).create());
-		textureLock.getTexture().setHasTransparency(true);
+		textureTopBar = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "console_top.png")).create());
+		textureBody = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "console_body.png")).create());
+		textureInput = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "console_input.png")).create());
+		textureClose = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "console_circle.png")).create());
+		textureLock = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "console_circle.png")).create());
+
 		consolePosition = new Vector2f(0.2f, 0.2f);
 		consoleSize = new Vector2f(0.7f, 0.5f);
 
