@@ -60,9 +60,9 @@ public class ComponentCollider extends IComponentEntity {
 	}
 
 	/**
-	 * Gets the models convex hull.
+	 * Gets the flounder.models convex hull.
 	 *
-	 * @return The models convex hull.
+	 * @return The flounder.models convex hull.
 	 */
 	public QuickHull getHull() {
 		return hull;
@@ -91,12 +91,12 @@ public class ComponentCollider extends IComponentEntity {
 		if (super.getEntity().hasMoved()) {
 			ComponentModel componentModel = (ComponentModel) getEntity().getComponent(ComponentModel.ID);
 
-			if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().getMeshData() != null && componentModel.getModel().getMeshData().getAABB() != null) {
-				AABB.recalculate(componentModel.getModel().getMeshData().getAABB(), super.getEntity().getPosition(), super.getEntity().getRotation(), componentModel.getScale(), aabb);
+			if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().getData() != null && componentModel.getModel().getData().getAABB() != null) {
+				AABB.recalculate(componentModel.getModel().getData().getAABB(), super.getEntity().getPosition(), super.getEntity().getRotation(), componentModel.getScale(), aabb);
 				//	QuickHull.recalculate(componentModel.getModel().getMeshData().getHull(), hull, super.getEntity().getPosition(), super.getEntity().getRotation(), componentModel.getScale());
 			}
 
-			// TODO: Calculate the AABBs and Hulls from animated models.
+			// TODO: Calculate the AABBs and Hulls from animated flounder.models.
 			/*ComponentAnimation componentAnimation = (ComponentAnimation) getEntity().getComponent(ComponentAnimation.ID);
 
 			if (componentAnimation != null && componentAnimation.getModel() != null && componentAnimation.getModel().getAABB() != null) {

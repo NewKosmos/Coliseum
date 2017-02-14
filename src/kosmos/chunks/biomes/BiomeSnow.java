@@ -26,7 +26,7 @@ public class BiomeSnow implements IBiome {
 
 	@Override
 	public Tile[] getOreTiles() {
-		return new Tile[] { Tile.TILE_ROCK_GEM };
+		return new Tile[]{Tile.TILE_ROCK_GEM};
 	}
 
 	@Override

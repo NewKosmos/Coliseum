@@ -125,9 +125,9 @@ public class Water {
 		position.z -= aabb.getMaxExtents().z / 2.0f;
 		AABB.recalculate(aabb, position, rotation, scale, aabb);
 
-		System.out.println(VERTEX_COUNT);
-		System.out.println(aabb);
-		System.out.println(ChunkGenerator.CHUNK_WORLD_SIZE);
+		//System.out.println(VERTEX_COUNT);
+		//System.out.println(aabb);
+		//System.out.println(ChunkGenerator.CHUNK_WORLD_SIZE);
 	}
 
 	private void storeQuad1(List<Float> vertices, int topLeft, int topRight, int bottomLeft, int bottomRight, boolean mixed) {

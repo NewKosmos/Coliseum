@@ -18,7 +18,7 @@ import flounder.textures.*;
 import kosmos.entities.components.*;
 
 public class InstanceCloud extends Entity {
-	private static final Model model = Model.newModel(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cloud", "cloud.obj")).create();
+	private static final ModelObject model = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cloud", "cloud.obj")).create();
 	private static final Texture texture = Texture.newTexture(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cloud", "cloud.png")).clampEdges().create();
 
 	public InstanceCloud(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation, float scale) {

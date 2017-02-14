@@ -18,7 +18,7 @@ import flounder.textures.*;
 import kosmos.entities.components.*;
 
 public class InstanceRobit extends Entity {
-	private static final Model model = Model.newModel(new MyFile(FlounderEntities.ENTITIES_FOLDER, "robit", "robit.obj")).create();
+	private static final ModelObject model = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "robit", "robit.obj")).create();
 	private static final Texture texture = Texture.newTexture(new MyFile(FlounderEntities.ENTITIES_FOLDER, "robit", "robit.png")).create();
 
 	public InstanceRobit(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {

@@ -44,7 +44,7 @@ public class Chunk extends Entity {
 		//	new ComponentCollision(this);
 
 		ChunkGenerator.generate(this);
-		FlounderLogger.log("Chunk[ " + position.x + ", " + position.y + " ]");
+		FlounderLogger.log("Creating chunk at: " + position.x + ", " + position.y + ".");
 	}
 
 	public void update(Vector3f playerPosition) {

@@ -26,7 +26,7 @@ import flounder.textures.*;
 public class ComponentModel extends IComponentEntity {
 	public static final int ID = EntityIDAssigner.getId();
 
-	private Model model;
+	private ModelObject model;
 	private float scale;
 	private Matrix4f modelMatrix;
 
@@ -45,7 +45,7 @@ public class ComponentModel extends IComponentEntity {
 	 * @param texture The diffuse texture for the entity.
 	 * @param textureIndex What texture index this entity should renderObjects from (0 default).
 	 */
-	public ComponentModel(Entity entity, Model model, float scale, Texture texture, int textureIndex) {
+	public ComponentModel(Entity entity, ModelObject model, float scale, Texture texture, int textureIndex) {
 		super(entity, ID);
 		this.model = model;
 		this.scale = scale;
@@ -67,12 +67,7 @@ public class ComponentModel extends IComponentEntity {
 	public ComponentModel(Entity entity, EntityTemplate template) {
 		super(entity, ID);
 
-		this.model = Model.newModel(new ModelBuilder.LoadManual() {
-			@Override
-			public String getModelName() {
-				return template.getEntityName();
-			}
-
+		this.model = ModelFactory.newBuilder().setManual(new ModelLoadManual(template.getEntityName()) {
 			@Override
 			public float[] getVertices() {
 				return EntityTemplate.toFloatArray(template.getSectionData(ComponentModel.this, "Vertices"));
@@ -99,6 +94,11 @@ public class ComponentModel extends IComponentEntity {
 			}
 
 			@Override
+			public boolean isSmoothShading() {
+				return false;
+			}
+
+			@Override
 			public Material[] getMaterials() {
 				return new Material[]{}; // TODO: Save and load materials!
 			}
@@ -112,7 +112,7 @@ public class ComponentModel extends IComponentEntity {
 			public QuickHull getHull() {
 				return null; // TODO: Load hull.
 			}
-		}).create();
+		}.toData()).create();
 
 		this.scale = Float.parseFloat(template.getValue(this, "Scale"));
 		this.modelMatrix = new Matrix4f();
@@ -127,11 +127,11 @@ public class ComponentModel extends IComponentEntity {
 	public void update() {
 	}
 
-	public Model getModel() {
+	public ModelObject getModel() {
 		return model;
 	}
 
-	public void setModel(Model model) {
+	public void setModel(ModelObject model) {
 		this.model = model;
 	}
 

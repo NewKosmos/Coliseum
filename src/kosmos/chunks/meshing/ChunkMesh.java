@@ -10,7 +10,6 @@
 package kosmos.chunks.meshing;
 
 import flounder.framework.*;
-import flounder.logger.*;
 import flounder.materials.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
@@ -23,7 +22,7 @@ import java.util.*;
 
 public class ChunkMesh {
 	private Chunk chunk;
-	private Model model;
+	private ModelObject model;
 	private AABB aabb;
 
 	public ChunkMesh(Chunk chunk) {
@@ -33,7 +32,7 @@ public class ChunkMesh {
 	}
 
 	public void rebuild() {
-		// Removes old models and AABBs.
+		// Removes old flounder.models and AABBs.
 		if (model != null) {
 			model.delete();
 		}
@@ -41,9 +40,9 @@ public class ChunkMesh {
 		model = null;
 		aabb = null;
 
-		// Makes sure all tile models have been loaded, and have data.
+		// Makes sure all tile flounder.models have been loaded, and have data.
 		for (Tile tile : chunk.getTiles().keySet()) {
-			if (tile.getModel() == null || tile.getModel().getMeshData() == null) {
+			if (tile.getModel() == null || tile.getModel().getData() == null) {
 				return;
 			}
 		}
@@ -105,13 +104,13 @@ public class ChunkMesh {
 			}
 		}
 
-		// Then all model data is used to create a manual model loader, a hull is not generated and materials are baked into the textures.
-		ModelBuilder.LoadManual manual = new ModelBuilder.LoadManual() {
-			@Override
-			public String getModelName() {
-				return "chunk" + chunk.getPosition().x + "u" + chunk.getPosition().y + FlounderFramework.getTimeSec();
-			}
 
+		// Logs how many vertices and indices are in the chunk model.
+		//	FlounderLogger.log("Vertices = " + (vertices.length / 3) + ", Indices = " + indices.length);
+
+		// Then all model data is used to create a manual model loader, a hull is not generated and materials are baked into the textures.
+		// The model is then loaded into a object and OpenGL.
+		this.model = ModelFactory.newBuilder().setManual(new ModelLoadManual("chunk" + chunk.getPosition().x + "u" + chunk.getPosition().y + FlounderFramework.getTimeSec()) {
 			@Override
 			public float[] getVertices() {
 				return vertices;
@@ -138,6 +137,11 @@ public class ChunkMesh {
 			}
 
 			@Override
+			public boolean isSmoothShading() {
+				return false;
+			}
+
+			@Override
 			public Material[] getMaterials() {
 				return null;
 			}
@@ -151,13 +155,7 @@ public class ChunkMesh {
 			public QuickHull getHull() {
 				return null;
 			}
-		};
-
-		// Logs how many vertices and indices are in the chunk model.
-	//	FlounderLogger.log("Vertices = " + (vertices.length / 3) + ", Indices = " + indices.length);
-
-		// The model is then loaded into a object and OpenGL.
-		this.model = Model.newModel(manual).create();
+		}.toData()).create();
 
 		// The chunks model component is also updated.
 		ComponentModel componentModel = (ComponentModel) chunk.getComponent(ComponentModel.ID);
@@ -168,14 +166,14 @@ public class ChunkMesh {
 		return chunk;
 	}
 
-	public Model getModel() {
+	public ModelObject getModel() {
 		return model;
 	}
 
 	public AABB getAABB() {
-		if (aabb == null && model != null && model.getMeshData() != null) {
+		if (aabb == null && model != null && model.getData() != null) {
 			this.aabb = new AABB();
-			AABB.recalculate(model.getMeshData().getAABB(), new Vector3f(), new Vector3f(), 2.0f, aabb);
+			AABB.recalculate(model.getData().getAABB(), new Vector3f(), new Vector3f(), 2.0f, aabb);
 		}
 
 		return aabb;

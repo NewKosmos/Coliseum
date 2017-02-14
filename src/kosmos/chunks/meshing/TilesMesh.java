@@ -36,18 +36,18 @@ public class TilesMesh {
 		this.tileVertices = new ArrayList<>();
 
 		// Finds the largest indices size in the tile model.
-		for (int i = 0; i < tile.getModel().getMeshData().getIndices().length; i++) {
-			tileModelMaxIndex = (tileModelMaxIndex < tile.getModel().getMeshData().getIndices()[i]) ? tile.getModel().getMeshData().getIndices()[i] : tileModelMaxIndex;
+		for (int i = 0; i < tile.getModel().getData().getIndices().length; i++) {
+			tileModelMaxIndex = (tileModelMaxIndex < tile.getModel().getData().getIndices()[i]) ? tile.getModel().getData().getIndices()[i] : tileModelMaxIndex;
 		}
 
 		this.accumulator = 0;
 
 		//
-		float[] vertices = tile.getModel().getMeshData().getVertices();
-		float[] textures = tile.getModel().getMeshData().getTextures();
-		float[] normals = tile.getModel().getMeshData().getNormals();
-		float[] tangents = tile.getModel().getMeshData().getTangents();
-		int[] indices = tile.getModel().getMeshData().getIndices();
+		float[] vertices = tile.getModel().getData().getVertices();
+		float[] textures = tile.getModel().getData().getTextures();
+		float[] normals = tile.getModel().getData().getNormals();
+		float[] tangents = tile.getModel().getData().getTangents();
+		int[] indices = tile.getModel().getData().getIndices();
 
 		for (int p = 0; p < positions.size(); p++) {
 			int currentPosID = 0;

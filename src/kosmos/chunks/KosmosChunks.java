@@ -12,7 +12,6 @@ package kosmos.chunks;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.framework.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
@@ -64,14 +63,16 @@ public class KosmosChunks extends IModule {
 		chunks.add(parent);
 
 		for (int i = 0; i < 6; i++) {
-			double theta = ((360.0 / 6.0) * (i + 1));
-			FlounderLogger.log("[" + i + "]: " + theta);
+			double θ = (Math.PI / 3.0) * (double) i;
+			double r = 9.0;
 			Vector2f position = new Vector2f();
-			position.x = (ChunkGenerator.CHUNK_WORLD_SIZE) * (float) Math.cos(Math.toRadians(theta));
-			position.y = (ChunkGenerator.CHUNK_WORLD_SIZE) * (float) Math.sin(Math.toRadians(theta));
+			position.x = (float) (r * Math.cos(θ));
+			position.y = (float) (r * Math.sin(θ));
 			Vector2f.add(position, parent.getPosition().toVector2f(), position);
 			chunks.add(new Chunk(FlounderEntities.getEntities(), position, Tile.TILE_SNOW.getTexture()));
 		}
+
+		//chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f((float) Math.cos(Math.toRadians(30.0f)) * 9.0f, (float) Math.sin(Math.toRadians(30.0f)) * 9.0f), Tile.TILE_SNOW.getTexture()));
 
 		//chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(0.0f, 0.0f), Tile.TILE_GRASS.getTexture()));
 		//chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector3f(10.392304f, 0.0f, 18.0f), Tile.TILE_SNOW.getTexture())));

@@ -26,7 +26,7 @@ public class BiomeRiver implements IBiome {
 
 	@Override
 	public Tile[] getOreTiles() {
-		return new Tile[] { };
+		return new Tile[]{};
 	}
 
 	@Override
