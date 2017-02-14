@@ -106,7 +106,7 @@ public class ComponentModel extends IComponentEntity {
 			public QuickHull getHull() {
 				return null; // TODO: Load hull.
 			}
-		}.toData()).create();
+		}).create();
 
 		this.scale = Float.parseFloat(template.getValue(this, "Scale"));
 		this.modelMatrix = new Matrix4f();

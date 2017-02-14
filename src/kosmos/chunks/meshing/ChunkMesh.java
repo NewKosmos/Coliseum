@@ -41,7 +41,7 @@ public class ChunkMesh {
 
 		// Makes sure all tile flounder.models have been loaded, and have data.
 		for (Tile tile : chunk.getTiles().keySet()) {
-			if (tile.getModel() == null || tile.getModel().getData() == null) {
+			if (tile.getModel() == null || !tile.getModel().isLoaded()) {
 				return;
 			}
 		}
@@ -149,7 +149,7 @@ public class ChunkMesh {
 			public QuickHull getHull() {
 				return null;
 			}
-		}.toData()).create();
+		}).create();
 
 		// The chunks model component is also updated.
 		ComponentModel componentModel = (ComponentModel) chunk.getComponent(ComponentModel.ID);
@@ -165,9 +165,9 @@ public class ChunkMesh {
 	}
 
 	public AABB getAABB() {
-		if (aabb == null && model != null && model.getData() != null) {
+		if (aabb == null && model != null && model.isLoaded()) {
 			this.aabb = new AABB();
-			AABB.recalculate(model.getData().getAABB(), new Vector3f(), new Vector3f(), 2.0f, aabb);
+			AABB.recalculate(model.getAABB(), new Vector3f(), new Vector3f(), 2.0f, aabb);
 		}
 
 		return aabb;
