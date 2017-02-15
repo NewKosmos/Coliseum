@@ -33,21 +33,18 @@ import static org.lwjgl.opengl.GL20.*;
  * A renderer that is used to render entity's.
  */
 public class EntitiesRenderer extends IRenderer {
-	private static final MyFile VERTEX_SHADER = new MyFile(Shader.SHADERS_LOC, "entities", "entityVertex.glsl");
-	private static final MyFile FRAGMENT_SHADER = new MyFile(Shader.SHADERS_LOC, "entities", "entityFragment.glsl");
+	private static final MyFile VERTEX_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "entities", "entityVertex.glsl");
+	private static final MyFile FRAGMENT_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "entities", "entityFragment.glsl");
 
-	private Shader shader;
+	private ShaderObject shader;
 	private TextureObject textureUndefined;
 
 	/**
 	 * Creates a new entity renderer.
 	 */
 	public EntitiesRenderer() {
-		shader = Shader.newShader("entities").setShaderTypes(
-				new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER),
-				new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)
-		).create();
-		textureUndefined = TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "undefined.png")).create();
+		this.shader = ShaderFactory.newBuilder().setName("entities").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
+		this.textureUndefined = TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "undefined.png")).create();
 	}
 
 	@Override
@@ -167,6 +164,6 @@ public class EntitiesRenderer extends IRenderer {
 
 	@Override
 	public void dispose() {
-		shader.dispose();
+		shader.delete();
 	}
 }

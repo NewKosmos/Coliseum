@@ -32,8 +32,8 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL31.*;
 
 public class ParticleRenderer extends IRenderer {
-	private static final MyFile VERTEX_SHADER = new MyFile(Shader.SHADERS_LOC, "particles", "particleVertex.glsl");
-	private static final MyFile FRAGMENT_SHADER = new MyFile(Shader.SHADERS_LOC, "particles", "particleFragment.glsl");
+	private static final MyFile VERTEX_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "particles", "particleVertex.glsl");
+	private static final MyFile FRAGMENT_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "particles", "particleFragment.glsl");
 
 	private static final float[] VERTICES = {-0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, -0.5f};
 	private static final int MAX_INSTANCES = 27500;
@@ -43,18 +43,15 @@ public class ParticleRenderer extends IRenderer {
 	private static final FloatBuffer BUFFER = BufferUtils.createFloatBuffer(MAX_INSTANCES * INSTANCE_DATA_LENGTH);
 	private static final int VBO = FlounderLoader.createEmptyVBO(INSTANCE_DATA_LENGTH * MAX_INSTANCES);
 
-	private Shader shader;
+	private ShaderObject shader;
 	private int pointer;
 	private int rendered;
 
 	public ParticleRenderer() {
-		shader = Shader.newShader("particles").setShaderTypes(
-				new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER),
-				new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)
-		).create();
+		this.shader = ShaderFactory.newBuilder().setName("particles").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 
-		pointer = 0;
-		rendered = 0;
+		this.pointer = 0;
+		this.rendered = 0;
 
 		FlounderLoader.addInstancedAttribute(VAO, VBO, 1, 4, INSTANCE_DATA_LENGTH, 0);
 		FlounderLoader.addInstancedAttribute(VAO, VBO, 2, 4, INSTANCE_DATA_LENGTH, 4);
@@ -196,6 +193,6 @@ public class ParticleRenderer extends IRenderer {
 
 	@Override
 	public void dispose() {
-		shader.dispose();
+		shader.delete();
 	}
 }

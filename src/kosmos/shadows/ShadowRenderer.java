@@ -29,11 +29,12 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
 public class ShadowRenderer extends IRenderer {
-	private static final MyFile VERTEX_SHADER = new MyFile(Shader.SHADERS_LOC, "shadows", "shadowVertex.glsl");
-	private static final MyFile FRAGMENT_SHADER = new MyFile(Shader.SHADERS_LOC, "shadows", "shadowFragment.glsl");
+	private static final MyFile VERTEX_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "shadows", "shadowVertex.glsl");
+	private static final MyFile FRAGMENT_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "shadows", "shadowFragment.glsl");
+
 	public static final int SHADOW_MAP_SIZE = NewKosmos.configMain.getIntWithDefault("shadow_map_size", Math.min(FBO.getMaxFBOSize(), 4096 * 4), ShadowRenderer::getShadowMapSize);
 
-	private Shader shader;
+	private ShaderObject shader;
 
 	private Matrix4f projectionMatrix;
 	private Matrix4f lightViewMatrix;
@@ -47,18 +48,15 @@ public class ShadowRenderer extends IRenderer {
 	 * Creates a new entity renderer.
 	 */
 	public ShadowRenderer() {
-		shader = Shader.newShader("shadows").setShaderTypes(
-				new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER),
-				new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)
-		).create();
+		this.shader = ShaderFactory.newBuilder().setName("shadows").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 
-		projectionMatrix = new Matrix4f();
-		lightViewMatrix = new Matrix4f();
-		projectionViewMatrix = new Matrix4f();
-		offset = createOffset();
+		this.projectionMatrix = new Matrix4f();
+		this.lightViewMatrix = new Matrix4f();
+		this.projectionViewMatrix = new Matrix4f();
+		this.offset = createOffset();
 
-		shadowFBO = FBO.newFBO(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).noColourBuffer().depthBuffer(DepthBufferType.TEXTURE).create();
-		shadowBox = new ShadowBox(lightViewMatrix);
+		this.shadowFBO = FBO.newFBO(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).noColourBuffer().depthBuffer(DepthBufferType.TEXTURE).create();
+		this.shadowBox = new ShadowBox(lightViewMatrix);
 	}
 
 	@Override
@@ -223,7 +221,7 @@ public class ShadowRenderer extends IRenderer {
 
 	@Override
 	public void dispose() {
-		shader.dispose();
+		shader.delete();
 		shadowFBO.delete();
 	}
 }

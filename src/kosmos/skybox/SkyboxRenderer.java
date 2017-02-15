@@ -24,25 +24,21 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
 public class SkyboxRenderer extends IRenderer {
-	private static final MyFile VERTEX_SHADER = new MyFile(Shader.SHADERS_LOC, "skybox", "skyboxVertex.glsl");
-	private static final MyFile FRAGMENT_SHADER = new MyFile(Shader.SHADERS_LOC, "skybox", "skyboxFragment.glsl");
+	private static final MyFile VERTEX_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "skybox", "skyboxVertex.glsl");
+	private static final MyFile FRAGMENT_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "skybox", "skyboxFragment.glsl");
 
 	private static final float SIZE = 300f;
 	private static final float[] VERTICES = {-SIZE, SIZE, -SIZE, -SIZE, -SIZE, -SIZE, SIZE, -SIZE, -SIZE, SIZE, -SIZE, -SIZE, SIZE, SIZE, -SIZE, -SIZE, SIZE, -SIZE, -SIZE, -SIZE, SIZE, -SIZE, -SIZE, -SIZE, -SIZE, SIZE, -SIZE, -SIZE, SIZE, -SIZE, -SIZE, SIZE, SIZE, -SIZE, -SIZE, SIZE, SIZE, -SIZE, -SIZE, SIZE, -SIZE, SIZE, SIZE, SIZE, SIZE, SIZE, SIZE, SIZE, SIZE, SIZE, -SIZE, SIZE, -SIZE, -SIZE, -SIZE, -SIZE, SIZE, -SIZE, SIZE, SIZE, SIZE, SIZE, SIZE, SIZE, SIZE, SIZE, SIZE, -SIZE, SIZE, -SIZE, -SIZE, SIZE, -SIZE, SIZE, -SIZE, SIZE, SIZE, -SIZE, SIZE, SIZE, SIZE, SIZE, SIZE, SIZE, -SIZE, SIZE, SIZE, -SIZE, SIZE, -SIZE, -SIZE, -SIZE, -SIZE, -SIZE, -SIZE, SIZE, SIZE, -SIZE, -SIZE, SIZE, -SIZE, -SIZE, -SIZE, -SIZE, SIZE, SIZE, -SIZE, SIZE};
 
-	private Shader shader;
+	private ShaderObject shader;
 	private int vao;
 
 	public SkyboxRenderer() {
-		shader = Shader.newShader("skybox").setShaderTypes(
-				new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER),
-				new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)
-		).create();
+		this.shader = ShaderFactory.newBuilder().setName("skybox").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 
-		vao = FlounderLoader.createVAO();
+		this.vao = FlounderLoader.createVAO();
 		FlounderLoader.storeDataInVBO(vao, VERTICES, 0, 3);
 		OpenGlUtils.unbindVAO();
-
 	}
 
 	@Override
@@ -78,6 +74,6 @@ public class SkyboxRenderer extends IRenderer {
 
 	@Override
 	public void dispose() {
-		shader.dispose();
+		shader.delete();
 	}
 }

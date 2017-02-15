@@ -27,11 +27,13 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
 public class WaterRenderer extends IRenderer {
-	private static final MyFile VERTEX_SHADER = new MyFile(Shader.SHADERS_LOC, "water", "waterVertex.glsl");
-	private static final MyFile FRAGMENT_SHADER = new MyFile(Shader.SHADERS_LOC, "water", "waterFragment.glsl");
+	private static final MyFile VERTEX_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "water", "waterVertex.glsl");
+	private static final MyFile FRAGMENT_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "water", "waterFragment.glsl");
 
 	private FBO reflectionFBO;
-	private Shader shader;
+
+	private ShaderObject shader;
+
 	private Water water;
 	private float waveTime;
 
@@ -40,10 +42,9 @@ public class WaterRenderer extends IRenderer {
 
 	public WaterRenderer() {
 		this.reflectionFBO = FBO.newFBO(0.3f).disableTextureWrap().depthBuffer(DepthBufferType.RENDER_BUFFER).create();
-		this.shader = Shader.newShader("water").setShaderTypes(
-				new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER),
-				new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)
-		).create();
+
+		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
+
 		this.water = new Water(new Vector3f(0.0f, -0.4f, 0.0f), new Vector3f(), 1.0f);
 		this.waveTime = 0.0f;
 
@@ -166,7 +167,7 @@ public class WaterRenderer extends IRenderer {
 	@Override
 	public void dispose() {
 		reflectionFBO.delete();
-		shader.dispose();
+		shader.delete();
 		water.delete();
 	}
 }
