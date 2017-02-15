@@ -14,7 +14,7 @@ import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.resources.*;
 
-public class DevMain extends FlounderFramework {
+public class DevMain extends Framework {
 	public static void main(String[] args) {
 		DevMain devMain = new DevMain();
 		devMain.run();

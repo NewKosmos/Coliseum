@@ -19,7 +19,7 @@ import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.camera.*;
 
-public class NewKosmos extends FlounderFramework {
+public class NewKosmos extends Framework {
 	public static void main(String[] args) {
 		NewKosmos newKosmos = new NewKosmos();
 		newKosmos.run();
@@ -31,7 +31,7 @@ public class NewKosmos extends FlounderFramework {
 	public NewKosmos() {
 		super("kosmos", -1, new KosmosInterface(), new KosmosRenderer(), new CameraIsographic(), new PlayerBasic(), new KosmosGuis());
 
-		configMain = new Config(new MyFile(FlounderFramework.getRoamingFolder(), "configs", "settings.conf"));
+		configMain = new Config(new MyFile(Framework.getRoamingFolder(), "configs", "settings.conf"));
 
 		FlounderDisplay.setup(configMain.getIntWithDefault("width", 1080, FlounderDisplay::getWindowWidth),
 				configMain.getIntWithDefault("height", 720, FlounderDisplay::getWindowHeight),

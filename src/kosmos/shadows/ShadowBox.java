@@ -52,7 +52,7 @@ public class ShadowBox {
 	 *
 	 * @param camera The camera object to be used when calculating the shadow boxes size.
 	 */
-	protected void update(ICamera camera) {
+	protected void update(Camera camera) {
 		updateWidthsAndHeights(camera);
 
 		Matrix4f rotation = calculateCameraRotationMatrix(camera);
@@ -108,7 +108,7 @@ public class ShadowBox {
 	 *
 	 * @param camera The camera object.
 	 */
-	private void updateWidthsAndHeights(ICamera camera) {
+	private void updateWidthsAndHeights(Camera camera) {
 		farWidth = (float) (shadowDistance * Math.tan(Math.toRadians(camera.getFOV())));
 		nearWidth = (float) (camera.getNearPlane() * Math.tan(Math.toRadians(camera.getFOV())));
 		farHeight = farWidth / FlounderDisplay.getAspectRatio();
@@ -120,7 +120,7 @@ public class ShadowBox {
 	 *
 	 * @return The rotation of the camera represented as a matrix.
 	 */
-	private Matrix4f calculateCameraRotationMatrix(ICamera camera) {
+	private Matrix4f calculateCameraRotationMatrix(Camera camera) {
 		Matrix4f rotation = new Matrix4f();
 		Matrix4f.rotate(rotation, new Vector3f(0.0f, 1.0f, 0.0f), (float) Math.toRadians(camera.getRotation().y), rotation);
 		Matrix4f.rotate(rotation, new Vector3f(1.0f, 0.0f, 0.0f), (float) Math.toRadians(-camera.getRotation().x), rotation);

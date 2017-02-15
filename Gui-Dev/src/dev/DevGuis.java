@@ -18,7 +18,7 @@ import flounder.profiling.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class DevGuis extends IGuiMaster {
+public class DevGuis extends GuiMaster {
 	private MasterMenu masterMenu;
 	private MasterOverlay masterOverlay;
 

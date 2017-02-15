@@ -18,7 +18,7 @@ import kosmos.chunks.*;
 import kosmos.entities.instances.*;
 import kosmos.particles.*;
 
-public class KosmosWorld extends IModule {
+public class KosmosWorld extends Module {
 	private static final KosmosWorld INSTANCE = new KosmosWorld();
 	public static final String PROFILE_TAB_NAME = "Kosmos World";
 
@@ -68,7 +68,7 @@ public class KosmosWorld extends IModule {
 	}
 
 	@Override
-	public IModule getInstance() {
+	public Module getInstance() {
 		return INSTANCE;
 	}
 

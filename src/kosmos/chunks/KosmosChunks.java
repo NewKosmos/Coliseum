@@ -22,7 +22,7 @@ import kosmos.entities.instances.*;
 
 import java.util.*;
 
-public class KosmosChunks extends IModule {
+public class KosmosChunks extends Module {
 	private static final KosmosChunks INSTANCE = new KosmosChunks();
 	public static final String PROFILE_TAB_NAME = "Kosmos Chunks";
 
@@ -104,7 +104,7 @@ public class KosmosChunks extends IModule {
 	}
 
 	@Override
-	public IModule getInstance() {
+	public Module getInstance() {
 		return INSTANCE;
 	}
 

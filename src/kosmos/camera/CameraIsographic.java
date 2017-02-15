@@ -21,7 +21,7 @@ import flounder.space.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class CameraIsographic extends ICamera {
+public class CameraIsographic extends Camera {
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 700.0f;
 	private static final float FIELD_OF_VIEW = 45.0f;
@@ -114,7 +114,7 @@ public class CameraIsographic extends ICamera {
 	}
 
 	@Override
-	public void update(IPlayer player) {
+	public void update(Player player) {
 		calculateHorizontalAngle();
 		calculateVerticalAngle();
 		calculateZoom();
@@ -142,7 +142,7 @@ public class CameraIsographic extends ICamera {
 	}
 
 	private void calculateHorizontalAngle() {
-		float delta = FlounderFramework.getDelta();
+		float delta = Framework.getDelta();
 		float angleChange = 0.0f;
 
 		if (FlounderMouse.getMouse(toggleMouseMoveKey)) {
@@ -165,7 +165,7 @@ public class CameraIsographic extends ICamera {
 	}
 
 	private void calculateVerticalAngle() {
-		float delta = FlounderFramework.getDelta();
+		float delta = Framework.getDelta();
 		float angleChange = 0.0f;
 
 		if (FlounderMouse.getMouse(toggleMouseMoveKey)) {
@@ -209,7 +209,7 @@ public class CameraIsographic extends ICamera {
 
 	private void updateActualZoom() {
 		float offset = targetZoom - actualDistanceFromPoint;
-		float change = offset * FlounderFramework.getDelta() * ZOOM_AGILITY;
+		float change = offset * Framework.getDelta() * ZOOM_AGILITY;
 		actualDistanceFromPoint += change;
 	}
 
@@ -224,7 +224,7 @@ public class CameraIsographic extends ICamera {
 			}
 		}
 
-		float change = offset * FlounderFramework.getDelta() * ROTATE_AGILITY;
+		float change = offset * Framework.getDelta() * ROTATE_AGILITY;
 		angleAroundPlayer += change;
 
 		if (angleAroundPlayer >= Maths.DEGREES_IN_HALF_CIRCLE) {
@@ -236,7 +236,7 @@ public class CameraIsographic extends ICamera {
 
 	private void updatePitchAngle() {
 		float offset = targetElevation - angleOfElevation;
-		float change = offset * FlounderFramework.getDelta() * PITCH_AGILITY;
+		float change = offset * Framework.getDelta() * PITCH_AGILITY;
 		angleOfElevation += change;
 	}
 

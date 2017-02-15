@@ -13,11 +13,11 @@ import flounder.devices.*;
 import flounder.events.*;
 import flounder.framework.*;
 import flounder.inputs.*;
-import flounder.standard.*;
+import flounder.standards.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class DevInterface extends IStandard {
+public class DevInterface extends Standard {
 	private KeyButton screenshot;
 	private KeyButton closeWindow;
 
@@ -50,7 +50,7 @@ public class DevInterface extends IStandard {
 
 			@Override
 			public void onEvent() {
-				FlounderFramework.requestClose();
+				Framework.requestClose();
 			}
 		});
 	}

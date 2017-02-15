@@ -95,15 +95,15 @@ public class Particle implements ISpatialObject, Comparable<Particle> {
 	 * Updates the particle.
 	 */
 	protected void update() {
-		velocity.y += -10.0f * gravityEffect * FlounderFramework.getDelta();
+		velocity.y += -10.0f * gravityEffect * Framework.getDelta();
 		change.set(velocity);
-		change.scale(FlounderFramework.getDelta());
+		change.scale(Framework.getDelta());
 
 		Vector3f.add(change, position, position);
-		elapsedTime += FlounderFramework.getDelta();
+		elapsedTime += Framework.getDelta();
 
 		if (elapsedTime > lifeLength) {
-			transparency += 1.0f * FlounderFramework.getDelta();
+			transparency += 1.0f * Framework.getDelta();
 		}
 
 		if (!isAlive() || FlounderCamera.getCamera() == null) {

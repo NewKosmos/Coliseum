@@ -62,7 +62,7 @@ public class ShadowRenderer extends IRenderer {
 	}
 
 	@Override
-	public void renderObjects(Vector4f clipPlane, ICamera camera) {
+	public void renderObjects(Vector4f clipPlane, Camera camera) {
 		if (!shader.isLoaded() || FlounderEntities.getEntities() == null) {
 			return;
 		}
@@ -76,7 +76,7 @@ public class ShadowRenderer extends IRenderer {
 		endRendering();
 	}
 
-	private void prepareRendering(Vector4f clipPlane, ICamera camera) {
+	private void prepareRendering(Vector4f clipPlane, Camera camera) {
 		shadowBox.update(camera);
 		updateOrthographicProjectionMatrix(shadowBox.getWidth(), shadowBox.getHeight(), shadowBox.getLength());
 		updateLightViewMatrix(KosmosWorld.getSkyCycle().getLightDirection(), shadowBox.getCenter());

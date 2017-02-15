@@ -18,12 +18,12 @@ import flounder.inputs.*;
 import flounder.logger.*;
 import flounder.resources.*;
 import flounder.sounds.*;
-import flounder.standard.*;
+import flounder.standards.*;
 import kosmos.world.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class KosmosInterface extends IStandard {
+public class KosmosInterface extends Standard {
 	private Playlist gamePlaylist;
 
 	private KeyButton screenshot;
@@ -91,7 +91,7 @@ public class KosmosInterface extends IStandard {
 
 			@Override
 			public void onEvent() {
-				FlounderFramework.requestClose();
+				Framework.requestClose();
 			}
 		});
 

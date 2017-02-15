@@ -29,7 +29,7 @@ import java.util.*;
 /**
  * A manager that manages particles.
  */
-public class KosmosParticles extends IModule {
+public class KosmosParticles extends Module {
 	private static final KosmosParticles INSTANCE = new KosmosParticles();
 	public static final String PROFILE_TAB_NAME = "Kosmos Particles";
 
@@ -282,7 +282,7 @@ public class KosmosParticles extends IModule {
 	}
 
 	@Override
-	public IModule getInstance() {
+	public Module getInstance() {
 		return INSTANCE;
 	}
 

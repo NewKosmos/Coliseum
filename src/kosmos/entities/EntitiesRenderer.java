@@ -51,7 +51,7 @@ public class EntitiesRenderer extends IRenderer {
 	}
 
 	@Override
-	public void renderObjects(Vector4f clipPlane, ICamera camera) {
+	public void renderObjects(Vector4f clipPlane, Camera camera) {
 		if (!shader.isLoaded() || FlounderEntities.getEntities() == null) {
 			return;
 		}
@@ -65,7 +65,7 @@ public class EntitiesRenderer extends IRenderer {
 		endRendering();
 	}
 
-	private void prepareRendering(Vector4f clipPlane, ICamera camera) {
+	private void prepareRendering(Vector4f clipPlane, Camera camera) {
 		shader.start();
 		shader.getUniformMat4("projectionMatrix").loadMat4(camera.getProjectionMatrix());
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());

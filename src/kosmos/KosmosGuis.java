@@ -19,7 +19,7 @@ import kosmos.uis.*;
 import kosmos.uis.console.*;
 import org.lwjgl.glfw.*;
 
-public class KosmosGuis extends IGuiMaster {
+public class KosmosGuis extends GuiMaster {
 	private MasterOverlay masterOverlay;
 
 	private ConsoleUi consoleUi;

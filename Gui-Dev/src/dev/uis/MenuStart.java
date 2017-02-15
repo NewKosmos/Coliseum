@@ -99,12 +99,12 @@ public class MenuStart extends GuiComponent {
 
 	private void createQuitButton(float yPos) {
 		GuiTextButton button = MasterSlider.createButton("Quit", yPos, this);
-		button.addLeftListener(FlounderFramework::requestClose);
+		button.addLeftListener(Framework::requestClose);
 	}
 
 	@Override
 	protected void updateSelf() {
-		Vector2f.rotate(PARALAX_START, paralaxDriver.update(FlounderFramework.getDelta()), paralaxPosition);
+		Vector2f.rotate(PARALAX_START, paralaxDriver.update(Framework.getDelta()), paralaxPosition);
 
 		float extraWidth = 0.15f;
 		float extraHeight = 0.15f;

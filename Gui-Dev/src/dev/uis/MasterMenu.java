@@ -74,7 +74,7 @@ public class MasterMenu extends GuiComponent {
 
 	@Override
 	protected void updateSelf() {
-		backgroundAlpha = slideDriver.update(FlounderFramework.getDelta());
+		backgroundAlpha = slideDriver.update(Framework.getDelta());
 
 		if (!displayed && !masterSlider.isShown() && backgroundAlpha == 0.0f) {
 			show(false);

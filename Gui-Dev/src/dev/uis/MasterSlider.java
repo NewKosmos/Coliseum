@@ -57,7 +57,7 @@ public class MasterSlider extends GuiComponent {
 		addComponent(menuStart, 0.0f, 0.0f, 1.0f, 1.0f);
 		addComponent(menuPause, 0.0f, 0.0f, 1.0f, 1.0f);
 
-		//	if (FlounderFramework.isRunningFromJar()) {
+		//	if (Framework.isRunningFromJar()) {
 		this.menuActive = menuStart;
 		//	} else {
 		//		this.menuActive = menuPause;
@@ -88,8 +88,8 @@ public class MasterSlider extends GuiComponent {
 
 	@Override
 	protected void updateSelf() {
-		float mainValue = mainDriver.update(FlounderFramework.getDelta());
-		float value = secondaryDriver.update(FlounderFramework.getDelta());
+		float mainValue = mainDriver.update(Framework.getDelta());
+		float value = secondaryDriver.update(Framework.getDelta());
 
 		menuActive.setRelativeX(value);
 		menuActive.show(Math.abs(value) <= SLIDE_SCALAR);
@@ -157,7 +157,7 @@ public class MasterSlider extends GuiComponent {
 	}
 
 	public void setNewSecondaryScreen(GuiComponent secondScreen, boolean slideForwards) {
-		if (newSecondaryScreen == null && secondaryDriver.update(FlounderFramework.getDelta()) == secondaryDepth) {
+		if (newSecondaryScreen == null && secondaryDriver.update(Framework.getDelta()) == secondaryDepth) {
 			secondaryDepth += slideForwards ? SLIDE_SCALAR : -SLIDE_SCALAR;
 			slidingForwards = slideForwards;
 			newSecondaryScreen = secondScreen;

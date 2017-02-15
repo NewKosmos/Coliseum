@@ -51,7 +51,7 @@ public class WaterRenderer extends IRenderer {
 		this.enableReflections = true;
 	}
 
-	private void prepareRendering(Vector4f clipPlane, ICamera camera) {
+	private void prepareRendering(Vector4f clipPlane, Camera camera) {
 		updateWaveTime();
 
 		shader.start();
@@ -91,7 +91,7 @@ public class WaterRenderer extends IRenderer {
 	}
 
 	@Override
-	public void renderObjects(Vector4f clipPlane, ICamera camera) {
+	public void renderObjects(Vector4f clipPlane, Camera camera) {
 		if (!shader.isLoaded() || !water.isLoaded()) {
 			return;
 		}
@@ -130,7 +130,7 @@ public class WaterRenderer extends IRenderer {
 	}
 
 	private void updateWaveTime() {
-		waveTime += FlounderFramework.getDeltaRender();
+		waveTime += Framework.getDeltaRender();
 		waveTime %= Water.WAVE_SPEED;
 	}
 

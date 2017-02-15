@@ -159,7 +159,7 @@ public class ParticleSystem {
 			return;
 		}
 
-		float delta = FlounderFramework.getDelta();
+		float delta = Framework.getDelta();
 		float particlesToCreate = this.pps * delta;
 		int count = (int) Math.floor(particlesToCreate);
 		float partialParticle = particlesToCreate % 1.0f;

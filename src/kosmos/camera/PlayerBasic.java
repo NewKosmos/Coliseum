@@ -16,7 +16,7 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import org.lwjgl.glfw.*;
 
-public class PlayerBasic extends IPlayer {
+public class PlayerBasic extends Player {
 	private static final float RUN_SPEED = 10.0f;
 	private static final float TURN_SPEED = 100.0f;
 
@@ -52,10 +52,10 @@ public class PlayerBasic extends IPlayer {
 	public void update() {
 		currentSpeed = -RUN_SPEED * Maths.deadband(0.05f, inputForward.getAmount());
 		currentTurnSpeed = -TURN_SPEED * Maths.deadband(0.05f, inputTurn.getAmount());
-		float distance = currentSpeed * FlounderFramework.getDelta();
+		float distance = currentSpeed * Framework.getDelta();
 		float dx = (float) (distance * Math.sin(Math.toRadians(rotation.y)));
 		float dz = (float) (distance * Math.cos(Math.toRadians(rotation.y)));
-		float ry = currentTurnSpeed * FlounderFramework.getDelta();
+		float ry = currentTurnSpeed * Framework.getDelta();
 
 		position.x += dx;
 		position.z += dz;

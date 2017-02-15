@@ -35,7 +35,7 @@ import org.lwjgl.glfw.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
 
-public class KosmosRenderer extends IRendererMaster {
+public class KosmosRenderer extends RendererMaster {
 	private static final Vector4f POSITIVE_INFINITY = new Vector4f(0.0f, 1.0f, 0.0f, Float.POSITIVE_INFINITY);
 	private static final Colour CLEAR_COLOUR = new Colour(0.0f, 0.0f, 0.0f);
 
@@ -151,7 +151,7 @@ public class KosmosRenderer extends IRendererMaster {
 
 	private void renderScene(Vector4f clipPlane, Colour clearColour, boolean waterPass) {
 		/* Clear and update. */
-		ICamera camera = FlounderCamera.getCamera();
+		Camera camera = FlounderCamera.getCamera();
 		OpenGlUtils.prepareNewRenderParse(clearColour);
 
 		skyboxRenderer.render(clipPlane, camera);

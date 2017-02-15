@@ -66,7 +66,7 @@ public class ParticleRenderer extends IRenderer {
 	}
 
 	@Override
-	public void renderObjects(Vector4f clipPlane, ICamera camera) {
+	public void renderObjects(Vector4f clipPlane, Camera camera) {
 		if (!shader.isLoaded() || KosmosParticles.getParticles() == null) {
 			return;
 		}
@@ -106,7 +106,7 @@ public class ParticleRenderer extends IRenderer {
 		endRendering();
 	}
 
-	private void prepareRendering(Vector4f clipPlane, ICamera camera) {
+	private void prepareRendering(Vector4f clipPlane, Camera camera) {
 		shader.start();
 		shader.getUniformMat4("projectionMatrix").loadMat4(camera.getProjectionMatrix());
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
@@ -137,7 +137,7 @@ public class ParticleRenderer extends IRenderer {
 		OpenGlUtils.unbindVAO(0, 1, 2, 3, 4, 5, 6, 7);
 	}
 
-	private void prepareInstance(Particle particle, ICamera camera, float[] vboData) {
+	private void prepareInstance(Particle particle, Camera camera, float[] vboData) {
 		if (rendered >= MAX_INSTANCES) {
 			FlounderLogger.error("Particles overflow: " + rendered);
 			return;

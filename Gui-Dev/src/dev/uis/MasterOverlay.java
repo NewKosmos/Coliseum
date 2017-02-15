@@ -58,11 +58,11 @@ public class MasterOverlay extends GuiComponent {
 
 	@Override
 	protected void updateSelf() {
-		float mainValue = mainDriver.update(FlounderFramework.getDelta());
+		float mainValue = mainDriver.update(Framework.getDelta());
 
 		if (updateText) {
-			fpsText.setText("FPS: " + Maths.roundToPlace(1.0f / FlounderFramework.getDeltaRender(), 1));
-			upsText.setText("UPS: " + Maths.roundToPlace(1.0f / FlounderFramework.getDelta(), 1));
+			fpsText.setText("FPS: " + Maths.roundToPlace(1.0f / Framework.getDeltaRender(), 1));
+			upsText.setText("UPS: " + Maths.roundToPlace(1.0f / Framework.getDelta(), 1));
 			updateText = false;
 		}
 

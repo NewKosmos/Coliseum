@@ -46,7 +46,7 @@ public class SkyboxRenderer extends IRenderer {
 	}
 
 	@Override
-	public void renderObjects(Vector4f clipPlane, ICamera camera) {
+	public void renderObjects(Vector4f clipPlane, Camera camera) {
 		if (!shader.isLoaded()) {
 			return;
 		}

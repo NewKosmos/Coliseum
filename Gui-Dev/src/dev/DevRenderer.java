@@ -14,7 +14,7 @@ import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.renderer.*;
 
-public class DevRenderer extends IRendererMaster {
+public class DevRenderer extends RendererMaster {
 	private GuisRenderer guisRenderer;
 	private FontRenderer fontRenderer;
 

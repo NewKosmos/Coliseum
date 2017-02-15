@@ -108,14 +108,14 @@ public class ConsoleUi extends GuiComponent {
 
 		if (leftClick.isDown() && !windowLocked) {
 			if (cursorGrabbed) {
-				consolePosition.x -= FlounderMouse.getDeltaX() * FlounderDisplay.getAspectRatio() * (1.0f / FlounderFramework.getDelta());
-				consolePosition.y -= FlounderMouse.getDeltaY() * (1.0f / FlounderFramework.getDelta());
+				consolePosition.x -= FlounderMouse.getDeltaX() * FlounderDisplay.getAspectRatio() * (1.0f / Framework.getDelta());
+				consolePosition.y -= FlounderMouse.getDeltaY() * (1.0f / Framework.getDelta());
 				cursorGrabbed = true;
 			}
 		} else if (rightClick.isDown() && !windowLocked) {
 			if (cursorGrabbed) {
-				consoleSize.x -= FlounderMouse.getDeltaX() * FlounderDisplay.getAspectRatio() * (1.0f / FlounderFramework.getDelta());
-				consoleSize.y -= FlounderMouse.getDeltaY() * (1.0f / FlounderFramework.getDelta());
+				consoleSize.x -= FlounderMouse.getDeltaX() * FlounderDisplay.getAspectRatio() * (1.0f / Framework.getDelta());
+				consoleSize.y -= FlounderMouse.getDeltaY() * (1.0f / Framework.getDelta());
 				consoleSize.x = Maths.clamp(consoleSize.x, 4.0f * TOP_BUTTON_SIZE, Float.POSITIVE_INFINITY);
 				consoleSize.y = Maths.clamp(consoleSize.y, TOP_BAR_HEIGHT, Float.POSITIVE_INFINITY);
 				cursorGrabbed = true;
