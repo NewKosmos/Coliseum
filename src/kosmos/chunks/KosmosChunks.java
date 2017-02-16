@@ -37,7 +37,7 @@ public class KosmosChunks extends Module {
 		this.chunks = new ArrayList<>();
 
 		// new InstanceDerpWalk(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
-		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.5f, 0.0f), new Vector3f());
+		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) Math.sqrt(2.0) * 0.5f * ChunkGenerator.CHUNK_SCALE, 0.0f), new Vector3f());
 		// new InstanceRobit(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
 
 		for (int x = -2; x <= 2; x++) {
@@ -62,15 +62,22 @@ public class KosmosChunks extends Module {
 		Chunk parent = new Chunk(FlounderEntities.getEntities(), new Vector2f(0.0f, 0.0f), Tile.TILE_GRASS.getTexture());
 		chunks.add(parent);
 
-		for (int i = 0; i < 6; i++) {
-			double θ = (Math.PI / 3.0) * (double) i;
-			double r = 9.0;
+		float w = (float) Math.sqrt(3.0) * ChunkGenerator.CHUNK_SCALE * (ChunkGenerator.CHUNK_RADIUS - 0.5f);
+		double t = 40.0;
+		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(
+				w * (float) Math.cos(Math.toRadians(t)),
+				w * (float) Math.sin(Math.toRadians(t))
+		), Tile.TILE_SNOW.getTexture()));
+
+		/*for (int i = 0; i < 6; i++) {
+			double θ = Math.toRadians(2.0 * 34.71 * i);
+			double r = ChunkGenerator.CHUNK_WORLD_SIZE;
 			Vector2f position = new Vector2f();
 			position.x = (float) (r * Math.cos(θ));
 			position.y = (float) (r * Math.sin(θ));
 			Vector2f.add(position, parent.getPosition().toVector2f(), position);
 			chunks.add(new Chunk(FlounderEntities.getEntities(), position, Tile.TILE_SNOW.getTexture()));
-		}
+		}*/
 
 		//chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f((float) Math.cos(Math.toRadians(30.0f)) * 9.0f, (float) Math.sin(Math.toRadians(30.0f)) * 9.0f), Tile.TILE_SNOW.getTexture()));
 
