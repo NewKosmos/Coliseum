@@ -12,6 +12,7 @@ package kosmos.chunks;
 import flounder.entities.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
+import flounder.noise.*;
 import flounder.physics.bounding.*;
 import flounder.space.*;
 import flounder.textures.*;
@@ -27,6 +28,16 @@ import java.util.*;
  * http://stackoverflow.com/questions/2459402/hexagonal-grid-coordinates-to-pixel-coordinates
  */
 public class Chunk extends Entity {
+	protected static final float[][] GENERATE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
+
+	public static final int HEXAGON_SIDE_COUNT = 6; // The number of sides for each figure (hexagon).
+	public static final float HEXAGON_SIDE_LENGTH = 2.0f; //  Each tile can be broken into equilateral triangles with sides of length.
+
+	public static final int CHUNK_RADIUS = 21; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
+	public static final float CHUNK_SCALE = 4.0f; // The model scale size used for each chunk.
+
+	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * CHUNK_SCALE * CHUNK_RADIUS; // The overall world radius footprint per chunk.
+
 	private Map<Tile, List<Vector3f>> tiles;
 	private ChunkMesh chunkMesh;
 	private boolean tilesChanged;
@@ -39,12 +50,46 @@ public class Chunk extends Entity {
 		this.tilesChanged = true;
 		this.darkness = 0.0f;
 
-		new ComponentModel(this, null, ChunkGenerator.CHUNK_SCALE, texture, 0);
+		new ComponentModel(this, null, CHUNK_SCALE, texture, 0);
 		//	new ComponentCollider(this);
 		//	new ComponentCollision(this);
 
-		ChunkGenerator.generate(this);
+		generate(this);
 		FlounderLogger.log("Creating chunk at: " + position.x + ", " + position.y + ".");
+	}
+
+	protected static void generate(Chunk chunk) {
+		for (int i = 0; i < CHUNK_RADIUS; i++) {
+			int shapesOnEdge = i;
+			float r = 0;
+			float g = -i;
+			float b = i;
+			generateTile(chunk, Vector2f.add(chunk.getPosition().toVector2f(), Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null), null));
+
+			for (int j = 0; j < HEXAGON_SIDE_COUNT; j++) {
+				if (j == HEXAGON_SIDE_COUNT - 1) {
+					shapesOnEdge = i - 1;
+				}
+
+				for (int w = 0; w < shapesOnEdge; w++) {
+					// r + g + b = 0
+					r = r + GENERATE_DELTAS[j][0];
+					g = g + GENERATE_DELTAS[j][1];
+					b = b + GENERATE_DELTAS[j][2];
+					generateTile(chunk, Vector2f.add(chunk.getPosition().toVector2f(), Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null), null));
+				}
+			}
+		}
+	}
+
+	protected static void generateTile(Chunk chunk, Vector2f position) {
+		PerlinNoise noise = new PerlinNoise(69);
+
+		float height = noise.noise2(position.x / 66.6f, position.y / 66.6f) * 10.0f;
+
+		for (int i = 0; i < Math.round(Math.abs(height)); i++) {
+			chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
+		}
 	}
 
 	public void update(Vector3f playerPosition) {
@@ -114,26 +159,5 @@ public class Chunk extends Entity {
 
 	public float getDarkness() {
 		return darkness;
-	}
-
-	public static Vector3f hexagonSpace(Vector2f position, float length, Vector3f destination) {
-		if (destination == null) {
-			destination = new Vector3f();
-		}
-
-		destination.x = 0.0f;
-		destination.y = 0.0f;
-		destination.z = 0.0f;
-		return destination;
-	}
-
-	public static Vector2f worldSpace2D(Vector3f position, float length, Vector2f destination) {
-		if (destination == null) {
-			destination = new Vector2f();
-		}
-
-		destination.x = position.x * length;
-		destination.y = position.y * length;
-		return destination;
 	}
 }

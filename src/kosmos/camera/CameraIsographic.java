@@ -82,14 +82,14 @@ public class CameraIsographic extends Camera {
 		this.viewMatrix = new Matrix4f();
 		this.projectionMatrix = new Matrix4f();
 
-		this.angleOfElevation = 0.0f;
+		this.angleOfElevation = (float) Math.PI / 7.0f;
 		this.angleAroundPlayer = 0.0f;
 
 		this.targetPosition = new Vector3f();
 		this.targetRotation = new Vector3f();
 		this.targetZoom = NORMAL_ZOOM;
-		this.targetElevation = 0.0f;
-		this.targetRotationAngle = 0.0f;
+		this.targetElevation = angleOfElevation;
+		this.targetRotationAngle = angleAroundPlayer;
 
 		this.actualDistanceFromPoint = NORMAL_ZOOM;
 		this.horizontalDistanceFromFocus = 0.0f;
@@ -121,12 +121,12 @@ public class CameraIsographic extends Camera {
 
 		if (player != null) {
 			this.targetPosition.set(player.getPosition());
-			this.targetRotation.set(player.getRotation());
+			//this.targetRotation.set(player.getRotation());
 		}
 
 		updateActualZoom();
 		updateHorizontalAngle();
-		updatePitchAngle();
+		//	updatePitchAngle();
 		calculateDistances();
 		calculatePosition();
 

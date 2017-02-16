@@ -18,7 +18,7 @@ import org.lwjgl.glfw.*;
 
 public class PlayerBasic extends Player {
 	private static final float RUN_SPEED = 10.0f;
-	private static final float TURN_SPEED = 100.0f;
+	private static final float TURN_SPEED = 250.0f;
 
 	private Vector3f position;
 	private Vector3f rotation;

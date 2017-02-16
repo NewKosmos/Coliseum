@@ -13,6 +13,7 @@ import flounder.camera.*;
 import flounder.devices.*;
 import flounder.helpers.*;
 import flounder.loaders.*;
+import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
@@ -32,11 +33,13 @@ public class SkyboxRenderer extends Renderer {
 
 	private ShaderObject shader;
 	private int vao;
+	private Matrix4f viewMatrix;
 
 	public SkyboxRenderer() {
 		this.shader = ShaderFactory.newBuilder().setName("skybox").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 
 		this.vao = FlounderLoader.createVAO();
+		this.viewMatrix = new Matrix4f();
 		FlounderLoader.storeDataInVBO(vao, VERTICES, 0, 3);
 		OpenGlUtils.unbindVAO();
 	}
@@ -47,9 +50,11 @@ public class SkyboxRenderer extends Renderer {
 			return;
 		}
 
+		updateViewMatrix(camera);
+
 		shader.start();
 		shader.getUniformMat4("projectionMatrix").loadMat4(camera.getProjectionMatrix());
-		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
+		shader.getUniformMat4("viewMatrix").loadMat4(viewMatrix);
 
 		shader.getUniformVec4("colour1").loadVec4(KosmosWorld.getSkyCycle().getSkyColour());
 		shader.getUniformVec4("colour2").loadVec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -65,6 +70,15 @@ public class SkyboxRenderer extends Renderer {
 		glDrawArrays(GL_TRIANGLES, 0, VERTICES.length); // Renders the skybox.
 
 		OpenGlUtils.unbindVAO(0);
+	}
+
+	private void updateViewMatrix(Camera camera) {
+		viewMatrix.setIdentity();
+		viewMatrix.set(camera.getViewMatrix());
+		viewMatrix.m30 = 0.0f;
+		viewMatrix.m31 = 0.0f;
+		viewMatrix.m32 = 0.0f;
+		Matrix4f.rotate(viewMatrix, new Vector3f(0.0f, 1.0f, 0.0f), 0.0f, viewMatrix);
 	}
 
 	@Override
