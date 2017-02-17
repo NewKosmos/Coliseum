@@ -31,15 +31,9 @@ import java.util.*;
 public class Chunk extends Entity {
 	protected static final float[][] GENERATE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
 
-	public static final int HEXAGON_SIDE_COUNT = 6; // The number of sides for each figure (hexagon).
 	public static final double HEXAGON_SIDE_LENGTH = 2.0; //  Each tile can be broken into equilateral triangles with sides of length.
 
 	public static final int CHUNK_RADIUS = 21; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
-	public static final double CHUNK_SCALE = 4.0; // The model scale size used for each chunk.
-
-	// MATH SUCKS!
-	public static final double CHUNK_WORLD_WIDTH = CHUNK_SCALE * (Math.sqrt(3.0) * 0.5 * HEXAGON_SIDE_LENGTH * (CHUNK_RADIUS - 0.5)); // The overall world width footprint per chunk.
-	public static final double CHUNK_WORLD_DEPTH = CHUNK_SCALE * (((3.0 / 2.0) * 0.5 * HEXAGON_SIDE_LENGTH * (CHUNK_RADIUS - 0.5)) + 0.25); // The overall world depth footprint per chunk.
 
 	private Map<Tile, List<Vector3f>> tiles;
 	private ChunkMesh chunkMesh;
@@ -53,7 +47,7 @@ public class Chunk extends Entity {
 		this.tilesChanged = true;
 		this.darkness = 0.0f;
 
-		new ComponentModel(this, null, (float) CHUNK_SCALE, texture, 0);
+		new ComponentModel(this, null, 1.0f, texture, 0);
 		//	new ComponentCollider(this);
 		//	new ComponentCollision(this);
 
@@ -69,8 +63,8 @@ public class Chunk extends Entity {
 			float b = i;
 			generateTile(chunk, Vector2f.add(chunk.getPosition().toVector2f(), Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null), null));
 
-			for (int j = 0; j < HEXAGON_SIDE_COUNT; j++) {
-				if (j == HEXAGON_SIDE_COUNT - 1) {
+			for (int j = 0; j < 6; j++) {
+				if (j == 5) {
 					shapesOnEdge = i - 1;
 				}
 
@@ -100,9 +94,9 @@ public class Chunk extends Entity {
 					case 1:
 						new InstanceTreePine(FlounderEntities.getEntities(),
 								new Vector3f(
-										(float) (position.x * 0.5 * CHUNK_SCALE),
-										(float) ((5.25 * 0.25) + (i * Math.sqrt(2.0)) * 0.5 * CHUNK_SCALE),
-										(float) (position.y * 0.5 * CHUNK_SCALE)
+										(float) (position.x * 0.5),
+										(float) ((1.05 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
+										(float) (position.y * 0.5)
 								),
 								new Vector3f(0.0f, rotation, 0.0f)
 						);
@@ -112,6 +106,7 @@ public class Chunk extends Entity {
 				}
 			}
 		}
+		//chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, 0.0f, position.y));
 	}
 
 	public void update(Vector3f playerPosition) {
@@ -119,12 +114,6 @@ public class Chunk extends Entity {
 		if (tilesChanged || chunkMesh.getModel() == null) {
 			chunkMesh.rebuild();
 			tilesChanged = false;
-		}
-
-		if (chunkMesh.getAABB() != null) {
-
-			FlounderLogger.log("width: " + chunkMesh.getAABB().getWidth() + " : " + CHUNK_WORLD_WIDTH);
-			FlounderLogger.log("depth: " + chunkMesh.getAABB().getDepth() + " : " + CHUNK_WORLD_DEPTH);
 		}
 
 		// Updates the darkness of this chunk.

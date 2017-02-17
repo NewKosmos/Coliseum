@@ -36,21 +36,19 @@ public class KosmosChunks extends Module {
 	public void init() {
 		this.chunks = new ArrayList<>();
 
-		// new InstanceDerpWalk(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
-		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25 * Chunk.CHUNK_SCALE), 0.0f), new Vector3f());
-		// new InstanceRobit(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
+		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25), 0.0f), new Vector3f());
 
 		for (int x = -2; x <= 2; x++) {
 			for (int y = -2; y <= 2; y++) {
 				new InstanceCloud(FlounderEntities.getEntities(), new Vector3f(
-						(x * 55.0f) + Maths.randomInRange(-20.0f, 20.0f),
-						24.0f + Maths.randomInRange(-1.25f, 6.05f),
-						(y * 55.0f) + Maths.randomInRange(-20.0f, 20.0f)
+						(x * 11.0f) + Maths.randomInRange(-4.0f, 4.0f),
+						5.8f + Maths.randomInRange(-0.25f, 1.21f),
+						(y * 11.0f) + Maths.randomInRange(-4.0f, 4.0f)
 				), new Vector3f(
 						0.0f,
 						Maths.randomInRange(0.0f, 360.0f),
 						Maths.randomInRange(0.0f, 180.0f)
-				), Maths.randomInRange(2.0f, 4.5f));
+				), Maths.randomInRange(1.0f, 2.25f));
 			}
 		}
 
@@ -61,8 +59,6 @@ public class KosmosChunks extends Module {
 
 		Chunk parent = new Chunk(FlounderEntities.getEntities(), new Vector2f(0.0f, 0.0f), Tile.TILE_GRASS.getTexture());
 		chunks.add(parent);
-
-
 	}
 
 	@Override

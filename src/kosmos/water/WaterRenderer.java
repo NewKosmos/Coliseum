@@ -45,7 +45,7 @@ public class WaterRenderer extends Renderer {
 
 		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 
-		this.water = new Water(new Vector3f(0.0f, -0.4f, 0.0f), new Vector3f(), 1.0f);
+		this.water = new Water(new Vector3f(0.0f, -0.2f, 0.0f), new Vector3f(), 1.0f);
 		this.waveTime = 0.0f;
 
 		this.enableShadows = true;

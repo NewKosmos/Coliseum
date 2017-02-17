@@ -17,8 +17,8 @@ import flounder.maths.vectors.*;
 import org.lwjgl.glfw.*;
 
 public class PlayerBasic extends Player {
-	private static final float RUN_SPEED = 10.0f;
-	private static final float BOOST_SPEED = 20.0f;
+	private static final float RUN_SPEED = 4.5f;
+	private static final float BOOST_SPEED = 6.25f;
 	private static final float TURN_SPEED = 250.0f;
 
 	private Vector3f position;
