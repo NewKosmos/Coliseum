@@ -156,12 +156,13 @@ public class KosmosRenderer extends RendererMaster {
 
 		skyboxRenderer.render(clipPlane, camera);
 		entitiesRenderer.render(clipPlane, camera);
-		particleRenderer.render(clipPlane, camera);
 
 		if (!waterPass) {
 			waterRenderer.render(clipPlane, camera);
 			boundingRenderer.render(clipPlane, camera);
 		}
+
+		particleRenderer.render(clipPlane, camera);
 	}
 
 	private void renderIndependents() {

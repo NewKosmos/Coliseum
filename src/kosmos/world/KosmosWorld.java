@@ -34,7 +34,7 @@ public class KosmosWorld extends Module {
 
 	@Override
 	public void init() {
-		this.fog = new Fog(new Colour(), 0.005f, 2.0f, 0.0f, 50.0f);
+		this.fog = new Fog(new Colour(), 0.008f, 2.22f, 0.0f, 50.0f);
 		this.skyCycle = new SkyCycle();
 
 		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));

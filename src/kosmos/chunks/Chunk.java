@@ -11,7 +11,6 @@ package kosmos.chunks;
 
 import flounder.entities.*;
 import flounder.logger.*;
-import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.noise.*;
 import flounder.physics.bounding.*;
