@@ -84,11 +84,11 @@ public class Chunk extends Entity {
 	}
 
 	protected static void generateTile(Chunk chunk, Vector2f position) {
-		PerlinNoise noise = new PerlinNoise(11);
+		PerlinNoise noise = new PerlinNoise(420);
 
 		int height = (int) Math.abs(noise.noise2(position.x / 66.6f, position.y / 66.6f) * 10.0f);
-		int generate = (int) Math.abs(noise.noise1((position.x + position.y) / 1000.0f) * 100.0f);
-		float rotation = noise.noise1((position.x - position.y) / 66.0f) * 3600.0f;
+		int generate = (int) (noise.noise1((position.x + position.y)) * 100.0f);
+		float rotation = noise.noise1((position.x - position.y) / 66.6f) * 3600.0f;
 
 		for (int i = 0; i < height; i++) {
 			chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));

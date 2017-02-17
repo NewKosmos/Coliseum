@@ -18,6 +18,7 @@ import org.lwjgl.glfw.*;
 
 public class PlayerBasic extends Player {
 	private static final float RUN_SPEED = 10.0f;
+	private static final float BOOST_SPEED = 20.0f;
 	private static final float TURN_SPEED = 250.0f;
 
 	private Vector3f position;
@@ -27,6 +28,7 @@ public class PlayerBasic extends Player {
 	private float currentTurnSpeed;
 	private IAxis inputForward;
 	private IAxis inputTurn;
+	private IButton inputBoost;
 
 	public PlayerBasic() {
 		super();
@@ -41,16 +43,18 @@ public class PlayerBasic extends Player {
 		IButton rightKeyButtons = new KeyButton(GLFW.GLFW_KEY_D, GLFW.GLFW_KEY_RIGHT);
 		IButton upKeyButtons = new KeyButton(GLFW.GLFW_KEY_W, GLFW.GLFW_KEY_UP);
 		IButton downKeyButtons = new KeyButton(GLFW.GLFW_KEY_S, GLFW.GLFW_KEY_DOWN);
+		IButton inputButtons = new KeyButton(GLFW.GLFW_KEY_LEFT_SHIFT, GLFW.GLFW_KEY_RIGHT_SHIFT);
 
 		this.currentSpeed = 0.0f;
 		this.currentTurnSpeed = 0.0f;
 		this.inputForward = new CompoundAxis(new ButtonAxis(upKeyButtons, downKeyButtons), new JoystickAxis(0, 1));
 		this.inputTurn = new CompoundAxis(new ButtonAxis(leftKeyButtons, rightKeyButtons), new JoystickAxis(0, 0));
+		this.inputBoost = new CompoundButton(downKeyButtons);
 	}
 
 	@Override
 	public void update() {
-		currentSpeed = -RUN_SPEED * Maths.deadband(0.05f, inputForward.getAmount());
+		currentSpeed = -(inputBoost.isDown() ? BOOST_SPEED : RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
 		currentTurnSpeed = -TURN_SPEED * Maths.deadband(0.05f, inputTurn.getAmount());
 		float distance = currentSpeed * Framework.getDelta();
 		float dx = (float) (distance * Math.sin(Math.toRadians(rotation.y)));
