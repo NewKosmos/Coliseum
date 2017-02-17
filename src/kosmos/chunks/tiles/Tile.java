@@ -52,24 +52,24 @@ public class Tile {
 		return texture;
 	}
 
-	public static Vector3f hexagonSpace(Vector2f position, float length, Vector3f destination) {
+	public static Vector3f hexagonSpace(Vector2f position, double length, Vector3f destination) {
 		if (destination == null) {
 			destination = new Vector3f();
 		}
 
-		destination.x = (((float) Math.sqrt(3.0f) / 3.0f) * position.x - (position.y / 3.0f)) / length;
-		destination.y = -(((float) Math.sqrt(3.0f) / 3.0f) * position.x + (position.y / 3.0f)) / length;
-		destination.z = (2.0f / 3.0f) * position.y / length;
+		destination.x = (float) (((Math.sqrt(3.0) / 3.0) * position.x - (position.y / 3.0f)) / length);
+		destination.y = (float) (-((Math.sqrt(3.0) / 3.0) * position.x + (position.y / 3.0f)) / length);
+		destination.z = (float) ((2.0 / 3.0) * position.y / length);
 		return destination;
 	}
 
-	public static Vector2f worldSpace2D(Vector3f position, float length, Vector2f destination) {
+	public static Vector2f worldSpace2D(Vector3f position, double length, Vector2f destination) {
 		if (destination == null) {
 			destination = new Vector2f();
 		}
 
-		destination.x = (float) Math.sqrt(3.0f) * length * ((position.z / 2.0f) + position.x);
-		destination.y = (3.0f / 2.0f) * length * position.z;
+		destination.x = (float) (Math.sqrt(3.0) * length * ((position.z / 2.0) + position.x));
+		destination.y = (float) ((3.0 / 2.0) * length * position.z);
 		return destination;
 	}
 }

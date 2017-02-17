@@ -100,7 +100,6 @@ public class WaterRenderer extends Renderer {
 		prepareRendering(clipPlane, camera);
 		renderWater(water);
 		endRendering();
-
 	}
 
 	private void renderWater(Water water) {
@@ -113,7 +112,7 @@ public class WaterRenderer extends Renderer {
 		shader.getUniformFloat("waveTime").loadFloat(waveTime / Water.WAVE_SPEED);
 		shader.getUniformFloat("waveLength").loadFloat(Water.WAVE_LENGTH);
 		shader.getUniformFloat("amplitude").loadFloat(Water.AMPLITUDE);
-		shader.getUniformFloat("squareSize").loadFloat(Water.SQUARE_SIZE);
+		shader.getUniformFloat("squareSize").loadFloat((float) Water.SQUARE_SIZE);
 		shader.getUniformFloat("waterHeight").loadFloat(water.getPosition().y);
 
 		shader.getUniformBool("ignoreShadows").loadBoolean(!enableShadows);

@@ -48,11 +48,11 @@ public class ChunkMesh {
 
 		// Loads all tiles into a tile mesh with all positional instances within the chunk.
 		List<TilesMesh> tilesMeshes = new ArrayList<>();
-		int accumulator = 0;
+		int previousAccumulator = 0;
 
 		for (Tile tile : chunk.getTiles().keySet()) {
-			TilesMesh tilesMesh = new TilesMesh(tile, chunk.getTiles().get(tile), accumulator);
-			accumulator += tilesMesh.getAccumulator();
+			TilesMesh tilesMesh = new TilesMesh(tile, chunk.getTiles().get(tile), previousAccumulator);
+			previousAccumulator += tilesMesh.getAccumulator();
 			tilesMeshes.add(tilesMesh);
 		}
 

@@ -24,13 +24,13 @@ import java.util.*;
  * Represents the physical mesh for all the water at a certain height in the scene.
  */
 public class Water {
-	protected static final float COLOUR_INTENSITY = 0.75f; // 0 being 100% reflective, 0% disables reflections.
+	protected static final float COLOUR_INTENSITY = 0.823f; // 0 being 100% reflective, 0% disables reflections.
 
 	protected static final float WAVE_SPEED = 10.0f;
 	protected static final float WAVE_LENGTH = 5.0f;
 	protected static final float AMPLITUDE = 0.50f;
 
-	protected static final float SQUARE_SIZE = 0.5f * (float) Math.sqrt(3.0) * Chunk.HEXAGON_SIDE_LENGTH;
+	protected static final double SQUARE_SIZE = (Math.sqrt(3.0) / 2.0) * Chunk.HEXAGON_SIDE_LENGTH;
 	protected static final int VERTEX_COUNT = 35 * 5; // Should create a AABB of size 'ChunkGenerator.CHUNK_WORLD_SIZE'.
 
 	private int vao;
@@ -173,23 +173,23 @@ public class Water {
 	private void storeVertex(List<Float> vertices, int index, Vector2f otherPoint1, Vector2f otherPoint2) {
 		int gridX = index % Water.VERTEX_COUNT;
 		int gridZ = index / Water.VERTEX_COUNT;
-		float x = gridX * Water.SQUARE_SIZE;
-		float z = gridZ * Water.SQUARE_SIZE;
+		double x = gridX * Water.SQUARE_SIZE;
+		double z = gridZ * Water.SQUARE_SIZE;
 
 		if (x > aabb.getMaxExtents().x) {
-			aabb.getMaxExtents().x = x;
+			aabb.getMaxExtents().x = (float) x;
 		} else if (x < aabb.getMinExtents().x) {
-			aabb.getMinExtents().x = x;
+			aabb.getMinExtents().x = (float) x;
 		}
 
 		if (z > aabb.getMaxExtents().z) {
-			aabb.getMaxExtents().z = z;
+			aabb.getMaxExtents().z = (float) z;
 		} else if (z < aabb.getMinExtents().z) {
-			aabb.getMinExtents().z = z;
+			aabb.getMinExtents().z = (float) z;
 		}
 
-		vertices.add(x);
-		vertices.add(z);
+		vertices.add((float) x);
+		vertices.add((float) z);
 		vertices.add(encode(otherPoint1.x, otherPoint1.y, otherPoint2.x, otherPoint2.y));
 	}
 

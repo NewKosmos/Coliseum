@@ -37,7 +37,7 @@ public class KosmosChunks extends Module {
 		this.chunks = new ArrayList<>();
 
 		// new InstanceDerpWalk(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
-		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) Math.sqrt(2.0) * 0.25f * Chunk.CHUNK_SCALE, 0.0f), new Vector3f());
+		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25 * Chunk.CHUNK_SCALE), 0.0f), new Vector3f());
 		// new InstanceRobit(FlounderEntities.getEntities(), new Vector3f(0.0f, 1.0f, 0.0f), new Vector3f());
 
 		for (int x = -2; x <= 2; x++) {
