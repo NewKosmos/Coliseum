@@ -11,6 +11,7 @@ package kosmos.chunks;
 
 import flounder.entities.*;
 import flounder.logger.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.noise.*;
 import flounder.physics.bounding.*;
@@ -19,6 +20,7 @@ import flounder.textures.*;
 import kosmos.chunks.meshing.*;
 import kosmos.chunks.tiles.*;
 import kosmos.entities.components.*;
+import kosmos.entities.instances.*;
 
 import java.util.*;
 
@@ -33,7 +35,7 @@ public class Chunk extends Entity {
 	public static final int HEXAGON_SIDE_COUNT = 6; // The number of sides for each figure (hexagon).
 	public static final float HEXAGON_SIDE_LENGTH = 2.0f; //  Each tile can be broken into equilateral triangles with sides of length.
 
-	public static final int CHUNK_RADIUS = 21; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
+	public static final int CHUNK_RADIUS = 19; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
 	public static final float CHUNK_SCALE = 4.0f; // The model scale size used for each chunk.
 
 	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * CHUNK_SCALE * CHUNK_RADIUS; // The overall world radius footprint per chunk.
@@ -83,12 +85,27 @@ public class Chunk extends Entity {
 	}
 
 	protected static void generateTile(Chunk chunk, Vector2f position) {
-		PerlinNoise noise = new PerlinNoise(69);
+		PerlinNoise noise = new PerlinNoise(11);
 
-		float height = noise.noise2(position.x / 66.6f, position.y / 66.6f) * 10.0f;
+		int height = (int) Math.abs(noise.noise2(position.x / 66.6f, position.y / 66.6f) * 10.0f);
+		int generate = (int) Math.abs(noise.noise1((position.x + position.y) / 1000.0f) * 100.0f);
+		float rotation = noise.noise1((position.x - position.y) / 66.0f) * 3600.0f;
 
-		for (int i = 0; i < Math.round(Math.abs(height)); i++) {
+		for (int i = 0; i < height; i++) {
 			chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
+
+			if (i == height - 1 && height > 0) {
+				switch (generate) {
+					case 1:
+						new InstanceTreePine(FlounderEntities.getEntities(),
+								new Vector3f(position.x * 0.5f * CHUNK_SCALE, (5.25f * 0.25f) + (i * (float) Math.sqrt(2.0f)) * 0.5f * CHUNK_SCALE, position.y * 0.5f * CHUNK_SCALE),
+								new Vector3f(0.0f, rotation, 0.0f)
+						);
+						break;
+					default:
+						break;
+				}
+			}
 		}
 	}
 

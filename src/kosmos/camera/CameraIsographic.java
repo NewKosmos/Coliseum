@@ -36,7 +36,7 @@ public class CameraIsographic extends Camera {
 	private static final float PITCH_OFFSET = 0.0f;
 	private static final float MINIMUM_ZOOM = 0.0f;
 	private static final float MAXIMUM_ZOOM = 128.0f;
-	private static final float NORMAL_ZOOM = 25.0f;
+	private static final float NORMAL_ZOOM = 28.0f;
 
 	private static final float MAX_HORIZONTAL_CHANGE = 500.0f;
 	private static final float MAX_VERTICAL_CHANGE = 5.0f;
@@ -82,7 +82,7 @@ public class CameraIsographic extends Camera {
 		this.viewMatrix = new Matrix4f();
 		this.projectionMatrix = new Matrix4f();
 
-		this.angleOfElevation = (float) Math.PI / 7.0f;
+		this.angleOfElevation = (float) Math.PI / 8.0f;
 		this.angleAroundPlayer = 0.0f;
 
 		this.targetPosition = new Vector3f();

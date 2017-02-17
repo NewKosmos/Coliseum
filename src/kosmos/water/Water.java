@@ -30,8 +30,8 @@ public class Water {
 	protected static final float WAVE_LENGTH = 5.0f;
 	protected static final float AMPLITUDE = 0.50f;
 
-	protected static final float SQUARE_SIZE = 0.500f * (float) Math.sqrt(3.0) * Chunk.HEXAGON_SIDE_LENGTH;
-	protected static final int VERTEX_COUNT = 35 * 4; // Should create a AABB of size 'ChunkGenerator.CHUNK_WORLD_SIZE'.
+	protected static final float SQUARE_SIZE = 0.5f * (float) Math.sqrt(3.0) * Chunk.HEXAGON_SIDE_LENGTH;
+	protected static final int VERTEX_COUNT = 35 * 5; // Should create a AABB of size 'ChunkGenerator.CHUNK_WORLD_SIZE'.
 
 	private int vao;
 	private int vertexCount;
