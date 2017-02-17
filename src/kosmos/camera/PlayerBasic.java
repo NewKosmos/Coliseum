@@ -43,13 +43,13 @@ public class PlayerBasic extends Player {
 		IButton rightKeyButtons = new KeyButton(GLFW.GLFW_KEY_D, GLFW.GLFW_KEY_RIGHT);
 		IButton upKeyButtons = new KeyButton(GLFW.GLFW_KEY_W, GLFW.GLFW_KEY_UP);
 		IButton downKeyButtons = new KeyButton(GLFW.GLFW_KEY_S, GLFW.GLFW_KEY_DOWN);
-		IButton inputButtons = new KeyButton(GLFW.GLFW_KEY_LEFT_SHIFT, GLFW.GLFW_KEY_RIGHT_SHIFT);
+		IButton boostButtons = new KeyButton(GLFW.GLFW_KEY_LEFT_SHIFT, GLFW.GLFW_KEY_RIGHT_SHIFT);
 
 		this.currentSpeed = 0.0f;
 		this.currentTurnSpeed = 0.0f;
 		this.inputForward = new CompoundAxis(new ButtonAxis(upKeyButtons, downKeyButtons), new JoystickAxis(0, 1));
 		this.inputTurn = new CompoundAxis(new ButtonAxis(leftKeyButtons, rightKeyButtons), new JoystickAxis(0, 0));
-		this.inputBoost = new CompoundButton(downKeyButtons);
+		this.inputBoost = new CompoundButton(boostButtons);
 	}
 
 	@Override

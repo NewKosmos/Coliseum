@@ -34,7 +34,7 @@ public class Chunk extends Entity {
 	public static final int HEXAGON_SIDE_COUNT = 6; // The number of sides for each figure (hexagon).
 	public static final float HEXAGON_SIDE_LENGTH = 2.0f; //  Each tile can be broken into equilateral triangles with sides of length.
 
-	public static final int CHUNK_RADIUS = 19; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
+	public static final int CHUNK_RADIUS = 13; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
 	public static final float CHUNK_SCALE = 4.0f; // The model scale size used for each chunk.
 
 	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * CHUNK_SCALE * CHUNK_RADIUS; // The overall world radius footprint per chunk.
