@@ -41,7 +41,7 @@ public class WaterRenderer extends Renderer {
 	private boolean enableReflections;
 
 	public WaterRenderer() {
-		this.reflectionFBO = FBO.newFBO(0.4f).disableTextureWrap().depthBuffer(DepthBufferType.RENDER_BUFFER).create();
+		this.reflectionFBO = FBO.newFBO(0.3f).disableTextureWrap().depthBuffer(DepthBufferType.RENDER_BUFFER).create();
 
 		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 

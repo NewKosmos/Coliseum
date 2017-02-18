@@ -23,11 +23,11 @@ import java.util.*;
  * Represents the physical mesh for all the water at a certain height in the scene.
  */
 public class Water {
-	protected static final float COLOUR_INTENSITY = 0.823f; // 0 being 100% reflective, 0% disables reflections.
+	protected static final float COLOUR_INTENSITY = 0.9f; // 0 being 100% reflective, 0% disables reflections.
 
 	protected static final float WAVE_SPEED = 10.0f;
-	protected static final float WAVE_LENGTH = 1.0f;
-	protected static final float AMPLITUDE = 0.20f;
+	protected static final float WAVE_LENGTH = 5.0f;
+	protected static final float AMPLITUDE = 0.185f;
 
 	protected static final double SQUARE_SIZE = 1.0;
 	protected static final int VERTEX_COUNT = 35 * 5; // Should create a AABB of size 'ChunkGenerator.CHUNK_WORLD_SIZE'.
