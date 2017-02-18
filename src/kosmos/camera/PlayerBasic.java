@@ -36,7 +36,7 @@ public class PlayerBasic extends Player {
 
 	@Override
 	public void init() {
-		this.position = new Vector3f(0.0f, 0.0f, 0.0f);
+		this.position = new Vector3f();
 		this.rotation = new Vector3f();
 
 		IButton leftKeyButtons = new KeyButton(GLFW.GLFW_KEY_A, GLFW.GLFW_KEY_LEFT);

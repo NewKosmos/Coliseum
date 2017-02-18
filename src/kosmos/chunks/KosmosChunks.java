@@ -20,13 +20,12 @@ import flounder.profiling.*;
 import flounder.textures.*;
 import kosmos.chunks.tiles.*;
 import kosmos.entities.instances.*;
-import kosmos.particles.*;
-import kosmos.particles.loading.*;
-import kosmos.particles.spawns.*;
 
 import java.util.*;
 
 public class KosmosChunks extends Module {
+	protected static final float[][] GENERATE_DELTAS = new float[][]{{0.7592566024f, 0.6507913735f}, {-0.099503719f, 0.9950371902f}, {-0.894427191f, 0.4472135955f}, {-0.7592566024f, -0.6507913735f}, {0.099503719f, -0.9950371902f}, {0.894427191f, -0.4472135955f}};
+
 	private static final KosmosChunks INSTANCE = new KosmosChunks();
 	public static final String PROFILE_TAB_NAME = "Kosmos Chunks";
 
@@ -40,25 +39,29 @@ public class KosmosChunks extends Module {
 	public void init() {
 		this.chunks = new ArrayList<>();
 		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25), 0.0f), new Vector3f());
-
-		//List<ParticleTemplate> templates = new ArrayList<>();
-		//templates.add(KosmosParticles.load("rain"));
-		//ParticleSystem system = new ParticleSystem(templates, new SpawnCircle(40.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 500, 0.5f, 0.75f);
-		//system.setSystemCentre(new Vector3f(0.0f, 15.0f, 0.0f));
-
 		generateClouds();
 
-		Chunk parent = new Chunk(FlounderEntities.getEntities(), new Vector2f(0.0f, 0.0f), Tile.TILE_GRASS.getTexture());
+		Chunk parent = new Chunk(FlounderEntities.getEntities(), new Vector3f(), Tile.TILE_GRASS.getTexture());
 		chunks.add(parent);
 
-		float offsetX = 1.154700539f;
-		float offsetY = 1.5f;
-		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(3.5f * offsetX, 3.0f * offsetY), Tile.TILE_STONE.getTexture()));
-		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(-0.5f * offsetX, 5.0f * offsetY), Tile.TILE_STONE.getTexture()));
-		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(-4.0f * offsetX, 2.0f * offsetY), Tile.TILE_STONE.getTexture()));
-		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(-3.5f * offsetX, -3.0f * offsetY), Tile.TILE_STONE.getTexture()));
-		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(0.5f * offsetX, -5.0f * offsetY), Tile.TILE_STONE.getTexture()));
-		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(4.0f * offsetX, -2.0f * offsetY), Tile.TILE_STONE.getTexture()));
+		for (int i = 0; i < 6; i++) {
+			// These three variables find the positioning for chunks around the parent.
+			float w = 0.3300505011863f * (float) Math.sin(2.0943951023932 * i - 0.27618325663556) + 4.7f;
+			float x = parent.getPosition().x + (GENERATE_DELTAS[i][0] * w * 1.154700539f);
+			float z = parent.getPosition().z + (GENERATE_DELTAS[i][1] * w * 1.5f);
+			Vector3f p = new Vector3f(x, 0.0f, z);
+			boolean chunkExists = false;
+
+			for (Chunk chunk : chunks) {
+				if (chunk.getPosition().equals(p)) {
+					chunkExists = true;
+				}
+			}
+
+			if (!chunkExists) {
+				chunks.add(new Chunk(FlounderEntities.getEntities(), p, Tile.TILE_STONE.getTexture()));
+			}
+		}
 	}
 
 	private void generateClouds() {
@@ -74,6 +77,11 @@ public class KosmosChunks extends Module {
 				new InstanceCloud(FlounderEntities.getEntities(), new Vector3f((x * 11.0f) + offsetX, 7.0f * height, (y * 11.0f) + offsetZ), new Vector3f(0.0f, rotationY, rotationZ), Maths.randomInRange(1.0f, 2.25f));
 			}
 		}
+
+		//List<ParticleTemplate> templates = new ArrayList<>();
+		//templates.add(KosmosParticles.load("rain"));
+		//ParticleSystem system = new ParticleSystem(templates, new SpawnCircle(40.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 500, 0.5f, 0.75f);
+		//system.setSystemCentre(new Vector3f(0.0f, 15.0f, 0.0f));
 	}
 
 	@Override
