@@ -29,7 +29,7 @@ public class NewKosmos extends Framework {
 	public static Config configMain;
 
 	public NewKosmos() {
-		super("kosmos", -1, new KosmosInterface(), new KosmosRenderer(), new CameraIsographic(), new PlayerBasic(), new KosmosGuis());
+		super("kosmos", -1, new KosmosInterface(), new KosmosRenderer(), new CameraFocus(), new PlayerBasic(), new KosmosGuis());
 
 		configMain = new Config(new MyFile(Framework.getRoamingFolder(), "configs", "settings.conf"));
 

@@ -55,7 +55,7 @@ public class ShadowRenderer extends Renderer {
 		this.projectionViewMatrix = new Matrix4f();
 		this.offset = createOffset();
 
-		this.shadowFBO = FBO.newFBO(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).noColourBuffer().depthBuffer(DepthBufferType.TEXTURE).create();
+		this.shadowFBO = FBO.newFBO(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).noColourBuffer().disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
 		this.shadowBox = new ShadowBox(lightViewMatrix);
 	}
 

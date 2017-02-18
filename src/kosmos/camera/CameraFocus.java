@@ -21,7 +21,7 @@ import flounder.space.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class CameraIsographic extends Camera {
+public class CameraFocus extends Camera {
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 700.0f;
 	private static final float FIELD_OF_VIEW = 45.0f;
@@ -67,7 +67,7 @@ public class CameraIsographic extends Camera {
 	private float horizontalDistanceFromFocus;
 	private float verticalDistanceFromFocus;
 
-	public CameraIsographic() {
+	public CameraFocus() {
 		super(FlounderLogger.class, FlounderProfiler.class, FlounderJoysticks.class, FlounderKeyboard.class, FlounderMouse.class);
 	}
 
@@ -263,12 +263,10 @@ public class CameraIsographic extends Camera {
 		Matrix4f.rotate(viewMatrix, new Vector3f(0.0f, 0.0f, 1.0f), (float) Math.toRadians(rotation.z), viewMatrix);
 		Matrix4f.translate(viewMatrix, position, viewMatrix);
 		position.negate();
-		viewFrustum.recalculateFrustum(getProjectionMatrix(), viewMatrix);
 	}
 
 	private void updateProjectionMatrix() {
 		Matrix4f.perspectiveMatrix(FIELD_OF_VIEW, FlounderDisplay.getAspectRatio(), NEAR_PLANE, FAR_PLANE, projectionMatrix);
-		//	Matrix4f.orthographicMatrix(-FlounderDisplay.getAspectRatio(), FlounderDisplay.getAspectRatio(), -1.0f, 1.0f, NEAR_PLANE, FAR_PLANE, projectionMatrix);
 	}
 
 	@Override
@@ -279,6 +277,7 @@ public class CameraIsographic extends Camera {
 
 	@Override
 	public Frustum getViewFrustum() {
+		viewFrustum.recalculateFrustum(getProjectionMatrix(), viewMatrix);
 		return viewFrustum;
 	}
 

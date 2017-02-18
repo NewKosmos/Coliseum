@@ -41,7 +41,7 @@ public class WaterRenderer extends Renderer {
 	private boolean enableReflections;
 
 	public WaterRenderer() {
-		this.reflectionFBO = FBO.newFBO(0.3f).disableTextureWrap().depthBuffer(DepthBufferType.RENDER_BUFFER).create();
+		this.reflectionFBO = FBO.newFBO(0.45f).disableTextureWrap().depthBuffer(DepthBufferType.RENDER_BUFFER).create();
 
 		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 
@@ -50,6 +50,17 @@ public class WaterRenderer extends Renderer {
 
 		this.enableShadows = true;
 		this.enableReflections = true;
+	}
+
+	@Override
+	public void renderObjects(Vector4f clipPlane, Camera camera) {
+		if (!shader.isLoaded() || !water.isLoaded()) {
+			return;
+		}
+
+		prepareRendering(clipPlane, camera);
+		renderWater(water);
+		endRendering();
 	}
 
 	private void prepareRendering(Vector4f clipPlane, Camera camera) {
@@ -89,17 +100,6 @@ public class WaterRenderer extends Renderer {
 
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();
-	}
-
-	@Override
-	public void renderObjects(Vector4f clipPlane, Camera camera) {
-		if (!shader.isLoaded() || !water.isLoaded()) {
-			return;
-		}
-
-		prepareRendering(clipPlane, camera);
-		renderWater(water);
-		endRendering();
 	}
 
 	private void renderWater(Water water) {

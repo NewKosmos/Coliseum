@@ -37,7 +37,6 @@ import static org.lwjgl.opengl.GL30.*;
 
 public class KosmosRenderer extends RendererMaster {
 	private static final Vector4f POSITIVE_INFINITY = new Vector4f(0.0f, 1.0f, 0.0f, Float.POSITIVE_INFINITY);
-	private static final Colour CLEAR_COLOUR = new Colour(0.0f, 0.0f, 0.0f);
 
 	private ShadowRenderer shadowRenderer;
 	private SkyboxRenderer skyboxRenderer;
@@ -110,7 +109,7 @@ public class KosmosRenderer extends RendererMaster {
 			glEnable(GL_CLIP_DISTANCE0);
 			{
 				waterRenderer.getReflectionFBO().bindFrameBuffer();
-				renderScene(new Vector4f(0.0f, 1.0f, 0.0f, -waterRenderer.getWater().getPosition().y), CLEAR_COLOUR, true);
+				renderScene(new Vector4f(0.0f, 1.0f, 0.0f, -waterRenderer.getWater().getPosition().y), KosmosWorld.getFog().getFogColour(), true);
 				waterRenderer.getReflectionFBO().unbindFrameBuffer();
 			}
 			glDisable(GL_CLIP_DISTANCE0);
@@ -125,7 +124,7 @@ public class KosmosRenderer extends RendererMaster {
 		bindRelevantFBO();
 
 		/* Scene rendering. */
-		renderScene(POSITIVE_INFINITY, CLEAR_COLOUR, false);
+		renderScene(POSITIVE_INFINITY, KosmosWorld.getFog().getFogColour(), false);
 
 		/* Post rendering. */
 		renderPost(FlounderGuis.getGuiMaster().isGamePaused(), FlounderGuis.getGuiMaster().getBlurFactor());
@@ -154,13 +153,13 @@ public class KosmosRenderer extends RendererMaster {
 		Camera camera = FlounderCamera.getCamera();
 		OpenGlUtils.prepareNewRenderParse(clearColour);
 
-		skyboxRenderer.render(clipPlane, camera);
-		entitiesRenderer.render(clipPlane, camera);
-
 		if (!waterPass) {
 			waterRenderer.render(clipPlane, camera);
 			boundingRenderer.render(clipPlane, camera);
 		}
+
+		//skyboxRenderer.render(clipPlane, camera);
+		entitiesRenderer.render(clipPlane, camera);
 
 		particleRenderer.render(clipPlane, camera);
 	}

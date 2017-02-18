@@ -41,10 +41,10 @@ public class KosmosChunks extends Module {
 		this.chunks = new ArrayList<>();
 		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25), 0.0f), new Vector3f());
 
-		List<ParticleTemplate> templates = new ArrayList<>();
-		templates.add(KosmosParticles.load("rain"));
-		ParticleSystem system = new ParticleSystem(templates, new SpawnCircle(40.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 500, 0.5f, 0.75f);
-		system.setSystemCentre(new Vector3f(0.0f, 15.0f, 0.0f));
+		//List<ParticleTemplate> templates = new ArrayList<>();
+		//templates.add(KosmosParticles.load("rain"));
+		//ParticleSystem system = new ParticleSystem(templates, new SpawnCircle(40.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 500, 0.5f, 0.75f);
+		//system.setSystemCentre(new Vector3f(0.0f, 15.0f, 0.0f));
 
 		generateClouds();
 
