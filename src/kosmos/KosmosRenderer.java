@@ -153,13 +153,13 @@ public class KosmosRenderer extends RendererMaster {
 		Camera camera = FlounderCamera.getCamera();
 		OpenGlUtils.prepareNewRenderParse(clearColour);
 
+		//skyboxRenderer.render(clipPlane, camera);
+		entitiesRenderer.render(clipPlane, camera);
+
 		if (!waterPass) {
 			waterRenderer.render(clipPlane, camera);
 			boundingRenderer.render(clipPlane, camera);
 		}
-
-		//skyboxRenderer.render(clipPlane, camera);
-		entitiesRenderer.render(clipPlane, camera);
 
 		particleRenderer.render(clipPlane, camera);
 	}

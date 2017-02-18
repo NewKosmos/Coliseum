@@ -50,6 +50,15 @@ public class KosmosChunks extends Module {
 
 		Chunk parent = new Chunk(FlounderEntities.getEntities(), new Vector2f(0.0f, 0.0f), Tile.TILE_GRASS.getTexture());
 		chunks.add(parent);
+
+		float offsetX = 1.154700539f;
+		float offsetY = 1.5f;
+		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(3.5f * offsetX, 3.0f * offsetY), Tile.TILE_STONE.getTexture()));
+		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(-0.5f * offsetX, 5.0f * offsetY), Tile.TILE_STONE.getTexture()));
+		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(-4.0f * offsetX, 2.0f * offsetY), Tile.TILE_STONE.getTexture()));
+		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(-3.5f * offsetX, -3.0f * offsetY), Tile.TILE_STONE.getTexture()));
+		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(0.5f * offsetX, -5.0f * offsetY), Tile.TILE_STONE.getTexture()));
+		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector2f(4.0f * offsetX, -2.0f * offsetY), Tile.TILE_STONE.getTexture()));
 	}
 
 	private void generateClouds() {

@@ -167,7 +167,7 @@ public class ChunkMesh {
 	public AABB getAABB() {
 		if (aabb == null && model != null && model.isLoaded()) {
 			this.aabb = new AABB();
-			AABB.recalculate(model.getAABB(), new Vector3f(), new Vector3f(), 2.0f, aabb);
+			AABB.recalculate(model.getAABB(), chunk.getPosition(), chunk.getRotation(), 1.0f, aabb);
 		}
 
 		return aabb;

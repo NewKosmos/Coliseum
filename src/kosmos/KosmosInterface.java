@@ -16,6 +16,7 @@ import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
 import flounder.logger.*;
+import flounder.physics.bounding.*;
 import flounder.resources.*;
 import flounder.sounds.*;
 import flounder.standards.*;
@@ -29,6 +30,7 @@ public class KosmosInterface extends Standard {
 	private KeyButton screenshot;
 	private KeyButton fullscreen;
 	private KeyButton polygons;
+	private KeyButton aabbs;
 	private KeyButton closeWindow;
 
 	public KosmosInterface() {
@@ -45,6 +47,7 @@ public class KosmosInterface extends Standard {
 		this.screenshot = new KeyButton(GLFW_KEY_F2);
 		this.fullscreen = new KeyButton(GLFW_KEY_F11);
 		this.polygons = new KeyButton(GLFW_KEY_P);
+		this.aabbs = new KeyButton(GLFW_KEY_O);
 		this.closeWindow = new KeyButton(GLFW_KEY_DELETE);
 
 		FlounderEvents.addEvent(new IEvent() {
@@ -80,6 +83,18 @@ public class KosmosInterface extends Standard {
 			@Override
 			public void onEvent() {
 				OpenGlUtils.goWireframe(!OpenGlUtils.isInWireframe());
+			}
+		});
+
+		FlounderEvents.addEvent(new IEvent() {
+			@Override
+			public boolean eventTriggered() {
+				return aabbs.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				FlounderBounding.toggle(!FlounderBounding.renders());
 			}
 		});
 
