@@ -24,7 +24,7 @@ public class ShadowBox {
 	private static final Vector4f UP = new Vector4f(0.0f, 1.0f, 0.0f, 0.0f);
 	private static final Vector4f FORWARD = new Vector4f(0.0f, 0.0f, -1.0f, 0.0f);
 
-	private static final float OFFSET = 10.0f;
+	private static final float OFFSET = 16.0f;
 	private static final float SHADOW_DISTANCE = 40.0f;
 
 	private Matrix4f lightViewMatrix;
