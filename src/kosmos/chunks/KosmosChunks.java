@@ -24,7 +24,7 @@ import kosmos.entities.instances.*;
 import java.util.*;
 
 public class KosmosChunks extends Module {
-	protected static final float[][] GENERATE_DELTAS = new float[][]{{0.7592566024f, 0.6507913735f}, {-0.099503719f, 0.9950371902f}, {-0.894427191f, 0.4472135955f}, {-0.7592566024f, -0.6507913735f}, {0.099503719f, -0.9950371902f}, {0.894427191f, -0.4472135955f}};
+	protected static final double[][] GENERATE_DELTAS = new double[][]{{-0.5, Math.sqrt(3.0) / 2.0}, {0.5, Math.sqrt(3.0) / 2.0}, {1.0, 0.0}, {0.5, -Math.sqrt(3.0) / 2.0}, {-0.5, -Math.sqrt(3.0) / 2.0}, {-1.0, 0.0}};
 
 	private static final KosmosChunks INSTANCE = new KosmosChunks();
 	public static final String PROFILE_TAB_NAME = "Kosmos Chunks";
@@ -45,22 +45,16 @@ public class KosmosChunks extends Module {
 		chunks.add(parent);
 
 		for (int i = 0; i < 6; i++) {
-			// These three variables find the positioning for chunks around the parent.
-			float w = 0.3300505011863f * (float) Math.sin(2.0943951023932 * i - 0.27618325663556) + 4.7f;
-			float x = parent.getPosition().x + (GENERATE_DELTAS[i][0] * w * 1.154700539f);
-			float z = parent.getPosition().z + (GENERATE_DELTAS[i][1] * w * 1.5f);
-			Vector3f p = new Vector3f(x, 0.0f, z);
-			boolean chunkExists = false;
+			float csx = Chunk.CHUNK_RADIUS * 2.5f; // The side length of the master hexagon (x).
+			float csy = Chunk.CHUNK_RADIUS * 1.8f; // The side length of the master hexagon (y).
+			Vector2f o = new Vector2f((float) GENERATE_DELTAS[i][0] * csx, (float) GENERATE_DELTAS[i][1] * csy);
+			double theta = Math.atan(((2.0 * Chunk.CHUNK_RADIUS) - 1.0) / -0.5);
+			Vector2f.rotate(o, (float) Math.toDegrees(theta), o);
 
-			for (Chunk chunk : chunks) {
-				if (chunk.getPosition().equals(p)) {
-					chunkExists = true;
-				}
-			}
+			Vector3f p = new Vector3f(o.x, 0.0f, o.y);
+			Vector3f.add(parent.getPosition(), p, p);
 
-			if (!chunkExists) {
-				chunks.add(new Chunk(FlounderEntities.getEntities(), p, Tile.TILE_STONE.getTexture()));
-			}
+			chunks.add(new Chunk(FlounderEntities.getEntities(), p, Tile.TILE_STONE.getTexture()));
 		}
 	}
 

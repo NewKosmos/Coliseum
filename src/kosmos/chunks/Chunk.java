@@ -33,7 +33,7 @@ public class Chunk extends Entity {
 
 	public static final double HEXAGON_SIDE_LENGTH = 2.0; //  Each tile can be broken into equilateral triangles with sides of length.
 
-	public static final int CHUNK_RADIUS = 3; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
+	public static final int CHUNK_RADIUS = 7; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
 
 	private Map<Tile, List<Vector3f>> tiles;
 	private ChunkMesh chunkMesh;
@@ -80,7 +80,7 @@ public class Chunk extends Entity {
 	}
 
 	protected static void generateTile(Chunk chunk, Vector2f position) {
-		/*PerlinNoise noise = new PerlinNoise(420);
+		PerlinNoise noise = new PerlinNoise(420);
 
 		int height = (int) Math.abs(noise.noise2(position.x / 66.6f, position.y / 66.6f) * 10.0f);
 		int generate = (int) (noise.noise1((position.x + position.y)) * 100.0f);
@@ -105,8 +105,8 @@ public class Chunk extends Entity {
 						break;
 				}
 			}
-		}*/
-		chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, 0.0f, position.y));
+		}
+	//	chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, 0.0f, position.y));
 	}
 
 	public void update(Vector3f playerPosition) {
