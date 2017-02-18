@@ -55,13 +55,35 @@ public class Chunk extends Entity {
 		FlounderLogger.log("Creating chunk at: " + position.x + ", " + position.y + ".");
 	}
 
+	protected void createChunksAround() {
+		for (int i = 0; i < 6; i++) {
+			// These three variables find the positioning for chunks around the parent.
+			float x = this.getPosition().x + (KosmosChunks.GENERATE_DELTAS[i][0] * 1.154700539f);
+			float z = this.getPosition().z + (KosmosChunks.GENERATE_DELTAS[i][1] * 1.5f);
+			Vector3f p = new Vector3f(x, 0.0f, z);
+			boolean chunkExists = false;
+
+			for (Chunk chunk : KosmosChunks.getChunks()) {
+				if (chunk.getPosition().equals(p)) {
+					chunkExists = true;
+				}
+			}
+
+			if (!chunkExists) {
+				KosmosChunks.getChunks().add(new Chunk(FlounderEntities.getEntities(), p, Tile.TILE_STONE.getTexture()));
+			}
+		}
+	}
+
 	protected static void generate(Chunk chunk) {
+		Vector2f positionChunk = chunk.getPosition().toVector2f(); // new Vector2f(chunk.getPosition().x, chunk.getPosition().z);
+
 		for (int i = 0; i < CHUNK_RADIUS; i++) {
 			int shapesOnEdge = i;
 			float r = 0;
 			float g = -i;
 			float b = i;
-			generateTile(chunk, Vector2f.add(chunk.getPosition().toVector2f(), Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null), null));
+			generateTile(chunk, Vector2f.add(positionChunk, Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null), null));
 
 			for (int j = 0; j < 6; j++) {
 				if (j == 5) {
@@ -73,14 +95,14 @@ public class Chunk extends Entity {
 					r = r + GENERATE_DELTAS[j][0];
 					g = g + GENERATE_DELTAS[j][1];
 					b = b + GENERATE_DELTAS[j][2];
-					generateTile(chunk, Vector2f.add(chunk.getPosition().toVector2f(), Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null), null));
+					generateTile(chunk, Vector2f.add(positionChunk, Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null), null));
 				}
 			}
 		}
 	}
 
 	protected static void generateTile(Chunk chunk, Vector2f position) {
-		PerlinNoise noise = new PerlinNoise(420);
+		/*PerlinNoise noise = new PerlinNoise(420);
 
 		int height = (int) Math.abs(noise.noise2(position.x / 66.6f, position.y / 66.6f) * 10.0f);
 		int generate = (int) (noise.noise1((position.x + position.y)) * 100.0f);
@@ -105,8 +127,8 @@ public class Chunk extends Entity {
 						break;
 				}
 			}
-		}
-	//	chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, 0.0f, position.y));
+		}*/
+		chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, 0.0f, position.y));
 	}
 
 	public void update(Vector3f playerPosition) {

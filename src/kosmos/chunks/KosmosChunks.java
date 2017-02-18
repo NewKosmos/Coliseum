@@ -24,7 +24,7 @@ import kosmos.entities.instances.*;
 import java.util.*;
 
 public class KosmosChunks extends Module {
-	protected static final double[][] GENERATE_DELTAS = new double[][]{{-0.5, Math.sqrt(3.0) / 2.0}, {0.5, Math.sqrt(3.0) / 2.0}, {1.0, 0.0}, {0.5, -Math.sqrt(3.0) / 2.0}, {-0.5, -Math.sqrt(3.0) / 2.0}, {-1.0, 0.0}};
+	protected static final float[][] GENERATE_DELTAS = new float[][]{{9.5f, 7.0f}, {-0.5f, 13.0f}, {-10.0f, 6.0f}, {-9.5f, -7.0f}, {0.5f, -13.0f}, {10.0f, -6.0f}};
 
 	private static final KosmosChunks INSTANCE = new KosmosChunks();
 	public static final String PROFILE_TAB_NAME = "Kosmos Chunks";
@@ -43,19 +43,12 @@ public class KosmosChunks extends Module {
 
 		Chunk parent = new Chunk(FlounderEntities.getEntities(), new Vector3f(), Tile.TILE_GRASS.getTexture());
 		chunks.add(parent);
+		parent.createChunksAround();
 
-		for (int i = 0; i < 6; i++) {
-			float csx = Chunk.CHUNK_RADIUS * 2.5f; // The side length of the master hexagon (x).
-			float csy = Chunk.CHUNK_RADIUS * 1.8f; // The side length of the master hexagon (y).
-			Vector2f o = new Vector2f((float) GENERATE_DELTAS[i][0] * csx, (float) GENERATE_DELTAS[i][1] * csy);
-			double theta = Math.atan(((2.0 * Chunk.CHUNK_RADIUS) - 1.0) / -0.5);
-			Vector2f.rotate(o, (float) Math.toDegrees(theta), o);
-
-			Vector3f p = new Vector3f(o.x, 0.0f, o.y);
-			Vector3f.add(parent.getPosition(), p, p);
-
-			chunks.add(new Chunk(FlounderEntities.getEntities(), p, Tile.TILE_STONE.getTexture()));
-		}
+		/*List<Chunk> c = new ArrayList<>(chunks);
+		for (Chunk i : c) {
+			i.createChunksAround();
+		}*/
 	}
 
 	private void generateClouds() {
@@ -94,8 +87,8 @@ public class KosmosChunks extends Module {
 		FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Size", chunks.size());
 	}
 
-	public List<Chunk> getChunks() {
-		return chunks;
+	public static List<Chunk> getChunks() {
+		return INSTANCE.chunks;
 	}
 
 	@Override
