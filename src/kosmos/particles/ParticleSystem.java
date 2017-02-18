@@ -10,9 +10,11 @@
 package kosmos.particles;
 
 import flounder.framework.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
+import flounder.noise.*;
 import kosmos.particles.loading.*;
 import kosmos.particles.spawns.*;
 
@@ -31,6 +33,8 @@ public class ParticleSystem {
 
 	private Vector3f systemCentre;
 	private Vector3f velocityCentre;
+
+	private PerlinNoise noise;
 
 	private Vector3f direction;
 	private float directionDeviation;
@@ -59,6 +63,8 @@ public class ParticleSystem {
 
 		this.systemCentre = new Vector3f();
 		this.velocityCentre = new Vector3f();
+
+		this.noise = new PerlinNoise(21);
 
 		this.paused = false;
 
@@ -168,7 +174,9 @@ public class ParticleSystem {
 			emitParticle();
 		}
 
-		if (Math.random() < partialParticle) {
+		float random = noise.noise1(Framework.getTimeMs()) * 10.0f;
+
+		if (random < partialParticle) {
 			emitParticle();
 		}
 	}

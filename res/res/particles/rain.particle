@@ -7,6 +7,6 @@ ParticleData {
 	Texture: res/particles/rain.png;
 	NumberOfRows: 4;
 	LifeLength: 3.5;
-	Scale: 0.4;
+	Scale: 0.15;
 };
 

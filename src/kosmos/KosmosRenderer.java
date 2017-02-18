@@ -78,7 +78,7 @@ public class KosmosRenderer extends RendererMaster {
 		this.filterPixel = new FilterPixel(4.0f);
 		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.05f);
 		this.filterLensFlare = new FilterLensFlare();
-		this.filterTiltShift = new FilterTiltShift(0.75f, 1.1f, 0.004f, 3.0f);
+		this.filterTiltShift = new FilterTiltShift(0.6f, 1.1f, 0.002f, 6.0f);
 		this.effect = 1;
 
 		FlounderEvents.addEvent(new IEvent() {

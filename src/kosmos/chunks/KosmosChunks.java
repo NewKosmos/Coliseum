@@ -20,6 +20,9 @@ import flounder.profiling.*;
 import flounder.textures.*;
 import kosmos.chunks.tiles.*;
 import kosmos.entities.instances.*;
+import kosmos.particles.*;
+import kosmos.particles.loading.*;
+import kosmos.particles.spawns.*;
 
 import java.util.*;
 
@@ -38,10 +41,10 @@ public class KosmosChunks extends Module {
 		this.chunks = new ArrayList<>();
 		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25), 0.0f), new Vector3f());
 
-		// List<ParticleTemplate> templates = new ArrayList<>();
-		// templates.add(KosmosParticles.load("snow"));
-		// ParticleSystem system = new ParticleSystem(templates, new SpawnCircle(75.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 150, 0.5f, 0.75f);
-		// system.setSystemCentre(new Vector3f(0.0f, 30.0f, 0.0f));
+		List<ParticleTemplate> templates = new ArrayList<>();
+		templates.add(KosmosParticles.load("rain"));
+		ParticleSystem system = new ParticleSystem(templates, new SpawnCircle(40.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 500, 0.5f, 0.75f);
+		system.setSystemCentre(new Vector3f(0.0f, 15.0f, 0.0f));
 
 		generateClouds();
 
@@ -59,8 +62,7 @@ public class KosmosChunks extends Module {
 				float height = Math.abs(noise.noise2(x / 2.0f, y / 2.0f) * 5.0f) + 0.9f;
 				float rotationY = noise.noise1((x - y) / 60.0f) * 3600.0f;
 				float rotationZ = noise.noise1((x - y) / 20.0f) * 3600.0f;
-				new InstanceCloud(FlounderEntities.getEntities(), new Vector3f((x * 11.0f) + offsetX, 7.0f * height, (y * 11.0f) + offsetZ
-				), new Vector3f(0.0f, rotationY, rotationZ), Maths.randomInRange(1.0f, 2.25f));
+				new InstanceCloud(FlounderEntities.getEntities(), new Vector3f((x * 11.0f) + offsetX, 7.0f * height, (y * 11.0f) + offsetZ), new Vector3f(0.0f, rotationY, rotationZ), Maths.randomInRange(1.0f, 2.25f));
 			}
 		}
 	}
