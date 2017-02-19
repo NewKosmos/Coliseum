@@ -3,6 +3,7 @@ package kosmos.water;
 import flounder.framework.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
+import kosmos.*;
 
 public class KosmosWater extends Module {
 	private static final KosmosWater INSTANCE = new KosmosWater();
@@ -24,7 +25,7 @@ public class KosmosWater extends Module {
 		this.waveTime = 0.0f;
 
 		this.enableShadows = true;
-		this.enableReflections = true;
+		this.enableReflections = NewKosmos.configMain.getBooleanWithDefault("water_reflections", true, KosmosWater::reflectionsEnabled);
 	}
 
 	@Override
