@@ -16,6 +16,20 @@ import kosmos.particles.loading.*;
  * A interface used to define biome types.
  */
 public interface IBiome {
+	public enum Biomes {
+		BEACH(new BiomeBeach()), GRASS(new BiomeGrass()), RIVER(new BiomeRiver()), SNOW(new BiomeSnow());
+
+		private IBiome biome;
+
+		Biomes(IBiome biome) {
+			this.biome = biome;
+		}
+
+		public IBiome getBiome() {
+			return biome;
+		}
+	}
+
 	/**
 	 * The name of the biome to be used in world gen.
 	 *

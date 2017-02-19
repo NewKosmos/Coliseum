@@ -42,6 +42,7 @@ public class Tile {
 	protected Tile(ModelObject model, TextureObject texture) {
 		this.model = model;
 		this.texture = texture;
+		this.texture.setHasAlpha(false);
 	}
 
 	public ModelObject getModel() {

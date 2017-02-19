@@ -30,6 +30,7 @@ public class KosmosChunks extends Module {
 	public static final String PROFILE_TAB_NAME = "Kosmos Chunks";
 
 	private List<Chunk> chunks;
+	private PerlinNoise noise;
 
 	public KosmosChunks() {
 		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderBounding.class, FlounderTextures.class);
@@ -38,6 +39,7 @@ public class KosmosChunks extends Module {
 	@Override
 	public void init() {
 		this.chunks = new ArrayList<>();
+		this.noise = new PerlinNoise(420);
 		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25), 0.0f), new Vector3f());
 		generateClouds();
 
@@ -46,18 +48,17 @@ public class KosmosChunks extends Module {
 		parent.createChunksAround();
 
 		/*List<Chunk> c = new ArrayList<>(chunks);
+		c.remove(parent);
 		for (Chunk i : c) {
 			i.createChunksAround();
 		}*/
 	}
 
 	private void generateClouds() {
-		PerlinNoise noise = new PerlinNoise(420);
-
 		for (int x = -2; x <= 2; x++) {
 			for (int y = -2; y <= 2; y++) {
-				float offsetX = noise.noise2(x / 4.0f, y / 4.0f) * 17.0f;
-				float offsetZ = noise.noise2(x / 9.0f, y / 9.0f) * 17.0f;
+				float offsetX = noise.noise2(x / 4.0f, y / 4.0f) * 20.0f;
+				float offsetZ = noise.noise2(x / 9.0f, y / 9.0f) * 20.0f;
 				float height = Math.abs(noise.noise2(x / 2.0f, y / 2.0f) * 5.0f) + 0.9f;
 				float rotationY = noise.noise1((x - y) / 60.0f) * 3600.0f;
 				float rotationZ = noise.noise1((x - y) / 20.0f) * 3600.0f;
@@ -89,6 +90,10 @@ public class KosmosChunks extends Module {
 
 	public static List<Chunk> getChunks() {
 		return INSTANCE.chunks;
+	}
+
+	public static PerlinNoise getNoise() {
+		return INSTANCE.noise;
 	}
 
 	@Override

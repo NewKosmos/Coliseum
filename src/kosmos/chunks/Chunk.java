@@ -48,8 +48,8 @@ public class Chunk extends Entity {
 		this.darkness = 0.0f;
 
 		new ComponentModel(this, null, 1.0f, texture, 0);
-		//	new ComponentCollider(this);
-		//	new ComponentCollision(this);
+		//new ComponentCollider(this);
+		//new ComponentCollision(this);
 
 		generate(this);
 		FlounderLogger.log("Creating chunk at: " + position.x + ", " + position.y + ".");
@@ -58,7 +58,7 @@ public class Chunk extends Entity {
 	protected void createChunksAround() {
 		for (int i = 0; i < 6; i++) {
 			// These three variables find the positioning for chunks around the parent.
-			float x = this.getPosition().x + (KosmosChunks.GENERATE_DELTAS[i][0] * 1.154700539f);
+			float x = this.getPosition().x + (KosmosChunks.GENERATE_DELTAS[i][0] * (float) Math.sqrt(3.0));
 			float z = this.getPosition().z + (KosmosChunks.GENERATE_DELTAS[i][1] * 1.5f);
 			Vector3f p = new Vector3f(x, 0.0f, z);
 			boolean chunkExists = false;
@@ -70,20 +70,18 @@ public class Chunk extends Entity {
 			}
 
 			if (!chunkExists) {
-				KosmosChunks.getChunks().add(new Chunk(FlounderEntities.getEntities(), p, Tile.TILE_STONE.getTexture()));
+				KosmosChunks.getChunks().add(new Chunk(FlounderEntities.getEntities(), p, Tile.TILE_GRASS.getTexture()));
 			}
 		}
 	}
 
 	protected static void generate(Chunk chunk) {
-		Vector2f positionChunk = chunk.getPosition().toVector2f(); // new Vector2f(chunk.getPosition().x, chunk.getPosition().z);
-
 		for (int i = 0; i < CHUNK_RADIUS; i++) {
 			int shapesOnEdge = i;
-			float r = 0;
+			float r = 0.0f;
 			float g = -i;
 			float b = i;
-			generateTile(chunk, Vector2f.add(positionChunk, Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null), null));
+			generateTile(chunk, Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null));
 
 			for (int j = 0; j < 6; j++) {
 				if (j == 5) {
@@ -95,18 +93,19 @@ public class Chunk extends Entity {
 					r = r + GENERATE_DELTAS[j][0];
 					g = g + GENERATE_DELTAS[j][1];
 					b = b + GENERATE_DELTAS[j][2];
-					generateTile(chunk, Vector2f.add(positionChunk, Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null), null));
+					generateTile(chunk, Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null));
 				}
 			}
 		}
 	}
 
 	protected static void generateTile(Chunk chunk, Vector2f position) {
-		/*PerlinNoise noise = new PerlinNoise(420);
-
-		int height = (int) Math.abs(noise.noise2(position.x / 66.6f, position.y / 66.6f) * 10.0f);
-		int generate = (int) (noise.noise1((position.x + position.y)) * 100.0f);
-		float rotation = noise.noise1((position.x - position.y) / 66.6f) * 3600.0f;
+		int height = (int) Math.abs(KosmosChunks.getNoise().noise2(
+				(chunk.getPosition().x + position.x) / 66.6f,
+				(chunk.getPosition().z + position.y) / 66.6f
+		) * 10.0f); // (int) position.length() / 16; //
+		int generate = (int) (KosmosChunks.getNoise().noise1((position.x + position.y)) * 100.0f);
+		float rotation = KosmosChunks.getNoise().noise1((position.x - position.y) / 66.6f) * 3600.0f;
 
 		for (int i = 0; i < height; i++) {
 			chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
@@ -116,9 +115,19 @@ public class Chunk extends Entity {
 					case 1:
 						new InstanceTreePine(FlounderEntities.getEntities(),
 								new Vector3f(
-										(float) (position.x * 0.5),
+										chunk.getPosition().x + (float) (position.x * 0.5),
 										(float) ((1.05 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
-										(float) (position.y * 0.5)
+										chunk.getPosition().z + (float) (position.y * 0.5)
+								),
+								new Vector3f(0.0f, rotation, 0.0f)
+						);
+						break;
+					case 2:
+						new InstanceBush(FlounderEntities.getEntities(),
+								new Vector3f(
+										chunk.getPosition().x + (float) (position.x * 0.5),
+										(float) ((1.05 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
+										chunk.getPosition().z + (float) (position.y * 0.5)
 								),
 								new Vector3f(0.0f, rotation, 0.0f)
 						);
@@ -127,8 +136,8 @@ public class Chunk extends Entity {
 						break;
 				}
 			}
-		}*/
-		chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, 0.0f, position.y));
+		}
+		//chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, 0.0f, position.y));
 	}
 
 	public void update(Vector3f playerPosition) {
@@ -139,7 +148,7 @@ public class Chunk extends Entity {
 		}
 
 		// Updates the darkness of this chunk.
-		if (playerPosition != null) {
+		/*if (playerPosition != null) {
 			double distance = Math.sqrt(Math.pow(getPosition().x - playerPosition.x, 2.0) + Math.pow(getPosition().y - playerPosition.y, 2.0));
 
 			if (distance >= 30.0) {
@@ -147,7 +156,7 @@ public class Chunk extends Entity {
 			} else {
 				darkness = 0.0f;
 			}
-		}
+		}*/
 
 		// Adds this mesh AABB to the bounding render pool.
 		FlounderBounding.addShapeRender(chunkMesh.getAABB());
