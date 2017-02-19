@@ -28,6 +28,7 @@ public class ComponentCloud extends IComponentEntity {
 	@Override
 	public void update() {
 		Vector3f.rotate(startPosition, new Vector3f(0.0f, KosmosWorld.getSkyCycle().getDayFactor() * 180.0f, 0.0f), getEntity().getPosition());
+		getEntity().setMoved();
 	}
 
 	@Override

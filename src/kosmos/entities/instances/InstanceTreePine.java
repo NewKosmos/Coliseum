@@ -25,5 +25,7 @@ public class InstanceTreePine extends Entity {
 		super(structure, position, rotation);
 
 		ComponentModel componentModel = new ComponentModel(this, model, 1.0f, texture, 1);
+		ComponentCollider componentCollider = new ComponentCollider(this);
+		ComponentCollision componentCollision = new ComponentCollision(this);
 	}
 }

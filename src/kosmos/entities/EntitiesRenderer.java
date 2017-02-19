@@ -38,6 +38,7 @@ public class EntitiesRenderer extends Renderer {
 
 	private ShaderObject shader;
 	private TextureObject textureUndefined;
+	private int renderedCount;
 
 	/**
 	 * Creates a new entity renderer.
@@ -45,6 +46,7 @@ public class EntitiesRenderer extends Renderer {
 	public EntitiesRenderer() {
 		this.shader = ShaderFactory.newBuilder().setName("entities").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 		this.textureUndefined = TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "undefined.png")).create();
+		this.renderedCount = 0;
 	}
 
 	@Override
@@ -90,6 +92,8 @@ public class EntitiesRenderer extends Renderer {
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();
 		OpenGlUtils.enableAlphaBlending();
+
+		renderedCount = 0;
 	}
 
 	private void renderEntity(Entity entity) {
@@ -151,6 +155,7 @@ public class EntitiesRenderer extends Renderer {
 
 		glDrawElements(GL_TRIANGLES, vaoLength, GL_UNSIGNED_INT, 0);
 		OpenGlUtils.unbindVAO(0, 1, 2, 3, 4, 5);
+		renderedCount++;
 	}
 
 	private void endRendering() {
@@ -160,6 +165,7 @@ public class EntitiesRenderer extends Renderer {
 	@Override
 	public void profile() {
 		FlounderProfiler.add(FlounderEntities.PROFILE_TAB_NAME, "Render Time", super.getRenderTime());
+		FlounderProfiler.add(FlounderEntities.PROFILE_TAB_NAME, "Rendered Count", renderedCount);
 	}
 
 	@Override

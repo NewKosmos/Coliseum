@@ -31,41 +31,27 @@ public class WaterRenderer extends Renderer {
 	private static final MyFile FRAGMENT_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "water", "waterFragment.glsl");
 
 	private FBO reflectionFBO;
-
 	private ShaderObject shader;
-
-	private Water water;
-	private float waveTime;
-
-	private boolean enableShadows;
-	private boolean enableReflections;
 
 	public WaterRenderer() {
 		this.reflectionFBO = FBO.newFBO(0.4f).disableTextureWrap().depthBuffer(DepthBufferType.RENDER_BUFFER).create();
-
 		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
-
-		this.water = new Water(new Vector3f(0.0f, -0.2f, 0.0f), new Vector3f(), 1.0f);
-		this.waveTime = 0.0f;
-
-		this.enableShadows = true;
-		this.enableReflections = true;
 	}
 
 	@Override
 	public void renderObjects(Vector4f clipPlane, Camera camera) {
-		if (!shader.isLoaded() || !water.isLoaded()) {
+		if (!shader.isLoaded() || !KosmosWater.getWater().isLoaded()) {
 			return;
 		}
 
-		prepareRendering(clipPlane, camera);
-		renderWater(water);
-		endRendering();
+		if (KosmosWater.getWater().getAABB().inFrustum(camera.getViewFrustum())) {
+			prepareRendering(clipPlane, camera);
+			renderWater(KosmosWater.getWater());
+			endRendering();
+		}
 	}
 
 	private void prepareRendering(Vector4f clipPlane, Camera camera) {
-		updateWaveTime();
-
 		shader.start();
 		shader.getUniformMat4("projectionMatrix").loadMat4(camera.getProjectionMatrix());
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
@@ -74,7 +60,7 @@ public class WaterRenderer extends Renderer {
 		shader.getUniformVec3("lightDirection").loadVec3(KosmosWorld.getSkyCycle().getLightDirection());
 		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f);
 
-		if (enableShadows) {
+		if (KosmosWater.shadowsEnabled()) {
 			shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.SHADOW_MAP_SIZE);
 			shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
 			shader.getUniformFloat("shadowDistance").loadFloat(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
@@ -82,7 +68,7 @@ public class WaterRenderer extends Renderer {
 			OpenGlUtils.bindTexture(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
 		}
 
-		if (enableReflections) {
+		if (KosmosWater.reflectionsEnabled()) {
 			OpenGlUtils.bindTexture(reflectionFBO.getColourTexture(0), GL_TEXTURE_2D, 0);
 		}
 
@@ -109,14 +95,14 @@ public class WaterRenderer extends Renderer {
 
 		shader.getUniformVec4("diffuseColour").loadVec4(water.getColour());
 
-		shader.getUniformFloat("waveTime").loadFloat(waveTime / Water.WAVE_SPEED);
+		shader.getUniformFloat("waveTime").loadFloat(KosmosWater.getWaveTime() / Water.WAVE_SPEED);
 		shader.getUniformFloat("waveLength").loadFloat(Water.WAVE_LENGTH);
 		shader.getUniformFloat("amplitude").loadFloat(Water.AMPLITUDE);
 		shader.getUniformFloat("squareSize").loadFloat((float) Water.SQUARE_SIZE);
 		shader.getUniformFloat("waterHeight").loadFloat(water.getPosition().y);
 
-		shader.getUniformBool("ignoreShadows").loadBoolean(!enableShadows);
-		shader.getUniformBool("ignoreReflections").loadBoolean(!enableReflections);
+		shader.getUniformBool("ignoreShadows").loadBoolean(!KosmosWater.shadowsEnabled());
+		shader.getUniformBool("ignoreReflections").loadBoolean(!KosmosWater.reflectionsEnabled());
 
 		glDrawArrays(GL_TRIANGLES, 0, water.getVertexCount());
 
@@ -129,44 +115,18 @@ public class WaterRenderer extends Renderer {
 		shader.stop();
 	}
 
-	private void updateWaveTime() {
-		waveTime += Framework.getDeltaRender();
-		waveTime %= Water.WAVE_SPEED;
-	}
-
 	public FBO getReflectionFBO() {
 		return reflectionFBO;
 	}
 
-	public Water getWater() {
-		return water;
-	}
-
-	public boolean shadowsEnabled() {
-		return enableShadows;
-	}
-
-	public void setShadowsEnabled(boolean enableShadows) {
-		this.enableShadows = enableShadows;
-	}
-
-	public boolean reflectionsEnabled() {
-		return enableReflections && water.getColour().a != 1.0f;
-	}
-
-	public void setReflectionsEnabled(boolean enableReflections) {
-		this.enableReflections = enableReflections;
-	}
-
 	@Override
 	public void profile() {
-		FlounderProfiler.add("Water", "Render Time", super.getRenderTime());
+		FlounderProfiler.add(KosmosWater.PROFILE_TAB_NAME, "Render Time", super.getRenderTime());
 	}
 
 	@Override
 	public void dispose() {
 		reflectionFBO.delete();
 		shader.delete();
-		water.delete();
 	}
 }

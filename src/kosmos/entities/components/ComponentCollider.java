@@ -88,7 +88,7 @@ public class ComponentCollider extends IComponentEntity {
 
 	@Override
 	public void update() {
-		if (super.getEntity().hasMoved()) {
+		if (super.getEntity().hasMoved() || aabb.getMinExtents().length() == 0.0f || aabb.getMaxExtents().length() == 0.0f) {
 			ComponentModel componentModel = (ComponentModel) getEntity().getComponent(ComponentModel.ID);
 
 			if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded() && componentModel.getModel().getAABB() != null) {

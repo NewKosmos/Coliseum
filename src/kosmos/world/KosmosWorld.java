@@ -17,6 +17,7 @@ import flounder.maths.vectors.*;
 import kosmos.chunks.*;
 import kosmos.entities.instances.*;
 import kosmos.particles.*;
+import kosmos.water.*;
 
 public class KosmosWorld extends Module {
 	private static final KosmosWorld INSTANCE = new KosmosWorld();
@@ -29,7 +30,7 @@ public class KosmosWorld extends Module {
 	private Entity entityMoon;
 
 	public KosmosWorld() {
-		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEntities.class, KosmosParticles.class, KosmosChunks.class);
+		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEntities.class, KosmosParticles.class, KosmosChunks.class, KosmosWater.class);
 	}
 
 	@Override

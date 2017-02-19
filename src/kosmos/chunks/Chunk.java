@@ -47,9 +47,9 @@ public class Chunk extends Entity {
 		this.tilesChanged = true;
 		this.darkness = 0.0f;
 
-		new ComponentModel(this, null, 1.0f, texture, 0);
-		//new ComponentCollider(this);
-		//new ComponentCollision(this);
+		ComponentModel componentModel = new ComponentModel(this, null, 1.0f, texture, 0);
+		ComponentCollider componentCollider = new ComponentCollider(this);
+		ComponentCollision componentCollision = new ComponentCollision(this);
 
 		generate(this);
 		FlounderLogger.log("Creating chunk at: " + position.x + ", " + position.y + ".");

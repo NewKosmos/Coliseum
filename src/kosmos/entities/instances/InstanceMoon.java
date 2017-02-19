@@ -27,5 +27,7 @@ public class InstanceMoon extends Entity {
 		componentModel.setIgnoreShadows(true);
 		componentModel.setIgnoreFog(true);
 		ComponentCelestial componentCelestial = new ComponentCelestial(this);
+		ComponentCollider componentCollider = new ComponentCollider(this);
+		ComponentCollision componentCollision = new ComponentCollision(this);
 	}
 }

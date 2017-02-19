@@ -102,19 +102,19 @@ public class KosmosRenderer extends RendererMaster {
 	@Override
 	public void render() {
 		/* Water Reflection & Refraction */
-		if (waterRenderer.reflectionsEnabled()) {
-			FlounderCamera.getCamera().reflect(waterRenderer.getWater().getPosition().y);
+		if (KosmosWater.reflectionsEnabled()) {
+			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
 			shadowRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
 
 			glEnable(GL_CLIP_DISTANCE0);
 			{
 				waterRenderer.getReflectionFBO().bindFrameBuffer();
-				renderScene(new Vector4f(0.0f, 1.0f, 0.0f, -waterRenderer.getWater().getPosition().y), KosmosWorld.getFog().getFogColour(), true);
+				renderScene(new Vector4f(0.0f, 1.0f, 0.0f, -KosmosWater.getWater().getPosition().y), KosmosWorld.getFog().getFogColour(), true);
 				waterRenderer.getReflectionFBO().unbindFrameBuffer();
 			}
 			glDisable(GL_CLIP_DISTANCE0);
 
-			FlounderCamera.getCamera().reflect(waterRenderer.getWater().getPosition().y);
+			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
 		}
 
 		/* Shadow rendering. */
