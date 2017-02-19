@@ -12,7 +12,6 @@ package kosmos.chunks;
 import flounder.entities.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
-import flounder.noise.*;
 import flounder.physics.bounding.*;
 import flounder.space.*;
 import flounder.textures.*;
@@ -52,7 +51,7 @@ public class Chunk extends Entity {
 		ComponentCollision componentCollision = new ComponentCollision(this);
 
 		generate(this);
-		FlounderLogger.log("Creating chunk at: " + position.x + ", " + position.y + ".");
+		FlounderLogger.log("Creating chunk at: " + position.x + ", " + position.z + ".");
 	}
 
 	protected void createChunksAround() {
@@ -100,18 +99,20 @@ public class Chunk extends Entity {
 	}
 
 	protected static void generateTile(Chunk chunk, Vector2f position) {
+		Vector2f worldPos = new Vector2f(position.x + (chunk.getPosition().x * 2.0f), position.y + (chunk.getPosition().z * 2.0f));
 		int height = (int) Math.abs(KosmosChunks.getNoise().noise2(
-				(chunk.getPosition().x + position.x) / 66.6f,
-				(chunk.getPosition().z + position.y) / 66.6f
-		) * 10.0f); // (int) position.length() / 16; //
-		int generate = (int) (KosmosChunks.getNoise().noise1((position.x + position.y)) * 100.0f);
-		float rotation = KosmosChunks.getNoise().noise1((position.x - position.y) / 66.6f) * 3600.0f;
+				worldPos.x / 66.6f,
+				worldPos.y / 66.6f
+		) * 10.0f); // (int) worldPos.length() / 7;
+		boolean generate = (KosmosChunks.getNoise().noise1((worldPos.x + worldPos.y) / 11.0f) * 20.0f) > 1.0f;
+		int genID = (int) (KosmosChunks.getNoise().noise1((worldPos.y - worldPos.x) / 11.0f) * 200.0f);
+		float rotation = KosmosChunks.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
 
 		for (int i = 0; i < height; i++) {
 			chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
 
-			if (i == height - 1 && height > 0) {
-				switch (generate) {
+			if (generate && i == height - 1 && height > 0) {
+				switch (genID) {
 					case 1:
 						new InstanceTreePine(FlounderEntities.getEntities(),
 								new Vector3f(

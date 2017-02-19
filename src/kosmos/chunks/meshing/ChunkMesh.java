@@ -10,7 +10,6 @@
 package kosmos.chunks.meshing;
 
 import flounder.framework.*;
-import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
 import kosmos.chunks.*;
@@ -109,7 +108,7 @@ public class ChunkMesh {
 
 		// Then all model data is used to create a manual model loader, a hull is not generated and materials are baked into the textures.
 		// The model is then loaded into a object and OpenGL.
-		this.model = ModelFactory.newBuilder().setManual(new ModelLoadManual("chunk" + chunk.getPosition().x + "u" + chunk.getPosition().y + Framework.getTimeSec()) {
+		this.model = ModelFactory.newBuilder().setManual(new ModelLoadManual("chunk" + chunk.getPosition().x + "p" + chunk.getPosition().z + "t" + (int) Framework.getTimeSec()) {
 			@Override
 			public float[] getVertices() {
 				return vertices;

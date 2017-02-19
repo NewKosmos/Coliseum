@@ -10,7 +10,6 @@
 package kosmos.particles;
 
 import flounder.framework.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;

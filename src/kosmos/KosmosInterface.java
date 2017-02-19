@@ -34,7 +34,7 @@ public class KosmosInterface extends Standard {
 	private KeyButton closeWindow;
 
 	public KosmosInterface() {
-		super(FlounderDisplay.class, FlounderKeyboard.class, KosmosWorld.class);
+		super(KosmosWorld.class, FlounderDisplay.class, FlounderKeyboard.class);
 	}
 
 	@Override

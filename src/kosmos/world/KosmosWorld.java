@@ -30,12 +30,12 @@ public class KosmosWorld extends Module {
 	private Entity entityMoon;
 
 	public KosmosWorld() {
-		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEntities.class, KosmosParticles.class, KosmosChunks.class, KosmosWater.class);
+		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEntities.class, KosmosChunks.class, KosmosWater.class, KosmosParticles.class);
 	}
 
 	@Override
 	public void init() {
-		this.fog = new Fog(new Colour(), 0.0162f, 2.22f, 0.0f, 50.0f);
+		this.fog = new Fog(new Colour(), 0.02f, 2.0f, 0.0f, 50.0f);
 		this.skyCycle = new SkyCycle();
 
 		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));

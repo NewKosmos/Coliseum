@@ -39,7 +39,7 @@ public class KosmosChunks extends Module {
 	@Override
 	public void init() {
 		this.chunks = new ArrayList<>();
-		this.noise = new PerlinNoise(420);
+		this.noise = new PerlinNoise(21);
 		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25), 0.0f), new Vector3f());
 		generateClouds();
 
@@ -47,11 +47,14 @@ public class KosmosChunks extends Module {
 		chunks.add(parent);
 		parent.createChunksAround();
 
-		/*List<Chunk> c = new ArrayList<>(chunks);
-		c.remove(parent);
-		for (Chunk i : c) {
-			i.createChunksAround();
-		}*/
+		try {
+			chunks.forEach(Chunk::createChunksAround);
+		} catch (ConcurrentModificationException e) {
+		}
+		try {
+			chunks.forEach(Chunk::createChunksAround);
+		} catch (ConcurrentModificationException e) {
+		}
 	}
 
 	private void generateClouds() {

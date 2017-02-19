@@ -12,10 +12,8 @@ package kosmos.entities.components;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
-import kosmos.chunks.*;
 
 public class ComponentPlayer extends IComponentEntity {
 	public static final int ID = EntityIDAssigner.getId();

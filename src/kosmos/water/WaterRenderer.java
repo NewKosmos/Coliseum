@@ -12,7 +12,6 @@ package kosmos.water;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.fbos.*;
-import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;

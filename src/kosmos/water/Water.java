@@ -30,7 +30,7 @@ public class Water {
 	protected static final float AMPLITUDE = 0.185f;
 
 	protected static final double SQUARE_SIZE = 1.0;
-	protected static final int VERTEX_COUNT = 35 * 5; // Should create a AABB of size 'ChunkGenerator.CHUNK_WORLD_SIZE'.
+	protected static final int VERTEX_COUNT = 135;
 
 	private int vao;
 	private int vertexCount;
