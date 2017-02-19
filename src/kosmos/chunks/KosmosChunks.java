@@ -12,11 +12,13 @@ package kosmos.chunks;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.framework.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.noise.*;
 import flounder.physics.bounding.*;
 import flounder.profiling.*;
+import flounder.space.*;
 import flounder.textures.*;
 import kosmos.chunks.tiles.*;
 import kosmos.entities.instances.*;
@@ -29,8 +31,11 @@ public class KosmosChunks extends Module {
 	private static final KosmosChunks INSTANCE = new KosmosChunks();
 	public static final String PROFILE_TAB_NAME = "Kosmos Chunks";
 
-	private List<Chunk> chunks;
 	private PerlinNoise noise;
+	private ISpatialStructure<Chunk> chunks;
+
+	private Vector3f lastPlayerPos;
+	private Chunk currentChunk;
 
 	public KosmosChunks() {
 		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderBounding.class, FlounderTextures.class);
@@ -38,8 +43,10 @@ public class KosmosChunks extends Module {
 
 	@Override
 	public void init() {
-		this.chunks = new ArrayList<>();
-		this.noise = new PerlinNoise(21);
+		this.noise = new PerlinNoise(90);
+		this.chunks = new StructureBasic<>();
+		this.lastPlayerPos = new Vector3f();
+		this.currentChunk = null;
 		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25), 0.0f), new Vector3f());
 		generateClouds();
 
@@ -47,14 +54,11 @@ public class KosmosChunks extends Module {
 		chunks.add(parent);
 		parent.createChunksAround();
 
-		try {
-			chunks.forEach(Chunk::createChunksAround);
+		/*try {
+			chunks.getAll(new ArrayList<>()).forEach(Chunk::createChunksAround);
+			chunks.getAll(new ArrayList<>()).forEach(Chunk::createChunksAround);
 		} catch (ConcurrentModificationException e) {
-		}
-		try {
-			chunks.forEach(Chunk::createChunksAround);
-		} catch (ConcurrentModificationException e) {
-		}
+		}*/
 	}
 
 	private void generateClouds() {
@@ -77,26 +81,55 @@ public class KosmosChunks extends Module {
 
 	@Override
 	public void update() {
-		for (Chunk chunk : chunks) {
-			if (FlounderCamera.getPlayer() != null) {
-				chunk.update(FlounderCamera.getPlayer().getPosition());
-			} else {
-				chunk.update(null);
+		if (FlounderCamera.getPlayer() != null) {
+			Vector3f playerPos = FlounderCamera.getPlayer().getPosition();
+			//List<Chunk> playerChunks = null;
+			Chunk playerChunk = null;
+
+			for (Chunk chunk : chunks.queryInFrustum(new ArrayList<>(), FlounderCamera.getCamera().getViewFrustum())) {
+				if (chunk.getBounding().contains(playerPos)) { // !playerPos.equals(lastPlayerPos) &&
+					/*if (playerChunks == null) {
+						playerChunks = new ArrayList<>();
+					}
+
+					playerChunks.add(chunk);*/
+					playerChunk = chunk;
+				}
+
+				chunk.update(playerPos);
 			}
+
+			if (playerChunk != null) {
+				if (playerChunk != currentChunk) {
+					FlounderLogger.log(playerChunk);
+				//	playerChunk.createChunksAround();
+				}
+
+				currentChunk = playerChunk;
+			}
+
+			/*if (playerChunks != null) {
+				FlounderLogger.log(playerChunks.size());
+				if (playerChunks.size() == 1) {
+
+				}
+			}*/
+
+			lastPlayerPos.set(playerPos);
 		}
 	}
 
 	@Override
 	public void profile() {
-		FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Size", chunks.size());
-	}
-
-	public static List<Chunk> getChunks() {
-		return INSTANCE.chunks;
+		FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Size", chunks.getSize());
 	}
 
 	public static PerlinNoise getNoise() {
 		return INSTANCE.noise;
+	}
+
+	public static ISpatialStructure<Chunk> getChunks() {
+		return INSTANCE.chunks;
 	}
 
 	@Override

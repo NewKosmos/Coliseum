@@ -34,6 +34,7 @@ public class Chunk extends Entity {
 
 	public static final int CHUNK_RADIUS = 7; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
 
+	private List<Chunk> childrenChunks;
 	private Map<Tile, List<Vector3f>> tiles;
 	private ChunkMesh chunkMesh;
 	private boolean tilesChanged;
@@ -41,6 +42,7 @@ public class Chunk extends Entity {
 
 	public Chunk(ISpatialStructure<Entity> structure, Vector3f position, TextureObject texture) {
 		super(structure, position, new Vector3f());
+		this.childrenChunks = new ArrayList<>();
 		this.tiles = new HashMap<>();
 		this.chunkMesh = new ChunkMesh(this);
 		this.tilesChanged = true;
@@ -62,14 +64,16 @@ public class Chunk extends Entity {
 			Vector3f p = new Vector3f(x, 0.0f, z);
 			boolean chunkExists = false;
 
-			for (Chunk chunk : KosmosChunks.getChunks()) {
+			for (Chunk chunk : KosmosChunks.getChunks().getAll(new ArrayList<>())) {
 				if (chunk.getPosition().equals(p)) {
 					chunkExists = true;
 				}
 			}
 
 			if (!chunkExists) {
-				KosmosChunks.getChunks().add(new Chunk(FlounderEntities.getEntities(), p, Tile.TILE_GRASS.getTexture()));
+				Chunk chunk = new Chunk(FlounderEntities.getEntities(), p, Tile.TILE_GRASS.getTexture());
+				childrenChunks.add(chunk);
+				KosmosChunks.getChunks().add(chunk);
 			}
 		}
 	}
@@ -202,11 +206,20 @@ public class Chunk extends Entity {
 		}
 	}
 
+	public List<Chunk> getChildrenChunks() {
+		return childrenChunks;
+	}
+
 	public ChunkMesh getChunkMesh() {
 		return chunkMesh;
 	}
 
 	public float getDarkness() {
 		return darkness;
+	}
+
+	public void delete() {
+		tiles.clear();
+		chunkMesh.delete();
 	}
 }

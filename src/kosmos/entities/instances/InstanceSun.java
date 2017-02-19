@@ -28,6 +28,6 @@ public class InstanceSun extends Entity {
 		componentModel.setIgnoreFog(true);
 		ComponentCelestial componentCelestial = new ComponentCelestial(this);
 		ComponentCollider componentCollider = new ComponentCollider(this);
-		ComponentCollision componentCollision = new ComponentCollision(this);
+		// ComponentCollision componentCollision = new ComponentCollision(this);
 	}
 }
