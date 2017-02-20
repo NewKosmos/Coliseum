@@ -16,11 +16,11 @@ import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.noise.*;
+import flounder.physics.*;
 import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.space.*;
 import flounder.textures.*;
-import kosmos.chunks.tiles.*;
 import kosmos.entities.instances.*;
 import kosmos.world.*;
 
@@ -33,6 +33,8 @@ public class KosmosChunks extends Module {
 	private PerlinNoise noise;
 	private ISpatialStructure<Entity> chunks;
 
+	private AABB chunkRangeAABB;
+
 	private Vector3f lastPlayerPos;
 	private Chunk currentChunk;
 
@@ -44,7 +46,10 @@ public class KosmosChunks extends Module {
 	public void init() {
 		this.noise = new PerlinNoise(420);
 		this.chunks = new StructureBasic<>();
-		this.lastPlayerPos = new Vector3f();
+
+		this.chunkRangeAABB = new AABB();
+
+		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
 		this.currentChunk = null;
 		generateClouds();
 
@@ -75,6 +80,13 @@ public class KosmosChunks extends Module {
 			Vector3f playerPos = FlounderCamera.getPlayer().getPosition();
 			Chunk playerChunk = null;
 
+			if (!playerPos.equals(lastPlayerPos)) {
+				float t = 40.0f;
+				chunkRangeAABB.getMinExtents().set(-t, -t, -t);
+				chunkRangeAABB.getMaxExtents().set(t, t, t);
+				AABB.recalculate(chunkRangeAABB, playerPos, new Vector3f(), 1.0f, chunkRangeAABB);
+			}
+
 			for (Entity entity : chunks.getAll(new ArrayList<>())) {
 				Chunk chunk = (Chunk) entity;
 
@@ -93,24 +105,35 @@ public class KosmosChunks extends Module {
 						playerChunk.createChunksAround();
 					}
 
-					/*Iterator it = chunks.getAll(new ArrayList<>()).iterator();
+					Iterator it = chunks.getAll(new ArrayList<>()).iterator();
 
 					while (it.hasNext()) {
 						Chunk chunk = (Chunk) it.next();
 
-						if (chunk != currentChunk && !playerChunk.getChildrenChunks().contains(chunk)) {
-							chunk.delete();
-							it.remove();
+						if (chunk != currentChunk && chunk.isLoaded()) {
+							if (!chunk.getBounding().intersects(chunkRangeAABB).isIntersection() && !chunkRangeAABB.contains((AABB) chunk.getBounding())) {
+								for (Entity ee : chunks.getAll(new ArrayList<>())) {
+									Chunk cc = (Chunk) ee;
+
+									if (cc.getChildrenChunks().contains(chunk)) {
+										cc.getChildrenChunks().remove(chunk);
+									}
+								}
+
+								chunk.delete();
+								it.remove();
+							}
 						}
-					}*/
+					}
+
+					currentChunk = playerChunk;
 				}
 
 				FlounderLogger.log(playerChunk);
 			}
 
-			currentChunk = playerChunk;
-
 			lastPlayerPos.set(playerPos);
+			FlounderBounding.addShapeRender(chunkRangeAABB);
 		}
 	}
 

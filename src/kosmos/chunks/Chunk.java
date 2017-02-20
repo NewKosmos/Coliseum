@@ -31,7 +31,7 @@ import java.util.*;
  */
 public class Chunk extends Entity {
 	protected static final float[][] TILE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
-	protected static final float[][] CHUNK_DELTAS = new float[][]{{9.5f, 7.0f}, {-0.5f, 13.0f}, {-10.0f, 6.0f}, {-9.5f, -7.0f}, {0.5f, -13.0f}, {10.0f, -6.0f}};
+	protected static final double[][] CHUNK_DELTAS = new double[][]{{9.5, 7.0}, {-0.5, 13.0}, {-10.0, 6.0}, {-9.5, -7.0}, {0.5, -13.0}, {10.0, -6.0}};
 
 	public static final double HEXAGON_SIDE_LENGTH = 2.0; //  Each tile can be broken into equilateral triangles with sides of length.
 
@@ -66,22 +66,21 @@ public class Chunk extends Entity {
 	}
 
 	protected void createChunksAround() {
-		if (!childrenChunks.isEmpty()) {
+		if (childrenChunks.size() == 6) {
 			return;
 		}
 
 		for (int i = 0; i < 6; i++) {
 			// These three variables find the positioning for chunks around the parent.
-			float x = this.getPosition().x + (CHUNK_DELTAS[i][0] * (float) Math.sqrt(3.0));
-			float z = this.getPosition().z + (CHUNK_DELTAS[i][1] * 1.5f);
+			float x = this.getPosition().x + (float) (CHUNK_DELTAS[i][0] * Math.sqrt(3.0));
+			float z = this.getPosition().z + (float) (CHUNK_DELTAS[i][1] * 1.5f);
 			Vector3f p = new Vector3f(x, 0.0f, z);
 			Chunk duplicate = null;
 
 			for (Entity entity : KosmosChunks.getChunks().getAll(new ArrayList<>())) {
 				Chunk chunk = (Chunk) entity;
 
-				if (chunk.getPosition().equals(p)) {
-					FlounderLogger.log("Bash the fash!");
+				if (p.equals(chunk.getPosition())) {
 					duplicate = chunk;
 				}
 			}
@@ -133,7 +132,7 @@ public class Chunk extends Entity {
 		for (int i = 0; i < height; i++) {
 			chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
 
-			if (generate && i == height - 1 && height > 0) {
+			/*if (generate && i == height - 1 && height > 0) {
 				switch (genID) {
 					case 1:
 						new InstanceTreePine(chunk.entities,
@@ -178,7 +177,7 @@ public class Chunk extends Entity {
 					default:
 						break;
 				}
-			}
+			}*/
 		}
 		//chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, 0.0f, position.y));
 	}
