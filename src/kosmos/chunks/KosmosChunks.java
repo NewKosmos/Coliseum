@@ -42,7 +42,7 @@ public class KosmosChunks extends Module {
 
 	@Override
 	public void init() {
-		this.noise = new PerlinNoise(537);
+		this.noise = new PerlinNoise(420);
 		this.chunks = new StructureBasic<>();
 		this.lastPlayerPos = new Vector3f();
 		this.currentChunk = null;
@@ -88,23 +88,21 @@ public class KosmosChunks extends Module {
 			}
 
 			if (playerChunk != currentChunk) {
-				/*if (currentChunk != null && !currentChunk.getChildrenChunks().isEmpty()) {
-					for (Chunk children : currentChunk.getChildrenChunks()) {
-						if (children != playerChunk) {
-						//	children.delete();
+				if (playerChunk != null) {
+					if (playerChunk.getChildrenChunks().isEmpty()) {
+						playerChunk.createChunksAround();
+					}
+
+					/*Iterator it = chunks.getAll(new ArrayList<>()).iterator();
+
+					while (it.hasNext()) {
+						Chunk chunk = (Chunk) it.next();
+
+						if (chunk != currentChunk && !playerChunk.getChildrenChunks().contains(chunk)) {
+							chunk.delete();
+							it.remove();
 						}
-					}
-
-					if (currentChunk.getChildrenChunks().contains(playerChunk)) {
-						currentChunk.getChildrenChunks().clear();
-						currentChunk.getChildrenChunks().add(playerChunk);
-					} else {
-						currentChunk.getChildrenChunks().clear();
-					}
-				}*/
-
-				if (playerChunk != null && playerChunk.getChildrenChunks().isEmpty()) {
-					playerChunk.createChunksAround();
+					}*/
 				}
 
 				FlounderLogger.log(playerChunk);

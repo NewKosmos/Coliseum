@@ -62,7 +62,7 @@ public class EntitiesRenderer extends Renderer {
 			Chunk chunk = (Chunk) entityc;
 			renderEntity(entityc);
 
-			for (Entity entity : chunk.getEntities().queryInFrustum(new ArrayList<>(), FlounderCamera.getCamera().getViewFrustum())) {
+			for (Entity entity : chunk.getEntities().getAll(new ArrayList<>())) { // queryInFrustum(new ArrayList<>(), FlounderCamera.getCamera().getViewFrustum())
 				renderEntity(entity);
 			}
 		}

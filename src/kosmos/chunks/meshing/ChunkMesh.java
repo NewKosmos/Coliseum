@@ -103,8 +103,8 @@ public class ChunkMesh {
 		}
 
 		// Makes sure the chunk takes sufficient space.
-		modelAABB.getMinExtents().y -= 5.0f;
-		modelAABB.getMaxExtents().y += 5.0f;
+		modelAABB.getMinExtents().y = -3.0f;
+		modelAABB.getMaxExtents().y = 7.0f;
 
 		// Logs how many vertices and indices are in the chunk model.
 		//	FlounderLogger.log("Vertices = " + (vertices.length / 3) + ", Indices = " + indices.length);
@@ -176,6 +176,8 @@ public class ChunkMesh {
 	}
 
 	public void delete() {
-		model.delete();
+		if (model != null) {
+			//	model.delete();
+		}
 	}
 }

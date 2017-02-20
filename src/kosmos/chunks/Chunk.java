@@ -63,25 +63,31 @@ public class Chunk extends Entity {
 	}
 
 	protected void createChunksAround() {
+		if (!childrenChunks.isEmpty()) {
+			return;
+		}
+
 		for (int i = 0; i < 6; i++) {
 			// These three variables find the positioning for chunks around the parent.
 			float x = this.getPosition().x + (CHUNK_DELTAS[i][0] * (float) Math.sqrt(3.0));
 			float z = this.getPosition().z + (CHUNK_DELTAS[i][1] * 1.5f);
 			Vector3f p = new Vector3f(x, 0.0f, z);
-			boolean chunkExists = false;
+			Chunk duplicate = null;
 
 			for (Entity entity : KosmosChunks.getChunks().getAll(new ArrayList<>())) {
 				Chunk chunk = (Chunk) entity;
 
 				if (chunk.getPosition().equals(p)) {
-					chunkExists = true;
+					duplicate = chunk;
 				}
 			}
 
-			if (!chunkExists) {
+			if (duplicate == null) {
 				Chunk chunk = new Chunk(KosmosChunks.getChunks(), p, Tile.TILE_GRASS.getTexture());
 				childrenChunks.add(chunk);
 				KosmosChunks.getChunks().add(chunk);
+			} else {
+				childrenChunks.add(duplicate);
 			}
 		}
 	}
@@ -260,7 +266,13 @@ public class Chunk extends Entity {
 	}
 
 	public void delete() {
+		for (Entity entity : entities.getAll(new ArrayList<>())) {
+			entity.forceRemove();
+		}
+
+		entities.clear();
 		tiles.clear();
 		chunkMesh.delete();
+		KosmosChunks.getChunks().remove(this);
 	}
 }
