@@ -22,6 +22,7 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.chunks.tiles.*;
 import kosmos.entities.instances.*;
+import kosmos.world.*;
 
 import java.util.*;
 
@@ -43,22 +44,13 @@ public class KosmosChunks extends Module {
 
 	@Override
 	public void init() {
-		this.noise = new PerlinNoise(90);
+		this.noise = new PerlinNoise(537);
 		this.chunks = new StructureBasic<>();
 		this.lastPlayerPos = new Vector3f();
 		this.currentChunk = null;
-		new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25), 0.0f), new Vector3f());
 		generateClouds();
 
-		Chunk parent = new Chunk(FlounderEntities.getEntities(), new Vector3f(), Tile.TILE_GRASS.getTexture());
-		chunks.add(parent);
-		parent.createChunksAround();
-
-		/*try {
-			chunks.getAll(new ArrayList<>()).forEach(Chunk::createChunksAround);
-			chunks.getAll(new ArrayList<>()).forEach(Chunk::createChunksAround);
-		} catch (ConcurrentModificationException e) {
-		}*/
+		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector3f(), Tile.TILE_GRASS.getTexture())); // The root chunk.
 	}
 
 	private void generateClouds() {
@@ -83,37 +75,42 @@ public class KosmosChunks extends Module {
 	public void update() {
 		if (FlounderCamera.getPlayer() != null) {
 			Vector3f playerPos = FlounderCamera.getPlayer().getPosition();
-			//List<Chunk> playerChunks = null;
 			Chunk playerChunk = null;
 
-			for (Chunk chunk : chunks.queryInFrustum(new ArrayList<>(), FlounderCamera.getCamera().getViewFrustum())) {
-				if (chunk.getBounding().contains(playerPos)) { // !playerPos.equals(lastPlayerPos) &&
-					/*if (playerChunks == null) {
-						playerChunks = new ArrayList<>();
+			for (Chunk chunk : chunks.getAll(new ArrayList<>())) {
+				if (chunk.isLoaded() && chunk.getBounding().inFrustum(FlounderCamera.getCamera().getViewFrustum())) {
+					if (chunk.getBounding().contains(KosmosWorld.getEntityPlayer().getBounding())) {
+						playerChunk = chunk;
 					}
-
-					playerChunks.add(chunk);*/
-					playerChunk = chunk;
 				}
 
 				chunk.update(playerPos);
 			}
 
-			if (playerChunk != null) {
-				if (playerChunk != currentChunk) {
-					FlounderLogger.log(playerChunk);
-				//	playerChunk.createChunksAround();
+			if (playerChunk != currentChunk) {
+				/*if (currentChunk != null && !currentChunk.getChildrenChunks().isEmpty()) {
+					for (Chunk children : currentChunk.getChildrenChunks()) {
+						if (children != playerChunk) {
+						//	children.delete();
+						}
+					}
+
+					if (currentChunk.getChildrenChunks().contains(playerChunk)) {
+						currentChunk.getChildrenChunks().clear();
+						currentChunk.getChildrenChunks().add(playerChunk);
+					} else {
+						currentChunk.getChildrenChunks().clear();
+					}
+				}*/
+
+				if (playerChunk != null && playerChunk.getChildrenChunks().isEmpty()) {
+					playerChunk.createChunksAround();
 				}
 
-				currentChunk = playerChunk;
+				FlounderLogger.log(playerChunk);
 			}
 
-			/*if (playerChunks != null) {
-				FlounderLogger.log(playerChunks.size());
-				if (playerChunks.size() == 1) {
-
-				}
-			}*/
+			currentChunk = playerChunk;
 
 			lastPlayerPos.set(playerPos);
 		}

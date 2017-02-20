@@ -36,6 +36,7 @@ public class ComponentCelestial extends IComponentEntity {
 		if (FlounderCamera.getCamera() != null) {
 			Vector3f.add(getEntity().getPosition(), FlounderCamera.getCamera().getPosition(), getEntity().getPosition());
 		}
+
 		getEntity().setMoved();
 	}
 

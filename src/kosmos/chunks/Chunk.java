@@ -121,17 +121,37 @@ public class Chunk extends Entity {
 						new InstanceTreePine(FlounderEntities.getEntities(),
 								new Vector3f(
 										chunk.getPosition().x + (float) (position.x * 0.5),
-										(float) ((1.05 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
+										(float) ((1.5 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
 										chunk.getPosition().z + (float) (position.y * 0.5)
 								),
 								new Vector3f(0.0f, rotation, 0.0f)
 						);
 						break;
 					case 2:
+						new InstanceTree1(FlounderEntities.getEntities(),
+								new Vector3f(
+										chunk.getPosition().x + (float) (position.x * 0.5),
+										(float) ((2.0 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
+										chunk.getPosition().z + (float) (position.y * 0.5)
+								),
+								new Vector3f(0.0f, rotation, 0.0f)
+						);
+						break;
+					case 3:
+						new InstanceTree3(FlounderEntities.getEntities(),
+								new Vector3f(
+										chunk.getPosition().x + (float) (position.x * 0.5),
+										(float) ((2.5 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
+										chunk.getPosition().z + (float) (position.y * 0.5)
+								),
+								new Vector3f(0.0f, rotation, 0.0f)
+						);
+						break;
+					case 4:
 						new InstanceBush(FlounderEntities.getEntities(),
 								new Vector3f(
 										chunk.getPosition().x + (float) (position.x * 0.5),
-										(float) ((1.05 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
+										(float) ((2.5 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
 										chunk.getPosition().z + (float) (position.y * 0.5)
 								),
 								new Vector3f(0.0f, rotation, 0.0f)
@@ -216,6 +236,10 @@ public class Chunk extends Entity {
 
 	public float getDarkness() {
 		return darkness;
+	}
+
+	public boolean isLoaded() {
+		return chunkMesh.getModel() != null && chunkMesh.getModel().isLoaded();
 	}
 
 	public void delete() {

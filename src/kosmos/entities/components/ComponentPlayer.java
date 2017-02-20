@@ -45,6 +45,8 @@ public class ComponentPlayer extends IComponentEntity {
 				return;
 			}
 		}*/
+
+		getEntity().setMoved();
 	}
 
 	@Override
