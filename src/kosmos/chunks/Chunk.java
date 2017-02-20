@@ -12,6 +12,7 @@ package kosmos.chunks;
 import flounder.entities.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
+import flounder.physics.*;
 import flounder.physics.bounding.*;
 import flounder.space.*;
 import flounder.textures.*;
@@ -28,11 +29,14 @@ import java.util.*;
  * http://stackoverflow.com/questions/2459402/hexagonal-grid-coordinates-to-pixel-coordinates
  */
 public class Chunk extends Entity {
-	protected static final float[][] GENERATE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
+	protected static final float[][] TILE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
+	protected static final float[][] CHUNK_DELTAS = new float[][]{{9.5f, 7.0f}, {-0.5f, 13.0f}, {-10.0f, 6.0f}, {-9.5f, -7.0f}, {0.5f, -13.0f}, {10.0f, -6.0f}};
 
 	public static final double HEXAGON_SIDE_LENGTH = 2.0; //  Each tile can be broken into equilateral triangles with sides of length.
 
 	public static final int CHUNK_RADIUS = 7; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
+
+	private ISpatialStructure<Entity> entities;
 
 	private List<Chunk> childrenChunks;
 	private Map<Tile, List<Vector3f>> tiles;
@@ -42,6 +46,8 @@ public class Chunk extends Entity {
 
 	public Chunk(ISpatialStructure<Entity> structure, Vector3f position, TextureObject texture) {
 		super(structure, position, new Vector3f());
+		this.entities = new StructureBasic<>();
+
 		this.childrenChunks = new ArrayList<>();
 		this.tiles = new HashMap<>();
 		this.chunkMesh = new ChunkMesh(this);
@@ -59,19 +65,21 @@ public class Chunk extends Entity {
 	protected void createChunksAround() {
 		for (int i = 0; i < 6; i++) {
 			// These three variables find the positioning for chunks around the parent.
-			float x = this.getPosition().x + (KosmosChunks.GENERATE_DELTAS[i][0] * (float) Math.sqrt(3.0));
-			float z = this.getPosition().z + (KosmosChunks.GENERATE_DELTAS[i][1] * 1.5f);
+			float x = this.getPosition().x + (CHUNK_DELTAS[i][0] * (float) Math.sqrt(3.0));
+			float z = this.getPosition().z + (CHUNK_DELTAS[i][1] * 1.5f);
 			Vector3f p = new Vector3f(x, 0.0f, z);
 			boolean chunkExists = false;
 
-			for (Chunk chunk : KosmosChunks.getChunks().getAll(new ArrayList<>())) {
+			for (Entity entity : KosmosChunks.getChunks().getAll(new ArrayList<>())) {
+				Chunk chunk = (Chunk) entity;
+
 				if (chunk.getPosition().equals(p)) {
 					chunkExists = true;
 				}
 			}
 
 			if (!chunkExists) {
-				Chunk chunk = new Chunk(FlounderEntities.getEntities(), p, Tile.TILE_GRASS.getTexture());
+				Chunk chunk = new Chunk(KosmosChunks.getChunks(), p, Tile.TILE_GRASS.getTexture());
 				childrenChunks.add(chunk);
 				KosmosChunks.getChunks().add(chunk);
 			}
@@ -93,9 +101,9 @@ public class Chunk extends Entity {
 
 				for (int w = 0; w < shapesOnEdge; w++) {
 					// r + g + b = 0
-					r = r + GENERATE_DELTAS[j][0];
-					g = g + GENERATE_DELTAS[j][1];
-					b = b + GENERATE_DELTAS[j][2];
+					r = r + TILE_DELTAS[j][0];
+					g = g + TILE_DELTAS[j][1];
+					b = b + TILE_DELTAS[j][2];
 					generateTile(chunk, Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null));
 				}
 			}
@@ -118,7 +126,7 @@ public class Chunk extends Entity {
 			if (generate && i == height - 1 && height > 0) {
 				switch (genID) {
 					case 1:
-						new InstanceTreePine(FlounderEntities.getEntities(),
+						new InstanceTreePine(chunk.entities,
 								new Vector3f(
 										chunk.getPosition().x + (float) (position.x * 0.5),
 										(float) ((1.5 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
@@ -128,7 +136,7 @@ public class Chunk extends Entity {
 						);
 						break;
 					case 2:
-						new InstanceTree1(FlounderEntities.getEntities(),
+						new InstanceTree1(chunk.entities,
 								new Vector3f(
 										chunk.getPosition().x + (float) (position.x * 0.5),
 										(float) ((2.0 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
@@ -138,7 +146,7 @@ public class Chunk extends Entity {
 						);
 						break;
 					case 3:
-						new InstanceTree3(FlounderEntities.getEntities(),
+						new InstanceTree3(chunk.entities,
 								new Vector3f(
 										chunk.getPosition().x + (float) (position.x * 0.5),
 										(float) ((2.5 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
@@ -148,7 +156,7 @@ public class Chunk extends Entity {
 						);
 						break;
 					case 4:
-						new InstanceBush(FlounderEntities.getEntities(),
+						new InstanceBush(chunk.entities,
 								new Vector3f(
 										chunk.getPosition().x + (float) (position.x * 0.5),
 										(float) ((2.5 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
@@ -226,6 +234,10 @@ public class Chunk extends Entity {
 		}
 	}
 
+	public ISpatialStructure<Entity> getEntities() {
+		return entities;
+	}
+
 	public List<Chunk> getChildrenChunks() {
 		return childrenChunks;
 	}
@@ -240,6 +252,11 @@ public class Chunk extends Entity {
 
 	public boolean isLoaded() {
 		return chunkMesh.getModel() != null && chunkMesh.getModel().isLoaded();
+	}
+
+	@Override
+	public IBounding getBounding() {
+		return chunkMesh.getAABB();
 	}
 
 	public void delete() {

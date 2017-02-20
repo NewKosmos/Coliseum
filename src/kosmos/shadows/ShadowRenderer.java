@@ -20,6 +20,7 @@ import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
 import kosmos.*;
+import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.world.*;
 
@@ -66,6 +67,15 @@ public class ShadowRenderer extends Renderer {
 		}
 
 		prepareRendering(clipPlane, camera);
+
+		for (Entity entityc : KosmosChunks.getChunks().getAll(new ArrayList<>())) {
+			Chunk chunk = (Chunk) entityc;
+			renderEntity(entityc);
+
+			for (Entity entity : chunk.getEntities().getAll(new ArrayList<>())) {
+				renderEntity(entity);
+			}
+		}
 
 		for (Entity entity : FlounderEntities.getEntities().getAll(new ArrayList<>())) {
 			renderEntity(entity);

@@ -27,13 +27,11 @@ import kosmos.world.*;
 import java.util.*;
 
 public class KosmosChunks extends Module {
-	protected static final float[][] GENERATE_DELTAS = new float[][]{{9.5f, 7.0f}, {-0.5f, 13.0f}, {-10.0f, 6.0f}, {-9.5f, -7.0f}, {0.5f, -13.0f}, {10.0f, -6.0f}};
-
 	private static final KosmosChunks INSTANCE = new KosmosChunks();
 	public static final String PROFILE_TAB_NAME = "Kosmos Chunks";
 
 	private PerlinNoise noise;
-	private ISpatialStructure<Chunk> chunks;
+	private ISpatialStructure<Entity> chunks;
 
 	private Vector3f lastPlayerPos;
 	private Chunk currentChunk;
@@ -50,7 +48,7 @@ public class KosmosChunks extends Module {
 		this.currentChunk = null;
 		generateClouds();
 
-		chunks.add(new Chunk(FlounderEntities.getEntities(), new Vector3f(), Tile.TILE_GRASS.getTexture())); // The root chunk.
+		new Chunk(KosmosChunks.getChunks(), new Vector3f(), Tile.TILE_GRASS.getTexture()); // The root chunk.
 	}
 
 	private void generateClouds() {
@@ -77,7 +75,9 @@ public class KosmosChunks extends Module {
 			Vector3f playerPos = FlounderCamera.getPlayer().getPosition();
 			Chunk playerChunk = null;
 
-			for (Chunk chunk : chunks.getAll(new ArrayList<>())) {
+			for (Entity entity : chunks.getAll(new ArrayList<>())) {
+				Chunk chunk = (Chunk) entity;
+
 				if (chunk.isLoaded() && chunk.getBounding().inFrustum(FlounderCamera.getCamera().getViewFrustum())) {
 					if (chunk.getBounding().contains(KosmosWorld.getEntityPlayer().getBounding())) {
 						playerChunk = chunk;
@@ -125,7 +125,7 @@ public class KosmosChunks extends Module {
 		return INSTANCE.noise;
 	}
 
-	public static ISpatialStructure<Chunk> getChunks() {
+	public static ISpatialStructure<Entity> getChunks() {
 		return INSTANCE.chunks;
 	}
 
