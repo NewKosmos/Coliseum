@@ -21,7 +21,7 @@ public class BiomeRiver implements IBiome {
 
 	@Override
 	public Tile getMainTile() {
-		return null;
+		return Tile.TILE_SAND;
 	}
 
 	@Override

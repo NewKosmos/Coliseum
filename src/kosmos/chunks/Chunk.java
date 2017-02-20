@@ -16,6 +16,7 @@ import flounder.physics.*;
 import flounder.physics.bounding.*;
 import flounder.space.*;
 import flounder.textures.*;
+import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;
 import kosmos.chunks.tiles.*;
 import kosmos.entities.components.*;
@@ -43,8 +44,9 @@ public class Chunk extends Entity {
 	private ChunkMesh chunkMesh;
 	private boolean tilesChanged;
 	private float darkness;
+	private IBiome.Biomes biome;
 
-	public Chunk(ISpatialStructure<Entity> structure, Vector3f position, TextureObject texture) {
+	public Chunk(ISpatialStructure<Entity> structure, Vector3f position) {
 		super(structure, position, new Vector3f());
 		this.entities = new StructureBasic<>();
 
@@ -53,8 +55,9 @@ public class Chunk extends Entity {
 		this.chunkMesh = new ChunkMesh(this);
 		this.tilesChanged = true;
 		this.darkness = 0.0f;
+		this.biome = IBiome.Biomes.random();
 
-		ComponentModel componentModel = new ComponentModel(this, null, 1.0f, texture, 0);
+		ComponentModel componentModel = new ComponentModel(this, null, 1.0f, biome.getBiome().getMainTile().getTexture(), 0);
 		ComponentCollider componentCollider = new ComponentCollider(this);
 		ComponentCollision componentCollision = new ComponentCollision(this);
 
@@ -78,12 +81,13 @@ public class Chunk extends Entity {
 				Chunk chunk = (Chunk) entity;
 
 				if (chunk.getPosition().equals(p)) {
+					FlounderLogger.log("Bash the fash!");
 					duplicate = chunk;
 				}
 			}
 
 			if (duplicate == null) {
-				Chunk chunk = new Chunk(KosmosChunks.getChunks(), p, Tile.TILE_GRASS.getTexture());
+				Chunk chunk = new Chunk(KosmosChunks.getChunks(), p);
 				childrenChunks.add(chunk);
 				KosmosChunks.getChunks().add(chunk);
 			} else {

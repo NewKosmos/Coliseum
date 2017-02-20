@@ -9,6 +9,7 @@
 
 package kosmos.chunks.biomes;
 
+import flounder.maths.*;
 import kosmos.chunks.tiles.*;
 import kosmos.particles.loading.*;
 
@@ -27,6 +28,10 @@ public interface IBiome {
 
 		public IBiome getBiome() {
 			return biome;
+		}
+
+		public static Biomes random() {
+			return Biomes.values()[(int) Maths.randomInRange(0.0f, Biomes.values().length)];
 		}
 	}
 

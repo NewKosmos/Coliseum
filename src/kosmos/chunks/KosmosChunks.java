@@ -48,7 +48,7 @@ public class KosmosChunks extends Module {
 		this.currentChunk = null;
 		generateClouds();
 
-		new Chunk(KosmosChunks.getChunks(), new Vector3f(), Tile.TILE_GRASS.getTexture()); // The root chunk.
+		new Chunk(KosmosChunks.getChunks(), new Vector3f()); // The root chunk.
 	}
 
 	private void generateClouds() {

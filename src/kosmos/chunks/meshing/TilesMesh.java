@@ -44,6 +44,12 @@ public class TilesMesh {
 
 			accumulator += tile.getModel().getIndices().length;
 		}
+
+		Iterator<TileVertex> it = tileVertices.iterator();
+
+		while (it.hasNext()) {
+			TileVertex vertex = it.next();
+		}
 	}
 
 	public TileVertex getTileVertex(int index) {
