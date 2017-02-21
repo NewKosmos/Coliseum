@@ -41,11 +41,11 @@ public class Chunk extends Entity {
 
 	private List<Chunk> childrenChunks;
 	private IBiome.Biomes biome;
-	private List<Vector3f> tiles;
 	private ChunkMesh chunkMesh;
+
+	private List<Vector3f> tiles;
 	private boolean tilesChanged;
 	private float darkness;
-	private Sphere boundingSphere;
 
 	public Chunk(ISpatialStructure<Entity> structure, Vector3f position) {
 		super(structure, position, new Vector3f());
@@ -53,11 +53,11 @@ public class Chunk extends Entity {
 
 		this.childrenChunks = new ArrayList<>();
 		this.biome = IBiome.Biomes.random();
-		this.tiles = new ArrayList<>();
 		this.chunkMesh = new ChunkMesh(this);
+
+		this.tiles = new ArrayList<>();
 		this.tilesChanged = true;
 		this.darkness = 0.0f;
-		this.boundingSphere = new Sphere(15.0f);
 
 		ComponentModel componentModel = new ComponentModel(this, null, 1.0f, biome.getBiome().getMainTile().getTexture(), 0);
 		ComponentCollider componentCollider = new ComponentCollider(this);
@@ -127,14 +127,14 @@ public class Chunk extends Entity {
 				worldPos.x / 66.6f,
 				worldPos.y / 66.6f
 		) * 10.0f); // (int) worldPos.length() / 7;
-	//	boolean generate = (KosmosChunks.getNoise().noise1((worldPos.x + worldPos.y) / 11.0f) * 20.0f) > 1.0f;
-	//	int genID = (int) (KosmosChunks.getNoise().noise1((worldPos.y - worldPos.x) / 11.0f) * 200.0f);
-	//	float rotation = KosmosChunks.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
+		boolean generate = (KosmosChunks.getNoise().noise1((worldPos.x + worldPos.y) / 11.0f) * 20.0f) > 1.0f;
+		int genID = (int) (KosmosChunks.getNoise().noise1((worldPos.y - worldPos.x) / 11.0f) * 200.0f);
+		float rotation = KosmosChunks.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
 
 		for (int i = 0; i < height; i++) {
 			chunk.addTile(new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
 
-			/*if (generate && i == height - 1 && height > 0) {
+			if (generate && i == height - 1 && height > 0) {
 				switch (genID) {
 					case 1:
 						new InstanceTreePine(chunk.entities,
@@ -179,7 +179,7 @@ public class Chunk extends Entity {
 					default:
 						break;
 				}
-			}*/
+			}
 		}
 	}
 
@@ -214,7 +214,8 @@ public class Chunk extends Entity {
 		}*/
 
 		// Adds this mesh AABB to the bounding render pool.
-		FlounderBounding.addShapeRender(chunkMesh.getAABB());
+		//FlounderBounding.addShapeRender(chunkMesh.getAABB());
+		FlounderBounding.addShapeRender(chunkMesh.getSphere());
 	}
 
 	public List<Vector3f> getTiles() {
@@ -265,12 +266,12 @@ public class Chunk extends Entity {
 
 	@Override
 	public IBounding getBounding() {
-		return chunkMesh.getAABB();
+		return chunkMesh.getSphere();
 	}
 
 	public void delete() {
 		for (Entity entity : entities.getAll()) {
-			entity.forceRemove();
+			entity.forceRemove(false);
 		}
 
 		entities.clear();

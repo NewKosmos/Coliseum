@@ -10,4 +10,4 @@
 /**
  * Contains classes for rendering a 3D shadow map.
  */
-package deferred.shadows;
+package testing.shadows;

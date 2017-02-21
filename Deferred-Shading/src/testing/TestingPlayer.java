@@ -1,4 +1,4 @@
-package deferred;
+package testing;
 
 import flounder.camera.*;
 import flounder.maths.vectors.*;
@@ -6,11 +6,11 @@ import flounder.maths.vectors.*;
 /**
  * Created by matthew on 21/02/17.
  */
-public class DeferredPlayer extends Player {
+public class TestingPlayer extends Player {
 	private Vector3f position;
 	private Vector3f rotation;
 
-	public DeferredPlayer() {
+	public TestingPlayer() {
 		super();
 	}
 

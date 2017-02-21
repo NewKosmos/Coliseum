@@ -1,4 +1,4 @@
-package deferred;
+package testing;
 
 import flounder.camera.*;
 import flounder.devices.*;
@@ -14,7 +14,7 @@ import static org.lwjgl.glfw.GLFW.*;
 /**
  * Created by matthew on 21/02/17.
  */
-public class DeferredCamera extends Camera {
+public class TestingCamera extends Camera {
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 1200.0f;
 	private static final float FIELD_OF_VIEW = 90.0f;
@@ -59,7 +59,7 @@ public class DeferredCamera extends Camera {
 	private float horizontalDistanceFromFocus;
 	private float verticalDistanceFromFocus;
 
-	public DeferredCamera() {
+	public TestingCamera() {
 		super(FlounderJoysticks.class, FlounderKeyboard.class, FlounderMouse.class);
 	}
 

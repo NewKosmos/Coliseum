@@ -7,10 +7,10 @@
  * Proprietary and confidential
  */
 
-package deferred.entities;
+package testing.entities;
 
-import deferred.*;
-import deferred.shadows.*;
+import testing.*;
+import testing.shadows.*;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.entities.*;
@@ -66,14 +66,14 @@ public class EntitiesRenderer extends Renderer {
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 
-		shader.getUniformVec3("lightDirection").loadVec3(DeferredShading.LIGHT_DIRECTION);
+		shader.getUniformVec3("lightDirection").loadVec3(Testing.LIGHT_DIRECTION);
 		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f);
 
 		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.SHADOW_MAP_SIZE);
-		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((DeferredRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
-		shader.getUniformFloat("shadowDistance").loadFloat(((DeferredRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
+		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((TestingRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
+		shader.getUniformFloat("shadowDistance").loadFloat(((TestingRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
 		shader.getUniformFloat("shadowTransition").loadFloat(10.0f);
-		OpenGlUtils.bindTexture(((DeferredRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
+		OpenGlUtils.bindTexture(((TestingRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
 
 		/*if (KosmosWorld.getFog() != null) {
 			shader.getUniformVec3("fogColour").loadVec3(KosmosWorld.getFog().getFogColour());
@@ -108,7 +108,7 @@ public class EntitiesRenderer extends Renderer {
 			return;
 		}
 
-		shader.getUniformVec3("dayNightColour").loadVec3(DeferredShading.SKY_COLOUR_DAY);
+		shader.getUniformVec3("dayNightColour").loadVec3(Testing.SKY_COLOUR_DAY);
 
 		if (componentModel != null && componentModel.getTexture() != null) {
 			OpenGlUtils.bindTexture(componentModel.getTexture(), 0);

@@ -10,21 +10,27 @@
 package kosmos.chunks.meshing;
 
 import flounder.framework.*;
+import flounder.logger.*;
+import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
 import kosmos.chunks.*;
-import kosmos.chunks.tiles.*;
 import kosmos.entities.components.*;
 
 import java.util.*;
 
 public class ChunkMesh {
 	private Chunk chunk;
+
+	private List<TileVertex> vertices;
 	private ModelObject model;
+	private Sphere sphere;
 	private AABB aabb;
 
 	public ChunkMesh(Chunk chunk) {
 		this.chunk = chunk;
+
+		this.vertices = null;
 		this.model = null;
 		this.aabb = null;
 	}
@@ -35,7 +41,9 @@ public class ChunkMesh {
 			model.delete();
 		}
 
+		vertices = new ArrayList<>();
 		model = null;
+		sphere = null;
 		aabb = null;
 
 		// Makes sure all tile flounder.models have been loaded, and have data.
@@ -44,93 +52,41 @@ public class ChunkMesh {
 		}
 
 		// Loads all tiles into a tile mesh with all positional instances within the chunk.
-		List<TilesMesh> tilesMeshes = new ArrayList<>();
-		int previousAccumulator = 0;
+		TilesMesh tilesMesh = new TilesMesh(chunk.getBiome().getBiome().getMainTile(), chunk.getTiles());
 
-			TilesMesh tilesMesh = new TilesMesh(chunk.getBiome().getBiome().getMainTile().getModel(), chunk.getTiles().get(tile), previousAccumulator);
-			previousAccumulator += tilesMesh.getAccumulator();
-			tilesMeshes.add(tilesMesh);
+		// Creates a sphere.
+		this.sphere = new Sphere();
+		Sphere.recalculate(sphere, chunk.getPosition(), tilesMesh.maxRadius, sphere);
 
-		// Takes all tile mesh data and appends the Number arrays together to create data for the chunk mesh.
-		float[] vertices = TilesMesh.mergeF(tilesMeshes, TilesMesh::getVertices);
-		float[] textures = TilesMesh.mergeF(tilesMeshes, TilesMesh::getTextures);
-		float[] normals = TilesMesh.mergeF(tilesMeshes, TilesMesh::getNormals);
-		float[] tangents = TilesMesh.mergeF(tilesMeshes, TilesMesh::getTangents);
-		int[] indices = TilesMesh.mergeI(tilesMeshes, TilesMesh::getIndices);
+		// Creates a AABB.
+		this.aabb = new AABB(new Vector3f(tilesMesh.minX, tilesMesh.minY - 3.0f, tilesMesh.minZ), new Vector3f(tilesMesh.maxX, tilesMesh.maxY + 7.0f, tilesMesh.maxZ));
+		AABB.recalculate(aabb, chunk.getPosition(), chunk.getRotation(), 1.0f, aabb);
 
-		// Calculates new AABB bounds from the minimum and maximum vertex vector component positions.
-		AABB modelAABB = new AABB();
-		int currentPosID = 0;
-
-		for (int i = 0; i < vertices.length; i++) {
-			switch (currentPosID) {
-				case (0):
-					if (vertices[i] > modelAABB.getMaxExtents().x) {
-						modelAABB.getMaxExtents().x = vertices[i];
-					} else if (vertices[i] < modelAABB.getMinExtents().x) {
-						modelAABB.getMinExtents().x = vertices[i];
-					}
-
-					break;
-				case (1):
-					if (vertices[i] > modelAABB.getMaxExtents().y) {
-						modelAABB.getMaxExtents().y = vertices[i];
-					} else if (vertices[i] < modelAABB.getMinExtents().y) {
-						modelAABB.getMinExtents().y = vertices[i];
-					}
-
-					break;
-				case (2):
-					if (vertices[i] > modelAABB.getMaxExtents().z) {
-						modelAABB.getMaxExtents().z = vertices[i];
-					} else if (vertices[i] < modelAABB.getMinExtents().z) {
-						modelAABB.getMinExtents().z = vertices[i];
-					}
-
-					break;
-			}
-
-			// Updates the current pos ID, this is used to keep track of what position component is looked at (0=X, 1=Y, 2=Z).
-			currentPosID++;
-
-			if (currentPosID > 2) {
-				currentPosID = 0;
-			}
-		}
-
-		// Makes sure the chunk takes sufficient space.
-		modelAABB.getMinExtents().y = -3.0f;
-		modelAABB.getMaxExtents().y = 7.0f;
-
-		// Logs how many vertices and indices are in the chunk model.
-		//	FlounderLogger.log("Vertices = " + (vertices.length / 3) + ", Indices = " + indices.length);
-
-		// Then all model data is used to create a manual model loader, a hull is not generated and materials are baked into the textures.
-		// The model is then loaded into a object and OpenGL.
+		// Then all model data is used to create a manual model loader, a hull is not generated and materials are baked into the textures. he model is then loaded into a object and OpenGL.
 		this.model = ModelFactory.newBuilder().setManual(new ModelLoadManual("chunk" + chunk.getPosition().x + "p" + chunk.getPosition().z + "t" + (int) Framework.getTimeSec()) {
 			@Override
 			public float[] getVertices() {
-				return vertices;
+				return tilesMesh.getVertices();
 			}
 
 			@Override
 			public float[] getTextureCoords() {
-				return textures;
+				return tilesMesh.getTextures();
 			}
 
 			@Override
 			public float[] getNormals() {
-				return normals;
+				return tilesMesh.getNormals();
 			}
 
 			@Override
 			public float[] getTangents() {
-				return tangents;
+				return tilesMesh.getTangents();
 			}
 
 			@Override
 			public int[] getIndices() {
-				return indices;
+				return tilesMesh.getIndices();
 			}
 
 			@Override
@@ -140,7 +96,7 @@ public class ChunkMesh {
 
 			@Override
 			public AABB getAABB() {
-				return modelAABB;
+				return aabb;
 			}
 
 			@Override
@@ -151,29 +107,38 @@ public class ChunkMesh {
 
 		// The chunks model component is also updated.
 		ComponentModel componentModel = (ComponentModel) chunk.getComponent(ComponentModel.ID);
-		componentModel.setModel(model);
-	}
 
-	public Chunk getChunk() {
-		return chunk;
+		if (componentModel != null) {
+			componentModel.setModel(model);
+		} else {
+			FlounderLogger.error(chunk + " does not have a model component! Model cannot be set.");
+		}
+
+		// Clears unneeded data.
+		if (vertices != null) {
+			vertices.clear();
+			vertices = null;
+		}
 	}
 
 	public ModelObject getModel() {
 		return model;
 	}
 
-	public AABB getAABB() {
-		if (aabb == null && model != null && model.isLoaded()) {
-			this.aabb = new AABB();
-			AABB.recalculate(model.getAABB(), chunk.getPosition(), chunk.getRotation(), 1.0f, aabb);
-		}
+	public Sphere getSphere() {
+		return sphere;
+	}
 
+	public AABB getAABB() {
 		return aabb;
 	}
 
 	public void delete() {
 		if (model != null) {
 			model.delete();
+			model = null;
+			sphere = null;
+			aabb = null;
 		}
 	}
 }

@@ -7,7 +7,7 @@
  * Proprietary and confidential
  */
 
-package deferred.entities;
+package testing.entities;
 
 import flounder.entities.*;
 import flounder.entities.components.*;

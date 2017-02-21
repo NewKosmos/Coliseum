@@ -7,10 +7,10 @@
  * Proprietary and confidential
  */
 
-package deferred.shadows;
+package testing.shadows;
 
-import deferred.*;
-import deferred.entities.*;
+import testing.*;
+import testing.entities.*;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.fbos.*;
@@ -74,7 +74,7 @@ public class ShadowRenderer extends Renderer {
 	private void prepareRendering(Vector4f clipPlane, Camera camera) {
 		shadowBox.update(camera);
 		updateOrthographicProjectionMatrix(shadowBox.getWidth(), shadowBox.getHeight(), shadowBox.getLength());
-		updateLightViewMatrix(DeferredShading.LIGHT_DIRECTION, shadowBox.getCenter());
+		updateLightViewMatrix(Testing.LIGHT_DIRECTION, shadowBox.getCenter());
 		Matrix4f.multiply(projectionMatrix, lightViewMatrix, projectionViewMatrix);
 
 		shadowFBO.bindFrameBuffer();

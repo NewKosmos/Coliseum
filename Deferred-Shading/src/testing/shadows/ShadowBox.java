@@ -7,7 +7,7 @@
  * Proprietary and confidential
  */
 
-package deferred.shadows;
+package testing.shadows;
 
 import flounder.camera.*;
 import flounder.devices.*;

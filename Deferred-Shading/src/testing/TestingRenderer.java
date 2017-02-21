@@ -1,12 +1,11 @@
-package deferred;
+package testing;
 
-import deferred.entities.*;
-import deferred.shadows.*;
+import testing.entities.*;
+import testing.shadows.*;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.fbos.*;
 import flounder.helpers.*;
-import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
 import flounder.profiling.*;
@@ -15,7 +14,7 @@ import flounder.renderer.*;
 /**
  * Created by matthew on 21/02/17.
  */
-public class DeferredRenderer extends RendererMaster {
+public class TestingRenderer extends RendererMaster {
 	private static final Vector4f POSITIVE_INFINITY = new Vector4f(0.0f, 1.0f, 0.0f, Float.POSITIVE_INFINITY);
 
 	private ShadowRenderer shadowRenderer;
@@ -25,7 +24,7 @@ public class DeferredRenderer extends RendererMaster {
 	private FBO multisamplingFBO;
 	private FBO nonsampledFBO;
 
-	public DeferredRenderer() {
+	public TestingRenderer() {
 		super(FlounderProfiler.class, FlounderDisplay.class);
 	}
 
@@ -80,7 +79,7 @@ public class DeferredRenderer extends RendererMaster {
 	private void renderScene(Vector4f clipPlane) {
 		/* Clear and update. */
 		Camera camera = FlounderCamera.getCamera();
-		OpenGlUtils.prepareNewRenderParse(DeferredShading.SKY_COLOUR_DAY);
+		OpenGlUtils.prepareNewRenderParse(Testing.SKY_COLOUR_DAY);
 
 		/* Renders each renderer. */
 		entitiesRenderer.render(clipPlane, camera);

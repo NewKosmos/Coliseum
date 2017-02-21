@@ -1,6 +1,6 @@
-package deferred;
+package testing;
 
-import deferred.entities.*;
+import testing.entities.*;
 import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
@@ -10,8 +10,8 @@ import flounder.textures.*;
 /**
  * Created by matthew on 21/02/17.
  */
-public class DeferredInterface extends Standard {
-	public DeferredInterface() {
+public class TestingInterface extends Standard {
+	public TestingInterface() {
 		super(FlounderEntities.class, FlounderTextures.class, FlounderModels.class);
 	}
 
