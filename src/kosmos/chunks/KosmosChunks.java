@@ -44,7 +44,7 @@ public class KosmosChunks extends Module {
 
 	@Override
 	public void init() {
-		this.noise = new PerlinNoise(420);
+		this.noise = new PerlinNoise(537);
 		this.chunks = new StructureBasic<>();
 
 		this.chunkRange = new Sphere(40.0f); // new AABB();

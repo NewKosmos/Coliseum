@@ -10,6 +10,8 @@
 package kosmos.chunks.biomes;
 
 import flounder.maths.*;
+import flounder.maths.vectors.*;
+import kosmos.chunks.*;
 import kosmos.chunks.tiles.*;
 import kosmos.particles.loading.*;
 
@@ -18,7 +20,7 @@ import kosmos.particles.loading.*;
  */
 public interface IBiome {
 	public enum Biomes {
-		DESERT(new BiomeDesert()), GRASS(new BiomeGrass()), RIVER(new BiomeRiver()), SNOW(new BiomeSnow());
+		GRASS(new BiomeGrass()), SNOW(new BiomeSnow()), RIVER(new BiomeRiver()), STONE(new BiomeStone()), DESERT(new BiomeDesert());
 
 		private IBiome biome;
 
@@ -49,12 +51,7 @@ public interface IBiome {
 	 */
 	Tile getMainTile();
 
-	/**
-	 * Gets the types of ore tiles that may spawn in the biome.
-	 *
-	 * @return The viable ore tiles that are spawnable.
-	 */
-	Tile[] getOreTiles();
+	void generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height);
 
 	/**
 	 * Gets the type of weather particle to spawn when weather is active.

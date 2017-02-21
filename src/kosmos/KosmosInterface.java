@@ -17,7 +17,6 @@ import flounder.helpers.*;
 import flounder.inputs.*;
 import flounder.logger.*;
 import flounder.physics.bounding.*;
-import flounder.resources.*;
 import flounder.sounds.*;
 import flounder.standards.*;
 import kosmos.world.*;

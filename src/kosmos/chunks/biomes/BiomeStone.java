@@ -16,37 +16,37 @@ import kosmos.entities.instances.*;
 import kosmos.particles.*;
 import kosmos.particles.loading.*;
 
-public class BiomeGrass implements IBiome {
+public class BiomeStone implements IBiome {
 	@Override
 	public String getBiomeName() {
-		return "grass";
+		return "rock";
 	}
 
 	@Override
 	public Tile getMainTile() {
-		return Tile.TILE_GRASS;
+		return Tile.TILE_STONE;
 	}
 
 	@Override
 	public void generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height) {
 		float rotation = KosmosChunks.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
 
-		switch ((int) (KosmosChunks.getNoise().noise1((worldPos.y - worldPos.x) / 11.0f) * 400.0f)) {
+		switch ((int) (KosmosChunks.getNoise().noise1((worldPos.y - worldPos.x) / 11.0f) * 200.0f)) {
 			case 1:
-				new InstanceTree1(chunk.getEntities(),
+				new InstanceBush(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((2.0 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								(float) ((2.5 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
 				break;
 			case 2:
-				new InstanceTree3(chunk.getEntities(),
+				new InstanceRockGem(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((2.5 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								(float) ((0.0f * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
@@ -64,16 +64,16 @@ public class BiomeGrass implements IBiome {
 
 	@Override
 	public float getTempDay() {
-		return 20.9f;
+		return 8.2f;
 	}
 
 	@Override
 	public float getTempNight() {
-		return 12.4f;
+		return -13.0f;
 	}
 
 	@Override
 	public float getHumidity() {
-		return 61.0f;
+		return 10.0f;
 	}
 }

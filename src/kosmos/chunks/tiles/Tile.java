@@ -31,10 +31,6 @@ public class Tile {
 			ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "snow", "snow.obj")).create(),
 			TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "snow", "snow.png")).clampEdges().create()
 	);
-	public static final Tile TILE_ROCK_GEM = new Tile(
-			ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "rockGem", "rockGem.obj")).create(),
-			TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "rockGem", "rockGem.png")).clampEdges().create()
-	);
 
 	private ModelObject model;
 	private TextureObject texture;

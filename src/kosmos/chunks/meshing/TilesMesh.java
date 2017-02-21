@@ -9,7 +9,6 @@
 
 package kosmos.chunks.meshing;
 
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import kosmos.chunks.tiles.*;
@@ -55,7 +54,7 @@ public class TilesMesh {
 		this.maxRadius = Maths.maxValue(maxX, maxY, maxZ, Math.abs(minX), Math.abs(minY), Math.abs(minZ));
 
 		// Logs how many vertices and indices are in the chunk model.
-		FlounderLogger.log("Vertices = " + (tileVertices.size() * 3) + ", Indices = " + tileVertices.size());
+		// FlounderLogger.log("Vertices = " + (tileVertices.size() * 3) + ", Indices = " + tileVertices.size());
 
 		/*Iterator<TileVertex> it = tileVertices.iterator();
 

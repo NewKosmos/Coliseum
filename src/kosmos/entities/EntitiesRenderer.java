@@ -25,8 +25,6 @@ import kosmos.entities.components.*;
 import kosmos.shadows.*;
 import kosmos.world.*;
 
-import java.util.*;
-
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 

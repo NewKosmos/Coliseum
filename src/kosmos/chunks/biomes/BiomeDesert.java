@@ -9,6 +9,8 @@
 
 package kosmos.chunks.biomes;
 
+import flounder.maths.vectors.*;
+import kosmos.chunks.*;
 import kosmos.chunks.tiles.*;
 import kosmos.particles.*;
 import kosmos.particles.loading.*;
@@ -25,8 +27,8 @@ public class BiomeDesert implements IBiome {
 	}
 
 	@Override
-	public Tile[] getOreTiles() {
-		return new Tile[]{};
+	public void generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height) {
+
 	}
 
 	@Override

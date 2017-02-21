@@ -11,16 +11,15 @@ package kosmos.chunks;
 
 import flounder.entities.*;
 import flounder.logger.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
 import flounder.space.*;
-import flounder.textures.*;
 import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;
 import kosmos.chunks.tiles.*;
 import kosmos.entities.components.*;
-import kosmos.entities.instances.*;
 
 import java.util.*;
 
@@ -51,8 +50,12 @@ public class Chunk extends Entity {
 		super(structure, position, new Vector3f());
 		this.entities = new StructureBasic<>();
 
+		float biomeID = Math.abs(KosmosChunks.getNoise().noise1((position.x + position.z) / 100.0f)) * 3.0f * IBiome.Biomes.values().length;
+		biomeID = Maths.clamp((int) biomeID, 0.0f, IBiome.Biomes.values().length - 1);
+		FlounderLogger.error("BiomeID: " + biomeID);
+
 		this.childrenChunks = new ArrayList<>();
-		this.biome = IBiome.Biomes.random();
+		this.biome = IBiome.Biomes.values()[(int) biomeID]; // IBiome.Biomes.random();
 		this.chunkMesh = new ChunkMesh(this);
 
 		this.tiles = new ArrayList<>();
@@ -127,57 +130,13 @@ public class Chunk extends Entity {
 				worldPos.x / 66.6f,
 				worldPos.y / 66.6f
 		) * 10.0f); // (int) worldPos.length() / 7;
-		boolean generate = (KosmosChunks.getNoise().noise1((worldPos.x + worldPos.y) / 11.0f) * 20.0f) > 1.0f;
-		int genID = (int) (KosmosChunks.getNoise().noise1((worldPos.y - worldPos.x) / 11.0f) * 200.0f);
-		float rotation = KosmosChunks.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
 
 		for (int i = 0; i < height; i++) {
 			chunk.addTile(new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
 
-			if (generate && i == height - 1 && height > 0) {
-				switch (genID) {
-					case 1:
-						new InstanceTreePine(chunk.entities,
-								new Vector3f(
-										chunk.getPosition().x + (float) (position.x * 0.5),
-										(float) ((1.5 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
-										chunk.getPosition().z + (float) (position.y * 0.5)
-								),
-								new Vector3f(0.0f, rotation, 0.0f)
-						);
-						break;
-					case 2:
-						new InstanceTree1(chunk.entities,
-								new Vector3f(
-										chunk.getPosition().x + (float) (position.x * 0.5),
-										(float) ((2.0 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
-										chunk.getPosition().z + (float) (position.y * 0.5)
-								),
-								new Vector3f(0.0f, rotation, 0.0f)
-						);
-						break;
-					case 3:
-						new InstanceTree3(chunk.entities,
-								new Vector3f(
-										chunk.getPosition().x + (float) (position.x * 0.5),
-										(float) ((2.5 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
-										chunk.getPosition().z + (float) (position.y * 0.5)
-								),
-								new Vector3f(0.0f, rotation, 0.0f)
-						);
-						break;
-					case 4:
-						new InstanceBush(chunk.entities,
-								new Vector3f(
-										chunk.getPosition().x + (float) (position.x * 0.5),
-										(float) ((2.5 * 0.25) + (i * Math.sqrt(2.0)) * 0.5),
-										chunk.getPosition().z + (float) (position.y * 0.5)
-								),
-								new Vector3f(0.0f, rotation, 0.0f)
-						);
-						break;
-					default:
-						break;
+			if (i == height - 1 && height > 0) {
+				if (!((KosmosChunks.getNoise().noise1((worldPos.x + worldPos.y) / 11.0f) * 20.0f) > 1.0f)) {
+					chunk.biome.getBiome().generateEntity(chunk, worldPos, position, i);
 				}
 			}
 		}
