@@ -172,7 +172,7 @@ public class TilesMesh {
 		protected final Vector3f position;
 		protected final Vector2f textures;
 		protected final Vector3f normals;
-		protected final Vector3f tangents;
+		protected final Vector3f tangents; // TODO: No objects!
 
 		TileVertex(int index, float vertex0, float vertex1, float vertex2, float texture0, float texture1,
 		           float normal0, float normal1, float normal2, float tangent0, float tangent1, float tangent2) {

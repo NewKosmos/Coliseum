@@ -87,7 +87,7 @@ public class KosmosChunks extends Module {
 				AABB.recalculate(chunkRangeAABB, playerPos, new Vector3f(), 1.0f, chunkRangeAABB);
 			}
 
-			for (Entity entity : chunks.getAll(new ArrayList<>())) {
+			for (Entity entity : chunks.getAll()) {
 				Chunk chunk = (Chunk) entity;
 
 				if (chunk.isLoaded() && chunk.getBounding().inFrustum(FlounderCamera.getCamera().getViewFrustum())) {
@@ -105,30 +105,21 @@ public class KosmosChunks extends Module {
 						playerChunk.createChunksAround();
 					}
 
-					Iterator it = chunks.getAll(new ArrayList<>()).iterator();
+					Iterator it = chunks.getAll().iterator();
 
 					while (it.hasNext()) {
 						Chunk chunk = (Chunk) it.next();
 
 						if (chunk != currentChunk && chunk.isLoaded()) {
 							if (!chunk.getBounding().intersects(chunkRangeAABB).isIntersection() && !chunkRangeAABB.contains((AABB) chunk.getBounding())) {
-								for (Entity ee : chunks.getAll(new ArrayList<>())) {
-									Chunk cc = (Chunk) ee;
-
-									if (cc.getChildrenChunks().contains(chunk)) {
-										cc.getChildrenChunks().remove(chunk);
-									}
-								}
-
 								chunk.delete();
 								it.remove();
 							}
 						}
 					}
-
-					currentChunk = playerChunk;
 				}
 
+				currentChunk = playerChunk;
 				FlounderLogger.log(playerChunk);
 			}
 

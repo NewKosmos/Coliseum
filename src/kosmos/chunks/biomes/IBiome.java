@@ -18,7 +18,7 @@ import kosmos.particles.loading.*;
  */
 public interface IBiome {
 	public enum Biomes {
-		BEACH(new BiomeBeach()), GRASS(new BiomeGrass()), RIVER(new BiomeRiver()), SNOW(new BiomeSnow());
+		DESERT(new BiomeDesert()), GRASS(new BiomeGrass()), RIVER(new BiomeRiver()), SNOW(new BiomeSnow());
 
 		private IBiome biome;
 

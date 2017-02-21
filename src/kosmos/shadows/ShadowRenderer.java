@@ -68,16 +68,19 @@ public class ShadowRenderer extends Renderer {
 
 		prepareRendering(clipPlane, camera);
 
-		for (Entity entityc : KosmosChunks.getChunks().getAll(new ArrayList<>())) {
+		for (Entity entityc : KosmosChunks.getChunks().getAll()) {
 			Chunk chunk = (Chunk) entityc;
-			renderEntity(entityc);
 
-			for (Entity entity : chunk.getEntities().getAll(new ArrayList<>())) {
-				renderEntity(entity);
+			if (chunk.isLoaded()) {
+				renderEntity(entityc);
+
+				for (Entity entity : chunk.getEntities().getAll()) {
+					renderEntity(entity);
+				}
 			}
 		}
 
-		for (Entity entity : FlounderEntities.getEntities().getAll(new ArrayList<>())) {
+		for (Entity entity : FlounderEntities.getEntities().getAll()) {
 			renderEntity(entity);
 		}
 

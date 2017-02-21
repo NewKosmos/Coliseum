@@ -13,7 +13,7 @@ import kosmos.chunks.tiles.*;
 import kosmos.particles.*;
 import kosmos.particles.loading.*;
 
-public class BiomeBeach implements IBiome {
+public class BiomeDesert implements IBiome {
 	@Override
 	public String getBiomeName() {
 		return "beach";

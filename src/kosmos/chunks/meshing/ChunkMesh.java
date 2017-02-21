@@ -177,7 +177,7 @@ public class ChunkMesh {
 
 	public void delete() {
 		if (model != null) {
-			//	model.delete();
+			model.delete();
 		}
 	}
 }

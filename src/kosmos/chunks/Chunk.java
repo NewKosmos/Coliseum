@@ -45,6 +45,7 @@ public class Chunk extends Entity {
 	private boolean tilesChanged;
 	private float darkness;
 	private IBiome.Biomes biome;
+	private Sphere boundingSphere;
 
 	public Chunk(ISpatialStructure<Entity> structure, Vector3f position) {
 		super(structure, position, new Vector3f());
@@ -56,6 +57,7 @@ public class Chunk extends Entity {
 		this.tilesChanged = true;
 		this.darkness = 0.0f;
 		this.biome = IBiome.Biomes.random();
+		this.boundingSphere = new Sphere(15.0f);
 
 		ComponentModel componentModel = new ComponentModel(this, null, 1.0f, biome.getBiome().getMainTile().getTexture(), 0);
 		ComponentCollider componentCollider = new ComponentCollider(this);
@@ -77,7 +79,7 @@ public class Chunk extends Entity {
 			Vector3f p = new Vector3f(x, 0.0f, z);
 			Chunk duplicate = null;
 
-			for (Entity entity : KosmosChunks.getChunks().getAll(new ArrayList<>())) {
+			for (Entity entity : KosmosChunks.getChunks().getAll()) {
 				Chunk chunk = (Chunk) entity;
 
 				if (p.equals(chunk.getPosition())) {
@@ -179,7 +181,7 @@ public class Chunk extends Entity {
 				}
 			}*/
 		}
-		//chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, 0.0f, position.y));
+		chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, 0.0f, position.y));
 	}
 
 	public void update(Vector3f playerPosition) {
@@ -188,6 +190,18 @@ public class Chunk extends Entity {
 			chunkMesh.rebuild();
 			tilesChanged = false;
 		}
+
+		Iterator it = childrenChunks.iterator();
+
+		while (it.hasNext()) {
+			Chunk child = (Chunk) it.next();
+
+			if (!KosmosChunks.getChunks().contains(child)) {
+				it.remove();
+			}
+		}
+
+		//FlounderLogger.log(getBounding());
 
 		// Updates the darkness of this chunk.
 		/*if (playerPosition != null) {
@@ -269,13 +283,12 @@ public class Chunk extends Entity {
 	}
 
 	public void delete() {
-		for (Entity entity : entities.getAll(new ArrayList<>())) {
+		for (Entity entity : entities.getAll()) {
 			entity.forceRemove();
 		}
 
 		entities.clear();
 		tiles.clear();
 		chunkMesh.delete();
-		KosmosChunks.getChunks().remove(this);
 	}
 }

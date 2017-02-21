@@ -71,7 +71,7 @@ public class ParticleRenderer extends Renderer {
 		prepareRendering(clipPlane, camera);
 
 		for (StructureBasic<Particle> list : KosmosParticles.getParticles()) {
-			List<Particle> particles = list.queryInFrustum(new ArrayList<>(), camera.getViewFrustum());
+			List<Particle> particles = list.queryInFrustum(camera.getViewFrustum());
 
 			if (particles.size() > 0) {
 				// Added to particles first -> last, so no initial reverse needed.
