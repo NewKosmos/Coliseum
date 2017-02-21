@@ -27,19 +27,20 @@ public class TilesMesh {
 		for (int p = 0; p < positions.size(); p++) {
 			for (int id = 0; id < tile.getModel().getIndices().length; id++) {
 				int pointer = tile.getModel().getIndices()[id];
-				int i = id + previousAccumulator + accumulator;
-				float v0 = tile.getModel().getVertices()[pointer * 3] + (positions.get(p).x / 2.0f);
-				float v1 = tile.getModel().getVertices()[pointer * 3 + 1] + (positions.get(p).y / 2.0f);
-				float v2 = tile.getModel().getVertices()[pointer * 3 + 2] + (positions.get(p).z / 2.0f);
-				float t0 = tile.getModel().getTextures()[pointer * 2];
-				float t1 = tile.getModel().getTextures()[pointer * 2 + 1];
-				float n0 = tile.getModel().getNormals()[pointer * 3];
-				float n1 = tile.getModel().getNormals()[pointer * 3 + 1];
-				float n2 = tile.getModel().getNormals()[pointer * 3 + 2];
-				float ta0 = tile.getModel().getTangents()[pointer * 3];
-				float ta1 = tile.getModel().getTangents()[pointer * 3 + 1];
-				float ta2 = tile.getModel().getTangents()[pointer * 3 + 2];
-				tileVertices.add(new TileVertex(i, v0, v1, v2, t0, t1, n0, n1, n2, ta0, ta1, ta2));
+
+				int index = id + previousAccumulator + accumulator;
+				float vertex0 = tile.getModel().getVertices()[pointer * 3] + (positions.get(p).x / 2.0f);
+				float vertex1 = tile.getModel().getVertices()[pointer * 3 + 1] + (positions.get(p).y / 2.0f);
+				float vertex2 = tile.getModel().getVertices()[pointer * 3 + 2] + (positions.get(p).z / 2.0f);
+				float texture0 = tile.getModel().getTextures()[pointer * 2];
+				float texture1 = tile.getModel().getTextures()[pointer * 2 + 1];
+				float normal0 = tile.getModel().getNormals()[pointer * 3];
+				float normal1 = tile.getModel().getNormals()[pointer * 3 + 1];
+				float normal2 = tile.getModel().getNormals()[pointer * 3 + 2];
+				float tangent0 = tile.getModel().getTangents()[pointer * 3];
+				float tangent1 = tile.getModel().getTangents()[pointer * 3 + 1];
+				float tangent2 = tile.getModel().getTangents()[pointer * 3 + 2];
+				tileVertices.add(new TileVertex(index, vertex0, vertex1, vertex2, texture0, texture1, normal0, normal1, normal2, tangent0, tangent1, tangent2));
 			}
 
 			accumulator += tile.getModel().getIndices().length;
@@ -66,9 +67,9 @@ public class TilesMesh {
 		Float[] result = new Float[tileVertices.size() * 3];
 
 		for (int i = 0; i < tileVertices.size(); i++) {
-			result[i * 3] = tileVertices.get(i).position.x;
-			result[i * 3 + 1] = tileVertices.get(i).position.y;
-			result[i * 3 + 2] = tileVertices.get(i).position.z;
+			result[i * 3] = tileVertices.get(i).vertex0;
+			result[i * 3 + 1] = tileVertices.get(i).vertex1;
+			result[i * 3 + 2] = tileVertices.get(i).vertex2;
 		}
 
 		return result;
@@ -78,8 +79,8 @@ public class TilesMesh {
 		Float[] result = new Float[tileVertices.size() * 2];
 
 		for (int i = 0; i < tileVertices.size(); i++) {
-			result[i * 2] = tileVertices.get(i).textures.x;
-			result[i * 2 + 1] = tileVertices.get(i).textures.y;
+			result[i * 2] = tileVertices.get(i).texture0;
+			result[i * 2 + 1] = tileVertices.get(i).texture1;
 		}
 
 		return result;
@@ -89,9 +90,9 @@ public class TilesMesh {
 		Float[] result = new Float[tileVertices.size() * 3];
 
 		for (int i = 0; i < tileVertices.size(); i++) {
-			result[i * 3] = tileVertices.get(i).normals.x;
-			result[i * 3 + 1] = tileVertices.get(i).normals.y;
-			result[i * 3 + 2] = tileVertices.get(i).normals.z;
+			result[i * 3] = tileVertices.get(i).normal0;
+			result[i * 3 + 1] = tileVertices.get(i).normal1;
+			result[i * 3 + 2] = tileVertices.get(i).normal2;
 		}
 
 		return result;
@@ -101,9 +102,9 @@ public class TilesMesh {
 		Float[] result = new Float[tileVertices.size() * 3];
 
 		for (int i = 0; i < tileVertices.size(); i++) {
-			result[i * 3] = tileVertices.get(i).tangents.x;
-			result[i * 3 + 1] = tileVertices.get(i).tangents.y;
-			result[i * 3 + 2] = tileVertices.get(i).tangents.z;
+			result[i * 3] = tileVertices.get(i).tangent0;
+			result[i * 3 + 1] = tileVertices.get(i).tangent1;
+			result[i * 3 + 2] = tileVertices.get(i).tangent2;
 		}
 
 		return result;
@@ -169,18 +170,31 @@ public class TilesMesh {
 
 	public class TileVertex implements Comparable<TileVertex> {
 		protected final int index;
-		protected final Vector3f position;
-		protected final Vector2f textures;
-		protected final Vector3f normals;
-		protected final Vector3f tangents; // TODO: No objects!
+		protected final float vertex0;
+		protected final float vertex1;
+		protected final float vertex2;
+		protected final float texture0;
+		protected final float texture1;
+		protected final float normal0;
+		protected final float normal1;
+		protected final float normal2;
+		protected final float tangent0;
+		protected final float tangent1;
+		protected final float tangent2;
 
-		TileVertex(int index, float vertex0, float vertex1, float vertex2, float texture0, float texture1,
-		           float normal0, float normal1, float normal2, float tangent0, float tangent1, float tangent2) {
+		public TileVertex(int index, float vertex0, float vertex1, float vertex2, float texture0, float texture1, float normal0, float normal1, float normal2, float tangent0, float tangent1, float tangent2) {
 			this.index = index;
-			this.position = new Vector3f(vertex0, vertex1, vertex2);
-			this.textures = new Vector2f(texture0, texture1);
-			this.normals = new Vector3f(normal0, normal1, normal2);
-			this.tangents = new Vector3f(tangent0, tangent1, tangent2);
+			this.vertex0 = vertex0;
+			this.vertex1 = vertex1;
+			this.vertex2 = vertex2;
+			this.texture0 = texture0;
+			this.texture1 = texture1;
+			this.normal0 = normal0;
+			this.normal1 = normal1;
+			this.normal2 = normal2;
+			this.tangent0 = tangent0;
+			this.tangent1 = tangent1;
+			this.tangent2 = tangent2;
 		}
 
 		@Override

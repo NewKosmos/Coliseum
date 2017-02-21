@@ -10,6 +10,7 @@
 package kosmos.chunks;
 
 import flounder.camera.*;
+import flounder.devices.*;
 import flounder.entities.*;
 import flounder.framework.*;
 import flounder.logger.*;
@@ -23,6 +24,7 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.entities.instances.*;
 import kosmos.world.*;
+import org.lwjgl.glfw.*;
 
 import java.util.*;
 
@@ -76,6 +78,10 @@ public class KosmosChunks extends Module {
 
 	@Override
 	public void update() {
+	//	if (!FlounderKeyboard.getKey(GLFW.GLFW_KEY_Y)) {
+	//		return;
+	//	}
+
 		if (FlounderCamera.getPlayer() != null) {
 			Vector3f playerPos = FlounderCamera.getPlayer().getPosition();
 			Chunk playerChunk = null;

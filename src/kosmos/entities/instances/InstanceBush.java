@@ -28,7 +28,7 @@ public class InstanceBush extends Entity {
 		ComponentCollider componentCollider = new ComponentCollider(this);
 		ComponentCollision componentCollision = new ComponentCollision(this);
 
-		new InstanceBushBerry(structure, new Vector3f(position.x, position.y + 0.45f, position.z), rotation);
+		// new InstanceBushBerry(structure, new Vector3f(position.x, position.y + 0.45f, position.z), rotation);
 	}
 
 	public static class InstanceBushBerry extends Entity {

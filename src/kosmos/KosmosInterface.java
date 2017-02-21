@@ -40,9 +40,9 @@ public class KosmosInterface extends Standard {
 	@Override
 	public void init() {
 		gamePlaylist = new Playlist();
-		gamePlaylist.addMusic(Sound.loadSoundInBackground(new MyFile(MyFile.RES_FOLDER, "music", "09-hitori-bocchi-1b.wav"), 0.80f, 1.0f));
-		FlounderSound.getMusicPlayer().playMusicPlaylist(gamePlaylist, true, 4.0f, 10.0f);
-		//	FlounderSound.getMusicPlayer().unpauseTrack();
+		//gamePlaylist.addMusic(Sound.loadSoundInBackground(new MyFile(MyFile.RES_FOLDER, "music", "09-hitori-bocchi-1b.wav"), 0.80f, 1.0f));
+		//FlounderSound.getMusicPlayer().playMusicPlaylist(gamePlaylist, true, 4.0f, 10.0f);
+		//FlounderSound.getMusicPlayer().unpauseTrack();
 
 		this.screenshot = new KeyButton(GLFW_KEY_F2);
 		this.fullscreen = new KeyButton(GLFW_KEY_F11);

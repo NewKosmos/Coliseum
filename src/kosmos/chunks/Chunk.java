@@ -127,9 +127,9 @@ public class Chunk extends Entity {
 				worldPos.x / 66.6f,
 				worldPos.y / 66.6f
 		) * 10.0f); // (int) worldPos.length() / 7;
-		boolean generate = (KosmosChunks.getNoise().noise1((worldPos.x + worldPos.y) / 11.0f) * 20.0f) > 1.0f;
-		int genID = (int) (KosmosChunks.getNoise().noise1((worldPos.y - worldPos.x) / 11.0f) * 200.0f);
-		float rotation = KosmosChunks.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
+	//	boolean generate = (KosmosChunks.getNoise().noise1((worldPos.x + worldPos.y) / 11.0f) * 20.0f) > 1.0f;
+	//	int genID = (int) (KosmosChunks.getNoise().noise1((worldPos.y - worldPos.x) / 11.0f) * 200.0f);
+	//	float rotation = KosmosChunks.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
 
 		for (int i = 0; i < height; i++) {
 			chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
@@ -181,7 +181,6 @@ public class Chunk extends Entity {
 				}
 			}*/
 		}
-		chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, 0.0f, position.y));
 	}
 
 	public void update(Vector3f playerPosition) {

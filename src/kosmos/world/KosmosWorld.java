@@ -39,7 +39,7 @@ public class KosmosWorld extends Module {
 		this.fog = new Fog(new Colour(), 0.02f, 2.0f, 0.0f, 50.0f);
 		this.skyCycle = new SkyCycle();
 
-		this.entityPlayer = new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25), 0.0f), new Vector3f());
+		this.entityPlayer = new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25), 0.0f), new Vector3f()); // InstanceCowboyStatic
 		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 		this.entitySun = new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-200.0f, -200.0f, -200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 	}

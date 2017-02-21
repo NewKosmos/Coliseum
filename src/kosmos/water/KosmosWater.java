@@ -30,9 +30,9 @@ public class KosmosWater extends Module {
 
 	@Override
 	public void update() {
-		waveTime += Framework.getDeltaRender();
+		waveTime += Framework.getDelta();
 		waveTime %= Water.WAVE_SPEED;
-		//	FlounderBounding.addShapeRender(water.getAABB());
+		FlounderBounding.addShapeRender(water.getAABB());
 	}
 
 	@Override
