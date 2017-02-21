@@ -39,21 +39,17 @@ public class ChunkMesh {
 		aabb = null;
 
 		// Makes sure all tile flounder.models have been loaded, and have data.
-		for (Tile tile : chunk.getTiles().keySet()) {
-			if (tile.getModel() == null || !tile.getModel().isLoaded()) {
-				return;
-			}
+		if (!chunk.getBiome().getBiome().getMainTile().getModel().isLoaded()) {
+			return;
 		}
 
 		// Loads all tiles into a tile mesh with all positional instances within the chunk.
 		List<TilesMesh> tilesMeshes = new ArrayList<>();
 		int previousAccumulator = 0;
 
-		for (Tile tile : chunk.getTiles().keySet()) {
-			TilesMesh tilesMesh = new TilesMesh(tile, chunk.getTiles().get(tile), previousAccumulator);
+			TilesMesh tilesMesh = new TilesMesh(chunk.getBiome().getBiome().getMainTile().getModel(), chunk.getTiles().get(tile), previousAccumulator);
 			previousAccumulator += tilesMesh.getAccumulator();
 			tilesMeshes.add(tilesMesh);
-		}
 
 		// Takes all tile mesh data and appends the Number arrays together to create data for the chunk mesh.
 		float[] vertices = TilesMesh.mergeF(tilesMeshes, TilesMesh::getVertices);

@@ -40,11 +40,11 @@ public class Chunk extends Entity {
 	private ISpatialStructure<Entity> entities;
 
 	private List<Chunk> childrenChunks;
-	private Map<Tile, List<Vector3f>> tiles;
+	private IBiome.Biomes biome;
+	private List<Vector3f> tiles;
 	private ChunkMesh chunkMesh;
 	private boolean tilesChanged;
 	private float darkness;
-	private IBiome.Biomes biome;
 	private Sphere boundingSphere;
 
 	public Chunk(ISpatialStructure<Entity> structure, Vector3f position) {
@@ -52,11 +52,11 @@ public class Chunk extends Entity {
 		this.entities = new StructureBasic<>();
 
 		this.childrenChunks = new ArrayList<>();
-		this.tiles = new HashMap<>();
+		this.biome = IBiome.Biomes.random();
+		this.tiles = new ArrayList<>();
 		this.chunkMesh = new ChunkMesh(this);
 		this.tilesChanged = true;
 		this.darkness = 0.0f;
-		this.biome = IBiome.Biomes.random();
 		this.boundingSphere = new Sphere(15.0f);
 
 		ComponentModel componentModel = new ComponentModel(this, null, 1.0f, biome.getBiome().getMainTile().getTexture(), 0);
@@ -132,7 +132,7 @@ public class Chunk extends Entity {
 	//	float rotation = KosmosChunks.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
 
 		for (int i = 0; i < height; i++) {
-			chunk.addTile(Tile.TILE_GRASS, new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
+			chunk.addTile(new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
 
 			/*if (generate && i == height - 1 && height > 0) {
 				switch (genID) {
@@ -217,23 +217,16 @@ public class Chunk extends Entity {
 		FlounderBounding.addShapeRender(chunkMesh.getAABB());
 	}
 
-	public Map<Tile, List<Vector3f>> getTiles() {
+	public List<Vector3f> getTiles() {
 		return tiles;
 	}
 
-	public void addTile(Tile tile, Vector3f position) {
-		if (tile == null && position == null) {
+	public void addTile(Vector3f position) {
+		if (position == null) {
 			return;
 		}
 
-		if (tiles.containsKey(tile)) {
-			tiles.get(tile).add(position);
-		} else {
-			List<Vector3f> list = new ArrayList<>();
-			list.add(position);
-			tiles.put(tile, list);
-		}
-
+		tiles.add(position);
 		tilesChanged = true;
 	}
 
@@ -242,18 +235,8 @@ public class Chunk extends Entity {
 			return;
 		}
 
-		for (Tile tile : tiles.keySet()) {
-			Iterator<Vector3f> iterator = tiles.get(tile).iterator();
-
-			while (iterator.hasNext()) {
-				Vector3f next = iterator.next();
-
-				if (next.equals(position)) {
-					iterator.remove();
-					tilesChanged = true;
-				}
-			}
-		}
+		tiles.remove(position);
+		tilesChanged = true;
 	}
 
 	public ISpatialStructure<Entity> getEntities() {
@@ -266,6 +249,10 @@ public class Chunk extends Entity {
 
 	public ChunkMesh getChunkMesh() {
 		return chunkMesh;
+	}
+
+	public IBiome.Biomes getBiome() {
+		return biome;
 	}
 
 	public float getDarkness() {
