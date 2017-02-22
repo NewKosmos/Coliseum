@@ -100,6 +100,8 @@ public class EntitiesRenderer extends Renderer {
 			shader.getUniformFloat("fogGradient").loadFloat(2.0f);
 		}
 
+		shader.getUniformVec3("dayNightColour").loadVec3(KosmosWorld.getSkyCycle().getSkyColour());
+
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();
 		OpenGlUtils.enableAlphaBlending();
@@ -110,7 +112,6 @@ public class EntitiesRenderer extends Renderer {
 	private void renderEntity(Entity entity) {
 		ComponentModel componentModel = (ComponentModel) entity.getComponent(ComponentModel.ID);
 		ComponentAnimation componentAnimation = (ComponentAnimation) entity.getComponent(ComponentAnimation.ID);
-		ComponentTerrain componentTerrain = (ComponentTerrain) entity.getComponent(ComponentTerrain.ID);
 		final int vaoLength;
 
 		if (componentModel != null && componentModel.getModel() != null) {
@@ -131,8 +132,6 @@ public class EntitiesRenderer extends Renderer {
 			// No model, so no render!
 			return;
 		}
-
-		shader.getUniformVec3("dayNightColour").loadVec3(KosmosWorld.getSkyCycle().getSkyColour());
 
 		if (componentModel != null && componentModel.getTexture() != null) {
 			OpenGlUtils.bindTexture(componentModel.getTexture(), 0);
@@ -156,12 +155,6 @@ public class EntitiesRenderer extends Renderer {
 			for (int i = 0; i < componentAnimation.getJointTransforms().length; i++) {
 				shader.getUniformMat4("jointTransforms[" + i + "]").loadMat4(componentAnimation.getJointTransforms()[i]);
 			}
-		}
-
-		if (componentTerrain != null) {
-			shader.getUniformFloat("darkness").loadFloat(componentTerrain.getDarkness());
-		} else {
-			shader.getUniformFloat("darkness").loadFloat(0.0f);
 		}
 
 		glDrawElements(GL_TRIANGLES, vaoLength, GL_UNSIGNED_INT, 0);

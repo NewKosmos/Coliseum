@@ -147,11 +147,11 @@ public class Chunk extends Entity {
 		for (int i = 0; i < height; i++) {
 			tiles.add(new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
 
-			if (i == height - 1 && height > 0) {
-				if (!((KosmosChunks.getNoise().noise1((worldPos.x + worldPos.y) / 11.0f) * 20.0f) > 1.0f)) {
-					biome.getBiome().generateEntity(this, worldPos, position, i);
-				}
-			}
+			//if (i == height - 1 && height > 0) {
+			//	if (!((KosmosChunks.getNoise().noise1((worldPos.x + worldPos.y) / 11.0f) * 20.0f) > 1.0f)) {
+			//		biome.getBiome().generateEntity(this, worldPos, position, i);
+			//	}
+			//}
 		}
 	}
 
@@ -160,7 +160,10 @@ public class Chunk extends Entity {
 		if (tilesChanged || chunkMesh.getModel() == null) {
 			chunkMesh.rebuild(generate());
 			tilesChanged = false;
+			super.setMoved();
 		}
+
+		super.update();
 
 		/*Iterator it = childrenChunks.iterator();
 

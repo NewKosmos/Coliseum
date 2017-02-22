@@ -118,6 +118,9 @@ public class ComponentModel extends IComponentEntity {
 
 	@Override
 	public void update() {
+		if (getEntity().hasMoved()) {
+			Matrix4f.transformationMatrix(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, modelMatrix);
+		}
 	}
 
 	public ModelObject getModel() {
@@ -126,6 +129,7 @@ public class ComponentModel extends IComponentEntity {
 
 	public void setModel(ModelObject model) {
 		this.model = model;
+		getEntity().setMoved();
 	}
 
 	public float getScale() {
@@ -134,6 +138,7 @@ public class ComponentModel extends IComponentEntity {
 
 	public void setScale(float scale) {
 		this.scale = scale;
+		getEntity().setMoved();
 	}
 
 	/**
@@ -142,10 +147,6 @@ public class ComponentModel extends IComponentEntity {
 	 * @return The entitys model matrix.
 	 */
 	public Matrix4f getModelMatrix() {
-		modelMatrix.setIdentity();
-		float scale = 1.0f;
-		scale = (super.getEntity().getComponent(ComponentModel.ID) != null) ? ((ComponentModel) super.getEntity().getComponent(ComponentModel.ID)).getScale() : scale;
-		Matrix4f.transformationMatrix(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, modelMatrix);
 		return modelMatrix;
 	}
 

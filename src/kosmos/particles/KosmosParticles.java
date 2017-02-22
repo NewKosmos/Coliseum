@@ -66,31 +66,35 @@ public class KosmosParticles extends Module {
 
 		particleSystems.forEach(ParticleSystem::generateParticles);
 
-		for (StructureBasic<Particle> list : particles) {
-			List<Particle> particles = new ArrayList<>(list.getAll());
+		if (!particles.isEmpty()) {
+			for (StructureBasic<Particle> list : particles) {
+				List<Particle> particles = new ArrayList<>(list.getAll());
 
-			for (Particle particle : particles) {
-				particle.update();
+				for (Particle particle : particles) {
+					particle.update();
 
-				if (!particle.isAlive()) {
-					list.remove(particle);
-					deadParticles.add(particle);
+					if (!particle.isAlive()) {
+						list.remove(particle);
+						deadParticles.add(particle);
+					}
 				}
 			}
 		}
 
-		Iterator<Particle> deadIterator = deadParticles.iterator();
+		if (!deadParticles.isEmpty()) {
+			Iterator<Particle> deadIterator = deadParticles.iterator();
 
-		while (deadIterator.hasNext()) {
-			Particle particle = deadIterator.next();
-			particle.update();
+			while (deadIterator.hasNext()) {
+				Particle particle = deadIterator.next();
+				particle.update();
 
-			if (particle.getElapsedTime() > MAX_ELAPSED_TIME) {
-				deadIterator.remove();
+				if (particle.getElapsedTime() > MAX_ELAPSED_TIME) {
+					deadIterator.remove();
+				}
 			}
-		}
 
-		ArraySorting.heapSort(deadParticles); // Sorts the list old to new.
+			ArraySorting.heapSort(deadParticles); // Sorts the list old to new.
+		}
 	}
 
 	@Override

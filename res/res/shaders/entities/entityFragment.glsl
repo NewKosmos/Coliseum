@@ -14,8 +14,6 @@ flat in float pass_brightness;
 //---------UNIFORM------------
 layout(binding = 0) uniform sampler2D diffuseMap;
 layout(binding = 1) uniform sampler2D shadowMap;
-uniform float transparency;
-uniform float darkness;
 
 uniform float shadowMapSize;
 uniform vec3 fogColour;
@@ -49,6 +47,6 @@ void main(void) {
 	    fogFactor = visibility(pass_positionRelativeToCam, fogDensity, fogGradient);
 	}
 
-	out_colour = vec4(diffuseColour.rgb * shadeFactor * (-(darkness - 0.5) + 0.5), diffuseColour.a);
+	out_colour = vec4(diffuseColour.rgb * shadeFactor, diffuseColour.a);
 	out_colour = mix(vec4(fogColour, 1.0), out_colour, fogFactor);
 }

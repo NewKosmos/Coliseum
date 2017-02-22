@@ -175,10 +175,10 @@ public class KosmosRenderer extends RendererMaster {
 
 		switch (effect) {
 			case 0:
-				break;
-			case 1:
 				filterTiltShift.applyFilter(output.getColourTexture(0));
 				output = filterTiltShift.fbo;
+				break;
+			case 1:
 				break;
 			case 2:
 				filterLensFlare.setSunPositon(KosmosWorld.getEntitySun().getPosition());

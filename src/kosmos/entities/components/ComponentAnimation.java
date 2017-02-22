@@ -270,6 +270,10 @@ public class ComponentAnimation extends IComponentEntity {
 		if (animator != null) {
 			animator.update();
 		}
+
+		//if (getEntity().hasMoved()) {
+			Matrix4f.transformationMatrix(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, modelMatrix);
+		//}
 	}
 
 	/**
@@ -297,6 +301,7 @@ public class ComponentAnimation extends IComponentEntity {
 	 */
 	public void setScale(float scale) {
 		this.scale = scale;
+		getEntity().setMoved();
 	}
 
 	/**
@@ -305,10 +310,6 @@ public class ComponentAnimation extends IComponentEntity {
 	 * @return The entitys model matrix.
 	 */
 	public Matrix4f getModelMatrix() {
-		modelMatrix.setIdentity();
-		float scale = 1.0f;
-		scale = (super.getEntity().getComponent(ComponentAnimation.ID) != null) ? ((ComponentAnimation) super.getEntity().getComponent(ComponentAnimation.ID)).getScale() : scale;
-		Matrix4f.transformationMatrix(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, modelMatrix);
 		return modelMatrix;
 	}
 
@@ -326,6 +327,7 @@ public class ComponentAnimation extends IComponentEntity {
 			this.model = model;
 			this.model.getHeadJoint().calculateInverseBindTransform(Matrix4f.rotate(new Matrix4f(), new Vector3f(1.0f, 0.0f, 0.0f), (float) Math.toRadians(-90.0f), null));
 			this.animator = new Animator(this.model.getHeadJoint());
+			getEntity().setMoved();
 		}
 	}
 
