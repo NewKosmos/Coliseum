@@ -77,11 +77,11 @@ public class TilesMesh {
 		float[] result = new float[tileVertices.size() * 3];
 
 		for (int i = 0; i < tileVertices.size(); i++) {
-		//	if (!tileVertices.get(i).duplicate) {
-				result[tileVertices.get(i).index * 3] = tileVertices.get(i).vertex0;
-				result[tileVertices.get(i).index * 3 + 1] = tileVertices.get(i).vertex1;
-				result[tileVertices.get(i).index * 3 + 2] = tileVertices.get(i).vertex2;
-		//	}
+			//	if (!tileVertices.get(i).duplicate) {
+			result[tileVertices.get(i).index * 3] = tileVertices.get(i).vertex0;
+			result[tileVertices.get(i).index * 3 + 1] = tileVertices.get(i).vertex1;
+			result[tileVertices.get(i).index * 3 + 2] = tileVertices.get(i).vertex2;
+			//	}
 		}
 
 		return result;
@@ -91,10 +91,10 @@ public class TilesMesh {
 		float[] result = new float[tileVertices.size() * 2];
 
 		for (int i = 0; i < tileVertices.size(); i++) {
-		//	if (!tileVertices.get(i).duplicate) {
-				result[tileVertices.get(i).index * 2] = tileVertices.get(i).texture0;
-				result[tileVertices.get(i).index * 2 + 1] = tileVertices.get(i).texture1;
-		//	}
+			//	if (!tileVertices.get(i).duplicate) {
+			result[tileVertices.get(i).index * 2] = tileVertices.get(i).texture0;
+			result[tileVertices.get(i).index * 2 + 1] = tileVertices.get(i).texture1;
+			//	}
 		}
 
 		return result;
@@ -104,11 +104,11 @@ public class TilesMesh {
 		float[] result = new float[tileVertices.size() * 3];
 
 		for (int i = 0; i < tileVertices.size(); i++) {
-		//	if (!tileVertices.get(i).duplicate) {
-				result[tileVertices.get(i).index * 3] = tileVertices.get(i).normal0;
-				result[tileVertices.get(i).index * 3 + 1] = tileVertices.get(i).normal1;
-				result[tileVertices.get(i).index * 3 + 2] = tileVertices.get(i).normal2;
-		//	}
+			//	if (!tileVertices.get(i).duplicate) {
+			result[tileVertices.get(i).index * 3] = tileVertices.get(i).normal0;
+			result[tileVertices.get(i).index * 3 + 1] = tileVertices.get(i).normal1;
+			result[tileVertices.get(i).index * 3 + 2] = tileVertices.get(i).normal2;
+			//	}
 		}
 
 		return result;
@@ -118,11 +118,11 @@ public class TilesMesh {
 		float[] result = new float[tileVertices.size() * 3];
 
 		for (int i = 0; i < tileVertices.size(); i++) {
-		//	if (!tileVertices.get(i).duplicate) {
-				result[tileVertices.get(i).index * 3] = tileVertices.get(i).tangent0;
-				result[tileVertices.get(i).index * 3 + 1] = tileVertices.get(i).tangent1;
-				result[tileVertices.get(i).index * 3 + 2] = tileVertices.get(i).tangent2;
-		//	}
+			//	if (!tileVertices.get(i).duplicate) {
+			result[tileVertices.get(i).index * 3] = tileVertices.get(i).tangent0;
+			result[tileVertices.get(i).index * 3 + 1] = tileVertices.get(i).tangent1;
+			result[tileVertices.get(i).index * 3 + 2] = tileVertices.get(i).tangent2;
+			//	}
 		}
 
 		return result;

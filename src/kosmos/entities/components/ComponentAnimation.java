@@ -272,7 +272,7 @@ public class ComponentAnimation extends IComponentEntity {
 		}
 
 		//if (getEntity().hasMoved()) {
-			Matrix4f.transformationMatrix(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, modelMatrix);
+		Matrix4f.transformationMatrix(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, modelMatrix);
 		//}
 	}
 

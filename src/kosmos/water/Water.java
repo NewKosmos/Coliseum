@@ -43,6 +43,7 @@ public class Water {
 	private Vector3f rotation;
 	private float scale;
 	private Matrix4f modelMatrix;
+	private boolean moved;
 
 	/**
 	 * Generates a new water mesh.
@@ -63,6 +64,7 @@ public class Water {
 		this.rotation = rotation;
 		this.scale = scale;
 		this.modelMatrix = new Matrix4f();
+		this.moved = true;
 
 		/*FlounderEvents.addEvent(new IEvent() {
 			private KeyButton keyButton = new KeyButton(GLFW.GLFW_KEY_I);
@@ -210,6 +212,14 @@ public class Water {
 		return p0 + p1 + p2 + p3;
 	}
 
+	public void update() {
+		if (moved) {
+			Matrix4f.transformationMatrix(position, rotation, scale, modelMatrix);
+		}
+
+		moved = false;
+	}
+
 	/**
 	 * @return The VAO's ID.
 	 */
@@ -241,7 +251,8 @@ public class Water {
 	}
 
 	public void setPosition(Vector3f position) {
-		this.position = position;
+		this.position.set(position);
+		this.moved = true;
 	}
 
 	public Vector3f getRotation() {
@@ -249,7 +260,8 @@ public class Water {
 	}
 
 	public void setRotation(Vector3f rotation) {
-		this.rotation = rotation;
+		this.rotation.set(rotation);
+		this.moved = true;
 	}
 
 	public float getScale() {
@@ -258,11 +270,10 @@ public class Water {
 
 	public void setScale(float scale) {
 		this.scale = scale;
+		this.moved = true;
 	}
 
 	public Matrix4f getModelMatrix() {
-		modelMatrix.setIdentity();
-		Matrix4f.transformationMatrix(position, rotation, scale, modelMatrix);
 		return modelMatrix;
 	}
 

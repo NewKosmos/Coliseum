@@ -52,7 +52,6 @@ public class KosmosRenderer extends RendererMaster {
 	private FilterFXAA filterFXAA;
 	private FilterPixel filterPixel;
 	private FilterCRT filterCRT;
-	private FilterLensFlare filterLensFlare;
 	private FilterTiltShift filterTiltShift;
 	private int effect;
 
@@ -76,8 +75,7 @@ public class KosmosRenderer extends RendererMaster {
 		this.filterFXAA = new FilterFXAA();
 		this.filterPixel = new FilterPixel(4.0f);
 		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.05f);
-		this.filterLensFlare = new FilterLensFlare();
-		this.filterTiltShift = new FilterTiltShift(0.6f, 1.1f, 0.002f, 6.0f);
+		this.filterTiltShift = new FilterTiltShift(0.6f, 1.1f, 0.005f, 2.0f);
 		this.effect = 1;
 
 		FlounderEvents.addEvent(new IEvent() {
@@ -92,7 +90,7 @@ public class KosmosRenderer extends RendererMaster {
 			public void onEvent() {
 				effect++;
 
-				if (effect > 3) {
+				if (effect > 2) {
 					effect = 0;
 				}
 			}
@@ -175,17 +173,12 @@ public class KosmosRenderer extends RendererMaster {
 
 		switch (effect) {
 			case 0:
+				break;
+			case 1:
 				filterTiltShift.applyFilter(output.getColourTexture(0));
 				output = filterTiltShift.fbo;
 				break;
-			case 1:
-				break;
 			case 2:
-				filterLensFlare.setSunPositon(KosmosWorld.getEntitySun().getPosition());
-				filterLensFlare.applyFilter(output.getColourTexture(0));
-				output = filterLensFlare.fbo;
-				break;
-			case 3:
 				/* Scene independents. */
 				renderIndependents();
 				independentsRendered = true;
@@ -229,7 +222,6 @@ public class KosmosRenderer extends RendererMaster {
 		filterFXAA.dispose();
 		filterPixel.dispose();
 		filterCRT.dispose();
-		filterLensFlare.dispose();
 		filterTiltShift.dispose();
 	}
 

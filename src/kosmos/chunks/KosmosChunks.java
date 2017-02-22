@@ -52,7 +52,7 @@ public class KosmosChunks extends Module {
 
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
 		this.currentChunk = null;
-	//	generateClouds();
+		//	generateClouds();
 
 		new Chunk(KosmosChunks.getChunks(), new Vector3f(NewKosmos.configSave.getFloatWithDefault("chunk_x", 0.0f, () -> KosmosChunks.getCurrent().getPosition().x), 0.0f, NewKosmos.configSave.getFloatWithDefault("chunk_z", 0.0f, () -> KosmosChunks.getCurrent().getPosition().z))); // The root chunk.
 	}
@@ -98,9 +98,10 @@ public class KosmosChunks extends Module {
 
 			if (playerChunk != currentChunk) {
 				if (playerChunk != null) {
-					if (playerChunk.getChildrenChunks().isEmpty()) {
-						playerChunk.createChunksAround();
-					}
+					//if (playerChunk.getChildrenChunks().isEmpty()) {
+					playerChunk.createChunksAround();
+					//	playerChunk.getChildrenChunks().forEach(Chunk::createChunksAround);
+					//}
 
 					Iterator it = chunks.getAll().iterator();
 
@@ -117,7 +118,7 @@ public class KosmosChunks extends Module {
 				}
 
 				currentChunk = playerChunk;
-				FlounderLogger.log(playerChunk);
+				//	FlounderLogger.log(playerChunk);
 			}
 
 			lastPlayerPos.set(playerPos);

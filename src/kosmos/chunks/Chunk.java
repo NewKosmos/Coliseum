@@ -21,6 +21,8 @@ import kosmos.chunks.meshing.*;
 import kosmos.chunks.tiles.*;
 import kosmos.entities.components.*;
 import kosmos.particles.*;
+import kosmos.particles.loading.*;
+import kosmos.particles.spawns.*;
 
 import java.util.*;
 
@@ -68,23 +70,27 @@ public class Chunk extends Entity {
 		ComponentCollider componentCollider = new ComponentCollider(this);
 		ComponentCollision componentCollision = new ComponentCollision(this);
 
-		generateWeather();
+		// generateWeather();
 
-		FlounderLogger.log("Creating chunk at: " + position.x + ", " + position.z + ".");
+		// FlounderLogger.log("Creating chunk at: " + position.x + ", " + position.z + ".");
 	}
 
 	protected void generateWeather() {
-		/*if (biome.getBiome().getWeatherParticle() != null) {
+		if (biome.getBiome().getWeatherParticle() != null) {
 			List<ParticleTemplate> templates = new ArrayList<>();
 			templates.add(biome.getBiome().getWeatherParticle());
 			particleSystem = new ParticleSystem(templates, new SpawnCircle(40.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 100, 0.5f, 0.5f);
 			particleSystem.setSystemCentre(new Vector3f(getPosition().x, 15.0f, getPosition().z));
-		}*/
+		}
 	}
 
 	protected void createChunksAround() {
 		if (childrenChunks.size() == 6) {
-			return;
+			childrenChunks.removeIf((Chunk child) -> child == null || !KosmosChunks.getChunks().contains(child));
+
+			if (childrenChunks.size() == 6) {
+				return;
+			}
 		}
 
 		for (int i = 0; i < 6; i++) {

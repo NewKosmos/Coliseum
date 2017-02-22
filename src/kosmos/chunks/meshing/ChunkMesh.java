@@ -87,7 +87,7 @@ public class ChunkMesh {
 		QuickHull.recalculate(hull, chunk.getPosition(), chunk.getRotation(), 1.0f, hull);*/
 
 		// Then all model data is used to create a manual model loader, a hull is not generated and materials are baked into the textures. he model is then loaded into a object and OpenGL.
-		this.model = ModelFactory.newBuilder().setManual(new ModelLoadManual("chunk" + chunk.getPosition().x + "p" + chunk.getPosition().z + "t" + (int) Framework.getTimeSec()) {
+		this.model = ModelFactory.newBuilder().setManual(new ModelLoadManual("chunk" + chunk.getPosition().x + "p" + chunk.getPosition().z) { //  + "t" + (int) Framework.getTimeSec()
 			@Override
 			public float[] getVertices() {
 				return tilesMesh.getVertices();

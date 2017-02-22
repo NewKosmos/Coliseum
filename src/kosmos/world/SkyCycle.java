@@ -42,8 +42,8 @@ public class SkyCycle {
 	}
 
 	public void update() {
-		dayFactor = dayDriver.update(Framework.getDelta()) / 100.0f; // 0.2f;
-		Colour.interpolate(SKY_COLOUR_DAY, SKY_COLOUR_NIGHT, dayFactor, skyColour);
+		dayFactor = dayDriver.update(Framework.getDelta()) / 100.0f;
+		//	Colour.interpolate(SKY_COLOUR_DAY, SKY_COLOUR_NIGHT, dayFactor, skyColour);
 		Vector3f.rotate(LIGHT_DIRECTION, new Vector3f(0.0f, dayFactor * 360.0f, 0.0f), lightDirection);
 	}
 
