@@ -31,7 +31,7 @@ public class KosmosWorld extends Module {
 	private Entity entityMoon;
 
 	public KosmosWorld() {
-		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEntities.class, KosmosChunks.class, KosmosWater.class, KosmosParticles.class);
+		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEntities.class, KosmosParticles.class, KosmosChunks.class, KosmosWater.class);
 	}
 
 	@Override

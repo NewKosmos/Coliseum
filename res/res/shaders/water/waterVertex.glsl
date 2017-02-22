@@ -30,7 +30,7 @@ out vec4 pass_positionRelativeToCam;
 out vec3 pass_surfaceNormal;
 out vec4 pass_shadowCoords;
 out vec4 pass_clipSpace;
-out float pass_brightness;
+flat out float pass_brightness;
 
 //---------WAVE OFFSET------------
 float generateOffset(float x, float z, float val1, float val2){

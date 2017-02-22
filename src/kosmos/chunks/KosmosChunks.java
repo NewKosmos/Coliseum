@@ -44,7 +44,7 @@ public class KosmosChunks extends Module {
 
 	@Override
 	public void init() {
-		this.noise = new PerlinNoise(537);
+		this.noise = new PerlinNoise(420);
 		this.chunks = new StructureBasic<>();
 
 		this.chunkRange = new Sphere(40.0f); // new AABB();
@@ -67,11 +67,6 @@ public class KosmosChunks extends Module {
 				new InstanceCloud(FlounderEntities.getEntities(), new Vector3f((x * 11.0f) + offsetX, 7.0f * height, (y * 11.0f) + offsetZ), new Vector3f(0.0f, rotationY, rotationZ), Maths.randomInRange(1.0f, 2.25f));
 			}
 		}
-
-		//List<ParticleTemplate> templates = new ArrayList<>();
-		//templates.add(KosmosParticles.load("rain"));
-		//ParticleSystem system = new ParticleSystem(templates, new SpawnCircle(40.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 500, 0.5f, 0.75f);
-		//system.setSystemCentre(new Vector3f(0.0f, 15.0f, 0.0f));
 	}
 
 	@Override

@@ -12,7 +12,6 @@ package kosmos.chunks.biomes;
 import flounder.maths.vectors.*;
 import kosmos.chunks.*;
 import kosmos.chunks.tiles.*;
-import kosmos.particles.*;
 import kosmos.particles.loading.*;
 
 public class BiomeDesert implements IBiome {
@@ -33,7 +32,7 @@ public class BiomeDesert implements IBiome {
 
 	@Override
 	public ParticleTemplate getWeatherParticle() {
-		return KosmosParticles.load("rain");
+		return null;
 	}
 
 	@Override

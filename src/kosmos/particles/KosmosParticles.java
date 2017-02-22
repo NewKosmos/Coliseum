@@ -67,7 +67,7 @@ public class KosmosParticles extends Module {
 		particleSystems.forEach(ParticleSystem::generateParticles);
 
 		for (StructureBasic<Particle> list : particles) {
-			List<Particle> particles = list.getAll();
+			List<Particle> particles = new ArrayList<>(list.getAll());
 
 			for (Particle particle : particles) {
 				particle.update();

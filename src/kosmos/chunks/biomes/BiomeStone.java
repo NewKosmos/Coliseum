@@ -12,8 +12,6 @@ package kosmos.chunks.biomes;
 import flounder.maths.vectors.*;
 import kosmos.chunks.*;
 import kosmos.chunks.tiles.*;
-import kosmos.entities.instances.*;
-import kosmos.particles.*;
 import kosmos.particles.loading.*;
 
 public class BiomeStone implements IBiome {
@@ -32,7 +30,7 @@ public class BiomeStone implements IBiome {
 		float rotation = KosmosChunks.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
 
 		switch ((int) (KosmosChunks.getNoise().noise1((worldPos.y - worldPos.x) / 11.0f) * 200.0f)) {
-			case 1:
+			/*case 1:
 				new InstanceBush(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
@@ -51,7 +49,7 @@ public class BiomeStone implements IBiome {
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
-				break;
+				break;*/
 			default:
 				break;
 		}
@@ -59,7 +57,7 @@ public class BiomeStone implements IBiome {
 
 	@Override
 	public ParticleTemplate getWeatherParticle() {
-		return KosmosParticles.load("rain");
+		return null;
 	}
 
 	@Override

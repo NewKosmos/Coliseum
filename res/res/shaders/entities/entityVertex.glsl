@@ -36,7 +36,7 @@ out vec4 pass_positionRelativeToCam;
 out vec2 pass_textureCoords;
 out vec3 pass_surfaceNormal;
 out vec4 pass_shadowCoords;
-out float pass_brightness;
+flat out float pass_brightness;
 
 //---------MAIN------------
 void main(void) {

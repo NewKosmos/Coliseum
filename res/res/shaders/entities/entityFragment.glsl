@@ -9,7 +9,7 @@ in vec4 pass_positionRelativeToCam;
 in vec2 pass_textureCoords;
 in vec3 pass_surfaceNormal;
 in vec4 pass_shadowCoords;
-in float pass_brightness;
+flat in float pass_brightness;
 
 //---------UNIFORM------------
 layout(binding = 0) uniform sampler2D diffuseMap;

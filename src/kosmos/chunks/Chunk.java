@@ -20,6 +20,7 @@ import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;
 import kosmos.chunks.tiles.*;
 import kosmos.entities.components.*;
+import kosmos.particles.*;
 
 import java.util.*;
 
@@ -42,15 +43,16 @@ public class Chunk extends Entity {
 	private IBiome.Biomes biome;
 	private ChunkMesh chunkMesh;
 
-	private List<Vector3f> tiles;
 	private boolean tilesChanged;
 	private float darkness;
+
+	private ParticleSystem particleSystem;
 
 	public Chunk(ISpatialStructure<Entity> structure, Vector3f position) {
 		super(structure, position, new Vector3f());
 		this.entities = new StructureBasic<>();
 
-		float biomeID = Math.abs(KosmosChunks.getNoise().noise1((position.x + position.z) / 100.0f)) * 3.0f * IBiome.Biomes.values().length;
+		float biomeID = Math.abs(KosmosChunks.getNoise().noise1((position.x + position.z) / 163.2f)) * 3.0f * IBiome.Biomes.values().length;
 		biomeID = Maths.clamp((int) biomeID, 0.0f, IBiome.Biomes.values().length - 1);
 		FlounderLogger.error("BiomeID: " + biomeID);
 
@@ -58,7 +60,6 @@ public class Chunk extends Entity {
 		this.biome = IBiome.Biomes.values()[(int) biomeID]; // IBiome.Biomes.random();
 		this.chunkMesh = new ChunkMesh(this);
 
-		this.tiles = new ArrayList<>();
 		this.tilesChanged = true;
 		this.darkness = 0.0f;
 
@@ -66,8 +67,18 @@ public class Chunk extends Entity {
 		ComponentCollider componentCollider = new ComponentCollider(this);
 		ComponentCollision componentCollision = new ComponentCollision(this);
 
-		generate(this);
+		generateWeather();
+
 		FlounderLogger.log("Creating chunk at: " + position.x + ", " + position.z + ".");
+	}
+
+	protected void generateWeather() {
+		/*if (biome.getBiome().getWeatherParticle() != null) {
+			List<ParticleTemplate> templates = new ArrayList<>();
+			templates.add(biome.getBiome().getWeatherParticle());
+			particleSystem = new ParticleSystem(templates, new SpawnCircle(40.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 100, 0.5f, 0.5f);
+			particleSystem.setSystemCentre(new Vector3f(getPosition().x, 15.0f, getPosition().z));
+		}*/
 	}
 
 	protected void createChunksAround() {
@@ -100,13 +111,15 @@ public class Chunk extends Entity {
 		}
 	}
 
-	protected static void generate(Chunk chunk) {
+	protected List<Vector3f> generate() {
+		List<Vector3f> tiles = new ArrayList<>();
+
 		for (int i = 0; i < CHUNK_RADIUS; i++) {
 			int shapesOnEdge = i;
 			float r = 0.0f;
 			float g = -i;
 			float b = i;
-			generateTile(chunk, Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null));
+			generateTile(tiles, Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null));
 
 			for (int j = 0; j < 6; j++) {
 				if (j == 5) {
@@ -118,25 +131,24 @@ public class Chunk extends Entity {
 					r = r + TILE_DELTAS[j][0];
 					g = g + TILE_DELTAS[j][1];
 					b = b + TILE_DELTAS[j][2];
-					generateTile(chunk, Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null));
+					generateTile(tiles, Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null));
 				}
 			}
 		}
+
+		return tiles;
 	}
 
-	protected static void generateTile(Chunk chunk, Vector2f position) {
-		Vector2f worldPos = new Vector2f(position.x + (chunk.getPosition().x * 2.0f), position.y + (chunk.getPosition().z * 2.0f));
-		int height = (int) Math.abs(KosmosChunks.getNoise().noise2(
-				worldPos.x / 66.6f,
-				worldPos.y / 66.6f
-		) * 10.0f); // (int) worldPos.length() / 7;
+	protected void generateTile(List<Vector3f> tiles, Vector2f position) {
+		Vector2f worldPos = new Vector2f(position.x + (getPosition().x * 2.0f), position.y + (getPosition().z * 2.0f));
+		int height = (int) Math.abs(KosmosChunks.getNoise().noise2(worldPos.x / 88.8f, worldPos.y / 88.8f) * 9.81f);
 
 		for (int i = 0; i < height; i++) {
-			chunk.addTile(new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
+			tiles.add(new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
 
 			if (i == height - 1 && height > 0) {
 				if (!((KosmosChunks.getNoise().noise1((worldPos.x + worldPos.y) / 11.0f) * 20.0f) > 1.0f)) {
-					chunk.biome.getBiome().generateEntity(chunk, worldPos, position, i);
+					biome.getBiome().generateEntity(this, worldPos, position, i);
 				}
 			}
 		}
@@ -145,11 +157,11 @@ public class Chunk extends Entity {
 	public void update(Vector3f playerPosition) {
 		// Builds or rebulds this chunks mesh.
 		if (tilesChanged || chunkMesh.getModel() == null) {
-			chunkMesh.rebuild();
+			chunkMesh.rebuild(generate());
 			tilesChanged = false;
 		}
 
-		Iterator it = childrenChunks.iterator();
+		/*Iterator it = childrenChunks.iterator();
 
 		while (it.hasNext()) {
 			Chunk child = (Chunk) it.next();
@@ -157,7 +169,7 @@ public class Chunk extends Entity {
 			if (!KosmosChunks.getChunks().contains(child)) {
 				it.remove();
 			}
-		}
+		}*/
 
 		//FlounderLogger.log(getBounding());
 
@@ -173,30 +185,8 @@ public class Chunk extends Entity {
 		}*/
 
 		// Adds this mesh AABB to the bounding render pool.
-		//FlounderBounding.addShapeRender(chunkMesh.getAABB());
+		// FlounderBounding.addShapeRender(chunkMesh.getAABB());
 		FlounderBounding.addShapeRender(chunkMesh.getSphere());
-	}
-
-	public List<Vector3f> getTiles() {
-		return tiles;
-	}
-
-	public void addTile(Vector3f position) {
-		if (position == null) {
-			return;
-		}
-
-		tiles.add(position);
-		tilesChanged = true;
-	}
-
-	public void removeTile(Vector3f position) {
-		if (position == null) {
-			return;
-		}
-
-		tiles.remove(position);
-		tilesChanged = true;
 	}
 
 	public ISpatialStructure<Entity> getEntities() {
@@ -234,7 +224,11 @@ public class Chunk extends Entity {
 		}
 
 		entities.clear();
-		tiles.clear();
 		chunkMesh.delete();
+
+		if (particleSystem != null) {
+			particleSystem.delete();
+			particleSystem = null;
+		}
 	}
 }

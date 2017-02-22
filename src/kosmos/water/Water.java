@@ -23,7 +23,7 @@ import java.util.*;
  * Represents the physical mesh for all the water at a certain height in the scene.
  */
 public class Water {
-	protected static final float COLOUR_INTENSITY = 0.75f; // 0 being 100% reflective, 0% disables reflections.
+	protected static final float COLOUR_INTENSITY = 0.5f; // 0 being 100% reflective, 0% disables reflections.
 
 	protected static final float WAVE_SPEED = 10.0f;
 	protected static final float WAVE_LENGTH = 5.0f;

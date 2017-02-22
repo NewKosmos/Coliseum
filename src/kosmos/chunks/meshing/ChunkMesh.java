@@ -35,7 +35,7 @@ public class ChunkMesh {
 		this.aabb = null;
 	}
 
-	public void rebuild() {
+	public void rebuild(List<Vector3f> tiles) {
 		// Removes old flounder.models and AABBs.
 		if (model != null) {
 			model.delete();
@@ -52,7 +52,7 @@ public class ChunkMesh {
 		}
 
 		// Loads all tiles into a tile mesh with all positional instances within the chunk.
-		TilesMesh tilesMesh = new TilesMesh(chunk.getBiome().getBiome().getMainTile(), chunk.getTiles());
+		TilesMesh tilesMesh = new TilesMesh(chunk.getBiome().getBiome().getMainTile(), tiles);
 
 		// Creates a sphere.
 		this.sphere = new Sphere();
