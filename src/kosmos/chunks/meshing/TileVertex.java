@@ -9,7 +9,7 @@
 
 package kosmos.chunks.meshing;
 
-public class TileVertex implements Comparable<TileVertex> {
+public class TileVertex {
 	protected int index;
 	protected float vertex0;
 	protected float vertex1;
@@ -38,11 +38,6 @@ public class TileVertex implements Comparable<TileVertex> {
 		this.tangent1 = tangent1;
 		this.tangent2 = tangent2;
 		this.duplicate = false;
-	}
-
-	@Override
-	public int compareTo(TileVertex tileVertex) {
-		return ((Integer) index).compareTo(tileVertex.index);
 	}
 
 	@Override
@@ -97,6 +92,7 @@ public class TileVertex implements Comparable<TileVertex> {
 				"], tangent=[" + tangent0 +
 				", " + tangent1 +
 				", " + tangent2 +
-				"]}";
+				"], duplicate=" + duplicate +
+				"}";
 	}
 }

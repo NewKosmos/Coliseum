@@ -28,10 +28,10 @@ public class TilesMesh {
 		int duplicates = 0;
 
 		for (int p = 0; p < positions.size(); p++) {
-			for (int id = 0; id < tile.getModel().getIndices().length; id++) {
-				int pointer = tile.getModel().getIndices()[id];
+			for (int i = 0; i < tile.getModel().getIndices().length; i++) {
+				int pointer = tile.getModel().getIndices()[i];
 
-				int index = id + (tile.getModel().getIndices().length * p);
+				int index = pointer + (tile.getModel().getIndices().length * p);
 				float vertex0 = tile.getModel().getVertices()[pointer * 3] + (positions.get(p).x / 2.0f);
 				float vertex1 = tile.getModel().getVertices()[pointer * 3 + 1] + (positions.get(p).y / 2.0f);
 				float vertex2 = tile.getModel().getVertices()[pointer * 3 + 2] + (positions.get(p).z / 2.0f);
@@ -52,6 +52,16 @@ public class TilesMesh {
 				maxZ = (vertex2 > maxZ) ? vertex2 : maxZ;
 
 				TileVertex vertex = new TileVertex(index, vertex0, vertex1, vertex2, texture0, texture1, normal0, normal1, normal2, tangent0, tangent1, tangent2);
+
+				/*for (TileVertex tv : tileVertices) {
+					if (tv.equals(vertex)) {
+						vertex.index = tv.index;
+						vertex.duplicate = true;
+						duplicates++;
+						break;
+					}
+				}*/
+
 				tileVertices.add(vertex);
 			}
 		}
@@ -60,28 +70,18 @@ public class TilesMesh {
 		this.maxRadius = Chunk.CHUNK_WORLD_SIZE; // Maths.maxValue(maxX, maxY, maxZ, Math.abs(minX), Math.abs(minY), Math.abs(minZ));
 
 		// Logs how many vertices and indices are in the chunk model.
-		FlounderLogger.log("Vertices = " + (tileVertices.size() * 3) + ", Indices = " + tileVertices.size() + ", Duplicates = " + duplicates);
-	}
-
-	protected TileVertex getTileVertex(int index) {
-		for (TileVertex tileVertex : tileVertices) {
-			if (tileVertex.index == index) {
-				return tileVertex;
-			}
-		}
-
-		return null;
+		// FlounderLogger.log("Vertices = " + (tileVertices.size() * 3) + ", Indices = " + tileVertices.size() + ", Duplicates = " + duplicates);
 	}
 
 	protected float[] getVertices() {
 		float[] result = new float[tileVertices.size() * 3];
 
 		for (int i = 0; i < tileVertices.size(); i++) {
-			if (!tileVertices.get(i).duplicate) {
-				result[i * 3] = tileVertices.get(i).vertex0;
-				result[i * 3 + 1] = tileVertices.get(i).vertex1;
-				result[i * 3 + 2] = tileVertices.get(i).vertex2;
-			}
+		//	if (!tileVertices.get(i).duplicate) {
+				result[tileVertices.get(i).index * 3] = tileVertices.get(i).vertex0;
+				result[tileVertices.get(i).index * 3 + 1] = tileVertices.get(i).vertex1;
+				result[tileVertices.get(i).index * 3 + 2] = tileVertices.get(i).vertex2;
+		//	}
 		}
 
 		return result;
@@ -91,10 +91,10 @@ public class TilesMesh {
 		float[] result = new float[tileVertices.size() * 2];
 
 		for (int i = 0; i < tileVertices.size(); i++) {
-			if (!tileVertices.get(i).duplicate) {
-				result[i * 2] = tileVertices.get(i).texture0;
-				result[i * 2 + 1] = tileVertices.get(i).texture1;
-			}
+		//	if (!tileVertices.get(i).duplicate) {
+				result[tileVertices.get(i).index * 2] = tileVertices.get(i).texture0;
+				result[tileVertices.get(i).index * 2 + 1] = tileVertices.get(i).texture1;
+		//	}
 		}
 
 		return result;
@@ -104,11 +104,11 @@ public class TilesMesh {
 		float[] result = new float[tileVertices.size() * 3];
 
 		for (int i = 0; i < tileVertices.size(); i++) {
-			if (!tileVertices.get(i).duplicate) {
-				result[i * 3] = tileVertices.get(i).normal0;
-				result[i * 3 + 1] = tileVertices.get(i).normal1;
-				result[i * 3 + 2] = tileVertices.get(i).normal2;
-			}
+		//	if (!tileVertices.get(i).duplicate) {
+				result[tileVertices.get(i).index * 3] = tileVertices.get(i).normal0;
+				result[tileVertices.get(i).index * 3 + 1] = tileVertices.get(i).normal1;
+				result[tileVertices.get(i).index * 3 + 2] = tileVertices.get(i).normal2;
+		//	}
 		}
 
 		return result;
@@ -118,11 +118,11 @@ public class TilesMesh {
 		float[] result = new float[tileVertices.size() * 3];
 
 		for (int i = 0; i < tileVertices.size(); i++) {
-			if (!tileVertices.get(i).duplicate) {
-				result[i * 3] = tileVertices.get(i).tangent0;
-				result[i * 3 + 1] = tileVertices.get(i).tangent1;
-				result[i * 3 + 2] = tileVertices.get(i).tangent2;
-			}
+		//	if (!tileVertices.get(i).duplicate) {
+				result[tileVertices.get(i).index * 3] = tileVertices.get(i).tangent0;
+				result[tileVertices.get(i).index * 3 + 1] = tileVertices.get(i).tangent1;
+				result[tileVertices.get(i).index * 3 + 2] = tileVertices.get(i).tangent2;
+		//	}
 		}
 
 		return result;

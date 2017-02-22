@@ -126,7 +126,7 @@ public class CameraFocus extends Camera {
 
 		updateActualZoom();
 		updateHorizontalAngle();
-		updatePitchAngle();
+		//updatePitchAngle();
 		calculateDistances();
 		calculatePosition();
 
@@ -180,11 +180,11 @@ public class CameraFocus extends Camera {
 
 		targetElevation -= angleChange;
 
-		/*if (targetElevation >= MAX_ANGLE_OF_ELEVATION) {
+		if (targetElevation >= MAX_ANGLE_OF_ELEVATION) {
 			targetElevation = MAX_ANGLE_OF_ELEVATION;
 		} else if (targetElevation <= MIN_ANGLE_OF_ELEVATION) {
 			targetElevation = MIN_ANGLE_OF_ELEVATION;
-		}*/
+		}
 	}
 
 	private void calculateZoom() {
