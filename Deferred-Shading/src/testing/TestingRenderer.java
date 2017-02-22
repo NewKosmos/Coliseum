@@ -1,7 +1,5 @@
 package testing;
 
-import testing.entities.*;
-import testing.shadows.*;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.fbos.*;
@@ -10,6 +8,8 @@ import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
+import testing.entities.*;
+import testing.shadows.*;
 
 /**
  * Created by matthew on 21/02/17.

@@ -26,6 +26,7 @@ public class ChunkMesh {
 	private ModelObject model;
 	private Sphere sphere;
 	private AABB aabb;
+	//private QuickHull hull;
 
 	public ChunkMesh(Chunk chunk) {
 		this.chunk = chunk;
@@ -33,6 +34,7 @@ public class ChunkMesh {
 		this.vertices = null;
 		this.model = null;
 		this.aabb = null;
+		//this.hull = null;
 	}
 
 	public void rebuild(List<Vector3f> tiles) {
@@ -61,6 +63,28 @@ public class ChunkMesh {
 		// Creates a AABB.
 		this.aabb = new AABB(new Vector3f(tilesMesh.minX, tilesMesh.minY - 3.0f, tilesMesh.minZ), new Vector3f(tilesMesh.maxX, tilesMesh.maxY + 7.0f, tilesMesh.maxZ));
 		AABB.recalculate(aabb, chunk.getPosition(), chunk.getRotation(), 1.0f, aabb);
+
+		// Creates a Quick Hull.
+		/*List<Vector3f> hullPoints = new ArrayList<>();
+		Vector3f current = new Vector3f();
+		int i = 0;
+		for (float f : tilesMesh.getVertices()) {
+			if (i == 0) {
+				current.x = f;
+			} else if (i == 1) {
+				current.y = f;
+			} else if (i == 2) {
+				current.z = f;
+			}
+			i++;
+			if (i == 3) {
+				hullPoints.add(current);
+				current = new Vector3f();
+				i = 0;
+			}
+		}
+		this.hull = new QuickHull(hullPoints);
+		QuickHull.recalculate(hull, chunk.getPosition(), chunk.getRotation(), 1.0f, hull);*/
 
 		// Then all model data is used to create a manual model loader, a hull is not generated and materials are baked into the textures. he model is then loaded into a object and OpenGL.
 		this.model = ModelFactory.newBuilder().setManual(new ModelLoadManual("chunk" + chunk.getPosition().x + "p" + chunk.getPosition().z + "t" + (int) Framework.getTimeSec()) {
@@ -101,7 +125,7 @@ public class ChunkMesh {
 
 			@Override
 			public QuickHull getHull() {
-				return null;
+				return null; // hull
 			}
 		}).create();
 
@@ -133,12 +157,17 @@ public class ChunkMesh {
 		return aabb;
 	}
 
+	/*public void setHull(QuickHull hull) {
+		this.hull = hull;
+	}*/
+
 	public void delete() {
 		if (model != null) {
 			model.delete();
 			model = null;
 			sphere = null;
 			aabb = null;
+			//	hull = null;
 		}
 	}
 }

@@ -85,6 +85,7 @@ public class WaterRenderer extends Renderer {
 
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();
+		OpenGlUtils.cullBackFaces(true);
 	}
 
 	private void renderWater(Water water) {

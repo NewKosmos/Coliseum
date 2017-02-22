@@ -9,8 +9,6 @@
 
 package testing.entities;
 
-import testing.*;
-import testing.shadows.*;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.entities.*;
@@ -21,6 +19,8 @@ import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
 import flounder.textures.*;
+import testing.*;
+import testing.shadows.*;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -80,9 +80,9 @@ public class EntitiesRenderer extends Renderer {
 			shader.getUniformFloat("fogDensity").loadFloat(KosmosWorld.getFog().getFogDensity());
 			shader.getUniformFloat("fogGradient").loadFloat(KosmosWorld.getFog().getFogGradient());
 		} else {*/
-			shader.getUniformVec3("fogColour").loadVec3(1.0f, 1.0f, 1.0f);
-			shader.getUniformFloat("fogDensity").loadFloat(0.003f);
-			shader.getUniformFloat("fogGradient").loadFloat(2.0f);
+		shader.getUniformVec3("fogColour").loadVec3(1.0f, 1.0f, 1.0f);
+		shader.getUniformFloat("fogDensity").loadFloat(0.003f);
+		shader.getUniformFloat("fogGradient").loadFloat(2.0f);
 		//}
 
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
@@ -123,7 +123,7 @@ public class EntitiesRenderer extends Renderer {
 			OpenGlUtils.cullBackFaces(!textureUndefined.hasAlpha());
 		}
 
-			shader.getUniformFloat("darkness").loadFloat(0.0f);
+		shader.getUniformFloat("darkness").loadFloat(0.0f);
 
 		glDrawElements(GL_TRIANGLES, vaoLength, GL_UNSIGNED_INT, 0);
 		OpenGlUtils.unbindVAO(0, 1, 2, 3, 4, 5);

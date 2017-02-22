@@ -14,6 +14,8 @@ import flounder.framework.*;
 import flounder.inputs.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
+import kosmos.*;
+import kosmos.world.*;
 import org.lwjgl.glfw.*;
 
 public class PlayerBasic extends Player {
@@ -36,7 +38,7 @@ public class PlayerBasic extends Player {
 
 	@Override
 	public void init() {
-		this.position = new Vector3f();
+		this.position = new Vector3f(NewKosmos.configSave.getFloatWithDefault("player_x", 0.0f, () -> KosmosWorld.getEntityPlayer().getPosition().x), 0.0f, NewKosmos.configSave.getFloatWithDefault("player_z", 0.0f, () -> KosmosWorld.getEntityPlayer().getPosition().z));
 		this.rotation = new Vector3f();
 
 		IButton leftKeyButtons = new KeyButton(GLFW.GLFW_KEY_A, GLFW.GLFW_KEY_LEFT);

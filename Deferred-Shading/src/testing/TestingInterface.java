@@ -1,11 +1,11 @@
 package testing;
 
-import testing.entities.*;
 import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.standards.*;
 import flounder.textures.*;
+import testing.entities.*;
 
 /**
  * Created by matthew on 21/02/17.

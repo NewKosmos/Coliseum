@@ -21,6 +21,7 @@ import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.space.*;
 import flounder.textures.*;
+import kosmos.*;
 import kosmos.entities.instances.*;
 import kosmos.world.*;
 
@@ -44,7 +45,7 @@ public class KosmosChunks extends Module {
 
 	@Override
 	public void init() {
-		this.noise = new PerlinNoise(420);
+		this.noise = new PerlinNoise(NewKosmos.configSave.getIntWithDefault("seed", (int) Maths.randomInRange(1.0, 10000.0), () -> KosmosChunks.getNoise().getSeed()));
 		this.chunks = new StructureBasic<>();
 
 		this.chunkRange = new Sphere(40.0f); // new AABB();
@@ -53,7 +54,7 @@ public class KosmosChunks extends Module {
 		this.currentChunk = null;
 		generateClouds();
 
-		new Chunk(KosmosChunks.getChunks(), new Vector3f()); // The root chunk.
+		new Chunk(KosmosChunks.getChunks(), new Vector3f(NewKosmos.configSave.getFloatWithDefault("chunk_x", 0.0f, () -> KosmosChunks.getCurrent().getPosition().x), 0.0f, NewKosmos.configSave.getFloatWithDefault("chunk_z", 0.0f, () -> KosmosChunks.getCurrent().getPosition().z))); // The root chunk.
 	}
 
 	private void generateClouds() {
@@ -135,6 +136,10 @@ public class KosmosChunks extends Module {
 
 	public static ISpatialStructure<Entity> getChunks() {
 		return INSTANCE.chunks;
+	}
+
+	public static Chunk getCurrent() {
+		return INSTANCE.currentChunk;
 	}
 
 	@Override

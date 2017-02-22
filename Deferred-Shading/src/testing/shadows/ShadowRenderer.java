@@ -9,8 +9,6 @@
 
 package testing.shadows;
 
-import testing.*;
-import testing.entities.*;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.fbos.*;
@@ -21,6 +19,8 @@ import flounder.profiling.*;
 import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
+import testing.*;
+import testing.entities.*;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;

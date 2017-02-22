@@ -37,6 +37,8 @@ public class Chunk extends Entity {
 
 	public static final int CHUNK_RADIUS = 7; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
 
+	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * (CHUNK_RADIUS - 0.5f); // The overall world radius footprint per chunk.
+
 	private ISpatialStructure<Entity> entities;
 
 	private List<Chunk> childrenChunks;
@@ -54,7 +56,6 @@ public class Chunk extends Entity {
 
 		float biomeID = Math.abs(KosmosChunks.getNoise().noise1((position.x + position.z) / 163.2f)) * 3.0f * IBiome.Biomes.values().length;
 		biomeID = Maths.clamp((int) biomeID, 0.0f, IBiome.Biomes.values().length - 1);
-		FlounderLogger.error("BiomeID: " + biomeID);
 
 		this.childrenChunks = new ArrayList<>();
 		this.biome = IBiome.Biomes.values()[(int) biomeID]; // IBiome.Biomes.random();
