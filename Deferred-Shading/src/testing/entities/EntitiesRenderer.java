@@ -20,7 +20,6 @@ import flounder.resources.*;
 import flounder.shaders.*;
 import flounder.textures.*;
 import testing.*;
-import testing.shadows.*;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -69,11 +68,6 @@ public class EntitiesRenderer extends Renderer {
 		shader.getUniformVec3("lightDirection").loadVec3(Testing.LIGHT_DIRECTION);
 		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f);
 
-		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.SHADOW_MAP_SIZE);
-		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((TestingRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
-		shader.getUniformFloat("shadowDistance").loadFloat(((TestingRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
-		shader.getUniformFloat("shadowTransition").loadFloat(10.0f);
-		OpenGlUtils.bindTexture(((TestingRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
 
 		/*if (KosmosWorld.getFog() != null) {
 			shader.getUniformVec3("fogColour").loadVec3(KosmosWorld.getFog().getFogColour());
@@ -98,17 +92,12 @@ public class EntitiesRenderer extends Renderer {
 
 		if (componentModel != null && componentModel.getModel() != null) {
 			OpenGlUtils.bindVAO(componentModel.getModel().getVaoID(), 0, 1, 2, 3);
-			shader.getUniformBool("animated").loadBoolean(false);
 			shader.getUniformMat4("modelMatrix").loadMat4(componentModel.getModelMatrix());
 			vaoLength = componentModel.getModel().getVaoLength();
-			shader.getUniformBool("ignoreShadows").loadBoolean(componentModel.isIgnoringShadows());
-			shader.getUniformBool("ignoreFog").loadBoolean(componentModel.isIgnoringFog());
 		} else {
 			// No model, so no render!
 			return;
 		}
-
-		shader.getUniformVec3("dayNightColour").loadVec3(Testing.SKY_COLOUR_DAY);
 
 		if (componentModel != null && componentModel.getTexture() != null) {
 			OpenGlUtils.bindTexture(componentModel.getTexture(), 0);
@@ -122,8 +111,6 @@ public class EntitiesRenderer extends Renderer {
 			shader.getUniformVec2("atlasOffset").loadVec2(0, 0);
 			OpenGlUtils.cullBackFaces(!textureUndefined.hasAlpha());
 		}
-
-		shader.getUniformFloat("darkness").loadFloat(0.0f);
 
 		glDrawElements(GL_TRIANGLES, vaoLength, GL_UNSIGNED_INT, 0);
 		OpenGlUtils.unbindVAO(0, 1, 2, 3, 4, 5);

@@ -24,8 +24,8 @@ public class InstanceCowboyStatic extends Entity {
 	public InstanceCowboyStatic(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 
-		ComponentModel componentModel = new ComponentModel(this, model, 0.2f, texture, 1);
 		ComponentPlayer componentPlayer = new ComponentPlayer(this);
+		ComponentModel componentModel = new ComponentModel(this, model, 0.2f, texture, 1);
 		ComponentCollider componentCollider = new ComponentCollider(this);
 		ComponentCollision componentCollision = new ComponentCollision(this);
 	}

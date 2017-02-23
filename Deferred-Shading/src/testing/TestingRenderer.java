@@ -9,15 +9,10 @@ import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
 import testing.entities.*;
-import testing.shadows.*;
 
-/**
- * Created by matthew on 21/02/17.
- */
 public class TestingRenderer extends RendererMaster {
 	private static final Vector4f POSITIVE_INFINITY = new Vector4f(0.0f, 1.0f, 0.0f, Float.POSITIVE_INFINITY);
 
-	private ShadowRenderer shadowRenderer;
 	private EntitiesRenderer entitiesRenderer;
 	private BoundingRenderer boundingRenderer;
 
@@ -30,7 +25,6 @@ public class TestingRenderer extends RendererMaster {
 
 	@Override
 	public void init() {
-		this.shadowRenderer = new ShadowRenderer();
 		this.entitiesRenderer = new EntitiesRenderer();
 		this.boundingRenderer = new BoundingRenderer();
 
@@ -40,8 +34,6 @@ public class TestingRenderer extends RendererMaster {
 
 	@Override
 	public void render() {
-		shadowRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
-
 		/* Binds the relevant FBO. */
 		bindRelevantFBO();
 
@@ -84,10 +76,6 @@ public class TestingRenderer extends RendererMaster {
 		/* Renders each renderer. */
 		entitiesRenderer.render(clipPlane, camera);
 		boundingRenderer.render(clipPlane, camera);
-	}
-
-	public ShadowRenderer getShadowRenderer() {
-		return shadowRenderer;
 	}
 
 	@Override

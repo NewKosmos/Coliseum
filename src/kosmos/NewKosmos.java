@@ -33,7 +33,7 @@ public class NewKosmos extends Framework {
 		super("kosmos", -1, new KosmosInterface(), new KosmosRenderer(), new CameraFocus(), new PlayerBasic(), new KosmosGuis());
 
 		configMain = new Config(new MyFile(Framework.getRoamingFolder(), "configs", "settings.conf"));
-		configSave = new Config(new MyFile(Framework.getRoamingFolder(), "configs", "save0.conf"));
+		configSave = new Config(new MyFile(Framework.getRoamingFolder(), "saves", "save0.conf"));
 
 		FlounderDisplay.setup(configMain.getIntWithDefault("width", 1080, FlounderDisplay::getWindowWidth),
 				configMain.getIntWithDefault("height", 720, FlounderDisplay::getWindowHeight),

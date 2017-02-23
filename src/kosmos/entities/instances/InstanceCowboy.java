@@ -26,6 +26,7 @@ public class InstanceCowboy extends Entity {
 	public InstanceCowboy(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 
+		ComponentPlayer componentPlayer = new ComponentPlayer(this);
 		ModelAnimated modelAnimated = FlounderCollada.loadCollada(colladaFile);
 
 		AnimationData animationData = FlounderCollada.loadAnimation(colladaFile);
@@ -33,7 +34,6 @@ public class InstanceCowboy extends Entity {
 
 		ComponentAnimation componentAnimation = new ComponentAnimation(this, modelAnimated, 0.2f, texture, 1);
 		componentAnimation.doAnimation(animation);
-		ComponentPlayer componentPlayer = new ComponentPlayer(this);
 		//	ComponentCollider componentCollider = new ComponentCollider(this);
 		//	ComponentCollision componentCollision = new ComponentCollision(this);
 	}

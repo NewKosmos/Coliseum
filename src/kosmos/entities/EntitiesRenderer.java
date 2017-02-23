@@ -82,9 +82,9 @@ public class EntitiesRenderer extends Renderer {
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 
 		shader.getUniformVec3("lightDirection").loadVec3(KosmosWorld.getSkyCycle().getLightDirection());
-		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f);
+		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f * (1.0f - KosmosWorld.getSkyCycle().getDayFactor()));
 
-		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.SHADOW_MAP_SIZE);
+		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.getShadowMapSize());
 		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
 		shader.getUniformFloat("shadowDistance").loadFloat(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
 		shader.getUniformFloat("shadowTransition").loadFloat(10.0f);

@@ -40,7 +40,7 @@ void main(void) {
 	float fogFactor = 1.0;
 
 	if (!ignoreShadows) {
-	    shadeFactor = shadow(shadowMap, pass_shadowCoords, shadowMapSize);
+	    shadeFactor *= shadow(shadowMap, pass_shadowCoords, shadowMapSize);
 	}
 
 	if (!ignoreFog) {

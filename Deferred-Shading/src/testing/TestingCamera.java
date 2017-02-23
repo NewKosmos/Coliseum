@@ -11,24 +11,21 @@ import flounder.space.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-/**
- * Created by matthew on 21/02/17.
- */
 public class TestingCamera extends Camera {
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 1200.0f;
-	private static final float FIELD_OF_VIEW = 90.0f;
+	private static final float FIELD_OF_VIEW = 45.0f;
 
 	private static final float ZOOM_AGILITY = 8.0f;
 	private static final float ROTATE_AGILITY = 6.0f;
 	private static final float PITCH_AGILITY = 8.0f;
 
-	private static final float CAMERA_AIM_OFFSET = 0.0f;
+	private static final float CAMERA_AIM_OFFSET = 6.0f;
 	private static final float MAX_ANGLE_OF_ELEVATION = 1.5f;
 	private static final float PITCH_OFFSET = 3.0f;
 	private static final float MINIMUM_ZOOM = 0.0f;
 	private static final float MAXIMUM_ZOOM = 500.0f;
-	private static final float NORMAL_ZOOM = 25.0f;
+	private static final float NORMAL_ZOOM = 50.0f;
 
 	private static final float MAX_HORIZONTAL_CHANGE = 500.0f;
 	private static final float MAX_VERTICAL_CHANGE = 5.0f;

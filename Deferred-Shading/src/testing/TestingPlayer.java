@@ -3,9 +3,6 @@ package testing;
 import flounder.camera.*;
 import flounder.maths.vectors.*;
 
-/**
- * Created by matthew on 21/02/17.
- */
 public class TestingPlayer extends Player {
 	private Vector3f position;
 	private Vector3f rotation;
