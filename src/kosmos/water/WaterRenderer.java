@@ -11,16 +11,20 @@ package kosmos.water;
 
 import flounder.camera.*;
 import flounder.devices.*;
+import flounder.events.*;
 import flounder.fbos.*;
 import flounder.helpers.*;
+import flounder.inputs.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
 import kosmos.*;
+import kosmos.chunks.*;
 import kosmos.shadows.*;
 import kosmos.world.*;
+import org.lwjgl.glfw.*;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -29,12 +33,25 @@ public class WaterRenderer extends Renderer {
 	private static final MyFile VERTEX_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "water", "waterVertex.glsl");
 	private static final MyFile FRAGMENT_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "water", "waterFragment.glsl");
 
+	private float reflectionQuality;
 	private FBO reflectionFBO;
 	private ShaderObject shader;
 
 	public WaterRenderer() {
-		this.reflectionFBO = FBO.newFBO(0.4f).disableTextureWrap().depthBuffer(DepthBufferType.RENDER_BUFFER).create();
+		this.reflectionQuality = NewKosmos.configMain.getFloatWithDefault("water_quality", 0.3f, () -> reflectionQuality);
+		this.reflectionFBO = FBO.newFBO(reflectionQuality).disableTextureWrap().depthBuffer(DepthBufferType.RENDER_BUFFER).create();
 		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
+
+		/*FlounderEvents.addEvent(new IEvent() {
+			private KeyButton k = new KeyButton(GLFW.GLFW_KEY_KP_ADD);
+			@Override public boolean eventTriggered() {return k.wasDown();}
+			@Override public void onEvent() {setReflectionQuality(getReflectionQuality() + 0.1f);}
+		});
+		FlounderEvents.addEvent(new IEvent() {
+			private KeyButton k = new KeyButton(GLFW.GLFW_KEY_KP_SUBTRACT);
+			@Override public boolean eventTriggered() {return k.wasDown();}
+			@Override public void onEvent() {setReflectionQuality(getReflectionQuality() - 0.1f);}
+		});*/
 	}
 
 	@Override
@@ -43,11 +60,11 @@ public class WaterRenderer extends Renderer {
 			return;
 		}
 
-		if (KosmosWater.getWater().getAABB().inFrustum(camera.getViewFrustum())) {
-			prepareRendering(clipPlane, camera);
-			renderWater(KosmosWater.getWater());
-			endRendering();
-		}
+		//if (KosmosWater.getWater().getAABB().inFrustum(camera.getViewFrustum())) {
+		prepareRendering(clipPlane, camera);
+		renderWater(KosmosWater.getWater());
+		endRendering();
+		//}
 	}
 
 	private void prepareRendering(Vector4f clipPlane, Camera camera) {
@@ -58,6 +75,12 @@ public class WaterRenderer extends Renderer {
 
 		shader.getUniformVec3("lightDirection").loadVec3(KosmosWorld.getSkyCycle().getLightDirection());
 		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f);
+
+		Chunk chunk = KosmosChunks.getCurrent();
+		if (chunk != null) {
+			shader.getUniformVec3("waterOffset").loadVec3(chunk.getPosition());
+		}
+		//shader.getUniformVec3("waterOffset").loadVec3(FlounderCamera.getPlayer().getPosition());
 
 		if (KosmosWater.shadowsEnabled()) {
 			shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.SHADOW_MAP_SIZE);
@@ -113,6 +136,15 @@ public class WaterRenderer extends Renderer {
 	private void endRendering() {
 		//	FlounderBounding.addShapeRender(water.getAABB());
 		shader.stop();
+	}
+
+	public float getReflectionQuality() {
+		return reflectionQuality;
+	}
+
+	public void setReflectionQuality(float reflectionQuality) {
+		this.reflectionQuality = reflectionQuality;
+		this.reflectionFBO.setSizeScalar(reflectionQuality);
 	}
 
 	public FBO getReflectionFBO() {

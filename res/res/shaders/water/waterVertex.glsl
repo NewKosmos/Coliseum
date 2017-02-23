@@ -11,6 +11,7 @@ uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform vec4 clipPlane;
 uniform mat4 modelMatrix;
+uniform vec3 waterOffset;
 
 uniform vec3 lightDirection;
 uniform vec2 lightBias;
@@ -63,9 +64,9 @@ vec4 decode(float n){
 void main(void) {
 	vec4 offsets = decode(in_position.z);
 
-	vec4 thisVertex = modelMatrix * vec4(in_position.x, waterHeight, in_position.y, 1.0);
-	vec4 otherVertex1 = modelMatrix * vec4(in_position.x + (offsets.z * squareSize), waterHeight, in_position.y + (offsets.w * squareSize), 1.0);
-	vec4 otherVertex2 = modelMatrix * vec4(in_position.x + (offsets.x * squareSize), waterHeight, in_position.y + (offsets.y * squareSize), 1.0);
+	vec4 thisVertex = modelMatrix * vec4(in_position.x + waterOffset.x, waterHeight, in_position.y + waterOffset.z, 1.0);
+	vec4 otherVertex1 = modelMatrix * vec4(in_position.x + waterOffset.x + (offsets.z * squareSize), waterHeight, in_position.y + waterOffset.z + (offsets.w * squareSize), 1.0);
+	vec4 otherVertex2 = modelMatrix * vec4(in_position.x + waterOffset.x + (offsets.x * squareSize), waterHeight, in_position.y + waterOffset.z + (offsets.y * squareSize), 1.0);
 
 	thisVertex += generateVertexOffset(thisVertex.x, thisVertex.z);
 	otherVertex1 += generateVertexOffset(otherVertex1.x, otherVertex1.z);
@@ -81,7 +82,6 @@ void main(void) {
     vec3 bitangent = otherVertex2.xyz - thisVertex.xyz;
     vec3 normal = -cross(tangent, bitangent);
 
-	pass_surfaceNormal = normalize(normal.xyz);
 
 	pass_shadowCoords = shadowSpaceMatrix * thisVertex;
     float distanceAway = length(pass_positionRelativeToCam.xyz);
@@ -89,6 +89,6 @@ void main(void) {
     distanceAway = distanceAway / shadowTransition;
     pass_shadowCoords.w = clamp(1.0 - distanceAway, 0.0, 1.0);
 
-	vec3 surfaceNormal = normalize((modelMatrix * vec4(pass_surfaceNormal, 0.0)).xyz);
+	vec3 surfaceNormal = normalize((modelMatrix * vec4(normalize(normal.xyz), 0.0)).xyz);
     pass_brightness = max(dot(-lightDirection, surfaceNormal), 0.0) * lightBias.x + lightBias.y;
 }

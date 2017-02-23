@@ -18,6 +18,8 @@ import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
 import flounder.space.*;
+import kosmos.*;
+import kosmos.world.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -83,15 +85,15 @@ public class CameraFocus extends Camera {
 		this.projectionMatrix = new Matrix4f();
 
 		this.angleOfElevation = (float) Math.PI / 8.0f;
-		this.angleAroundPlayer = 0.0f;
+		this.angleAroundPlayer = NewKosmos.configSave.getFloatWithDefault("camera_angle", 0.0f, () -> targetRotationAngle);
 
 		this.targetPosition = new Vector3f();
 		this.targetRotation = new Vector3f();
-		this.targetZoom = NORMAL_ZOOM;
+		this.targetZoom = NewKosmos.configSave.getFloatWithDefault("camera_zoom", NORMAL_ZOOM, () -> actualDistanceFromPoint);
 		this.targetElevation = angleOfElevation;
 		this.targetRotationAngle = angleAroundPlayer;
 
-		this.actualDistanceFromPoint = NORMAL_ZOOM;
+		this.actualDistanceFromPoint = targetZoom;
 		this.horizontalDistanceFromFocus = 0.0f;
 		this.verticalDistanceFromFocus = 0.0f;
 

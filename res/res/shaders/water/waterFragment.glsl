@@ -6,7 +6,6 @@
 
 //---------IN------------
 in vec4 pass_positionRelativeToCam;
-in vec3 pass_surfaceNormal;
 in vec4 pass_shadowCoords;
 in vec4 pass_clipSpace;
 flat in float pass_brightness;

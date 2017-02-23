@@ -9,6 +9,7 @@
 
 package kosmos.water;
 
+import flounder.camera.*;
 import flounder.loaders.*;
 import flounder.maths.*;
 import flounder.maths.matrices.*;
@@ -16,6 +17,7 @@ import flounder.maths.vectors.*;
 import flounder.physics.*;
 import flounder.processing.*;
 import flounder.processing.opengl.*;
+import kosmos.chunks.*;
 
 import java.util.*;
 
