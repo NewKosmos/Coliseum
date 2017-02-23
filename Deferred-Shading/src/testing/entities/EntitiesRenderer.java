@@ -65,20 +65,6 @@ public class EntitiesRenderer extends Renderer {
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 
-		shader.getUniformVec3("lightDirection").loadVec3(Testing.LIGHT_DIRECTION);
-		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f);
-
-
-		/*if (KosmosWorld.getFog() != null) {
-			shader.getUniformVec3("fogColour").loadVec3(KosmosWorld.getFog().getFogColour());
-			shader.getUniformFloat("fogDensity").loadFloat(KosmosWorld.getFog().getFogDensity());
-			shader.getUniformFloat("fogGradient").loadFloat(KosmosWorld.getFog().getFogGradient());
-		} else {*/
-		shader.getUniformVec3("fogColour").loadVec3(1.0f, 1.0f, 1.0f);
-		shader.getUniformFloat("fogDensity").loadFloat(0.003f);
-		shader.getUniformFloat("fogGradient").loadFloat(2.0f);
-		//}
-
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();
 		OpenGlUtils.enableAlphaBlending();

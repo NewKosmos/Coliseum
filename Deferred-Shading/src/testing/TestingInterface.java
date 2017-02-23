@@ -95,6 +95,7 @@ public class TestingInterface extends Standard {
 		});
 
 		new InstanceTree3(FlounderEntities.getEntities(), new Vector3f(), new Vector3f());
+		new InstanceTree3(FlounderEntities.getEntities(), new Vector3f(5.0f, 0.0f, 25.0f), new Vector3f(0.0f, 90.0f, 0.0f));
 	}
 
 	@Override

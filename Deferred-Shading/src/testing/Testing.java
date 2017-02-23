@@ -1,6 +1,7 @@
 package testing;
 
 import flounder.devices.*;
+import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
@@ -17,7 +18,8 @@ public class Testing extends Framework {
 	}
 
 	public Testing() {
-		super("Deferred Shading", -1, new TestingInterface(), new TestingPlayer(), new TestingCamera(), new TestingRenderer());
+		super("Deferred Shading", -1, new TestingInterface(), new TestingPlayer(), new TestingCamera(), new TestingGuis(), new TestingRenderer());
 		FlounderDisplay.setup(1080, 720, "Deferred Shading", new MyFile[]{}, false, false, 0, false, false);
+		TextBuilder.DEFAULT_TYPE = FlounderFonts.SEGO_UI;
 	}
 }
