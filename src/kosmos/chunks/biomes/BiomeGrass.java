@@ -52,6 +52,16 @@ public class BiomeGrass implements IBiome {
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
 				break;
+			case 3:
+				new InstancePod(chunk.getEntities(),
+						new Vector3f(
+								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
+								(float) ((4.20 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
+						),
+						new Vector3f(0.0f, rotation, 0.0f)
+				);
+				break;
 			default:
 				break;
 		}
