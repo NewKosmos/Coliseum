@@ -25,6 +25,7 @@ import flounder.post.filters.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
 import kosmos.entities.*;
+import kosmos.filters.*;
 import kosmos.particles.*;
 import kosmos.shadows.*;
 import kosmos.skybox.*;
@@ -49,6 +50,7 @@ public class KosmosRenderer extends RendererMaster {
 
 	private FBO rendererFBO;
 
+	private PipelineMRT pipelineMRT;
 	private FilterFXAA filterFXAA;
 	private FilterPixel filterPixel;
 	private FilterCRT filterCRT;
@@ -70,8 +72,9 @@ public class KosmosRenderer extends RendererMaster {
 		this.guisRenderer = new GuisRenderer();
 		this.fontRenderer = new FontRenderer();
 
-		this.rendererFBO = FBO.newFBO(1.0f).depthBuffer(DepthBufferType.TEXTURE).create();
+		this.rendererFBO = FBO.newFBO(1.0f).attachments(4).withAlphaChannel(true).disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
 
+		this.pipelineMRT = new PipelineMRT();
 		this.filterFXAA = new FilterFXAA();
 		this.filterPixel = new FilterPixel(4.0f);
 		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.05f);
@@ -102,7 +105,6 @@ public class KosmosRenderer extends RendererMaster {
 		/* Water Reflection & Refraction */
 		if (KosmosWater.reflectionsEnabled()) {
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
-			shadowRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
 
 			glEnable(GL_CLIP_DISTANCE0);
 			{
@@ -169,7 +171,8 @@ public class KosmosRenderer extends RendererMaster {
 
 	private void renderPost(boolean isPaused, float blurFactor) {
 		boolean independentsRendered = false;
-		FBO output = rendererFBO;
+		pipelineMRT.renderPipeline(rendererFBO);
+		FBO output = pipelineMRT.getOutput();
 
 		switch (effect) {
 			case 0:
@@ -219,6 +222,7 @@ public class KosmosRenderer extends RendererMaster {
 
 		rendererFBO.delete();
 
+		pipelineMRT.dispose();
 		filterFXAA.dispose();
 		filterPixel.dispose();
 		filterCRT.dispose();

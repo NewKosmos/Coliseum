@@ -1,32 +1,22 @@
 #version 130
 
-//---------INCLUDES------------
-#include "fog.glsl"
-#include "shadows.glsl"
-
 //---------IN------------
+in vec4 pass_worldPosition;
 in vec4 pass_positionRelativeToCam;
-in vec4 pass_shadowCoords;
+in vec3 pass_surfaceNormal;
 in vec4 pass_clipSpace;
-flat in float pass_brightness;
 
 //---------UNIFORM------------
 layout(binding = 0) uniform sampler2D reflectionMap;
-layout(binding = 1) uniform sampler2D shadowMap;
 uniform vec4 diffuseColour;
 
-uniform float shadowMapSize;
-
-uniform vec3 fogColour;
-uniform float fogDensity;
-uniform float fogGradient;
-uniform vec3 dayNightColour;
-
-uniform bool ignoreShadows;
 uniform bool ignoreReflections;
 
 //---------OUT------------
-layout(location = 0) out vec4 out_colour;
+layout(location = 0) out vec4 out_albedo;
+layout(location = 1) out vec4 out_position;
+layout(location = 2) out vec4 out_toCamera;
+layout(location = 3) out vec4 out_normals;
 
 //---------REFRACTION------------
 vec2 getReflectionTexCoords(vec2 normalizedDeviceCoords){
@@ -38,22 +28,16 @@ vec2 getReflectionTexCoords(vec2 normalizedDeviceCoords){
 
 //---------MAIN------------
 void main(void) {
-	float shadeFactor = pass_brightness;
-	float fogFactor = visibility(pass_positionRelativeToCam, fogDensity, fogGradient);
-
-	if (!ignoreShadows) {
-	    shadeFactor = shadeFactor * shadow(shadowMap, pass_shadowCoords, shadowMapSize);
-	}
-
     if (!ignoreReflections) {
         vec2 normalizedDeviceCoords = (pass_clipSpace.xy / pass_clipSpace.w) / 2.0 + 0.5;
         vec2 reflectionTextureCoords = getReflectionTexCoords(normalizedDeviceCoords);
         vec3 reflectionColour = texture(reflectionMap, reflectionTextureCoords).rgb;
-        out_colour = vec4(mix(reflectionColour, diffuseColour.rgb, diffuseColour.a), 1.0f);
+        out_albedo = vec4(mix(reflectionColour, diffuseColour.rgb, diffuseColour.a), 1.0f);
 	} else {
-        out_colour = vec4(diffuseColour.rgb, 1.0f);
+        out_albedo = vec4(diffuseColour.rgb, 1.0f);
 	}
 
-	out_colour = vec4(out_colour.rgb * shadeFactor, 1.0f);
-	out_colour = mix(vec4(fogColour, 1.0), out_colour, fogFactor);
+	out_position = vec4(pass_worldPosition);
+	out_toCamera = pass_positionRelativeToCam;
+	out_normals = vec4(pass_surfaceNormal, 1.0);
 }

@@ -19,7 +19,7 @@ float shadow(sampler2D shadowMap, vec4 shadowCoords, float shadowMapSize) {
 
         shadowValue = texture(shadowMap, shadowCoords.xy + vec2(shadowTexelSize + shadowHalfw, 0.0 + shadowHalfw)).r;
 
-        if (shadowValue  + SHADOW_BIAS< shadowCoords.z) {
+        if (shadowValue + SHADOW_BIAS< shadowCoords.z) {
             shadowTotal += SHADOW_DARKNESS * shadowCoords.w;
         }
 

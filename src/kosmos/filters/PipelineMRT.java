@@ -7,10 +7,12 @@
  * Proprietary and confidential
  */
 
-package testing.filters;
+package kosmos.filters;
 
 import flounder.fbos.*;
 import flounder.post.*;
+import flounder.renderer.*;
+import kosmos.*;
 
 public class PipelineMRT extends PostPipeline {
 	private FilterMRT filterMRT;
@@ -25,7 +27,8 @@ public class PipelineMRT extends PostPipeline {
 				startFBO.getColourTexture(0),
 				startFBO.getColourTexture(1),
 				startFBO.getColourTexture(2),
-				startFBO.getColourTexture(3)
+				startFBO.getColourTexture(3),
+				((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap()
 		);
 	}
 

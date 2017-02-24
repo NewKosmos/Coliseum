@@ -13,13 +13,6 @@ uniform vec4 clipPlane;
 uniform mat4 modelMatrix;
 uniform vec3 waterOffset;
 
-uniform vec3 lightDirection;
-uniform vec2 lightBias;
-
-uniform mat4 shadowSpaceMatrix;
-uniform float shadowDistance;
-uniform float shadowTransition;
-
 uniform float waveTime;
 uniform float waveLength;
 uniform float amplitude;
@@ -27,11 +20,10 @@ uniform float squareSize;
 uniform float waterHeight;
 
 //---------OUT------------
+out vec4 pass_worldPosition;
 out vec4 pass_positionRelativeToCam;
 out vec3 pass_surfaceNormal;
-out vec4 pass_shadowCoords;
 out vec4 pass_clipSpace;
-flat out float pass_brightness;
 
 //---------WAVE OFFSET------------
 float generateOffset(float x, float z, float val1, float val2){
@@ -72,8 +64,8 @@ void main(void) {
 	otherVertex1 += generateVertexOffset(otherVertex1.x, otherVertex1.z);
 	otherVertex2 += generateVertexOffset(otherVertex2.x, otherVertex2.z);
 
-    pass_clipSpace = projectionMatrix * viewMatrix * thisVertex;
-	pass_positionRelativeToCam = viewMatrix * thisVertex;
+    pass_worldPosition = thisVertex;
+	pass_positionRelativeToCam = viewMatrix * pass_worldPosition;
 
 	gl_ClipDistance[0] = dot(thisVertex, clipPlane);
 	gl_Position = projectionMatrix * pass_positionRelativeToCam;
@@ -82,13 +74,6 @@ void main(void) {
     vec3 bitangent = otherVertex2.xyz - thisVertex.xyz;
     vec3 normal = -cross(tangent, bitangent);
 
-
-	pass_shadowCoords = shadowSpaceMatrix * thisVertex;
-    float distanceAway = length(pass_positionRelativeToCam.xyz);
-    distanceAway = distanceAway - ((shadowDistance * 2.0) - shadowTransition);
-    distanceAway = distanceAway / shadowTransition;
-    pass_shadowCoords.w = clamp(1.0 - distanceAway, 0.0, 1.0);
-
-	vec3 surfaceNormal = normalize((modelMatrix * vec4(normalize(normal.xyz), 0.0)).xyz);
-    pass_brightness = max(dot(-lightDirection, surfaceNormal), 0.0) * lightBias.x + lightBias.y;
+	pass_surfaceNormal = normalize((normal).xyz);
+    pass_clipSpace = projectionMatrix * pass_positionRelativeToCam;
 }

@@ -35,7 +35,8 @@ public class ShadowRenderer extends Renderer {
 	private static final MyFile VERTEX_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "shadows", "shadowVertex.glsl");
 	private static final MyFile FRAGMENT_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "shadows", "shadowFragment.glsl");
 
-	private float shadowQuality;
+	public static final int SHADOW_MAP_SIZE = NewKosmos.configMain.getIntWithDefault("shadowMap_size", Math.min(FBO.getMaxFBOSize(), 4096 * 4), ShadowRenderer::getShadowMapSize);
+
 	private FBO shadowFBO;
 	private ShaderObject shader;
 
@@ -50,20 +51,8 @@ public class ShadowRenderer extends Renderer {
 	 * Creates a new entity renderer.
 	 */
 	public ShadowRenderer() {
-		this.shadowQuality = NewKosmos.configMain.getFloatWithDefault("shadow_quality", 8.0f, () -> shadowQuality);
-		this.shadowFBO = FBO.newFBO(shadowQuality).noColourBuffer().disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
+		this.shadowFBO = FBO.newFBO(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).noColourBuffer().disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
 		this.shader = ShaderFactory.newBuilder().setName("shadows").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
-
-		FlounderEvents.addEvent(new IEvent() {
-			private KeyButton k = new KeyButton(GLFW.GLFW_KEY_KP_ADD);
-			@Override public boolean eventTriggered() {return k.wasDown();}
-			@Override public void onEvent() {setShadowQuality(getShadowQuality() + 0.1f);}
-		});
-		FlounderEvents.addEvent(new IEvent() {
-			private KeyButton k = new KeyButton(GLFW.GLFW_KEY_KP_SUBTRACT);
-			@Override public boolean eventTriggered() {return k.wasDown();}
-			@Override public void onEvent() {setShadowQuality(getShadowQuality() - 0.1f);}
-		});
 
 		this.projectionMatrix = new Matrix4f();
 		this.lightViewMatrix = new Matrix4f();
@@ -202,15 +191,6 @@ public class ShadowRenderer extends Renderer {
 		shadowFBO.unbindFrameBuffer();
 	}
 
-	public float getShadowQuality() {
-		return shadowQuality;
-	}
-
-	public void setShadowQuality(float shadowQuality) {
-		this.shadowQuality = shadowQuality;
-		this.shadowFBO.setSizeScalar(shadowQuality);
-	}
-
 	@Override
 	public void profile() {
 		FlounderProfiler.add("Shadows", "Render Time", super.getRenderTime());
@@ -244,7 +224,7 @@ public class ShadowRenderer extends Renderer {
 	}
 
 	public static int getShadowMapSize() {
-		return ((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().shadowFBO.getWidth();
+		return SHADOW_MAP_SIZE;
 	}
 
 	/**

@@ -19,6 +19,7 @@ import flounder.resources.*;
 import flounder.textures.*;
 import flounder.visual.*;
 import kosmos.*;
+import kosmos.chunks.*;
 import kosmos.world.*;
 
 import java.util.*;
@@ -29,6 +30,7 @@ public class MasterOverlay extends GuiComponent {
 	private Text upsText;
 	private Text positionText;
 	private Text timeText;
+	private Text seedText;
 	private boolean updateText;
 
 	private GuiTexture crossHair;
@@ -38,8 +40,10 @@ public class MasterOverlay extends GuiComponent {
 		upsText = createStatus("UPS: 0", 0.06f);
 		positionText = createStatus("POSITION: [0, 0, 0]", 0.10f);
 		timeText = createStatus("TIME: 0", 0.14f);
-		createStatus("C TO TOGGLE EFFECTS", 0.19f);
-		createStatus("ESC TO HIDE HUD", 0.23f);
+		seedText = createStatus("SEED: 0", 0.18f);
+		createStatus("C TO TOGGLE EFFECTS", 0.23f);
+		createStatus("ESC TO HIDE HUD", 0.27f);
+
 
 		crossHair = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "crosshair.png")).setNumberOfRows(4).create());
 		crossHair.setSelectedRow(NewKosmos.configMain.getIntWithDefault("crosshair", 1, () -> crossHair.getSelectedRow()));
@@ -71,6 +75,7 @@ public class MasterOverlay extends GuiComponent {
 			upsText.setText("UPS: " + Maths.roundToPlace(1.0f / Framework.getDelta(), 1));
 			positionText.setText("POSITION: [" + (FlounderCamera.getPlayer() == null ? "NULL" : Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().x, 1) + ", " + Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().y, 1) + ", " + Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().z, 1) + "]"));
 			timeText.setText("TIME: " + KosmosWorld.getSkyCycle().getDayFactor());
+			seedText.setText("SEED: " + KosmosChunks.getNoise().getSeed());
 			updateText = false;
 		}
 

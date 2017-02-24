@@ -73,38 +73,15 @@ public class WaterRenderer extends Renderer {
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 
-		shader.getUniformVec3("lightDirection").loadVec3(KosmosWorld.getSkyCycle().getLightDirection());
-		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f * (1.0f - KosmosWorld.getSkyCycle().getDayFactor()));
-
 		Chunk chunk = KosmosChunks.getCurrent();
 		if (chunk != null) {
 			shader.getUniformVec3("waterOffset").loadVec3(chunk.getPosition());
 		}
 		//shader.getUniformVec3("waterOffset").loadVec3(FlounderCamera.getPlayer().getPosition());
 
-		if (KosmosWater.shadowsEnabled()) {
-			shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.getShadowMapSize());
-			shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
-			shader.getUniformFloat("shadowDistance").loadFloat(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
-			shader.getUniformFloat("shadowTransition").loadFloat(10.0f);
-			OpenGlUtils.bindTexture(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
-		}
-
 		if (KosmosWater.reflectionsEnabled()) {
 			OpenGlUtils.bindTexture(reflectionFBO.getColourTexture(0), GL_TEXTURE_2D, 0);
 		}
-
-		if (KosmosWorld.getFog() != null) {
-			shader.getUniformVec3("fogColour").loadVec3(KosmosWorld.getFog().getFogColour());
-			shader.getUniformFloat("fogDensity").loadFloat(KosmosWorld.getFog().getFogDensity());
-			shader.getUniformFloat("fogGradient").loadFloat(KosmosWorld.getFog().getFogGradient());
-		} else {
-			shader.getUniformVec3("fogColour").loadVec3(1.0f, 1.0f, 1.0f);
-			shader.getUniformFloat("fogDensity").loadFloat(0.003f);
-			shader.getUniformFloat("fogGradient").loadFloat(2.0f);
-		}
-
-		shader.getUniformVec3("dayNightColour").loadVec3(KosmosWorld.getSkyCycle().getSkyColour());
 
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();
@@ -124,7 +101,6 @@ public class WaterRenderer extends Renderer {
 		shader.getUniformFloat("squareSize").loadFloat((float) Water.SQUARE_SIZE);
 		shader.getUniformFloat("waterHeight").loadFloat(water.getPosition().y);
 
-		shader.getUniformBool("ignoreShadows").loadBoolean(!KosmosWater.shadowsEnabled());
 		shader.getUniformBool("ignoreReflections").loadBoolean(!KosmosWater.reflectionsEnabled());
 
 		glDrawArrays(GL_TRIANGLES, 0, water.getVertexCount());

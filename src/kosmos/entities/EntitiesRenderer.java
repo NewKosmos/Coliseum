@@ -81,27 +81,6 @@ public class EntitiesRenderer extends Renderer {
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 
-		shader.getUniformVec3("lightDirection").loadVec3(KosmosWorld.getSkyCycle().getLightDirection());
-		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f * (1.0f - KosmosWorld.getSkyCycle().getDayFactor()));
-
-		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.getShadowMapSize());
-		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
-		shader.getUniformFloat("shadowDistance").loadFloat(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
-		shader.getUniformFloat("shadowTransition").loadFloat(10.0f);
-		OpenGlUtils.bindTexture(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap(), GL_TEXTURE_2D, 1);
-
-		if (KosmosWorld.getFog() != null) {
-			shader.getUniformVec3("fogColour").loadVec3(KosmosWorld.getFog().getFogColour());
-			shader.getUniformFloat("fogDensity").loadFloat(KosmosWorld.getFog().getFogDensity());
-			shader.getUniformFloat("fogGradient").loadFloat(KosmosWorld.getFog().getFogGradient());
-		} else {
-			shader.getUniformVec3("fogColour").loadVec3(1.0f, 1.0f, 1.0f);
-			shader.getUniformFloat("fogDensity").loadFloat(0.003f);
-			shader.getUniformFloat("fogGradient").loadFloat(2.0f);
-		}
-
-		shader.getUniformVec3("dayNightColour").loadVec3(KosmosWorld.getSkyCycle().getSkyColour());
-
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();
 		OpenGlUtils.enableAlphaBlending();
@@ -119,15 +98,15 @@ public class EntitiesRenderer extends Renderer {
 			shader.getUniformBool("animated").loadBoolean(false);
 			shader.getUniformMat4("modelMatrix").loadMat4(componentModel.getModelMatrix());
 			vaoLength = componentModel.getModel().getVaoLength();
-			shader.getUniformBool("ignoreShadows").loadBoolean(componentModel.isIgnoringShadows());
-			shader.getUniformBool("ignoreFog").loadBoolean(componentModel.isIgnoringFog());
+		//	shader.getUniformBool("ignoreShadows").loadBoolean(componentModel.isIgnoringShadows());
+		//	shader.getUniformBool("ignoreFog").loadBoolean(componentModel.isIgnoringFog());
 		} else if (componentAnimation != null && componentAnimation.getModel() != null) {
 			OpenGlUtils.bindVAO(componentAnimation.getModel().getVaoID(), 0, 1, 2, 3, 4, 5);
 			shader.getUniformBool("animated").loadBoolean(true);
 			shader.getUniformMat4("modelMatrix").loadMat4(componentAnimation.getModelMatrix());
 			vaoLength = componentAnimation.getModel().getVaoLength();
-			shader.getUniformBool("ignoreShadows").loadBoolean(false);
-			shader.getUniformBool("ignoreFog").loadBoolean(false);
+		//	shader.getUniformBool("ignoreShadows").loadBoolean(false);
+		//	shader.getUniformBool("ignoreFog").loadBoolean(false);
 		} else {
 			// No model, so no render!
 			return;

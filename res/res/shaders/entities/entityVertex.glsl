@@ -18,25 +18,17 @@ uniform mat4 viewMatrix;
 uniform vec4 clipPlane;
 uniform mat4 modelMatrix;
 
-uniform vec3 lightDirection;
-uniform vec2 lightBias;
-
-uniform mat4 shadowSpaceMatrix;
-uniform float shadowDistance;
-uniform float shadowTransition;
-
-uniform mat4 jointTransforms[MAX_JOINTS];
-uniform bool animated;
-
 uniform float atlasRows;
 uniform vec2 atlasOffset;
 
+uniform bool animated;
+uniform mat4 jointTransforms[MAX_JOINTS];
+
 //---------OUT------------
+out vec4 pass_worldPosition;
 out vec4 pass_positionRelativeToCam;
-out vec2 pass_textureCoords;
 out vec3 pass_surfaceNormal;
-out vec4 pass_shadowCoords;
-flat out float pass_brightness;
+out vec2 pass_textureCoords;
 
 //---------MAIN------------
 void main(void) {
@@ -56,28 +48,12 @@ void main(void) {
 	    totalNormal = vec4(in_normal, 0.0);
 	}
 
-	vec4 worldPosition = modelMatrix * totalLocalPos;
-//	mat4 modelViewMatrix = viewMatrix * modelMatrix;
-	pass_positionRelativeToCam = viewMatrix * worldPosition;
+	pass_worldPosition = modelMatrix * totalLocalPos;
+	pass_positionRelativeToCam = viewMatrix * pass_worldPosition;
 
-	gl_ClipDistance[0] = dot(worldPosition, clipPlane);
+	gl_ClipDistance[0] = dot(pass_worldPosition, clipPlane);
 	gl_Position = projectionMatrix * pass_positionRelativeToCam;
 
-//	vec3 surfaceNormal = (modelViewMatrix * totalNormal).xyz;
-//	vec3 norm = normalize(surfaceNormal);
-//	vec3 tang = normalize((modelViewMatrix * vec4(in_tangent, 0.0)).xyz);
-//	vec3 bitang = normalize(cross(norm, tang));
-//	mat3 toTangentSpace = mat3(tang.x, bitang.x, norm.x, tang.y, bitang.y, norm.y, tang.z, bitang.z, norm.z);
-
+	pass_surfaceNormal = normalize((modelMatrix * totalNormal).xyz);
 	pass_textureCoords = (in_textureCoords / atlasRows) + atlasOffset;
-	pass_surfaceNormal = normalize(totalNormal.xyz); // (modelMatrix * totalNormal).xyz; // toTangentSpace * surfaceNormal;
-
-	pass_shadowCoords = shadowSpaceMatrix * worldPosition;
-	float distanceAway = length(pass_positionRelativeToCam.xyz);
-    distanceAway = distanceAway - ((shadowDistance * 2.0) - shadowTransition);
-    distanceAway = distanceAway / shadowTransition;
-    pass_shadowCoords.w = clamp(1.0 - distanceAway, 0.0, 1.0);
-
-	vec3 surfaceNormal = normalize((modelMatrix * vec4(pass_surfaceNormal, 0.0)).xyz);
-    pass_brightness = max(dot(-lightDirection, surfaceNormal), 0.0) * lightBias.x + lightBias.y;
 }
