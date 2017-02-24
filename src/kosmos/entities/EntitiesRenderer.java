@@ -12,6 +12,7 @@ package kosmos.entities;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.entities.*;
+import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
@@ -91,6 +92,7 @@ public class EntitiesRenderer extends Renderer {
 	private void renderEntity(Entity entity) {
 		ComponentModel componentModel = (ComponentModel) entity.getComponent(ComponentModel.ID);
 		ComponentAnimation componentAnimation = (ComponentAnimation) entity.getComponent(ComponentAnimation.ID);
+		ComponentSway componentSway = (ComponentSway) entity.getComponent(ComponentSway.ID);
 		final int vaoLength;
 
 		if (componentModel != null && componentModel.getModel() != null) {
@@ -135,6 +137,15 @@ public class EntitiesRenderer extends Renderer {
 				shader.getUniformMat4("jointTransforms[" + i + "]").loadMat4(componentAnimation.getJointTransforms()[i]);
 			}
 		}
+
+		if (componentSway != null) {
+			shader.getUniformBool("swaying").loadBoolean(true);
+			OpenGlUtils.bindTexture(componentSway.getTextureSway(), 1);
+		} else {
+			shader.getUniformBool("swaying").loadBoolean(false);
+		}
+
+		shader.getUniformFloat("systemTime").loadFloat(Framework.getTimeSec());
 
 		glDrawElements(GL_TRIANGLES, vaoLength, GL_UNSIGNED_INT, 0);
 		OpenGlUtils.unbindVAO(0, 1, 2, 3, 4, 5);

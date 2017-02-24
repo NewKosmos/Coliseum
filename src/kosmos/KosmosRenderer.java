@@ -72,7 +72,7 @@ public class KosmosRenderer extends RendererMaster {
 		this.guisRenderer = new GuisRenderer();
 		this.fontRenderer = new FontRenderer();
 
-		this.rendererFBO = FBO.newFBO(1.0f).attachments(4).withAlphaChannel(true).disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
+		this.rendererFBO = FBO.newFBO(1.0f).attachments(3).withAlphaChannel(true).disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
 
 		this.pipelineMRT = new PipelineMRT();
 		this.filterFXAA = new FilterFXAA();
@@ -109,7 +109,7 @@ public class KosmosRenderer extends RendererMaster {
 			glEnable(GL_CLIP_DISTANCE0);
 			{
 				waterRenderer.getReflectionFBO().bindFrameBuffer();
-				renderScene(new Vector4f(0.0f, 1.0f, 0.0f, -KosmosWater.getWater().getPosition().y), KosmosWorld.getFog().getFogColour(), true);
+				renderScene(new Vector4f(0.0f, 1.0f, 0.0f, -KosmosWater.getWater().getPosition().y), true);
 				waterRenderer.getReflectionFBO().unbindFrameBuffer();
 			}
 			glDisable(GL_CLIP_DISTANCE0);
@@ -124,7 +124,7 @@ public class KosmosRenderer extends RendererMaster {
 		bindRelevantFBO();
 
 		/* Scene rendering. */
-		renderScene(POSITIVE_INFINITY, KosmosWorld.getFog().getFogColour(), false);
+		renderScene(POSITIVE_INFINITY, false);
 
 		/* Post rendering. */
 		renderPost(FlounderGuis.getGuiMaster().isGamePaused(), FlounderGuis.getGuiMaster().getBlurFactor());
@@ -148,10 +148,10 @@ public class KosmosRenderer extends RendererMaster {
 		return shadowRenderer;
 	}
 
-	private void renderScene(Vector4f clipPlane, Colour clearColour, boolean waterPass) {
+	private void renderScene(Vector4f clipPlane, boolean waterPass) {
 		/* Clear and update. */
 		Camera camera = FlounderCamera.getCamera();
-		OpenGlUtils.prepareNewRenderParse(clearColour);
+		OpenGlUtils.prepareNewRenderParse(0.0f, 0.0f, 0.0f);
 
 		//skyboxRenderer.render(clipPlane, camera);
 		entitiesRenderer.render(clipPlane, camera);

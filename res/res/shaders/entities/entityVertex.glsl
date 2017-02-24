@@ -13,6 +13,8 @@ layout(location = 4) in ivec3 in_jointIndices;
 layout(location = 5) in vec3 in_weights;
 
 //---------UNIFORM------------
+layout(binding = 1) uniform sampler2D swayMap;
+
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform vec4 clipPlane;
@@ -24,9 +26,11 @@ uniform vec2 atlasOffset;
 uniform bool animated;
 uniform mat4 jointTransforms[MAX_JOINTS];
 
+uniform bool swaying;
+uniform float systemTime;
+
 //---------OUT------------
 out vec4 pass_worldPosition;
-out vec4 pass_positionRelativeToCam;
 out vec3 pass_surfaceNormal;
 out vec2 pass_textureCoords;
 
@@ -48,12 +52,22 @@ void main(void) {
 	    totalNormal = vec4(in_normal, 0.0);
 	}
 
+	pass_textureCoords = (in_textureCoords / atlasRows) + atlasOffset;
+
+	if (swaying) {
+	    vec4 swayColour = texture(swayMap, pass_textureCoords);
+	    float swayPower = swayColour.r;
+
+	    if (swayPower != 0.0) {
+	        totalLocalPos.x += swayPower * 0.1 * sin(systemTime) * (length(totalLocalPos.rgb) / 3.0);
+	        totalLocalPos.z += swayPower * 0.1 * cos(systemTime) * (length(totalLocalPos.rgb) / 2.0);
+	    }
+	}
+
 	pass_worldPosition = modelMatrix * totalLocalPos;
-	pass_positionRelativeToCam = viewMatrix * pass_worldPosition;
 
 	gl_ClipDistance[0] = dot(pass_worldPosition, clipPlane);
-	gl_Position = projectionMatrix * pass_positionRelativeToCam;
+	gl_Position = projectionMatrix * viewMatrix * pass_worldPosition;
 
-	pass_surfaceNormal = normalize((modelMatrix * totalNormal).xyz);
-	pass_textureCoords = (in_textureCoords / atlasRows) + atlasOffset;
+	pass_surfaceNormal = (modelMatrix * totalNormal).xyz;
 }

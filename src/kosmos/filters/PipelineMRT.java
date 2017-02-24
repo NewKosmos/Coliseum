@@ -27,7 +27,6 @@ public class PipelineMRT extends PostPipeline {
 				startFBO.getColourTexture(0),
 				startFBO.getColourTexture(1),
 				startFBO.getColourTexture(2),
-				startFBO.getColourTexture(3),
 				((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap()
 		);
 	}
