@@ -19,7 +19,7 @@ public class SkyCycle {
 	private static final Colour SKY_COLOUR_SUNRISE = new Colour(0.9921f, 0.490f, 0.004f);
 	private static final Colour SKY_COLOUR_NIGHT = new Colour(0.0f, 0.0f, 0.0f);
 
-	private static final float DAY_NIGHT_CYCLE = 330.0f; // The day/night length (sec)
+	private static final float DAY_NIGHT_CYCLE = 333.3f; // The day/night length (sec)
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, -0.3f, -0.8f); // The starting light direction.
 
@@ -44,7 +44,7 @@ public class SkyCycle {
 	public void update() {
 		dayFactor = dayDriver.update(Framework.getDelta()) / 100.0f;
 		//	Colour.interpolate(SKY_COLOUR_DAY, SKY_COLOUR_NIGHT, dayFactor, skyColour);
-		// Vector3f.rotate(LIGHT_DIRECTION, new Vector3f(dayFactor * 360.0f, 0.0f, 0.0f), lightDirection);
+		//  Vector3f.rotate(LIGHT_DIRECTION, new Vector3f(dayFactor * 360.0f, 0.0f, 0.0f), lightDirection);
 	}
 
 	public float getDayFactor() {

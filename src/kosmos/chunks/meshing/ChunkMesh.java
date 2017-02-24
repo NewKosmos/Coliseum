@@ -9,7 +9,6 @@
 
 package kosmos.chunks.meshing;
 
-import flounder.framework.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;

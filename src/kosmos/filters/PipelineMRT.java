@@ -9,16 +9,20 @@
 
 package kosmos.filters;
 
+import flounder.devices.*;
 import flounder.fbos.*;
 import flounder.post.*;
+import flounder.post.filters.*;
 import flounder.renderer.*;
 import kosmos.*;
 
 public class PipelineMRT extends PostPipeline {
 	private FilterMRT filterMRT;
+	private FilterFXAA filterFXAA;
 
 	public PipelineMRT() {
 		filterMRT = new FilterMRT();
+		filterFXAA = new FilterFXAA();
 	}
 
 	@Override
@@ -29,15 +33,24 @@ public class PipelineMRT extends PostPipeline {
 				startFBO.getColourTexture(2),
 				((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap()
 		);
+
+		if (FlounderDisplay.isAntialiasing()) {
+			filterFXAA.applyFilter(filterMRT.fbo.getColourTexture(0));
+		}
 	}
 
 	@Override
 	public FBO getOutput() {
-		return filterMRT.fbo;
+		if (FlounderDisplay.isAntialiasing()) {
+			return filterFXAA.fbo;
+		} else {
+			return filterMRT.fbo;
+		}
 	}
 
 	@Override
 	public void dispose() {
 		filterMRT.dispose();
+		filterFXAA.dispose();
 	}
 }

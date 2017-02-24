@@ -19,7 +19,7 @@ import kosmos.particles.loading.*;
  */
 public interface IBiome {
 	public enum Biomes {
-		GRASS(new BiomeGrass()), SNOW(new BiomeSnow()), RIVER(new BiomeRiver()), STONE(new BiomeStone()), DESERT(new BiomeDesert());
+		GRASS(new BiomeGrass()), SNOW(new BiomeSnow()), STONE(new BiomeStone()), DESERT(new BiomeDesert()); // RIVER(new BiomeRiver()),
 
 		private IBiome biome;
 
@@ -75,4 +75,11 @@ public interface IBiome {
 	 * @return The average humidity.
 	 */
 	float getHumidity();
+
+	/**
+	 * Gets the wind speed % (0-1).
+	 *
+	 * @return The average wind speed.
+	 */
+	float getWindSpeed();
 }

@@ -25,7 +25,7 @@ public class InstanceCloud extends Entity {
 		super(structure, position, rotation);
 		ComponentCloud componentCloud = new ComponentCloud(this);
 		ComponentModel componentModel = new ComponentModel(this, model, scale, texture, 0);
-		ComponentCollider componentCollider = new ComponentCollider(this);
-		ComponentCollision componentCollision = new ComponentCollision(this);
+		//ComponentCollider componentCollider = new ComponentCollider(this);
+		//ComponentCollision componentCollision = new ComponentCollision(this);
 	}
 }

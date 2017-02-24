@@ -10,12 +10,9 @@
 package kosmos.shadows;
 
 import flounder.camera.*;
-import flounder.devices.*;
 import flounder.entities.*;
-import flounder.events.*;
 import flounder.fbos.*;
 import flounder.helpers.*;
-import flounder.inputs.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
@@ -26,7 +23,6 @@ import kosmos.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.world.*;
-import org.lwjgl.glfw.*;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;

@@ -11,20 +11,14 @@ package kosmos.water;
 
 import flounder.camera.*;
 import flounder.devices.*;
-import flounder.events.*;
 import flounder.fbos.*;
 import flounder.helpers.*;
-import flounder.inputs.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
 import kosmos.*;
-import kosmos.chunks.*;
-import kosmos.shadows.*;
-import kosmos.world.*;
-import org.lwjgl.glfw.*;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;

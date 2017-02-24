@@ -9,7 +9,6 @@
 
 package kosmos.chunks.meshing;
 
-import flounder.logger.*;
 import flounder.maths.vectors.*;
 import kosmos.chunks.*;
 import kosmos.chunks.tiles.*;

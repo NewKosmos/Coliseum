@@ -26,8 +26,10 @@ uniform vec2 atlasOffset;
 uniform bool animated;
 uniform mat4 jointTransforms[MAX_JOINTS];
 
+uniform float swayHeight;
 uniform bool swaying;
 uniform float systemTime;
+uniform float windPower;
 
 //---------OUT------------
 out vec4 pass_worldPosition;
@@ -54,13 +56,13 @@ void main(void) {
 
 	pass_textureCoords = (in_textureCoords / atlasRows) + atlasOffset;
 
-	if (swaying) {
+	if (swaying && windPower != 0.0) {
 	    vec4 swayColour = texture(swayMap, pass_textureCoords);
-	    float swayPower = swayColour.r;
+	    float swayPower = exp(log(swayColour.r) / 3.0) * windPower * 0.5 * (totalLocalPos.y / swayHeight);
 
 	    if (swayPower != 0.0) {
-	        float offsetX = swayPower * 0.05 * (sin(systemTime)-0.5*cos(systemTime/2)) * length(totalLocalPos.xyz);
-	        float offsetZ = swayPower * 0.05 * (cos(systemTime)-0.5*sin(systemTime/2)) * length(totalLocalPos.xyz);
+	        float offsetX = swayPower * (sin(0.25 * systemTime) - sin(1.2 * systemTime) + cos(0.5 * systemTime)) * length(totalLocalPos.xyz);
+	        float offsetZ = swayPower * (cos(0.25 * systemTime) - cos(1.2 * systemTime) + sin(0.5 * systemTime)) * length(totalLocalPos.xyz);
 	        totalLocalPos.x += offsetX;
 	        totalLocalPos.z += offsetZ;
 	    }

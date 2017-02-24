@@ -19,7 +19,6 @@ import flounder.maths.vectors.*;
 import flounder.profiling.*;
 import flounder.space.*;
 import kosmos.*;
-import kosmos.world.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 

@@ -66,4 +66,9 @@ public class BiomeSnow implements IBiome {
 	public float getHumidity() {
 		return 23.0f;
 	}
+
+	@Override
+	public float getWindSpeed() {
+		return 0.37f;
+	}
 }

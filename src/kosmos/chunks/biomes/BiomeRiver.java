@@ -50,4 +50,9 @@ public class BiomeRiver implements IBiome {
 	public float getHumidity() {
 		return 94.0f;
 	}
+
+	@Override
+	public float getWindSpeed() {
+		return 0.2f;
+	}
 }

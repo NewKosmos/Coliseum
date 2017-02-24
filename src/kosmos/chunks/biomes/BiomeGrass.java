@@ -62,6 +62,16 @@ public class BiomeGrass implements IBiome {
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
 				break;
+			case 4:
+				new InstanceBush(chunk.getEntities(),
+						new Vector3f(
+								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
+								(float) ((2.5 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
+						),
+						new Vector3f(0.0f, rotation, 0.0f)
+				);
+				break;
 			default:
 				break;
 		}
@@ -85,5 +95,10 @@ public class BiomeGrass implements IBiome {
 	@Override
 	public float getHumidity() {
 		return 61.0f;
+	}
+
+	@Override
+	public float getWindSpeed() {
+		return 0.17f;
 	}
 }

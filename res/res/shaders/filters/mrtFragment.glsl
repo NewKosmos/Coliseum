@@ -52,7 +52,7 @@ void main(void) {
     //  float shadow = shadow(shadowMap, shadowCoords, shadowMapSize);
 	//  float shadow = texture(shadowMap, shadowCoords.xy).r;
 
-   // out_colour = vec4((viewMatrix * position).rgb, 1.0);
+    //out_colour = vec4(normals.rgb, 1.0);
     out_colour = vec4(colour * brightness, 1.0);
     out_colour = mix(vec4(fogColour, 1.0), out_colour, visibility(position, fogDensity, fogGradient));
 }
