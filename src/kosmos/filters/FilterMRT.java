@@ -43,5 +43,8 @@ public class FilterMRT extends PostFilter {
 		shader.getUniformFloat("shadowDistance").loadFloat(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
 		shader.getUniformFloat("shadowTransition").loadFloat(10.0f);
 		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.getShadowMapSize());
+
+		shader.getUniformFloat("nearPlane").loadFloat(FlounderCamera.getCamera().getNearPlane());
+		shader.getUniformFloat("farPlane").loadFloat(FlounderCamera.getCamera().getFarPlane());
 	}
 }

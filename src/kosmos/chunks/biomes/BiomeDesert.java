@@ -31,7 +31,7 @@ public class BiomeDesert implements IBiome {
 		float rotation = KosmosChunks.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
 
 		switch ((int) (KosmosChunks.getNoise().noise1((worldPos.y - worldPos.x) / 11.0f) * 400.0f)) {
-			case 1:
+		/*	case 1:
 				new InstanceCactus(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
@@ -40,7 +40,7 @@ public class BiomeDesert implements IBiome {
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
-				break;
+				break;*/
 			default:
 				break;
 		}
