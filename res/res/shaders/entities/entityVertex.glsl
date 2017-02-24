@@ -59,8 +59,10 @@ void main(void) {
 	    float swayPower = swayColour.r;
 
 	    if (swayPower != 0.0) {
-	        totalLocalPos.x += swayPower * 0.1 * sin(systemTime) * (length(totalLocalPos.rgb) / 3.0);
-	        totalLocalPos.z += swayPower * 0.1 * cos(systemTime) * (length(totalLocalPos.rgb) / 2.0);
+	        float offsetX = swayPower * 0.05 * (sin(systemTime)-0.5*cos(systemTime/2)) * length(totalLocalPos.xyz);
+	        float offsetZ = swayPower * 0.05 * (cos(systemTime)-0.5*sin(systemTime/2)) * length(totalLocalPos.xyz);
+	        totalLocalPos.x += offsetX;
+	        totalLocalPos.z += offsetZ;
 	    }
 	}
 

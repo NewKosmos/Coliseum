@@ -100,15 +100,15 @@ public class EntitiesRenderer extends Renderer {
 			shader.getUniformBool("animated").loadBoolean(false);
 			shader.getUniformMat4("modelMatrix").loadMat4(componentModel.getModelMatrix());
 			vaoLength = componentModel.getModel().getVaoLength();
-		//	shader.getUniformBool("ignoreShadows").loadBoolean(componentModel.isIgnoringShadows());
-		//	shader.getUniformBool("ignoreFog").loadBoolean(componentModel.isIgnoringFog());
+			//	shader.getUniformBool("ignoreShadows").loadBoolean(componentModel.isIgnoringShadows());
+			//	shader.getUniformBool("ignoreFog").loadBoolean(componentModel.isIgnoringFog());
 		} else if (componentAnimation != null && componentAnimation.getModel() != null) {
 			OpenGlUtils.bindVAO(componentAnimation.getModel().getVaoID(), 0, 1, 2, 3, 4, 5);
 			shader.getUniformBool("animated").loadBoolean(true);
 			shader.getUniformMat4("modelMatrix").loadMat4(componentAnimation.getModelMatrix());
 			vaoLength = componentAnimation.getModel().getVaoLength();
-		//	shader.getUniformBool("ignoreShadows").loadBoolean(false);
-		//	shader.getUniformBool("ignoreFog").loadBoolean(false);
+			//	shader.getUniformBool("ignoreShadows").loadBoolean(false);
+			//	shader.getUniformBool("ignoreFog").loadBoolean(false);
 		} else {
 			// No model, so no render!
 			return;
