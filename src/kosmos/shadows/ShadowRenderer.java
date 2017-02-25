@@ -66,6 +66,10 @@ public class ShadowRenderer extends Renderer {
 
 		prepareRendering(clipPlane, camera);
 
+		for (Entity entity : FlounderEntities.getEntities().getAll()) {
+			renderEntity(entity);
+		}
+
 		for (Entity entityc : KosmosChunks.getChunks().getAll()) {
 			Chunk chunk = (Chunk) entityc;
 
@@ -78,10 +82,6 @@ public class ShadowRenderer extends Renderer {
 					}
 				}
 			}
-		}
-
-		for (Entity entity : FlounderEntities.getEntities().getAll()) {
-			renderEntity(entity);
 		}
 
 		endRendering();

@@ -75,7 +75,7 @@ public class Chunk extends Entity {
 		// FlounderLogger.log("Creating chunk at: " + position.x + ", " + position.z + ".");
 	}
 
-	protected void generateWeather() {
+	private void generateWeather() {
 		if (biome.getBiome().getWeatherParticle() != null) {
 			List<ParticleTemplate> templates = new ArrayList<>();
 			templates.add(biome.getBiome().getWeatherParticle());

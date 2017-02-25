@@ -18,14 +18,12 @@ out vec2 textureCoords1;
 out vec2 textureCoords2;
 out float textureBlendFactor;
 out float textureTransparency;
-out vec4 particlePosition;
 
 //---------MAIN------------
 void main(void) {
 	mat4 modelViewMatrix = viewMatrix * modelMatrix;
 	gl_ClipDistance[0] = dot(modelMatrix * vec4(position, 0.0, 1.0), clipPlane);
 	gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 0.0, 1.0);
-	particlePosition = gl_Position;
 
 	vec2 textureCoords = position + vec2(0.5, 0.5);
 	textureCoords.y = 1.0 - textureCoords.y;

@@ -55,6 +55,10 @@ public class EntitiesRenderer extends Renderer {
 
 		prepareRendering(clipPlane, camera);
 
+		for (Entity entity : FlounderEntities.getEntities().queryInFrustum(FlounderCamera.getCamera().getViewFrustum())) {
+			renderEntity(entity);
+		}
+
 		for (Entity entityc : KosmosChunks.getChunks().queryInFrustum(camera.getViewFrustum())) {
 			Chunk chunk = (Chunk) entityc;
 
@@ -65,10 +69,6 @@ public class EntitiesRenderer extends Renderer {
 					renderEntity(entity);
 				}
 			}
-		}
-
-		for (Entity entity : FlounderEntities.getEntities().queryInFrustum(FlounderCamera.getCamera().getViewFrustum())) {
-			renderEntity(entity);
 		}
 
 		endRendering();

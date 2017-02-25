@@ -82,7 +82,13 @@ void main(void) {
 	}
 
 	vec4 normals = texture(originalNormals, pass_textureCoords);
-	vec4 extras = texture(originalExtras, pass_textureCoords); // ignoreFog, shineDamper, reflectivity
+
+	vec4 extras = texture(originalExtras, pass_textureCoords);
+	float shineDamper = extras.r;
+	float reflectivity = extras.g;
+	bool ignoreFog = extras.b == (1.0 / 3.0) || extras.b == (3.0 / 3.0);
+	bool ignoreShadows = extras.b == (2.0 / 3.0) || extras.b == (3.0 / 3.0);
+
 	vec4 worldPosition = vec4(decodeLocation(), 1.0);
 
 	vec3 toCameraVector = (inverse(viewMatrix) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPosition.xyz;
@@ -92,12 +98,6 @@ void main(void) {
     distanceAway = distanceAway - ((shadowDistance * 2.0) - shadowTransition);
     distanceAway = distanceAway / shadowTransition;
     shadowCoords.w = clamp(1.0 - distanceAway, 0.0, 1.0);
-
-    float shadows = 1.0;
-
-   // if (!bool(extras.r)) {
-        shadows = shadow(shadowMap, shadowCoords, shadowMapSize);
-   // }
 
     vec3 totalDiffuse = vec3(0.0);
 	vec3 totalSpecular = vec3(0.0);
@@ -111,17 +111,20 @@ void main(void) {
 		float brightness = max(dot(normals.xyz, unitLightVector), 0.0);
 		vec3 reflectedLightDirection = reflect(-unitLightVector, normals.xyz);
 		float specularFactor = max(dot(reflectedLightDirection, normalize(toCameraVector)), 0.0);
-		float dampedFactor = pow(specularFactor, extras.r);
+		float dampedFactor = pow(specularFactor, shineDamper);
 
 		totalDiffuse = totalDiffuse + (brightness * lightColour[i]) / attinuationFactor;
-		totalSpecular = totalSpecular + (dampedFactor * extras.g * lightColour[i]) / attinuationFactor;
+		totalSpecular = totalSpecular + (dampedFactor * reflectivity * lightColour[i]) / attinuationFactor;
 	}
 
     out_colour = vec4(albedo.rgb, 1.0);
     out_colour = vec4(totalDiffuse, 1.0) * out_colour; //  + vec4(totalSpecular, 1.0)
-    out_colour = vec4(out_colour.rgb * shadows, 1.0);
 
-    if (!bool(extras.b)) {
+    if (!ignoreShadows) {
+        out_colour = vec4(out_colour.rgb * shadow(shadowMap, shadowCoords, shadowMapSize), 1.0);
+    }
+
+    if (!ignoreFog) {
         out_colour = mix(vec4(fogColour, 1.0), out_colour, visibility(positionRelativeToCam, fogDensity, fogGradient));
     }
 }
