@@ -28,10 +28,11 @@ public class PipelineMRT extends PostPipeline {
 	@Override
 	public void renderPipeline(FBO startFBO) {
 		filterMRT.applyFilter(
-				startFBO.getColourTexture(0),
-				startFBO.getColourTexture(1),
-				startFBO.getDepthTexture(),
-				((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap()
+				startFBO.getColourTexture(0), // Colours
+				startFBO.getColourTexture(1), // Normals
+				startFBO.getColourTexture(2), // Extras
+				startFBO.getDepthTexture(), // Depth
+				((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap() // Shadow Map
 		);
 
 		if (FlounderDisplay.isAntialiasing()) {

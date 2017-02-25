@@ -30,7 +30,7 @@ public class ComponentCelestial extends IComponentEntity {
 
 	@Override
 	public void update() {
-		getEntity().getPosition().set(KosmosWorld.getSkyCycle().getLightDirection());
+		getEntity().getPosition().set(KosmosWorld.getSkyCycle().getSunEntityDirection());
 		Vector3f.multiply(getEntity().getPosition(), startPosition, getEntity().getPosition());
 
 		if (FlounderCamera.getCamera() != null) {

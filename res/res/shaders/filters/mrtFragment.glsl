@@ -6,7 +6,7 @@
 //---------CONSTANT------------
 const int SHADOW_PCF = 1;
 const float SHADOW_BIAS = 0.001;
-const float SHADOW_DARKNESS = 0.6;
+const float SHADOW_DARKNESS = 0.7;
 
 //---------IN------------
 in vec2 pass_textureCoords;
@@ -14,8 +14,9 @@ in vec2 pass_textureCoords;
 //---------UNIFORM------------
 layout(binding = 0) uniform sampler2D originalAlbedo;
 layout(binding = 1) uniform sampler2D originalNormals;
-layout(binding = 2) uniform sampler2D originalDepth;
-layout(binding = 3) uniform sampler2D shadowMap;
+layout(binding = 2) uniform sampler2D originalExtras;
+layout(binding = 3) uniform sampler2D originalDepth;
+layout(binding = 4) uniform sampler2D shadowMap;
 
 uniform mat4 viewInverseMatrix;
 uniform mat4 projectionInverseMatrix;
@@ -23,6 +24,7 @@ uniform mat4 viewMatrix;
 
 uniform vec3 lightDirection;
 uniform vec2 lightBias;
+uniform float shadowIntensity;
 
 uniform vec3 fogColour;
 uniform float fogDensity;
@@ -83,7 +85,7 @@ float shadow(sampler2D shadowMap, vec4 shadowCoords, float shadowMapSize) {
         shadowShadeFactor = 1.0;
     }
 
-    return shadowShadeFactor;
+    return shadowShadeFactor * shadowIntensity;
 
     /*float totalTextels = (SHADOW_PCF * 2.0 + 1.0) * (SHADOW_PCF * 2.0 + 1.0);
     float texelSize = 1.0 / shadowMapSize;
@@ -119,6 +121,7 @@ void main(void) {
 	}
 
 	vec4 normals = texture(originalNormals, pass_textureCoords);
+	vec4 extras = texture(originalExtras, pass_textureCoords);
 	vec4 worldPosition = vec4(decodeLocation(), 1.0);
 
     vec4 positionRelativeToCam = viewMatrix * worldPosition;
@@ -130,8 +133,14 @@ void main(void) {
 
     vec3 colour = vec3(albedo);
     float brightness = max(dot(-lightDirection, normals.rgb), 0.0) * lightBias.x + lightBias.y;
-    float shadow = shadow(shadowMap, shadowCoords, shadowMapSize);
 
-    out_colour = vec4(colour * shadow * brightness, 1.0);
-    out_colour = mix(vec4(fogColour, 1.0), out_colour, visibility(positionRelativeToCam, fogDensity, fogGradient));
+    if (!bool(extras.r)) {
+        brightness *= shadow(shadowMap, shadowCoords, shadowMapSize);
+    }
+
+    out_colour = vec4(colour * brightness, 1.0);
+
+    if (!bool(extras.g)) {
+        out_colour = mix(vec4(fogColour, 1.0), out_colour, visibility(positionRelativeToCam, fogDensity, fogGradient));
+    }
 }

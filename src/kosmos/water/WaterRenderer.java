@@ -19,6 +19,7 @@ import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
 import kosmos.*;
+import kosmos.chunks.*;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -67,10 +68,10 @@ public class WaterRenderer extends Renderer {
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 
-		/*Chunk chunk = KosmosChunks.getCurrent();
+		Chunk chunk = KosmosChunks.getCurrent();
 		if (chunk != null) {
 			shader.getUniformVec3("waterOffset").loadVec3(chunk.getPosition());
-		}*/
+		}
 		//shader.getUniformVec3("waterOffset").loadVec3(FlounderCamera.getPlayer().getPosition());
 
 		if (KosmosWater.reflectionsEnabled()) {

@@ -37,7 +37,9 @@ public class FilterMRT extends PostFilter {
 		shader.getUniformMat4("viewMatrix").loadMat4(FlounderCamera.getCamera().getViewMatrix());
 
 		shader.getUniformVec3("lightDirection").loadVec3(KosmosWorld.getSkyCycle().getLightDirection());
-		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f); //  * (1.0f - KosmosWorld.getSkyCycle().getDayFactor())
+		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f * KosmosWorld.getSkyCycle().getSinDay());
+
+		shader.getUniformFloat("shadowIntensity").loadFloat(KosmosWorld.getSkyCycle().getSinDay());
 
 		if (KosmosWorld.getFog() != null) {
 			shader.getUniformVec3("fogColour").loadVec3(KosmosWorld.getFog().getFogColour());
