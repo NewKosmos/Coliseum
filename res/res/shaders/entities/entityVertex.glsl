@@ -32,7 +32,6 @@ uniform float systemTime;
 uniform float windPower;
 
 //---------OUT------------
-out vec4 pass_worldPosition;
 out vec3 pass_surfaceNormal;
 out vec2 pass_textureCoords;
 
@@ -68,10 +67,10 @@ void main(void) {
 	    }
 	}
 
-	pass_worldPosition = modelMatrix * totalLocalPos;
+	vec4 worldPosition = modelMatrix * totalLocalPos;
 
-	gl_ClipDistance[0] = dot(pass_worldPosition, clipPlane);
-	gl_Position = projectionMatrix * viewMatrix * pass_worldPosition;
+	gl_ClipDistance[0] = dot(worldPosition, clipPlane);
+	gl_Position = projectionMatrix * viewMatrix * worldPosition;
 
 	pass_surfaceNormal = (modelMatrix * totalNormal).xyz;
 }

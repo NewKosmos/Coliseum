@@ -20,7 +20,6 @@ uniform float squareSize;
 uniform float waterHeight;
 
 //---------OUT------------
-out vec4 pass_worldPosition;
 out vec3 pass_surfaceNormal;
 out vec4 pass_clipSpace;
 
@@ -63,15 +62,15 @@ void main(void) {
 	otherVertex1 += generateVertexOffset(otherVertex1.x, otherVertex1.z);
 	otherVertex2 += generateVertexOffset(otherVertex2.x, otherVertex2.z);
 
-    pass_worldPosition = thisVertex;
+    vec4 worldPosition = thisVertex;
 
 	gl_ClipDistance[0] = dot(thisVertex, clipPlane);
-	gl_Position = projectionMatrix * viewMatrix * pass_worldPosition;
+	gl_Position = projectionMatrix * viewMatrix * worldPosition;
 
 	vec3 tangent = otherVertex1.xyz - thisVertex.xyz;
     vec3 bitangent = otherVertex2.xyz - thisVertex.xyz;
     vec3 normal = -cross(tangent, bitangent);
 
 	pass_surfaceNormal = normal.xyz;
-    pass_clipSpace = projectionMatrix * viewMatrix * pass_worldPosition;
+    pass_clipSpace = projectionMatrix * viewMatrix * worldPosition;
 }

@@ -46,8 +46,6 @@ public class CameraFocus extends Camera {
 	private static final float INFLUENCE_OF_MOUSEDX = INFLUENCE_OF_MOUSEDY * 92.0f;
 	private static final float INFLUENCE_OF_MOUSE_WHEEL = 12.5f;
 
-	private int toggleMouseMoveKey;
-
 	private Vector3f position;
 	private Vector3f rotation;
 
@@ -74,8 +72,6 @@ public class CameraFocus extends Camera {
 
 	@Override
 	public void init() {
-		this.toggleMouseMoveKey = GLFW_MOUSE_BUTTON_LEFT;
-
 		this.position = new Vector3f();
 		this.rotation = new Vector3f();
 
@@ -146,7 +142,7 @@ public class CameraFocus extends Camera {
 		float delta = Framework.getDelta();
 		float angleChange = 0.0f;
 
-		if (FlounderMouse.getMouse(toggleMouseMoveKey)) {
+		if (FlounderMouse.getMouse(GLFW_MOUSE_BUTTON_RIGHT)) {
 			angleChange = FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSEDX;
 		}
 
@@ -169,7 +165,7 @@ public class CameraFocus extends Camera {
 		float delta = Framework.getDelta();
 		float angleChange = 0.0f;
 
-		if (FlounderMouse.getMouse(toggleMouseMoveKey)) {
+		if (FlounderMouse.getMouse(GLFW_MOUSE_BUTTON_RIGHT)) {
 			angleChange = -FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSEDY;
 		}
 

@@ -73,7 +73,7 @@ public class KosmosRenderer extends RendererMaster {
 		this.guisRenderer = new GuisRenderer();
 		this.fontRenderer = new FontRenderer();
 
-		this.rendererFBO = FBO.newFBO(1.0f).attachments(3).withAlphaChannel(true).disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
+		this.rendererFBO = FBO.newFBO(1.0f).attachments(2).withAlphaChannel(true).disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
 
 		this.pipelineMRT = new PipelineMRT();
 		this.filterFXAA = new FilterFXAA();
@@ -180,11 +180,12 @@ public class KosmosRenderer extends RendererMaster {
 			case 0:
 				break;
 			case 1:
-				filterTiltShift.applyFilter(output.getColourTexture(0));
-				output = filterTiltShift.fbo;
-			case 2:
 				pipelineDOF.renderMRT(rendererFBO, output);
 				output = pipelineDOF.getOutput();
+				break;
+			case 2:
+				filterTiltShift.applyFilter(output.getColourTexture(0));
+				output = filterTiltShift.fbo;
 				break;
 			case 3:
 				/* Scene independents. */
