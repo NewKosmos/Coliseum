@@ -25,7 +25,7 @@ public class InstanceRockGem extends Entity {
 		super(structure, position, rotation);
 
 		ComponentModel componentModel = new ComponentModel(this, model, 1.0f, texture, 1);
-		ComponentLighting componentLighting = new ComponentLighting(this, 1.0f, 0.0f, false, false);
+		ComponentLighting componentLighting = new ComponentLighting(this, 1.0f, 0.2f, false, false);
 		ComponentCollider componentCollider = new ComponentCollider(this);
 		ComponentCollision componentCollision = new ComponentCollision(this);
 	}

@@ -13,6 +13,7 @@ import flounder.camera.*;
 import flounder.devices.*;
 import flounder.entities.*;
 import flounder.helpers.*;
+import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
@@ -93,13 +94,13 @@ public class EntitiesRenderer extends Renderer {
 		ComponentSway componentSway = (ComponentSway) entity.getComponent(ComponentSway.ID);
 		final int vaoLength;
 
-		if (componentModel != null && componentModel.getModel() != null) {
+		if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded()) {
 			OpenGlUtils.bindVAO(componentModel.getModel().getVaoID(), 0, 1, 2, 3);
 			shader.getUniformBool("animated").loadBoolean(false);
 			shader.getUniformMat4("modelMatrix").loadMat4(componentModel.getModelMatrix());
 			shader.getUniformFloat("swayHeight").loadFloat((float) componentModel.getModel().getAABB().getHeight());
 			vaoLength = componentModel.getModel().getVaoLength();
-		} else if (componentAnimation != null && componentAnimation.getModel() != null) {
+		} else if (componentAnimation != null && componentAnimation.getModel() != null) { // TODO: Check if loaded.
 			OpenGlUtils.bindVAO(componentAnimation.getModel().getVaoID(), 0, 1, 2, 3, 4, 5);
 			shader.getUniformBool("animated").loadBoolean(true);
 			shader.getUniformMat4("modelMatrix").loadMat4(componentAnimation.getModelMatrix());

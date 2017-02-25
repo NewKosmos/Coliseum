@@ -32,11 +32,11 @@ void main(void) {
         vec2 normalizedDeviceCoords = (pass_clipSpace.xy / pass_clipSpace.w) / 2.0 + 0.5;
         vec2 reflectionTextureCoords = getReflectionTexCoords(normalizedDeviceCoords);
         vec3 reflectionColour = texture(reflectionMap, reflectionTextureCoords).rgb;
-        out_albedo = vec4(mix(reflectionColour, diffuseColour.rgb, diffuseColour.a), 1.0f);
+        out_albedo = vec4(mix(reflectionColour, diffuseColour.rgb, diffuseColour.a), 1.0);
 	} else {
-        out_albedo = vec4(diffuseColour.rgb, 1.0f);
+        out_albedo = vec4(diffuseColour.rgb, 1.0);
 	}
 
 	out_normals = vec4(normalize(pass_surfaceNormal), 1.0);
-	out_extras = vec4(float(false), float(false), shineDamper, reflectivity);
+	out_extras = vec4(shineDamper, reflectivity, float(false), 1.0); // float(false)
 }

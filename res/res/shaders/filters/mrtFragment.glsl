@@ -4,7 +4,9 @@
 #include "maths.glsl"
 
 //---------CONSTANT------------
-const int SHADOW_PCF = 1;
+const int LIGHTS = 32;
+
+const int SHADOW_PCF = 0;
 const float SHADOW_BIAS = 0.001;
 const float SHADOW_DARKNESS = 0.6;
 
@@ -18,25 +20,21 @@ layout(binding = 2) uniform sampler2D originalExtras;
 layout(binding = 3) uniform sampler2D originalDepth;
 layout(binding = 4) uniform sampler2D shadowMap;
 
-uniform mat4 viewInverseMatrix;
-uniform mat4 projectionInverseMatrix;
+uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 
-uniform vec3 lightDirection;
-uniform vec2 lightBias;
-uniform float shadowIntensity;
-
-uniform vec3 fogColour;
-uniform float fogDensity;
-uniform float fogGradient;
+uniform vec3 lightColour[LIGHTS];
+uniform vec3 lightPosition[LIGHTS];
+uniform vec3 lightAttenuation[LIGHTS];
 
 uniform mat4 shadowSpaceMatrix;
 uniform float shadowDistance;
 uniform float shadowTransition;
 uniform float shadowMapSize;
 
-uniform float nearPlane;
-uniform float farPlane;
+uniform vec3 fogColour;
+uniform float fogDensity;
+uniform float fogGradient;
 
 //---------OUT------------
 layout(location = 0) out vec4 out_colour;
@@ -44,50 +42,13 @@ layout(location = 0) out vec4 out_colour;
 //---------CALCULATE LOCATION------------
 vec3 decodeLocation() {
     float depth = texture(originalDepth, pass_textureCoords).x;
-    vec4 p = projectionInverseMatrix * (vec4(pass_textureCoords, depth, 1.0) * 2.0 - 1.0);
-    return vec3(viewInverseMatrix * vec4(p.xyz / p.w, 1.0));
+    vec4 p = inverse(projectionMatrix) * (vec4(pass_textureCoords, depth, 1.0) * 2.0 - 1.0);
+    return vec3(inverse(viewMatrix) * vec4(p.xyz / p.w, 1.0));
 }
 
 //---------SHADOW------------
 float shadow(sampler2D shadowMap, vec4 shadowCoords, float shadowMapSize) {
-	float shadowTexelSize = 1.0 / shadowMapSize;
-	float shadowHalfw = shadowTexelSize * 0.5;
-	float shadowTotal = 0.0;
-	float shadowValue = 0.0;
-	float shadowShadeFactor;
-	shadowValue = texture(shadowMap, shadowCoords.xy + vec2(0.0 + shadowHalfw, 0.0 + shadowHalfw)).r;
-
-    if (shadowCoords.x > 0.0 && shadowCoords.x < 1.0 && shadowCoords.y > 0.0 && shadowCoords.y < 1.0 && shadowCoords.z > 0.0 && shadowCoords.z < 1.0) {
-        if (shadowValue + SHADOW_BIAS < shadowCoords.z) {
-            shadowTotal += SHADOW_DARKNESS * shadowCoords.w;
-        }
-
-        shadowValue = texture(shadowMap, shadowCoords.xy + vec2(shadowTexelSize + shadowHalfw, 0.0 + shadowHalfw)).r;
-
-        if (shadowValue + SHADOW_BIAS< shadowCoords.z) {
-            shadowTotal += SHADOW_DARKNESS * shadowCoords.w;
-        }
-
-        shadowValue = texture(shadowMap, shadowCoords.xy + vec2(0.0 + shadowHalfw, shadowTexelSize + shadowHalfw)).r;
-
-        if (shadowValue + SHADOW_BIAS < shadowCoords.z) {
-            shadowTotal += SHADOW_DARKNESS * shadowCoords.w;
-        }
-
-        shadowValue = texture(shadowMap, shadowCoords.xy + vec2(shadowTexelSize + shadowHalfw, shadowTexelSize + shadowHalfw)).r;
-
-        if (shadowValue + SHADOW_BIAS < shadowCoords.z) {
-            shadowTotal += SHADOW_DARKNESS * shadowCoords.w;
-        }
-
-        shadowShadeFactor = 1.0 - (shadowTotal / 4.0);
-    } else {
-        shadowShadeFactor = 1.0;
-    }
-
-    return shadowShadeFactor;
-
-    /*float totalTextels = (SHADOW_PCF * 2.0 + 1.0) * (SHADOW_PCF * 2.0 + 1.0);
+    float totalTextels = (SHADOW_PCF * 2.0 + 1.0) * (SHADOW_PCF * 2.0 + 1.0);
     float texelSize = 1.0 / shadowMapSize;
     float total = 0.0;
 
@@ -102,7 +63,7 @@ float shadow(sampler2D shadowMap, vec4 shadowCoords, float shadowMapSize) {
     }
 
     total /= totalTextels;
-    return 1.0 - (total * SHADOW_DARKNESS * shadowCoords.w);*/
+    return 1.0 - (total * SHADOW_DARKNESS * shadowCoords.w);
 }
 
 //---------FOG VISIBILITY------------
@@ -121,9 +82,10 @@ void main(void) {
 	}
 
 	vec4 normals = texture(originalNormals, pass_textureCoords);
-	vec4 extras = texture(originalExtras, pass_textureCoords); // ignoreShadows, ignoreFog, shineDamper, reflectivity
+	vec4 extras = texture(originalExtras, pass_textureCoords); // ignoreFog, shineDamper, reflectivity
 	vec4 worldPosition = vec4(decodeLocation(), 1.0);
 
+	vec3 toCameraVector = (inverse(viewMatrix) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPosition.xyz;
     vec4 positionRelativeToCam = viewMatrix * worldPosition;
     vec4 shadowCoords = shadowSpaceMatrix * worldPosition;
     float distanceAway = length(positionRelativeToCam.xyz);
@@ -131,20 +93,37 @@ void main(void) {
     distanceAway = distanceAway / shadowTransition;
     shadowCoords.w = clamp(1.0 - distanceAway, 0.0, 1.0);
 
-    vec3 colour = vec3(albedo);
-    float brightness = 0.0;
+    float shadows = 1.0;
 
-    {
-        brightness = max(dot(-lightDirection, normals.rgb), 0.0) * lightBias.x + lightBias.y;
-    }
+   // if (!bool(extras.r)) {
+        shadows = shadow(shadowMap, shadowCoords, shadowMapSize);
+   // }
 
-    if (!bool(extras.r)) {
-        brightness *= shadow(shadowMap, shadowCoords, shadowMapSize);
-    }
+    vec3 totalDiffuse = vec3(0.0);
+	vec3 totalSpecular = vec3(0.0);
 
-    out_colour = vec4(colour * brightness, 1.0);
+	for (int i = 0; i < LIGHTS; i++) {
+		vec3 toLightVector = lightPosition[i] - worldPosition.xyz;
+		float distance = length(toLightVector);
+		float attinuationFactor = lightAttenuation[i].x + (lightAttenuation[i].y * distance) + (lightAttenuation[i].z * distance * distance);
+		vec3 unitLightVector = normalize(toLightVector);
 
-    if (!bool(extras.g)) {
+		float brightness = max(dot(normals.xyz, unitLightVector), 0.0);
+		vec3 reflectedLightDirection = reflect(-unitLightVector, normals.xyz);
+		float specularFactor = max(dot(reflectedLightDirection, normalize(toCameraVector)), 0.0);
+		float dampedFactor = pow(specularFactor, extras.r);
+
+		totalDiffuse += (brightness * lightColour[i]) / attinuationFactor;
+		totalSpecular += (dampedFactor * extras.g * lightColour[i]) / attinuationFactor;
+	}
+
+    out_colour = vec4(albedo.rgb, 1.0);
+    out_colour = vec4(totalDiffuse, 1.0) * out_colour + vec4(totalSpecular, 1.0);
+    out_colour = vec4(out_colour.rgb * shadows, 1.0);
+
+    if (!bool(extras.b)) {
         out_colour = mix(vec4(fogColour, 1.0), out_colour, visibility(positionRelativeToCam, fogDensity, fogGradient));
     }
+
+   // out_colour = extras;
 }

@@ -152,7 +152,7 @@ public class ShadowRenderer extends Renderer {
 		ComponentSway componentSway = (ComponentSway) entity.getComponent(ComponentSway.ID);
 		final int vaoLength;
 
-		if (componentModel != null && componentModel.getModel() != null) {
+		if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded()) {
 			//	if (componentModel.isIgnoringShadows()) {
 			//		return;
 			//	}
@@ -163,7 +163,7 @@ public class ShadowRenderer extends Renderer {
 			shader.getUniformMat4("mvpMatrix").loadMat4(mvpMatrix);
 			shader.getUniformFloat("swayHeight").loadFloat((float) componentModel.getModel().getAABB().getHeight());
 			vaoLength = componentModel.getModel().getVaoLength();
-		} else if (componentAnimation != null && componentAnimation.getModel() != null) {
+		} else if (componentAnimation != null && componentAnimation.getModel() != null) { // TODO: Check if loaded.
 			OpenGlUtils.bindVAO(componentAnimation.getModel().getVaoID(), 0, 4, 5);
 			shader.getUniformBool("animated").loadBoolean(true);
 			Matrix4f mvpMatrix = Matrix4f.multiply(projectionViewMatrix, componentAnimation.getModelMatrix(), null);

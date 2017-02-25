@@ -10,34 +10,54 @@
 package kosmos.filters;
 
 import flounder.camera.*;
+import flounder.entities.*;
+import flounder.logger.*;
 import flounder.maths.matrices.*;
 import flounder.post.*;
 import flounder.renderer.*;
 import flounder.resources.*;
 import kosmos.*;
+import kosmos.entities.components.*;
 import kosmos.shadows.*;
 import kosmos.world.*;
 
 public class FilterMRT extends PostFilter {
-	private Matrix4f viewInverseMatrix;
-	private Matrix4f projectionInverseMatrix;
+	private static final int LIGHTS = 32;
 
 	public FilterMRT() {
 		super("filterMrt", new MyFile(PostFilter.POST_LOC, "mrtFragment.glsl"));
-		this.viewInverseMatrix = new Matrix4f(); // View inverse matrix.
-		this.projectionInverseMatrix = new Matrix4f(); // Projection inverse matrix.
 	}
 
 	@Override
 	public void storeValues() {
-		updateVPIMatrix();
-
-		shader.getUniformMat4("viewInverseMatrix").loadMat4(viewInverseMatrix);
-		shader.getUniformMat4("projectionInverseMatrix").loadMat4(projectionInverseMatrix);
+		shader.getUniformMat4("projectionMatrix").loadMat4(FlounderCamera.getCamera().getProjectionMatrix());
 		shader.getUniformMat4("viewMatrix").loadMat4(FlounderCamera.getCamera().getViewMatrix());
 
-		shader.getUniformVec3("lightDirection").loadVec3(KosmosWorld.getSkyCycle().getLightDirection());
-		shader.getUniformVec2("lightBias").loadVec2(0.7f, 0.6f * KosmosWorld.getSkyCycle().getSinDay());
+		int lightsLoaded = 0;
+
+		for (Entity entity : FlounderEntities.getEntities().getAll()) {
+			ComponentLight componentLight = (ComponentLight) entity.getComponent(ComponentLight.ID);
+
+			if (lightsLoaded < LIGHTS && componentLight != null) {
+				shader.getUniformVec3("lightColour[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getColour());
+				shader.getUniformVec3("lightPosition[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getPosition());
+				shader.getUniformVec3("lightAttenuation[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getAttenuation());
+				lightsLoaded++;
+			}
+		}
+
+		if (lightsLoaded < LIGHTS) {
+			for (int i = lightsLoaded; i < LIGHTS; i++) {
+				shader.getUniformVec3("lightColour[" + i + "]").loadVec3(0.0f, 0.0f, 0.0f);
+				shader.getUniformVec3("lightPosition[" + i + "]").loadVec3(0.0f, 0.0f, 0.0f);
+				shader.getUniformVec3("lightAttenuation[" + i + "]").loadVec3(1.0f, 0.0f, 0.0f);
+			}
+		}
+
+		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
+		shader.getUniformFloat("shadowDistance").loadFloat(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
+		shader.getUniformFloat("shadowTransition").loadFloat(10.0f);
+		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.getShadowMapSize());
 
 		if (KosmosWorld.getFog() != null) {
 			shader.getUniformVec3("fogColour").loadVec3(KosmosWorld.getFog().getFogColour());
@@ -48,23 +68,5 @@ public class FilterMRT extends PostFilter {
 			shader.getUniformFloat("fogDensity").loadFloat(0.003f);
 			shader.getUniformFloat("fogGradient").loadFloat(2.0f);
 		}
-
-		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
-		shader.getUniformFloat("shadowDistance").loadFloat(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
-		shader.getUniformFloat("shadowTransition").loadFloat(10.0f);
-		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.getShadowMapSize());
-
-		shader.getUniformFloat("nearPlane").loadFloat(FlounderCamera.getCamera().getNearPlane());
-		shader.getUniformFloat("farPlane").loadFloat(FlounderCamera.getCamera().getFarPlane());
-	}
-
-	private void updateVPIMatrix() {
-		viewInverseMatrix.setIdentity();
-		viewInverseMatrix.set(FlounderCamera.getCamera().getViewMatrix());
-		viewInverseMatrix.invert();
-
-		projectionInverseMatrix.setIdentity();
-		projectionInverseMatrix.set(FlounderCamera.getCamera().getProjectionMatrix());
-		projectionInverseMatrix.invert();
 	}
 }
