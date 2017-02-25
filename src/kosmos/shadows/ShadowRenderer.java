@@ -149,6 +149,7 @@ public class ShadowRenderer extends Renderer {
 	private void renderEntity(Entity entity) {
 		ComponentModel componentModel = (ComponentModel) entity.getComponent(ComponentModel.ID);
 		ComponentAnimation componentAnimation = (ComponentAnimation) entity.getComponent(ComponentAnimation.ID);
+		ComponentSway componentSway = (ComponentSway) entity.getComponent(ComponentSway.ID);
 		final int vaoLength;
 
 		if (componentModel != null && componentModel.getModel() != null) {
@@ -160,12 +161,14 @@ public class ShadowRenderer extends Renderer {
 			shader.getUniformBool("animated").loadBoolean(false);
 			Matrix4f mvpMatrix = Matrix4f.multiply(projectionViewMatrix, componentModel.getModelMatrix(), null);
 			shader.getUniformMat4("mvpMatrix").loadMat4(mvpMatrix);
+			shader.getUniformFloat("swayHeight").loadFloat((float) componentModel.getModel().getAABB().getHeight());
 			vaoLength = componentModel.getModel().getVaoLength();
 		} else if (componentAnimation != null && componentAnimation.getModel() != null) {
 			OpenGlUtils.bindVAO(componentAnimation.getModel().getVaoID(), 0, 4, 5);
 			shader.getUniformBool("animated").loadBoolean(true);
 			Matrix4f mvpMatrix = Matrix4f.multiply(projectionViewMatrix, componentAnimation.getModelMatrix(), null);
 			shader.getUniformMat4("mvpMatrix").loadMat4(mvpMatrix);
+			shader.getUniformFloat("swayHeight").loadFloat(0.0f);
 			vaoLength = componentAnimation.getModel().getVaoLength();
 		} else {
 			// No model, so no render!
@@ -176,6 +179,17 @@ public class ShadowRenderer extends Renderer {
 			for (int i = 0; i < componentAnimation.getJointTransforms().length; i++) {
 				shader.getUniformMat4("jointTransforms[" + i + "]").loadMat4(componentAnimation.getJointTransforms()[i]);
 			}
+		}
+
+		if (componentSway != null) {
+			shader.getUniformBool("swaying").loadBoolean(true);
+			shader.getUniformVec2("swayOffset").loadVec2(KosmosWorld.getSwayOffsetX(), KosmosWorld.getSwayOffsetY());
+
+			if (componentSway.getTextureSway() != null && componentSway.getTextureSway().isLoaded()) {
+				OpenGlUtils.bindTexture(componentSway.getTextureSway(), 1);
+			}
+		} else {
+			shader.getUniformBool("swaying").loadBoolean(false);
 		}
 
 		glDrawElements(GL_TRIANGLES, vaoLength, GL_UNSIGNED_INT, 0);

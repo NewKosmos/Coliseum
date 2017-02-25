@@ -98,6 +98,7 @@ public class EntitiesRenderer extends Renderer {
 			OpenGlUtils.bindVAO(componentModel.getModel().getVaoID(), 0, 1, 2, 3);
 			shader.getUniformBool("animated").loadBoolean(false);
 			shader.getUniformMat4("modelMatrix").loadMat4(componentModel.getModelMatrix());
+			shader.getUniformFloat("swayHeight").loadFloat((float) componentModel.getModel().getAABB().getHeight());
 			vaoLength = componentModel.getModel().getVaoLength();
 			//	shader.getUniformBool("ignoreShadows").loadBoolean(componentModel.isIgnoringShadows());
 			//	shader.getUniformBool("ignoreFog").loadBoolean(componentModel.isIgnoringFog());
@@ -105,6 +106,7 @@ public class EntitiesRenderer extends Renderer {
 			OpenGlUtils.bindVAO(componentAnimation.getModel().getVaoID(), 0, 1, 2, 3, 4, 5);
 			shader.getUniformBool("animated").loadBoolean(true);
 			shader.getUniformMat4("modelMatrix").loadMat4(componentAnimation.getModelMatrix());
+			shader.getUniformFloat("swayHeight").loadFloat(0.0f);
 			vaoLength = componentAnimation.getModel().getVaoLength();
 			//	shader.getUniformBool("ignoreShadows").loadBoolean(false);
 			//	shader.getUniformBool("ignoreFog").loadBoolean(false);
@@ -116,7 +118,6 @@ public class EntitiesRenderer extends Renderer {
 		if (componentModel != null && componentModel.getTexture() != null && componentModel.getTexture().isLoaded()) {
 			shader.getUniformFloat("atlasRows").loadFloat(componentModel.getTexture().getNumberOfRows());
 			shader.getUniformVec2("atlasOffset").loadVec2(componentModel.getTextureOffset());
-			shader.getUniformFloat("swayHeight").loadFloat((float) componentModel.getModel().getAABB().getHeight());
 			OpenGlUtils.cullBackFaces(!componentModel.getTexture().hasAlpha());
 			OpenGlUtils.bindTexture(componentModel.getTexture(), 0);
 		} else if (componentAnimation != null && componentAnimation.getTexture() != null && componentAnimation.getTexture().isLoaded()) {
@@ -140,6 +141,7 @@ public class EntitiesRenderer extends Renderer {
 
 		if (componentSway != null) {
 			shader.getUniformBool("swaying").loadBoolean(true);
+			shader.getUniformVec2("swayOffset").loadVec2(KosmosWorld.getSwayOffsetX(), KosmosWorld.getSwayOffsetY());
 
 			if (componentSway.getTextureSway() != null && componentSway.getTextureSway().isLoaded()) {
 				OpenGlUtils.bindTexture(componentSway.getTextureSway(), 1);
@@ -147,9 +149,6 @@ public class EntitiesRenderer extends Renderer {
 		} else {
 			shader.getUniformBool("swaying").loadBoolean(false);
 		}
-
-		shader.getUniformFloat("systemTime").loadFloat(Framework.getTimeSec());
-		shader.getUniformFloat("windPower").loadFloat(KosmosWorld.getWindPower());
 
 		glDrawElements(GL_TRIANGLES, vaoLength, GL_UNSIGNED_INT, 0);
 		OpenGlUtils.unbindVAO(0, 1, 2, 3, 4, 5);
