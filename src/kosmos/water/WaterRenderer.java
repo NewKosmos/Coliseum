@@ -96,6 +96,9 @@ public class WaterRenderer extends Renderer {
 		shader.getUniformFloat("squareSize").loadFloat((float) Water.SQUARE_SIZE);
 		shader.getUniformFloat("waterHeight").loadFloat(water.getPosition().y);
 
+		shader.getUniformFloat("shineDamper").loadFloat(Water.SHINE_DAMPER);
+		shader.getUniformFloat("reflectivity").loadFloat(Water.REFLECTIVITY);
+
 		shader.getUniformBool("ignoreReflections").loadBoolean(!KosmosWater.reflectionsEnabled());
 
 		glDrawArrays(GL_TRIANGLES, 0, water.getVertexCount());

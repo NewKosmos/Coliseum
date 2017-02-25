@@ -34,6 +34,7 @@ public class InstanceCowboy extends Entity {
 
 		ComponentAnimation componentAnimation = new ComponentAnimation(this, modelAnimated, 0.2f, texture, 1);
 		componentAnimation.doAnimation(animation);
+		ComponentLighting componentLighting = new ComponentLighting(this, 1.0f, 0.0f, false, false);
 		//	ComponentCollider componentCollider = new ComponentCollider(this);
 		//	ComponentCollision componentCollision = new ComponentCollision(this);
 	}

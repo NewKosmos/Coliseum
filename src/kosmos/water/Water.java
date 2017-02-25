@@ -32,6 +32,9 @@ public class Water {
 	protected static final double SQUARE_SIZE = 1.0;
 	protected static final int VERTEX_COUNT = 135;
 
+	protected static final float SHINE_DAMPER = 1.0f;
+	protected static final float REFLECTIVITY = 0.0f;
+
 	private int vao;
 	private int vertexCount;
 	private boolean loaded;

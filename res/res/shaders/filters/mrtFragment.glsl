@@ -6,7 +6,7 @@
 //---------CONSTANT------------
 const int SHADOW_PCF = 1;
 const float SHADOW_BIAS = 0.001;
-const float SHADOW_DARKNESS = 0.7;
+const float SHADOW_DARKNESS = 0.6;
 
 //---------IN------------
 in vec2 pass_textureCoords;
@@ -85,7 +85,7 @@ float shadow(sampler2D shadowMap, vec4 shadowCoords, float shadowMapSize) {
         shadowShadeFactor = 1.0;
     }
 
-    return shadowShadeFactor * shadowIntensity;
+    return shadowShadeFactor;
 
     /*float totalTextels = (SHADOW_PCF * 2.0 + 1.0) * (SHADOW_PCF * 2.0 + 1.0);
     float texelSize = 1.0 / shadowMapSize;
@@ -121,7 +121,7 @@ void main(void) {
 	}
 
 	vec4 normals = texture(originalNormals, pass_textureCoords);
-	vec4 extras = texture(originalExtras, pass_textureCoords);
+	vec4 extras = texture(originalExtras, pass_textureCoords); // ignoreShadows, ignoreFog, shineDamper, reflectivity
 	vec4 worldPosition = vec4(decodeLocation(), 1.0);
 
     vec4 positionRelativeToCam = viewMatrix * worldPosition;
@@ -132,7 +132,11 @@ void main(void) {
     shadowCoords.w = clamp(1.0 - distanceAway, 0.0, 1.0);
 
     vec3 colour = vec3(albedo);
-    float brightness = max(dot(-lightDirection, normals.rgb), 0.0) * lightBias.x + lightBias.y;
+    float brightness = 0.0;
+
+    {
+        brightness = max(dot(-lightDirection, normals.rgb), 0.0) * lightBias.x + lightBias.y;
+    }
 
     if (!bool(extras.r)) {
         brightness *= shadow(shadowMap, shadowCoords, shadowMapSize);

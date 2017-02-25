@@ -12,7 +12,6 @@ package kosmos.chunks.biomes;
 import flounder.maths.vectors.*;
 import kosmos.chunks.*;
 import kosmos.chunks.tiles.*;
-import kosmos.entities.instances.*;
 import kosmos.particles.loading.*;
 
 public class BiomeDesert implements IBiome {

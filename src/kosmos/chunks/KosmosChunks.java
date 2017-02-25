@@ -92,7 +92,7 @@ public class KosmosChunks extends Module {
 					}
 				}
 
-				chunk.update(playerPos);
+				chunk.update();
 			}
 
 			if (playerChunk != currentChunk) {

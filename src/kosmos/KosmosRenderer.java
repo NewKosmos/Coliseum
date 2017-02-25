@@ -29,7 +29,6 @@ import kosmos.entities.*;
 import kosmos.filters.*;
 import kosmos.particles.*;
 import kosmos.shadows.*;
-import kosmos.skybox.*;
 import kosmos.water.*;
 import org.lwjgl.glfw.*;
 

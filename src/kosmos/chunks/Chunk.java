@@ -160,15 +160,14 @@ public class Chunk extends Entity {
 		}
 	}
 
-	public void update(Vector3f playerPosition) {
+	@Override
+	public void update() {
 		// Builds or rebulds this chunks mesh.
 		if (tilesChanged || chunkMesh.getModel() == null) {
 			chunkMesh.rebuild(generate());
 			tilesChanged = false;
 			super.setMoved();
 		}
-
-		super.update();
 
 		/*Iterator it = childrenChunks.iterator();
 
@@ -200,6 +199,8 @@ public class Chunk extends Entity {
 		for (Entity entity : entities.getAll()) {
 			entity.update();
 		}
+
+		super.update();
 	}
 
 	public ISpatialStructure<Entity> getEntities() {

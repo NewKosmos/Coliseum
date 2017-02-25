@@ -25,8 +25,7 @@ public class InstanceSun extends Entity {
 		super(structure, position, rotation);
 		ComponentCelestial componentCelestial = new ComponentCelestial(this);
 		ComponentModel componentModel = new ComponentModel(this, model, 30.0f, texture, 0);
-		componentModel.setIgnoreShadows(true);
-		componentModel.setIgnoreFog(true);
+		ComponentLighting componentLighting = new ComponentLighting(this, 1.0f, 0.0f, true, true);
 		//ComponentCollider componentCollider = new ComponentCollider(this);
 		// ComponentCollision componentCollision = new ComponentCollision(this);
 	}

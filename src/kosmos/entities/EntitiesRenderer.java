@@ -12,7 +12,6 @@ package kosmos.entities;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.entities.*;
-import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
@@ -20,7 +19,6 @@ import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
 import flounder.textures.*;
-import kosmos.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.world.*;
@@ -91,6 +89,7 @@ public class EntitiesRenderer extends Renderer {
 	private void renderEntity(Entity entity) {
 		ComponentModel componentModel = (ComponentModel) entity.getComponent(ComponentModel.ID);
 		ComponentAnimation componentAnimation = (ComponentAnimation) entity.getComponent(ComponentAnimation.ID);
+		ComponentLighting componentLighting = (ComponentLighting) entity.getComponent(ComponentLighting.ID);
 		ComponentSway componentSway = (ComponentSway) entity.getComponent(ComponentSway.ID);
 		final int vaoLength;
 
@@ -100,16 +99,12 @@ public class EntitiesRenderer extends Renderer {
 			shader.getUniformMat4("modelMatrix").loadMat4(componentModel.getModelMatrix());
 			shader.getUniformFloat("swayHeight").loadFloat((float) componentModel.getModel().getAABB().getHeight());
 			vaoLength = componentModel.getModel().getVaoLength();
-			shader.getUniformBool("ignoreShadows").loadBoolean(componentModel.isIgnoringShadows());
-			shader.getUniformBool("ignoreFog").loadBoolean(componentModel.isIgnoringFog());
 		} else if (componentAnimation != null && componentAnimation.getModel() != null) {
 			OpenGlUtils.bindVAO(componentAnimation.getModel().getVaoID(), 0, 1, 2, 3, 4, 5);
 			shader.getUniformBool("animated").loadBoolean(true);
 			shader.getUniformMat4("modelMatrix").loadMat4(componentAnimation.getModelMatrix());
 			shader.getUniformFloat("swayHeight").loadFloat(0.0f);
 			vaoLength = componentAnimation.getModel().getVaoLength();
-			shader.getUniformBool("ignoreShadows").loadBoolean(false);
-			shader.getUniformBool("ignoreFog").loadBoolean(false);
 		} else {
 			// No model, so no render!
 			return;
@@ -137,6 +132,20 @@ public class EntitiesRenderer extends Renderer {
 			for (int i = 0; i < componentAnimation.getJointTransforms().length; i++) {
 				shader.getUniformMat4("jointTransforms[" + i + "]").loadMat4(componentAnimation.getJointTransforms()[i]);
 			}
+		}
+
+		if (componentLighting != null) {
+			shader.getUniformFloat("shineDamper").loadFloat(componentLighting.getShineDamper());
+			shader.getUniformFloat("reflectivity").loadFloat(componentLighting.getReflectivity());
+
+			shader.getUniformBool("ignoreShadows").loadBoolean(componentLighting.isIgnoreShadows());
+			shader.getUniformBool("ignoreFog").loadBoolean(componentLighting.isIgnoreFog());
+		} else {
+			shader.getUniformFloat("shineDamper").loadFloat(1.0f);
+			shader.getUniformFloat("reflectivity").loadFloat(0.0f);
+
+			shader.getUniformBool("ignoreShadows").loadBoolean(false);
+			shader.getUniformBool("ignoreFog").loadBoolean(false);
 		}
 
 		if (componentSway != null) {

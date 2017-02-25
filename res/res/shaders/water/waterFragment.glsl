@@ -8,6 +8,9 @@ in vec4 pass_clipSpace;
 layout(binding = 0) uniform sampler2D reflectionMap;
 uniform vec4 diffuseColour;
 
+uniform float shineDamper;
+uniform float reflectivity;
+
 uniform bool ignoreReflections;
 
 //---------OUT------------
@@ -35,5 +38,5 @@ void main(void) {
 	}
 
 	out_normals = vec4(normalize(pass_surfaceNormal), 1.0);
-	out_extras = vec4(float(false), float(false), 0.0, 0.0);
+	out_extras = vec4(float(false), float(false), shineDamper, reflectivity);
 }
