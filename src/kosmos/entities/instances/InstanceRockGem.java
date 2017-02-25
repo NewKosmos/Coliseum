@@ -10,6 +10,8 @@
 package kosmos.entities.instances;
 
 import flounder.entities.*;
+import flounder.lights.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.resources.*;
@@ -26,6 +28,7 @@ public class InstanceRockGem extends Entity {
 
 		ComponentModel componentModel = new ComponentModel(this, model, 1.0f, texture, 1);
 		ComponentLighting componentLighting = new ComponentLighting(this, 1.0f, 0.2f, false, false);
+		ComponentLight componentLight = new ComponentLight(this, new Vector3f(0.0f, 0.8f, 0.0f), new Colour(0.0f, 1.0f, 0.0f), new Attenuation(1.0f, 0.03f, 0.09f));
 		ComponentCollider componentCollider = new ComponentCollider(this);
 		ComponentCollision componentCollision = new ComponentCollision(this);
 	}

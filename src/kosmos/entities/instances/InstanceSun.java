@@ -27,7 +27,7 @@ public class InstanceSun extends Entity {
 		super(structure, position, rotation);
 		ComponentCelestial componentCelestial = new ComponentCelestial(this);
 		ComponentModel componentModel = new ComponentModel(this, model, 30.0f, texture, 0);
-		ComponentLight componentLight = new ComponentLight(this, new Vector3f(), new Light(new Colour(1.0f, 1.0f, 1.0f), new Vector3f(), new Attenuation(1.0f, 0.0f, 0.0f)));
+		ComponentLight componentLight = new ComponentLight(this, new Vector3f(), new Colour(1.0f, 1.0f, 1.0f), new Attenuation(1.0f, 0.0f, 0.0f));
 		ComponentLighting componentLighting = new ComponentLighting(this, 1.0f, 0.0f, true, true);
 		//ComponentCollider componentCollider = new ComponentCollider(this);
 		// ComponentCollision componentCollision = new ComponentCollision(this);

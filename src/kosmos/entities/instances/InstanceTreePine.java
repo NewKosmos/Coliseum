@@ -29,7 +29,6 @@ public class InstanceTreePine extends Entity {
 
 		ComponentModel componentModel = new ComponentModel(this, model, 1.0f, texture, 1);
 		ComponentLighting componentLighting = new ComponentLighting(this, 1.0f, 0.1f, false, false);
-		ComponentLight componentLight = new ComponentLight(this, new Vector3f(0.0f, 0.6f, 0.0f), new Light(new Colour(1.0f, 0.5f, 0.2f), new Vector3f(), new Attenuation(5.0f, 3.0f, 1.0f)));
 		ComponentSway componentSway = new ComponentSway(this, textureSway);
 		ComponentCollider componentCollider = new ComponentCollider(this);
 		ComponentCollision componentCollision = new ComponentCollision(this);

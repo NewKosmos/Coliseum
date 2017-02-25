@@ -28,6 +28,6 @@ void main(void) {
 	}
 
 	out_albedo = vec4(diffuseColour);
-	out_normals = vec4(normalize(pass_surfaceNormal), 1.0);
+	out_normals = vec4(pass_surfaceNormal, 1.0);
 	out_extras = vec4(shineDamper, reflectivity, float(ignoreFog), 1.0); // float(ignoreShadows),
 }

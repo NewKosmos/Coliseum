@@ -66,5 +66,5 @@ void main(void) {
 	gl_ClipDistance[0] = dot(worldPosition, clipPlane);
 	gl_Position = projectionMatrix * viewMatrix * worldPosition;
 
-	pass_surfaceNormal = (modelMatrix * totalNormal).xyz;
+	pass_surfaceNormal = normalize((modelMatrix * totalNormal).xyz);
 }

@@ -17,12 +17,13 @@ import flounder.post.*;
 import flounder.renderer.*;
 import flounder.resources.*;
 import kosmos.*;
+import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.shadows.*;
 import kosmos.world.*;
 
 public class FilterMRT extends PostFilter {
-	private static final int LIGHTS = 32;
+	private static final int LIGHTS = 128;
 
 	public FilterMRT() {
 		super("filterMrt", new MyFile(PostFilter.POST_LOC, "mrtFragment.glsl"));
@@ -43,6 +44,23 @@ public class FilterMRT extends PostFilter {
 				shader.getUniformVec3("lightPosition[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getPosition());
 				shader.getUniformVec3("lightAttenuation[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getAttenuation());
 				lightsLoaded++;
+			}
+		}
+
+		for (Entity entityc : KosmosChunks.getChunks().getAll()) {
+			Chunk chunk = (Chunk) entityc;
+
+			if (chunk.isLoaded()) {
+				for (Entity entity : chunk.getEntities().getAll()) {
+					ComponentLight componentLight = (ComponentLight) entity.getComponent(ComponentLight.ID);
+
+					if (lightsLoaded < LIGHTS && componentLight != null) {
+						shader.getUniformVec3("lightColour[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getColour());
+						shader.getUniformVec3("lightPosition[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getPosition());
+						shader.getUniformVec3("lightAttenuation[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getAttenuation());
+						lightsLoaded++;
+					}
+				}
 			}
 		}
 

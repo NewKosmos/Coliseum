@@ -69,11 +69,13 @@ public class ShadowRenderer extends Renderer {
 		for (Entity entityc : KosmosChunks.getChunks().getAll()) {
 			Chunk chunk = (Chunk) entityc;
 
-			if (chunk.isLoaded()) {
+			if (chunk != null && chunk.isLoaded()) {
 				renderEntity(entityc);
 
-				for (Entity entity : chunk.getEntities().getAll()) {
-					renderEntity(entity);
+				if (chunk.getEntities() != null && !chunk.getEntities().getAll().isEmpty()) {
+					for (Entity entity : chunk.getEntities().getAll()) {
+						renderEntity(entity);
+					}
 				}
 			}
 		}

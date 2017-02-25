@@ -4,7 +4,7 @@
 #include "maths.glsl"
 
 //---------CONSTANT------------
-const int LIGHTS = 32;
+const int LIGHTS = 128;
 
 const int SHADOW_PCF = 0;
 const float SHADOW_BIAS = 0.001;
@@ -113,17 +113,15 @@ void main(void) {
 		float specularFactor = max(dot(reflectedLightDirection, normalize(toCameraVector)), 0.0);
 		float dampedFactor = pow(specularFactor, extras.r);
 
-		totalDiffuse += (brightness * lightColour[i]) / attinuationFactor;
-		totalSpecular += (dampedFactor * extras.g * lightColour[i]) / attinuationFactor;
+		totalDiffuse = totalDiffuse + (brightness * lightColour[i]) / attinuationFactor;
+		totalSpecular = totalSpecular + (dampedFactor * extras.g * lightColour[i]) / attinuationFactor;
 	}
 
     out_colour = vec4(albedo.rgb, 1.0);
-    out_colour = vec4(totalDiffuse, 1.0) * out_colour + vec4(totalSpecular, 1.0);
+    out_colour = vec4(totalDiffuse, 1.0) * out_colour; //  + vec4(totalSpecular, 1.0)
     out_colour = vec4(out_colour.rgb * shadows, 1.0);
 
     if (!bool(extras.b)) {
         out_colour = mix(vec4(fogColour, 1.0), out_colour, visibility(positionRelativeToCam, fogDensity, fogGradient));
     }
-
-   // out_colour = extras;
 }

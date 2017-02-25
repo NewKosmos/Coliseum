@@ -13,6 +13,8 @@ import flounder.animation.*;
 import flounder.collada.*;
 import flounder.collada.animation.*;
 import flounder.entities.*;
+import flounder.lights.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.space.*;
@@ -35,6 +37,7 @@ public class InstanceCowboy extends Entity {
 		ComponentAnimation componentAnimation = new ComponentAnimation(this, modelAnimated, 0.2f, texture, 1);
 		componentAnimation.doAnimation(animation);
 		ComponentLighting componentLighting = new ComponentLighting(this, 1.0f, 0.0f, false, false);
+		ComponentLight componentLight = new ComponentLight(this, new Vector3f(0.0f, 1.0f, 0.0f), new Colour(1, 0, 0), new Attenuation(1.0f, 0.03f, 0.01f));
 		//	ComponentCollider componentCollider = new ComponentCollider(this);
 		//	ComponentCollision componentCollision = new ComponentCollision(this);
 	}
