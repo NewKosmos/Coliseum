@@ -8,6 +8,7 @@ import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.standards.*;
+import kosmos.entities.editing.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -125,8 +126,8 @@ public class FrameEntities extends Standard {
 		// Component Dropdown.
 		componentDropdown = new JComboBox();
 
-		for (int i = 0; i < IComponentEditor.EDITOR_COMPONENTS.length; i++) {
-			componentDropdown.addItem(IComponentEditor.EDITOR_COMPONENTS[i].getTabName());
+		for (int i = 0; i < EditorsList.values().length; i++) {
+			componentDropdown.addItem(EditorsList.values()[i].getEditor().getTabName());
 		}
 
 		mainPanel.add(componentDropdown);
@@ -139,22 +140,22 @@ public class FrameEntities extends Standard {
 				String component = (String) componentDropdown.getSelectedItem();
 				IComponentEditor editorComponent = null;
 
-				for (int i = 0; i < IComponentEditor.EDITOR_COMPONENTS.length; i++) {
-					if (IComponentEditor.EDITOR_COMPONENTS[i].getTabName().equals(component)) {
-						if (((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity != null && ((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity.getComponent(IComponentEditor.EDITOR_COMPONENTS[i].getComponent().getId()) == null) {
+				for (int i = 0; i < EditorsList.values().length; i++) {
+					if (EditorsList.values()[i].getEditor().getTabName().equals(component)) {
+						if (((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity != null && ((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity.getComponent(EditorsList.values()[i].getEditor().getComponent().getId()) == null) {
 							try {
 								FlounderLogger.log("Adding component: " + component);
-								Class componentClass = Class.forName(IComponentEditor.EDITOR_COMPONENTS[i].getClass().getName());
+								Class componentClass = Class.forName(EditorsList.values()[i].getEditor().getClass().getName());
 								Class[] componentTypes = new Class[]{Entity.class};
 								@SuppressWarnings("unchecked") Constructor componentConstructor = componentClass.getConstructor(componentTypes);
 								Object[] componentParameters = new Object[]{((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity};
 								editorComponent = (IComponentEditor) componentConstructor.newInstance(componentParameters);
 							} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException ex) {
-								FlounderLogger.error("While loading component" + IComponentEditor.EDITOR_COMPONENTS[i] + "'s constructor could not be found!");
+								FlounderLogger.error("While loading component" + EditorsList.values()[i].getEditor() + "'s constructor could not be found!");
 								FlounderLogger.exception(ex);
 							}
 						} else {
-							FlounderLogger.error("Entity already has instance of " + IComponentEditor.EDITOR_COMPONENTS[i]);
+							FlounderLogger.error("Entity already has instance of " + EditorsList.values()[i].getEditor());
 						}
 					}
 				}

@@ -93,7 +93,7 @@ public class EditorModel extends IComponentEditor {
 		if (component != null) {
 			if (pathModel != null && (component.getModel() == null || !component.getModel().getName().equals(pathModel.getName()))) {
 				if (pathModel.getPath().contains(".obj")) {
-					ModelObject model = ModelFactory.newBuilder().setFile(pathModel).create();
+					ModelObject model = ModelFactory.newBuilder().setFile(new MyFile(pathModel)).create();
 					component.setModel(model);
 				}
 
@@ -102,7 +102,7 @@ public class EditorModel extends IComponentEditor {
 
 			if (pathTexture != null && (component.getTexture() == null || !component.getTexture().getFile().getPath().equals(pathTexture.getPath()))) {
 				if (pathTexture.getPath().contains(".png")) {
-					TextureObject texture = TextureFactory.newBuilder().setFile(pathTexture).create();
+					TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(pathTexture)).create();
 					component.setTexture(texture);
 				}
 

@@ -7,7 +7,7 @@ EntityData {
 };
 
 Components {
-	ebon.entities.components.ComponentAnimation {
+	kosmos.entities.components.ComponentAnimation {
 		Scale: 1.0;
 		FurthestPoint: 1.0;
 		Texture: res/entities/cowboy/cowboy.png;

@@ -97,8 +97,8 @@ public class EditorAnimation extends IComponentEditor {
 		if (component != null) {
 			if (pathCollada != null/*  && (component.getModel() == null|| !component.getModel().getFile().equals(pathCollada.getPath()))*/) {
 				if (pathCollada.getPath().contains(".dae")) {
-					ModelAnimated modelAnimated = FlounderCollada.loadCollada(pathCollada);
-					AnimationData animationData = FlounderCollada.loadAnimation(pathCollada);
+					ModelAnimated modelAnimated = FlounderCollada.loadCollada(new MyFile(pathCollada));
+					AnimationData animationData = FlounderCollada.loadAnimation(new MyFile(pathCollada));
 					Animation animation = FlounderAnimation.loadAnimation(animationData);
 					component.setModel(modelAnimated);
 					component.doAnimation(animation);
@@ -109,7 +109,7 @@ public class EditorAnimation extends IComponentEditor {
 
 			if (pathTexture != null && (component.getTexture() == null || !component.getTexture().getFile().getPath().equals(pathTexture.getPath()))) {
 				if (pathTexture.getPath().contains(".png")) {
-					TextureObject texture = TextureFactory.newBuilder().setFile(pathTexture).create();
+					TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(pathTexture)).create();
 					component.setTexture(texture);
 				}
 

@@ -36,6 +36,8 @@ public class ShadowRenderer extends Renderer {
 	private FBO shadowFBO;
 	private ShaderObject shader;
 
+	private Matrix4f mvpReusableMatrix;
+
 	private Matrix4f projectionMatrix;
 	private Matrix4f lightViewMatrix;
 	private Matrix4f projectionViewMatrix;
@@ -49,6 +51,8 @@ public class ShadowRenderer extends Renderer {
 	public ShadowRenderer() {
 		this.shadowFBO = FBO.newFBO(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).noColourBuffer().disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
 		this.shader = ShaderFactory.newBuilder().setName("shadows").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
+
+		this.mvpReusableMatrix = new Matrix4f();
 
 		this.projectionMatrix = new Matrix4f();
 		this.lightViewMatrix = new Matrix4f();
@@ -156,22 +160,22 @@ public class ShadowRenderer extends Renderer {
 		ComponentSway componentSway = (ComponentSway) entity.getComponent(ComponentSway.ID);
 		final int vaoLength;
 
-		if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded()) {
+		if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded() && componentModel.getModelMatrix() != null) {
 			//	if (componentModel.isIgnoringShadows()) {
 			//		return;
 			//	}
 
 			OpenGlUtils.bindVAO(componentModel.getModel().getVaoID(), 0);
 			shader.getUniformBool("animated").loadBoolean(false);
-			Matrix4f mvpMatrix = Matrix4f.multiply(projectionViewMatrix, componentModel.getModelMatrix(), null);
-			shader.getUniformMat4("mvpMatrix").loadMat4(mvpMatrix);
+			Matrix4f.multiply(projectionViewMatrix, componentModel.getModelMatrix(), mvpReusableMatrix);
+			shader.getUniformMat4("mvpMatrix").loadMat4(mvpReusableMatrix);
 			shader.getUniformFloat("swayHeight").loadFloat((float) componentModel.getModel().getAABB().getHeight());
 			vaoLength = componentModel.getModel().getVaoLength();
-		} else if (componentAnimation != null && componentAnimation.getModel() != null) { // TODO: Check if loaded.
+		} else if (componentAnimation != null && componentAnimation.getModel() != null && componentAnimation.getModelMatrix() != null) { // TODO: Check if loaded.
 			OpenGlUtils.bindVAO(componentAnimation.getModel().getVaoID(), 0, 4, 5);
 			shader.getUniformBool("animated").loadBoolean(true);
-			Matrix4f mvpMatrix = Matrix4f.multiply(projectionViewMatrix, componentAnimation.getModelMatrix(), null);
-			shader.getUniformMat4("mvpMatrix").loadMat4(mvpMatrix);
+			Matrix4f.multiply(projectionViewMatrix, componentAnimation.getModelMatrix(), mvpReusableMatrix);
+			shader.getUniformMat4("mvpMatrix").loadMat4(mvpReusableMatrix);
 			shader.getUniformFloat("swayHeight").loadFloat(0.0f);
 			vaoLength = componentAnimation.getModel().getVaoLength();
 		} else {

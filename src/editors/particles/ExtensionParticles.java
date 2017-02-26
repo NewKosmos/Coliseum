@@ -51,7 +51,7 @@ public class ExtensionParticles extends IEditorType {
 	@Override
 	public void update() {
 		if (loadFromParticle != null) {
-			ParticleTemplate template = KosmosParticles.load(loadFromParticle);
+			ParticleTemplate template = KosmosParticles.load("" + loadFromParticle);
 			particleSystem.removeParticleType(particleTemplate);
 			particleTemplate = template;
 			particleSystem.addParticleType(particleTemplate);

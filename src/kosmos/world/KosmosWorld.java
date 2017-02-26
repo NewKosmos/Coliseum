@@ -53,13 +53,13 @@ public class KosmosWorld extends Module {
 	}
 
 	public static float getSwayOffsetX() {
-		float windPower = 0.15f;
+		float windPower = 0.2f;
 		float systemTime = Framework.getTimeSec();
 		return windPower * (float) (Math.sin(0.25 * systemTime) - Math.sin(1.2 * systemTime) + Math.cos(0.5 * systemTime));
 	}
 
 	public static float getSwayOffsetY() {
-		float windPower = 0.15f;
+		float windPower = 0.2f;
 		float systemTime = Framework.getTimeSec();
 		return windPower * (float) (Math.cos(0.25 * systemTime) - Math.cos(1.2 * systemTime) + Math.sin(0.5 * systemTime));
 	}

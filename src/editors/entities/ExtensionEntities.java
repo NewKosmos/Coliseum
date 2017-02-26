@@ -13,6 +13,7 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
 import kosmos.entities.components.*;
+import kosmos.entities.editing.*;
 import kosmos.particles.*;
 import kosmos.world.*;
 
@@ -78,17 +79,17 @@ public class ExtensionEntities extends IEditorType {
 			for (IComponentEntity component : focusEntity.getComponents()) {
 				IComponentEditor editorComponent = null;
 
-				for (int i = 0; i < IComponentEditor.EDITOR_COMPONENTS.length; i++) {
-					if (IComponentEditor.EDITOR_COMPONENTS[i].getComponent().getId() == component.getId()) {
+				for (int i = 0; i < EditorsList.values().length; i++) {
+					if (EditorsList.values()[i].getEditor().getComponent().getId() == component.getId()) {
 						try {
 							FlounderLogger.log("Adding component: " + component);
-							Class componentClass = Class.forName(IComponentEditor.EDITOR_COMPONENTS[i].getClass().getName());
+							Class componentClass = Class.forName(EditorsList.values()[i].getEditor().getClass().getName());
 							Class[] componentTypes = new Class[]{IComponentEntity.class};
 							@SuppressWarnings("unchecked") Constructor componentConstructor = componentClass.getConstructor(componentTypes);
 							Object[] componentParameters = new Object[]{component};
 							editorComponent = (IComponentEditor) componentConstructor.newInstance(componentParameters);
 						} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException ex) {
-							FlounderLogger.error("While loading component" + IComponentEditor.EDITOR_COMPONENTS[i] + "'s constructor could not be found!");
+							FlounderLogger.error("While loading component" + EditorsList.values()[i].getEditor() + "'s constructor could not be found!");
 							FlounderLogger.exception(ex);
 						}
 
