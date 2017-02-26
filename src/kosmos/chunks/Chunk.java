@@ -66,7 +66,7 @@ public class Chunk extends Entity {
 		this.darkness = 0.0f;
 
 		ComponentModel componentModel = new ComponentModel(this, null, 1.0f, biome.getBiome().getMainTile().getTexture(), 0);
-		ComponentSurface componentSurface = new ComponentSurface(this, 2.0f, 0.0f, false, false);
+		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.0f, false, false);
 		ComponentCollider componentCollider = new ComponentCollider(this);
 		ComponentCollision componentCollision = new ComponentCollision(this);
 

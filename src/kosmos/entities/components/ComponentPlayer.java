@@ -13,7 +13,11 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.maths.vectors.*;
+import flounder.networking.*;
 import flounder.physics.*;
+import kosmos.network.*;
+
+import java.util.*;
 
 public class ComponentPlayer extends IComponentEntity {
 	public static final int ID = EntityIDAssigner.getId();
@@ -25,6 +29,16 @@ public class ComponentPlayer extends IComponentEntity {
 		super(entity, ID);
 		this.startPosition = new Vector3f(entity.getPosition());
 		this.startRotation = new Vector3f(entity.getRotation());
+
+		Timer timerDashboard = new Timer();
+		timerDashboard.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if (FlounderNetwork.getSocketClient() != null) {
+					new PacketMove(FlounderNetwork.getUsername(), getEntity().getPosition()).writeData(FlounderNetwork.getSocketClient());
+				}
+			}
+		}, 0, 100);
 	}
 
 	@Override

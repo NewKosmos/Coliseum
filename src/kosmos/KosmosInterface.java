@@ -16,6 +16,7 @@ import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
 import flounder.logger.*;
+import flounder.networking.*;
 import flounder.physics.bounding.*;
 import flounder.sounds.*;
 import flounder.standards.*;
@@ -35,7 +36,7 @@ public class KosmosInterface extends Standard {
 	private KeyButton closeWindow;
 
 	public KosmosInterface() {
-		super(FlounderDisplay.class, FlounderKeyboard.class, KosmosWorld.class, KosmosChunks.class, KosmosWater.class);
+		super(FlounderDisplay.class, FlounderKeyboard.class, KosmosWorld.class, KosmosChunks.class, KosmosWater.class, FlounderNetwork.class);
 	}
 
 	@Override
@@ -50,6 +51,8 @@ public class KosmosInterface extends Standard {
 		this.polygons = new KeyButton(GLFW_KEY_P);
 		this.aabbs = new KeyButton(GLFW_KEY_O);
 		this.closeWindow = new KeyButton(GLFW_KEY_DELETE);
+
+		FlounderNetwork.startClient(KosmosConfigs.configServer.getStringWithDefault("client_connect", "localhost", null)); // FlounderNetwork.getSocketClient()::getIpAddress
 
 		FlounderEvents.addEvent(new IEvent() {
 			@Override
@@ -111,7 +114,7 @@ public class KosmosInterface extends Standard {
 			}
 		});
 
-		try {
+		/*try {
 			if (!SteamAPI.init()) {
 				// Steamworks initialization error, e.g. Steam client not running
 			}
@@ -119,14 +122,14 @@ public class KosmosInterface extends Standard {
 			FlounderLogger.exception(e);
 		}
 
-		SteamAPI.printDebugInfo(System.out);
+		SteamAPI.printDebugInfo(System.out);*/
 	}
 
 	@Override
 	public void update() {
-		if (SteamAPI.isSteamRunning()) {
+	/*	if (SteamAPI.isSteamRunning()) {
 			SteamAPI.runCallbacks();
-		}
+		}*/
 	}
 
 	@Override
@@ -136,7 +139,7 @@ public class KosmosInterface extends Standard {
 
 	@Override
 	public void dispose() {
-		SteamAPI.shutdown();
+	//	SteamAPI.shutdown();
 		KosmosConfigs.closeConfigs();
 	}
 

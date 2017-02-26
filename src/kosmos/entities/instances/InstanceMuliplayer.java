@@ -17,14 +17,14 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.entities.components.*;
 
-public class InstanceCowboyStatic extends Entity {
+public class InstanceMuliplayer extends Entity {
 	private static final ModelObject model = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cowboy", "cowboy.obj")).create();
 	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cowboy", "cowboy.png")).create();
 
-	public InstanceCowboyStatic(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+	public InstanceMuliplayer(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation, String username) {
 		super(structure, position, rotation);
 
-		ComponentPlayer componentPlayer = new ComponentPlayer(this);
+		ComponentMultiplayer componentMultiplayer = new ComponentMultiplayer(this, username);
 		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.0f, false, false);
 		ComponentModel componentModel = new ComponentModel(this, model, 0.2f, texture, 1);
 		ComponentCollider componentCollider = new ComponentCollider(this);

@@ -28,7 +28,7 @@ public class InstanceMoon extends Entity {
 		ComponentCelestial componentCelestial = new ComponentCelestial(this);
 		ComponentModel componentModel = new ComponentModel(this, model, 8.5f, texture, 0);
 		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.0f, true, true);
-		ComponentLight componentLight = new ComponentLight(this, new Vector3f(), new Colour(0.1f, 0.1f, 0.1f), new Attenuation(1.0f, 0.0f, 0.0f));
+		ComponentLight componentLight = new ComponentLight(this, new Vector3f(), new Colour(0.2f, 0.2f, 0.2f), new Attenuation(1.0f, 0.0f, 0.0f));
 		//ComponentCollider componentCollider = new ComponentCollider(this);
 		// ComponentCollision componentCollision = new ComponentCollision(this);
 	}

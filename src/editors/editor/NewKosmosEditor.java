@@ -87,13 +87,13 @@ public class NewKosmosEditor extends TimerTask {
 			startEntrance = false;
 
 			if (optionParticle.isSelected()) {
-				Framework entrance = new Framework("Kosmos Editors", -1, new KosmosRenderer(), new CameraFocus(), new EditorPlayer(), new EditorGuis(), new ExtensionParticles(), new FrameParticles());
+				Framework entrance = new Framework("Kosmos Editors", -1, new ExtensionParticles(), new FrameParticles(), new KosmosRenderer(), new CameraFocus(), new EditorPlayer(), new EditorGuis());
 				FlounderDisplay.setup(1080, 720, "Kosmos Editor Particle", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")}, false, true, 0, false, true);
 				TextBuilder.DEFAULT_TYPE = FlounderFonts.FFF_FORWARD;
 				frame.setVisible(false);
 				entrance.run();
 			} else if (optionEntities.isSelected()) {
-				Framework entrance = new Framework("Kosmos Editors", -1, new KosmosRenderer(), new CameraFocus(), new EditorPlayer(), new EditorGuis(), new ExtensionEntities(), new FrameEntities());
+				Framework entrance = new Framework("Kosmos Editors", -1, new ExtensionEntities(), new FrameEntities(), new KosmosRenderer(), new CameraFocus(), new EditorPlayer(), new EditorGuis());
 				FlounderDisplay.setup(1080, 720, "Kosmos Editor Entities", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")}, false, true, 0, false, true);
 				TextBuilder.DEFAULT_TYPE = FlounderFonts.FFF_FORWARD;
 				frame.setVisible(false);

@@ -26,7 +26,7 @@ public class InstanceTree3 extends Entity {
 		super(structure, position, rotation);
 
 		ComponentModel componentModel = new ComponentModel(this, model, 1.0f, texture, 1);
-		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.08f, false, false);
+		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.0f, false, false);
 		ComponentSway componentSway = new ComponentSway(this, textureSway);
 		ComponentCollider componentCollider = new ComponentCollider(this);
 		ComponentCollision componentCollision = new ComponentCollision(this);

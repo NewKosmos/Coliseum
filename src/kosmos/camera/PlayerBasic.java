@@ -39,7 +39,7 @@ public class PlayerBasic extends Player {
 
 	@Override
 	public void init() {
-		this.position = new Vector3f(KosmosConfigs.configMain.getFloatWithDefault("player_x", 0.0f, () -> KosmosChunks.getEntityPlayer().getPosition().x), 0.0f, KosmosConfigs.configMain.getFloatWithDefault("player_z", 0.0f, () -> KosmosChunks.getEntityPlayer().getPosition().z));
+		this.position = new Vector3f(KosmosConfigs.configSave.getFloatWithDefault("player_x", 0.0f, () -> KosmosChunks.getEntityPlayer().getPosition().x), 0.0f, KosmosConfigs.configSave.getFloatWithDefault("player_z", 0.0f, () -> KosmosChunks.getEntityPlayer().getPosition().z));
 		this.rotation = new Vector3f();
 
 		IButton leftKeyButtons = new KeyButton(GLFW.GLFW_KEY_A, GLFW.GLFW_KEY_LEFT);

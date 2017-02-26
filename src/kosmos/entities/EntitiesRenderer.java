@@ -61,13 +61,10 @@ public class EntitiesRenderer extends Renderer {
 		if (KosmosChunks.getChunks() != null) {
 			for (Entity entityc : KosmosChunks.getChunks().queryInFrustum(camera.getViewFrustum())) {
 				Chunk chunk = (Chunk) entityc;
+				renderEntity(entityc);
 
-				if (chunk.isLoaded()) {
-					renderEntity(entityc);
-
-					for (Entity entity : chunk.getEntities().getAll()) {
-						renderEntity(entity);
-					}
+				for (Entity entity : chunk.getEntities().getAll()) {
+					renderEntity(entity);
 				}
 			}
 		}
@@ -89,6 +86,10 @@ public class EntitiesRenderer extends Renderer {
 	}
 
 	private void renderEntity(Entity entity) {
+		if (entity == null) {
+			return;
+		}
+
 		ComponentModel componentModel = (ComponentModel) entity.getComponent(ComponentModel.ID);
 		ComponentAnimation componentAnimation = (ComponentAnimation) entity.getComponent(ComponentAnimation.ID);
 		ComponentSurface componentSurface = (ComponentSurface) entity.getComponent(ComponentSurface.ID);
@@ -98,13 +99,25 @@ public class EntitiesRenderer extends Renderer {
 		if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded()) {
 			OpenGlUtils.bindVAO(componentModel.getModel().getVaoID(), 0, 1, 2, 3);
 			shader.getUniformBool("animated").loadBoolean(false);
-			shader.getUniformMat4("modelMatrix").loadMat4(componentModel.getModelMatrix());
-			shader.getUniformFloat("swayHeight").loadFloat((float) componentModel.getModel().getAABB().getHeight());
+
+			if (componentModel.getModelMatrix() != null) {
+				shader.getUniformMat4("modelMatrix").loadMat4(componentModel.getModelMatrix());
+			}
+
+			if (componentModel.getModel().getAABB() != null) {
+				shader.getUniformFloat("swayHeight").loadFloat((float) componentModel.getModel().getAABB().getHeight());
+			}
+
 			vaoLength = componentModel.getModel().getVaoLength();
 		} else if (componentAnimation != null && componentAnimation.getModel() != null) { // TODO: Check if loaded.
 			OpenGlUtils.bindVAO(componentAnimation.getModel().getVaoID(), 0, 1, 2, 3, 4, 5);
 			shader.getUniformBool("animated").loadBoolean(true);
-			shader.getUniformMat4("modelMatrix").loadMat4(componentAnimation.getModelMatrix());
+
+			if (componentAnimation.getModelMatrix() != null) {
+				shader.getUniformMat4("modelMatrix").loadMat4(componentAnimation.getModelMatrix());
+			}
+
+			// Just stop if you are trying to apply a sway to a animated object, rethink life.
 			shader.getUniformFloat("swayHeight").loadFloat(0.0f);
 			vaoLength = componentAnimation.getModel().getVaoLength();
 		} else {

@@ -77,14 +77,11 @@ public class ShadowRenderer extends Renderer {
 		if (KosmosChunks.getChunks() != null) {
 			for (Entity entityc : KosmosChunks.getChunks().getAll()) {
 				Chunk chunk = (Chunk) entityc;
+				renderEntity(entityc);
 
-				if (chunk != null && chunk.isLoaded()) {
-					renderEntity(entityc);
-
-					if (chunk.getEntities() != null && !chunk.getEntities().getAll().isEmpty()) {
-						for (Entity entity : chunk.getEntities().getAll()) {
-							renderEntity(entity);
-						}
+				if (chunk.getEntities() != null) {
+					for (Entity entity : chunk.getEntities().getAll()) {
+						renderEntity(entity);
 					}
 				}
 			}
@@ -155,27 +152,39 @@ public class ShadowRenderer extends Renderer {
 	}
 
 	private void renderEntity(Entity entity) {
+		if (entity == null) {
+			return;
+		}
+
 		ComponentModel componentModel = (ComponentModel) entity.getComponent(ComponentModel.ID);
 		ComponentAnimation componentAnimation = (ComponentAnimation) entity.getComponent(ComponentAnimation.ID);
 		ComponentSway componentSway = (ComponentSway) entity.getComponent(ComponentSway.ID);
 		final int vaoLength;
 
-		if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded() && componentModel.getModelMatrix() != null) {
-			//	if (componentModel.isIgnoringShadows()) {
-			//		return;
-			//	}
-
+		if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded()) {
 			OpenGlUtils.bindVAO(componentModel.getModel().getVaoID(), 0);
 			shader.getUniformBool("animated").loadBoolean(false);
-			Matrix4f.multiply(projectionViewMatrix, componentModel.getModelMatrix(), mvpReusableMatrix);
-			shader.getUniformMat4("mvpMatrix").loadMat4(mvpReusableMatrix);
-			shader.getUniformFloat("swayHeight").loadFloat((float) componentModel.getModel().getAABB().getHeight());
+
+			if (componentModel.getModelMatrix() != null) {
+				Matrix4f.multiply(projectionViewMatrix, componentModel.getModelMatrix(), mvpReusableMatrix);
+				shader.getUniformMat4("mvpMatrix").loadMat4(mvpReusableMatrix);
+			}
+
+			if (componentModel.getModel().getAABB() != null) {
+				shader.getUniformFloat("swayHeight").loadFloat((float) componentModel.getModel().getAABB().getHeight());
+			}
+
 			vaoLength = componentModel.getModel().getVaoLength();
-		} else if (componentAnimation != null && componentAnimation.getModel() != null && componentAnimation.getModelMatrix() != null) { // TODO: Check if loaded.
+		} else if (componentAnimation != null && componentAnimation.getModel() != null) { // TODO: Check if loaded.
 			OpenGlUtils.bindVAO(componentAnimation.getModel().getVaoID(), 0, 4, 5);
 			shader.getUniformBool("animated").loadBoolean(true);
-			Matrix4f.multiply(projectionViewMatrix, componentAnimation.getModelMatrix(), mvpReusableMatrix);
-			shader.getUniformMat4("mvpMatrix").loadMat4(mvpReusableMatrix);
+
+			if (componentAnimation.getModelMatrix() != null) {
+				Matrix4f.multiply(projectionViewMatrix, componentAnimation.getModelMatrix(), mvpReusableMatrix);
+				shader.getUniformMat4("mvpMatrix").loadMat4(mvpReusableMatrix);
+			}
+
+			// Just stop if you are trying to apply a sway to a animated object, rethink life.
 			shader.getUniformFloat("swayHeight").loadFloat(0.0f);
 			vaoLength = componentAnimation.getModel().getVaoLength();
 		} else {

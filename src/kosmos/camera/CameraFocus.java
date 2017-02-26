@@ -80,11 +80,11 @@ public class CameraFocus extends Camera {
 		this.projectionMatrix = new Matrix4f();
 
 		this.angleOfElevation = (float) Math.PI / 8.0f;
-		this.angleAroundPlayer = KosmosConfigs.configMain.getFloatWithDefault("camera_angle", 0.0f, () -> targetRotationAngle);
+		this.angleAroundPlayer = KosmosConfigs.configSave.getFloatWithDefault("camera_angle", 0.0f, () -> targetRotationAngle);
 
 		this.targetPosition = new Vector3f();
 		this.targetRotation = new Vector3f();
-		this.targetZoom = KosmosConfigs.configMain.getFloatWithDefault("camera_zoom", NORMAL_ZOOM, () -> actualDistanceFromPoint);
+		this.targetZoom = KosmosConfigs.configSave.getFloatWithDefault("camera_zoom", NORMAL_ZOOM, () -> actualDistanceFromPoint);
 		this.targetElevation = angleOfElevation;
 		this.targetRotationAngle = angleAroundPlayer;
 
