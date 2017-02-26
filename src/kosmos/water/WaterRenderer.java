@@ -29,6 +29,7 @@ public class WaterRenderer extends Renderer {
 	private static final MyFile FRAGMENT_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "water", "waterFragment.glsl");
 
 	private float reflectionQuality;
+
 	private FBO reflectionFBO;
 	private ShaderObject shader;
 

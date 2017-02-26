@@ -17,7 +17,7 @@ import flounder.physics.*;
 /**
  * Creates a set of lighting data for a entity.
  */
-public class ComponentLighting extends IComponentEntity {
+public class ComponentSurface extends IComponentEntity {
 	public static final int ID = EntityIDAssigner.getId();
 
 	private float shineDamper;
@@ -27,7 +27,7 @@ public class ComponentLighting extends IComponentEntity {
 	private boolean ignoreFog;
 
 	/**
-	 * Creates a new ComponentLighting.
+	 * Creates a new ComponentSurface.
 	 *
 	 * @param entity The entity this component is attached to.
 	 * @param shineDamper The rendered objects shine damper when lighted.
@@ -35,7 +35,7 @@ public class ComponentLighting extends IComponentEntity {
 	 * @param ignoreShadows If the rendered object will ignore shadows.
 	 * @param ignoreFog If the rendered object will ignore fog.
 	 */
-	public ComponentLighting(Entity entity, float shineDamper, float reflectivity, boolean ignoreShadows, boolean ignoreFog) {
+	public ComponentSurface(Entity entity, float shineDamper, float reflectivity, boolean ignoreShadows, boolean ignoreFog) {
 		super(entity, ID);
 		this.shineDamper = shineDamper;
 		this.reflectivity = reflectivity;
@@ -50,7 +50,7 @@ public class ComponentLighting extends IComponentEntity {
 	 * @param entity The entity this component is attached to.
 	 * @param template The entity template to load data from.
 	 */
-	public ComponentLighting(Entity entity, EntityTemplate template) {
+	public ComponentSurface(Entity entity, EntityTemplate template) {
 		super(entity, ID);
 	}
 

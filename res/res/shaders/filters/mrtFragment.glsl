@@ -4,7 +4,7 @@
 #include "maths.glsl"
 
 //---------CONSTANT------------
-const int LIGHTS = 128;
+const int LIGHTS = 86;
 
 const int SHADOW_PCF = 0;
 const float SHADOW_BIAS = 0.001;
@@ -118,10 +118,10 @@ void main(void) {
 	}
 
     out_colour = vec4(albedo.rgb, 1.0);
-    out_colour = vec4(totalDiffuse, 1.0) * out_colour; //  + vec4(totalSpecular, 1.0)
 
     if (!ignoreShadows) {
         out_colour = vec4(out_colour.rgb * shadow(shadowMap, shadowCoords, shadowMapSize), 1.0);
+        out_colour = (vec4(totalDiffuse, 1.0) * out_colour) + vec4(totalSpecular, 1.0);
     }
 
     if (!ignoreFog) {

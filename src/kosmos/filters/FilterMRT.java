@@ -23,7 +23,7 @@ import kosmos.shadows.*;
 import kosmos.world.*;
 
 public class FilterMRT extends PostFilter {
-	private static final int LIGHTS = 128;
+	private static final int LIGHTS = 86;
 
 	public FilterMRT() {
 		super("filterMrt", new MyFile(PostFilter.POST_LOC, "mrtFragment.glsl"));

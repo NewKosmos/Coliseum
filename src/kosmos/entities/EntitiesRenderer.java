@@ -13,7 +13,6 @@ import flounder.camera.*;
 import flounder.devices.*;
 import flounder.entities.*;
 import flounder.helpers.*;
-import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
@@ -90,7 +89,7 @@ public class EntitiesRenderer extends Renderer {
 	private void renderEntity(Entity entity) {
 		ComponentModel componentModel = (ComponentModel) entity.getComponent(ComponentModel.ID);
 		ComponentAnimation componentAnimation = (ComponentAnimation) entity.getComponent(ComponentAnimation.ID);
-		ComponentLighting componentLighting = (ComponentLighting) entity.getComponent(ComponentLighting.ID);
+		ComponentSurface componentSurface = (ComponentSurface) entity.getComponent(ComponentSurface.ID);
 		ComponentSway componentSway = (ComponentSway) entity.getComponent(ComponentSway.ID);
 		final int vaoLength;
 
@@ -135,12 +134,12 @@ public class EntitiesRenderer extends Renderer {
 			}
 		}
 
-		if (componentLighting != null) {
-			shader.getUniformFloat("shineDamper").loadFloat(componentLighting.getShineDamper());
-			shader.getUniformFloat("reflectivity").loadFloat(componentLighting.getReflectivity());
+		if (componentSurface != null) {
+			shader.getUniformFloat("shineDamper").loadFloat(componentSurface.getShineDamper());
+			shader.getUniformFloat("reflectivity").loadFloat(componentSurface.getReflectivity());
 
-			shader.getUniformBool("ignoreShadows").loadBoolean(componentLighting.isIgnoreShadows());
-			shader.getUniformBool("ignoreFog").loadBoolean(componentLighting.isIgnoreFog());
+			shader.getUniformBool("ignoreShadows").loadBoolean(componentSurface.isIgnoreShadows());
+			shader.getUniformBool("ignoreFog").loadBoolean(componentSurface.isIgnoreFog());
 		} else {
 			shader.getUniformFloat("shineDamper").loadFloat(1.0f);
 			shader.getUniformFloat("reflectivity").loadFloat(0.0f);

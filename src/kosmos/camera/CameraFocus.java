@@ -39,12 +39,12 @@ public class CameraFocus extends Camera {
 	private static final float MAXIMUM_ZOOM = 28.0f;
 	private static final float NORMAL_ZOOM = 8.0f;
 
-	private static final float MAX_HORIZONTAL_CHANGE = 500.0f;
-	private static final float MAX_VERTICAL_CHANGE = 5.0f;
+	private static final float MAX_HORIZONTAL_CHANGE = 800.0f;
+	private static final float MAX_VERTICAL_CHANGE = 8.0f;
 
-	private static final float INFLUENCE_OF_MOUSEDY = -175.0f;
-	private static final float INFLUENCE_OF_MOUSEDX = INFLUENCE_OF_MOUSEDY * 92.0f;
-	private static final float INFLUENCE_OF_MOUSE_WHEEL = 12.5f;
+	private static final float INFLUENCE_OF_MOUSEDY = -300.0f;
+	private static final float INFLUENCE_OF_MOUSEDX = INFLUENCE_OF_MOUSEDY * 100.0f;
+	private static final float INFLUENCE_OF_MOUSE_WHEEL = 10.0f;
 
 	private Vector3f position;
 	private Vector3f rotation;

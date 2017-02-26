@@ -10,8 +10,6 @@
 package kosmos.entities.instances;
 
 import flounder.entities.*;
-import flounder.lights.*;
-import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.resources.*;
@@ -28,7 +26,7 @@ public class InstanceTree3 extends Entity {
 		super(structure, position, rotation);
 
 		ComponentModel componentModel = new ComponentModel(this, model, 1.0f, texture, 1);
-		ComponentLighting componentLighting = new ComponentLighting(this, 1.0f, 0.1f, false, false);
+		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.08f, false, false);
 		ComponentSway componentSway = new ComponentSway(this, textureSway);
 		ComponentCollider componentCollider = new ComponentCollider(this);
 		ComponentCollision componentCollision = new ComponentCollision(this);

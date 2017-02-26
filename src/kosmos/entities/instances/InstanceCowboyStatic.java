@@ -25,7 +25,7 @@ public class InstanceCowboyStatic extends Entity {
 		super(structure, position, rotation);
 
 		ComponentPlayer componentPlayer = new ComponentPlayer(this);
-		ComponentLighting componentLighting = new ComponentLighting(this, 1.0f, 0.0f, false, false);
+		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.0f, false, false);
 		ComponentModel componentModel = new ComponentModel(this, model, 0.2f, texture, 1);
 		ComponentCollider componentCollider = new ComponentCollider(this);
 		ComponentCollision componentCollision = new ComponentCollision(this);

@@ -47,6 +47,7 @@ public class KosmosRenderer extends RendererMaster {
 	private GuisRenderer guisRenderer;
 	private FontRenderer fontRenderer;
 
+	private float displayScale;
 	private FBO rendererFBO;
 
 	private PipelineMRT pipelineMRT;
@@ -72,7 +73,8 @@ public class KosmosRenderer extends RendererMaster {
 		this.guisRenderer = new GuisRenderer();
 		this.fontRenderer = new FontRenderer();
 
-		this.rendererFBO = FBO.newFBO(1.0f).attachments(3).withAlphaChannel(true).disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
+		this.displayScale = NewKosmos.configMain.getFloatWithDefault("render_scale", 1.0f, this::getDisplayScale);
+		this.rendererFBO = FBO.newFBO(displayScale).attachments(3).withAlphaChannel(true).disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
 
 		this.pipelineMRT = new PipelineMRT();
 		this.filterFXAA = new FilterFXAA();
@@ -212,6 +214,15 @@ public class KosmosRenderer extends RendererMaster {
 
 	@Override
 	public void profile() {
+	}
+
+	public float getDisplayScale() {
+		return displayScale;
+	}
+
+	public void setDisplayScale(float displayScale) {
+		this.displayScale = displayScale;
+		rendererFBO.setSizeScalar(displayScale);
 	}
 
 	@Override
