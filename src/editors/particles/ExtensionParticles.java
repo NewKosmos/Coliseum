@@ -37,15 +37,20 @@ public class ExtensionParticles extends IEditorType {
 		//	KosmosWorld.addFog(new Fog(new Colour(1.0f, 1.0f, 1.0f), 0.003f, 2.0f, 0.0f, 50.0f));
 		//	KosmosWorld.addSun(new Light(new Colour(1.0f, 1.0f, 1.0f), new Vector3f(0.0f, 2000.0f, 2000.0f)));
 
-		// The template to edit.
-		particleTemplate = new ParticleTemplate("testing", null, 1.0f, 1.0f);
+		List<ParticleTemplate> templates = new ArrayList<>();
+		templates.add(KosmosParticles.load("rain"));
+		particleSystem = new ParticleSystem(templates, new SpawnCircle(40.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 100, 0.5f, 0.5f);
+		particleSystem.setSystemCentre(FlounderCamera.getPlayer().getPosition());
+
+		/*// The template to edit.
+		particleTemplate = KosmosParticles.load("rain"); // new ParticleTemplate("testing", null, 1.0f, 1.0f);
 
 		// The testing particle system.
-		particleSystem = new ParticleSystem(new ArrayList<>(), null, 376.0f, 10.0f, 1.0f);
+		particleSystem = new ParticleSystem(new ArrayList<>(), null, 376.0f, 1.0f, 0.1f);
 		particleSystem.addParticleType(particleTemplate);
 		particleSystem.randomizeRotation();
-		particleSystem.setSpawn(new SpawnSphere(12));
-		particleSystem.setSystemCentre(FlounderCamera.getPlayer().getPosition());
+		particleSystem.setSpawn(new SpawnSphere(2.0f));
+		particleSystem.setSystemCentre(FlounderCamera.getPlayer().getPosition());*/
 	}
 
 	@Override
