@@ -33,7 +33,7 @@ public class CameraFocus extends Camera {
 
 	private static final float CAMERA_AIM_OFFSET = 2.0f;
 	private static final float MAX_ANGLE_OF_ELEVATION = (float) Math.PI / 4.0f;
-	private static final float MIN_ANGLE_OF_ELEVATION = -(float) Math.PI / 12.0f;
+	private static final float MIN_ANGLE_OF_ELEVATION = 0.0f;
 	private static final float PITCH_OFFSET = 0.0f;
 	private static final float MINIMUM_ZOOM = 0.5f;
 	private static final float MAXIMUM_ZOOM = 28.0f;
@@ -80,11 +80,11 @@ public class CameraFocus extends Camera {
 		this.projectionMatrix = new Matrix4f();
 
 		this.angleOfElevation = (float) Math.PI / 8.0f;
-		this.angleAroundPlayer = NewKosmos.configSave.getFloatWithDefault("camera_angle", 0.0f, () -> targetRotationAngle);
+		this.angleAroundPlayer = KosmosConfigs.configMain.getFloatWithDefault("camera_angle", 0.0f, () -> targetRotationAngle);
 
 		this.targetPosition = new Vector3f();
 		this.targetRotation = new Vector3f();
-		this.targetZoom = NewKosmos.configSave.getFloatWithDefault("camera_zoom", NORMAL_ZOOM, () -> actualDistanceFromPoint);
+		this.targetZoom = KosmosConfigs.configMain.getFloatWithDefault("camera_zoom", NORMAL_ZOOM, () -> actualDistanceFromPoint);
 		this.targetElevation = angleOfElevation;
 		this.targetRotationAngle = angleAroundPlayer;
 
@@ -123,7 +123,7 @@ public class CameraFocus extends Camera {
 
 		updateActualZoom();
 		updateHorizontalAngle();
-		//updatePitchAngle();
+		updatePitchAngle();
 		calculateDistances();
 		calculatePosition();
 

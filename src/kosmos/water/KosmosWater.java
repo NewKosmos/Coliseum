@@ -25,7 +25,7 @@ public class KosmosWater extends Module {
 		this.waveTime = 0.0f;
 
 		this.enableShadows = true;
-		this.enableReflections = NewKosmos.configMain.getBooleanWithDefault("water_reflections", true, KosmosWater::reflectionsEnabled);
+		this.enableReflections = KosmosConfigs.configMain.getBooleanWithDefault("water_reflections", true, KosmosWater::reflectionsEnabled);
 	}
 
 	@Override

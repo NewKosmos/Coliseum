@@ -19,6 +19,8 @@ import flounder.logger.*;
 import flounder.physics.bounding.*;
 import flounder.sounds.*;
 import flounder.standards.*;
+import kosmos.chunks.*;
+import kosmos.water.*;
 import kosmos.world.*;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -33,7 +35,7 @@ public class KosmosInterface extends Standard {
 	private KeyButton closeWindow;
 
 	public KosmosInterface() {
-		super(KosmosWorld.class, FlounderDisplay.class, FlounderKeyboard.class);
+		super(FlounderDisplay.class, FlounderKeyboard.class, KosmosWorld.class, KosmosChunks.class, KosmosWater.class);
 	}
 
 	@Override
@@ -135,7 +137,7 @@ public class KosmosInterface extends Standard {
 	@Override
 	public void dispose() {
 		SteamAPI.shutdown();
-		NewKosmos.closeConfigs();
+		KosmosConfigs.closeConfigs();
 	}
 
 	@Override

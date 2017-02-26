@@ -58,14 +58,16 @@ public class EntitiesRenderer extends Renderer {
 			renderEntity(entity);
 		}
 
-		for (Entity entityc : KosmosChunks.getChunks().queryInFrustum(camera.getViewFrustum())) {
-			Chunk chunk = (Chunk) entityc;
+		if (KosmosChunks.getChunks() != null) {
+			for (Entity entityc : KosmosChunks.getChunks().queryInFrustum(camera.getViewFrustum())) {
+				Chunk chunk = (Chunk) entityc;
 
-			if (chunk.isLoaded()) {
-				renderEntity(entityc);
+				if (chunk.isLoaded()) {
+					renderEntity(entityc);
 
-				for (Entity entity : chunk.getEntities().getAll()) {
-					renderEntity(entity);
+					for (Entity entity : chunk.getEntities().getAll()) {
+						renderEntity(entity);
+					}
 				}
 			}
 		}

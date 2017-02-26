@@ -46,7 +46,7 @@ public class MasterOverlay extends GuiComponent {
 
 
 		crossHair = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "crosshair.png")).setNumberOfRows(4).create());
-		crossHair.setSelectedRow(NewKosmos.configMain.getIntWithDefault("crosshair", 1, () -> crossHair.getSelectedRow()));
+		crossHair.setSelectedRow(KosmosConfigs.configMain.getIntWithDefault("crosshair", 1, () -> crossHair.getSelectedRow()));
 
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {

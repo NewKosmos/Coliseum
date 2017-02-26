@@ -47,18 +47,20 @@ public class FilterMRT extends PostFilter {
 			}
 		}
 
-		for (Entity entityc : KosmosChunks.getChunks().getAll()) {
-			Chunk chunk = (Chunk) entityc;
+		if (KosmosChunks.getChunks() != null) {
+			for (Entity entityc : KosmosChunks.getChunks().getAll()) {
+				Chunk chunk = (Chunk) entityc;
 
-			if (chunk.isLoaded()) {
-				for (Entity entity : chunk.getEntities().getAll()) {
-					ComponentLight componentLight = (ComponentLight) entity.getComponent(ComponentLight.ID);
+				if (chunk.isLoaded()) {
+					for (Entity entity : chunk.getEntities().getAll()) {
+						ComponentLight componentLight = (ComponentLight) entity.getComponent(ComponentLight.ID);
 
-					if (lightsLoaded < LIGHTS && componentLight != null) {
-						shader.getUniformVec3("lightColour[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getColour());
-						shader.getUniformVec3("lightPosition[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getPosition());
-						shader.getUniformVec3("lightAttenuation[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getAttenuation());
-						lightsLoaded++;
+						if (lightsLoaded < LIGHTS && componentLight != null) {
+							shader.getUniformVec3("lightColour[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getColour());
+							shader.getUniformVec3("lightPosition[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getPosition());
+							shader.getUniformVec3("lightAttenuation[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getAttenuation());
+							lightsLoaded++;
+						}
 					}
 				}
 			}

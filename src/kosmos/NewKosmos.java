@@ -26,33 +26,23 @@ public class NewKosmos extends Framework {
 		System.exit(0);
 	}
 
-	public static Config configMain;
-	public static Config configSave;
-
 	public NewKosmos() {
 		super("kosmos", -1, new KosmosInterface(), new KosmosRenderer(), new CameraFocus(), new PlayerBasic(), new KosmosGuis());
 
-		configMain = new Config(new MyFile(Framework.getRoamingFolder(), "configs", "settings.conf"));
-		configSave = new Config(new MyFile(Framework.getRoamingFolder(), "saves", "save0.conf"));
 
-		FlounderDisplay.setup(configMain.getIntWithDefault("width", 1080, FlounderDisplay::getWindowWidth),
-				configMain.getIntWithDefault("height", 720, FlounderDisplay::getWindowHeight),
+		FlounderDisplay.setup(KosmosConfigs.configMain.getIntWithDefault("width", 1080, FlounderDisplay::getWindowWidth),
+				KosmosConfigs.configMain.getIntWithDefault("height", 720, FlounderDisplay::getWindowHeight),
 				"New Kosmos", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
-				configMain.getBooleanWithDefault("vsync", false, FlounderDisplay::isVSync),
-				configMain.getBooleanWithDefault("antialias", true, FlounderDisplay::isAntialiasing),
-				configMain.getIntWithDefault("samples", 0, FlounderDisplay::getSamples),
-				configMain.getBooleanWithDefault("fullscreen", false, FlounderDisplay::isFullscreen),
+				KosmosConfigs.configMain.getBooleanWithDefault("vsync", false, FlounderDisplay::isVSync),
+				KosmosConfigs.configMain.getBooleanWithDefault("antialias", true, FlounderDisplay::isAntialiasing),
+				KosmosConfigs.configMain.getIntWithDefault("samples", 0, FlounderDisplay::getSamples),
+				KosmosConfigs.configMain.getBooleanWithDefault("fullscreen", false, FlounderDisplay::isFullscreen),
 				false
 		);
-		setFpsLimit(configMain.getIntWithDefault("fps_limit", -1, Framework::getFpsLimit));
-		FlounderTextures.setup(NewKosmos.configMain.getFloatWithDefault("anisotropy_level", 4, FlounderTextures::getAnisotropyLevel));
-		FlounderBounding.toggle(NewKosmos.configMain.getBooleanWithDefault("boundings_render", false, FlounderBounding::renders));
-		FlounderProfiler.toggle(NewKosmos.configMain.getBooleanWithDefault("profiler_open", false, FlounderProfiler::isOpen));
+		setFpsLimit(KosmosConfigs.configMain.getIntWithDefault("fps_limit", -1, Framework::getFpsLimit));
+		FlounderTextures.setup(KosmosConfigs.configMain.getFloatWithDefault("anisotropy_level", 4, FlounderTextures::getAnisotropyLevel));
+		FlounderBounding.toggle(KosmosConfigs.configMain.getBooleanWithDefault("boundings_render", false, FlounderBounding::renders));
+		FlounderProfiler.toggle(KosmosConfigs.configMain.getBooleanWithDefault("profiler_open", false, FlounderProfiler::isOpen));
 		TextBuilder.DEFAULT_TYPE = FlounderFonts.FFF_FORWARD;
-	}
-
-	protected static void closeConfigs() {
-		configMain.dispose();
-		configSave.dispose();
 	}
 }

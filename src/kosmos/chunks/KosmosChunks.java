@@ -33,6 +33,10 @@ public class KosmosChunks extends Module {
 	private PerlinNoise noise;
 	private ISpatialStructure<Entity> chunks;
 
+	private Entity entityPlayer;
+	private Entity entitySun;
+	private Entity entityMoon;
+
 	private Sphere chunkRange;
 
 	private Vector3f lastPlayerPos;
@@ -44,8 +48,12 @@ public class KosmosChunks extends Module {
 
 	@Override
 	public void init() {
-		this.noise = new PerlinNoise(NewKosmos.configSave.getIntWithDefault("seed", (int) Maths.randomInRange(1.0, 10000.0), () -> KosmosChunks.getNoise().getSeed()));
+		this.noise = new PerlinNoise(KosmosConfigs.configMain.getIntWithDefault("seed", (int) Maths.randomInRange(1.0, 10000.0), () -> KosmosChunks.getNoise().getSeed()));
 		this.chunks = new StructureBasic<>();
+
+		this.entityPlayer = new InstanceCowboy(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25), 0.0f), new Vector3f()); // InstanceCowboyStatic
+		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+		this.entitySun = new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-200.0f, -200.0f, -200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 
 		this.chunkRange = new Sphere(40.0f); // new AABB();
 
@@ -53,7 +61,7 @@ public class KosmosChunks extends Module {
 		this.currentChunk = null;
 		//	generateClouds();
 
-		new Chunk(KosmosChunks.getChunks(), new Vector3f(NewKosmos.configSave.getFloatWithDefault("chunk_x", 0.0f, () -> KosmosChunks.getCurrent().getPosition().x), 0.0f, NewKosmos.configSave.getFloatWithDefault("chunk_z", 0.0f, () -> KosmosChunks.getCurrent().getPosition().z))); // The root chunk.
+		new Chunk(KosmosChunks.getChunks(), new Vector3f(KosmosConfigs.configMain.getFloatWithDefault("chunk_x", 0.0f, () -> KosmosChunks.getCurrent().getPosition().x), 0.0f, KosmosConfigs.configMain.getFloatWithDefault("chunk_z", 0.0f, () -> KosmosChunks.getCurrent().getPosition().z))); // The root chunk.
 	}
 
 	private void generateClouds() {
@@ -87,7 +95,7 @@ public class KosmosChunks extends Module {
 				Chunk chunk = (Chunk) entity;
 
 				if (chunk.isLoaded() && chunk.getBounding().inFrustum(FlounderCamera.getCamera().getViewFrustum())) {
-					if (chunk.getBounding().contains(KosmosWorld.getEntityPlayer().getPosition())) {
+					if (chunk.getBounding().contains(entityPlayer.getPosition())) {
 						playerChunk = chunk;
 					}
 				}
@@ -97,10 +105,8 @@ public class KosmosChunks extends Module {
 
 			if (playerChunk != currentChunk) {
 				if (playerChunk != null) {
-					//if (playerChunk.getChildrenChunks().isEmpty()) {
 					playerChunk.createChunksAround();
-					//	playerChunk.getChildrenChunks().forEach(Chunk::createChunksAround);
-					//}
+					//playerChunk.getChildrenChunks().forEach(Chunk::createChunksAround);
 
 					Iterator it = chunks.getAll().iterator();
 
@@ -117,7 +123,6 @@ public class KosmosChunks extends Module {
 				}
 
 				currentChunk = playerChunk;
-				//	FlounderLogger.log(playerChunk);
 			}
 
 			lastPlayerPos.set(playerPos);
@@ -136,6 +141,18 @@ public class KosmosChunks extends Module {
 
 	public static ISpatialStructure<Entity> getChunks() {
 		return INSTANCE.chunks;
+	}
+
+	public static Entity getEntityPlayer() {
+		return INSTANCE.entityPlayer;
+	}
+
+	public static Entity getEntitySun() {
+		return INSTANCE.entitySun;
+	}
+
+	public static Entity getEntityMoon() {
+		return INSTANCE.entityMoon;
 	}
 
 	public static Chunk getCurrent() {

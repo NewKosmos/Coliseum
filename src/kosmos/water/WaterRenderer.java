@@ -34,7 +34,7 @@ public class WaterRenderer extends Renderer {
 	private ShaderObject shader;
 
 	public WaterRenderer() {
-		this.reflectionQuality = NewKosmos.configMain.getFloatWithDefault("water_quality", 0.3f, () -> reflectionQuality);
+		this.reflectionQuality = KosmosConfigs.configMain.getFloatWithDefault("water_quality", 0.3f, () -> reflectionQuality);
 		this.reflectionFBO = FBO.newFBO(reflectionQuality).disableTextureWrap().depthBuffer(DepthBufferType.RENDER_BUFFER).create();
 		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 
@@ -52,7 +52,7 @@ public class WaterRenderer extends Renderer {
 
 	@Override
 	public void renderObjects(Vector4f clipPlane, Camera camera) {
-		if (!shader.isLoaded() || !KosmosWater.getWater().isLoaded()) {
+		if (!shader.isLoaded() || KosmosWater.getWater() == null || !KosmosWater.getWater().isLoaded()) {
 			return;
 		}
 
