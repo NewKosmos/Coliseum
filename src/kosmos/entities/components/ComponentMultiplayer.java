@@ -12,8 +12,12 @@ package kosmos.entities.components;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.framework.*;
+import flounder.helpers.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
+import flounder.visual.*;
 
 import java.util.*;
 
@@ -27,6 +31,7 @@ public class ComponentMultiplayer extends IComponentEntity {
 	public ComponentMultiplayer(Entity entity, String username) {
 		super(entity, ID);
 		this.username = username;
+
 		players.put(username, this);
 	}
 
@@ -35,9 +40,14 @@ public class ComponentMultiplayer extends IComponentEntity {
 		getEntity().setMoved();
 	}
 
-	public void move(float x, float y, float z) {
+	public void move(float x, float y, float z, float w) {
 		getEntity().getPosition().set(x, y, z);
+		getEntity().getRotation().set(0.0f, w, 0.0f);
 		getEntity().setMoved();
+	}
+
+	public String getUsername() {
+		return username;
 	}
 
 	@Override
@@ -47,6 +57,6 @@ public class ComponentMultiplayer extends IComponentEntity {
 
 	@Override
 	public void dispose() {
-		players.remove(username);
+		//	players.remove(username);
 	}
 }

@@ -22,12 +22,8 @@ public class KosmosServer extends Framework {
 
 		@Override
 		public void init() {
-			int serverPort = KosmosConfigs.configServer.getIntWithDefault("server_ip", 2266, FlounderNetwork::getPort);
-
-			if (KosmosConfigs.configServer.getBooleanWithDefault("server_hosting", true, null)) {
-				FlounderNetwork.setup(serverPort);
-				FlounderNetwork.startServer();
-			}
+			int serverPort = KosmosConfigs.configServer.getIntWithDefault("server_port", FlounderNetwork.getPort(), FlounderNetwork::getPort);
+			FlounderNetwork.startServer(serverPort);
 		}
 
 		@Override

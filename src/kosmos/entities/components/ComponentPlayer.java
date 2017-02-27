@@ -12,55 +12,66 @@ package kosmos.entities.components;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.physics.*;
 import kosmos.network.*;
 
-import java.util.*;
-
 public class ComponentPlayer extends IComponentEntity {
 	public static final int ID = EntityIDAssigner.getId();
 
-	private Vector3f startPosition;
-	private Vector3f startRotation;
+	private Vector3f lastPosition;
+	private Vector3f lastRotation;
+	private int lastPlayerCount;
+	private boolean needSendData;
+
+	private Timer timer;
 
 	public ComponentPlayer(Entity entity) {
 		super(entity, ID);
-		this.startPosition = new Vector3f(entity.getPosition());
-		this.startRotation = new Vector3f(entity.getRotation());
+		this.lastPosition = new Vector3f();
+		this.lastRotation = new Vector3f();
+		this.lastPlayerCount = 0;
+		this.needSendData = true;
 
-		Timer timerDashboard = new Timer();
-		timerDashboard.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				if (FlounderNetwork.getSocketClient() != null) {
-					new PacketMove(FlounderNetwork.getUsername(), getEntity().getPosition()).writeData(FlounderNetwork.getSocketClient());
-				}
-			}
-		}, 0, 100);
+		this.timer = new Timer(0.05); // 20 ticks per second.
 	}
 
 	@Override
 	public void update() {
+		if (ComponentMultiplayer.players.size() != lastPlayerCount) {
+			lastPlayerCount = ComponentMultiplayer.players.size();
+			sendData();
+		}
+
 		if (FlounderCamera.getPlayer() == null) {
 			return;
 		}
 
 		getEntity().getPosition().set(FlounderCamera.getPlayer().getPosition());
-		Vector3f.add(getEntity().getPosition(), startPosition, getEntity().getPosition());
-
 		getEntity().getRotation().set(FlounderCamera.getPlayer().getRotation());
-		Vector3f.add(getEntity().getRotation(), startRotation, getEntity().getRotation());
 
-		/*for (Chunk chunk : KosmosChunks.getChunks()) {
-			if (chunk.getBounding() != null && (chunk.getBounding().contains(getEntity().getBounding()) || chunk.getBounding().intersects((AABB) getEntity().getBounding()).isIntersection())) {
-				FlounderLogger.log("Player in chunk: " + chunk.toString());
-				return;
+		if (!getEntity().getPosition().equals(lastPosition) || !getEntity().getRotation().equals(lastRotation)) {
+			getEntity().setMoved();
+
+			if (!needSendData) {
+				needSendData = true;
+				timer.resetStartTime();
 			}
-		}*/
 
-		getEntity().setMoved();
+			lastPosition.set(getEntity().getPosition());
+			lastRotation.set(getEntity().getRotation());
+		}
+
+		if (needSendData && timer.isPassedTime()) {
+			needSendData = false;
+			sendData();
+		}
+	}
+
+	private void sendData() {
+		new PacketMove(FlounderNetwork.getUsername(), getEntity().getPosition(), getEntity().getRotation()).writeData(FlounderNetwork.getSocketClient());
 	}
 
 	@Override

@@ -35,6 +35,9 @@ public class KosmosInterface extends Standard {
 	private KeyButton aabbs;
 	private KeyButton closeWindow;
 
+	private String serverIP;
+	private int serverPort;
+
 	public KosmosInterface() {
 		super(FlounderDisplay.class, FlounderKeyboard.class, KosmosWorld.class, KosmosChunks.class, KosmosWater.class, FlounderNetwork.class);
 	}
@@ -52,7 +55,9 @@ public class KosmosInterface extends Standard {
 		this.aabbs = new KeyButton(GLFW_KEY_O);
 		this.closeWindow = new KeyButton(GLFW_KEY_DELETE);
 
-		FlounderNetwork.startClient(KosmosConfigs.configServer.getStringWithDefault("client_connect", "localhost", null)); // FlounderNetwork.getSocketClient()::getIpAddress
+		this.serverIP = KosmosConfigs.configServer.getStringWithDefault("connect_ip", "localhost", this::getServerIP);
+		this.serverPort = KosmosConfigs.configServer.getIntWithDefault("connect_port", FlounderNetwork.getPort(), this::getServerPort);
+		FlounderNetwork.startClient(serverIP, serverPort);
 
 		FlounderEvents.addEvent(new IEvent() {
 			@Override
@@ -137,9 +142,17 @@ public class KosmosInterface extends Standard {
 
 	}
 
+	public String getServerIP() {
+		return serverIP;
+	}
+
+	public int getServerPort() {
+		return serverPort;
+	}
+
 	@Override
 	public void dispose() {
-	//	SteamAPI.shutdown();
+		//	SteamAPI.shutdown();
 		KosmosConfigs.closeConfigs();
 	}
 
