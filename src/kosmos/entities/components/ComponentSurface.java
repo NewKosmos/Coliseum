@@ -96,16 +96,16 @@ public class ComponentSurface extends IComponentEntity implements IComponentEdit
 
 	@Override
 	public void addToPanel(JPanel panel) {
-		// Shinde Damper Slider.
+		// Shine Damper Slider.
 		JSlider sliderShineDamper = new JSlider(JSlider.HORIZONTAL, 0, 500, (int) (shineDamper * 100.0f));
 		sliderShineDamper.setToolTipText("Shine Damper");
 		sliderShineDamper.addChangeListener((ChangeEvent e) -> {
 			JSlider source = (JSlider) e.getSource();
 			int reading = source.getValue();
-			shineDamper = reading / 100.0f;
+			this.shineDamper = reading / 100.0f;
 		});
-		sliderShineDamper.setMajorTickSpacing(25);
-		sliderShineDamper.setMinorTickSpacing(10);
+		sliderShineDamper.setMajorTickSpacing(100);
+		sliderShineDamper.setMinorTickSpacing(50);
 		sliderShineDamper.setPaintTicks(true);
 		sliderShineDamper.setPaintLabels(true);
 		panel.add(sliderShineDamper);
@@ -116,17 +116,17 @@ public class ComponentSurface extends IComponentEntity implements IComponentEdit
 		sliderReflectivity.addChangeListener((ChangeEvent e) -> {
 			JSlider source = (JSlider) e.getSource();
 			int reading = source.getValue();
-			reflectivity = reading / 100.0f;
+			this.reflectivity = reading / 100.0f;
 		});
-		sliderReflectivity.setMajorTickSpacing(25);
-		sliderReflectivity.setMinorTickSpacing(10);
+		sliderReflectivity.setMajorTickSpacing(100);
+		sliderReflectivity.setMinorTickSpacing(50);
 		sliderReflectivity.setPaintTicks(true);
 		sliderReflectivity.setPaintLabels(true);
 		panel.add(sliderReflectivity);
 
 		// Ignore Fog Checkbox.
 		JCheckBox boxIgnoreFog = new JCheckBox("Ignore Fog");
-		boxIgnoreFog.setSelected(FlounderBounding.renders());
+		boxIgnoreFog.setSelected(this.ignoreFog);
 		boxIgnoreFog.addItemListener((ItemEvent e) -> {
 			this.ignoreFog = boxIgnoreFog.isSelected();
 		});
@@ -134,7 +134,7 @@ public class ComponentSurface extends IComponentEntity implements IComponentEdit
 
 		// Ignore Shadows Checkbox.
 		JCheckBox boxIgnoreShadows = new JCheckBox("Ignore Shadows");
-		boxIgnoreShadows.setSelected(FlounderBounding.renders());
+		boxIgnoreShadows.setSelected(this.ignoreShadows);
 		boxIgnoreShadows.addItemListener((ItemEvent e) -> {
 			this.ignoreShadows = boxIgnoreShadows.isSelected();
 		});

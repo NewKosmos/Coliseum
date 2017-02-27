@@ -19,6 +19,7 @@ import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
 
 import javax.swing.*;
+import javax.swing.event.*;
 
 public class ComponentLight extends IComponentEntity implements IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
@@ -46,7 +47,12 @@ public class ComponentLight extends IComponentEntity implements IComponentEditor
 	public ComponentLight(Entity entity, Vector3f offset, Colour colour, Attenuation attenuation) {
 		super(entity, ID);
 		this.offset = offset;
-		this.light = new Light(colour, Vector3f.add(entity.getPosition(), offset, null), attenuation);
+
+		if (entity != null) {
+			this.light = new Light(colour, Vector3f.add(entity.getPosition(), offset, null), attenuation);
+		} else {
+			this.light = new Light(colour, new Vector3f(offset), attenuation);
+		}
 	}
 
 	@Override
@@ -62,6 +68,80 @@ public class ComponentLight extends IComponentEntity implements IComponentEditor
 
 	@Override
 	public void addToPanel(JPanel panel) {
+		// Attenuation Constant Slider.
+		JSlider sliderAttenuationC = new JSlider(JSlider.HORIZONTAL, 0, 500, (int) (light.attenuation.constant * 100.0f));
+		sliderAttenuationC.setToolTipText("Attenuation Constant");
+		sliderAttenuationC.addChangeListener((ChangeEvent e) -> {
+			JSlider source = (JSlider) e.getSource();
+			int reading = source.getValue();
+			light.attenuation.constant = reading / 100.0f;
+		});
+		sliderAttenuationC.setMajorTickSpacing(100);
+		sliderAttenuationC.setMinorTickSpacing(50);
+		sliderAttenuationC.setPaintTicks(true);
+		sliderAttenuationC.setPaintLabels(true);
+		panel.add(sliderAttenuationC);
+
+		// Attenuation Linear Slider.
+		JSlider sliderAttenuationL = new JSlider(JSlider.HORIZONTAL, 0, 500, (int) (light.attenuation.linear * 100.0f));
+		sliderAttenuationL.setToolTipText("Attenuation Linear");
+		sliderAttenuationL.addChangeListener((ChangeEvent e) -> {
+			JSlider source = (JSlider) e.getSource();
+			int reading = source.getValue();
+			light.attenuation.linear = reading / 100.0f;
+		});
+		sliderAttenuationL.setMajorTickSpacing(100);
+		sliderAttenuationL.setMinorTickSpacing(50);
+		sliderAttenuationL.setPaintTicks(true);
+		sliderAttenuationL.setPaintLabels(true);
+		panel.add(sliderAttenuationL);
+
+		// Attenuation Exponent Slider.
+		JSlider sliderAttenuationE = new JSlider(JSlider.HORIZONTAL, 0, 500, (int) (light.attenuation.exponent * 100.0f));
+		sliderAttenuationE.setToolTipText("Attenuation Exponent");
+		sliderAttenuationE.addChangeListener((ChangeEvent e) -> {
+			JSlider source = (JSlider) e.getSource();
+			int reading = source.getValue();
+			light.attenuation.exponent = reading / 100.0f;
+		});
+		sliderAttenuationE.setMajorTickSpacing(100);
+		sliderAttenuationE.setMinorTickSpacing(50);
+		sliderAttenuationE.setPaintTicks(true);
+		sliderAttenuationE.setPaintLabels(true);
+		panel.add(sliderAttenuationE);
+
+		// X Offset Field.
+		JSpinner xOffsetField = new JSpinner(new SpinnerNumberModel((double) offset.x, Double.NEGATIVE_INFINITY + 1.0, Double.POSITIVE_INFINITY - 1.0, 0.1));
+		xOffsetField.setToolTipText("Light X Offset");
+		xOffsetField.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				offset.x = (float) (double) ((JSpinner) e.getSource()).getValue();
+			}
+		});
+		panel.add(xOffsetField);
+
+		// Y Offset Field.
+		JSpinner yOffsetField = new JSpinner(new SpinnerNumberModel((double) offset.x, Double.NEGATIVE_INFINITY + 1.0, Double.POSITIVE_INFINITY - 1.0, 0.1));
+		yOffsetField.setToolTipText("Light Y Offset");
+		yOffsetField.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				offset.y = (float) (double) ((JSpinner) e.getSource()).getValue();
+			}
+		});
+		panel.add(yOffsetField);
+
+		// Z Offset Field.
+		JSpinner zOffsetField = new JSpinner(new SpinnerNumberModel((double) offset.x, Double.NEGATIVE_INFINITY + 1.0, Double.POSITIVE_INFINITY - 1.0, 0.1));
+		yOffsetField.setToolTipText("Light Z Offset");
+		zOffsetField.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				offset.z = (float) (double) ((JSpinner) e.getSource()).getValue();
+			}
+		});
+		panel.add(zOffsetField);
 	}
 
 	@Override

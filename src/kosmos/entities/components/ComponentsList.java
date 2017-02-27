@@ -16,6 +16,8 @@ public enum ComponentsList {
 	SURFACE(new ComponentSurface(null)),
 	SWAY(new ComponentSway(null));
 
+	public static final ComponentsList[] LIST = ComponentsList.values();
+
 	private final IComponentEntity component;
 
 	ComponentsList(IComponentEntity component) {

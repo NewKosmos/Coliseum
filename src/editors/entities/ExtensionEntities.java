@@ -58,6 +58,7 @@ public class ExtensionEntities extends IEditorType {
 
 		focusEntity = new Entity(FlounderEntities.getEntities(), new Vector3f(), new Vector3f());
 		//focusEntity = FlounderEntities.load("dragon").createEntity(FlounderEntities.getEntities(), new Vector3f(), new Vector3f());
+		forceAddComponents();
 	}
 
 	@Override
@@ -72,42 +73,9 @@ public class ExtensionEntities extends IEditorType {
 			}
 
 			focusEntity = FlounderEntities.load(loadFromEntity).createEntity(FlounderEntities.getEntities(), new Vector3f(), new Vector3f());
-
-			for (IComponentEntity component : focusEntity.getComponents()) {
-				IComponentEditor editorComponent = null;
-
-				for (ComponentsList c : ComponentsList.values()) {
-					if (c.getComponent() instanceof IComponentEditor) {
-						if (c.getComponent().getId() == component.getId()) {
-							try {
-								FlounderLogger.log("Adding component: " + component);
-								Class componentClass = Class.forName(c.getComponent().getClass().getName());
-								Class[] componentTypes = new Class[]{IComponentEntity.class};
-								@SuppressWarnings("unchecked") Constructor componentConstructor = componentClass.getConstructor(componentTypes);
-								Object[] componentParameters = new Object[]{component};
-								editorComponent = (IComponentEditor) componentConstructor.newInstance(componentParameters);
-							} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException ex) {
-								FlounderLogger.error("While loading component" + c.getComponent() + "'s constructor could not be found!");
-								FlounderLogger.exception(ex);
-							}
-
-							break;
-						}
-					}
-				}
-
-				FrameEntities.editorComponents.add(editorComponent);
-
-				if (editorComponent != null) {
-					JPanel panel = IComponentEditor.makeTextPanel();
-					editorComponent.addToPanel(panel);
-					FrameEntities.componentAddRemove(panel, editorComponent);
-					FrameEntities.addSideTab(IComponentEditor.getTabName(editorComponent), panel);
-				}
-			}
+			forceAddComponents();
 
 			FrameEntities.nameField.setText(loadFromEntity);
-			//	FrameEntities.addSidePane();
 			loadFromEntity = null;
 		}
 
@@ -123,6 +91,41 @@ public class ExtensionEntities extends IEditorType {
 				}
 
 				focusEntity.move(componentModel.getEntity().getPosition().set(0.0f, (float) height / -2.0f, 0.0f), FlounderCamera.getPlayer().getRotation());
+			}
+		}
+	}
+
+	private void forceAddComponents() {
+		for (IComponentEntity component : focusEntity.getComponents()) {
+			IComponentEditor editorComponent = null;
+
+			for (ComponentsList c : ComponentsList.LIST) {
+				if (c.getComponent() instanceof IComponentEditor) {
+					if (c.getComponent().getId() == component.getId()) {
+						try {
+							FlounderLogger.log("Adding component: " + component);
+							Class componentClass = Class.forName(c.getComponent().getClass().getName());
+							Class[] componentTypes = new Class[]{IComponentEntity.class};
+							@SuppressWarnings("unchecked") Constructor componentConstructor = componentClass.getConstructor(componentTypes);
+							Object[] componentParameters = new Object[]{component};
+							editorComponent = (IComponentEditor) componentConstructor.newInstance(componentParameters);
+						} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException ex) {
+							FlounderLogger.error("While loading component" + c.getComponent() + "'s constructor could not be found!");
+							FlounderLogger.exception(ex);
+						}
+
+						break;
+					}
+				}
+			}
+
+			FrameEntities.editorComponents.add(editorComponent);
+
+			if (editorComponent != null) {
+				JPanel panel = IComponentEditor.makeTextPanel();
+				editorComponent.addToPanel(panel);
+				FrameEntities.componentAddRemove(panel, editorComponent);
+				FrameEntities.addSideTab(IComponentEditor.getTabName(editorComponent), panel);
 			}
 		}
 	}

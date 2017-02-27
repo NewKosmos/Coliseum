@@ -65,8 +65,8 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 	public void update() {
 		if (particleSystem != null) {
 			if (particleSystem.getTypes().isEmpty()) {
-				particleSystem.addParticleType(KosmosParticles.load("cosmic"));
-				particleSystem.addParticleType(KosmosParticles.load("cosmicHot"));
+				particleSystem.addParticleType(KosmosParticles.load("rain"));
+				particleSystem.addParticleType(KosmosParticles.load("snow"));
 			}
 
 			if (super.getEntity().hasMoved()) {
@@ -94,7 +94,6 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 	@Override
 	public void addToPanel(JPanel panel) {
 		// PPS Slider.
-		//	panel.add(new JLabel("PPS Slider: "));
 		JSlider ppsSlider = new JSlider(JSlider.HORIZONTAL, 0, 2500, (int) particleSystem.getPPS());
 		ppsSlider.setToolTipText("Particles Per Second");
 		ppsSlider.addChangeListener(new ChangeListener() {
@@ -105,8 +104,6 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 				particleSystem.setPps(reading);
 			}
 		});
-
-		// Turn on labels at major tick marks.
 		ppsSlider.setMajorTickSpacing(500);
 		ppsSlider.setMinorTickSpacing(100);
 		ppsSlider.setPaintTicks(true);
@@ -114,7 +111,6 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 		panel.add(ppsSlider);
 
 		// Gravity Effect Slider.
-		//	panel.add(new JLabel("Gravity Slider: "));
 		JSlider gravityEffectSlider = new JSlider(JSlider.HORIZONTAL, -150, 150, (int) (particleSystem.getGravityEffect() * 100.0f));
 		gravityEffectSlider.setToolTipText("Gravity Effect");
 		gravityEffectSlider.addChangeListener(new ChangeListener() {
@@ -125,8 +121,6 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 				particleSystem.setGravityEffect(reading / 100.0f);
 			}
 		});
-
-		// Turn on labels at major tick marks.
 		gravityEffectSlider.setMajorTickSpacing(50);
 		gravityEffectSlider.setMinorTickSpacing(10);
 		gravityEffectSlider.setPaintTicks(true);
@@ -134,7 +128,6 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 		panel.add(gravityEffectSlider);
 
 		// Speed Slider.
-		//	panel.add(new JLabel("Speed Slider: "));
 		JSlider speedSlider = new JSlider(JSlider.HORIZONTAL, 0, 150, (int) (particleSystem.getAverageSpeed() * 10.0f));
 		speedSlider.setToolTipText("Speed Slider");
 		speedSlider.addChangeListener(new ChangeListener() {
@@ -145,8 +138,6 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 				particleSystem.setAverageSpeed(reading / 10.0f);
 			}
 		});
-
-		// Turn on labels at major tick marks.
 		speedSlider.setMajorTickSpacing(30);
 		speedSlider.setMinorTickSpacing(5);
 		speedSlider.setPaintTicks(true);

@@ -89,7 +89,9 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 	}
 
 	private void sendData() {
-		new PacketMove(FlounderNetwork.getUsername(), getEntity().getPosition(), getEntity().getRotation()).writeData(FlounderNetwork.getSocketClient());
+		if (FlounderNetwork.getUsername() != null && FlounderNetwork.getSocketClient() != null) {
+			new PacketMove(FlounderNetwork.getUsername(), getEntity().getPosition(), getEntity().getRotation()).writeData(FlounderNetwork.getSocketClient());
+		}
 	}
 
 	@Override

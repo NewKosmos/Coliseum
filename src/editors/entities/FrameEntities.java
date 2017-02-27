@@ -126,7 +126,7 @@ public class FrameEntities extends Standard {
 		// Component Dropdown.
 		componentDropdown = new JComboBox();
 
-		for (ComponentsList c : ComponentsList.values()) {
+		for (ComponentsList c : ComponentsList.LIST) {
 			if (c.getComponent() instanceof IComponentEditor) {
 				String tabName = IComponentEditor.getTabName((IComponentEditor) c.getComponent());
 				componentDropdown.addItem(tabName);
@@ -143,7 +143,7 @@ public class FrameEntities extends Standard {
 				String component = (String) componentDropdown.getSelectedItem();
 				IComponentEditor editorComponent = null;
 
-				for (ComponentsList c : ComponentsList.values()) {
+				for (ComponentsList c : ComponentsList.LIST) {
 					if (c.getComponent() instanceof IComponentEditor) {
 						String tabName = IComponentEditor.getTabName((IComponentEditor) c.getComponent());
 
