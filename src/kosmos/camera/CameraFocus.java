@@ -23,13 +23,23 @@ import kosmos.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class CameraFocus extends Camera {
+	// Defines basic view frustum sizes.
 	private static final float NEAR_PLANE = 0.1f;
-	private static final float FAR_PLANE = 700.0f;
-	private static final float FIELD_OF_VIEW = 45.0f;
+	private static final float FAR_PLANE = 300.0f;
+	private static final float FIELD_OF_VIEW = 40.0f;
 
+	// Defines how snappy these camera functions will be.
 	private static final float ZOOM_AGILITY = 8.0f;
-	private static final float ROTATE_AGILITY = 6.0f;
+	private static final float ROTATE_AGILITY = 8.0f;
 	private static final float PITCH_AGILITY = 8.0f;
+
+	// Defines the strength of motion from the mouse.
+	private static final float INFLUENCE_OF_MOUSE_DY = 300.0f;
+	private static final float INFLUENCE_OF_MOUSE_DX = INFLUENCE_OF_MOUSE_DY * 100.0f;
+	private static final float INFLUENCE_OF_MOUSE_WHEEL = 0.1f;
+
+	private static final float MAX_HORIZONTAL_CHANGE = 800.0f;
+	private static final float MAX_VERTICAL_CHANGE = 8.0f;
 
 	private static final float CAMERA_AIM_OFFSET = 2.0f;
 	private static final float MAX_ANGLE_OF_ELEVATION = (float) Math.PI / 4.0f;
@@ -38,13 +48,6 @@ public class CameraFocus extends Camera {
 	private static final float MINIMUM_ZOOM = 0.5f;
 	private static final float MAXIMUM_ZOOM = 28.0f;
 	private static final float NORMAL_ZOOM = 8.0f;
-
-	private static final float MAX_HORIZONTAL_CHANGE = 800.0f;
-	private static final float MAX_VERTICAL_CHANGE = 8.0f;
-
-	private static final float INFLUENCE_OF_MOUSEDY = -300.0f;
-	private static final float INFLUENCE_OF_MOUSEDX = INFLUENCE_OF_MOUSEDY * 100.0f;
-	private static final float INFLUENCE_OF_MOUSE_WHEEL = 10.0f;
 
 	private Vector3f position;
 	private Vector3f rotation;
@@ -72,6 +75,17 @@ public class CameraFocus extends Camera {
 
 	@Override
 	public void init() {
+		/*FlounderEvents.addEvent(new IEvent() {
+			private KeyButton k = new KeyButton(GLFW.GLFW_KEY_KP_ADD);
+			@Override public boolean eventTriggered() {return k.wasDown();}
+			@Override public void onEvent() {FIELD_OF_VIEW += 2.0f; FlounderLogger.log("FOV: " + FIELD_OF_VIEW);}
+		});
+		FlounderEvents.addEvent(new IEvent() {
+			private KeyButton k = new KeyButton(org.lwjgl.glfw.GLFW.GLFW_KEY_KP_SUBTRACT);
+			@Override public boolean eventTriggered() {return k.wasDown();}
+			@Override public void onEvent() {FIELD_OF_VIEW -= 2.0f; FlounderLogger.log("FOV: " + FIELD_OF_VIEW);}
+		});*/
+
 		this.position = new Vector3f();
 		this.rotation = new Vector3f();
 
@@ -79,7 +93,7 @@ public class CameraFocus extends Camera {
 		this.viewMatrix = new Matrix4f();
 		this.projectionMatrix = new Matrix4f();
 
-		this.angleOfElevation = (float) Math.PI / 8.0f;
+		this.angleOfElevation = KosmosConfigs.configSave.getFloatWithDefault("camera_elevation", (float) Math.PI / 8.0f, () -> targetElevation);
 		this.angleAroundPlayer = KosmosConfigs.configSave.getFloatWithDefault("camera_angle", 0.0f, () -> targetRotationAngle);
 
 		this.targetPosition = new Vector3f();
@@ -143,7 +157,7 @@ public class CameraFocus extends Camera {
 		float angleChange = 0.0f;
 
 		if (FlounderMouse.getMouse(GLFW_MOUSE_BUTTON_RIGHT)) {
-			angleChange = FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSEDX;
+			angleChange = -FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSE_DX;
 		}
 
 		if (angleChange > MAX_HORIZONTAL_CHANGE * delta) {
@@ -166,7 +180,7 @@ public class CameraFocus extends Camera {
 		float angleChange = 0.0f;
 
 		if (FlounderMouse.getMouse(GLFW_MOUSE_BUTTON_RIGHT)) {
-			angleChange = -FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSEDY;
+			angleChange = FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSE_DY;
 		}
 
 		if (angleChange > MAX_VERTICAL_CHANGE * delta) {
@@ -185,23 +199,19 @@ public class CameraFocus extends Camera {
 	}
 
 	private void calculateZoom() {
-		float zoomLevel = 0.0f;
+		float zoomChange = 0.0f;
 
 		if (Math.abs(Maths.deadband(0.1f, FlounderMouse.getDeltaWheel())) > 0.0f) {
-			zoomLevel = FlounderMouse.getDeltaWheel();
+			zoomChange = FlounderMouse.getDeltaWheel() * INFLUENCE_OF_MOUSE_WHEEL;
 		}
 
-		zoomLevel = zoomLevel / INFLUENCE_OF_MOUSE_WHEEL;
-
-		// if (zoomLevel != 0) {
-		targetZoom -= zoomLevel;
+		targetZoom -= zoomChange;
 
 		if (targetZoom < MINIMUM_ZOOM) {
 			targetZoom = MINIMUM_ZOOM;
 		} else if (targetZoom > MAXIMUM_ZOOM) {
 			targetZoom = MAXIMUM_ZOOM;
 		}
-		// }
 	}
 
 	private void updateActualZoom() {
@@ -233,8 +243,22 @@ public class CameraFocus extends Camera {
 
 	private void updatePitchAngle() {
 		float offset = targetElevation - angleOfElevation;
+		if (Math.abs(offset) > Maths.DEGREES_IN_HALF_CIRCLE) {
+			if (offset < 0) {
+				offset = targetElevation + Maths.DEGREES_IN_CIRCLE - angleOfElevation;
+			} else {
+				offset = targetElevation - Maths.DEGREES_IN_CIRCLE - angleOfElevation;
+			}
+		}
+
 		float change = offset * Framework.getDelta() * PITCH_AGILITY;
 		angleOfElevation += change;
+
+		if (angleOfElevation >= Maths.DEGREES_IN_HALF_CIRCLE) {
+			angleOfElevation -= Maths.DEGREES_IN_CIRCLE;
+		} else if (angleOfElevation <= -Maths.DEGREES_IN_HALF_CIRCLE) {
+			angleOfElevation += Maths.DEGREES_IN_CIRCLE;
+		}
 	}
 
 	private void calculateDistances() {
