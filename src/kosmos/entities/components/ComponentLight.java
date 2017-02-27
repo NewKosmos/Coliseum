@@ -11,19 +11,38 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.entities.template.*;
+import flounder.helpers.*;
 import flounder.lights.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
-import flounder.physics.*;
 import flounder.physics.bounding.*;
 
-public class ComponentLight extends IComponentEntity {
+import javax.swing.*;
+
+public class ComponentLight extends IComponentEntity implements IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
 	private Vector3f offset;
 	private Light light;
 
+	/**
+	 * Creates a new ComponentLight.
+	 *
+	 * @param entity The entity this component is attached to.
+	 */
+	public ComponentLight(Entity entity) {
+		this(entity, new Vector3f(), new Colour(1.0f, 1.0f, 1.0f), new Attenuation(1.0f, 0.0f, 0.0f));
+	}
+
+	/**
+	 * Creates a new ComponentLight.
+	 *
+	 * @param entity The entity this component is attached to.
+	 * @param offset
+	 * @param colour
+	 * @param attenuation
+	 */
 	public ComponentLight(Entity entity, Vector3f offset, Colour colour, Attenuation attenuation) {
 		super(entity, ID);
 		this.offset = offset;
@@ -42,12 +61,19 @@ public class ComponentLight extends IComponentEntity {
 	}
 
 	@Override
-	public IBounding getBounding() {
-		return null;
+	public void addToPanel(JPanel panel) {
+	}
+
+	@Override
+	public void editorUpdate() {
+	}
+
+	@Override
+	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+		return new Pair<>(new String[]{}, new EntitySaverFunction[]{});
 	}
 
 	@Override
 	public void dispose() {
-
 	}
 }

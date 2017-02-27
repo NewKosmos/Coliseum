@@ -11,14 +11,38 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.physics.*;
+import flounder.entities.template.*;
+import flounder.helpers.*;
+import flounder.logger.*;
+import flounder.resources.*;
 import flounder.textures.*;
 
-public class ComponentSway extends IComponentEntity {
+import javax.swing.*;
+import java.awt.event.*;
+import java.io.*;
+
+public class ComponentSway extends IComponentEntity implements IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
 	private TextureObject textureSway;
 
+	private MyFile editorPathTexture;
+
+	/**
+	 * Creates a new ComponentSway.
+	 *
+	 * @param entity The entity this component is attached to.
+	 */
+	public ComponentSway(Entity entity) {
+		this(entity, null);
+	}
+
+	/**
+	 * Creates a new ComponentSway.
+	 *
+	 * @param entity The entity this component is attached to.
+	 * @param textureSway
+	 */
 	public ComponentSway(Entity entity, TextureObject textureSway) {
 		super(entity, ID);
 		this.textureSway = textureSway;
@@ -37,8 +61,69 @@ public class ComponentSway extends IComponentEntity {
 	}
 
 	@Override
-	public IBounding getBounding() {
-		return null;
+	public void addToPanel(JPanel panel) {
+		// Load Texture.
+		JButton loadTexture = new JButton("Select Texture");
+		loadTexture.addActionListener((ActionEvent ae) -> {
+			JFileChooser fileChooser = new JFileChooser();
+			File workingDirectory = new File(System.getProperty("user.dir"));
+			fileChooser.setCurrentDirectory(workingDirectory);
+			int returnValue = fileChooser.showOpenDialog(null);
+
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				String selectedFile = fileChooser.getSelectedFile().getAbsolutePath().replace("\\", "/");
+				this.editorPathTexture = new MyFile(selectedFile.split("/"));
+			}
+		});
+		panel.add(loadTexture);
+	}
+
+	@Override
+	public void editorUpdate() {
+		if (editorPathTexture != null && (textureSway == null || !textureSway.getFile().getPath().equals(editorPathTexture.getPath()))) {
+			if (editorPathTexture.getPath().contains(".png")) {
+				textureSway = TextureFactory.newBuilder().setFile(new MyFile(editorPathTexture)).create();
+			}
+
+			editorPathTexture = null;
+		}
+	}
+
+	@Override
+	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+		if (textureSway != null) {
+			try {
+				File file = new File("entities/" + entityName + "/" + entityName + "Sway.png");
+
+				if (file.exists()) {
+					file.delete();
+				}
+
+				file.createNewFile();
+
+				InputStream input = textureSway.getFile().getInputStream();
+				OutputStream output = new FileOutputStream(file);
+				byte[] buf = new byte[1024];
+				int bytesRead;
+
+				while ((bytesRead = input.read(buf)) > 0) {
+					output.write(buf, 0, bytesRead);
+				}
+
+				input.close();
+				output.close();
+			} catch (IOException e) {
+				FlounderLogger.exception(e);
+			}
+		}
+
+		String saveTexture = "Texture: " + (textureSway == null ? null : "res/entities/" + entityName + "/" + entityName + "Sway.png");
+		String saveTextureNumRows = "TextureNumRows: " + (textureSway == null ? 1 : textureSway.getNumberOfRows());
+
+		return new Pair<>(
+				new String[]{saveTexture, saveTextureNumRows},
+				new EntitySaverFunction[]{}
+		);
 	}
 
 	@Override

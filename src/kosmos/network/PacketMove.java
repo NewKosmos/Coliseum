@@ -1,8 +1,6 @@
 package kosmos.network;
 
 import flounder.entities.*;
-import flounder.logger.*;
-import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.networking.packets.*;

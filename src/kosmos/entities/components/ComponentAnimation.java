@@ -11,24 +11,28 @@ package kosmos.entities.components;
 
 import flounder.animation.*;
 import flounder.collada.*;
-import flounder.collada.geometry.*;
+import flounder.collada.animation.*;
 import flounder.collada.joints.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.entities.template.*;
 import flounder.helpers.*;
+import flounder.logger.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
-import flounder.physics.*;
 import flounder.resources.*;
 import flounder.textures.*;
 
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.event.*;
+import java.io.*;
 import java.util.*;
 
 /**
  * Creates a animation used to set animation properties.
  */
-public class ComponentAnimation extends IComponentEntity {
+public class ComponentAnimation extends IComponentEntity implements IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
 	private ModelAnimated model;
@@ -39,6 +43,18 @@ public class ComponentAnimation extends IComponentEntity {
 	private int textureIndex;
 
 	private Animator animator;
+
+	private MyFile editorPathCollada;
+	private MyFile editorPathTexture;
+
+	/**
+	 * Creates a new ComponentAnimation.
+	 *
+	 * @param entity The entity this component is attached to.
+	 */
+	public ComponentAnimation(Entity entity) {
+		this(entity, null, 1.0f, null, 1);
+	}
 
 	/**
 	 * Creates a new ComponentAnimation.
@@ -61,188 +77,6 @@ public class ComponentAnimation extends IComponentEntity {
 		if (model != null) {
 			model.getHeadJoint().calculateInverseBindTransform(Matrix4f.rotate(new Matrix4f(), new Vector3f(1.0f, 0.0f, 0.0f), (float) Math.toRadians(-90.0f), null));
 			this.animator = new Animator(model.getHeadJoint());
-		}
-	}
-
-	/**
-	 * Creates a new ComponentAnimation. From strings loaded from entity files.
-	 *
-	 * @param entity The entity this component is attached to.
-	 * @param template The entity template to load data from.
-	 */
-	public ComponentAnimation(Entity entity, EntityTemplate template) {
-		super(entity, ID);
-
-		{
-			String[] jointsData = template.getSectionData(ComponentAnimation.this, "Joints");
-			Pair<JointData, List<String>> headJoint = null;
-			Map<JointData, List<String>> allJoints = new HashMap<>();
-
-			boolean isHeadJoint = false;
-			int index = 0;
-			String name = "";
-			float[] localBindTransform = new float[16];
-			List<String> children = new ArrayList<>();
-
-			int id = 0;
-
-			for (int i = 0; i <= jointsData.length; i++) {
-				switch (id) {
-					case 0:
-						isHeadJoint = Boolean.parseBoolean(jointsData[i]);
-						break;
-					case 1:
-						index = Integer.parseInt(jointsData[i]);
-						break;
-					case 2:
-						name = jointsData[i];
-						break;
-					case 3:
-					case 4:
-					case 5:
-					case 6:
-					case 7:
-					case 8:
-					case 9:
-					case 10:
-					case 11:
-					case 12:
-					case 13:
-					case 14:
-					case 15:
-					case 16:
-					case 17:
-					case 18:
-						localBindTransform[id - 3] = Float.parseFloat(jointsData[i]);
-						break;
-					case 19:
-						if (i < jointsData.length) {
-							Collections.addAll(children, jointsData[i].split("\\|"));
-						}
-
-						if (isHeadJoint) {
-							headJoint = new Pair<>(new JointData(index, name, new Matrix4f(localBindTransform)), new ArrayList<>(children));
-						} else {
-							allJoints.put(new JointData(index, name, new Matrix4f(localBindTransform)), new ArrayList<>(children));
-						}
-
-						isHeadJoint = false;
-						index = 0;
-						name = "";
-						localBindTransform = new float[16];
-						children = new ArrayList<>();
-						id = -1;
-						break;
-				}
-
-				id++;
-			}
-
-			addChildren(headJoint.getFirst(), headJoint.getSecond(), allJoints);
-
-			this.model = new ModelAnimated(
-					new MeshData(
-							EntityTemplate.toFloatArray(template.getSectionData(ComponentAnimation.this, "Vertices")),
-							EntityTemplate.toFloatArray(template.getSectionData(ComponentAnimation.this, "TextureCoords")),
-							EntityTemplate.toFloatArray(template.getSectionData(ComponentAnimation.this, "Normals")),
-							EntityTemplate.toFloatArray(template.getSectionData(ComponentAnimation.this, "Tangents")),
-							EntityTemplate.toIntArray(template.getSectionData(ComponentAnimation.this, "Indices")),
-							EntityTemplate.toIntArray(template.getSectionData(ComponentAnimation.this, "JointIds")),
-							EntityTemplate.toFloatArray(template.getSectionData(ComponentAnimation.this, "VertexWeights")),
-							Float.parseFloat(template.getValue(this, "FurthestPoint"))
-					),
-					new JointsData(
-							Integer.parseInt(template.getValue(this, "JointCount")),
-							headJoint.getFirst()
-					)
-			);
-		}
-
-		{
-			float animationLength = Float.parseFloat(template.getValue(this, "AnimationLength"));
-			String[] animationData = template.getSectionData(ComponentAnimation.this, "Animation");
-
-			List<KeyFrameJoints> keyFrameJoints = new ArrayList<>();
-
-			float timeStamp = 0.0f;
-			String name = "";
-			Vector3f position = new Vector3f();
-			Quaternion rotation = new Quaternion();
-
-			int id = 0;
-
-			for (int i = 0; i < animationData.length; i++) {
-				switch (id) {
-					case 0:
-						timeStamp = Float.parseFloat(animationData[i]);
-						break;
-					case 1:
-						name = animationData[i];
-						break;
-					case 2:
-						position.x = Float.parseFloat(animationData[i]);
-						break;
-					case 3:
-						position.y = Float.parseFloat(animationData[i]);
-						break;
-					case 4:
-						position.z = Float.parseFloat(animationData[i]);
-						break;
-					case 5:
-						rotation.x = Float.parseFloat(animationData[i]);
-						break;
-					case 6:
-						rotation.y = Float.parseFloat(animationData[i]);
-						break;
-					case 7:
-						rotation.z = Float.parseFloat(animationData[i]);
-						break;
-					case 8:
-						rotation.w = Float.parseFloat(animationData[i]);
-						boolean set = false;
-
-						for (KeyFrameJoints frame : keyFrameJoints) {
-							if (frame.getTimeStamp() == timeStamp) {
-								frame.getJointKeyFrames().put(name, new JointTransform(new Vector3f(position), new Quaternion(rotation)));
-								set = true;
-							}
-						}
-
-						if (!set) {
-							KeyFrameJoints newFrame = new KeyFrameJoints(timeStamp, new HashMap<>());
-							newFrame.getJointKeyFrames().put(name, new JointTransform(new Vector3f(position), new Quaternion(rotation)));
-							keyFrameJoints.add(newFrame);
-						}
-
-						timeStamp = 0.0f;
-						name = "";
-						position = new Vector3f();
-						rotation = new Quaternion();
-						id = -1;
-						break;
-				}
-
-				id++;
-			}
-
-			keyFrameJoints.sort((KeyFrameJoints p1, KeyFrameJoints p2) -> (int) (p1.getTimeStamp() - p2.getTimeStamp()));
-			KeyFrameJoints[] frames = new KeyFrameJoints[keyFrameJoints.size()];
-
-			for (int i = 0; i < frames.length; i++) {
-				frames[i] = keyFrameJoints.get(i);
-			}
-
-			model.getHeadJoint().calculateInverseBindTransform(Matrix4f.rotate(new Matrix4f(), new Vector3f(1.0f, 0.0f, 0.0f), (float) Math.toRadians(-90.0f), null));
-			this.animator = new Animator(model.getHeadJoint());
-
-			Animation animation = new Animation(animationLength, frames);
-			doAnimation(animation);
-		}
-
-		this.scale = Float.parseFloat(template.getValue(this, "Scale"));
-
-		if (!template.getValue(this, "Texture").equals("null")) {
-			this.texture = TextureFactory.newBuilder().setFile(new MyFile(template.getValue(this, "Texture"))).setNumberOfRows(Integer.parseInt(template.getValue(this, "TextureNumRows"))).create();
 		}
 	}
 
@@ -400,8 +234,243 @@ public class ComponentAnimation extends IComponentEntity {
 	}
 
 	@Override
-	public IBounding getBounding() {
-		return null;
+	public void addToPanel(JPanel panel) {
+		// Load Collada.
+		JButton loadCollada = new JButton("Select Collada");
+		loadCollada.addActionListener((ActionEvent ae) -> {
+			JFileChooser fileChooser = new JFileChooser();
+			File workingDirectory = new File(System.getProperty("user.dir"));
+			fileChooser.setCurrentDirectory(workingDirectory);
+			int returnValue = fileChooser.showOpenDialog(null);
+
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				String selectedFile = fileChooser.getSelectedFile().getAbsolutePath().replace("\\", "/");
+				this.editorPathCollada = new MyFile(selectedFile.split("/"));
+			}
+		});
+		panel.add(loadCollada);
+
+		// Load Texture.
+		JButton loadTexture = new JButton("Select Texture");
+		loadTexture.addActionListener((ActionEvent ae) -> {
+			JFileChooser fileChooser = new JFileChooser();
+			File workingDirectory = new File(System.getProperty("user.dir"));
+			fileChooser.setCurrentDirectory(workingDirectory);
+			int returnValue = fileChooser.showOpenDialog(null);
+
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				String selectedFile = fileChooser.getSelectedFile().getAbsolutePath().replace("\\", "/");
+				this.editorPathTexture = new MyFile(selectedFile.split("/"));
+			}
+		});
+		panel.add(loadTexture);
+
+		// Scale Slider.
+		//	panel.add(new JLabel("Scale Slider: "));
+		JSlider scaleSlider = new JSlider(JSlider.HORIZONTAL, 0, 150, (int) (scale * 25.0f));
+		scaleSlider.setToolTipText("Model Scale");
+		scaleSlider.addChangeListener((ChangeEvent e) -> {
+			JSlider source = (JSlider) e.getSource();
+			int reading = source.getValue();
+			this.scale = reading / 25.0f;
+		});
+		scaleSlider.setMajorTickSpacing(25);
+		scaleSlider.setMinorTickSpacing(10);
+		scaleSlider.setPaintTicks(true);
+		scaleSlider.setPaintLabels(true);
+		panel.add(scaleSlider);
+	}
+
+	@Override
+	public void editorUpdate() {
+		if (editorPathCollada != null/*  && (model == null|| !model.getFile().equals(editorPathCollada.getPath()))*/) {
+			if (editorPathCollada.getPath().contains(".dae")) {
+				ModelAnimated modelAnimated = FlounderCollada.loadCollada(new MyFile(editorPathCollada));
+				AnimationData animationData = FlounderCollada.loadAnimation(new MyFile(editorPathCollada));
+				Animation animation = FlounderAnimation.loadAnimation(animationData);
+				this.model = modelAnimated;
+				doAnimation(animation);
+			}
+
+			editorPathCollada = null;
+		}
+
+		if (editorPathTexture != null && (texture == null || !texture.getFile().getPath().equals(editorPathTexture.getPath()))) {
+			if (editorPathTexture.getPath().contains(".png")) {
+				this.texture = TextureFactory.newBuilder().setFile(new MyFile(editorPathTexture)).create();
+			}
+
+			editorPathTexture = null;
+		}
+	}
+
+	@Override
+	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+		if (texture != null) {
+			try {
+				File file = new File("entities/" + entityName + "/" + entityName + "Diffuse.png");
+
+				if (file.exists()) {
+					file.delete();
+				}
+
+				file.createNewFile();
+
+				InputStream input = texture.getFile().getInputStream();
+				OutputStream output = new FileOutputStream(file);
+				byte[] buf = new byte[1024];
+				int bytesRead;
+
+				while ((bytesRead = input.read(buf)) > 0) {
+					output.write(buf, 0, bytesRead);
+				}
+
+				input.close();
+				output.close();
+			} catch (IOException e) {
+				FlounderLogger.exception(e);
+			}
+		}
+
+		EntitySaverFunction saveVertices = new EntitySaverFunction("Vertices") {
+			@Override
+			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
+				if (model != null) {
+					for (float v : model.getMeshData().getVertices()) {
+						String s = v + ",";
+						entityFileWriter.writeSegmentData(s);
+					}
+				}
+			}
+		};
+		EntitySaverFunction saveTextureCoords = new EntitySaverFunction("TextureCoords") {
+			@Override
+			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
+				if (model != null) {
+					for (float v : model.getMeshData().getTextures()) {
+						String s = v + ",";
+						entityFileWriter.writeSegmentData(s);
+					}
+				}
+			}
+		};
+		EntitySaverFunction saveNormals = new EntitySaverFunction("Normals") {
+			@Override
+			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
+				if (model != null) {
+					for (float v : model.getMeshData().getNormals()) {
+						String s = v + ",";
+						entityFileWriter.writeSegmentData(s);
+					}
+				}
+			}
+		};
+		EntitySaverFunction saveTangents = new EntitySaverFunction("Tangents") {
+			@Override
+			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
+				if (model != null) {
+					for (float v : model.getMeshData().getTangents()) {
+						String s = v + ",";
+						entityFileWriter.writeSegmentData(s);
+					}
+				}
+			}
+		};
+		EntitySaverFunction saveIndices = new EntitySaverFunction("Indices") {
+			@Override
+			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
+				if (model != null) {
+					for (int i : model.getMeshData().getIndices()) {
+						String s = i + ",";
+						entityFileWriter.writeSegmentData(s);
+					}
+				}
+			}
+		};
+		EntitySaverFunction saveJointIds = new EntitySaverFunction("JointIds") {
+			@Override
+			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
+				if (model != null) {
+					for (int i : model.getMeshData().getJointIds()) {
+						String s = i + ",";
+						entityFileWriter.writeSegmentData(s);
+					}
+				}
+			}
+		};
+		EntitySaverFunction saveVertexWeights = new EntitySaverFunction("VertexWeights") {
+			@Override
+			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
+				if (model != null) {
+					for (float v : model.getMeshData().getVertexWeights()) {
+						String s = v + ",";
+						entityFileWriter.writeSegmentData(s);
+					}
+				}
+			}
+		};
+		EntitySaverFunction saveJoints = new EntitySaverFunction("Joints") {
+			@Override
+			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
+				if (model != null && model.getJointsData() != null) {
+					Joint headJoint = model.getHeadJoint();
+					List<Joint> joints = new ArrayList<>();
+					headJoint.addSelfAndChildren(joints);
+
+					for (Joint joint : joints) {
+						String s = (joint == headJoint ? "true," : "false,") + joint.getIndex() + "," + joint.getName() + ",";
+
+						for (float v : Matrix4f.toArray(joint.getLocalBindTransform())) {
+							s += v + ",";
+						}
+
+						for (Joint c : joint.getChildren()) {
+							s += c.getName() + "|";
+						}
+
+						entityFileWriter.writeSegmentData(s + ",");
+					}
+
+					//public final int index;
+					//public final String name;
+					//public final List<Joint> children;
+					//private final Matrix4f localBindTransform;
+				}
+			}
+		};
+		EntitySaverFunction saveAnimation = new EntitySaverFunction("Animation") {
+			@Override
+			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
+				if (animator != null && animator.getCurrentAnimation() != null) {
+					Animation animation = animator.getCurrentAnimation();
+
+					for (KeyFrameJoints frame : animation.getKeyFrameJointss()) {
+						for (String name : frame.getJointKeyFrames().keySet()) {
+							JointTransform joint = frame.getJointKeyFrames().get(name);
+							Vector3f position = joint.getPosition();
+							Quaternion rotation = joint.getRotation();
+							String s = frame.getTimeStamp() + "," + name + "," + position.x + "," + position.y + "," + position.z + "," + rotation.x + "," + rotation.y + "," + rotation.z + "," + rotation.w + ",";
+							entityFileWriter.writeSegmentData(s);
+						}
+					}
+				}
+			}
+		};
+		// TODO: Save AABB and Hull.
+
+		String saveScale = "Scale: " + scale;
+		String saveFurthestPoint = "FurthestPoint: " + model.getMeshData().getFurthestPoint();
+
+		String saveTexture = "Texture: " + (texture == null ? null : "res/entities/" + entityName + "/" + entityName + "Diffuse.png");
+		String saveTextureNumRows = "TextureNumRows: " + (texture == null ? 1 : texture.getNumberOfRows());
+
+		String saveAnimationLength = "AnimationLength: " + (animator != null && animator.getCurrentAnimation() != null ? animator.getCurrentAnimation().getLength() : null);
+		String saveJointCount = "JointCount: " + (model != null && model.getJointsData() != null ? model.getJointsData().getJointCount() : null);
+
+		return new Pair<>(
+				new String[]{saveScale, saveFurthestPoint, saveTexture, saveTextureNumRows, saveAnimationLength, saveJointCount},
+				new EntitySaverFunction[]{saveVertices, saveTextureCoords, saveNormals, saveTangents, saveIndices, saveJointIds, saveVertexWeights, saveJoints, saveAnimation}
+		);
 	}
 
 	@Override

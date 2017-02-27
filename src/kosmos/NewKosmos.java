@@ -12,7 +12,6 @@ package kosmos;
 import flounder.devices.*;
 import flounder.fonts.*;
 import flounder.framework.*;
-import flounder.parsing.*;
 import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.resources.*;

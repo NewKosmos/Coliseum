@@ -12,20 +12,34 @@ package kosmos.entities.components;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.entities.template.*;
+import flounder.helpers.*;
 import flounder.maths.vectors.*;
-import flounder.physics.*;
 import kosmos.world.*;
 
-public class ComponentCelestial extends IComponentEntity {
+import javax.swing.*;
+
+public class ComponentCelestial extends IComponentEntity implements IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
 	private Vector3f startPosition;
 	private Vector3f startRotation;
 
+	/**
+	 * Creates a new ComponentCelestial.
+	 *
+	 * @param entity The entity this component is attached to.
+	 */
 	public ComponentCelestial(Entity entity) {
 		super(entity, ID);
-		this.startPosition = new Vector3f(entity.getPosition());
-		this.startRotation = new Vector3f(entity.getRotation());
+
+		if (entity != null) {
+			this.startPosition = new Vector3f(entity.getPosition());
+			this.startRotation = new Vector3f(entity.getRotation());
+		} else {
+			this.startPosition = new Vector3f();
+			this.startRotation = new Vector3f();
+		}
 	}
 
 	@Override
@@ -41,12 +55,19 @@ public class ComponentCelestial extends IComponentEntity {
 	}
 
 	@Override
-	public IBounding getBounding() {
-		return null;
+	public void addToPanel(JPanel panel) {
+	}
+
+	@Override
+	public void editorUpdate() {
+	}
+
+	@Override
+	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+		return new Pair<>(new String[]{}, new EntitySaverFunction[]{});
 	}
 
 	@Override
 	public void dispose() {
-
 	}
 }

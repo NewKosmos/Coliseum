@@ -12,15 +12,19 @@ package kosmos.entities.components;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.maths.*;
+import flounder.entities.template.*;
+import flounder.helpers.*;
+import flounder.maths.Timer;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
-import flounder.physics.*;
 import kosmos.network.*;
 
-public class ComponentPlayer extends IComponentEntity {
+import javax.swing.*;
+
+public class ComponentPlayer extends IComponentEntity implements IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
+	private float offsetY;
 	private Vector3f lastPosition;
 	private Vector3f lastRotation;
 	private int lastPlayerCount;
@@ -28,8 +32,20 @@ public class ComponentPlayer extends IComponentEntity {
 
 	private Timer timer;
 
+	/**
+	 * Creates a new ComponentPlayer.
+	 *
+	 * @param entity The entity this component is attached to.
+	 */
 	public ComponentPlayer(Entity entity) {
 		super(entity, ID);
+
+		if (entity != null) {
+			this.offsetY = entity.getPosition().y;
+		} else {
+			this.offsetY = 0.0f;
+		}
+
 		this.lastPosition = new Vector3f();
 		this.lastRotation = new Vector3f();
 		this.lastPlayerCount = 0;
@@ -51,6 +67,8 @@ public class ComponentPlayer extends IComponentEntity {
 
 		getEntity().getPosition().set(FlounderCamera.getPlayer().getPosition());
 		getEntity().getRotation().set(FlounderCamera.getPlayer().getRotation());
+
+		getEntity().getPosition().y += offsetY;
 
 		if (!getEntity().getPosition().equals(lastPosition) || !getEntity().getRotation().equals(lastRotation)) {
 			getEntity().setMoved();
@@ -75,12 +93,19 @@ public class ComponentPlayer extends IComponentEntity {
 	}
 
 	@Override
-	public IBounding getBounding() {
-		return null;
+	public void addToPanel(JPanel panel) {
+	}
+
+	@Override
+	public void editorUpdate() {
+	}
+
+	@Override
+	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+		return new Pair<>(new String[]{}, new EntitySaverFunction[]{});
 	}
 
 	@Override
 	public void dispose() {
-
 	}
 }

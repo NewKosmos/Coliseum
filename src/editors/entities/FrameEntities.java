@@ -8,7 +8,7 @@ import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.standards.*;
-import kosmos.entities.editing.*;
+import kosmos.entities.components.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -126,8 +126,11 @@ public class FrameEntities extends Standard {
 		// Component Dropdown.
 		componentDropdown = new JComboBox();
 
-		for (int i = 0; i < EditorsList.values().length; i++) {
-			componentDropdown.addItem(EditorsList.values()[i].getEditor().getTabName());
+		for (ComponentsList c : ComponentsList.values()) {
+			if (c.getComponent() instanceof IComponentEditor) {
+				String tabName = IComponentEditor.getTabName((IComponentEditor) c.getComponent());
+				componentDropdown.addItem(tabName);
+			}
 		}
 
 		mainPanel.add(componentDropdown);
@@ -140,22 +143,26 @@ public class FrameEntities extends Standard {
 				String component = (String) componentDropdown.getSelectedItem();
 				IComponentEditor editorComponent = null;
 
-				for (int i = 0; i < EditorsList.values().length; i++) {
-					if (EditorsList.values()[i].getEditor().getTabName().equals(component)) {
-						if (((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity != null && ((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity.getComponent(EditorsList.values()[i].getEditor().getComponent().getId()) == null) {
-							try {
-								FlounderLogger.log("Adding component: " + component);
-								Class componentClass = Class.forName(EditorsList.values()[i].getEditor().getClass().getName());
-								Class[] componentTypes = new Class[]{Entity.class};
-								@SuppressWarnings("unchecked") Constructor componentConstructor = componentClass.getConstructor(componentTypes);
-								Object[] componentParameters = new Object[]{((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity};
-								editorComponent = (IComponentEditor) componentConstructor.newInstance(componentParameters);
-							} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException ex) {
-								FlounderLogger.error("While loading component" + EditorsList.values()[i].getEditor() + "'s constructor could not be found!");
-								FlounderLogger.exception(ex);
+				for (ComponentsList c : ComponentsList.values()) {
+					if (c.getComponent() instanceof IComponentEditor) {
+						String tabName = IComponentEditor.getTabName((IComponentEditor) c.getComponent());
+
+						if (tabName.equals(component)) {
+							if (((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity != null && ((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity.getComponent(c.getComponent().getId()) == null) {
+								try {
+									FlounderLogger.log("Adding component: " + component);
+									Class componentClass = Class.forName(((IComponentEditor) c.getComponent()).getClass().getName());
+									Class[] componentTypes = new Class[]{Entity.class};
+									@SuppressWarnings("unchecked") Constructor componentConstructor = componentClass.getConstructor(componentTypes);
+									Object[] componentParameters = new Object[]{((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity};
+									editorComponent = (IComponentEditor) componentConstructor.newInstance(componentParameters);
+								} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException ex) {
+									FlounderLogger.error("While loading component" + c.getComponent() + "'s constructor could not be found!");
+									FlounderLogger.exception(ex);
+								}
+							} else {
+								FlounderLogger.error("Entity already has instance of " + c.getComponent());
 							}
-						} else {
-							FlounderLogger.error("Entity already has instance of " + EditorsList.values()[i].getEditor());
 						}
 					}
 				}
@@ -308,8 +315,8 @@ public class FrameEntities extends Standard {
 						JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 					editorComponents.remove(editorComponent);
-					removeSideTab(editorComponent.getTabName());
-					((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity.removeComponent(editorComponent.getComponent());
+					removeSideTab(IComponentEditor.getTabName(editorComponent));
+					((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity.removeComponent((IComponentEntity) editorComponent);
 				}
 			}
 		});
@@ -318,7 +325,7 @@ public class FrameEntities extends Standard {
 
 	@Override
 	public void update() {
-		editorComponents.forEach(IComponentEditor::update);
+		editorComponents.forEach(IComponentEditor::editorUpdate);
 
 		for (Pair<String, JPanel> p : IComponentEditor.ADD_SIDE_TAB) {
 			addSideTab(p.getFirst(), p.getSecond());

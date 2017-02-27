@@ -22,7 +22,6 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.*;
 import kosmos.entities.instances.*;
-import kosmos.world.*;
 
 import java.util.*;
 

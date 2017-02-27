@@ -12,15 +12,19 @@ package kosmos.entities.components;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.entities.template.*;
+import flounder.helpers.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
+
+import javax.swing.*;
+import java.awt.event.*;
 
 /**
  * Gives an object a collider for spatial interaction. Note that a collider doesn't necessarily need to be used for collision. A collider component can be used for any spatial interaction.
  * <p>
  * For example, a checkpoint can use a ComponentCollider to detect when the player has reached it.
  */
-public class ComponentCollider extends IComponentEntity {
+public class ComponentCollider extends IComponentEntity implements IComponentBounding, IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
 	private AABB aabb;
@@ -33,19 +37,6 @@ public class ComponentCollider extends IComponentEntity {
 	 * @param entity The entity this component is attached to.
 	 */
 	public ComponentCollider(Entity entity) {
-		super(entity, ID);
-		this.aabb = new AABB();
-		this.hull = new QuickHull();
-		this.renderAABB = true;
-	}
-
-	/**
-	 * Creates a new ComponentCollider. From strings loaded from entity files.
-	 *
-	 * @param entity The entity this component is attached to.
-	 * @param template The entity template to load data from.
-	 */
-	public ComponentCollider(Entity entity, EntityTemplate template) {
 		super(entity, ID);
 		this.aabb = new AABB();
 		this.hull = new QuickHull();
@@ -113,6 +104,25 @@ public class ComponentCollider extends IComponentEntity {
 	@Override
 	public IBounding getBounding() {
 		return aabb;
+	}
+
+	@Override
+	public void addToPanel(JPanel panel) {
+		JCheckBox renderAABB = new JCheckBox("Render AABB");
+		renderAABB.setSelected(FlounderBounding.renders());
+		renderAABB.addItemListener((ItemEvent e) -> {
+			this.renderAABB = renderAABB.isSelected();
+		});
+		panel.add(renderAABB);
+	}
+
+	@Override
+	public void editorUpdate() {
+	}
+
+	@Override
+	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+		return new Pair<>(new String[]{}, new EntitySaverFunction[]{});
 	}
 
 	@Override

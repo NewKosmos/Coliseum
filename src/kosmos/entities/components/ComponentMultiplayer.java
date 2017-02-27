@@ -9,30 +9,43 @@
 
 package kosmos.entities.components;
 
-import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.framework.*;
+import flounder.entities.template.*;
 import flounder.helpers.*;
-import flounder.maths.*;
-import flounder.maths.vectors.*;
-import flounder.physics.*;
-import flounder.visual.*;
 
+import javax.swing.*;
 import java.util.*;
 
-public class ComponentMultiplayer extends IComponentEntity {
+public class ComponentMultiplayer extends IComponentEntity implements IComponentEditor {
 	public static final Map<String, ComponentMultiplayer> players = new HashMap<>();
 
 	public static final int ID = EntityIDAssigner.getId();
 
 	private String username;
 
+	/**
+	 * Creates a new ComponentMultiplayer.
+	 *
+	 * @param entity The entity this component is attached to.
+	 */
+	public ComponentMultiplayer(Entity entity) {
+		this(entity, null);
+	}
+
+	/**
+	 * Creates a new ComponentMultiplayer.
+	 *
+	 * @param entity The entity this component is attached to.
+	 * @param username
+	 */
 	public ComponentMultiplayer(Entity entity, String username) {
 		super(entity, ID);
 		this.username = username;
 
-		players.put(username, this);
+		if (username != null) {
+			players.put(username, this);
+		}
 	}
 
 	@Override
@@ -51,12 +64,20 @@ public class ComponentMultiplayer extends IComponentEntity {
 	}
 
 	@Override
-	public IBounding getBounding() {
-		return null;
+	public void addToPanel(JPanel panel) {
+	}
+
+	@Override
+	public void editorUpdate() {
+	}
+
+	@Override
+	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+		return new Pair<>(new String[]{}, new EntitySaverFunction[]{});
 	}
 
 	@Override
 	public void dispose() {
-		//	players.remove(username);
+		players.remove(username);
 	}
 }

@@ -7,13 +7,10 @@ import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.framework.*;
 import flounder.helpers.*;
-import flounder.lights.*;
 import flounder.logger.*;
-import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
 import kosmos.entities.components.*;
-import kosmos.entities.editing.*;
 import kosmos.particles.*;
 import kosmos.world.*;
 
@@ -79,21 +76,23 @@ public class ExtensionEntities extends IEditorType {
 			for (IComponentEntity component : focusEntity.getComponents()) {
 				IComponentEditor editorComponent = null;
 
-				for (int i = 0; i < EditorsList.values().length; i++) {
-					if (EditorsList.values()[i].getEditor().getComponent().getId() == component.getId()) {
-						try {
-							FlounderLogger.log("Adding component: " + component);
-							Class componentClass = Class.forName(EditorsList.values()[i].getEditor().getClass().getName());
-							Class[] componentTypes = new Class[]{IComponentEntity.class};
-							@SuppressWarnings("unchecked") Constructor componentConstructor = componentClass.getConstructor(componentTypes);
-							Object[] componentParameters = new Object[]{component};
-							editorComponent = (IComponentEditor) componentConstructor.newInstance(componentParameters);
-						} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException ex) {
-							FlounderLogger.error("While loading component" + EditorsList.values()[i].getEditor() + "'s constructor could not be found!");
-							FlounderLogger.exception(ex);
-						}
+				for (ComponentsList c : ComponentsList.values()) {
+					if (c.getComponent() instanceof IComponentEditor) {
+						if (c.getComponent().getId() == component.getId()) {
+							try {
+								FlounderLogger.log("Adding component: " + component);
+								Class componentClass = Class.forName(c.getComponent().getClass().getName());
+								Class[] componentTypes = new Class[]{IComponentEntity.class};
+								@SuppressWarnings("unchecked") Constructor componentConstructor = componentClass.getConstructor(componentTypes);
+								Object[] componentParameters = new Object[]{component};
+								editorComponent = (IComponentEditor) componentConstructor.newInstance(componentParameters);
+							} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException ex) {
+								FlounderLogger.error("While loading component" + c.getComponent() + "'s constructor could not be found!");
+								FlounderLogger.exception(ex);
+							}
 
-						break;
+							break;
+						}
 					}
 				}
 
@@ -103,7 +102,7 @@ public class ExtensionEntities extends IEditorType {
 					JPanel panel = IComponentEditor.makeTextPanel();
 					editorComponent.addToPanel(panel);
 					FrameEntities.componentAddRemove(panel, editorComponent);
-					FrameEntities.addSideTab(editorComponent.getTabName(), panel);
+					FrameEntities.addSideTab(IComponentEditor.getTabName(editorComponent), panel);
 				}
 			}
 

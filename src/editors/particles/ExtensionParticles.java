@@ -4,8 +4,6 @@ import editors.editor.*;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.helpers.*;
-import flounder.lights.*;
-import flounder.maths.*;
 import flounder.maths.vectors.*;
 import kosmos.particles.*;
 import kosmos.particles.loading.*;

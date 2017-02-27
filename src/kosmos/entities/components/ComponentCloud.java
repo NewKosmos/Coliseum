@@ -11,18 +11,31 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.entities.template.*;
+import flounder.helpers.*;
 import flounder.maths.vectors.*;
-import flounder.physics.*;
 import kosmos.world.*;
 
-public class ComponentCloud extends IComponentEntity {
+import javax.swing.*;
+
+public class ComponentCloud extends IComponentEntity implements IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
 	private Vector3f startPosition;
 
+	/**
+	 * Creates a new ComponentCloud.
+	 *
+	 * @param entity The entity this component is attached to.
+	 */
 	public ComponentCloud(Entity entity) {
 		super(entity, ID);
-		this.startPosition = new Vector3f(entity.getPosition());
+
+		if (entity != null) {
+			this.startPosition = new Vector3f(entity.getPosition());
+		} else {
+			this.startPosition = new Vector3f();
+		}
 	}
 
 	@Override
@@ -32,12 +45,19 @@ public class ComponentCloud extends IComponentEntity {
 	}
 
 	@Override
-	public IBounding getBounding() {
-		return null;
+	public void addToPanel(JPanel panel) {
+	}
+
+	@Override
+	public void editorUpdate() {
+	}
+
+	@Override
+	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+		return new Pair<>(new String[]{}, new EntitySaverFunction[]{});
 	}
 
 	@Override
 	public void dispose() {
-
 	}
 }

@@ -12,15 +12,18 @@ package kosmos.entities.components;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.entities.template.*;
+import flounder.helpers.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
+
+import javax.swing.*;
 
 /**
  * Component that detects collision between two engine.entities.
  * <p>
  * Note: this component requires that both engine.entities have a ComponentCollider. Should one entity not have a ComponentCollider, then no collisions will be detected, because there is no collider to detect collisions against.
  */
-public class ComponentCollision extends IComponentEntity implements IComponentMove {
+public class ComponentCollision extends IComponentEntity implements IComponentMove, IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
 	/**
@@ -29,16 +32,6 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 	 * @param entity The entity this component is attached to.
 	 */
 	public ComponentCollision(Entity entity) {
-		super(entity, ID);
-	}
-
-	/**
-	 * Creates a new ComponentCollision. From strings loaded from entity files.
-	 *
-	 * @param entity The entity this component is attached to.
-	 * @param template The entity template to load data from.
-	 */
-	public ComponentCollision(Entity entity, EntityTemplate template) {
 		super(entity, ID);
 	}
 
@@ -151,16 +144,24 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 	}
 
 	@Override
-	public IBounding getBounding() {
-		return null;
-	}
-
-	@Override
 	public void move(Entity entity, Vector3f moveAmount, Vector3f rotateAmount) {
 		Vector3f move = resolveAABBCollisions(moveAmount);
 		Vector3f rotate = rotateAmount; // TODO: Stop some rotations?
 		entity.getPosition().set(entity.getPosition().x + move.x, entity.getPosition().y + move.y, entity.getPosition().z + move.z);
 		entity.getRotation().set(entity.getRotation().x + rotate.x, entity.getRotation().y + rotate.y, entity.getRotation().z + rotate.z);
+	}
+
+	@Override
+	public void addToPanel(JPanel panel) {
+	}
+
+	@Override
+	public void editorUpdate() {
+	}
+
+	@Override
+	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+		return new Pair<>(new String[]{}, new EntitySaverFunction[]{});
 	}
 
 	@Override

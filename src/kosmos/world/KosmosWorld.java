@@ -13,8 +13,6 @@ import flounder.entities.*;
 import flounder.framework.*;
 import flounder.lights.*;
 import flounder.maths.*;
-import flounder.maths.vectors.*;
-import kosmos.entities.instances.*;
 import kosmos.particles.*;
 
 public class KosmosWorld extends Module {

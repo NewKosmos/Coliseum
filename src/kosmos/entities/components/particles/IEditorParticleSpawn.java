@@ -1,4 +1,4 @@
-package kosmos.entities.editing.particles;
+package kosmos.entities.components.particles;
 
 import kosmos.particles.spawns.*;
 

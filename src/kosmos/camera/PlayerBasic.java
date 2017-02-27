@@ -16,7 +16,6 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import kosmos.*;
 import kosmos.chunks.*;
-import kosmos.world.*;
 import org.lwjgl.glfw.*;
 
 public class PlayerBasic extends Player {

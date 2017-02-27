@@ -11,8 +11,6 @@ package kosmos.filters;
 
 import flounder.camera.*;
 import flounder.entities.*;
-import flounder.logger.*;
-import flounder.maths.matrices.*;
 import flounder.post.*;
 import flounder.renderer.*;
 import flounder.resources.*;
@@ -23,7 +21,7 @@ import kosmos.shadows.*;
 import kosmos.world.*;
 
 public class FilterMRT extends PostFilter {
-	private static final int LIGHTS = 86;
+	private static final int LIGHTS = 64;
 
 	public FilterMRT() {
 		super("filterMrt", new MyFile(PostFilter.POST_LOC, "mrtFragment.glsl"));

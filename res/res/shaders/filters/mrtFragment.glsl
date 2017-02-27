@@ -4,9 +4,9 @@
 #include "maths.glsl"
 
 //---------CONSTANT------------
-const int LIGHTS = 86;
+const int LIGHTS = 64;
 
-const int SHADOW_PCF = 0;
+const int SHADOW_PCF = 1;
 const float SHADOW_BIAS = 0.001;
 const float SHADOW_DARKNESS = 0.6;
 
