@@ -232,9 +232,9 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 	}
 
 	@Override
-	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+	public String[] getSavableValues(String entityName) {
 		// TODO: Not use saver function here, only place using it.
-		EntitySaverFunction saveTemplates = new EntitySaverFunction("Templates") {
+		/*EntitySaverFunction saveTemplates = new EntitySaverFunction("Templates") {
 			@Override
 			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
 				for (ParticleTemplate template : particleSystem.getTypes()) {
@@ -254,7 +254,7 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 					}
 				}
 			}
-		};
+		};*/
 
 		String saveParticleSpawn = "Spawn: " + (particleSystem.getSpawn() == null ? null : particleSystem.getSpawn().getClass().getName());
 		String saveParticlePPS = "PPS: " + particleSystem.getPPS();
@@ -262,10 +262,7 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 		String saveParticleGravity = "GravityEffect: " + particleSystem.getGravityEffect();
 		String scaleParticleCentreOffset = "CentreOffset: " + ParticleTemplate.saveVector3f(centreOffset);
 
-		return new Pair<>(
-				new String[]{saveParticleSpawn, saveParticlePPS, saveParticleSpeed, saveParticleGravity, scaleParticleCentreOffset},
-				new EntitySaverFunction[]{saveTemplates, saveSpawnValues}
-		);
+		return new String[]{saveParticleSpawn, saveParticlePPS, saveParticleSpeed, saveParticleGravity, scaleParticleCentreOffset};
 	}
 
 	@Override

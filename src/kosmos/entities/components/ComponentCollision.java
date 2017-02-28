@@ -160,8 +160,8 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 	}
 
 	@Override
-	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
-		return new Pair<>(new String[]{}, new EntitySaverFunction[]{});
+	public String[] getSavableValues(String entityName) {
+		return new String[]{};
 	}
 
 	@Override

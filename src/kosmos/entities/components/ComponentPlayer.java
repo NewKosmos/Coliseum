@@ -103,8 +103,8 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 	}
 
 	@Override
-	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
-		return new Pair<>(new String[]{}, new EntitySaverFunction[]{});
+	public String[] getSavableValues(String entityName) {
+		return new String[]{};
 	}
 
 	@Override

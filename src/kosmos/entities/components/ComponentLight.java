@@ -149,8 +149,16 @@ public class ComponentLight extends IComponentEntity implements IComponentEditor
 	}
 
 	@Override
-	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
-		return new Pair<>(new String[]{}, new EntitySaverFunction[]{});
+	public String[] getSavableValues(String entityName) {
+		String saveConstant = "AttenuationConstant: " + light.attenuation.constant;
+		String saveLinear = "AttenuationLinear: " + light.attenuation.linear;
+		String saveExponent = "AttenuationExponent: " + light.attenuation.exponent;
+
+		String saveOffsetX = "OffsetX: " + offset.x;
+		String saveOffsetY = "OffsetY: " + offset.y;
+		String saveOffsetZ = "OffsetZ: " + offset.z;
+
+		return new String[]{saveConstant, saveLinear, saveExponent, saveOffsetX, saveOffsetY, saveOffsetZ};
 	}
 
 	@Override

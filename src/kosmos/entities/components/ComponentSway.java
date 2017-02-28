@@ -90,7 +90,7 @@ public class ComponentSway extends IComponentEntity implements IComponentEditor 
 	}
 
 	@Override
-	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+	public String[] getSavableValues(String entityName) {
 		if (textureSway != null) {
 			try {
 				File file = new File("entities/" + entityName + "/" + entityName + "Sway.png");
@@ -120,10 +120,7 @@ public class ComponentSway extends IComponentEntity implements IComponentEditor 
 		String saveTexture = "Texture: " + (textureSway == null ? null : "res/entities/" + entityName + "/" + entityName + "Sway.png");
 		String saveTextureNumRows = "TextureNumRows: " + (textureSway == null ? 1 : textureSway.getNumberOfRows());
 
-		return new Pair<>(
-				new String[]{saveTexture, saveTextureNumRows},
-				new EntitySaverFunction[]{}
-		);
+		return new String[]{saveTexture, saveTextureNumRows};
 	}
 
 	@Override

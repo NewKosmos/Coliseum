@@ -147,8 +147,13 @@ public class ComponentSurface extends IComponentEntity implements IComponentEdit
 	}
 
 	@Override
-	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
-		return new Pair<>(new String[]{}, new EntitySaverFunction[]{});
+	public String[] getSavableValues(String entityName) {
+		String saveShineDamper = "ShineDamper: " + shineDamper;
+		String saveReflectivity = "Reflectivity: " + reflectivity;
+		String saveIgnoreFog = "IgnoreFog: " + ignoreFog;
+		String saveIgnoreShadows = "IgnoreShadows: " + ignoreShadows;
+
+		return new String[]{saveShineDamper, saveReflectivity, saveIgnoreFog, saveIgnoreShadows};
 	}
 
 	@Override

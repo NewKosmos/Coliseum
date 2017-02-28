@@ -305,7 +305,7 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	}
 
 	@Override
-	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+	public String[] getSavableValues(String entityName) {
 		if (model != null) {
 			try {
 				File file = new File("entities/" + entityName + "/" + entityName + ".dae");
@@ -368,10 +368,7 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 		String saveAnimationLength = "AnimationLength: " + (animator != null && animator.getCurrentAnimation() != null ? animator.getCurrentAnimation().getLength() : null);
 		String saveJointCount = "JointCount: " + (model != null && model.getJointsData() != null ? model.getJointsData().getJointCount() : null);
 
-		return new Pair<>(
-				new String[]{saveScale, saveFurthestPoint, saveModel, saveTexture, saveTextureNumRows, saveAnimationLength, saveJointCount},
-				new EntitySaverFunction[]{}
-		);
+		return new String[]{saveScale, saveFurthestPoint, saveModel, saveTexture, saveTextureNumRows, saveAnimationLength, saveJointCount};
 	}
 
 	@Override

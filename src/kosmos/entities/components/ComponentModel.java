@@ -190,7 +190,7 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 	}
 
 	@Override
-	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+	public String[] getSavableValues(String entityName) {
 		if (model != null) {
 			try {
 				File file = new File("entities/" + entityName + "/" + entityName + ".obj");
@@ -249,10 +249,7 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 		String saveTexture = "Texture: " + (texture == null ? null : "res/entities/" + entityName + "/" + entityName + "Diffuse.png");
 		String saveTextureNumRows = "TextureNumRows: " + (texture == null ? 1 : texture.getNumberOfRows());
 
-		return new Pair<>(
-				new String[]{saveScale, saveModel, saveTexture, saveTextureNumRows},
-				new EntitySaverFunction[]{}
-		);
+		return new String[]{saveScale, saveModel, saveTexture, saveTextureNumRows};
 	}
 
 	@Override
