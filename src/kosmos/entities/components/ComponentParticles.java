@@ -38,7 +38,7 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 	 * @param entity The entity this component is attached to.
 	 */
 	public ComponentParticles(Entity entity) {
-		this(entity, new ArrayList<>(), null, 100.0f, 1.0f, 1.0f);
+		this(entity, new ArrayList<>(), null, new Vector3f(), 100.0f, 1.0f, 1.0f);
 	}
 
 	/**
@@ -51,11 +51,11 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 	 * @param speed
 	 * @param gravityEffect
 	 */
-	public ComponentParticles(Entity entity, List<ParticleTemplate> types, IParticleSpawn spawn, float pps, float speed, float gravityEffect) {
+	public ComponentParticles(Entity entity, List<ParticleTemplate> types, IParticleSpawn spawn, Vector3f offset, float pps, float speed, float gravityEffect) {
 		super(entity, ID);
 		particleSystem = new ParticleSystem(types, spawn, pps, speed, gravityEffect);
 		particleSystem.setSystemCentre(new Vector3f());
-		centreOffset = new Vector3f();
+		centreOffset = offset;
 		lastPosition = new Vector3f();
 	}
 
@@ -231,36 +231,21 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 
 	@Override
 	public String[] getSaveParameters(String entityName) {
-		// TODO: Not use saver function here, only place using it.
-		/*EntitySaverFunction saveTemplates = new EntitySaverFunction("Templates") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				for (ParticleTemplate template : particleSystem.getTypes()) {
-					String s = template.getName() + ",";
-					entityFileWriter.writeSegmentData(s);
-				}
-			}
-		};
+		String parameterData = "";
 
-		EntitySaverFunction saveSpawnValues = new EntitySaverFunction("SpawnValues") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (particleSystem.getSpawn() != null) {
-					for (String values : editorSystemSpawn.getSaveParameters()) {
-						String s = values + ",";
-						entityFileWriter.writeSegmentData(s);
-					}
-				}
-			}
-		};*/
+		for (String s : editorSystemSpawn.getSavableValues()) {
+			parameterData += s + ", ";
+		}
 
-		String saveParticleSpawn = "Spawn: " + (particleSystem.getSpawn() == null ? null : particleSystem.getSpawn().getClass().getName());
-		String saveParticlePPS = "PPS: " + particleSystem.getPPS();
-		String saveParticleSpeed = "Speed: " + particleSystem.getAverageSpeed();
-		String saveParticleGravity = "GravityEffect: " + particleSystem.getGravityEffect();
-		String scaleParticleCentreOffset = "CentreOffset: " + ParticleTemplate.saveVector3f(centreOffset);
+		parameterData = parameterData.replaceAll(", $", "");
 
-		return new String[]{saveParticleSpawn, saveParticlePPS, saveParticleSpeed, saveParticleGravity, scaleParticleCentreOffset};
+		String saveSpawn = "new " + particleSystem.getSpawn().getClass().getName() + "(" + parameterData + ")";
+		String saveParticleOffset = "new Vector3f(" + centreOffset.x + "f, " + centreOffset.y + "f, " + centreOffset.z + "f)";
+		String saveParticlePPS = particleSystem.getPPS() + "f";
+		String saveParticleSpeed = particleSystem.getAverageSpeed() + "f";
+		String saveParticleGravity = particleSystem.getGravityEffect() + "f";
+
+		return new String[]{saveSpawn, saveParticleOffset, saveParticlePPS, saveParticleSpeed, saveParticleGravity};
 	}
 
 	@Override

@@ -52,6 +52,8 @@ public class EditorParticleCircle extends IEditorParticleSpawn {
 
 	@Override
 	public String[] getSavableValues() {
-		return new String[]{"" + spawn.getRadius(), ParticleTemplate.saveVector3f(spawn.getHeading())};
+		String saveRadius = spawn.getRadius() + "f";
+		String saveHeading = "new Vector3f(" + spawn.getHeading().x + "f, " + spawn.getHeading().y + "f, " + spawn.getHeading().z + "f)";
+		return new String[]{saveRadius, saveHeading};
 	}
 }

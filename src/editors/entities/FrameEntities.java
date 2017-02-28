@@ -349,7 +349,7 @@ public class FrameEntities extends Standard {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity != null) {
-					FlounderEntities.save(((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity, editorComponents, ((ExtensionEntities) KosmosEditor.getEditorType()).entityName);
+					FlounderEntities.save("kosmos.entities.components", editorComponents, ((ExtensionEntities) KosmosEditor.getEditorType()).entityName);
 				}
 			}
 		});

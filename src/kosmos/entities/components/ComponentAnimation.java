@@ -384,7 +384,7 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 
 		String saveModel = (model != null) ? ("new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + ".dae\")") : null;
 
-		String saveScale = "" + scale;
+		String saveScale = scale + "f";
 
 		String saveTexture = (texture != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Diffuse.png\")).setNumberOfRows(" + texture.getNumberOfRows() + ").create()") : null;
 

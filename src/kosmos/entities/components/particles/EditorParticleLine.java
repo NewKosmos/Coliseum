@@ -50,6 +50,8 @@ public class EditorParticleLine extends IEditorParticleSpawn {
 
 	@Override
 	public String[] getSavableValues() {
-		return new String[]{"" + spawn.getLength(), ParticleTemplate.saveVector3f(spawn.getAxis())};
+		String saveLength = spawn.getLength() + "f";
+		String saveAxis = "new Vector3f(" + spawn.getAxis().x + "f, " + spawn.getAxis().y + "f, " + spawn.getAxis().z + "f)";
+		return new String[]{saveLength, saveAxis};
 	}
 }

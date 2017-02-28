@@ -48,6 +48,7 @@ public class EditorParticleSphere extends IEditorParticleSpawn {
 
 	@Override
 	public String[] getSavableValues() {
-		return new String[]{"" + spawn.getRadius()};
+		String saveRadius = spawn.getRadius() + "f";
+		return new String[]{saveRadius};
 	}
 }

@@ -148,9 +148,9 @@ public class ComponentLight extends IComponentEntity implements IComponentEditor
 
 	@Override
 	public String[] getSaveParameters(String entityName) {
-		String saveOffset = "new Vector3f(" + offset.x + ", " + offset.y + ", " + offset.z + ")";
-		String saveColour = "new Colour(" + light.colour.r + ", " + light.colour.g + ", " + light.colour.b + ")";
-		String saveAttenuation = "new Attenuation(" + light.attenuation.constant + ", " + light.attenuation.linear + ", " + light.attenuation.exponent + ")";
+		String saveOffset = "new Vector3f(" + offset.x + "f, " + offset.y + "f, " + offset.z + "f)";
+		String saveColour = "new Colour(" + light.colour.r + "f, " + light.colour.g + "f, " + light.colour.b + "f)";
+		String saveAttenuation = "new Attenuation(" + light.attenuation.constant + "f, " + light.attenuation.linear + "f, " + light.attenuation.exponent + "f)";
 
 		return new String[]{saveOffset, saveColour, saveAttenuation};
 	}

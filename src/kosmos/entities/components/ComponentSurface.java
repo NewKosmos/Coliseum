@@ -145,10 +145,10 @@ public class ComponentSurface extends IComponentEntity implements IComponentEdit
 
 	@Override
 	public String[] getSaveParameters(String entityName) {
-		String saveShineDamper = "" + shineDamper;
-		String saveReflectivity = "" + reflectivity;
-		String saveIgnoreFog = "" + ignoreFog;
-		String saveIgnoreShadows = "" + ignoreShadows;
+		String saveShineDamper = shineDamper + "f";
+		String saveReflectivity = reflectivity + "f";
+		String saveIgnoreFog = ignoreFog + "";
+		String saveIgnoreShadows = ignoreShadows + "";
 
 		return new String[]{saveShineDamper, saveReflectivity, saveIgnoreFog, saveIgnoreShadows};
 	}

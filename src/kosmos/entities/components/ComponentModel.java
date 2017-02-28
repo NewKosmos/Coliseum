@@ -243,7 +243,7 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 
 		String saveModel = (model != null) ? ("ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + ".obj\")).create()") : null;
 
-		String saveScale = "" + scale;
+		String saveScale = scale + "f";
 
 		String saveTexture = (texture != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Diffuse.png\")).setNumberOfRows(" + texture.getNumberOfRows() + ").create()") : null;
 
