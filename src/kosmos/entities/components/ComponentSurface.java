@@ -11,9 +11,6 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.entities.template.*;
-import flounder.helpers.*;
-import flounder.physics.bounding.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -147,11 +144,11 @@ public class ComponentSurface extends IComponentEntity implements IComponentEdit
 	}
 
 	@Override
-	public String[] getSavableValues(String entityName) {
-		String saveShineDamper = "ShineDamper: " + shineDamper;
-		String saveReflectivity = "Reflectivity: " + reflectivity;
-		String saveIgnoreFog = "IgnoreFog: " + ignoreFog;
-		String saveIgnoreShadows = "IgnoreShadows: " + ignoreShadows;
+	public String[] getSaveParameters(String entityName) {
+		String saveShineDamper = "" + shineDamper;
+		String saveReflectivity = "" + reflectivity;
+		String saveIgnoreFog = "" + ignoreFog;
+		String saveIgnoreShadows = "" + ignoreShadows;
 
 		return new String[]{saveShineDamper, saveReflectivity, saveIgnoreFog, saveIgnoreShadows};
 	}

@@ -80,7 +80,7 @@ public class ExtensionEntities extends IEditorType {
 				focusEntity.forceRemove(true);
 			}
 
-			focusEntity = FlounderEntities.load(loadFromEntity).createEntity(FlounderEntities.getEntities(), new Vector3f(), new Vector3f());
+			//focusEntity = FlounderEntities.load(loadFromEntity).createEntity(FlounderEntities.getEntities(), new Vector3f(), new Vector3f()); // TODO
 			forceAddComponents();
 
 			FrameEntities.nameField.setText(loadFromEntity);

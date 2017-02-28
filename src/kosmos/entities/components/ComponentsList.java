@@ -1,6 +1,10 @@
 package kosmos.entities.components;
 
 import flounder.entities.components.*;
+import flounder.helpers.*;
+
+import javax.swing.*;
+import java.util.*;
 
 public enum ComponentsList {
 	ANIMATION(new ComponentAnimation(null)),
@@ -15,6 +19,9 @@ public enum ComponentsList {
 	PLAYER(new ComponentPlayer(null)),
 	SURFACE(new ComponentSurface(null)),
 	SWAY(new ComponentSway(null));
+
+	public static final List<Pair<String, JPanel>> ADD_SIDE_TAB = new ArrayList<>();
+	public static final List<String> REMOVE_SIDE_TAB = new ArrayList<>();
 
 	public static final ComponentsList[] LIST = ComponentsList.values();
 

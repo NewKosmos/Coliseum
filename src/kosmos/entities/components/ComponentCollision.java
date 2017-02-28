@@ -11,8 +11,6 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.entities.template.*;
-import flounder.helpers.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
 
@@ -160,7 +158,7 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 	}
 
 	@Override
-	public String[] getSavableValues(String entityName) {
+	public String[] getSaveParameters(String entityName) {
 		return new String[]{};
 	}
 

@@ -2,7 +2,6 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.entities.template.*;
 import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
@@ -14,7 +13,6 @@ import kosmos.particles.spawns.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.event.*;
-import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -209,7 +207,7 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 
 				if (particleSystem.getSpawn() != null) {
 					String classname = particleSystem.getSpawn().getClass().getName();
-					IComponentEditor.REMOVE_SIDE_TAB.add("Particles (" + classname.split("\\.")[ByteWork.getCharCount(classname, '.')].replace("Spawn", "") + ")");
+					ComponentsList.REMOVE_SIDE_TAB.add("Particles (" + classname.split("\\.")[ByteWork.getCharCount(classname, '.')].replace("Spawn", "") + ")");
 				}
 
 				if (particleSpawn != null) {
@@ -218,7 +216,7 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 
 					JPanel panel = IComponentEditor.makeTextPanel();
 					particleSpawn.addToPanel(panel);
-					IComponentEditor.ADD_SIDE_TAB.add(new Pair<>("Particles (" + particleSpawn.getTabName() + ")", panel));
+					ComponentsList.ADD_SIDE_TAB.add(new Pair<>("Particles (" + particleSpawn.getTabName() + ")", panel));
 				}
 			}
 		});
@@ -232,7 +230,7 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 	}
 
 	@Override
-	public String[] getSavableValues(String entityName) {
+	public String[] getSaveParameters(String entityName) {
 		// TODO: Not use saver function here, only place using it.
 		/*EntitySaverFunction saveTemplates = new EntitySaverFunction("Templates") {
 			@Override
@@ -248,7 +246,7 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 			@Override
 			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
 				if (particleSystem.getSpawn() != null) {
-					for (String values : editorSystemSpawn.getSavableValues()) {
+					for (String values : editorSystemSpawn.getSaveParameters()) {
 						String s = values + ",";
 						entityFileWriter.writeSegmentData(s);
 					}

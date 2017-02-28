@@ -15,8 +15,6 @@ import flounder.collada.animation.*;
 import flounder.collada.joints.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.entities.template.*;
-import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
@@ -53,7 +51,33 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	 * @param entity The entity this component is attached to.
 	 */
 	public ComponentAnimation(Entity entity) {
-		this(entity, null, 1.0f, null, 1);
+		this(entity, (ModelAnimated) null, 1.0f, null, 1);
+	}
+
+	/**
+	 * Creates a new ComponentAnimation.
+	 *
+	 * @param entity The entity this component is attached to.
+	 * @param file The animated model file to load from.
+	 * @param scale The scale of the entity.
+	 * @param texture The diffuse texture for the entity.
+	 * @param textureIndex What texture index this entity should renderObjects from (0 default).
+	 */
+	public ComponentAnimation(Entity entity, MyFile file, float scale, TextureObject texture, int textureIndex) {
+		super(entity, ID);
+		ModelAnimated modelAnimated = FlounderCollada.loadCollada(file);
+
+		AnimationData animationData = FlounderCollada.loadAnimation(file);
+		Animation animation = FlounderAnimation.loadAnimation(animationData);
+
+		this.model = modelAnimated;
+		this.scale = scale;
+		this.modelMatrix = new Matrix4f();
+
+		this.texture = texture;
+		this.textureIndex = textureIndex;
+
+		doAnimation(animation);
 	}
 
 	/**
@@ -305,7 +329,7 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	}
 
 	@Override
-	public String[] getSavableValues(String entityName) {
+	public String[] getSaveParameters(String entityName) {
 		if (model != null) {
 			try {
 				File file = new File("entities/" + entityName + "/" + entityName + ".dae");
@@ -358,17 +382,13 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 			}
 		}
 
-		String saveScale = "Scale: " + scale;
-		String saveFurthestPoint = "FurthestPoint: " + ((model == null || model.getMeshData() == null) ? null : model.getMeshData().getFurthestPoint());
+		String saveModel = (model != null) ? ("new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + ".dae\")") : null;
 
-		String saveModel = "Model: " + (model == null ? null : "res/entities/" + entityName + "/" + entityName + ".dae");
-		String saveTexture = "Texture: " + (texture == null ? null : "res/entities/" + entityName + "/" + entityName + "Diffuse.png");
-		String saveTextureNumRows = "TextureNumRows: " + (texture == null ? 1 : texture.getNumberOfRows());
+		String saveScale = "" + scale;
 
-		String saveAnimationLength = "AnimationLength: " + (animator != null && animator.getCurrentAnimation() != null ? animator.getCurrentAnimation().getLength() : null);
-		String saveJointCount = "JointCount: " + (model != null && model.getJointsData() != null ? model.getJointsData().getJointCount() : null);
+		String saveTexture = (texture != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Diffuse.png\")).setNumberOfRows(" + texture.getNumberOfRows() + ").create()") : null;
 
-		return new String[]{saveScale, saveFurthestPoint, saveModel, saveTexture, saveTextureNumRows, saveAnimationLength, saveJointCount};
+		return new String[]{saveScale, saveModel, saveTexture};
 	}
 
 	@Override

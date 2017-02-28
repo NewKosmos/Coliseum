@@ -11,8 +11,6 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.entities.template.*;
-import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
@@ -190,7 +188,7 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 	}
 
 	@Override
-	public String[] getSavableValues(String entityName) {
+	public String[] getSaveParameters(String entityName) {
 		if (model != null) {
 			try {
 				File file = new File("entities/" + entityName + "/" + entityName + ".obj");
@@ -243,13 +241,13 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 			}
 		}
 
-		String saveScale = "Scale: " + scale;
+		String saveModel = (model != null) ? ("ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + ".obj\")).create()") : null;
 
-		String saveModel = "Model: " + (texture == null ? null : "res/entities/" + entityName + "/" + entityName + ".obj");
-		String saveTexture = "Texture: " + (texture == null ? null : "res/entities/" + entityName + "/" + entityName + "Diffuse.png");
-		String saveTextureNumRows = "TextureNumRows: " + (texture == null ? 1 : texture.getNumberOfRows());
+		String saveScale = "" + scale;
 
-		return new String[]{saveScale, saveModel, saveTexture, saveTextureNumRows};
+		String saveTexture = (texture != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Diffuse.png\")).setNumberOfRows(" + texture.getNumberOfRows() + ").create()") : null;
+
+		return new String[]{saveScale, saveModel, saveTexture};
 	}
 
 	@Override

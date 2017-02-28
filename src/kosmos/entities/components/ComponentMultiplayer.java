@@ -11,8 +11,6 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.entities.template.*;
-import flounder.helpers.*;
 
 import javax.swing.*;
 import java.util.*;
@@ -72,7 +70,7 @@ public class ComponentMultiplayer extends IComponentEntity implements IComponent
 	}
 
 	@Override
-	public String[] getSavableValues(String entityName) {
+	public String[] getSaveParameters(String entityName) {
 		return new String[]{};
 	}
 

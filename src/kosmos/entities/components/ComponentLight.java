@@ -11,8 +11,6 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.entities.template.*;
-import flounder.helpers.*;
 import flounder.lights.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
@@ -149,16 +147,12 @@ public class ComponentLight extends IComponentEntity implements IComponentEditor
 	}
 
 	@Override
-	public String[] getSavableValues(String entityName) {
-		String saveConstant = "AttenuationConstant: " + light.attenuation.constant;
-		String saveLinear = "AttenuationLinear: " + light.attenuation.linear;
-		String saveExponent = "AttenuationExponent: " + light.attenuation.exponent;
+	public String[] getSaveParameters(String entityName) {
+		String saveOffset = "new Vector3f(" + offset.x + ", " + offset.y + ", " + offset.z + ")";
+		String saveColour = "new Colour(" + light.colour.r + ", " + light.colour.g + ", " + light.colour.b + ")";
+		String saveAttenuation = "new Attenuation(" + light.attenuation.constant + ", " + light.attenuation.linear + ", " + light.attenuation.exponent + ")";
 
-		String saveOffsetX = "OffsetX: " + offset.x;
-		String saveOffsetY = "OffsetY: " + offset.y;
-		String saveOffsetZ = "OffsetZ: " + offset.z;
-
-		return new String[]{saveConstant, saveLinear, saveExponent, saveOffsetX, saveOffsetY, saveOffsetZ};
+		return new String[]{saveOffset, saveColour, saveAttenuation};
 	}
 
 	@Override
