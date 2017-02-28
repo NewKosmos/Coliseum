@@ -191,6 +191,32 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 
 	@Override
 	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+		if (model != null) {
+			try {
+				File file = new File("entities/" + entityName + "/" + entityName + ".obj");
+
+				if (file.exists()) {
+					file.delete();
+				}
+
+				file.createNewFile();
+
+				InputStream input = model.getFile().getInputStream();
+				OutputStream output = new FileOutputStream(file);
+				byte[] buf = new byte[1024];
+				int bytesRead;
+
+				while ((bytesRead = input.read(buf)) > 0) {
+					output.write(buf, 0, bytesRead);
+				}
+
+				input.close();
+				output.close();
+			} catch (IOException e) {
+				FlounderLogger.exception(e);
+			}
+		}
+
 		if (texture != null) {
 			try {
 				File file = new File("entities/" + entityName + "/" + entityName + "Diffuse.png");
@@ -217,93 +243,15 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 			}
 		}
 
-
-		EntitySaverFunction saveVertices = new EntitySaverFunction("Vertices") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (model != null) {
-					for (float v : model.getVertices()) {
-						String s = v + ",";
-						entityFileWriter.writeSegmentData(s);
-					}
-				}
-			}
-		};
-		EntitySaverFunction saveTextureCoords = new EntitySaverFunction("TextureCoords") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (model != null) {
-					for (float v : model.getTextures()) {
-						String s = v + ",";
-						entityFileWriter.writeSegmentData(s);
-					}
-				}
-			}
-		};
-		EntitySaverFunction saveNormals = new EntitySaverFunction("Normals") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (model != null) {
-					for (float v : model.getNormals()) {
-						String s = v + ",";
-						entityFileWriter.writeSegmentData(s);
-					}
-				}
-			}
-		};
-		EntitySaverFunction saveTangents = new EntitySaverFunction("Tangents") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (model != null) {
-					for (float v : model.getTangents()) {
-						String s = v + ",";
-						entityFileWriter.writeSegmentData(s);
-					}
-				}
-			}
-		};
-		EntitySaverFunction saveIndices = new EntitySaverFunction("Indices") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (model != null) {
-					for (int i : model.getIndices()) {
-						String s = i + ",";
-						entityFileWriter.writeSegmentData(s);
-					}
-				}
-			}
-		};
-		EntitySaverFunction saveAABB = new EntitySaverFunction("AABB") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (model != null && model.getAABB() != null) {
-					Vector3f min = model.getAABB().getMinExtents();
-					Vector3f max = model.getAABB().getMaxExtents();
-					String s = min.x + "," + min.y + "," + min.z + "," + max.x + "," + max.y + "," + max.z + ",";
-					entityFileWriter.writeSegmentData(s);
-				}
-			}
-		};
-		EntitySaverFunction saveQuickHull = new EntitySaverFunction("QuickHull") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (model != null && model.getHull() != null && model.getHull().getHullPoints() != null) {
-					for (Vector3f v : model.getHull().getHullPoints()) {
-						String s = v.x + "," + v.y + "," + v.z + ",";
-						entityFileWriter.writeSegmentData(s);
-					}
-				}
-			}
-		};
-
 		String saveScale = "Scale: " + scale;
 
+		String saveModel = "Model: " + (texture == null ? null : "res/entities/" + entityName + "/" + entityName + ".obj");
 		String saveTexture = "Texture: " + (texture == null ? null : "res/entities/" + entityName + "/" + entityName + "Diffuse.png");
 		String saveTextureNumRows = "TextureNumRows: " + (texture == null ? 1 : texture.getNumberOfRows());
 
 		return new Pair<>(
-				new String[]{saveScale, saveTexture, saveTextureNumRows},
-				new EntitySaverFunction[]{saveVertices, saveTextureCoords, saveNormals, saveTangents, saveIndices, saveAABB, saveQuickHull}
+				new String[]{saveScale, saveModel, saveTexture, saveTextureNumRows},
+				new EntitySaverFunction[]{}
 		);
 	}
 

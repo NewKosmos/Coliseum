@@ -233,6 +233,7 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 
 	@Override
 	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+		// TODO: Not use saver function here, only place using it.
 		EntitySaverFunction saveTemplates = new EntitySaverFunction("Templates") {
 			@Override
 			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {

@@ -192,7 +192,7 @@ public class ShadowRenderer extends Renderer {
 			return;
 		}
 
-		if (componentAnimation != null) {
+		if (componentAnimation != null && componentAnimation.getModel() != null) {
 			for (int i = 0; i < componentAnimation.getJointTransforms().length; i++) {
 				shader.getUniformMat4("jointTransforms[" + i + "]").loadMat4(componentAnimation.getJointTransforms()[i]);
 			}

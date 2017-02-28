@@ -143,7 +143,7 @@ public class EntitiesRenderer extends Renderer {
 			OpenGlUtils.bindTexture(textureUndefined, 0);
 		}
 
-		if (componentAnimation != null) {
+		if (componentAnimation != null && componentAnimation.getModel() != null) {
 			for (int i = 0; i < componentAnimation.getJointTransforms().length; i++) {
 				shader.getUniformMat4("jointTransforms[" + i + "]").loadMat4(componentAnimation.getJointTransforms()[i]);
 			}

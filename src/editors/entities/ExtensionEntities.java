@@ -9,7 +9,10 @@ import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
+import flounder.models.*;
 import flounder.physics.bounding.*;
+import flounder.resources.*;
+import flounder.textures.*;
 import kosmos.entities.components.*;
 import kosmos.particles.*;
 import kosmos.world.*;
@@ -58,6 +61,11 @@ public class ExtensionEntities extends IEditorType {
 
 		focusEntity = new Entity(FlounderEntities.getEntities(), new Vector3f(), new Vector3f());
 		//focusEntity = FlounderEntities.load("dragon").createEntity(FlounderEntities.getEntities(), new Vector3f(), new Vector3f());
+		new ComponentModel(focusEntity, ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "cactus1.obj")).create(), 1.0f, TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "cactus1.png")).create(), 1);
+		new ComponentSway(focusEntity, TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "cactusSway1.png")).create());
+		new ComponentSurface(focusEntity, 1.0f, 0.0f, false, false);
+		new ComponentCollider(focusEntity);
+		new ComponentCollision(focusEntity);
 		forceAddComponents();
 	}
 
@@ -97,28 +105,7 @@ public class ExtensionEntities extends IEditorType {
 
 	private void forceAddComponents() {
 		for (IComponentEntity component : focusEntity.getComponents()) {
-			IComponentEditor editorComponent = null;
-
-			for (ComponentsList c : ComponentsList.LIST) {
-				if (c.getComponent() instanceof IComponentEditor) {
-					if (c.getComponent().getId() == component.getId()) {
-						try {
-							FlounderLogger.log("Adding component: " + component);
-							Class componentClass = Class.forName(c.getComponent().getClass().getName());
-							Class[] componentTypes = new Class[]{IComponentEntity.class};
-							@SuppressWarnings("unchecked") Constructor componentConstructor = componentClass.getConstructor(componentTypes);
-							Object[] componentParameters = new Object[]{component};
-							editorComponent = (IComponentEditor) componentConstructor.newInstance(componentParameters);
-						} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException ex) {
-							FlounderLogger.error("While loading component" + c.getComponent() + "'s constructor could not be found!");
-							FlounderLogger.exception(ex);
-						}
-
-						break;
-					}
-				}
-			}
-
+			IComponentEditor editorComponent = (IComponentEditor) component;
 			FrameEntities.editorComponents.add(editorComponent);
 
 			if (editorComponent != null) {

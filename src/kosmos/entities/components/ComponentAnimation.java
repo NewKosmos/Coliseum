@@ -288,7 +288,7 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 				ModelAnimated modelAnimated = FlounderCollada.loadCollada(new MyFile(editorPathCollada));
 				AnimationData animationData = FlounderCollada.loadAnimation(new MyFile(editorPathCollada));
 				Animation animation = FlounderAnimation.loadAnimation(animationData);
-				this.model = modelAnimated;
+				setModel(modelAnimated);
 				doAnimation(animation);
 			}
 
@@ -306,6 +306,32 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 
 	@Override
 	public Pair<String[], EntitySaverFunction[]> getSavableValues(String entityName) {
+		if (model != null) {
+			try {
+				File file = new File("entities/" + entityName + "/" + entityName + ".dae");
+
+				if (file.exists()) {
+					file.delete();
+				}
+
+				file.createNewFile();
+
+				InputStream input = model.getFile().getInputStream();
+				OutputStream output = new FileOutputStream(file);
+				byte[] buf = new byte[1024];
+				int bytesRead;
+
+				while ((bytesRead = input.read(buf)) > 0) {
+					output.write(buf, 0, bytesRead);
+				}
+
+				input.close();
+				output.close();
+			} catch (IOException e) {
+				FlounderLogger.exception(e);
+			}
+		}
+
 		if (texture != null) {
 			try {
 				File file = new File("entities/" + entityName + "/" + entityName + "Diffuse.png");
@@ -332,135 +358,10 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 			}
 		}
 
-		EntitySaverFunction saveVertices = new EntitySaverFunction("Vertices") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (model != null) {
-					for (float v : model.getMeshData().getVertices()) {
-						String s = v + ",";
-						entityFileWriter.writeSegmentData(s);
-					}
-				}
-			}
-		};
-		EntitySaverFunction saveTextureCoords = new EntitySaverFunction("TextureCoords") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (model != null) {
-					for (float v : model.getMeshData().getTextures()) {
-						String s = v + ",";
-						entityFileWriter.writeSegmentData(s);
-					}
-				}
-			}
-		};
-		EntitySaverFunction saveNormals = new EntitySaverFunction("Normals") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (model != null) {
-					for (float v : model.getMeshData().getNormals()) {
-						String s = v + ",";
-						entityFileWriter.writeSegmentData(s);
-					}
-				}
-			}
-		};
-		EntitySaverFunction saveTangents = new EntitySaverFunction("Tangents") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (model != null) {
-					for (float v : model.getMeshData().getTangents()) {
-						String s = v + ",";
-						entityFileWriter.writeSegmentData(s);
-					}
-				}
-			}
-		};
-		EntitySaverFunction saveIndices = new EntitySaverFunction("Indices") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (model != null) {
-					for (int i : model.getMeshData().getIndices()) {
-						String s = i + ",";
-						entityFileWriter.writeSegmentData(s);
-					}
-				}
-			}
-		};
-		EntitySaverFunction saveJointIds = new EntitySaverFunction("JointIds") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (model != null) {
-					for (int i : model.getMeshData().getJointIds()) {
-						String s = i + ",";
-						entityFileWriter.writeSegmentData(s);
-					}
-				}
-			}
-		};
-		EntitySaverFunction saveVertexWeights = new EntitySaverFunction("VertexWeights") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (model != null) {
-					for (float v : model.getMeshData().getVertexWeights()) {
-						String s = v + ",";
-						entityFileWriter.writeSegmentData(s);
-					}
-				}
-			}
-		};
-		EntitySaverFunction saveJoints = new EntitySaverFunction("Joints") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (model != null && model.getJointsData() != null) {
-					Joint headJoint = model.getHeadJoint();
-					List<Joint> joints = new ArrayList<>();
-					headJoint.addSelfAndChildren(joints);
-
-					for (Joint joint : joints) {
-						String s = (joint == headJoint ? "true," : "false,") + joint.getIndex() + "," + joint.getName() + ",";
-
-						for (float v : Matrix4f.toArray(joint.getLocalBindTransform())) {
-							s += v + ",";
-						}
-
-						for (Joint c : joint.getChildren()) {
-							s += c.getName() + "|";
-						}
-
-						entityFileWriter.writeSegmentData(s + ",");
-					}
-
-					//public final int index;
-					//public final String name;
-					//public final List<Joint> children;
-					//private final Matrix4f localBindTransform;
-				}
-			}
-		};
-		EntitySaverFunction saveAnimation = new EntitySaverFunction("Animation") {
-			@Override
-			public void writeIntoSection(FileWriterHelper entityFileWriter) throws IOException {
-				if (animator != null && animator.getCurrentAnimation() != null) {
-					Animation animation = animator.getCurrentAnimation();
-
-					for (KeyFrameJoints frame : animation.getKeyFrameJointss()) {
-						for (String name : frame.getJointKeyFrames().keySet()) {
-							JointTransform joint = frame.getJointKeyFrames().get(name);
-							Vector3f position = joint.getPosition();
-							Quaternion rotation = joint.getRotation();
-							String s = frame.getTimeStamp() + "," + name + "," + position.x + "," + position.y + "," + position.z + "," + rotation.x + "," + rotation.y + "," + rotation.z + "," + rotation.w + ",";
-							entityFileWriter.writeSegmentData(s);
-						}
-					}
-				}
-			}
-		};
-		// TODO: Save AABB and Hull.
-
 		String saveScale = "Scale: " + scale;
-		String saveFurthestPoint = "FurthestPoint: " + model.getMeshData().getFurthestPoint();
+		String saveFurthestPoint = "FurthestPoint: " + ((model == null || model.getMeshData() == null) ? null : model.getMeshData().getFurthestPoint());
 
+		String saveModel = "Model: " + (model == null ? null : "res/entities/" + entityName + "/" + entityName + ".dae");
 		String saveTexture = "Texture: " + (texture == null ? null : "res/entities/" + entityName + "/" + entityName + "Diffuse.png");
 		String saveTextureNumRows = "TextureNumRows: " + (texture == null ? 1 : texture.getNumberOfRows());
 
@@ -468,8 +369,8 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 		String saveJointCount = "JointCount: " + (model != null && model.getJointsData() != null ? model.getJointsData().getJointCount() : null);
 
 		return new Pair<>(
-				new String[]{saveScale, saveFurthestPoint, saveTexture, saveTextureNumRows, saveAnimationLength, saveJointCount},
-				new EntitySaverFunction[]{saveVertices, saveTextureCoords, saveNormals, saveTangents, saveIndices, saveJointIds, saveVertexWeights, saveJoints, saveAnimation}
+				new String[]{saveScale, saveFurthestPoint, saveModel, saveTexture, saveTextureNumRows, saveAnimationLength, saveJointCount},
+				new EntitySaverFunction[]{}
 		);
 	}
 
