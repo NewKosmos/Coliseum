@@ -26,7 +26,7 @@ public class InstanceGemPurple extends Entity {
 	public InstanceGemPurple(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 
-		ComponentModel componentModel = new ComponentModel(this, model, 1.0f, texture, 1);
+		ComponentModel componentModel = new ComponentModel(this, 1.0f, model, texture, 1);
 		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.2f, false, false);
 		ComponentLight componentLight = new ComponentLight(this, new Vector3f(0.0f, 1.5f, 0.0f), new Colour(0.631f, 0.243f, 0.812f), new Attenuation(1.0f, 0.02f, 2.0f));
 		ComponentCollider componentCollider = new ComponentCollider(this);

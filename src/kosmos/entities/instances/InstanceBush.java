@@ -21,7 +21,7 @@ import flounder.textures.*;
 public class InstanceBush extends Entity {
 	public InstanceBush(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
-		new kosmos.entities.components.ComponentModel(this, ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "bushBerry", "bush.obj")).create(), 1.0f, TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "bushBerry", "bush.png")).create(), 1);
+		new kosmos.entities.components.ComponentModel(this, 1.0f, ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "bushBerry", "bush.obj")).create(), TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "bushBerry", "bush.png")).create(), 1);
 		new kosmos.entities.components.ComponentSway(this, TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "bushBerry", "bushSway.png")).create());
 		new kosmos.entities.components.ComponentSurface(this, 1.0f, 0.0f, false, false);
 		new kosmos.entities.components.ComponentCollider(this);

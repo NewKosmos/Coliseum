@@ -33,7 +33,7 @@ public class KosmosParticles extends Module {
 	private static final KosmosParticles INSTANCE = new KosmosParticles();
 	public static final String PROFILE_TAB_NAME = "Kosmos Particles";
 
-	public static final MyFile PARTICLES_LOC = new MyFile(MyFile.RES_FOLDER, "particles");
+	public static final MyFile PARTICLES_FOLDER = new MyFile(MyFile.RES_FOLDER, "particles");
 	public static final float MAX_ELAPSED_TIME = 5.0f;
 
 	private Map<String, SoftReference<ParticleTemplate>> loaded;
@@ -154,7 +154,7 @@ public class KosmosParticles extends Module {
 			INSTANCE.loaded.remove(name);
 
 			// Creates the file reader.
-			MyFile saveFile = new MyFile(KosmosParticles.PARTICLES_LOC, name + ".particle");
+			MyFile saveFile = new MyFile(KosmosParticles.PARTICLES_FOLDER, name + ".particle");
 
 			try {
 				BufferedReader fileReader = saveFile.getReader();

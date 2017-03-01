@@ -22,11 +22,11 @@ void main(void) {
 	out_albedo = mix(colour1, colour2, textureBlendFactor);
 	out_albedo.a -= textureTransparency;
 
-	if (out_albedo.a <= 0.0) {
-		out_albedo = vec4(0.0);
-		discard;
-	}
+	//if (out_albedo.a <= 0.0) {
+	//	out_albedo = vec4(0.0);
+	//	discard;
+	//}
 
 	out_normals = vec4(0.0, 1.0, 0.0, 1.0);
-	out_extras = vec4(1.0, 0.0, 0.0, 1.0);
+	out_extras = vec4(1.0, 0.0, (2.0 / 3.0), 1.0); // Ignores shadows.
 }

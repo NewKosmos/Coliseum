@@ -115,7 +115,7 @@ public class ComponentSway extends IComponentEntity implements IComponentEditor 
 			}
 		}
 
-		String saveTexture = (textureSway != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Diffuse.png\")).setNumberOfRows(" + textureSway.getNumberOfRows() + ").create()") : null;
+		String saveTexture = (textureSway != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Sway.png\")).setNumberOfRows(" + textureSway.getNumberOfRows() + ").create()") : null;
 
 		return new String[]{saveTexture};
 	}

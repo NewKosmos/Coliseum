@@ -61,7 +61,7 @@ public class ExtensionEntities extends IEditorType {
 
 		focusEntity = new Entity(FlounderEntities.getEntities(), new Vector3f(), new Vector3f());
 		//focusEntity = FlounderEntities.load("dragon").createEntity(FlounderEntities.getEntities(), new Vector3f(), new Vector3f());
-		new ComponentModel(focusEntity, ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "cactus1.obj")).create(), 1.0f, TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "cactus1.png")).create(), 1);
+		new ComponentModel(focusEntity, 1.0f, ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "cactus1.obj")).create(), TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "cactus1.png")).create(), 1);
 		new ComponentSway(focusEntity, TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "cactusSway1.png")).create());
 		new ComponentSurface(focusEntity, 1.0f, 0.0f, false, false);
 		new ComponentCollider(focusEntity);

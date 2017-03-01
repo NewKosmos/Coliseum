@@ -24,7 +24,7 @@ public class InstanceCloud extends Entity {
 	public InstanceCloud(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation, float scale) {
 		super(structure, position, rotation);
 		ComponentCloud componentCloud = new ComponentCloud(this);
-		ComponentModel componentModel = new ComponentModel(this, model, scale, texture, 0);
+		ComponentModel componentModel = new ComponentModel(this, scale, model, texture, 0);
 		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.0f, false, false);
 		//ComponentCollider componentCollider = new ComponentCollider(this);
 		//ComponentCollision componentCollision = new ComponentCollision(this);

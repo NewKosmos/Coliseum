@@ -33,8 +33,6 @@ public class KosmosChunks extends Module {
 	private ISpatialStructure<Entity> chunks;
 
 	private Entity entityPlayer;
-	private Entity entitySun;
-	private Entity entityMoon;
 
 	private Sphere chunkRange;
 
@@ -51,8 +49,6 @@ public class KosmosChunks extends Module {
 		this.chunks = new StructureBasic<>();
 
 		this.entityPlayer = new InstancePlayer(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25), 0.0f), new Vector3f()); // InstanceMuliplayer
-		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
-		this.entitySun = new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-200.0f, -200.0f, -200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 
 		this.chunkRange = new Sphere(40.0f); // new AABB();
 
@@ -144,14 +140,6 @@ public class KosmosChunks extends Module {
 
 	public static Entity getEntityPlayer() {
 		return INSTANCE.entityPlayer;
-	}
-
-	public static Entity getEntitySun() {
-		return INSTANCE.entitySun;
-	}
-
-	public static Entity getEntityMoon() {
-		return INSTANCE.entityMoon;
 	}
 
 	public static Chunk getCurrent() {

@@ -25,7 +25,7 @@ public class InstanceCactus2 extends Entity {
 	public InstanceCactus2(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 
-		ComponentModel componentModel = new ComponentModel(this, model, 1.0f, texture, 1);
+		ComponentModel componentModel = new ComponentModel(this, 1.0f, model, texture, 1);
 		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.0f, false, false);
 		ComponentSway componentSway = new ComponentSway(this, textureSway);
 		ComponentCollider componentCollider = new ComponentCollider(this);

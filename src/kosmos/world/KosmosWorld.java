@@ -13,6 +13,8 @@ import flounder.entities.*;
 import flounder.framework.*;
 import flounder.lights.*;
 import flounder.maths.*;
+import flounder.maths.vectors.*;
+import kosmos.entities.instances.*;
 import kosmos.particles.*;
 
 public class KosmosWorld extends Module {
@@ -22,6 +24,9 @@ public class KosmosWorld extends Module {
 	private Fog fog;
 	private SkyCycle skyCycle;
 
+	private Entity entitySun;
+	private Entity entityMoon;
+
 	public KosmosWorld() {
 		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEntities.class, KosmosParticles.class);
 	}
@@ -30,6 +35,9 @@ public class KosmosWorld extends Module {
 	public void init() {
 		this.fog = new Fog(new Colour(), 0.02f, 2.0f, 0.0f, 50.0f);
 		this.skyCycle = new SkyCycle();
+
+		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+		this.entitySun = new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-200.0f, -200.0f, -200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 	}
 
 	@Override
@@ -48,6 +56,14 @@ public class KosmosWorld extends Module {
 
 	public static SkyCycle getSkyCycle() {
 		return INSTANCE.skyCycle;
+	}
+
+	public static Entity getEntitySun() {
+		return INSTANCE.entitySun;
+	}
+
+	public static Entity getEntityMoon() {
+		return INSTANCE.entityMoon;
 	}
 
 	public static float getSwayOffsetX() {

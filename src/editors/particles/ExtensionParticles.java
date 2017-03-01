@@ -37,7 +37,7 @@ public class ExtensionParticles extends IEditorType {
 
 		List<ParticleTemplate> templates = new ArrayList<>();
 		templates.add(KosmosParticles.load("rain"));
-		particleSystem = new ParticleSystem(templates, new SpawnCircle(40.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 100, 0.5f, 0.5f);
+		particleSystem = new ParticleSystem(templates, new SpawnCircle(20.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 100, 0.5f, 0.5f);
 		particleSystem.setSystemCentre(FlounderCamera.getPlayer().getPosition());
 
 		/*// The template to edit.

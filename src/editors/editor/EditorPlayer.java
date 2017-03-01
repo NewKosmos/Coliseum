@@ -13,7 +13,7 @@ public class EditorPlayer extends Player {
 
 	@Override
 	public void init() {
-		position = new Vector3f();
+		position = new Vector3f(0.0f, -2.0f, 0.0f);
 		rotation = new Vector3f();
 	}
 

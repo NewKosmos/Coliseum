@@ -29,8 +29,8 @@ import java.io.*;
 public class ComponentModel extends IComponentEntity implements IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
-	private ModelObject model;
 	private float scale;
+	private ModelObject model;
 	private Matrix4f modelMatrix;
 
 	private TextureObject texture;
@@ -45,22 +45,22 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 	 * @param entity The entity this component is attached to.
 	 */
 	public ComponentModel(Entity entity) {
-		this(entity, null, 1.0f, TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "undefined.png")).create(), 0);
+		this(entity, 1.0f, null, TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "undefined.png")).create(), 0);
 	}
 
 	/**
 	 * Creates a new ComponentModel.
 	 *
 	 * @param entity The entity this component is attached to.
-	 * @param model The model that will be attached to this entity.
 	 * @param scale The scale of the entity.
+	 * @param model The model that will be attached to this entity.
 	 * @param texture The diffuse texture for the entity.
 	 * @param textureIndex What texture index this entity should renderObjects from (0 default).
 	 */
-	public ComponentModel(Entity entity, ModelObject model, float scale, TextureObject texture, int textureIndex) {
+	public ComponentModel(Entity entity, float scale, ModelObject model, TextureObject texture, int textureIndex) {
 		super(entity, ID);
-		this.model = model;
 		this.scale = scale;
+		this.model = model;
 		this.modelMatrix = new Matrix4f();
 
 		this.texture = texture;
@@ -241,13 +241,12 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 			}
 		}
 
-		String saveModel = (model != null) ? ("ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + ".obj\")).create()") : null;
-
 		String saveScale = scale + "f";
-
+		String saveModel = (model != null) ? ("ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + ".obj\")).create()") : null;
 		String saveTexture = (texture != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Diffuse.png\")).setNumberOfRows(" + texture.getNumberOfRows() + ").create()") : null;
+		String saveTextureIndex = 1 + "";
 
-		return new String[]{saveScale, saveModel, saveTexture};
+		return new String[]{saveScale, saveModel, saveTexture, saveTextureIndex};
 	}
 
 	@Override
