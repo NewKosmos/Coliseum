@@ -120,7 +120,7 @@ public class ParticleRenderer extends Renderer {
 		OpenGlUtils.cullBackFaces(true);
 		OpenGlUtils.enableDepthTesting();
 		OpenGlUtils.enableAlphaBlending();
-	//	glDepthMask(false); // Stops particles from being rendered to the depth BUFFER.
+		//	glDepthMask(false); // Stops particles from being rendered to the depth BUFFER.
 
 		if (particleTemplate.getTexture() != null) {
 			shader.getUniformFloat("numberOfRows").loadFloat(particleTemplate.getTexture().getNumberOfRows());
@@ -129,7 +129,7 @@ public class ParticleRenderer extends Renderer {
 	}
 
 	private void unbindTexturedModel() {
-	//	glDepthMask(true);
+		//	glDepthMask(true);
 		OpenGlUtils.disableBlending();
 		OpenGlUtils.unbindVAO(0, 1, 2, 3, 4, 5, 6, 7);
 	}

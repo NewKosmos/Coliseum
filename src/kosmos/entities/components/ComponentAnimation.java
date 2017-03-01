@@ -15,6 +15,7 @@ import flounder.collada.animation.*;
 import flounder.collada.joints.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
@@ -329,7 +330,7 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	}
 
 	@Override
-	public String[] getSaveParameters(String entityName) {
+	public Pair<String[], String[]> getSaveValues(String entityName) {
 		if (model != null) {
 			try {
 				File file = new File("entities/" + entityName + "/" + entityName + ".dae");
@@ -383,12 +384,14 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 		}
 
 		String saveModel = (model != null) ? ("new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + ".dae\")") : null;
+		String saveTexture = (texture != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Diffuse.png\")).setNumberOfRows(" + texture.getNumberOfRows() + ").create()") : null;
 
 		String saveScale = scale + "f";
 
-		String saveTexture = (texture != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Diffuse.png\")).setNumberOfRows(" + texture.getNumberOfRows() + ").create()") : null;
-
-		return new String[]{saveScale, saveModel, saveTexture};
+		return new Pair<>(
+				new String[]{"private static final MyFile COLLADA = " + saveModel, "private static final TextureObject TEXTURE = " + saveTexture}, // Static variables
+				new String[]{saveScale, "COLLADA", "TEXTURE"} // Class constructor
+		);
 	}
 
 	@Override

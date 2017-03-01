@@ -11,6 +11,7 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.helpers.*;
 import flounder.lights.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
@@ -147,12 +148,15 @@ public class ComponentLight extends IComponentEntity implements IComponentEditor
 	}
 
 	@Override
-	public String[] getSaveParameters(String entityName) {
+	public Pair<String[], String[]> getSaveValues(String entityName) {
 		String saveOffset = "new Vector3f(" + offset.x + "f, " + offset.y + "f, " + offset.z + "f)";
 		String saveColour = "new Colour(" + light.colour.r + "f, " + light.colour.g + "f, " + light.colour.b + "f)";
 		String saveAttenuation = "new Attenuation(" + light.attenuation.constant + "f, " + light.attenuation.linear + "f, " + light.attenuation.exponent + "f)";
 
-		return new String[]{saveOffset, saveColour, saveAttenuation};
+		return new Pair<>(
+				new String[]{}, // Static variables
+				new String[]{saveOffset, saveColour, saveAttenuation} // Class constructor
+		);
 	}
 
 	@Override

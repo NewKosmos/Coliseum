@@ -11,6 +11,7 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.helpers.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
 
@@ -119,8 +120,11 @@ public class ComponentCollider extends IComponentEntity implements IComponentBou
 	}
 
 	@Override
-	public String[] getSaveParameters(String entityName) {
-		return new String[]{};
+	public Pair<String[], String[]> getSaveValues(String entityName) {
+		return new Pair<>(
+				new String[]{}, // Static variables
+				new String[]{} // Class constructor
+		);
 	}
 
 	@Override

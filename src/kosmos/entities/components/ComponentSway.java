@@ -11,6 +11,7 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.resources.*;
 import flounder.textures.*;
@@ -88,7 +89,7 @@ public class ComponentSway extends IComponentEntity implements IComponentEditor 
 	}
 
 	@Override
-	public String[] getSaveParameters(String entityName) {
+	public Pair<String[], String[]> getSaveValues(String entityName) {
 		if (textureSway != null) {
 			try {
 				File file = new File("entities/" + entityName + "/" + entityName + "Sway.png");
@@ -117,7 +118,10 @@ public class ComponentSway extends IComponentEntity implements IComponentEditor 
 
 		String saveTexture = (textureSway != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Sway.png\")).setNumberOfRows(" + textureSway.getNumberOfRows() + ").create()") : null;
 
-		return new String[]{saveTexture};
+		return new Pair<>(
+				new String[]{"private static final TextureObject TEXTURE_SWAY = " + saveTexture}, // Static variables
+				new String[]{"TEXTURE_SWAY"} // Class constructor
+		);
 	}
 
 	@Override

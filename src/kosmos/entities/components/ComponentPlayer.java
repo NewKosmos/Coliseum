@@ -12,6 +12,7 @@ package kosmos.entities.components;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.helpers.*;
 import flounder.maths.Timer;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
@@ -101,8 +102,11 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 	}
 
 	@Override
-	public String[] getSaveParameters(String entityName) {
-		return new String[]{};
+	public Pair<String[], String[]> getSaveValues(String entityName) {
+		return new Pair<>(
+				new String[]{}, // Static variables
+				new String[]{} // Class constructor
+		);
 	}
 
 	@Override

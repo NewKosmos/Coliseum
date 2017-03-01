@@ -10,8 +10,6 @@
 package kosmos.entities.instances;
 
 import flounder.entities.*;
-import flounder.lights.*;
-import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.resources.*;

@@ -1,7 +1,6 @@
 package kosmos.entities.components.particles;
 
 import flounder.maths.vectors.*;
-import kosmos.particles.loading.*;
 import kosmos.particles.spawns.*;
 
 import javax.swing.*;

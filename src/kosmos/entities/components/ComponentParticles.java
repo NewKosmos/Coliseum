@@ -230,7 +230,7 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 	}
 
 	@Override
-	public String[] getSaveParameters(String entityName) {
+	public Pair<String[], String[]> getSaveValues(String entityName) {
 		String parameterData = "";
 
 		for (String s : editorSystemSpawn.getSavableValues()) {
@@ -243,19 +243,22 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 
 		for (ParticleTemplate t : particleSystem.getTypes()) {
 			String saveTexture = (t.getTexture() != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, \"" + t.getName() + "Particle.png\")).setNumberOfRows(" + t.getTexture().getNumberOfRows() + ").create()") : null;
-			particlesData += "new ParticleTemplate(\"" + t.getName() + "\", " + saveTexture + ", " + t.getLifeLength() + ", " + t.getScale() + "), ";
+			particlesData += "new ParticleTemplate(\"" + t.getName() + "\", " + saveTexture + ", " + t.getLifeLength() + "f, " + t.getScale() + "f), ";
 		}
 
 		particlesData = particlesData.replaceAll(", $", "");
 
-		String saveParticles = "new ArrayList<>(" + particlesData + ")";
+		String saveParticles = "new ParticleTemplate[]{" + particlesData + "}";
 		String saveSpawn = "new " + particleSystem.getSpawn().getClass().getName() + "(" + parameterData + ")";
 		String saveParticleOffset = "new Vector3f(" + centreOffset.x + "f, " + centreOffset.y + "f, " + centreOffset.z + "f)";
 		String saveParticlePPS = particleSystem.getPPS() + "f";
 		String saveParticleSpeed = particleSystem.getAverageSpeed() + "f";
 		String saveParticleGravity = particleSystem.getGravityEffect() + "f";
 
-		return new String[]{saveParticles, saveSpawn, saveParticleOffset, saveParticlePPS, saveParticleSpeed, saveParticleGravity};
+		return new Pair<>(
+				new String[]{"private static final ParticleTemplate[] TEMPLATES = " + saveParticles}, // Static variables
+				new String[]{"Arrays.asList(TEMPLATES)", saveSpawn, saveParticleOffset, saveParticlePPS, saveParticleSpeed, saveParticleGravity} // Class constructor
+		);
 	}
 
 	@Override
