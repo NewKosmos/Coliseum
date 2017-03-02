@@ -1,7 +1,6 @@
 package editors.editor;
 
 import editors.entities.*;
-import editors.particles.*;
 import flounder.devices.*;
 import flounder.fonts.*;
 import flounder.framework.*;
@@ -20,7 +19,6 @@ import java.util.*;
  */
 public class NewKosmosEditor extends TimerTask {
 	private JFrame frame;
-	private JRadioButton optionParticle;
 	private JRadioButton optionEntities;
 
 	private boolean startEntrance;
@@ -54,7 +52,6 @@ public class NewKosmosEditor extends TimerTask {
 
 		frame.setLayout(new FlowLayout());
 
-		optionParticle = new JRadioButton("Particles");
 		optionEntities = new JRadioButton("Entities");
 		JButton buttonSubmit = new JButton("Submit");
 
@@ -64,10 +61,8 @@ public class NewKosmosEditor extends TimerTask {
 		});
 
 		ButtonGroup group = new ButtonGroup();
-		group.add(optionParticle);
 		group.add(optionEntities);
 
-		frame.add(optionParticle);
 		frame.add(optionEntities);
 		frame.add(buttonSubmit);
 		frame.pack();
@@ -86,13 +81,7 @@ public class NewKosmosEditor extends TimerTask {
 			System.out.println("Starting editor entrance.");
 			startEntrance = false;
 
-			if (optionParticle.isSelected()) {
-				Framework entrance = new Framework("Kosmos Editors", -1, new ExtensionParticles(), new FrameParticles(), new KosmosRenderer(), new CameraFocus(), new EditorPlayer(), new EditorGuis());
-				FlounderDisplay.setup(1080, 720, "Kosmos Editor Particle", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")}, false, true, 0, false, true);
-				TextBuilder.DEFAULT_TYPE = FlounderFonts.FFF_FORWARD;
-				frame.setVisible(false);
-				entrance.run();
-			} else if (optionEntities.isSelected()) {
+			if (optionEntities.isSelected()) {
 				Framework entrance = new Framework("Kosmos Editors", -1, new ExtensionEntities(), new FrameEntities(), new KosmosRenderer(), new CameraFocus(), new EditorPlayer(), new EditorGuis());
 				FlounderDisplay.setup(1080, 720, "Kosmos Editor Entities", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")}, false, true, 0, false, true);
 				TextBuilder.DEFAULT_TYPE = FlounderFonts.FFF_FORWARD;

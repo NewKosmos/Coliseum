@@ -101,6 +101,16 @@ public class ExtensionEntities extends IEditorType {
 		}
 	}
 
+	protected void setEntity(Entity entity) {
+		if (this.focusEntity != null) {
+			this.focusEntity.forceRemove(true);
+			FrameEntities.clearSideTab();
+		}
+
+		this.focusEntity = entity;
+		forceAddComponents();
+	}
+
 	private void forceAddComponents() {
 		for (IComponentEntity component : focusEntity.getComponents()) {
 			IComponentEditor editorComponent = (IComponentEditor) component;

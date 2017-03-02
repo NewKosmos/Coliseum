@@ -12,10 +12,12 @@ import kosmos.entities.components.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.tools.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.lang.reflect.*;
+import java.net.*;
 import java.util.*;
 import java.util.List;
 
@@ -208,7 +210,7 @@ public class FrameEntities extends Standard {
 	}
 
 	private void addEntityLoad() {
-		loadButton = new JButton("Select .entity");
+		loadButton = new JButton("Select .java");
 		loadButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				JFileChooser fileChooser = new JFileChooser();
@@ -219,20 +221,21 @@ public class FrameEntities extends Standard {
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					String selectedFile = fileChooser.getSelectedFile().getPath().replace("\\", "/");
 
-					if (selectedFile.contains("res/entities")) {
-						String[] filepath = selectedFile.split("/");
-						String fileName = filepath[filepath.length - 1];
+					String[] filepath = selectedFile.split("/");
+					String fileName = filepath[filepath.length - 1];
 
-						FlounderLogger.error(fileName);
+					FlounderLogger.error(fileName);
 
-						clearSideTab();
-						((ExtensionEntities) KosmosEditor.getEditorType()).loadFromEntity = fileName.replace(".entity", "");
-					} else {
-						FlounderLogger.error("The selected file path is not inside the res/entities folder!");
-					}
+					//	try {
+					//		((ExtensionEntities) KosmosEditor.getEditorType()).setEntity((Entity) ClassLoader.getSystemClassLoader().loadClass(selectedFile).newInstance());
+					//	} catch (Exception e) {
+					//		FlounderLogger.exception(e);
+					//	}
+
 				}
 			}
 		});
+
 		mainPanel.add(loadButton);
 	}
 
