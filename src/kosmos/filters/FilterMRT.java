@@ -32,7 +32,7 @@ public class FilterMRT extends PostFilter {
 
 		this.shadowPCF = KosmosConfigs.configMain.getIntWithDefault("shadow_pcf", 0, () -> shadowPCF);
 		this.shadowBias = KosmosConfigs.configMain.getFloatWithDefault("shadow_bias", 0.001f, () -> shadowBias);
-		this.shadowDarkness = KosmosConfigs.configMain.getFloatWithDefault("shadow_darkness", 0.6f, () -> shadowBias);
+		this.shadowDarkness = KosmosConfigs.configMain.getFloatWithDefault("shadow_darkness", 0.6f, () -> shadowDarkness);
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class FilterMRT extends PostFilter {
 		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
 		shader.getUniformFloat("shadowDistance").loadFloat(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
 		shader.getUniformFloat("shadowTransition").loadFloat(10.0f);
-		shader.getUniformInt("shadowMapSize").loadInt(ShadowRenderer.getShadowMapSize());
+		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.getShadowMapSize());
 		shader.getUniformInt("shadowPCF").loadInt(shadowPCF);
 		shader.getUniformFloat("shadowBias").loadFloat(shadowBias);
 		shader.getUniformFloat("shadowDarkness").loadFloat(shadowDarkness);

@@ -27,7 +27,7 @@ public class InstanceGemGreen extends Entity {
 		super(structure, position, rotation);
 
 		ComponentModel componentModel = new ComponentModel(this, 1.0f, model, texture, 1);
-		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.2f, false, false);
+		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.0f, false, false);
 		ComponentLight componentLight = new ComponentLight(this, new Vector3f(0.0f, 0.8f, 0.0f), new Colour(0.0f, 1.0f, 0.0f), new Attenuation(1.0f, 0.02f, 2.0f));
 		ComponentCollider componentCollider = new ComponentCollider(this);
 		ComponentCollision componentCollision = new ComponentCollision(this);

@@ -28,7 +28,7 @@ public class InstancePod extends Entity {
 
 		ComponentModel componentModel = new ComponentModel(this, 1.0f, model, texture, 1);
 		texture.setHasAlpha(true);
-		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.2f, false, false);
+		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.0f, false, false);
 		ComponentLight componentLight = new ComponentLight(this, new Vector3f(0.0f, 0.5f, 0.0f), new Colour(1.0f, 1.0f, 1.0f), new Attenuation(1.0f, 0.06f, 1.0f));
 		ComponentCollider componentCollider = new ComponentCollider(this);
 		ComponentCollision componentCollision = new ComponentCollision(this);

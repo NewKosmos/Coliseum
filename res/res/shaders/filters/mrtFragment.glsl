@@ -26,7 +26,7 @@ uniform vec3 lightAttenuation[LIGHTS];
 uniform mat4 shadowSpaceMatrix;
 uniform float shadowDistance;
 uniform float shadowTransition;
-uniform int shadowMapSize;
+uniform float shadowMapSize;
 uniform int shadowPCF;
 uniform float shadowBias;
 uniform float shadowDarkness;
