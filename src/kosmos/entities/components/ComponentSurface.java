@@ -26,7 +26,7 @@ public class ComponentSurface extends IComponentEntity implements IComponentEdit
 	private float shineDamper;
 	private float reflectivity;
 
-	private boolean ignoreShadows;
+	private boolean ignoreLighting;
 	private boolean ignoreFog;
 
 	/**
@@ -44,15 +44,15 @@ public class ComponentSurface extends IComponentEntity implements IComponentEdit
 	 * @param entity The entity this component is attached to.
 	 * @param shineDamper The rendered objects shine damper when lighted.
 	 * @param reflectivity The rendered objects reflectivity when lighted.
-	 * @param ignoreShadows If the rendered object will ignore shadows.
+	 * @param ignoreLighting If the rendered object will ignore shadows and lights.
 	 * @param ignoreFog If the rendered object will ignore fog.
 	 */
-	public ComponentSurface(Entity entity, float shineDamper, float reflectivity, boolean ignoreShadows, boolean ignoreFog) {
+	public ComponentSurface(Entity entity, float shineDamper, float reflectivity, boolean ignoreLighting, boolean ignoreFog) {
 		super(entity, ID);
 		this.shineDamper = shineDamper;
 		this.reflectivity = reflectivity;
 
-		this.ignoreShadows = ignoreShadows;
+		this.ignoreLighting = ignoreLighting;
 		this.ignoreFog = ignoreFog;
 	}
 
@@ -76,12 +76,12 @@ public class ComponentSurface extends IComponentEntity implements IComponentEdit
 		this.reflectivity = reflectivity;
 	}
 
-	public boolean isIgnoreShadows() {
-		return ignoreShadows;
+	public boolean isIgnoreLighting() {
+		return ignoreLighting;
 	}
 
-	public void setIgnoreShadows(boolean ignoreShadows) {
-		this.ignoreShadows = ignoreShadows;
+	public void setIgnoreLighting(boolean ignoreLighting) {
+		this.ignoreLighting = ignoreLighting;
 	}
 
 	public boolean isIgnoreFog() {
@@ -132,9 +132,9 @@ public class ComponentSurface extends IComponentEntity implements IComponentEdit
 
 		// Ignore Shadows Checkbox.
 		JCheckBox boxIgnoreShadows = new JCheckBox("Ignore Shadows");
-		boxIgnoreShadows.setSelected(this.ignoreShadows);
+		boxIgnoreShadows.setSelected(this.ignoreLighting);
 		boxIgnoreShadows.addItemListener((ItemEvent e) -> {
-			this.ignoreShadows = boxIgnoreShadows.isSelected();
+			this.ignoreLighting = boxIgnoreShadows.isSelected();
 		});
 		panel.add(boxIgnoreShadows);
 	}
@@ -149,7 +149,7 @@ public class ComponentSurface extends IComponentEntity implements IComponentEdit
 		String saveShineDamper = shineDamper + "f";
 		String saveReflectivity = reflectivity + "f";
 		String saveIgnoreFog = ignoreFog + "";
-		String saveIgnoreShadows = ignoreShadows + "";
+		String saveIgnoreShadows = ignoreLighting + "";
 
 		return new Pair<>(
 				new String[]{}, // Static variables

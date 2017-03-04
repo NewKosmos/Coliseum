@@ -107,6 +107,7 @@ public class KosmosRenderer extends RendererMaster {
 	public void render() {
 		/* Water Reflection & Refraction */
 		if (KosmosWater.reflectionsEnabled()) {
+			FlounderLogger.log("FUCK FUCK");
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
 
 			glEnable(GL_CLIP_DISTANCE0);

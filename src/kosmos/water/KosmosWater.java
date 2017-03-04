@@ -12,7 +12,6 @@ public class KosmosWater extends Module {
 	private Water water;
 	private float waveTime;
 
-	private boolean enableShadows;
 	private boolean enableReflections;
 
 	public KosmosWater() {
@@ -24,8 +23,7 @@ public class KosmosWater extends Module {
 		this.water = new Water(new Vector3f(0.0f, -0.2f, 0.0f), new Vector3f(), 1.0f);
 		this.waveTime = 0.0f;
 
-		this.enableShadows = true;
-		this.enableReflections = KosmosConfigs.configMain.getBooleanWithDefault("water_reflections", true, KosmosWater::reflectionsEnabled);
+		this.enableReflections = KosmosConfigs.configMain.getBooleanWithDefault("water_reflections", false, KosmosWater::reflectionsEnabled);
 	}
 
 	@Override
@@ -46,14 +44,6 @@ public class KosmosWater extends Module {
 
 	public static float getWaveTime() {
 		return INSTANCE.waveTime;
-	}
-
-	public static boolean shadowsEnabled() {
-		return INSTANCE.enableShadows;
-	}
-
-	public static void setShadowsEnabled(boolean enableShadows) {
-		INSTANCE.enableShadows = enableShadows;
 	}
 
 	public static boolean reflectionsEnabled() {

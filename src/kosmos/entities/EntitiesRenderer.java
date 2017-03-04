@@ -153,14 +153,14 @@ public class EntitiesRenderer extends Renderer {
 			shader.getUniformFloat("shineDamper").loadFloat(componentSurface.getShineDamper());
 			shader.getUniformFloat("reflectivity").loadFloat(componentSurface.getReflectivity());
 
-			shader.getUniformBool("ignoreShadows").loadBoolean(componentSurface.isIgnoreShadows());
 			shader.getUniformBool("ignoreFog").loadBoolean(componentSurface.isIgnoreFog());
+			shader.getUniformBool("ignoreLighting").loadBoolean(componentSurface.isIgnoreLighting());
 		} else {
 			shader.getUniformFloat("shineDamper").loadFloat(1.0f);
 			shader.getUniformFloat("reflectivity").loadFloat(0.0f);
 
-			shader.getUniformBool("ignoreShadows").loadBoolean(false);
 			shader.getUniformBool("ignoreFog").loadBoolean(false);
+			shader.getUniformBool("ignoreLighting").loadBoolean(false);
 		}
 
 		if (componentSway != null) {

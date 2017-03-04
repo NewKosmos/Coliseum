@@ -15,8 +15,8 @@ layout(location = 2) out vec4 out_extras;
 uniform float shineDamper;
 uniform float reflectivity;
 
-uniform bool ignoreShadows;
 uniform bool ignoreFog;
+uniform bool ignoreLighting;
 
 //---------MAIN------------
 void main(void) {
@@ -29,5 +29,5 @@ void main(void) {
 
 	out_albedo = vec4(diffuseColour);
 	out_normals = vec4(pass_surfaceNormal, 1.0);
-	out_extras = vec4(shineDamper, reflectivity, (1.0 / 3.0) * (float(ignoreFog) + 2.0 * float(ignoreShadows)), 1.0);
+	out_extras = vec4(shineDamper, reflectivity, (1.0 / 3.0) * (float(ignoreFog) + 2.0 * float(ignoreLighting)), 1.0);
 }

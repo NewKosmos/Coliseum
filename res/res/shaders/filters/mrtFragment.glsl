@@ -4,7 +4,7 @@
 #include "maths.glsl"
 
 //---------CONSTANT------------
-const int LIGHTS = 64;
+const int LIGHTS = 32;
 
 const int SHADOW_PCF = 1;
 const float SHADOW_BIAS = 0.001;
@@ -87,40 +87,44 @@ void main(void) {
 	float shineDamper = extras.r;
 	float reflectivity = extras.g;
 	bool ignoreFog = extras.b == (1.0 / 3.0) || extras.b == (3.0 / 3.0);
-	bool ignoreShadows = extras.b == (2.0 / 3.0) || extras.b == (3.0 / 3.0);
+	bool ignoreLighting = extras.b == (2.0 / 3.0) || extras.b == (3.0 / 3.0);
 
 	vec4 worldPosition = vec4(decodeLocation(), 1.0);
 
 	vec3 toCameraVector = (inverse(viewMatrix) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPosition.xyz;
     vec4 positionRelativeToCam = viewMatrix * worldPosition;
-    vec4 shadowCoords = shadowSpaceMatrix * worldPosition;
-    float distanceAway = length(positionRelativeToCam.xyz);
-    distanceAway = distanceAway - ((shadowDistance * 2.0) - shadowTransition);
-    distanceAway = distanceAway / shadowTransition;
-    shadowCoords.w = clamp(1.0 - distanceAway, 0.0, 1.0);
-
-    vec3 totalDiffuse = vec3(0.0);
-	vec3 totalSpecular = vec3(0.0);
-
-	for (int i = 0; i < LIGHTS; i++) {
-		vec3 toLightVector = lightPosition[i] - worldPosition.xyz;
-		float distance = length(toLightVector);
-		float attinuationFactor = lightAttenuation[i].x + (lightAttenuation[i].y * distance) + (lightAttenuation[i].z * distance * distance);
-		vec3 unitLightVector = normalize(toLightVector);
-
-		float brightness = max(dot(normals.xyz, unitLightVector), 0.0);
-		vec3 reflectedLightDirection = reflect(-unitLightVector, normals.xyz);
-		float specularFactor = max(dot(reflectedLightDirection, normalize(toCameraVector)), 0.0);
-		float dampedFactor = pow(specularFactor, shineDamper);
-
-		totalDiffuse = totalDiffuse + (brightness * lightColour[i]) / attinuationFactor;
-		totalSpecular = totalSpecular + (dampedFactor * reflectivity * lightColour[i]) / attinuationFactor;
-	}
 
     out_colour = vec4(albedo.rgb, 1.0);
 
-    if (!ignoreShadows) {
+    if (!ignoreLighting) {
+        // Shadow mapping.
+        vec4 shadowCoords = shadowSpaceMatrix * worldPosition;
+        float distanceAway = length(positionRelativeToCam.xyz);
+        distanceAway = distanceAway - ((shadowDistance * 2.0) - shadowTransition);
+        distanceAway = distanceAway / shadowTransition;
+        shadowCoords.w = clamp(1.0 - distanceAway, 0.0, 1.0);
+
         out_colour = vec4(out_colour.rgb * shadow(shadowMap, shadowCoords, shadowMapSize), 1.0);
+
+        // Surface lighting.
+        vec3 totalDiffuse = vec3(0.0);
+        vec3 totalSpecular = vec3(0.0);
+
+        for (int i = 0; i < LIGHTS; i++) {
+            vec3 toLightVector = lightPosition[i] - worldPosition.xyz;
+            float distance = length(toLightVector);
+            float attinuationFactor = lightAttenuation[i].x + (lightAttenuation[i].y * distance) + (lightAttenuation[i].z * distance * distance);
+            vec3 unitLightVector = normalize(toLightVector);
+
+            float brightness = max(dot(normals.xyz, unitLightVector), 0.0);
+            vec3 reflectedLightDirection = reflect(-unitLightVector, normals.xyz);
+            float specularFactor = max(dot(reflectedLightDirection, normalize(toCameraVector)), 0.0);
+            float dampedFactor = pow(specularFactor, shineDamper);
+
+            totalDiffuse = totalDiffuse + (brightness * lightColour[i]) / attinuationFactor;
+            totalSpecular = totalSpecular + (dampedFactor * reflectivity * lightColour[i]) / attinuationFactor;
+        }
+
         out_colour = (vec4(totalDiffuse, 1.0) * out_colour) + vec4(totalSpecular, 1.0);
     }
 
