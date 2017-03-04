@@ -23,7 +23,7 @@ import java.util.*;
  * Represents the physical mesh for all the water at a certain height in the scene.
  */
 public class Water {
-	protected static final float COLOUR_INTENSITY = 0.9f; // 0 being 100% reflective, 1 disables reflections.
+	protected static final float COLOUR_INTENSITY = 0.7f; // 0 being 100% reflective, 1 disables reflections.
 
 	protected static final float WAVE_SPEED = 10.0f;
 	protected static final float WAVE_LENGTH = 5.0f;
@@ -32,8 +32,8 @@ public class Water {
 	protected static final double SQUARE_SIZE = 1.0;
 	protected static final int VERTEX_COUNT = 135;
 
-	protected static final float SHINE_DAMPER = 1.250f;
-	protected static final float REFLECTIVITY = 0.125f;
+	protected static final float SHINE_DAMPER = 1.0f;
+	protected static final float REFLECTIVITY = 0.0f;
 
 	private int vao;
 	private int vertexCount;
@@ -218,6 +218,12 @@ public class Water {
 	public void update() {
 		if (moved) {
 			Matrix4f.transformationMatrix(position, rotation, scale, modelMatrix);
+		}
+
+		if (KosmosWater.reflectionsEnabled()) {
+			colour.a = COLOUR_INTENSITY;
+		} else {
+			colour.a = 1.0f;
 		}
 
 		moved = false;

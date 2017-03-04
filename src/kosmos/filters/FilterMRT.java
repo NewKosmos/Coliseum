@@ -21,10 +21,18 @@ import kosmos.shadows.*;
 import kosmos.world.*;
 
 public class FilterMRT extends PostFilter {
-	private static final int LIGHTS = 32;
+	private static final int LIGHTS = 28;
+
+	private int shadowPCF;
+	private float shadowBias;
+	private float shadowDarkness;
 
 	public FilterMRT() {
 		super("filterMrt", new MyFile(PostFilter.POST_LOC, "mrtFragment.glsl"));
+
+		this.shadowPCF = KosmosConfigs.configMain.getIntWithDefault("shadow_pcf", 0, () -> shadowPCF);
+		this.shadowBias = KosmosConfigs.configMain.getFloatWithDefault("shadow_bias", 0.001f, () -> shadowBias);
+		this.shadowDarkness = KosmosConfigs.configMain.getFloatWithDefault("shadow_darkness", 0.6f, () -> shadowBias);
 	}
 
 	@Override
@@ -34,14 +42,16 @@ public class FilterMRT extends PostFilter {
 
 		int lightsLoaded = 0;
 
-		for (Entity entity : FlounderEntities.getEntities().getAll()) {
-			ComponentLight componentLight = (ComponentLight) entity.getComponent(ComponentLight.ID);
+		if (FlounderEntities.getEntities() != null) {
+			for (Entity entity : FlounderEntities.getEntities().getAll()) {
+				ComponentLight componentLight = (ComponentLight) entity.getComponent(ComponentLight.ID);
 
-			if (lightsLoaded < LIGHTS && componentLight != null) {
-				shader.getUniformVec3("lightColour[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getColour());
-				shader.getUniformVec3("lightPosition[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getPosition());
-				shader.getUniformVec3("lightAttenuation[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getAttenuation());
-				lightsLoaded++;
+				if (lightsLoaded < LIGHTS && componentLight != null) {
+					shader.getUniformVec3("lightColour[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getColour());
+					shader.getUniformVec3("lightPosition[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getPosition());
+					shader.getUniformVec3("lightAttenuation[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getAttenuation());
+					lightsLoaded++;
+				}
 			}
 		}
 
@@ -75,7 +85,10 @@ public class FilterMRT extends PostFilter {
 		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
 		shader.getUniformFloat("shadowDistance").loadFloat(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
 		shader.getUniformFloat("shadowTransition").loadFloat(10.0f);
-		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.getShadowMapSize());
+		shader.getUniformInt("shadowMapSize").loadInt(ShadowRenderer.getShadowMapSize());
+		shader.getUniformInt("shadowPCF").loadInt(shadowPCF);
+		shader.getUniformFloat("shadowBias").loadFloat(shadowBias);
+		shader.getUniformFloat("shadowDarkness").loadFloat(shadowDarkness);
 
 		if (KosmosWorld.getFog() != null) {
 			shader.getUniformVec3("fogColour").loadVec3(KosmosWorld.getFog().getFogColour());
@@ -86,5 +99,17 @@ public class FilterMRT extends PostFilter {
 			shader.getUniformFloat("fogDensity").loadFloat(0.003f);
 			shader.getUniformFloat("fogGradient").loadFloat(2.0f);
 		}
+	}
+
+	public int getShadowPCF() {
+		return shadowPCF;
+	}
+
+	public float getShadowBias() {
+		return shadowBias;
+	}
+
+	public float getShadowDarkness() {
+		return shadowDarkness;
 	}
 }

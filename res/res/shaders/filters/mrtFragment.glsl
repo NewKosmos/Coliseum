@@ -4,11 +4,7 @@
 #include "maths.glsl"
 
 //---------CONSTANT------------
-const int LIGHTS = 32;
-
-const int SHADOW_PCF = 1;
-const float SHADOW_BIAS = 0.001;
-const float SHADOW_DARKNESS = 0.6;
+const int LIGHTS = 28;
 
 //---------IN------------
 in vec2 pass_textureCoords;
@@ -30,7 +26,10 @@ uniform vec3 lightAttenuation[LIGHTS];
 uniform mat4 shadowSpaceMatrix;
 uniform float shadowDistance;
 uniform float shadowTransition;
-uniform float shadowMapSize;
+uniform int shadowMapSize;
+uniform int shadowPCF;
+uniform float shadowBias;
+uniform float shadowDarkness;
 
 uniform vec3 fogColour;
 uniform float fogDensity;
@@ -48,22 +47,19 @@ vec3 decodeLocation() {
 
 //---------SHADOW------------
 float shadow(sampler2D shadowMap, vec4 shadowCoords, float shadowMapSize) {
-    float totalTextels = (SHADOW_PCF * 2.0 + 1.0) * (SHADOW_PCF * 2.0 + 1.0);
+    float totalTextels = (shadowPCF * 2.0 + 1.0) * (shadowPCF * 2.0 + 1.0);
     float texelSize = 1.0 / shadowMapSize;
     float total = 0.0;
-
-    for (int x = -SHADOW_PCF; x <= SHADOW_PCF; x++) {
-        for (int y = -SHADOW_PCF; y <= SHADOW_PCF; y++) {
+    for (int x = -shadowPCF; x <= shadowPCF; x++) {
+        for (int y = -shadowPCF; y <= shadowPCF; y++) {
             float shadowValue = texture(shadowMap, shadowCoords.xy + vec2(x, y) * texelSize).r;
-
-            if (shadowCoords.z > shadowValue + SHADOW_BIAS) {
+            if (shadowCoords.z > shadowValue + shadowBias) {
                 total += 1.0;
             }
         }
     }
-
     total /= totalTextels;
-    return 1.0 - (total * SHADOW_DARKNESS * shadowCoords.w);
+    return 1.0 - (total * shadowDarkness * shadowCoords.w);
 }
 
 //---------FOG VISIBILITY------------

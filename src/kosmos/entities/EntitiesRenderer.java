@@ -48,14 +48,16 @@ public class EntitiesRenderer extends Renderer {
 
 	@Override
 	public void renderObjects(Vector4f clipPlane, Camera camera) {
-		if (!shader.isLoaded() || FlounderEntities.getEntities() == null) {
+		if (!shader.isLoaded() || camera == null) {
 			return;
 		}
 
 		prepareRendering(clipPlane, camera);
 
-		for (Entity entity : FlounderEntities.getEntities().queryInFrustum(FlounderCamera.getCamera().getViewFrustum())) {
-			renderEntity(entity);
+		if (FlounderEntities.getEntities() != null) {
+			for (Entity entity : FlounderEntities.getEntities().queryInFrustum(FlounderCamera.getCamera().getViewFrustum())) {
+				renderEntity(entity);
+			}
 		}
 
 		if (KosmosChunks.getChunks() != null) {

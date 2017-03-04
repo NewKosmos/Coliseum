@@ -31,7 +31,7 @@ public class ShadowRenderer extends Renderer {
 	private static final MyFile VERTEX_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "shadows", "shadowVertex.glsl");
 	private static final MyFile FRAGMENT_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "shadows", "shadowFragment.glsl");
 
-	public static final int SHADOW_MAP_SIZE = KosmosConfigs.configMain.getIntWithDefault("shadowMap_size", Math.min(FBO.getMaxFBOSize(), 8192), ShadowRenderer::getShadowMapSize);
+	public static final int SHADOW_MAP_SIZE = KosmosConfigs.configMain.getIntWithDefault("shadow_size", Math.min(FBO.getMaxFBOSize(), 8192), ShadowRenderer::getShadowMapSize);
 
 	private FBO shadowFBO;
 	private ShaderObject shader;
@@ -64,25 +64,25 @@ public class ShadowRenderer extends Renderer {
 
 	@Override
 	public void renderObjects(Vector4f clipPlane, Camera camera) {
-		if (!shader.isLoaded() || FlounderEntities.getEntities() == null) {
+		if (!shader.isLoaded() || camera == null) {
 			return;
 		}
 
 		prepareRendering(clipPlane, camera);
 
-		for (Entity entity : FlounderEntities.getEntities().getAll()) {
-			renderEntity(entity);
+		if (FlounderEntities.getEntities() != null) {
+			for (Entity entity : FlounderEntities.getEntities().queryInFrustum(FlounderCamera.getCamera().getViewFrustum())) {
+				renderEntity(entity);
+			}
 		}
 
 		if (KosmosChunks.getChunks() != null) {
-			for (Entity entityc : KosmosChunks.getChunks().getAll()) {
+			for (Entity entityc : KosmosChunks.getChunks().queryInFrustum(camera.getViewFrustum())) {
 				Chunk chunk = (Chunk) entityc;
 				renderEntity(entityc);
 
-				if (chunk.getEntities() != null) {
-					for (Entity entity : chunk.getEntities().getAll()) {
-						renderEntity(entity);
-					}
+				for (Entity entity : chunk.getEntities().getAll()) {
+					renderEntity(entity);
 				}
 			}
 		}

@@ -31,6 +31,8 @@ public class PlayerBasic extends Player {
 	private IAxis inputForward;
 	private IAxis inputTurn;
 	private IButton inputBoost;
+	private IButton inputRunStraight;
+	private boolean runStraight;
 
 	public PlayerBasic() {
 		super();
@@ -46,17 +48,27 @@ public class PlayerBasic extends Player {
 		IButton upKeyButtons = new KeyButton(GLFW.GLFW_KEY_W, GLFW.GLFW_KEY_UP);
 		IButton downKeyButtons = new KeyButton(GLFW.GLFW_KEY_S, GLFW.GLFW_KEY_DOWN);
 		IButton boostButtons = new KeyButton(GLFW.GLFW_KEY_LEFT_SHIFT, GLFW.GLFW_KEY_RIGHT_SHIFT);
+		IButton straightButtons = new KeyButton(GLFW.GLFW_KEY_H);
 
 		this.currentSpeed = 0.0f;
 		this.currentTurnSpeed = 0.0f;
 		this.inputForward = new CompoundAxis(new ButtonAxis(upKeyButtons, downKeyButtons), new JoystickAxis(0, 1));
 		this.inputTurn = new CompoundAxis(new ButtonAxis(leftKeyButtons, rightKeyButtons), new JoystickAxis(0, 0));
 		this.inputBoost = new CompoundButton(boostButtons);
+		this.inputRunStraight = new CompoundButton(straightButtons);
+		this.runStraight = false;
 	}
 
 	@Override
 	public void update() {
-		currentSpeed = -(inputBoost.isDown() ? BOOST_SPEED : RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
+		if (inputRunStraight.wasDown()) {
+			runStraight = !runStraight;
+		}
+		if (runStraight) {
+			currentSpeed = -(inputBoost.isDown() ? BOOST_SPEED : RUN_SPEED) * -1.5f;
+		} else {
+			currentSpeed = -(inputBoost.isDown() ? BOOST_SPEED : RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
+		}
 		currentTurnSpeed = -TURN_SPEED * Maths.deadband(0.05f, inputTurn.getAmount());
 		float distance = currentSpeed * Framework.getDelta();
 		float dx = (float) (distance * Math.sin(Math.toRadians(rotation.y)));
