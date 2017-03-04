@@ -12,6 +12,7 @@ package kosmos.camera;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.framework.*;
+import flounder.inputs.*;
 import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.matrices.*;
@@ -38,8 +39,9 @@ public class CameraFocus extends Camera {
 	private static final float INFLUENCE_OF_MOUSE_DX = INFLUENCE_OF_MOUSE_DY * 100.0f;
 	private static final float INFLUENCE_OF_MOUSE_WHEEL = 0.1f;
 
-	private static final float MAX_HORIZONTAL_CHANGE = 800.0f;
-	private static final float MAX_VERTICAL_CHANGE = 8.0f;
+	private static final float MAX_HORIZONTAL_CHANGE = 20.0f;
+	private static final float MAX_VERTICAL_CHANGE = 20.0f;
+	private static final float MAX_ZOOM_CHANGE = 1.0f;
 
 	private static final float CAMERA_AIM_OFFSET = 2.0f;
 	private static final float MAX_ANGLE_OF_ELEVATION = (float) Math.PI / 4.0f;
@@ -68,6 +70,8 @@ public class CameraFocus extends Camera {
 	private float actualDistanceFromPoint;
 	private float horizontalDistanceFromFocus;
 	private float verticalDistanceFromFocus;
+
+	private int reangleButton;
 
 	public CameraFocus() {
 		super(FlounderLogger.class, FlounderProfiler.class, FlounderJoysticks.class, FlounderKeyboard.class, FlounderMouse.class);
@@ -105,6 +109,11 @@ public class CameraFocus extends Camera {
 		this.actualDistanceFromPoint = targetZoom;
 		this.horizontalDistanceFromFocus = 0.0f;
 		this.verticalDistanceFromFocus = 0.0f;
+
+		this.reangleButton = KosmosConfigs.configSave.getIntWithDefault("camera_reangle", GLFW_MOUSE_BUTTON_RIGHT, () -> reangleButton);
+		// GLFW_MOUSE_BUTTON_LEFT   = GLFW_MOUSE_BUTTON_1,
+		// GLFW_MOUSE_BUTTON_RIGHT  = GLFW_MOUSE_BUTTON_2,
+		// GLFW_MOUSE_BUTTON_MIDDLE = GLFW_MOUSE_BUTTON_3;
 
 		calculateDistances();
 	}
@@ -153,17 +162,16 @@ public class CameraFocus extends Camera {
 	}
 
 	private void calculateHorizontalAngle() {
-		float delta = Framework.getDelta();
 		float angleChange = 0.0f;
 
-		if (FlounderMouse.getMouse(GLFW_MOUSE_BUTTON_RIGHT)) {
+		if (FlounderMouse.getMouse(reangleButton)) {
 			angleChange = -FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSE_DX;
 		}
 
-		if (angleChange > MAX_HORIZONTAL_CHANGE * delta) {
-			angleChange = MAX_HORIZONTAL_CHANGE * delta;
-		} else if (angleChange < -MAX_HORIZONTAL_CHANGE * delta) {
-			angleChange = -MAX_HORIZONTAL_CHANGE * delta;
+		if (angleChange > MAX_HORIZONTAL_CHANGE) {
+			angleChange = MAX_HORIZONTAL_CHANGE;
+		} else if (angleChange < -MAX_HORIZONTAL_CHANGE) {
+			angleChange = -MAX_HORIZONTAL_CHANGE;
 		}
 
 		targetRotationAngle -= angleChange;
@@ -176,17 +184,16 @@ public class CameraFocus extends Camera {
 	}
 
 	private void calculateVerticalAngle() {
-		float delta = Framework.getDelta();
 		float angleChange = 0.0f;
 
-		if (FlounderMouse.getMouse(GLFW_MOUSE_BUTTON_RIGHT)) {
+		if (FlounderMouse.getMouse(reangleButton)) {
 			angleChange = FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSE_DY;
 		}
 
-		if (angleChange > MAX_VERTICAL_CHANGE * delta) {
-			angleChange = MAX_VERTICAL_CHANGE * delta;
-		} else if (angleChange < -MAX_VERTICAL_CHANGE * delta) {
-			angleChange = -MAX_VERTICAL_CHANGE * delta;
+		if (angleChange > MAX_VERTICAL_CHANGE) {
+			angleChange = MAX_VERTICAL_CHANGE;
+		} else if (angleChange < -MAX_VERTICAL_CHANGE) {
+			angleChange = -MAX_VERTICAL_CHANGE;
 		}
 
 		targetElevation -= angleChange;
@@ -201,8 +208,14 @@ public class CameraFocus extends Camera {
 	private void calculateZoom() {
 		float zoomChange = 0.0f;
 
-		if (Math.abs(Maths.deadband(0.1f, FlounderMouse.getDeltaWheel())) > 0.0f) {
+		if (Math.abs(FlounderMouse.getDeltaWheel()) > 0.1f) {
 			zoomChange = FlounderMouse.getDeltaWheel() * INFLUENCE_OF_MOUSE_WHEEL;
+		}
+
+		if (zoomChange > MAX_VERTICAL_CHANGE) {
+			zoomChange = MAX_VERTICAL_CHANGE;
+		} else if (zoomChange < -MAX_VERTICAL_CHANGE) {
+			zoomChange = -MAX_ZOOM_CHANGE;
 		}
 
 		targetZoom -= zoomChange;
@@ -231,8 +244,7 @@ public class CameraFocus extends Camera {
 			}
 		}
 
-		float change = offset * Framework.getDelta() * ROTATE_AGILITY;
-		angleAroundPlayer += change;
+		angleAroundPlayer += offset * Framework.getDelta() * ROTATE_AGILITY;
 
 		if (angleAroundPlayer >= Maths.DEGREES_IN_HALF_CIRCLE) {
 			angleAroundPlayer -= Maths.DEGREES_IN_CIRCLE;
@@ -243,6 +255,7 @@ public class CameraFocus extends Camera {
 
 	private void updatePitchAngle() {
 		float offset = targetElevation - angleOfElevation;
+
 		if (Math.abs(offset) > Maths.DEGREES_IN_HALF_CIRCLE) {
 			if (offset < 0) {
 				offset = targetElevation + Maths.DEGREES_IN_CIRCLE - angleOfElevation;
@@ -251,8 +264,7 @@ public class CameraFocus extends Camera {
 			}
 		}
 
-		float change = offset * Framework.getDelta() * PITCH_AGILITY;
-		angleOfElevation += change;
+		angleOfElevation += offset * Framework.getDelta() * PITCH_AGILITY;
 
 		if (angleOfElevation >= Maths.DEGREES_IN_HALF_CIRCLE) {
 			angleOfElevation -= Maths.DEGREES_IN_CIRCLE;
@@ -279,9 +291,9 @@ public class CameraFocus extends Camera {
 	private void updateViewMatrix() {
 		viewMatrix.setIdentity();
 		position.negate();
-		Matrix4f.rotate(viewMatrix, new Vector3f(1.0f, 0.0f, 0.0f), (float) Math.toRadians(rotation.x), viewMatrix);
-		Matrix4f.rotate(viewMatrix, new Vector3f(0.0f, 1.0f, 0.0f), (float) Math.toRadians(-rotation.y), viewMatrix);
-		Matrix4f.rotate(viewMatrix, new Vector3f(0.0f, 0.0f, 1.0f), (float) Math.toRadians(rotation.z), viewMatrix);
+		Matrix4f.rotate(viewMatrix, Matrix4f.REUSABLE_VECTOR.set(1.0f, 0.0f, 0.0f), (float) Math.toRadians(rotation.x), viewMatrix);
+		Matrix4f.rotate(viewMatrix, Matrix4f.REUSABLE_VECTOR.set(0.0f, 1.0f, 0.0f), (float) Math.toRadians(-rotation.y), viewMatrix);
+		Matrix4f.rotate(viewMatrix, Matrix4f.REUSABLE_VECTOR.set(0.0f, 0.0f, 1.0f), (float) Math.toRadians(rotation.z), viewMatrix);
 		Matrix4f.translate(viewMatrix, position, viewMatrix);
 		position.negate();
 	}
