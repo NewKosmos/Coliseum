@@ -19,8 +19,11 @@ import flounder.physics.bounding.*;
 import flounder.sounds.*;
 import flounder.standards.*;
 import kosmos.chunks.*;
+import kosmos.entities.components.*;
 import kosmos.water.*;
 import kosmos.world.*;
+
+import java.util.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -33,6 +36,7 @@ public class KosmosInterface extends Standard {
 	private KeyButton aabbs;
 	private KeyButton closeWindow;
 
+	private String username;
 	private String serverIP;
 	private int serverPort;
 
@@ -53,9 +57,10 @@ public class KosmosInterface extends Standard {
 		this.aabbs = new KeyButton(GLFW_KEY_O);
 		this.closeWindow = new KeyButton(GLFW_KEY_DELETE);
 
+		this.username = KosmosConfigs.configServer.getStringWithDefault("username", "USERNAME" + ((int) (Math.random() * 10000)), this::getUsername);
 		this.serverIP = KosmosConfigs.configServer.getStringWithDefault("connect_ip", "localhost", this::getServerIP);
 		this.serverPort = KosmosConfigs.configServer.getIntWithDefault("connect_port", FlounderNetwork.getPort(), this::getServerPort);
-		FlounderNetwork.startClient(serverIP, serverPort);
+		FlounderNetwork.startClient(username, serverIP, serverPort);
 
 		FlounderEvents.addEvent(new IEvent() {
 			@Override
@@ -138,6 +143,10 @@ public class KosmosInterface extends Standard {
 	@Override
 	public void profile() {
 
+	}
+
+	public String getUsername() {
+		return username;
 	}
 
 	public String getServerIP() {

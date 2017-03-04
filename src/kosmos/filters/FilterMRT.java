@@ -85,7 +85,7 @@ public class FilterMRT extends PostFilter {
 		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
 		shader.getUniformFloat("shadowDistance").loadFloat(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
 		shader.getUniformFloat("shadowTransition").loadFloat(10.0f);
-		shader.getUniformFloat("shadowMapSize").loadFloat(ShadowRenderer.getShadowMapSize());
+		shader.getUniformInt("shadowMapSize").loadInt(ShadowRenderer.getShadowMapSize());
 		shader.getUniformInt("shadowPCF").loadInt(shadowPCF);
 		shader.getUniformFloat("shadowBias").loadFloat(shadowBias);
 		shader.getUniformFloat("shadowDarkness").loadFloat(shadowDarkness);

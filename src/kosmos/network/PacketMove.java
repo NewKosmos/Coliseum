@@ -1,11 +1,13 @@
 package kosmos.network;
 
 import flounder.entities.*;
+import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.networking.packets.*;
 import kosmos.entities.components.*;
 import kosmos.entities.instances.*;
+import kosmos.world.*;
 
 import java.net.*;
 
@@ -46,19 +48,12 @@ public class PacketMove extends Packet {
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
 		//	FlounderLogger.log("[" + client + "]: moved to: " + x + "," + y + "," + z + " : " + w);
-
-		//	if (!FlounderNetwork.getUsername().equals(username)) {
-		if (!ComponentMultiplayer.players.containsKey(username)) {
-			new InstanceMuliplayer(FlounderEntities.getEntities(), new Vector3f(x, y, z), new Vector3f(), username);
-		}
-
-		ComponentMultiplayer.players.get(username).move(x, y, z, w);
-		//	}
+		KosmosWorld.movePlayer(username, x, y, z, w);
 	}
 
 	@Override
 	public void serverHandlePacket(Server server, InetAddress address, int port) {
-		//	FlounderLogger.log("[" + port + "]: moved to: " + x + "," + y + "," + z + " : " + w);
+	//	FlounderLogger.log("[" + username + "]: moved to: " + x + "," + y + "," + z + " : " + w);
 		this.writeData(server);
 	}
 

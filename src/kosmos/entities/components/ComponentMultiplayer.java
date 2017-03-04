@@ -12,13 +12,13 @@ package kosmos.entities.components;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
+import kosmos.*;
+import kosmos.world.*;
 
 import javax.swing.*;
 import java.util.*;
 
 public class ComponentMultiplayer extends IComponentEntity implements IComponentEditor {
-	public static final Map<String, ComponentMultiplayer> players = new HashMap<>();
-
 	public static final int ID = EntityIDAssigner.getId();
 
 	private String username;
@@ -41,10 +41,6 @@ public class ComponentMultiplayer extends IComponentEntity implements IComponent
 	public ComponentMultiplayer(Entity entity, String username) {
 		super(entity, ID);
 		this.username = username;
-
-		if (username != null) {
-			players.put(username, this);
-		}
 	}
 
 	@Override
@@ -80,6 +76,6 @@ public class ComponentMultiplayer extends IComponentEntity implements IComponent
 
 	@Override
 	public void dispose() {
-		players.remove(username);
+		KosmosWorld.removePlayer(username);
 	}
 }

@@ -9,9 +9,6 @@
 
 package kosmos.entities.instances;
 
-import flounder.animation.*;
-import flounder.collada.*;
-import flounder.collada.animation.*;
 import flounder.entities.*;
 import flounder.lights.*;
 import flounder.maths.*;
@@ -28,16 +25,10 @@ public class InstancePlayer extends Entity {
 	public InstancePlayer(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 
-		ComponentPlayer componentPlayer = new ComponentPlayer(this);
-		ModelAnimated modelAnimated = FlounderCollada.loadCollada(colladaFile);
-
-		AnimationData animationData = FlounderCollada.loadAnimation(colladaFile);
-		Animation animation = FlounderAnimation.loadAnimation(animationData);
-
-		ComponentAnimation componentAnimation = new ComponentAnimation(this, modelAnimated, 0.2f, texture, 1);
-		componentAnimation.doAnimation(animation);
-		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.0f, false, false);
-		ComponentLight componentLight = new ComponentLight(this, new Vector3f(0.0f, 2.0f, 0.0f), new Colour(0.9f, 0.8f, 0.8f), new Attenuation(1.0f, 0.02f, 0.2f));
+		new ComponentPlayer(this);
+		new ComponentAnimation(this, colladaFile, 0.2f, texture, 1);
+		new ComponentSurface(this, 1.0f, 0.0f, false, false);
+		new ComponentLight(this, new Vector3f(0.0f, 2.0f, 0.0f), new Colour(0.9f, 0.8f, 0.8f), new Attenuation(1.0f, 0.02f, 0.2f));
 		//	ComponentCollider componentCollider = new ComponentCollider(this);
 		//	ComponentCollision componentCollision = new ComponentCollision(this);
 	}

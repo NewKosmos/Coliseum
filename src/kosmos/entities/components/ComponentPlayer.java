@@ -17,6 +17,7 @@ import flounder.maths.Timer;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import kosmos.network.*;
+import kosmos.world.*;
 
 import javax.swing.*;
 
@@ -55,8 +56,8 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 
 	@Override
 	public void update() {
-		if (ComponentMultiplayer.players.size() != lastPlayerCount) {
-			lastPlayerCount = ComponentMultiplayer.players.size();
+		if (KosmosWorld.connectedPlayers() != lastPlayerCount) {
+			lastPlayerCount = KosmosWorld.connectedPlayers();
 			sendData();
 		}
 

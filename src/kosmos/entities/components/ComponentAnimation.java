@@ -78,6 +78,11 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 		this.texture = texture;
 		this.textureIndex = textureIndex;
 
+		if (model != null) {
+			model.getHeadJoint().calculateInverseBindTransform(Matrix4f.rotate(new Matrix4f(), new Vector3f(1.0f, 0.0f, 0.0f), (float) Math.toRadians(-90.0f), null));
+			this.animator = new Animator(model.getHeadJoint());
+		}
+
 		doAnimation(animation);
 	}
 
