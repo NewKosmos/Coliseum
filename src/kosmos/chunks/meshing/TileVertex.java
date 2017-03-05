@@ -22,7 +22,6 @@ public class TileVertex {
 	protected float tangent0;
 	protected float tangent1;
 	protected float tangent2;
-	protected boolean duplicate;
 
 	protected TileVertex(int index, float vertex0, float vertex1, float vertex2, float texture0, float texture1, float normal0, float normal1, float normal2, float tangent0, float tangent1, float tangent2) {
 		this.index = index;
@@ -37,15 +36,10 @@ public class TileVertex {
 		this.tangent0 = tangent0;
 		this.tangent1 = tangent1;
 		this.tangent2 = tangent2;
-		this.duplicate = false;
 	}
 
 	@Override
 	public boolean equals(Object object) {
-		if (duplicate) {
-			return false;
-		}
-
 		if (this == object) {
 			return true;
 		}
@@ -59,10 +53,6 @@ public class TileVertex {
 		}
 
 		TileVertex other = (TileVertex) object;
-
-		if (other.duplicate) {
-			return false;
-		}
 
 		if (vertex0 == other.vertex0 && vertex1 == other.vertex1 && vertex2 == other.vertex2) {
 			if (texture0 == other.texture0 && texture1 == other.texture1) {
@@ -92,7 +82,6 @@ public class TileVertex {
 				"], tangent=[" + tangent0 +
 				", " + tangent1 +
 				", " + tangent2 +
-				"], duplicate=" + duplicate +
-				"}";
+				"]}";
 	}
 }

@@ -12,7 +12,6 @@ package kosmos.camera;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.framework.*;
-import flounder.inputs.*;
 import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.matrices.*;

@@ -65,7 +65,7 @@ public class PlayerBasic extends Player {
 			runStraight = !runStraight;
 		}
 		if (runStraight) {
-			currentSpeed = -(inputBoost.isDown() ? BOOST_SPEED : RUN_SPEED) * -1.5f;
+			currentSpeed = -(inputBoost.isDown() ? BOOST_SPEED : RUN_SPEED) * -4.20f;
 		} else {
 			currentSpeed = -(inputBoost.isDown() ? BOOST_SPEED : RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
 		}

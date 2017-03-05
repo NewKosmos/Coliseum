@@ -46,6 +46,10 @@ public class Chunk extends Entity {
 	private IBiome.Biomes biome;
 	private ChunkMesh chunkMesh;
 
+	//private QuickHull hull;
+	private Sphere sphere;
+	private AABB aabb;
+
 	private boolean tilesChanged;
 	private float darkness;
 
@@ -59,20 +63,22 @@ public class Chunk extends Entity {
 		biomeID = Maths.clamp((int) biomeID, 0.0f, IBiome.Biomes.values().length - 1);
 
 		this.childrenChunks = new ArrayList<>();
-		this.biome = IBiome.Biomes.values()[(int) biomeID]; // IBiome.Biomes.random();
+		this.biome = IBiome.Biomes.values()[(int) biomeID];
 		this.chunkMesh = new ChunkMesh(this);
+
+		//this.hull = new QuickHull();
+		this.sphere = new Sphere();
+		this.aabb = new AABB();
 
 		this.tilesChanged = true;
 		this.darkness = 0.0f;
 
-		ComponentModel componentModel = new ComponentModel(this, 1.0f, null, biome.getBiome().getMainTile().getTexture(), 0);
-		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.0f, false, false);
-		ComponentCollider componentCollider = new ComponentCollider(this);
-		ComponentCollision componentCollision = new ComponentCollision(this);
+		new ComponentModel(this, 1.0f, null, biome.getBiome().getMainTile().getTexture(), 0);
+		new ComponentSurface(this, 1.0f, 0.0f, false, false);
+		new ComponentCollider(this);
+		new ComponentCollision(this);
 
 		// generateWeather();
-
-		// FlounderLogger.log("Creating chunk at: " + position.x + ", " + position.z + ".");
 	}
 
 	private void generateWeather() {
@@ -195,7 +201,7 @@ public class Chunk extends Entity {
 
 		// Adds this mesh AABB to the bounding render pool.
 		// FlounderBounding.addShapeRender(chunkMesh.getAABB());
-		FlounderBounding.addShapeRender(chunkMesh.getSphere());
+		FlounderBounding.addShapeRender(getSphere());
 
 		for (Entity entity : entities.getAll()) {
 			entity.update();
@@ -216,6 +222,14 @@ public class Chunk extends Entity {
 		return chunkMesh;
 	}
 
+	public Sphere getSphere() {
+		return sphere;
+	}
+
+	public AABB getAABB() {
+		return aabb;
+	}
+
 	public IBiome.Biomes getBiome() {
 		return biome;
 	}
@@ -230,7 +244,7 @@ public class Chunk extends Entity {
 
 	@Override
 	public IBounding getBounding() {
-		return chunkMesh.getSphere();
+		return getSphere();
 	}
 
 	public void delete() {

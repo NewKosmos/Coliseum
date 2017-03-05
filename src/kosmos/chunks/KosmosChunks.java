@@ -79,10 +79,6 @@ public class KosmosChunks extends Module {
 			Chunk playerChunk = null;
 
 			if (!playerPos.equals(lastPlayerPos)) {
-				/*float t = 40.0f;
-				chunkRange.getMinExtents().set(-t, -t, -t);
-				chunkRange.getMaxExtents().set(t, t, t);
-				AABB.recalculate(chunkRange, playerPos, new Vector3f(), 1.0f, chunkRange);*/
 				Sphere.recalculate(chunkRange, playerPos, 1.0f, chunkRange);
 			}
 
@@ -101,7 +97,7 @@ public class KosmosChunks extends Module {
 			if (playerChunk != currentChunk) {
 				if (playerChunk != null) {
 					playerChunk.createChunksAround();
-					//playerChunk.getChildrenChunks().forEach(Chunk::createChunksAround);
+					playerChunk.getChildrenChunks().forEach(Chunk::createChunksAround);
 
 					Iterator it = chunks.getAll().iterator();
 

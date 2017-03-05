@@ -12,11 +12,9 @@ package kosmos.entities.components;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
-import kosmos.*;
 import kosmos.world.*;
 
 import javax.swing.*;
-import java.util.*;
 
 public class ComponentMultiplayer extends IComponentEntity implements IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();

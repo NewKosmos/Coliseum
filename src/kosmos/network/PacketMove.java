@@ -1,12 +1,8 @@
 package kosmos.network;
 
-import flounder.entities.*;
-import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.networking.packets.*;
-import kosmos.entities.components.*;
-import kosmos.entities.instances.*;
 import kosmos.world.*;
 
 import java.net.*;
@@ -53,7 +49,7 @@ public class PacketMove extends Packet {
 
 	@Override
 	public void serverHandlePacket(Server server, InetAddress address, int port) {
-	//	FlounderLogger.log("[" + username + "]: moved to: " + x + "," + y + "," + z + " : " + w);
+		//	FlounderLogger.log("[" + username + "]: moved to: " + x + "," + y + "," + z + " : " + w);
 		this.writeData(server);
 	}
 
