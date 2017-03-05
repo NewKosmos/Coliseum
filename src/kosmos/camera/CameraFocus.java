@@ -36,11 +36,11 @@ public class CameraFocus extends Camera {
 	// Defines the strength of motion from the mouse.
 	private static final float INFLUENCE_OF_MOUSE_DY = 300.0f;
 	private static final float INFLUENCE_OF_MOUSE_DX = INFLUENCE_OF_MOUSE_DY * 100.0f;
-	private static final float INFLUENCE_OF_MOUSE_WHEEL = 0.1f;
+	private static final float INFLUENCE_OF_MOUSE_WHEEL = 0.05f;
 
-	private static final float MAX_HORIZONTAL_CHANGE = 20.0f;
-	private static final float MAX_VERTICAL_CHANGE = 20.0f;
-	private static final float MAX_ZOOM_CHANGE = 1.0f;
+	private static final float MAX_HORIZONTAL_CHANGE = 30.0f;
+	private static final float MAX_VERTICAL_CHANGE = 30.0f;
+	private static final float MAX_ZOOM_CHANGE = 0.5f;
 
 	private static final float CAMERA_AIM_OFFSET = 2.0f;
 	private static final float MAX_ANGLE_OF_ELEVATION = (float) Math.PI / 4.0f;
@@ -140,6 +140,7 @@ public class CameraFocus extends Camera {
 
 		if (player != null) {
 			this.targetPosition.set(player.getPosition());
+			// TODO: Rotate if camera rotation is 90 degrees below player rotation (astroneer like player camera).
 			//this.targetRotation.set(player.getRotation());
 		}
 

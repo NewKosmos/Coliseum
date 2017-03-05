@@ -25,11 +25,11 @@ public class InstanceSun extends Entity {
 
 	public InstanceSun(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
-		ComponentCelestial componentCelestial = new ComponentCelestial(this);
-		ComponentModel componentModel = new ComponentModel(this, 30.0f, model, texture, 0);
-		ComponentLight componentLight = new ComponentLight(this, new Vector3f(), new Colour(0.7f, 0.7f, 0.7f), new Attenuation(1.0f, 0.0f, 0.0f));
-		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.0f, true, true);
-		//ComponentCollider componentCollider = new ComponentCollider(this);
-		// ComponentCollision componentCollision = new ComponentCollision(this);
+		new ComponentCelestial(this);
+		new ComponentModel(this, 15.0f, model, texture, 0);
+		new ComponentLight(this, new Vector3f(), new Colour(0.7f, 0.7f, 0.7f), new Attenuation(1.0f, 0.0f, 0.0f));
+		new ComponentSurface(this, 1.0f, 0.0f, true, true);
+		//new ComponentCollider(this);
+		//new ComponentCollision(this);
 	}
 }
