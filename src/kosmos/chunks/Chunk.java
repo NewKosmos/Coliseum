@@ -46,12 +46,10 @@ public class Chunk extends Entity {
 	private IBiome.Biomes biome;
 	private ChunkMesh chunkMesh;
 
-	//private QuickHull hull;
 	private Sphere sphere;
 	private AABB aabb;
 
 	private boolean tilesChanged;
-	private float darkness;
 
 	private ParticleSystem particleSystem;
 
@@ -66,12 +64,10 @@ public class Chunk extends Entity {
 		this.biome = IBiome.Biomes.values()[(int) biomeID];
 		this.chunkMesh = new ChunkMesh(this);
 
-		//this.hull = new QuickHull();
 		this.sphere = new Sphere();
 		this.aabb = new AABB();
 
 		this.tilesChanged = true;
-		this.darkness = 0.0f;
 
 		new ComponentModel(this, 1.0f, null, biome.getBiome().getMainTile().getTexture(), 0);
 		new ComponentSurface(this, 1.0f, 0.0f, false, false);
@@ -132,7 +128,7 @@ public class Chunk extends Entity {
 			float r = 0.0f;
 			float g = -i;
 			float b = i;
-			generateTile(tiles, Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null));
+			generateTile(tiles, Tile.worldSpace2D(r, g, b, HEXAGON_SIDE_LENGTH, null));
 
 			for (int j = 0; j < 6; j++) {
 				if (j == 5) {
@@ -144,7 +140,7 @@ public class Chunk extends Entity {
 					r = r + TILE_DELTAS[j][0];
 					g = g + TILE_DELTAS[j][1];
 					b = b + TILE_DELTAS[j][2];
-					generateTile(tiles, Tile.worldSpace2D(new Vector3f(r, g, b), HEXAGON_SIDE_LENGTH, null));
+					generateTile(tiles, Tile.worldSpace2D(r, g, b, HEXAGON_SIDE_LENGTH, null));
 				}
 			}
 		}
@@ -154,7 +150,7 @@ public class Chunk extends Entity {
 
 	protected void generateTile(List<Vector3f> tiles, Vector2f position) {
 		Vector2f worldPos = new Vector2f(position.x + (getPosition().x * 2.0f), position.y + (getPosition().z * 2.0f));
-		int height = (int) Math.abs(KosmosChunks.getNoise().noise2(worldPos.x / 88.8f, worldPos.y / 88.8f) * 9.81f);
+		int height = getHeight(worldPos.x, worldPos.y);
 
 		for (int i = 0; i < height; i++) {
 			tiles.add(new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
@@ -167,6 +163,10 @@ public class Chunk extends Entity {
 		}
 	}
 
+	public static int getHeight(float x, float z) {
+		return (int) Math.abs(KosmosChunks.getNoise().noise2(x / 88.8f, z / 88.8f) * 9.81f);
+	}
+
 	@Override
 	public void update() {
 		// Builds or rebulds this chunks mesh.
@@ -176,31 +176,7 @@ public class Chunk extends Entity {
 			super.setMoved();
 		}
 
-		/*Iterator it = childrenChunks.iterator();
-
-		while (it.hasNext()) {
-			Chunk child = (Chunk) it.next();
-
-			if (!KosmosChunks.getChunks().contains(child)) {
-				it.remove();
-			}
-		}*/
-
-		//FlounderLogger.log(getBounding());
-
-		// Updates the darkness of this chunk.
-		/*if (playerPosition != null) {
-			double distance = Math.sqrt(Math.pow(getPosition().x - playerPosition.x, 2.0) + Math.pow(getPosition().y - playerPosition.y, 2.0));
-
-			if (distance >= 30.0) {
-				darkness = 0.7f;
-			} else {
-				darkness = 0.0f;
-			}
-		}*/
-
 		// Adds this mesh AABB to the bounding render pool.
-		// FlounderBounding.addShapeRender(chunkMesh.getAABB());
 		FlounderBounding.addShapeRender(getSphere());
 
 		for (Entity entity : entities.getAll()) {
@@ -232,10 +208,6 @@ public class Chunk extends Entity {
 
 	public IBiome.Biomes getBiome() {
 		return biome;
-	}
-
-	public float getDarkness() {
-		return darkness;
 	}
 
 	public boolean isLoaded() {

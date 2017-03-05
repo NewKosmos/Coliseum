@@ -60,13 +60,13 @@ public class Tile {
 		return destination;
 	}
 
-	public static Vector2f worldSpace2D(Vector3f position, double length, Vector2f destination) {
+	public static Vector2f worldSpace2D(float r, float g, float b, double length, Vector2f destination) {
 		if (destination == null) {
 			destination = new Vector2f();
 		}
 
-		destination.x = (float) (Math.sqrt(3.0) * length * ((position.z / 2.0) + position.x));
-		destination.y = (float) ((3.0 / 2.0) * length * position.z);
+		destination.x = (float) (Math.sqrt(3.0) * length * ((b / 2.0) + r));
+		destination.y = (float) ((3.0 / 2.0) * length * b);
 		return destination;
 	}
 }

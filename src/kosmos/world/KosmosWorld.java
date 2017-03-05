@@ -26,6 +26,8 @@ public class KosmosWorld extends Module {
 	private static final KosmosWorld INSTANCE = new KosmosWorld();
 	public static final String PROFILE_TAB_NAME = "Kosmos World";
 
+	public static final float GRAVITY = -9.81f;
+
 	private Map<String, Pair<Vector3f, Vector3f>> playerQue;
 	private Map<String, Entity> players;
 

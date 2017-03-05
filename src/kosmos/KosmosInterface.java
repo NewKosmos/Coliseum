@@ -19,6 +19,7 @@ import flounder.physics.bounding.*;
 import flounder.sounds.*;
 import flounder.standards.*;
 import kosmos.chunks.*;
+import kosmos.terrain.*;
 import kosmos.water.*;
 import kosmos.world.*;
 
@@ -38,7 +39,7 @@ public class KosmosInterface extends Standard {
 	private int serverPort;
 
 	public KosmosInterface() {
-		super(FlounderDisplay.class, FlounderKeyboard.class, KosmosWorld.class, KosmosChunks.class, KosmosWater.class, FlounderNetwork.class);
+		super(FlounderDisplay.class, FlounderKeyboard.class, KosmosWorld.class, KosmosChunks.class, KosmosWater.class, KosmosTerrain.class, FlounderNetwork.class);
 	}
 
 	@Override

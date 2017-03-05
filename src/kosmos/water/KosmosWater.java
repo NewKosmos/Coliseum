@@ -20,7 +20,7 @@ public class KosmosWater extends Module {
 
 	@Override
 	public void init() {
-		this.water = new Water(new Vector3f(0.0f, -0.2f, 0.0f), new Vector3f(), 1.0f);
+		this.water = new Water(new Vector3f(0.0f, -0.1f, 0.0f), new Vector3f(), 1.0f);
 		this.waveTime = 0.0f;
 
 		this.enableReflections = KosmosConfigs.configMain.getBooleanWithDefault("water_reflections", false, KosmosWater::reflectionsEnabled);

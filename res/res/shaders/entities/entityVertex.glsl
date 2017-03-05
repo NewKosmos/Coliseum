@@ -31,7 +31,7 @@ uniform float swayHeight;
 uniform vec2 swayOffset;
 
 //---------OUT------------
-out vec3 pass_surfaceNormal;
+flat out vec3 pass_surfaceNormal;
 out vec2 pass_textureCoords;
 
 //---------MAIN------------

@@ -20,7 +20,7 @@ uniform float squareSize;
 uniform float waterHeight;
 
 //---------OUT------------
-out vec3 pass_surfaceNormal;
+flat out vec3 pass_surfaceNormal;
 out vec4 pass_clipSpace;
 
 //---------WAVE OFFSET------------

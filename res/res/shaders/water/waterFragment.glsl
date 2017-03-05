@@ -1,7 +1,7 @@
 #version 130
 
 //---------IN------------
-in vec3 pass_surfaceNormal;
+flat in vec3 pass_surfaceNormal;
 in vec4 pass_clipSpace;
 
 //---------UNIFORM------------

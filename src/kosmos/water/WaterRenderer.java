@@ -69,11 +69,15 @@ public class WaterRenderer extends Renderer {
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 
-		Chunk chunk = KosmosChunks.getCurrent();
+		/*Chunk chunk = KosmosChunks.getCurrent();
 		if (chunk != null) {
 			shader.getUniformVec3("waterOffset").loadVec3(chunk.getPosition());
+		}*/
+
+		if (FlounderCamera.getPlayer() != null) {
+			Vector3f position = FlounderCamera.getPlayer().getPosition();
+			shader.getUniformVec3("waterOffset").loadVec3(Math.round(position.x), 0.0f, Math.round(position.z));
 		}
-		//shader.getUniformVec3("waterOffset").loadVec3(FlounderCamera.getPlayer().getPosition());
 
 		if (KosmosWater.reflectionsEnabled()) {
 			OpenGlUtils.bindTexture(reflectionFBO.getColourTexture(0), GL_TEXTURE_2D, 0);

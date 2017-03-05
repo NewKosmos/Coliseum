@@ -111,9 +111,9 @@ public class KosmosChunks extends Module {
 							}
 						}
 					}
-				}
 
-				currentChunk = playerChunk;
+					currentChunk = playerChunk;
+				}
 			}
 
 			lastPlayerPos.set(playerPos);
