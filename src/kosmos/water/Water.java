@@ -30,7 +30,7 @@ public class Water {
 	protected static final float AMPLITUDE = 0.185f;
 
 	protected static final double SQUARE_SIZE = 1.0;
-	protected static final int VERTEX_COUNT = 135;
+	protected static final int VERTEX_COUNT = 338;
 
 	protected static final float SHINE_DAMPER = 1.0f;
 	protected static final float REFLECTIVITY = 0.0f;

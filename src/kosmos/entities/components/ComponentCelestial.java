@@ -24,13 +24,26 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 	private Vector3f startPosition;
 	private Vector3f startRotation;
 
+	private boolean sunsetColours;
+
 	/**
 	 * Creates a new ComponentCelestial.
 	 *
 	 * @param entity The entity this component is attached to.
 	 */
 	public ComponentCelestial(Entity entity) {
+		this(entity, false);
+	}
+
+	/**
+	 * Creates a new ComponentCelestial.
+	 *
+	 * @param entity The entity this component is attached to.
+	 */
+	public ComponentCelestial(Entity entity, boolean sunsetColours) {
 		super(entity, ID);
+
+		this.sunsetColours = sunsetColours;
 
 		if (entity != null) {
 			this.startPosition = new Vector3f(entity.getPosition());
@@ -51,6 +64,10 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 		}
 
 		getEntity().setMoved();
+
+		if (sunsetColours) {
+
+		}
 	}
 
 	@Override
@@ -63,9 +80,11 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 
 	@Override
 	public Pair<String[], String[]> getSaveValues(String entityName) {
+		String saveSunsetColours = sunsetColours + "";
+
 		return new Pair<>(
 				new String[]{}, // Static variables
-				new String[]{} // Class constructor
+				new String[]{saveSunsetColours} // Class constructor
 		);
 	}
 
