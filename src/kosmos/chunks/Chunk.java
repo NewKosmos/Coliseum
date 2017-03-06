@@ -10,6 +10,7 @@
 package kosmos.chunks;
 
 import flounder.entities.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
@@ -199,7 +200,7 @@ public class Chunk extends Entity {
 		int height = (int) (KosmosChunks.getNoise().noise2(worldPos.x / 75.0f, worldPos.y / 75.0f) * 10.0f);
 
 		if (height >= 0) {
-			return height * 0.5f * 1.414f;
+			return height * 0.5f * (float) Math.sqrt(2.0);
 		} else {
 			return Float.NEGATIVE_INFINITY;
 		}

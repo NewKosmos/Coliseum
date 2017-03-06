@@ -51,6 +51,7 @@ public class KosmosRenderer extends RendererMaster {
 	private FBO rendererFBO;
 
 	private PipelineMRT pipelineMRT;
+	private PipelineBloom pipelineBloom;
 	private FilterBlurMotion filterBlurMotion;
 	private PipelineDOF pipelineDOF;
 	private FilterTiltShift filterTiltShift;
@@ -78,13 +79,14 @@ public class KosmosRenderer extends RendererMaster {
 		this.rendererFBO = FBO.newFBO(displayScale).attachments(3).withAlphaChannel(true).disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
 
 		this.pipelineMRT = new PipelineMRT();
+		this.pipelineBloom = new PipelineBloom();
 		this.filterBlurMotion = new FilterBlurMotion();
 		this.pipelineDOF = new PipelineDOF();
 		this.filterTiltShift = new FilterTiltShift(0.6f, 1.1f, 0.005f, 2.0f);
 		this.filterPixel = new FilterPixel(4.0f);
 		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.05f);
 		this.pipelinePaused = new PipelinePaused();
-		this.effect = 0;
+		this.effect = 1;
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton c = new KeyButton(GLFW.GLFW_KEY_C);
@@ -185,8 +187,13 @@ public class KosmosRenderer extends RendererMaster {
 			case 0:
 				break;
 			case 1:
-				filterBlurMotion.applyFilter(output.getColourTexture(0), rendererFBO.getDepthTexture());
-				output = filterBlurMotion.fbo;
+				pipelineBloom.setBloomThreshold(0.6f);
+				pipelineBloom.renderPipeline(output);
+				output = pipelineBloom.getOutput();
+				filterTiltShift.applyFilter(output.getColourTexture(0));
+				output = filterTiltShift.fbo;
+				//filterBlurMotion.applyFilter(output.getColourTexture(0), rendererFBO.getDepthTexture());
+				//output = filterBlurMotion.fbo;
 				break;
 			case 2:
 				pipelineDOF.renderMRT(rendererFBO, output);
@@ -248,6 +255,7 @@ public class KosmosRenderer extends RendererMaster {
 		rendererFBO.delete();
 
 		pipelineMRT.dispose();
+		pipelineBloom.dispose();
 		filterBlurMotion.dispose();
 		pipelineDOF.dispose();
 		filterTiltShift.dispose();

@@ -49,14 +49,14 @@ public class Tile {
 		return texture;
 	}
 
-	public static Vector3f hexagonSpace(Vector2f position, double length, Vector3f destination) {
+	public static Vector3f hexagonSpace(float x, float z, double length, Vector3f destination) {
 		if (destination == null) {
 			destination = new Vector3f();
 		}
 
-		destination.x = (float) (((Math.sqrt(3.0) / 3.0) * position.x - (position.y / 3.0f)) / length);
-		destination.y = (float) (-((Math.sqrt(3.0) / 3.0) * position.x + (position.y / 3.0f)) / length);
-		destination.z = (float) ((2.0 / 3.0) * position.y / length);
+		destination.x = (float) (((Math.sqrt(3.0) / 3.0) * x - (z / 3.0f)) / length);
+		destination.y = (float) (-((Math.sqrt(3.0) / 3.0) * x + (z / 3.0f)) / length);
+		destination.z = (float) ((2.0 / 3.0) * z / length);
 		return destination;
 	}
 
