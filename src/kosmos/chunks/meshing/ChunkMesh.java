@@ -206,7 +206,7 @@ public class ChunkMesh {
 						}
 					}
 				},
-				5000
+				2500
 		);
 	}
 

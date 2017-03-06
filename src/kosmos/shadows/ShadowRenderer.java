@@ -93,7 +93,7 @@ public class ShadowRenderer extends Renderer {
 	private void prepareRendering(Vector4f clipPlane, Camera camera) {
 		shadowBox.update(camera);
 		updateOrthographicProjectionMatrix(shadowBox.getWidth(), shadowBox.getHeight(), shadowBox.getLength());
-		updateLightViewMatrix(KosmosWorld.getSkyCycle().getLightDirection(), shadowBox.getCenter());
+		updateLightViewMatrix(KosmosWorld.getSkyCycle().getLightPosition(), shadowBox.getCenter());
 		Matrix4f.multiply(projectionMatrix, lightViewMatrix, projectionViewMatrix);
 
 		shadowFBO.bindFrameBuffer();

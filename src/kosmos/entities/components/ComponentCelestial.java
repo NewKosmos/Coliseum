@@ -13,6 +13,8 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
+import flounder.logger.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import kosmos.world.*;
 
@@ -56,7 +58,7 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 
 	@Override
 	public void update() {
-		getEntity().getPosition().set(KosmosWorld.getSkyCycle().getSunEntityDirection());
+		getEntity().getPosition().set(KosmosWorld.getSkyCycle().getLightPosition());
 		Vector3f.multiply(getEntity().getPosition(), startPosition, getEntity().getPosition());
 
 		if (FlounderCamera.getCamera() != null) {
@@ -66,7 +68,14 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 		getEntity().setMoved();
 
 		if (sunsetColours) {
+			ComponentLight componentLight = (ComponentLight) getEntity().getComponent(ComponentLight.ID);
 
+			if (componentLight != null) {
+			//	float daySin = (float) Math.sin(2.0 * Math.PI * KosmosWorld.getSkyCycle().getDayFactor());
+			//	Colour.interpolate(SkyCycle.SUN_COLOUR_DAY, SkyCycle.SUN_COLOUR_SUNRISE, daySin, componentLight.getLight().getColour());
+			//	FlounderLogger.log("["+daySin+"]: " + componentLight.getLight().colour);
+				componentLight.getLight().getColour().set(KosmosWorld.getSkyCycle().getSkyColour());
+			}
 		}
 	}
 

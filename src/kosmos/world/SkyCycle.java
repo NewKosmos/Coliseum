@@ -18,34 +18,32 @@ public class SkyCycle {
 	private static final Colour SKY_COLOUR_NIGHT = new Colour(0.0f, 0.08f, 0.26f);
 	private static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.30f, 0.70f);
 
-	private static final Colour SUN_COLOUR_DAY = new Colour(0.5f, 0.5f, 0.5f);
-	private static final Colour SUN_COLOUR_SUNRISE = new Colour(0.9921f, 0.490f, 0.004f);
+	public static final Colour SUN_COLOUR_DAY = new Colour(0.5f, 0.5f, 0.5f);
+	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.9921f, 0.490f, 0.004f);
 
-	private static final float DAY_NIGHT_CYCLE = 180.0f; // The day/night length (sec)
+	private static final float DAY_NIGHT_CYCLE = 60.0f; // The day/night length (sec)
 
-	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, -0.3f, -0.8f); // The starting light direction.
+	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.6f, 0.6f, 0.6f); // The starting light direction.
 
-	private float dayFactor;
 	private LinearDriver dayDriver;
+	private float dayFactor;
 
 	private Colour skyColour;
-	private Vector3f lightDirection;
-	private Vector3f sunEntityDirection;
+	private Vector3f lightPosition;
 
 	public SkyCycle() {
-		this.dayFactor = 0.0f;
 		this.dayDriver = new LinearDriver(0.0f, 100.0f, DAY_NIGHT_CYCLE);
+		this.dayFactor = 0.0f;
 
 		this.skyColour = new Colour(SKY_COLOUR_DAY);
-		this.lightDirection = new Vector3f(LIGHT_DIRECTION);
-		this.sunEntityDirection = new Vector3f(LIGHT_DIRECTION);
+		this.lightPosition = new Vector3f(LIGHT_DIRECTION);
 	}
 
 	public void update() {
 		dayFactor = dayDriver.update(Framework.getDelta()) / 100.0f;
-		Colour.interpolate(SKY_COLOUR_DAY, SKY_COLOUR_NIGHT, getSinDay(), skyColour);
-		Vector3f.rotate(LIGHT_DIRECTION, new Vector3f(dayFactor * 360.0f, 0.0f, 0.0f), lightDirection);
-		Vector3f.rotate(LIGHT_DIRECTION, new Vector3f(dayFactor * 360.0f, 0.0f, 0.0f), sunEntityDirection);
+		// y=0.6\left(\sin \left(\pi x+\pi \right)-\cos \left(2\pi x+\pi \right)\right)+0.25
+		Colour.interpolate(SKY_COLOUR_DAY, SUN_COLOUR_SUNRISE, getSinDay(), skyColour);
+		Vector3f.rotate(LIGHT_DIRECTION, new Vector3f(dayFactor * 360.0f, 0.0f, 0.0f), lightPosition);
 	}
 
 	public float getDayFactor() {
@@ -60,11 +58,7 @@ public class SkyCycle {
 		return skyColour;
 	}
 
-	public Vector3f getLightDirection() {
-		return lightDirection;
-	}
-
-	public Vector3f getSunEntityDirection() {
-		return sunEntityDirection;
+	public Vector3f getLightPosition() {
+		return lightPosition;
 	}
 }
