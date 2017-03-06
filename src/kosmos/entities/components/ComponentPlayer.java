@@ -16,6 +16,7 @@ import flounder.helpers.*;
 import flounder.maths.Timer;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
+import kosmos.chunks.*;
 import kosmos.network.*;
 import kosmos.world.*;
 
@@ -83,14 +84,14 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		}
 
 		if (needSendData && timer.isPassedTime()) {
-			needSendData = false;
 			sendData();
 		}
 	}
 
 	private void sendData() {
-		if (FlounderNetwork.getUsername() != null && FlounderNetwork.getSocketClient() != null) {
-			new PacketMove(FlounderNetwork.getUsername(), getEntity().getPosition(), getEntity().getRotation()).writeData(FlounderNetwork.getSocketClient());
+		if (FlounderNetwork.getUsername() != null && FlounderNetwork.getSocketClient() != null && KosmosChunks.getCurrent() != null) {
+			new PacketMove(FlounderNetwork.getUsername(), getEntity().getPosition(), getEntity().getRotation(), KosmosChunks.getCurrent().getPosition().x, KosmosChunks.getCurrent().getPosition().z).writeData(FlounderNetwork.getSocketClient());
+			needSendData = false;
 		}
 	}
 

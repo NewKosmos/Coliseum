@@ -11,6 +11,7 @@ package kosmos.camera;
 
 import flounder.camera.*;
 import flounder.framework.*;
+import flounder.guis.*;
 import flounder.inputs.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
@@ -65,14 +66,17 @@ public class PlayerBasic extends Player {
 	@Override
 	public void update() {
 		// Gets movement and rotation data from player inputs.
-		currentSpeed = -(inputBoost.isDown() ? BOOST_SPEED : RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
-
-		if (inputJump.wasDown() && Maths.deadband(0.05f, currentUpwardSpeed) == 0.0f) {
-			currentUpwardSpeed = JUMP_POWER;
+		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
+			currentSpeed = -(inputBoost.isDown() ? BOOST_SPEED : RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
+			currentUpwardSpeed = (inputJump.wasDown() && Maths.deadband(0.05f, currentUpwardSpeed) == 0.0f) ? JUMP_POWER : currentUpwardSpeed;
+			currentTurnSpeed = -TURN_SPEED * Maths.deadband(0.05f, inputTurn.getAmount());
+		} else {
+			currentSpeed = 0.0f;
+			currentTurnSpeed = 0.0f;
 		}
+
 		currentUpwardSpeed += KosmosWorld.GRAVITY * Framework.getDelta();
 
-		currentTurnSpeed = -TURN_SPEED * Maths.deadband(0.05f, inputTurn.getAmount());
 		float distance = currentSpeed * Framework.getDelta();
 		float dx = (float) (distance * Math.sin(Math.toRadians(rotation.y)));
 		float dy = currentUpwardSpeed * Framework.getDelta();

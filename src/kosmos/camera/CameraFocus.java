@@ -12,6 +12,7 @@ package kosmos.camera;
 import flounder.camera.*;
 import flounder.devices.*;
 import flounder.framework.*;
+import flounder.guis.*;
 import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.matrices.*;
@@ -164,8 +165,10 @@ public class CameraFocus extends Camera {
 	private void calculateHorizontalAngle() {
 		float angleChange = 0.0f;
 
-		if (FlounderMouse.getMouse(reangleButton)) {
-			angleChange = -FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSE_DX;
+		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
+			if (FlounderMouse.getMouse(reangleButton)) {
+				angleChange = -FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSE_DX;
+			}
 		}
 
 		if (angleChange > MAX_HORIZONTAL_CHANGE) {
@@ -186,8 +189,10 @@ public class CameraFocus extends Camera {
 	private void calculateVerticalAngle() {
 		float angleChange = 0.0f;
 
-		if (FlounderMouse.getMouse(reangleButton)) {
-			angleChange = FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSE_DY;
+		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
+			if (FlounderMouse.getMouse(reangleButton)) {
+				angleChange = FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSE_DY;
+			}
 		}
 
 		if (angleChange > MAX_VERTICAL_CHANGE) {
@@ -208,8 +213,10 @@ public class CameraFocus extends Camera {
 	private void calculateZoom() {
 		float zoomChange = 0.0f;
 
-		if (Math.abs(FlounderMouse.getDeltaWheel()) > 0.1f) {
-			zoomChange = FlounderMouse.getDeltaWheel() * INFLUENCE_OF_MOUSE_WHEEL;
+		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
+			if (Math.abs(FlounderMouse.getDeltaWheel()) > 0.1f) {
+				zoomChange = FlounderMouse.getDeltaWheel() * INFLUENCE_OF_MOUSE_WHEEL;
+			}
 		}
 
 		if (zoomChange > MAX_VERTICAL_CHANGE) {

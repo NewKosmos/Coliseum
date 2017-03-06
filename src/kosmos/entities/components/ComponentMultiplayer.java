@@ -21,6 +21,8 @@ public class ComponentMultiplayer extends IComponentEntity implements IComponent
 
 	private String username;
 
+	private float chunkX, chunkZ;
+
 	/**
 	 * Creates a new ComponentMultiplayer.
 	 *
@@ -39,6 +41,8 @@ public class ComponentMultiplayer extends IComponentEntity implements IComponent
 	public ComponentMultiplayer(Entity entity, String username) {
 		super(entity, ID);
 		this.username = username;
+		this.chunkX = 0.0f;
+		this.chunkZ = 0.0f;
 	}
 
 	@Override
@@ -46,7 +50,9 @@ public class ComponentMultiplayer extends IComponentEntity implements IComponent
 		getEntity().setMoved();
 	}
 
-	public void move(float x, float y, float z, float w) {
+	public void move(float x, float y, float z, float w, float chunkX, float chunkZ) {
+		this.chunkX = chunkX;
+		this.chunkZ = chunkZ;
 		getEntity().getPosition().set(x, y, z);
 		getEntity().getRotation().set(0.0f, w, 0.0f);
 		getEntity().setMoved();
@@ -54,6 +60,14 @@ public class ComponentMultiplayer extends IComponentEntity implements IComponent
 
 	public String getUsername() {
 		return username;
+	}
+
+	public float getChunkX() {
+		return chunkX;
+	}
+
+	public float getChunkZ() {
+		return chunkZ;
 	}
 
 	@Override

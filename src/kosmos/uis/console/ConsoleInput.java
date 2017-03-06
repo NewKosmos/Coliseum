@@ -12,6 +12,7 @@ package kosmos.uis.console;
 import flounder.devices.*;
 import flounder.fonts.*;
 import flounder.guis.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import org.lwjgl.glfw.*;
 
@@ -73,6 +74,8 @@ public class ConsoleInput extends GuiComponent {
 			String s = currentInput.getTextString().replace(START_STRING, "").trim();
 
 			if (!s.isEmpty()) {
+				FlounderLogger.log("[Console]: " + s);
+				IConsoleCommand.ConsoleCommands.runCommand(s);
 				consoleText.addText(s, new Colour(1.0f, 1.0f, 1.0f));
 				currentInput.setText(START_STRING);
 				lastKey = 13;

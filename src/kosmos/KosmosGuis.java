@@ -12,17 +12,24 @@ package kosmos;
 import flounder.devices.*;
 import flounder.events.*;
 import flounder.fonts.*;
+import flounder.framework.*;
 import flounder.guis.*;
 import flounder.inputs.*;
 import flounder.physics.bounding.*;
+import flounder.visual.*;
 import kosmos.uis.*;
 import kosmos.uis.console.*;
-import org.lwjgl.glfw.*;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class KosmosGuis extends GuiMaster {
+	protected static final float SLIDE_TIME = 0.7f;
+
 	private MasterOverlay masterOverlay;
 
 	private ConsoleUi consoleUi;
+
+	private ValueDriver slideDriver;
+	private float backgroundAlpha;
 
 	public KosmosGuis() {
 		super(FlounderKeyboard.class, FlounderGuis.class, FlounderFonts.class, FlounderBounding.class);
@@ -31,13 +38,18 @@ public class KosmosGuis extends GuiMaster {
 	@Override
 	public void init() {
 		this.masterOverlay = new MasterOverlay();
+		masterOverlay.show(false);
 		FlounderGuis.addComponent(masterOverlay, 0.0f, 0.0f, 1.0f, 1.0f);
 
-		//	this.consoleUi = new ConsoleUi();
-		//	FlounderGuis.addComponent(consoleUi, 0.0f, 0.0f, 1.0f, 1.0f);
+		this.consoleUi = new ConsoleUi();
+		consoleUi.show(false);
+		FlounderGuis.addComponent(consoleUi, 0.0f, 0.0f, 1.0f, 1.0f);
+
+		this.slideDriver = new ConstantDriver(0.0f);
+		this.backgroundAlpha = 0.0f;
 
 		FlounderEvents.addEvent(new IEvent() {
-			private KeyButton k = new KeyButton(GLFW.GLFW_KEY_ESCAPE);
+			private KeyButton k = new KeyButton(GLFW_KEY_ESCAPE);
 
 			@Override
 			public boolean eventTriggered() {
@@ -46,14 +58,37 @@ public class KosmosGuis extends GuiMaster {
 
 			@Override
 			public void onEvent() {
-				masterOverlay.show(!masterOverlay.isShown());
+				consoleUi.show(!consoleUi.isShown());
+				masterOverlay.show(false);
+
+				if (consoleUi.isShown()) {
+					slideDriver = new SlideDriver(backgroundAlpha, 1.0f, SLIDE_TIME);
+				} else {
+					slideDriver = new SlideDriver(backgroundAlpha, 0.0f, SLIDE_TIME);
+				}
+			}
+		});
+
+		FlounderEvents.addEvent(new IEvent() {
+			private KeyButton k = new KeyButton(GLFW_KEY_F1);
+
+			@Override
+			public boolean eventTriggered() {
+				return k.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				if (!isGamePaused()) {
+					masterOverlay.show(!masterOverlay.isShown());
+				}
 			}
 		});
 	}
 
 	@Override
 	public void update() {
-
+		backgroundAlpha = slideDriver.update(Framework.getDelta());
 	}
 
 	@Override
@@ -63,7 +98,7 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public boolean isGamePaused() {
-		return false;
+		return consoleUi.isShown();
 	}
 
 	@Override
@@ -73,7 +108,7 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public float getBlurFactor() {
-		return 0;
+		return backgroundAlpha;
 	}
 
 	@Override

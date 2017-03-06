@@ -50,7 +50,7 @@ public class KosmosChunks extends Module {
 
 		this.entityPlayer = new InstancePlayer(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25), 0.0f), new Vector3f()); // InstanceMuliplayer
 
-		this.chunkRange = new Sphere(40.0f); // new AABB();
+		this.chunkRange = new Sphere(40.0f);
 
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
 		this.currentChunk = null;
@@ -140,6 +140,10 @@ public class KosmosChunks extends Module {
 
 	public static Chunk getCurrent() {
 		return INSTANCE.currentChunk;
+	}
+
+	public static void setCurrent(Chunk currentChunk) {
+		INSTANCE.currentChunk = currentChunk;
 	}
 
 	@Override

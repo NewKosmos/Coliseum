@@ -56,6 +56,7 @@ public class KosmosRenderer extends RendererMaster {
 	private FilterTiltShift filterTiltShift;
 	private FilterPixel filterPixel;
 	private FilterCRT filterCRT;
+	private PipelinePaused pipelinePaused;
 	private int effect;
 
 	public KosmosRenderer() {
@@ -82,6 +83,7 @@ public class KosmosRenderer extends RendererMaster {
 		this.filterTiltShift = new FilterTiltShift(0.6f, 1.1f, 0.005f, 2.0f);
 		this.filterPixel = new FilterPixel(4.0f);
 		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.05f);
+		this.pipelinePaused = new PipelinePaused();
 		this.effect = 0;
 
 		FlounderEvents.addEvent(new IEvent() {
@@ -94,10 +96,12 @@ public class KosmosRenderer extends RendererMaster {
 
 			@Override
 			public void onEvent() {
-				effect++;
+				if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
+					effect++;
 
-				if (effect > 4) {
-					effect = 0;
+					if (effect > 4) {
+						effect = 0;
+					}
 				}
 			}
 		});
@@ -203,6 +207,12 @@ public class KosmosRenderer extends RendererMaster {
 				break;
 		}
 
+		if (isPaused || blurFactor != 0.0f) {
+			pipelinePaused.setBlurFactor(blurFactor);
+			pipelinePaused.renderPipeline(output);
+			output = pipelinePaused.getOutput();
+		}
+
 		output.blitToScreen();
 
 		if (!independentsRendered) {
@@ -243,6 +253,7 @@ public class KosmosRenderer extends RendererMaster {
 		filterTiltShift.dispose();
 		filterPixel.dispose();
 		filterCRT.dispose();
+		pipelinePaused.dispose();
 	}
 
 	@Override

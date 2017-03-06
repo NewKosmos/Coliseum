@@ -4,7 +4,7 @@
 #include "maths.glsl"
 
 //---------CONSTANT------------
-const int LIGHTS = 28;
+const int LIGHTS = 48;
 
 //---------IN------------
 in vec2 pass_textureCoords;

@@ -76,11 +76,15 @@ public class KosmosWorld extends Module {
 		return INSTANCE.players.get(username);
 	}
 
+	public static boolean containsPlayer(String username) {
+		return INSTANCE.players.containsKey(username);
+	}
+
 	public static void addPlayer(Vector3f position, Vector3f rotation, String username) {
 		INSTANCE.players.put(username, new InstanceMuliplayer(FlounderEntities.getEntities(), position, rotation, username));
 	}
 
-	public static void movePlayer(String username, float x, float y, float z, float w) {
+	public static void movePlayer(String username, float x, float y, float z, float w, float chunkX, float chunkZ) {
 		if (FlounderNetwork.getUsername().equals(username)) {
 			return;
 		}
@@ -93,7 +97,7 @@ public class KosmosWorld extends Module {
 			return;
 		}
 
-		((ComponentMultiplayer) INSTANCE.players.get(username).getComponent(ComponentMultiplayer.ID)).move(x, y, z, w);
+		((ComponentMultiplayer) INSTANCE.players.get(username).getComponent(ComponentMultiplayer.ID)).move(x, y, z, w, chunkX, chunkZ);
 	}
 
 	public static void removePlayer(String username) {

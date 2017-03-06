@@ -43,11 +43,11 @@ public class ConsoleText extends GuiComponent {
 			name = name.substring(1, name.length()).trim();
 			name = name.split(" ")[0];
 
-			for (IConsoleCommand command : commands) {
+			/*for (IConsoleCommand command : commands) {
 				if (command.isCommandMatch(name)) {
 					command.runCommand(string.trim());
 				}
-			}
+			}*/
 		}
 	}
 
