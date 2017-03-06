@@ -19,7 +19,7 @@ public class SkyCycle {
 	private static final Colour SKY_COLOUR_SUNRISE = new Colour(0.9921f, 0.490f, 0.004f);
 	private static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.498f, 1.0f);
 
-	private static final float DAY_NIGHT_CYCLE = 60.0f; // The day/night length (sec)
+	private static final float DAY_NIGHT_CYCLE = 120.0f; // The day/night length (sec)
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, -0.3f, -0.8f); // The starting light direction.
 

@@ -6,6 +6,7 @@ in vec2 pass_textureCoords;
 
 //---------UNIFORM------------
 layout(binding = 0) uniform sampler2D diffuseMap;
+layout(binding = 1) uniform sampler2D glowMap;
 
 //---------OUT------------
 layout(location = 0) out vec4 out_albedo;
@@ -18,6 +19,8 @@ uniform float reflectivity;
 uniform bool ignoreFog;
 uniform bool ignoreLighting;
 
+uniform bool useGlowMap;
+
 //---------MAIN------------
 void main(void) {
 	vec4 diffuseColour = texture(diffuseMap, pass_textureCoords);
@@ -27,7 +30,17 @@ void main(void) {
 		discard;
 	}
 
+	bool glowing = false;
+
+	if (useGlowMap) {
+	    vec4 glowColour = texture(glowMap, pass_textureCoords);
+
+	    if (glowColour.r > 0.5) {
+	        glowing = true;
+	    }
+	}
+
 	out_albedo = vec4(diffuseColour);
 	out_normals = vec4(pass_surfaceNormal, 1.0);
-	out_extras = vec4(shineDamper, reflectivity, (1.0 / 3.0) * (float(ignoreFog) + 2.0 * float(ignoreLighting)), 1.0);
+	out_extras = vec4(shineDamper, reflectivity, (1.0 / 3.0) * (float(ignoreFog) + 2.0 * float(ignoreLighting || glowing)), 1.0);
 }

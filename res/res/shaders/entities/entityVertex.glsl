@@ -13,7 +13,7 @@ layout(location = 4) in ivec3 in_jointIndices;
 layout(location = 5) in vec3 in_weights;
 
 //---------UNIFORM------------
-layout(binding = 1) uniform sampler2D swayMap;
+layout(binding = 2) uniform sampler2D swayMap;
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
@@ -26,7 +26,7 @@ uniform vec2 atlasOffset;
 uniform bool animated;
 uniform mat4 jointTransforms[MAX_JOINTS];
 
-uniform bool swaying;
+uniform bool useSwayMap;
 uniform float swayHeight;
 uniform vec2 swayOffset;
 
@@ -54,7 +54,7 @@ void main(void) {
 
 	pass_textureCoords = (in_textureCoords / atlasRows) + atlasOffset;
 
-	if (swaying) {
+	if (useSwayMap) {
 	    vec4 swayColour = texture(swayMap, in_textureCoords);
 	    float swayPower = 0.5 * exp(log(length(swayColour.rgb)) / 3.0) * (totalLocalPos.y / swayHeight) * length(totalLocalPos.xyz);
 	    totalLocalPos.x += swayPower * swayOffset.x;

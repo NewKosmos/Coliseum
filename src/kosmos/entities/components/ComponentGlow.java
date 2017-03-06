@@ -20,49 +20,49 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.*;
 
-public class ComponentSway extends IComponentEntity implements IComponentEditor {
+public class ComponentGlow extends IComponentEntity implements IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
-	private TextureObject textureSway;
+	private TextureObject textureGlow;
 
 	private MyFile editorPathTexture;
 
 	/**
-	 * Creates a new ComponentSway.
+	 * Creates a new ComponentGlow.
 	 *
 	 * @param entity The entity this component is attached to.
 	 */
-	public ComponentSway(Entity entity) {
+	public ComponentGlow(Entity entity) {
 		this(entity, null);
 	}
 
 	/**
-	 * Creates a new ComponentSway.
+	 * Creates a new ComponentGlow.
 	 *
 	 * @param entity The entity this component is attached to.
-	 * @param textureSway
+	 * @param textureGlow
 	 */
-	public ComponentSway(Entity entity, TextureObject textureSway) {
+	public ComponentGlow(Entity entity, TextureObject textureGlow) {
 		super(entity, ID);
-		this.textureSway = textureSway;
+		this.textureGlow = textureGlow;
 	}
 
 	@Override
 	public void update() {
 	}
 
-	public TextureObject getTextureSway() {
-		return textureSway;
+	public TextureObject getTextureGlow() {
+		return textureGlow;
 	}
 
-	public void setTextureSway(TextureObject textureSway) {
-		this.textureSway = textureSway;
+	public void setTextureGlow(TextureObject textureGlow) {
+		this.textureGlow = textureGlow;
 	}
 
 	@Override
 	public void addToPanel(JPanel panel) {
 		// Load Texture.
-		JButton loadTexture = new JButton("Select Sway Map");
+		JButton loadTexture = new JButton("Select Glow Map");
 		loadTexture.addActionListener((ActionEvent ae) -> {
 			JFileChooser fileChooser = new JFileChooser();
 			File workingDirectory = new File(System.getProperty("user.dir"));
@@ -79,9 +79,9 @@ public class ComponentSway extends IComponentEntity implements IComponentEditor 
 
 	@Override
 	public void editorUpdate() {
-		if (editorPathTexture != null && (textureSway == null || !textureSway.getFile().getPath().equals(editorPathTexture.getPath()))) {
+		if (editorPathTexture != null && (textureGlow == null || !textureGlow.getFile().getPath().equals(editorPathTexture.getPath()))) {
 			if (editorPathTexture.getPath().contains(".png")) {
-				textureSway = TextureFactory.newBuilder().setFile(new MyFile(editorPathTexture)).create();
+				textureGlow = TextureFactory.newBuilder().setFile(new MyFile(editorPathTexture)).create();
 			}
 
 			editorPathTexture = null;
@@ -90,9 +90,9 @@ public class ComponentSway extends IComponentEntity implements IComponentEditor 
 
 	@Override
 	public Pair<String[], String[]> getSaveValues(String entityName) {
-		if (textureSway != null) {
+		if (textureGlow != null) {
 			try {
-				File file = new File("entities/" + entityName + "/" + entityName + "Sway.png");
+				File file = new File("entities/" + entityName + "/" + entityName + "Glow.png");
 
 				if (file.exists()) {
 					file.delete();
@@ -100,7 +100,7 @@ public class ComponentSway extends IComponentEntity implements IComponentEditor 
 
 				file.createNewFile();
 
-				InputStream input = textureSway.getFile().getInputStream();
+				InputStream input = textureGlow.getFile().getInputStream();
 				OutputStream output = new FileOutputStream(file);
 				byte[] buf = new byte[1024];
 				int bytesRead;
@@ -116,11 +116,11 @@ public class ComponentSway extends IComponentEntity implements IComponentEditor 
 			}
 		}
 
-		String saveTexture = (textureSway != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Sway.png\")).setNumberOfRows(" + textureSway.getNumberOfRows() + ").create()") : null;
+		String saveTexture = (textureGlow != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Glow.png\")).setNumberOfRows(" + textureGlow.getNumberOfRows() + ").create()") : null;
 
 		return new Pair<>(
-				new String[]{"private static final TextureObject TEXTURE_SWAY = " + saveTexture}, // Static variables
-				new String[]{"TEXTURE_SWAY"} // Class constructor
+				new String[]{"private static final TextureObject TEXTURE_GLOW = " + saveTexture}, // Static variables
+				new String[]{"TEXTURE_GLOW"} // Class constructor
 		);
 	}
 

@@ -13,6 +13,7 @@ import flounder.camera.*;
 import flounder.devices.*;
 import flounder.entities.*;
 import flounder.helpers.*;
+import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
@@ -95,6 +96,7 @@ public class EntitiesRenderer extends Renderer {
 		ComponentModel componentModel = (ComponentModel) entity.getComponent(ComponentModel.ID);
 		ComponentAnimation componentAnimation = (ComponentAnimation) entity.getComponent(ComponentAnimation.ID);
 		ComponentSurface componentSurface = (ComponentSurface) entity.getComponent(ComponentSurface.ID);
+		ComponentGlow componentGlow = (ComponentGlow) entity.getComponent(ComponentGlow.ID);
 		ComponentSway componentSway = (ComponentSway) entity.getComponent(ComponentSway.ID);
 		final int vaoLength;
 
@@ -165,15 +167,25 @@ public class EntitiesRenderer extends Renderer {
 			shader.getUniformBool("ignoreLighting").loadBoolean(false);
 		}
 
+		if (componentGlow != null) {
+			shader.getUniformBool("useGlowMap").loadBoolean(true);
+
+			if (componentGlow.getTextureGlow() != null && componentGlow.getTextureGlow().isLoaded()) {
+				OpenGlUtils.bindTexture(componentGlow.getTextureGlow(), 1);
+			}
+		} else {
+			shader.getUniformBool("useGlowMap").loadBoolean(false);
+		}
+
 		if (componentSway != null) {
-			shader.getUniformBool("swaying").loadBoolean(true);
+			shader.getUniformBool("useSwayMap").loadBoolean(true);
 			shader.getUniformVec2("swayOffset").loadVec2(KosmosWorld.getSwayOffsetX(), KosmosWorld.getSwayOffsetY());
 
 			if (componentSway.getTextureSway() != null && componentSway.getTextureSway().isLoaded()) {
-				OpenGlUtils.bindTexture(componentSway.getTextureSway(), 1);
+				OpenGlUtils.bindTexture(componentSway.getTextureSway(), 2);
 			}
 		} else {
-			shader.getUniformBool("swaying").loadBoolean(false);
+			shader.getUniformBool("useSwayMap").loadBoolean(false);
 		}
 
 		glDrawElements(GL_TRIANGLES, vaoLength, GL_UNSIGNED_INT, 0);

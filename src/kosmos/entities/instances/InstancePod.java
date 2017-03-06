@@ -22,12 +22,14 @@ import kosmos.entities.components.*;
 public class InstancePod extends Entity {
 	private static final ModelObject model = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "pod", "pod.obj")).create();
 	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "pod", "pod.png")).create();
+	private static final TextureObject textureGlow = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "pod", "podGlow.png")).create();
 
 	public InstancePod(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 
 		ComponentModel componentModel = new ComponentModel(this, 1.0f, model, texture, 1);
 		texture.setHasAlpha(true);
+		new ComponentGlow(this, textureGlow);
 		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.0f, false, false);
 		ComponentLight componentLight = new ComponentLight(this, new Vector3f(0.0f, 0.5f, 0.0f), new Colour(1.0f, 1.0f, 1.0f), new Attenuation(1.0f, 0.06f, 1.0f));
 		ComponentCollider componentCollider = new ComponentCollider(this);
