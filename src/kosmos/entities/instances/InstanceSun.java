@@ -27,7 +27,7 @@ public class InstanceSun extends Entity {
 		super(structure, position, rotation);
 		new ComponentCelestial(this);
 		new ComponentModel(this, 15.0f, model, texture, 0);
-		new ComponentLight(this, new Vector3f(), new Colour(0.7f, 0.7f, 0.7f), new Attenuation(1.0f, 0.0f, 0.0f));
+		new ComponentLight(this, new Vector3f(), new Colour(0.8f, 0.8f, 0.8f), new Attenuation(1.0f, 0.0f, 0.0f));
 		new ComponentSurface(this, 1.0f, 0.0f, true, true);
 		//new ComponentCollider(this);
 		//new ComponentCollision(this);
