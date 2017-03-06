@@ -143,7 +143,14 @@ public class KosmosChunks extends Module {
 	}
 
 	public static void setCurrent(Chunk currentChunk) {
+		currentChunk.createChunksAround();
+		currentChunk.getChildrenChunks().forEach(Chunk::createChunksAround);
 		INSTANCE.currentChunk = currentChunk;
+	}
+
+	public static void clear() {
+		INSTANCE.chunks.getAll().forEach((Entity chunk) -> ((Chunk) chunk).delete());
+		INSTANCE.chunks.clear();
 	}
 
 	@Override
@@ -153,5 +160,6 @@ public class KosmosChunks extends Module {
 
 	@Override
 	public void dispose() {
+		clear();
 	}
 }

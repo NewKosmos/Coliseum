@@ -18,7 +18,7 @@ public class PacketMove extends Packet {
 
 	public PacketMove(byte[] data) {
 		String[] d = readData(data).split(",");
-		this.username = d[0];
+		this.username = d[0].trim();
 		this.x = Float.parseFloat(d[1].trim());
 		this.y = Float.parseFloat(d[2].trim());
 		this.z = Float.parseFloat(d[3].trim());

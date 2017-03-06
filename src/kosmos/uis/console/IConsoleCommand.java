@@ -9,6 +9,7 @@
 
 package kosmos.uis.console;
 
+import flounder.camera.*;
 import flounder.entities.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
@@ -44,7 +45,9 @@ public interface IConsoleCommand {
 
 				FlounderLogger.log("Teleporting to " + player + " in chunk [" + chunkX + ", " + chunkZ + "].");
 
-				KosmosChunks.getEntityPlayer().getPosition().set(other.getPosition());
+				FlounderCamera.getPlayer().getPosition().set(other.getPosition());
+				other.setMoved();
+				KosmosChunks.clear();
 				KosmosChunks.setCurrent(new Chunk(KosmosChunks.getChunks(), new Vector3f(chunkX, 0.0f, chunkZ)));
 			}
 		}),
