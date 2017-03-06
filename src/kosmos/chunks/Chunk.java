@@ -57,7 +57,7 @@ public class Chunk extends Entity {
 		super(structure, position, new Vector3f());
 		this.entities = new StructureBasic<>();
 
-		float biomeID = Math.abs(KosmosChunks.getNoise().noise1((position.x + position.z) / 163.2f)) * 3.0f * IBiome.Biomes.values().length;
+		float biomeID = Math.abs(KosmosChunks.getNoise().noise1((position.x + position.z) / 300.0f)) * 3.0f * (IBiome.Biomes.values().length + 1);
 		biomeID = Maths.clamp((int) biomeID, 0.0f, IBiome.Biomes.values().length - 1);
 
 		this.childrenChunks = new ArrayList<>();
@@ -120,7 +120,26 @@ public class Chunk extends Entity {
 		}
 	}
 
-	protected List<Vector3f> generate() {
+	@Override
+	public void update() {
+		// Builds or rebulds this chunks mesh.
+		if (tilesChanged || chunkMesh.getModel() == null) {
+			chunkMesh.rebuild(generate());
+			tilesChanged = false;
+			super.setMoved();
+		}
+
+		// Adds this mesh AABB to the bounding render pool.
+		FlounderBounding.addShapeRender(getSphere());
+
+		for (Entity entity : entities.getAll()) {
+			entity.update();
+		}
+
+		super.update();
+	}
+
+	private List<Vector3f> generate() {
 		List<Vector3f> tiles = new ArrayList<>();
 
 		for (int i = 0; i < CHUNK_RADIUS; i++) {
@@ -148,11 +167,20 @@ public class Chunk extends Entity {
 		return tiles;
 	}
 
-	protected void generateTile(List<Vector3f> tiles, Vector2f position) {
+	private void generateTile(List<Vector3f> tiles, Vector2f position) {
 		Vector2f worldPos = new Vector2f(position.x + (getPosition().x * 2.0f), position.y + (getPosition().z * 2.0f));
-		int height = getHeight(worldPos.x, worldPos.y);
+		int height = (int) (KosmosChunks.getNoise().noise2(worldPos.x / 75.0f, worldPos.y / 75.0f) * 10.0f);
+		//FlounderLogger.log(position.x + ", " + height + ", " + position.y);
 
-		for (int i = 0; i < height; i++) {
+		if (height >= 0) {
+			tiles.add(new Vector3f(position.x, height * (float) Math.sqrt(2.0f), position.y));
+
+			if (KosmosChunks.getNoise().noise2(worldPos.x / 50.0f * (float) Math.sin(worldPos.y), worldPos.y / 50.0f * (float) Math.sin(worldPos.x)) > 0.1f) {
+				biome.getBiome().generateEntity(this, worldPos, position, height);
+			}
+		}
+
+	/*	for (int i = 0; i < height; i++) {
 			tiles.add(new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
 
 			if (i == height - 1 && height > 0) {
@@ -160,30 +188,17 @@ public class Chunk extends Entity {
 					biome.getBiome().generateEntity(this, worldPos, position, i);
 				}
 			}
-		}
+		}*/
 	}
 
-	public static int getHeight(float x, float z) {
-		return (int) Math.abs(KosmosChunks.getNoise().noise2(x / 88.8f, z / 88.8f) * 9.81f);
-	}
+	public int getHeight(Vector3f worldPosition) {
+		float positionX = worldPosition.x - super.getPosition().getX();
+		float positionZ = worldPosition.z - super.getPosition().getZ();
+		// FlounderLogger.log(positionX + ", " + positionZ);
 
-	@Override
-	public void update() {
-		// Builds or rebulds this chunks mesh.
-		if (tilesChanged || chunkMesh.getModel() == null) {
-			chunkMesh.rebuild(generate());
-			tilesChanged = false;
-			super.setMoved();
-		}
-
-		// Adds this mesh AABB to the bounding render pool.
-		FlounderBounding.addShapeRender(getSphere());
-
-		for (Entity entity : entities.getAll()) {
-			entity.update();
-		}
-
-		super.update();
+		Vector2f worldPos = new Vector2f(positionX + (getPosition().x * 2.0f), positionZ + (getPosition().z * 2.0f));
+		int height = (int) Math.abs(KosmosChunks.getNoise().noise2(worldPos.x / 88.8f, worldPos.y / 88.8f) * 9.81f);
+		return height;
 	}
 
 	public ISpatialStructure<Entity> getEntities() {

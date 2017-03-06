@@ -12,12 +12,10 @@ package kosmos.camera;
 import flounder.camera.*;
 import flounder.framework.*;
 import flounder.inputs.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import kosmos.*;
 import kosmos.chunks.*;
-import kosmos.terrain.*;
 import kosmos.water.*;
 import kosmos.world.*;
 import org.lwjgl.glfw.*;
@@ -85,11 +83,11 @@ public class PlayerBasic extends Player {
 		float waterLevel = (KosmosWater.getWater() != null) ? KosmosWater.getWater().getPosition().y : 0.0f;
 
 		// Finds the chunk height at the current player pos.
-		//float chunkHeight = (KosmosChunks.getCurrent() != null) ? Chunk.getHeight(position.x, position.z) * (float) Math.sqrt(2.0) : 0.0f;
-		float chunkHeight = KosmosTerrain.getTerrain().getHeightWorld(position.x, position.z);
+		float chunkHeight = (KosmosChunks.getCurrent() != null) ? KosmosChunks.getCurrent().getHeight(position) : 0.0f;
+		//float chunkHeight = KosmosTerrain.getTerrain().getHeightWorld(position.x, position.z);
 
 		// Does collision with the highest world object.
-		float worldHeight = Math.max(waterLevel, chunkHeight) - (float) (Math.sqrt(2.0) * 0.25f);
+		float worldHeight = 0.0f;//Math.max(waterLevel, chunkHeight) - (float) (Math.sqrt(2.0) * 0.25f);
 
 		if (position.y + dy < worldHeight) {
 			dy = worldHeight - position.getY();

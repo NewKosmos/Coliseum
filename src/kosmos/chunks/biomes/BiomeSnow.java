@@ -30,8 +30,9 @@ public class BiomeSnow implements IBiome {
 	@Override
 	public void generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height) {
 		float rotation = KosmosChunks.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
+		float spawn = Math.abs(KosmosChunks.getNoise().noise1((worldPos.y - worldPos.x) / 10.0f) * 250.0f);
 
-		switch ((int) (KosmosChunks.getNoise().noise1((worldPos.y - worldPos.x) / 11.0f) * 200.0f)) {
+		switch ((int) spawn) {
 			case 1:
 				new InstanceTreePine(chunk.getEntities(),
 						new Vector3f(

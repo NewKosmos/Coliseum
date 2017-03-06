@@ -197,16 +197,16 @@ public class ChunkMesh {
 
 		// Removes vertex data after some time.
 		new java.util.Timer().schedule(
-			new java.util.TimerTask() {
-				@Override
-				public void run() {
-					if (vertices != null) {
-						vertices.clear();
-						vertices = null;
+				new java.util.TimerTask() {
+					@Override
+					public void run() {
+						if (vertices != null) {
+							vertices.clear();
+							vertices = null;
+						}
 					}
-				}
-			},
-			5000
+				},
+				5000
 		);
 	}
 

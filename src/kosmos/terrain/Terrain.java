@@ -3,7 +3,6 @@ package kosmos.terrain;
 import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
-import flounder.noise.*;
 import flounder.physics.*;
 import flounder.resources.*;
 import flounder.space.*;
@@ -16,7 +15,7 @@ import kosmos.entities.components.*;
  */
 public class Terrain extends Entity {
 	public static final float TERRAIN_SIZE = 200.0f;
-	public static final int TERRAIN_VERTEX_COUNT = 135;
+	public static final int TERRAIN_VERTEX_COUNT = 270;
 
 	private float[][] heights;
 	private ModelObject model;
@@ -125,7 +124,7 @@ public class Terrain extends Entity {
 	}
 
 	private float getHeightFromMap(int x, int z) {
-		return (int) Math.abs(KosmosChunks.getNoise().noise2(x / 88.8f, z / 88.8f) * 9.81f);
+		return (int) Math.abs(KosmosChunks.getNoise().noise2((x + getPosition().x) / 88.8f, (z + getPosition().z) / 88.8f) * 9.81f);
 	}
 
 	private Vector3f calculateMapNormal(int x, int y) {
