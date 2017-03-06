@@ -87,11 +87,10 @@ public class PlayerBasic extends Player {
 		float waterLevel = (KosmosWater.getWater() != null) ? KosmosWater.getWater().getPosition().y : 0.0f;
 
 		// Finds the chunk height at the current player pos.
-		float chunkHeight = (KosmosChunks.getCurrent() != null) ? KosmosChunks.getCurrent().getHeight(position) : 0.0f;
-		//float chunkHeight = KosmosTerrain.getTerrain().getHeightWorld(position.x, position.z);
+		float chunkHeight = (KosmosChunks.getCurrent() != null) ? KosmosChunks.getCurrent().getHeight(position.x + dx, position.z + dz) : 0.0f;
 
 		// Does collision with the highest world object.
-		float worldHeight = 0.0f;//Math.max(waterLevel, chunkHeight) - (float) (Math.sqrt(2.0) * 0.25f);
+		float worldHeight = Math.max(waterLevel - (float) Math.sqrt(2.0), chunkHeight);
 
 		if (position.y + dy < worldHeight) {
 			dy = worldHeight - position.getY();

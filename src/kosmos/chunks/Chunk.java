@@ -191,14 +191,18 @@ public class Chunk extends Entity {
 		}*/
 	}
 
-	public int getHeight(Vector3f worldPosition) {
-		float positionX = worldPosition.x - super.getPosition().getX();
-		float positionZ = worldPosition.z - super.getPosition().getZ();
-		// FlounderLogger.log(positionX + ", " + positionZ);
+	public float getHeight(float worldX, float worldZ) {
+		float positionX = worldX - super.getPosition().getX();
+		float positionZ = worldZ - super.getPosition().getZ();
 
 		Vector2f worldPos = new Vector2f(positionX + (getPosition().x * 2.0f), positionZ + (getPosition().z * 2.0f));
-		int height = (int) Math.abs(KosmosChunks.getNoise().noise2(worldPos.x / 88.8f, worldPos.y / 88.8f) * 9.81f);
-		return height;
+		int height = (int) (KosmosChunks.getNoise().noise2(worldPos.x / 75.0f, worldPos.y / 75.0f) * 10.0f);
+
+		if (height >= 0) {
+			return height * 0.5f * 1.414f;
+		} else {
+			return Float.NEGATIVE_INFINITY;
+		}
 	}
 
 	public ISpatialStructure<Entity> getEntities() {
