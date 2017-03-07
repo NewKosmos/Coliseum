@@ -74,7 +74,7 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 			//	float daySin = (float) Math.sin(2.0 * Math.PI * KosmosWorld.getSkyCycle().getDayFactor());
 			//	Colour.interpolate(SkyCycle.SUN_COLOUR_DAY, SkyCycle.SUN_COLOUR_SUNRISE, daySin, componentLight.getLight().getColour());
 			//	FlounderLogger.log("["+daySin+"]: " + componentLight.getLight().colour);
-				componentLight.getLight().getColour().set(KosmosWorld.getSkyCycle().getSkyColour());
+			////	componentLight.getLight().getColour().set(KosmosWorld.getSkyCycle().getSkyColour());
 			}
 		}
 	}
