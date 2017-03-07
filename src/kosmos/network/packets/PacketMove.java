@@ -1,8 +1,7 @@
-package kosmos.network;
+package kosmos.network.packets;
 
 import flounder.maths.vectors.*;
 import flounder.networking.*;
-import flounder.networking.packets.*;
 import kosmos.world.*;
 
 import java.net.*;

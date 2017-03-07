@@ -30,7 +30,7 @@ public class CameraFocus extends Camera {
 	private static final float FIELD_OF_VIEW = 45.0f;
 
 	// Defines how snappy these camera functions will be.
-	private static final float ZOOM_AGILITY = 10.0f;
+	private static final float ZOOM_AGILITY = 20.0f;
 	private static final float ROTATE_AGILITY = 20.0f;
 	private static final float PITCH_AGILITY = 20.0f;
 

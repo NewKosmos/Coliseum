@@ -20,6 +20,8 @@ import flounder.physics.bounding.*;
 import flounder.sounds.*;
 import flounder.standards.*;
 import kosmos.chunks.*;
+import kosmos.network.packets.*;
+import kosmos.particles.*;
 import kosmos.water.*;
 import kosmos.world.*;
 
@@ -39,7 +41,7 @@ public class KosmosInterface extends Standard {
 	private int serverPort;
 
 	public KosmosInterface() {
-		super(FlounderDisplay.class, FlounderKeyboard.class, KosmosWorld.class, KosmosChunks.class, KosmosWater.class, FlounderNetwork.class);
+		super(FlounderDisplay.class, FlounderKeyboard.class, KosmosParticles.class, FlounderBounding.class, KosmosWorld.class, KosmosChunks.class, KosmosWater.class, FlounderNetwork.class);
 	}
 
 	@Override
@@ -59,6 +61,8 @@ public class KosmosInterface extends Standard {
 		this.serverIP = KosmosConfigs.configServer.getStringWithDefault("connect_ip", "localhost", this::getServerIP);
 		this.serverPort = KosmosConfigs.configServer.getIntWithDefault("connect_port", FlounderNetwork.getPort(), this::getServerPort);
 		FlounderNetwork.startClient(username, serverIP, serverPort);
+		PacketLogin loginPacket = new PacketLogin(username);
+		loginPacket.writeData(FlounderNetwork.getSocketClient());
 
 		FlounderEvents.addEvent(new IEvent() {
 			@Override
@@ -163,6 +167,8 @@ public class KosmosInterface extends Standard {
 
 	@Override
 	public void dispose() {
+		new PacketDisconnect(FlounderNetwork.getUsername()).writeData(FlounderNetwork.getSocketClient());
+
 		//	SteamAPI.shutdown();
 		KosmosConfigs.closeConfigs();
 	}

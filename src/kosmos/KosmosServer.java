@@ -3,6 +3,8 @@ package kosmos;
 import flounder.framework.*;
 import flounder.networking.*;
 import flounder.standards.*;
+import kosmos.network.packets.*;
+import kosmos.world.*;
 
 public class KosmosServer extends Framework {
 	public static void main(String[] args) {
@@ -17,7 +19,7 @@ public class KosmosServer extends Framework {
 
 	public static class ServerInterface extends Standard {
 		public ServerInterface() {
-			super(FlounderNetwork.class);
+			super(FlounderNetwork.class, KosmosWorld.class);
 		}
 
 		@Override
@@ -38,7 +40,7 @@ public class KosmosServer extends Framework {
 
 		@Override
 		public void dispose() {
-
+			new PacketDisconnect("server").writeData(FlounderNetwork.getSocketServer());
 		}
 
 		@Override

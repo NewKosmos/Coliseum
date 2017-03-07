@@ -17,7 +17,7 @@ import flounder.maths.Timer;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import kosmos.chunks.*;
-import kosmos.network.*;
+import kosmos.network.packets.*;
 import kosmos.world.*;
 
 import javax.swing.*;
