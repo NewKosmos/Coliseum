@@ -11,8 +11,10 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.maths.vectors.*;
+import flounder.visual.*;
 import kosmos.world.*;
 
 import javax.swing.*;
@@ -21,6 +23,8 @@ public class ComponentCloud extends IComponentEntity implements IComponentEditor
 	public static final int ID = EntityIDAssigner.getId();
 
 	private Vector3f startPosition;
+
+	private SinWaveDriver driverHeight;
 
 	/**
 	 * Creates a new ComponentCloud.
@@ -32,14 +36,19 @@ public class ComponentCloud extends IComponentEntity implements IComponentEditor
 
 		if (entity != null) {
 			this.startPosition = new Vector3f(entity.getPosition());
+			float variation = Math.abs(2.0f - entity.getPosition().y);
+			this.driverHeight = new SinWaveDriver(-variation, variation, 30.0f * variation);
 		} else {
 			this.startPosition = new Vector3f();
+			this.driverHeight = new SinWaveDriver(-2.0f, 3.0f, 30.0f);
 		}
 	}
 
 	@Override
 	public void update() {
-		Vector3f.rotate(startPosition, new Vector3f(0.0f, KosmosWorld.getSkyCycle().getDayFactor() * 180.0f, 0.0f), getEntity().getPosition());
+		//Vector3f.rotate(startPosition, new Vector3f(0.0f, KosmosWorld.getSkyCycle().getDayFactor() * 180.0f, 0.0f), getEntity().getPosition());
+		float height = driverHeight.update(Framework.getDelta());
+		getEntity().getPosition().y = startPosition.y + height;
 		getEntity().setMoved();
 	}
 

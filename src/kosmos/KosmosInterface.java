@@ -41,7 +41,7 @@ public class KosmosInterface extends Standard {
 	private int serverPort;
 
 	public KosmosInterface() {
-		super(FlounderDisplay.class, FlounderKeyboard.class, KosmosParticles.class, FlounderBounding.class, KosmosWorld.class, KosmosChunks.class, KosmosWater.class, FlounderNetwork.class);
+		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderNetwork.class, FlounderBounding.class, KosmosParticles.class, KosmosWater.class, KosmosWorld.class, KosmosChunks.class);
 	}
 
 	@Override

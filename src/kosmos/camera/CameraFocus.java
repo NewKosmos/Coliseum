@@ -17,6 +17,7 @@ import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
+import flounder.physics.*;
 import flounder.profiling.*;
 import flounder.space.*;
 import kosmos.*;
@@ -55,6 +56,7 @@ public class CameraFocus extends Camera {
 	private Vector3f rotation;
 
 	private Frustum viewFrustum;
+	private Ray viewRay;
 	private Matrix4f viewMatrix;
 	private Matrix4f projectionMatrix;
 
@@ -94,6 +96,7 @@ public class CameraFocus extends Camera {
 		this.rotation = new Vector3f();
 
 		this.viewFrustum = new Frustum();
+		this.viewRay = new Ray(false, new Vector2f());
 		this.viewMatrix = new Matrix4f();
 		this.projectionMatrix = new Matrix4f();
 
@@ -319,6 +322,12 @@ public class CameraFocus extends Camera {
 	public Frustum getViewFrustum() {
 		viewFrustum.recalculateFrustum(getProjectionMatrix(), viewMatrix);
 		return viewFrustum;
+	}
+
+	@Override
+	public Ray getViewRay() {
+		viewRay.recalculateRay(position);
+		return viewRay;
 	}
 
 	@Override

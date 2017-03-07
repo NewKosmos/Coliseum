@@ -19,6 +19,7 @@ import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;
 import kosmos.chunks.tiles.*;
 import kosmos.entities.components.*;
+import kosmos.entities.instances.*;
 import kosmos.particles.*;
 import kosmos.particles.loading.*;
 import kosmos.particles.spawns.*;
@@ -76,6 +77,7 @@ public class Chunk extends Entity {
 		new ComponentCollision(this);
 
 		// generateWeather();
+		// generateClouds();
 	}
 
 	private void generateWeather() {
@@ -84,6 +86,26 @@ public class Chunk extends Entity {
 			templates.add(biome.getBiome().getWeatherParticle());
 			particleSystem = new ParticleSystem(templates, new SpawnCircle(40.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 100, 0.5f, 0.5f);
 			particleSystem.setSystemCentre(new Vector3f(getPosition().x, 15.0f, getPosition().z));
+		}
+	}
+
+	private void generateClouds() {
+		for (int x = -1; x <= 1; x++) {
+			for (int y = -1; y <= 1; y++) {
+				float offsetX = KosmosWorld.getNoise().noise2(x / 4.0f, y / 4.0f) * 20.0f;
+				float offsetZ = KosmosWorld.getNoise().noise2(x / 9.0f, y / 9.0f) * 20.0f;
+				float height = Math.abs(KosmosWorld.getNoise().noise2(x / 2.0f, y / 2.0f) * 2.0f) + 2.0f;
+				float rotationY = KosmosWorld.getNoise().noise1((x - y) / 60.0f) * 3600.0f;
+				float rotationZ = KosmosWorld.getNoise().noise1((x - y) / 20.0f) * 3600.0f;
+
+				new InstanceCloud(entities, new Vector3f(
+						getPosition().x + (x * 11.0f) + offsetX,
+						getPosition().y + 7.0f * height,
+						getPosition().z + (y * 11.0f) + offsetZ),
+						new Vector3f(0.0f, rotationY, rotationZ),
+						Maths.randomInRange(1.0f, 2.25f)
+				);
+			}
 		}
 	}
 

@@ -157,7 +157,7 @@ public class KosmosRenderer extends RendererMaster {
 	}
 
 	private void renderScene(Vector4f clipPlane, boolean waterPass) {
-		/* Clear and update. */
+		/* Clear and recalculateRay. */
 		Camera camera = FlounderCamera.getCamera();
 		OpenGlUtils.prepareNewRenderParse(0.0f, 0.0f, 0.0f);
 

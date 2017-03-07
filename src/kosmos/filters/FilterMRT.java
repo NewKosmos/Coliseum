@@ -88,7 +88,7 @@ public class FilterMRT extends PostFilter {
 		shader.getUniformInt("shadowMapSize").loadInt(ShadowRenderer.getShadowMapSize());
 		shader.getUniformInt("shadowPCF").loadInt(shadowPCF);
 		shader.getUniformFloat("shadowBias").loadFloat(shadowBias);
-		shader.getUniformFloat("shadowDarkness").loadFloat(shadowDarkness);
+		shader.getUniformFloat("shadowDarkness").loadFloat(shadowDarkness * KosmosWorld.getSkyCycle().getSinDay()); // TODO
 
 		if (KosmosWorld.getFog() != null) {
 			shader.getUniformVec3("fogColour").loadVec3(KosmosWorld.getFog().getFogColour());

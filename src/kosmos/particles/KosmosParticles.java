@@ -112,7 +112,7 @@ public class KosmosParticles extends Module {
 	}
 
 	/**
-	 * Adds a particle system to the update loop.
+	 * Adds a particle system to the recalculateRay loop.
 	 *
 	 * @param system The new system to add.
 	 */
@@ -121,7 +121,7 @@ public class KosmosParticles extends Module {
 	}
 
 	/**
-	 * Removes a particle system from the update loop.
+	 * Removes a particle system from the recalculateRay loop.
 	 *
 	 * @param system The system to remove.
 	 */
@@ -253,7 +253,7 @@ public class KosmosParticles extends Module {
 	}
 
 	/**
-	 * Adds a particle to the update loop.
+	 * Adds a particle to the recalculateRay loop.
 	 *
 	 * @param particleTemplate The particle template to build from.
 	 * @param position The particles initial position.

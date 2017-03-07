@@ -10,11 +10,13 @@
 package kosmos.chunks;
 
 import flounder.camera.*;
+import flounder.devices.*;
 import flounder.entities.*;
 import flounder.framework.*;
-import flounder.maths.*;
+import flounder.loaders.*;
+import flounder.logger.*;
 import flounder.maths.vectors.*;
-import flounder.noise.*;
+import flounder.models.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
 import flounder.profiling.*;
@@ -22,7 +24,6 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.*;
 import kosmos.entities.instances.*;
-import kosmos.world.*;
 
 import java.util.*;
 
@@ -56,22 +57,11 @@ public class KosmosChunks extends Module {
 		this.chunkRange = new Sphere(40.0f);
 
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
-		this.currentChunk = new Chunk(KosmosChunks.getChunks(), new Vector3f(KosmosConfigs.configSave.getFloatWithDefault("chunk_x", 0.0f, () -> KosmosChunks.getCurrent().getPosition().x), 0.0f, KosmosConfigs.configSave.getFloatWithDefault("chunk_z", 0.0f, () -> KosmosChunks.getCurrent().getPosition().z))); // The root chunk.
-
-		//	generateClouds();
-	}
-
-	private void generateClouds() {
-		for (int x = -2; x <= 2; x++) {
-			for (int y = -2; y <= 2; y++) {
-				float offsetX = KosmosWorld.getNoise().noise2(x / 4.0f, y / 4.0f) * 20.0f;
-				float offsetZ = KosmosWorld.getNoise().noise2(x / 9.0f, y / 9.0f) * 20.0f;
-				float height = Math.abs(KosmosWorld.getNoise().noise2(x / 2.0f, y / 2.0f) * 5.0f) + 0.9f;
-				float rotationY = KosmosWorld.getNoise().noise1((x - y) / 60.0f) * 3600.0f;
-				float rotationZ = KosmosWorld.getNoise().noise1((x - y) / 20.0f) * 3600.0f;
-				new InstanceCloud(FlounderEntities.getEntities(), new Vector3f((x * 11.0f) + offsetX, 7.0f * height, (y * 11.0f) + offsetZ), new Vector3f(0.0f, rotationY, rotationZ), Maths.randomInRange(1.0f, 2.25f));
-			}
-		}
+		setCurrent(new Chunk(KosmosChunks.getChunks(), new Vector3f(
+				KosmosConfigs.configSave.getFloatWithDefault("chunk_x", 0.0f, () -> KosmosChunks.getCurrent().getPosition().x),
+				0.0f,
+				KosmosConfigs.configSave.getFloatWithDefault("chunk_z", 0.0f, () -> KosmosChunks.getCurrent().getPosition().z)
+		))); // The root chunk.
 	}
 
 	@Override
@@ -121,11 +111,33 @@ public class KosmosChunks extends Module {
 			lastPlayerPos.set(playerPos);
 			FlounderBounding.addShapeRender(chunkRange);
 		}
+
+		if (FlounderCamera.getCamera() != null && FlounderMouse.getMouse(0)) {
+			Ray viewRay = FlounderCamera.getCamera().getViewRay();
+			Entity entityInRay = null;
+			float entityRayDistance = 0.0f;
+
+			for (Entity entity : currentChunk.getEntities().getAll()) {
+				IntersectData data = entity.getBounding().intersects(viewRay);
+
+				if (entity.getBounding() != null && data.isIntersection()) {
+					if (entityInRay == null || data.getDistance() < entityRayDistance) {
+						entityInRay = entity;
+						entityRayDistance = data.getDistance();
+					}
+				}
+			}
+
+			if (entityInRay != null) {
+				entityInRay.forceRemove(true);
+			}
+		}
 	}
 
 	@Override
 	public void profile() {
 		FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Size", chunks.getSize());
+		FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Current", currentChunk);
 	}
 
 	public static ISpatialStructure<Entity> getChunks() {
@@ -157,9 +169,7 @@ public class KosmosChunks extends Module {
 	public static void clear() {
 		INSTANCE.chunks.getAll().forEach((Entity chunk) -> ((Chunk) chunk).delete());
 		INSTANCE.chunks.clear();
-		Vector3f lastChunk = getCurrent().getPosition();
-		INSTANCE.currentChunk = null;
-		new Chunk(KosmosChunks.getChunks(), new Vector3f(lastChunk)); // The new root chunk.
+		setCurrent(new Chunk(KosmosChunks.getChunks(), getCurrent().getPosition())); // The new root chunk.
 	}
 
 	@Override
