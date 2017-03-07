@@ -3,6 +3,7 @@ package kosmos.network.packets;
 import flounder.camera.*;
 import flounder.framework.*;
 import flounder.logger.*;
+import flounder.maths.vectors.*;
 import flounder.networking.*;
 import kosmos.camera.*;
 import kosmos.world.*;
@@ -46,6 +47,7 @@ public class PacketLogin extends Packet {
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
 		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "] " + username + " has joined the game.");
+		KosmosWorld.addPlayer(new Vector3f(), new Vector3f(), username);
 		((PlayerBasic) FlounderCamera.getPlayer()).sendData();
 	}
 

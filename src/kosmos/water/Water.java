@@ -26,11 +26,11 @@ public class Water {
 	protected static final float COLOUR_INTENSITY = 0.7f; // 0 being 100% reflective, 1 disables reflections.
 
 	protected static final float WAVE_SPEED = 10.0f;
-	protected static final float WAVE_LENGTH = 5.0f;
-	protected static final float AMPLITUDE = 0.185f;
+	protected static final float WAVE_LENGTH = 7.5f;
+	protected static final float AMPLITUDE = 0.150f;
 
 	protected static final double SQUARE_SIZE = 1.0;
-	protected static final int VERTEX_COUNT = 338;
+	protected static final int VERTEX_COUNT = 256;
 
 	protected static final float SHINE_DAMPER = 1.0f;
 	protected static final float REFLECTIVITY = 0.0f;
@@ -227,6 +227,17 @@ public class Water {
 		}
 
 		moved = false;
+	}
+
+	public float getHeight(float x, float z) {
+		float val1 = 0.1f;
+		float val2 = 0.3f;
+		float waveTime = KosmosWater.getWaveTime() / WAVE_SPEED;
+		float radiansX = (float) (((Maths.mod(x + z * x * val1, WAVE_LENGTH) / WAVE_LENGTH) + waveTime) * 2.0 * Math.PI);
+		float radiansZ = (float) (((Maths.mod(val2 * (z * x + x * z), WAVE_LENGTH) / WAVE_LENGTH) + waveTime * 2.0) * 2.0 * Math.PI);
+		float result = (float) (AMPLITUDE * 0.5 * (Math.sin(radiansZ) + Math.sin(radiansX)));
+		result += position.y;
+		return result;
 	}
 
 	/**

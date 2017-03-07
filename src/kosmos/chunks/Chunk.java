@@ -204,10 +204,10 @@ public class Chunk extends Entity {
 		} else {
 			float spawn = Math.abs(KosmosWorld.getNoise().noise1((worldPos.y - worldPos.x) / 10.0f) * 250.0f);
 
-			if ((int) spawn < 4) {
+			if (Math.abs(spawn) < 2.0f) {
 				new InstanceLilipad(entities, new Vector3f(
 						getPosition().x + (float) (position.x * 0.5),
-						(float) ((2.25 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+						0.0f,
 						getPosition().z + (float) (position.y * 0.5)
 				), new Vector3f());
 			}

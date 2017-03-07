@@ -35,8 +35,9 @@ public class PacketWorld extends Packet {
 
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
-		// TODO: Factor in packet delta.
-		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "]: world seed=" + seed +
+		boolean offServerTime = Math.abs(timeSec - Framework.getTimeSec()) > 0.866f;
+
+		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "]: world seed=" + seed + ", off server time=" + offServerTime +
 				", server time=" + timeSec + ", client time: " + Framework.getTimeSec() + ", client offset: " + Framework.getTimeOffset() +
 				", client original time: " + (Framework.getTimeSec() - Framework.getTimeOffset())
 		);
@@ -46,7 +47,7 @@ public class PacketWorld extends Packet {
 			KosmosChunks.clear();
 		}
 
-		if (Math.abs(timeSec - Framework.getTimeSec()) > 0.866f) {
+		if (offServerTime) {
 			Framework.setTimeOffset(timeSec - Framework.getTimeSec() - Framework.getTimeOffset());
 		}
 	}
