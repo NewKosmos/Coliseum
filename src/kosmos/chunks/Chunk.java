@@ -170,7 +170,7 @@ public class Chunk extends Entity {
 
 	private void generateTile(List<Vector3f> tiles, Vector2f position) {
 		Vector2f worldPos = new Vector2f(position.x + (getPosition().x * 2.0f), position.y + (getPosition().z * 2.0f));
-		int height = (int) (KosmosChunks.getNoise().noise2(worldPos.x / 75.0f, worldPos.y / 75.0f) * 16.0f);
+		int height = (int) (KosmosChunks.getNoise().noise2(worldPos.x / 75.0f, worldPos.y / 75.0f) * 14.0f);
 		//FlounderLogger.log(position.x + ", " + height + ", " + position.y);
 
 		if (height >= 0) {
@@ -197,7 +197,7 @@ public class Chunk extends Entity {
 		float positionZ = worldZ - super.getPosition().getZ();
 
 		Vector2f worldPos = new Vector2f(positionX + (getPosition().x * 2.0f), positionZ + (getPosition().z * 2.0f));
-		int height = (int) (KosmosChunks.getNoise().noise2(worldPos.x / 75.0f, worldPos.y / 75.0f) * 16.0f);
+		int height = (int) (KosmosChunks.getNoise().noise2(worldPos.x / 75.0f, worldPos.y / 75.0f) * 14.0f);
 
 		if (height >= 0) {
 			return height * 0.5f * (float) Math.sqrt(2.0);
