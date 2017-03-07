@@ -56,10 +56,9 @@ public class KosmosChunks extends Module {
 		this.chunkRange = new Sphere(40.0f);
 
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
-		this.currentChunk = null;
-		//	generateClouds();
+		this.currentChunk = new Chunk(KosmosChunks.getChunks(), new Vector3f(KosmosConfigs.configSave.getFloatWithDefault("chunk_x", 0.0f, () -> KosmosChunks.getCurrent().getPosition().x), 0.0f, KosmosConfigs.configSave.getFloatWithDefault("chunk_z", 0.0f, () -> KosmosChunks.getCurrent().getPosition().z))); // The root chunk.
 
-		new Chunk(KosmosChunks.getChunks(), new Vector3f(KosmosConfigs.configSave.getFloatWithDefault("chunk_x", 0.0f, () -> KosmosChunks.getCurrent().getPosition().x), 0.0f, KosmosConfigs.configSave.getFloatWithDefault("chunk_z", 0.0f, () -> KosmosChunks.getCurrent().getPosition().z))); // The root chunk.
+		//	generateClouds();
 	}
 
 	private void generateClouds() {
@@ -158,8 +157,9 @@ public class KosmosChunks extends Module {
 	public static void clear() {
 		INSTANCE.chunks.getAll().forEach((Entity chunk) -> ((Chunk) chunk).delete());
 		INSTANCE.chunks.clear();
+		Vector3f lastChunk = getCurrent().getPosition();
 		INSTANCE.currentChunk = null;
-		new Chunk(KosmosChunks.getChunks(), new Vector3f(KosmosConfigs.configSave.getFloatWithDefault("chunk_x", 0.0f, () -> KosmosChunks.getCurrent().getPosition().x), 0.0f, KosmosConfigs.configSave.getFloatWithDefault("chunk_z", 0.0f, () -> KosmosChunks.getCurrent().getPosition().z))); // The root chunk.
+		new Chunk(KosmosChunks.getChunks(), new Vector3f(lastChunk)); // The new root chunk.
 	}
 
 	@Override

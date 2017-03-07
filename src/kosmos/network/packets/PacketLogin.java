@@ -54,7 +54,7 @@ public class PacketLogin extends Packet {
 		this.writeData(server);
 
 		// Sends current world data to the new client.
-		new PacketWorld(KosmosWorld.getNoise().getSeed(), Framework.getTimeSec(), KosmosWorld.getSkyCycle().getDayFactor()).writeData(server);
+		new PacketWorld(KosmosWorld.getNoise().getSeed(), Framework.getTimeSec()).writeData(server);
 	}
 
 	@Override

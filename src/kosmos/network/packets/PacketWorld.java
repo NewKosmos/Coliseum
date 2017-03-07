@@ -11,19 +11,16 @@ import java.net.*;
 public class PacketWorld extends Packet {
 	private int seed;
 	private float timeSec;
-	private float dayFactor;
 
 	public PacketWorld(byte[] data) {
 		String[] d = readData(data).split(",");
 		this.seed = Integer.parseInt(d[0].trim());
 		this.timeSec = Float.parseFloat(d[1].trim());
-		this.dayFactor = Float.parseFloat(d[2].trim());
 	}
 
-	public PacketWorld(int seed, float timeSec, float dayFactor) {
+	public PacketWorld(int seed, float timeSec) {
 		this.seed = seed;
 		this.timeSec = timeSec;
-		this.dayFactor = dayFactor;
 	}
 
 	@Override
@@ -38,7 +35,8 @@ public class PacketWorld extends Packet {
 
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
-		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "]: world seed=" + seed + ", framework time=" + timeSec + ", day factor: " + dayFactor);
+		// TODO: Factor in packet delta.
+		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "]: world seed=" + seed + ", server time=" + timeSec + ", client time: " + Framework.getTimeSec());
 
 		if (KosmosWorld.getNoise().getSeed() != seed) {
 			KosmosWorld.getNoise().setSeed(seed);
@@ -56,7 +54,7 @@ public class PacketWorld extends Packet {
 
 	@Override
 	public byte[] getData() {
-		return (getDataPrefix() + seed + "," + timeSec + "," + dayFactor).getBytes();
+		return (getDataPrefix() + seed + "," + timeSec).getBytes();
 	}
 
 	public int getSeed() {
@@ -65,9 +63,5 @@ public class PacketWorld extends Packet {
 
 	public float getTimeSec() {
 		return timeSec;
-	}
-
-	public float getDayFactor() {
-		return dayFactor;
 	}
 }

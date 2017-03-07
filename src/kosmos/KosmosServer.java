@@ -34,7 +34,7 @@ public class KosmosServer extends Framework {
 			timerPing.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					new PacketWorld(KosmosWorld.getNoise().getSeed(), Framework.getTimeSec(), KosmosWorld.getSkyCycle().getDayFactor()).writeData(FlounderNetwork.getSocketServer());
+					new PacketWorld(KosmosWorld.getNoise().getSeed(), Framework.getTimeSec()).writeData(FlounderNetwork.getSocketServer());
 				}
 			}, 0, 5000);
 		}
