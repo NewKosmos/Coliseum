@@ -63,10 +63,13 @@ public class EntitiesRenderer extends Renderer {
 		if (KosmosChunks.getChunks() != null) {
 			for (Entity entityc : KosmosChunks.getChunks().queryInFrustum(camera.getViewFrustum())) {
 				Chunk chunk = (Chunk) entityc;
-				renderEntity(entityc);
 
-				for (Entity entity : chunk.getEntities().getAll()) {
-					renderEntity(entity);
+				if (chunk.isLoaded()) {
+					renderEntity(entityc);
+
+					for (Entity entity : chunk.getEntities().getAll()) {
+						renderEntity(entity);
+					}
 				}
 			}
 		}
@@ -99,7 +102,7 @@ public class EntitiesRenderer extends Renderer {
 		ComponentSway componentSway = (ComponentSway) entity.getComponent(ComponentSway.ID);
 		final int vaoLength;
 
-		if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded()) {
+		if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded() && componentModel.getModel().getVaoID() != -1) {
 			OpenGlUtils.bindVAO(componentModel.getModel().getVaoID(), 0, 1, 2, 3);
 			shader.getUniformBool("animated").loadBoolean(false);
 
@@ -112,7 +115,7 @@ public class EntitiesRenderer extends Renderer {
 			}
 
 			vaoLength = componentModel.getModel().getVaoLength();
-		} else if (componentAnimation != null && componentAnimation.getModel() != null) { // TODO: Check if loaded.
+		} else if (componentAnimation != null && componentAnimation.getModel() != null && componentAnimation.getModel().getVaoID() != -1) { // TODO: Check if loaded.
 			OpenGlUtils.bindVAO(componentAnimation.getModel().getVaoID(), 0, 1, 2, 3, 4, 5);
 			shader.getUniformBool("animated").loadBoolean(true);
 
@@ -123,6 +126,11 @@ public class EntitiesRenderer extends Renderer {
 			// Just stop if you are trying to apply a sway to a animated object, rethink life.
 			shader.getUniformFloat("swayHeight").loadFloat(0.0f);
 			vaoLength = componentAnimation.getModel().getVaoLength();
+
+			// Loads joint transforms.
+			for (int i = 0; i < componentAnimation.getJointTransforms().length; i++) {
+				shader.getUniformMat4("jointTransforms[" + i + "]").loadMat4(componentAnimation.getJointTransforms()[i]);
+			}
 		} else {
 			// No model, so no render!
 			return;
@@ -144,12 +152,6 @@ public class EntitiesRenderer extends Renderer {
 			shader.getUniformVec2("atlasOffset").loadVec2(0, 0);
 			OpenGlUtils.cullBackFaces(!textureUndefined.hasAlpha());
 			OpenGlUtils.bindTexture(textureUndefined, 0);
-		}
-
-		if (componentAnimation != null && componentAnimation.getModel() != null) {
-			for (int i = 0; i < componentAnimation.getJointTransforms().length; i++) {
-				shader.getUniformMat4("jointTransforms[" + i + "]").loadMat4(componentAnimation.getJointTransforms()[i]);
-			}
 		}
 
 		if (componentSurface != null) {
@@ -187,7 +189,10 @@ public class EntitiesRenderer extends Renderer {
 			shader.getUniformBool("useSwayMap").loadBoolean(false);
 		}
 
-		glDrawElements(GL_TRIANGLES, vaoLength, GL_UNSIGNED_INT, 0);
+		if (vaoLength > 0) {
+			glDrawElements(GL_TRIANGLES, vaoLength, GL_UNSIGNED_INT, 0);
+		}
+
 		OpenGlUtils.unbindVAO(0, 1, 2, 3, 4, 5);
 		renderedCount++;
 	}

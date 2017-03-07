@@ -3,6 +3,7 @@ package kosmos.terrain;
 import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
+import flounder.noise.*;
 import flounder.physics.*;
 import flounder.resources.*;
 import flounder.space.*;
@@ -15,11 +16,13 @@ import kosmos.world.*;
  * Represents a terrain object/
  */
 public class Terrain extends Entity {
-	public static final float TERRAIN_SIZE = 200.0f;
-	public static final int TERRAIN_VERTEX_COUNT = 270;
+	public static final float TERRAIN_SIZE = 256.0f;
+	public static final int TERRAIN_VERTEX_COUNT = 128;
 
 	private float[][] heights;
 	private ModelObject model;
+	
+	private PerlinNoise noise;
 
 	/**
 	 * Creates a new game terrain that the player and engine.entities can interact on.
@@ -29,6 +32,7 @@ public class Terrain extends Entity {
 	 */
 	public Terrain(ISpatialStructure<Entity> structure, float gridX, float gridZ) {
 		super(structure, new Vector3f((gridX * TERRAIN_SIZE) - (TERRAIN_SIZE / 2.0f), 0.0f, (gridZ * TERRAIN_SIZE) - (TERRAIN_SIZE / 2.0f)), new Vector3f());
+		this.noise = new PerlinNoise(420);
 		generateTerrain();
 	}
 
@@ -125,7 +129,7 @@ public class Terrain extends Entity {
 	}
 
 	private float getHeightFromMap(int x, int z) {
-		return (int) Math.abs(KosmosWorld.getNoise().noise2((x + getPosition().x) / 88.8f, (z + getPosition().z) / 88.8f) * 9.81f);
+		return noise.noise2((x + getPosition().x) / 5.8f, (z + getPosition().z) / 6.8f) * 5.81f + 1.0f;
 	}
 
 	private Vector3f calculateMapNormal(int x, int y) {

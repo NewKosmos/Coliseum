@@ -17,6 +17,7 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import kosmos.*;
 import kosmos.chunks.*;
+import kosmos.terrain.*;
 import kosmos.water.*;
 import kosmos.world.*;
 import org.lwjgl.glfw.*;
@@ -24,7 +25,7 @@ import org.lwjgl.glfw.*;
 public class PlayerBasic extends Player {
 	private static final float RUN_SPEED = 5.0f;
 	private static final float BOOST_SPEED = 10.0f;
-	private static final float JUMP_POWER = 6.0f;
+	private static final float JUMP_POWER = 5.5f;
 	private static final float TURN_SPEED = 300.0f;
 
 	private Vector3f position;
@@ -88,6 +89,7 @@ public class PlayerBasic extends Player {
 
 		// Finds the chunk height at the current player pos.
 		float chunkHeight = (KosmosChunks.getCurrent() != null) ? KosmosChunks.getCurrent().getHeight(position.x + dx, position.z + dz) : 0.0f;
+//		float chunkHeight = KosmosTerrain.getTerrain().getHeightWorld(position.x + dx, position.z + dz);
 
 		// Does collision with the highest world object.
 		float worldHeight = Math.max(waterLevel - (float) Math.sqrt(2.0), chunkHeight);

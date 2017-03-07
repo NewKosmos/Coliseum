@@ -253,7 +253,7 @@ public class Chunk extends Entity {
 	}
 
 	public boolean isLoaded() {
-		return chunkMesh.getModel() != null && chunkMesh.getModel().isLoaded();
+		return chunkMesh.getModel() != null && chunkMesh.getModel().isLoaded() && chunkMesh.getModel().getVaoID() != -1 && chunkMesh.getModel().getVaoLength() != -1;
 	}
 
 	@Override
