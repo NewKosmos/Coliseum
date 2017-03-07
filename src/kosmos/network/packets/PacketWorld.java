@@ -36,15 +36,15 @@ public class PacketWorld extends Packet {
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
 		// TODO: Factor in packet delta.
-		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "]: world seed=" + seed + ", server time=" + timeSec + ", client time: " + Framework.getTimeSec());
+		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "]: world seed=" + seed + ", server time=" + timeSec + ", client time: " + Framework.getTimeSec() + ", client offset: " + Framework.getTimeOffset());
 
 		if (KosmosWorld.getNoise().getSeed() != seed) {
 			KosmosWorld.getNoise().setSeed(seed);
 			KosmosChunks.clear();
 		}
 
-		if (Math.abs(timeSec - Framework.getTimeSec()) > 0.1f) {
-			Framework.setTimeOffset(timeSec - Framework.getTimeSec());
+		if (Math.abs(timeSec - Framework.getTimeSec()) > 0.866f) {
+			Framework.setTimeOffset(timeSec - Framework.getTimeSec() - Framework.getTimeOffset());
 		}
 	}
 
