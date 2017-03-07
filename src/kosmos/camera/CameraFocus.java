@@ -27,7 +27,7 @@ public class CameraFocus extends Camera {
 	// Defines basic view frustum sizes.
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 300.0f;
-	private static final float FIELD_OF_VIEW = 40.0f;
+	private static final float FIELD_OF_VIEW = 45.0f;
 
 	// Defines how snappy these camera functions will be.
 	private static final float ZOOM_AGILITY = 10.0f;
