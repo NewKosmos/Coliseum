@@ -13,12 +13,7 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
-import flounder.maths.Timer;
 import flounder.maths.vectors.*;
-import flounder.networking.*;
-import kosmos.chunks.*;
-import kosmos.network.packets.*;
-import kosmos.world.*;
 
 import javax.swing.*;
 
@@ -28,10 +23,6 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 	private float offsetY;
 	private Vector3f lastPosition;
 	private Vector3f lastRotation;
-	private int lastPlayerCount;
-	private boolean needSendData;
-
-	private Timer timer;
 
 	/**
 	 * Creates a new ComponentPlayer.
@@ -49,19 +40,10 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 
 		this.lastPosition = new Vector3f();
 		this.lastRotation = new Vector3f();
-		this.lastPlayerCount = 0;
-		this.needSendData = true;
-
-		this.timer = new Timer(0.05); // 20 ticks per second.
 	}
 
 	@Override
 	public void update() {
-		if (KosmosWorld.connectedPlayers() != lastPlayerCount) {
-			lastPlayerCount = KosmosWorld.connectedPlayers();
-			sendData();
-		}
-
 		if (FlounderCamera.getPlayer() == null) {
 			return;
 		}
@@ -74,24 +56,8 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		if (!getEntity().getPosition().equals(lastPosition) || !getEntity().getRotation().equals(lastRotation)) {
 			getEntity().setMoved();
 
-			if (!needSendData) {
-				needSendData = true;
-				timer.resetStartTime();
-			}
-
 			lastPosition.set(getEntity().getPosition());
 			lastRotation.set(getEntity().getRotation());
-		}
-
-		if (needSendData && timer.isPassedTime()) {
-			sendData();
-		}
-	}
-
-	private void sendData() {
-		if (FlounderNetwork.getUsername() != null && FlounderNetwork.getSocketClient() != null && KosmosChunks.getCurrent() != null) {
-			new PacketMove(FlounderNetwork.getUsername(), getEntity().getPosition(), getEntity().getRotation(), KosmosChunks.getCurrent().getPosition().x, KosmosChunks.getCurrent().getPosition().z).writeData(FlounderNetwork.getSocketClient());
-			needSendData = false;
 		}
 	}
 

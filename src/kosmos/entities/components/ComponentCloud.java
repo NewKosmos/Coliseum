@@ -15,7 +15,6 @@ import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;
-import kosmos.world.*;
 
 import javax.swing.*;
 

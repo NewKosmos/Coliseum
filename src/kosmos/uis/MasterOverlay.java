@@ -19,7 +19,6 @@ import flounder.resources.*;
 import flounder.textures.*;
 import flounder.visual.*;
 import kosmos.*;
-import kosmos.chunks.*;
 import kosmos.world.*;
 
 import java.util.*;

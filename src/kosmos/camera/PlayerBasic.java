@@ -15,9 +15,10 @@ import flounder.guis.*;
 import flounder.inputs.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
+import flounder.networking.*;
 import kosmos.*;
 import kosmos.chunks.*;
-import kosmos.terrain.*;
+import kosmos.network.packets.*;
 import kosmos.water.*;
 import kosmos.world.*;
 import org.lwjgl.glfw.*;
@@ -39,13 +40,20 @@ public class PlayerBasic extends Player {
 	private IButton inputBoost;
 	private IButton inputJump;
 
+	private Timer timer;
+	private boolean needSendData;
+
 	public PlayerBasic() {
 		super();
 	}
 
 	@Override
 	public void init() {
-		this.position = new Vector3f(KosmosConfigs.configSave.getFloatWithDefault("player_x", 0.0f, () -> KosmosChunks.getEntityPlayer().getPosition().x), 0.0f, KosmosConfigs.configSave.getFloatWithDefault("player_z", 0.0f, () -> KosmosChunks.getEntityPlayer().getPosition().z));
+		this.position = new Vector3f(
+				KosmosConfigs.configSave.getFloatWithDefault("player_x", 0.0f, () -> KosmosChunks.getEntityPlayer().getPosition().x),
+				0.0f,
+				KosmosConfigs.configSave.getFloatWithDefault("player_z", 0.0f, () -> KosmosChunks.getEntityPlayer().getPosition().z)
+		);
 		this.rotation = new Vector3f();
 
 		IButton leftKeyButtons = new KeyButton(GLFW.GLFW_KEY_A, GLFW.GLFW_KEY_LEFT);
@@ -62,6 +70,9 @@ public class PlayerBasic extends Player {
 		this.inputTurn = new CompoundAxis(new ButtonAxis(leftKeyButtons, rightKeyButtons), new JoystickAxis(0, 0));
 		this.inputBoost = new CompoundButton(boostButtons);
 		this.inputJump = new CompoundButton(jumpButtons);
+
+		this.timer = new Timer(1.0 / 32.0); // 32 ticks per second.
+		this.needSendData = true;
 	}
 
 	@Override
@@ -107,6 +118,30 @@ public class PlayerBasic extends Player {
 
 		// Fixes player rotation exceeding +/-360 degrease.
 		rotation.y = Maths.normalizeAngle(rotation.y);
+
+		// Try to send data to the server if needed.
+		if (dx != 0.0f || dy != 0.0f || dz != 0.0f || ry != 0.0f) {
+			if (!needSendData) {
+				needSendData = true;
+				timer.resetStartTime();
+			}
+		}
+
+		// Stop spam requests by using a tick rate.
+		if (needSendData && timer.isPassedTime()) {
+			sendData();
+		}
+	}
+
+	/**
+	 * Sends this players data to the server.
+	 */
+	public void sendData() {
+		if (FlounderNetwork.getUsername() != null && FlounderNetwork.getSocketClient() != null && KosmosChunks.getCurrent() != null) {
+			new PacketMove(FlounderNetwork.getUsername(), position, rotation, KosmosChunks.getCurrent().getPosition().x, KosmosChunks.getCurrent().getPosition().z).writeData(FlounderNetwork.getSocketClient());
+			needSendData = false;
+			timer.resetStartTime();
+		}
 	}
 
 	@Override

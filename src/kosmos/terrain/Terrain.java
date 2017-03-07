@@ -8,9 +8,7 @@ import flounder.physics.*;
 import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
-import kosmos.chunks.*;
 import kosmos.entities.components.*;
-import kosmos.world.*;
 
 /**
  * Represents a terrain object/

@@ -40,7 +40,7 @@ public class SkyCycle {
 	}
 
 	public void update() {
-		dayFactor = 0.52f; // dayDriver.update(Framework.getDelta()) / 100.0f;
+		dayFactor = dayDriver.update(Framework.getDelta()) / 100.0f; // 0.52f
 		// y=0.6\left(\sin \left(\pi x+\pi \right)-\cos \left(2\pi x+\pi \right)\right)+0.25
 		//Colour.interpolate(SKY_COLOUR_DAY, SUN_COLOUR_SUNRISE, getSinDay(), skyColour);
 		Vector3f.rotate(LIGHT_DIRECTION, new Vector3f(dayFactor * 360.0f, 0.0f, 0.0f), lightPosition);
