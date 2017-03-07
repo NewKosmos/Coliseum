@@ -36,7 +36,7 @@ public class KosmosServer extends Framework {
 				public void run() {
 					new PacketWorld(KosmosWorld.getNoise().getSeed(), Framework.getTimeSec()).writeData(FlounderNetwork.getSocketServer());
 				}
-			}, 0, 5000);
+			}, 0, 10000);
 		}
 
 		@Override
