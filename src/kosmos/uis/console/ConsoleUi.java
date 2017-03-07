@@ -163,4 +163,8 @@ public class ConsoleUi extends GuiComponent {
 		guiTextures.add(textureClose);
 		guiTextures.add(textureLock);
 	}
+
+	public ConsoleText getConsoleText() {
+		return consoleText;
+	}
 }

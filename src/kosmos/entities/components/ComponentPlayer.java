@@ -14,13 +14,13 @@ import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
 import flounder.maths.vectors.*;
+import kosmos.camera.*;
 
 import javax.swing.*;
 
 public class ComponentPlayer extends IComponentEntity implements IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
-	private float offsetY;
 	private Vector3f lastPosition;
 	private Vector3f lastRotation;
 
@@ -31,13 +31,6 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 	 */
 	public ComponentPlayer(Entity entity) {
 		super(entity, ID);
-
-		if (entity != null) {
-			this.offsetY = entity.getPosition().y;
-		} else {
-			this.offsetY = 0.0f;
-		}
-
 		this.lastPosition = new Vector3f();
 		this.lastRotation = new Vector3f();
 	}
@@ -49,9 +42,8 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		}
 
 		getEntity().getPosition().set(FlounderCamera.getPlayer().getPosition());
+		getEntity().getPosition().y += PlayerBasic.PLAYER_OFFSET_Y;
 		getEntity().getRotation().set(FlounderCamera.getPlayer().getRotation());
-
-		getEntity().getPosition().y += offsetY;
 
 		if (!getEntity().getPosition().equals(lastPosition) || !getEntity().getRotation().equals(lastRotation)) {
 			getEntity().setMoved();

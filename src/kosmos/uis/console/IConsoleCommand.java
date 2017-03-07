@@ -11,8 +11,11 @@ package kosmos.uis.console;
 
 import flounder.camera.*;
 import flounder.entities.*;
+import flounder.guis.*;
 import flounder.logger.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
+import kosmos.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.world.*;
@@ -34,7 +37,9 @@ public interface IConsoleCommand {
 				String player = fullCommand.substring(2, fullCommand.length()).trim();
 
 				if (!KosmosWorld.containsPlayer(player)) {
-					FlounderLogger.log("Could not teleport to player " + player);
+					String log = "Could not teleport to player " + player;
+					FlounderLogger.log(log);
+					((KosmosGuis) FlounderGuis.getGuiMaster()).getConsoleUi().getConsoleText().addText(log, new Colour(0.1f, 0.8f, 0.0f));
 					return;
 				}
 
@@ -43,7 +48,9 @@ public interface IConsoleCommand {
 				float chunkX = componentMultiplayer.getChunkX();
 				float chunkZ = componentMultiplayer.getChunkZ();
 
-				FlounderLogger.log("Teleporting to " + player + " in chunk [" + chunkX + ", " + chunkZ + "].");
+				String log = "Teleporting to " + player + " in chunk [" + chunkX + ", " + chunkZ + "].";
+				FlounderLogger.log(log);
+				((KosmosGuis) FlounderGuis.getGuiMaster()).getConsoleUi().getConsoleText().addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
 				FlounderCamera.getPlayer().getPosition().set(other.getPosition());
 				other.setMoved();

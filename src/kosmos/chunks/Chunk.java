@@ -201,6 +201,16 @@ public class Chunk extends Entity {
 			if (KosmosWorld.getNoise().noise2(worldPos.x / 50.0f * (float) Math.sin(worldPos.y), worldPos.y / 50.0f * (float) Math.sin(worldPos.x)) > 0.1f) {
 				biome.getBiome().generateEntity(this, worldPos, position, height);
 			}
+		} else {
+			float spawn = Math.abs(KosmosWorld.getNoise().noise1((worldPos.y - worldPos.x) / 10.0f) * 250.0f);
+
+			if ((int) spawn < 4) {
+				new InstanceLilipad(entities, new Vector3f(
+						getPosition().x + (float) (position.x * 0.5),
+						(float) ((2.25 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+						getPosition().z + (float) (position.y * 0.5)
+				), new Vector3f());
+			}
 		}
 
 	/*	for (int i = 0; i < height; i++) {

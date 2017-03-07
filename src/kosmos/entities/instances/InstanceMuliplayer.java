@@ -28,7 +28,7 @@ public class InstanceMuliplayer extends Entity {
 		new ComponentMultiplayer(this, username);
 		new ComponentAnimation(this, colladaFile, 0.2f, texture, 1);
 		new ComponentSurface(this, 1.0f, 0.0f, false, false);
-		new ComponentLight(this, new Vector3f(0.0f, 2.0f, 0.0f), new Colour(0.9f, 0.8f, 0.8f), new Attenuation(1.0f, 0.02f, 0.2f));
+		new ComponentLight(this, new Vector3f(0.0f, 2.0f, 0.0f), new Colour(1.0f, 1.0f, 1.0f), new Attenuation(1.0f, 0.02f, 0.5f));
 		//	new ComponentModel(this, 1.0f, model, texture, 1);
 		//	new ComponentCollider(this);
 		//	new ComponentCollision(this);

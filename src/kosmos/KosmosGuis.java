@@ -97,6 +97,10 @@ public class KosmosGuis extends GuiMaster {
 
 	}
 
+	public ConsoleUi getConsoleUi() {
+		return consoleUi;
+	}
+
 	@Override
 	public boolean isGamePaused() {
 		return consoleUi.isShown();

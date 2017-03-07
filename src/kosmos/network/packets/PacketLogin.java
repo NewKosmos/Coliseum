@@ -58,6 +58,11 @@ public class PacketLogin extends Packet {
 
 		// Sends current world data to the new client.
 		new PacketWorld(KosmosWorld.getNoise().getSeed(), Framework.getTimeSec()).writeData(server);
+
+		// If new client connects tell them the connected clients.
+		for (ClientInfo info : FlounderNetwork.getSocketServer().getConnected()) {
+			new PacketLogin(info.getUsername()).writeData(server);
+		}
 	}
 
 	@Override

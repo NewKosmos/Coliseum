@@ -12,6 +12,8 @@ package kosmos.entities.components;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
+import flounder.logger.*;
+import kosmos.camera.*;
 import kosmos.world.*;
 
 import javax.swing.*;
@@ -51,11 +53,12 @@ public class ComponentMultiplayer extends IComponentEntity implements IComponent
 	}
 
 	public void move(float x, float y, float z, float w, float chunkX, float chunkZ) {
-		this.chunkX = chunkX;
-		this.chunkZ = chunkZ;
 		getEntity().getPosition().set(x, y, z);
+		getEntity().getPosition().y += PlayerBasic.PLAYER_OFFSET_Y;
 		getEntity().getRotation().set(0.0f, w, 0.0f);
 		getEntity().setMoved();
+		this.chunkX = chunkX;
+		this.chunkZ = chunkZ;
 	}
 
 	public String getUsername() {

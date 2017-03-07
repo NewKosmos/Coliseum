@@ -29,6 +29,8 @@ public class PlayerBasic extends Player {
 	private static final float JUMP_POWER = 5.5f;
 	private static final float TURN_SPEED = 300.0f;
 
+	public static final float PLAYER_OFFSET_Y = (float) (Math.sqrt(2.0) * 0.25);
+
 	private Vector3f position;
 	private Vector3f rotation;
 
