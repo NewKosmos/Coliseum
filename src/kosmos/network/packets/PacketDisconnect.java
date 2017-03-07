@@ -2,6 +2,7 @@ package kosmos.network.packets;
 
 import flounder.logger.*;
 import flounder.networking.*;
+import kosmos.world.*;
 
 import java.net.*;
 
@@ -42,11 +43,12 @@ public class PacketDisconnect extends Packet {
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
 		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "] " + username + " has quit the game.");
+		KosmosWorld.removePlayer(username);
 	}
 
 	@Override
 	public void serverHandlePacket(Server server, InetAddress address, int port) {
-		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + username + " has disconnected.");
+		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "] " + username + " has disconnected.");
 		server.removeConnection(username);
 		this.writeData(server);
 	}

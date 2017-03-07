@@ -22,6 +22,7 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.*;
 import kosmos.entities.instances.*;
+import kosmos.world.*;
 
 import java.util.*;
 
@@ -29,7 +30,6 @@ public class KosmosChunks extends Module {
 	private static final KosmosChunks INSTANCE = new KosmosChunks();
 	public static final String PROFILE_TAB_NAME = "Kosmos Chunks";
 
-	private PerlinNoise noise;
 	private ISpatialStructure<Entity> chunks;
 
 	private Entity entityPlayer;
@@ -47,7 +47,6 @@ public class KosmosChunks extends Module {
 
 	@Override
 	public void init() {
-		this.noise = new PerlinNoise(537); // new PerlinNoise(KosmosConfigs.configSave.getIntWithDefault("seed", (int) Maths.randomInRange(1.0, 10000.0), () -> KosmosChunks.getNoise().getSeed()));
 		this.chunks = new StructureBasic<>();
 
 		this.entityPlayer = new InstancePlayer(FlounderEntities.getEntities(), new Vector3f(0.0f, (float) (Math.sqrt(2.0) * 0.25), 0.0f), new Vector3f());
@@ -66,11 +65,11 @@ public class KosmosChunks extends Module {
 	private void generateClouds() {
 		for (int x = -2; x <= 2; x++) {
 			for (int y = -2; y <= 2; y++) {
-				float offsetX = noise.noise2(x / 4.0f, y / 4.0f) * 20.0f;
-				float offsetZ = noise.noise2(x / 9.0f, y / 9.0f) * 20.0f;
-				float height = Math.abs(noise.noise2(x / 2.0f, y / 2.0f) * 5.0f) + 0.9f;
-				float rotationY = noise.noise1((x - y) / 60.0f) * 3600.0f;
-				float rotationZ = noise.noise1((x - y) / 20.0f) * 3600.0f;
+				float offsetX = KosmosWorld.getNoise().noise2(x / 4.0f, y / 4.0f) * 20.0f;
+				float offsetZ = KosmosWorld.getNoise().noise2(x / 9.0f, y / 9.0f) * 20.0f;
+				float height = Math.abs(KosmosWorld.getNoise().noise2(x / 2.0f, y / 2.0f) * 5.0f) + 0.9f;
+				float rotationY = KosmosWorld.getNoise().noise1((x - y) / 60.0f) * 3600.0f;
+				float rotationZ = KosmosWorld.getNoise().noise1((x - y) / 20.0f) * 3600.0f;
 				new InstanceCloud(FlounderEntities.getEntities(), new Vector3f((x * 11.0f) + offsetX, 7.0f * height, (y * 11.0f) + offsetZ), new Vector3f(0.0f, rotationY, rotationZ), Maths.randomInRange(1.0f, 2.25f));
 			}
 		}
@@ -128,10 +127,6 @@ public class KosmosChunks extends Module {
 	@Override
 	public void profile() {
 		FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Size", chunks.getSize());
-	}
-
-	public static PerlinNoise getNoise() {
-		return INSTANCE.noise;
 	}
 
 	public static ISpatialStructure<Entity> getChunks() {

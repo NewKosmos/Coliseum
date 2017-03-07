@@ -9,6 +9,7 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
+import kosmos.world.*;
 
 /**
  * Represents a terrain object/
@@ -124,7 +125,7 @@ public class Terrain extends Entity {
 	}
 
 	private float getHeightFromMap(int x, int z) {
-		return (int) Math.abs(KosmosChunks.getNoise().noise2((x + getPosition().x) / 88.8f, (z + getPosition().z) / 88.8f) * 9.81f);
+		return (int) Math.abs(KosmosWorld.getNoise().noise2((x + getPosition().x) / 88.8f, (z + getPosition().z) / 88.8f) * 9.81f);
 	}
 
 	private Vector3f calculateMapNormal(int x, int y) {

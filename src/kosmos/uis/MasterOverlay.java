@@ -75,7 +75,7 @@ public class MasterOverlay extends GuiComponent {
 			upsText.setText("UPS: " + Maths.roundToPlace(1.0f / Framework.getDelta(), 1));
 			positionText.setText("POSITION: [" + (FlounderCamera.getPlayer() == null ? "NULL" : Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().x, 1) + ", " + Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().y, 1) + ", " + Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().z, 1) + "]"));
 			timeText.setText("TIME: " + KosmosWorld.getSkyCycle().getDayFactor());
-			seedText.setText("SEED: " + KosmosChunks.getNoise().getSeed());
+			seedText.setText("SEED: " + KosmosWorld.getNoise().getSeed());
 			updateText = false;
 		}
 

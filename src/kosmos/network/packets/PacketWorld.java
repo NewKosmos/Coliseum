@@ -1,7 +1,9 @@
 package kosmos.network.packets;
 
+import flounder.framework.*;
 import flounder.logger.*;
 import flounder.networking.*;
+import kosmos.world.*;
 
 import java.net.*;
 
@@ -36,6 +38,12 @@ public class PacketWorld extends Packet {
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
 		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "]: world seed=" + seed + ", framework time=" + timeSec + ", day factor: " + dayFactor);
+
+		FlounderLogger.log("Our Seed=" + KosmosWorld.getNoise().getSeed() + ", Server Seed=" + seed);
+		FlounderLogger.log("Our Time=" + Framework.getTimeSec() + ", Server Time=" + timeSec);
+		FlounderLogger.log("Our Day=" + KosmosWorld.getSkyCycle().getDayFactor() + ", Server Day=" + dayFactor);
+		KosmosWorld.getNoise().setSeed(seed);
+		Framework.setTimeOffset(timeSec - Framework.getTimeSec());
 	}
 
 	@Override

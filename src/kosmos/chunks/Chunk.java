@@ -22,6 +22,7 @@ import kosmos.entities.components.*;
 import kosmos.particles.*;
 import kosmos.particles.loading.*;
 import kosmos.particles.spawns.*;
+import kosmos.world.*;
 
 import java.util.*;
 
@@ -57,7 +58,7 @@ public class Chunk extends Entity {
 		super(structure, position, new Vector3f());
 		this.entities = new StructureBasic<>();
 
-		float biomeID = Math.abs(KosmosChunks.getNoise().noise1((position.x + position.z) / 300.0f)) * 3.0f * (IBiome.Biomes.values().length + 1);
+		float biomeID = Math.abs(KosmosWorld.getNoise().noise1((position.x + position.z) / 300.0f)) * 3.0f * (IBiome.Biomes.values().length + 1);
 		biomeID = Maths.clamp((int) biomeID, 0.0f, IBiome.Biomes.values().length - 1);
 
 		this.childrenChunks = new ArrayList<>();
@@ -169,13 +170,13 @@ public class Chunk extends Entity {
 
 	private void generateTile(List<Vector3f> tiles, Vector2f position) {
 		Vector2f worldPos = new Vector2f(position.x + (getPosition().x * 2.0f), position.y + (getPosition().z * 2.0f));
-		int height = (int) (KosmosChunks.getNoise().noise2(worldPos.x / 75.0f, worldPos.y / 75.0f) * 14.0f);
+		int height = (int) (KosmosWorld.getNoise().noise2(worldPos.x / 75.0f, worldPos.y / 75.0f) * 14.0f);
 		//FlounderLogger.log(position.x + ", " + height + ", " + position.y);
 
 		if (height >= 0) {
 			tiles.add(new Vector3f(position.x, height * (float) Math.sqrt(2.0f), position.y));
 
-			if (KosmosChunks.getNoise().noise2(worldPos.x / 50.0f * (float) Math.sin(worldPos.y), worldPos.y / 50.0f * (float) Math.sin(worldPos.x)) > 0.1f) {
+			if (KosmosWorld.getNoise().noise2(worldPos.x / 50.0f * (float) Math.sin(worldPos.y), worldPos.y / 50.0f * (float) Math.sin(worldPos.x)) > 0.1f) {
 				biome.getBiome().generateEntity(this, worldPos, position, height);
 			}
 		}
@@ -196,7 +197,7 @@ public class Chunk extends Entity {
 		float positionZ = worldZ - super.getPosition().getZ();
 
 		Vector2f worldPos = new Vector2f(positionX + (getPosition().x * 2.0f), positionZ + (getPosition().z * 2.0f));
-		int height = (int) (KosmosChunks.getNoise().noise2(worldPos.x / 75.0f, worldPos.y / 75.0f) * 14.0f);
+		int height = (int) (KosmosWorld.getNoise().noise2(worldPos.x / 75.0f, worldPos.y / 75.0f) * 14.0f);
 
 		if (height >= 0) {
 			return height * 0.5f * (float) Math.sqrt(2.0);

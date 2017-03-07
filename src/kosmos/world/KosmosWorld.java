@@ -16,6 +16,8 @@ import flounder.lights.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
+import flounder.noise.*;
+import flounder.profiling.*;
 import kosmos.entities.components.*;
 import kosmos.entities.instances.*;
 
@@ -26,6 +28,8 @@ public class KosmosWorld extends Module {
 	public static final String PROFILE_TAB_NAME = "Kosmos World";
 
 	public static final float GRAVITY = -9.81f;
+
+	private PerlinNoise noise;
 
 	private Map<String, Pair<Vector3f, Vector3f>> playerQue;
 	private Map<String, Entity> players;
@@ -39,6 +43,8 @@ public class KosmosWorld extends Module {
 
 	@Override
 	public void init() {
+		this.noise = new PerlinNoise(537); // new PerlinNoise(KosmosConfigs.configSave.getIntWithDefault("seed", (int) Maths.randomInRange(1.0, 10000.0), () -> KosmosChunks.getNoise().getSeed()));
+
 		this.playerQue = new HashMap<>();
 		this.players = new HashMap<>();
 
@@ -63,6 +69,11 @@ public class KosmosWorld extends Module {
 
 	@Override
 	public void profile() {
+		FlounderProfiler.add(PROFILE_TAB_NAME, "Seed", noise.getSeed());
+	}
+
+	public static PerlinNoise getNoise() {
+		return INSTANCE.noise;
 	}
 
 	public static Entity getPlayer(String username) {

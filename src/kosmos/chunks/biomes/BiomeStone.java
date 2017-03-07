@@ -14,6 +14,7 @@ import kosmos.chunks.*;
 import kosmos.chunks.tiles.*;
 import kosmos.entities.instances.*;
 import kosmos.particles.loading.*;
+import kosmos.world.*;
 
 public class BiomeStone implements IBiome {
 	@Override
@@ -28,8 +29,8 @@ public class BiomeStone implements IBiome {
 
 	@Override
 	public void generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height) {
-		float rotation = KosmosChunks.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
-		float spawn = KosmosChunks.getNoise().noise1((worldPos.y - worldPos.x) / 11.0f) * 400.0f;
+		float rotation = KosmosWorld.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
+		float spawn = KosmosWorld.getNoise().noise1((worldPos.y - worldPos.x) / 11.0f) * 400.0f;
 
 		switch ((int) spawn) {
 			case 1:

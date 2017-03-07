@@ -1,7 +1,9 @@
 package kosmos.network.packets;
 
+import flounder.framework.*;
 import flounder.logger.*;
 import flounder.networking.*;
+import kosmos.world.*;
 
 import java.net.*;
 
@@ -46,11 +48,13 @@ public class PacketLogin extends Packet {
 
 	@Override
 	public void serverHandlePacket(Server server, InetAddress address, int port) {
-		// if (address.getHostAddress().equalsIgnoreCase("127.0.0.1")) // Server = Client
-		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + username + " has connected.");
+		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "] " + username + " has connected.");
 		ClientInfo player = new ClientInfo(username, address, port);
 		server.addConnection(player);
 		this.writeData(server);
+
+		// Sends current world data to the new client.
+		new PacketWorld(KosmosWorld.getNoise().getSeed(), Framework.getTimeSec(), KosmosWorld.getSkyCycle().getDayFactor()).writeData(server);
 	}
 
 	@Override
