@@ -18,6 +18,7 @@ import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.noise.*;
 import flounder.profiling.*;
+import kosmos.*;
 import kosmos.entities.components.*;
 import kosmos.entities.instances.*;
 
@@ -43,7 +44,7 @@ public class KosmosWorld extends Module {
 
 	@Override
 	public void init() {
-		this.noise = new PerlinNoise(537); // new PerlinNoise(KosmosConfigs.configSave.getIntWithDefault("seed", (int) Maths.randomInRange(1.0, 10000.0), () -> KosmosChunks.getNoise().getSeed()));
+		this.noise = new PerlinNoise(KosmosConfigs.configSave.getIntWithDefault("seed", (int) Maths.randomInRange(1.0, 10000.0), () -> KosmosWorld.getNoise().getSeed()));
 
 		this.playerQue = new HashMap<>();
 		this.players = new HashMap<>();

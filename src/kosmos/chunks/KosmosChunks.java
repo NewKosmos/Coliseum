@@ -158,6 +158,8 @@ public class KosmosChunks extends Module {
 	public static void clear() {
 		INSTANCE.chunks.getAll().forEach((Entity chunk) -> ((Chunk) chunk).delete());
 		INSTANCE.chunks.clear();
+		INSTANCE.currentChunk = null;
+		new Chunk(KosmosChunks.getChunks(), new Vector3f(KosmosConfigs.configSave.getFloatWithDefault("chunk_x", 0.0f, () -> KosmosChunks.getCurrent().getPosition().x), 0.0f, KosmosConfigs.configSave.getFloatWithDefault("chunk_z", 0.0f, () -> KosmosChunks.getCurrent().getPosition().z))); // The root chunk.
 	}
 
 	@Override

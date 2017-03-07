@@ -6,6 +6,8 @@ import flounder.standards.*;
 import kosmos.network.packets.*;
 import kosmos.world.*;
 
+import java.util.*;
+
 public class KosmosServer extends Framework {
 	public static void main(String[] args) {
 		KosmosServer server = new KosmosServer();
@@ -26,6 +28,15 @@ public class KosmosServer extends Framework {
 		public void init() {
 			int serverPort = KosmosConfigs.configServer.getIntWithDefault("server_port", FlounderNetwork.getPort(), FlounderNetwork::getPort);
 			FlounderNetwork.startServer(serverPort);
+
+			// Remind the clients the time, acts as a "are your there" ping as well.
+			Timer timerPing = new Timer();
+			timerPing.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					new PacketWorld(KosmosWorld.getNoise().getSeed(), Framework.getTimeSec(), KosmosWorld.getSkyCycle().getDayFactor()).writeData(FlounderNetwork.getSocketServer());
+				}
+			}, 0, 5000);
 		}
 
 		@Override
