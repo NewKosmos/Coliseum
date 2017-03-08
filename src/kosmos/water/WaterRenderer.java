@@ -19,6 +19,7 @@ import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
 import kosmos.*;
+import kosmos.chunks.*;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -68,15 +69,20 @@ public class WaterRenderer extends Renderer {
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 
-		/*Chunk chunk = KosmosChunks.getCurrent();
+		Chunk chunk = KosmosChunks.getCurrent();
 		if (chunk != null) {
-			shader.getUniformVec3("waterOffset").loadVec3(chunk.getPosition());
-		}*/
+			// Vector3f position = chunk.getPosition();
+			Vector3f position = FlounderCamera.getPlayer().getPosition();
+			shader.getUniformVec3("waterOffset").loadVec3(
+					(float) (2.0f * Water.SQUARE_SIZE) * Math.round(position.x / (2.0f * Water.SQUARE_SIZE)),
+					0.0f,
+					(float) (2.0f * Water.SQUARE_SIZE) * Math.round(position.z / (2.0f * Water.SQUARE_SIZE)));
+		}
 
-		if (FlounderCamera.getPlayer() != null) {
+		/*if (FlounderCamera.getPlayer() != null) {
 			Vector3f position = FlounderCamera.getPlayer().getPosition();
 			shader.getUniformVec3("waterOffset").loadVec3(Math.round(position.x), 0.0f, Math.round(position.z));
-		}
+		}*/
 
 		if (KosmosWater.reflectionsEnabled()) {
 			OpenGlUtils.bindTexture(reflectionFBO.getColourTexture(0), GL_TEXTURE_2D, 0);

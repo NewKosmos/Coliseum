@@ -23,7 +23,7 @@ public class SkyCycle {
 
 	private static final float DAY_NIGHT_CYCLE = 60.0f; // The day/night length (sec)
 
-	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.6f, 0.6f, 0.6f); // The starting light direction.
+	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.5f, 0.0f, 0.5f); // The starting light direction.
 
 	private LinearDriver dayDriver;
 	private float dayFactor;
@@ -41,8 +41,8 @@ public class SkyCycle {
 
 	public void update() {
 		dayFactor = dayDriver.update(Framework.getDelta()) / 100.0f; // 0.52f
-		// y=0.6\left(\sin \left(\pi x+\pi \right)-\cos \left(2\pi x+\pi \right)\right)+0.25
-		//Colour.interpolate(SKY_COLOUR_DAY, SUN_COLOUR_SUNRISE, getSinDay(), skyColour);
+		Colour.interpolate(SUN_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), skyColour);
+		Colour.interpolate(skyColour, SKY_COLOUR_DAY, getShadowFactor(), skyColour);
 		Vector3f.rotate(LIGHT_DIRECTION, new Vector3f(dayFactor * 360.0f, 0.0f, 0.0f), lightPosition);
 	}
 
@@ -50,8 +50,12 @@ public class SkyCycle {
 		return dayFactor;
 	}
 
-	public float getSinDay() {
-		return (float) Math.sin(Math.PI * KosmosWorld.getSkyCycle().getDayFactor());
+	public float getSunriseFactor() {
+		return (float) -(Math.sin(2.0 * Math.PI * KosmosWorld.getSkyCycle().getDayFactor()) - 1.0) / 2.0f;
+	}
+
+	public float getShadowFactor() {
+		return (float) Maths.clamp(1.7f * Math.sin(2.0f * Math.PI * KosmosWorld.getSkyCycle().getDayFactor()), 0.0, 1.0);
 	}
 
 	public Colour getSkyColour() {

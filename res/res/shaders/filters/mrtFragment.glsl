@@ -4,7 +4,7 @@
 #include "maths.glsl"
 
 //---------CONSTANT------------
-const int LIGHTS = 48;
+const int LIGHTS = 40;
 
 //---------IN------------
 in vec2 pass_textureCoords;
@@ -19,6 +19,7 @@ layout(binding = 4) uniform sampler2D shadowMap;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 
+uniform bool lightActive[LIGHTS];
 uniform vec3 lightColour[LIGHTS];
 uniform vec3 lightPosition[LIGHTS];
 uniform vec3 lightAttenuation[LIGHTS];
@@ -107,18 +108,20 @@ void main(void) {
         vec3 totalSpecular = vec3(0.0);
 
         for (int i = 0; i < LIGHTS; i++) {
-            vec3 toLightVector = lightPosition[i] - worldPosition.xyz;
-            float distance = length(toLightVector);
-            float attinuationFactor = lightAttenuation[i].x + (lightAttenuation[i].y * distance) + (lightAttenuation[i].z * distance * distance);
-            vec3 unitLightVector = normalize(toLightVector);
+            if (lightActive[i]) {
+                vec3 toLightVector = lightPosition[i] - worldPosition.xyz;
+                float distance = length(toLightVector);
+                float attinuationFactor = lightAttenuation[i].x + (lightAttenuation[i].y * distance) + (lightAttenuation[i].z * distance * distance);
+                vec3 unitLightVector = normalize(toLightVector);
 
-            float brightness = max(dot(normals.xyz, unitLightVector), 0.0);
-            vec3 reflectedLightDirection = reflect(-unitLightVector, normals.xyz);
-            float specularFactor = max(dot(reflectedLightDirection, normalize(toCameraVector)), 0.0);
-            float dampedFactor = pow(specularFactor, shineDamper);
+                float brightness = max(dot(normals.xyz, unitLightVector), 0.0);
+                vec3 reflectedLightDirection = reflect(-unitLightVector, normals.xyz);
+                float specularFactor = max(dot(reflectedLightDirection, normalize(toCameraVector)), 0.0);
+                float dampedFactor = pow(specularFactor, shineDamper);
 
-            totalDiffuse = totalDiffuse + (brightness * lightColour[i]) / attinuationFactor;
-            totalSpecular = totalSpecular + (dampedFactor * reflectivity * lightColour[i]) / attinuationFactor;
+                totalDiffuse = totalDiffuse + (brightness * lightColour[i]) / attinuationFactor;
+                totalSpecular = totalSpecular + (dampedFactor * reflectivity * lightColour[i]) / attinuationFactor;
+            }
         }
 
         out_colour = (vec4(totalDiffuse, 1.0) * out_colour) + vec4(totalSpecular, 1.0);

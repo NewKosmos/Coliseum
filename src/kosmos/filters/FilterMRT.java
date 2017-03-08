@@ -12,6 +12,7 @@ package kosmos.filters;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.post.*;
+import flounder.profiling.*;
 import flounder.renderer.*;
 import flounder.resources.*;
 import kosmos.*;
@@ -21,7 +22,7 @@ import kosmos.shadows.*;
 import kosmos.world.*;
 
 public class FilterMRT extends PostFilter {
-	private static final int LIGHTS = 48;
+	private static final int LIGHTS = 40;
 
 	private int shadowPCF;
 	private float shadowBias;
@@ -47,6 +48,7 @@ public class FilterMRT extends PostFilter {
 				ComponentLight componentLight = (ComponentLight) entity.getComponent(ComponentLight.ID);
 
 				if (lightsLoaded < LIGHTS && componentLight != null) {
+					shader.getUniformBool("lightActive[" + lightsLoaded + "]").loadBoolean(true);
 					shader.getUniformVec3("lightColour[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getColour());
 					shader.getUniformVec3("lightPosition[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getPosition());
 					shader.getUniformVec3("lightAttenuation[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getAttenuation());
@@ -64,6 +66,7 @@ public class FilterMRT extends PostFilter {
 						ComponentLight componentLight = (ComponentLight) entity.getComponent(ComponentLight.ID);
 
 						if (lightsLoaded < LIGHTS && componentLight != null) {
+							shader.getUniformBool("lightActive[" + lightsLoaded + "]").loadBoolean(false);
 							shader.getUniformVec3("lightColour[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getColour());
 							shader.getUniformVec3("lightPosition[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getPosition());
 							shader.getUniformVec3("lightAttenuation[" + lightsLoaded + "]").loadVec3(componentLight.getLight().getAttenuation());
@@ -73,6 +76,9 @@ public class FilterMRT extends PostFilter {
 				}
 			}
 		}
+
+		FlounderProfiler.add("Kosmos MRT", "Maximum Lights", LIGHTS);
+		FlounderProfiler.add("Kosmos MRT", "Loaded Lights", lightsLoaded);
 
 		if (lightsLoaded < LIGHTS) {
 			for (int i = lightsLoaded; i < LIGHTS; i++) {
@@ -88,7 +94,7 @@ public class FilterMRT extends PostFilter {
 		shader.getUniformInt("shadowMapSize").loadInt(ShadowRenderer.getShadowMapSize());
 		shader.getUniformInt("shadowPCF").loadInt(shadowPCF);
 		shader.getUniformFloat("shadowBias").loadFloat(shadowBias);
-		shader.getUniformFloat("shadowDarkness").loadFloat(shadowDarkness * KosmosWorld.getSkyCycle().getSinDay()); // TODO
+		shader.getUniformFloat("shadowDarkness").loadFloat(shadowDarkness * KosmosWorld.getSkyCycle().getShadowFactor());
 
 		if (KosmosWorld.getFog() != null) {
 			shader.getUniformVec3("fogColour").loadVec3(KosmosWorld.getFog().getFogColour());
