@@ -15,13 +15,14 @@ import flounder.maths.vectors.*;
 import flounder.visual.*;
 
 public class SkyCycle {
-	private static final Colour SKY_COLOUR_NIGHT = new Colour(0.0f, 0.08f, 0.26f);
-	private static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.30f, 0.70f);
+	public static final Colour SKY_COLOUR_NIGHT = new Colour(0.0f, 0.07f, 0.19f);
+	public static final Colour SKY_COLOUR_SUNRISE = new Colour(0.9921f, 0.490f, 0.004f);
+	public static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.30f, 0.70f);
 
-	public static final Colour SUN_COLOUR_DAY = new Colour(0.5f, 0.5f, 0.5f);
 	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.9921f, 0.490f, 0.004f);
+	public static final Colour SUN_COLOUR_DAY = new Colour(0.5f, 0.5f, 0.5f);
 
-	private static final float DAY_NIGHT_CYCLE = 60.0f; // The day/night length (sec)
+	public static final float DAY_NIGHT_CYCLE = 180.0f; // The day/night length (sec)
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.5f, 0.0f, 0.5f); // The starting light direction.
 
@@ -41,7 +42,7 @@ public class SkyCycle {
 
 	public void update() {
 		dayFactor = dayDriver.update(Framework.getDelta()) / 100.0f; // 0.52f
-		Colour.interpolate(SUN_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), skyColour);
+		Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), skyColour);
 		Colour.interpolate(skyColour, SKY_COLOUR_DAY, getShadowFactor(), skyColour);
 		Vector3f.rotate(LIGHT_DIRECTION, new Vector3f(dayFactor * 360.0f, 0.0f, 0.0f), lightPosition);
 	}

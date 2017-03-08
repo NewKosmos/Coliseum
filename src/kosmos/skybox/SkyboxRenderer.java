@@ -56,10 +56,6 @@ public class SkyboxRenderer extends Renderer {
 		shader.getUniformMat4("projectionMatrix").loadMat4(camera.getProjectionMatrix());
 		shader.getUniformMat4("viewMatrix").loadMat4(viewMatrix);
 
-		shader.getUniformVec4("colour1").loadVec4(KosmosWorld.getSkyCycle().getSkyColour());
-		shader.getUniformVec4("colour2").loadVec4(1.0f, 1.0f, 1.0f, 1.0f);
-		shader.getUniformFloat("dayFactor").loadFloat(KosmosWorld.getSkyCycle().getDayFactor());
-
 		OpenGlUtils.bindVAO(vao, 0);
 
 		OpenGlUtils.disableBlending();

@@ -13,6 +13,7 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import kosmos.world.*;
 
@@ -69,6 +70,8 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 			ComponentLight componentLight = (ComponentLight) getEntity().getComponent(ComponentLight.ID);
 
 			if (componentLight != null) {
+				Colour.interpolate(SkyCycle.SUN_COLOUR_SUNRISE, SkyCycle.SUN_COLOUR_DAY, KosmosWorld.getSkyCycle().getSunriseFactor(), componentLight.getLight().getColour());
+				Colour.interpolate(componentLight.getLight().getColour(), SkyCycle.SUN_COLOUR_DAY, KosmosWorld.getSkyCycle().getShadowFactor(), componentLight.getLight().getColour());
 				//	float daySin = (float) Math.sin(2.0 * Math.PI * KosmosWorld.getSkyCycle().getDayFactor());
 				//	Colour.interpolate(SkyCycle.SUN_COLOUR_DAY, SkyCycle.SUN_COLOUR_SUNRISE, daySin, componentLight.getLight().getColour());
 				//	FlounderLogger.log("["+daySin+"]: " + componentLight.getLight().colour);
