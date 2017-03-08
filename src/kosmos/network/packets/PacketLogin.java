@@ -5,6 +5,7 @@ import flounder.framework.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
+import kosmos.*;
 import kosmos.camera.*;
 import kosmos.world.*;
 
@@ -59,7 +60,7 @@ public class PacketLogin extends Packet {
 		this.writeData(server);
 
 		// Sends current world data to the new client.
-		new PacketWorld(KosmosWorld.getNoise().getSeed(), Framework.getTimeSec()).writeData(server);
+		new PacketWorld(KosmosServer.ServerInterface.serverSeed, Framework.getTimeSec()).writeData(server);
 
 		// If new client connects tell them the connected clients.
 		for (ClientInfo info : FlounderNetwork.getSocketServer().getConnected()) {

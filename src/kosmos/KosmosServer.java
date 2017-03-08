@@ -1,12 +1,14 @@
 package kosmos;
 
 import flounder.framework.*;
+import flounder.logger.*;
+import flounder.maths.*;
 import flounder.networking.*;
 import flounder.standards.*;
 import kosmos.network.packets.*;
-import kosmos.world.*;
 
 import java.util.*;
+import java.util.Timer;
 
 public class KosmosServer extends Framework {
 	public static void main(String[] args) {
@@ -20,13 +22,27 @@ public class KosmosServer extends Framework {
 	}
 
 	public static class ServerInterface extends Standard {
+		public static int serverPort;
+		public static int serverSeed;
+		public static Scanner scanner;
+
 		public ServerInterface() {
-			super(FlounderNetwork.class, KosmosWorld.class);
+			super(FlounderNetwork.class);
 		}
 
 		@Override
 		public void init() {
-			int serverPort = KosmosConfigs.configServer.getIntWithDefault("server_port", FlounderNetwork.getPort(), FlounderNetwork::getPort);
+			serverPort = KosmosConfigs.configServer.getIntWithDefault("server_port", FlounderNetwork.getPort(), () -> serverPort);
+			serverSeed = KosmosConfigs.configServer.getIntWithDefault("server_seed", (int) Maths.randomInRange(1.0, 10000.0), () -> serverSeed);
+			scanner = new Scanner(System.in);
+
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				FlounderLogger.log(e);
+			}
+
+			FlounderLogger.log("Server seed: " + serverSeed);
 			FlounderNetwork.startServer(serverPort);
 
 			// Remind the clients the time, acts as a "are your there" ping as well.
@@ -34,14 +50,20 @@ public class KosmosServer extends Framework {
 			timerPing.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					new PacketWorld(KosmosWorld.getNoise().getSeed(), Framework.getTimeSec()).writeData(FlounderNetwork.getSocketServer());
+					new PacketWorld(serverSeed, Framework.getTimeSec()).writeData(FlounderNetwork.getSocketServer());
 				}
-			}, 0, 10000);
+			}, 10000, 45000);
 		}
 
 		@Override
 		public void update() {
+			if (scanner.hasNext()) {
+				String string = scanner.next().trim();
 
+				if (string.toLowerCase().equals("exit") || string.toLowerCase().equals("q")) {
+					Framework.requestClose();
+				}
+			}
 		}
 
 		@Override
@@ -52,11 +74,12 @@ public class KosmosServer extends Framework {
 		@Override
 		public void dispose() {
 			new PacketDisconnect("server").writeData(FlounderNetwork.getSocketServer());
+			KosmosConfigs.closeConfigs();
 		}
 
 		@Override
 		public boolean isActive() {
-			return false;
+			return true;
 		}
 	}
 }

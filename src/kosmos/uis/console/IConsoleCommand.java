@@ -39,7 +39,7 @@ public interface IConsoleCommand {
 				if (!KosmosWorld.containsPlayer(player)) {
 					String log = "Could not teleport to player " + player;
 					FlounderLogger.log(log);
-					((KosmosGuis) FlounderGuis.getGuiMaster()).getConsoleUi().getConsoleText().addText(log, new Colour(0.1f, 0.8f, 0.0f));
+					((KosmosGuis) FlounderGuis.getGuiMaster()).getConsoleUi().getConsoleText().addText(log, new Colour(0.8f, 0.1f, 0.0f));
 					return;
 				}
 
