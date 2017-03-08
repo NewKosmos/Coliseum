@@ -19,7 +19,7 @@ public class Terrain extends Entity {
 
 	private float[][] heights;
 	private ModelObject model;
-	
+
 	private PerlinNoise noise;
 
 	/**
