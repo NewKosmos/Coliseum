@@ -53,16 +53,16 @@ public class MenuStart extends GuiComponent {
 		this.paralaxPosition = new Vector2f();
 
 		/*float currentY = 1.0f + MasterSlider.BUTTONS_Y_SEPARATION;
-		createQuitButton(currentY -= MasterSlider.BUTTONS_Y_SEPARATION);
+		createExitButton(currentY -= MasterSlider.BUTTONS_Y_SEPARATION);
 		currentY -= MasterSlider.BUTTONS_Y_SEPARATION * MasterSlider.BUTTONS_Y_SEPARATION;
 
 		createPlayButton(currentY -= MasterSlider.BUTTONS_Y_SEPARATION);*/
 
-		createOfflineButton(0.1f);
+		createSingleplayerButton(0.1f);
 		createMultiplayerButton(0.2f);
 		createSettingsButton(0.3f);
 		createAddonsButton(0.4f);
-		createQuitButton(0.5f);
+		createExitButton(0.5f);
 
 		Text text0 = Text.newText("New Kosmos").textAlign(GuiAlign.CENTRE).setFontSize(3.0f).create();
 		text0.setColour(MasterSlider.TEXT_COLOUR);
@@ -77,8 +77,8 @@ public class MenuStart extends GuiComponent {
 		addText(text2, 0.5f, 0.95f, 1.0f);
 	}
 
-	private void createOfflineButton(float yPos) {
-		GuiTextButton button = MasterSlider.createButton("Offline", yPos, this);
+	private void createSingleplayerButton(float yPos) {
+		GuiTextButton button = MasterSlider.createButton("Singleplayer", yPos, this);
 		button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenOffline, true));
 	}
 
@@ -97,8 +97,8 @@ public class MenuStart extends GuiComponent {
 		button.addLeftListener(() -> masterSlider.setNewSecondaryScreen(screenAddons, true));
 	}
 
-	private void createQuitButton(float yPos) {
-		GuiTextButton button = MasterSlider.createButton("Quit", yPos, this);
+	private void createExitButton(float yPos) {
+		GuiTextButton button = MasterSlider.createButton("Exit", yPos, this);
 		button.addLeftListener(Framework::requestClose);
 	}
 
@@ -142,11 +142,11 @@ public class MenuStart extends GuiComponent {
 
 	@Override
 	protected void getGuiTextures(List<GuiTexture> guiTextures) {
-		//if (isShown()) {
-		guiTextures.add(t1);
-		guiTextures.add(t2);
-		guiTextures.add(t3);
-		guiTextures.add(t4);
-		//}
+		if (isShown()) {
+			guiTextures.add(t1);
+			guiTextures.add(t2);
+			guiTextures.add(t3);
+			guiTextures.add(t4);
+		}
 	}
 }

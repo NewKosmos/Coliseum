@@ -82,10 +82,6 @@ public class MasterSlider extends GuiComponent {
 		mainDriver = new SlideDriver(getRelativeX(), visible ? 0.0f : SLIDE_SCALAR, MasterMenu.SLIDE_TIME);
 	}
 
-	public boolean isDisplayed() {
-		return displayed;
-	}
-
 	@Override
 	protected void updateSelf() {
 		float mainValue = mainDriver.update(Framework.getDelta());
@@ -146,6 +142,10 @@ public class MasterSlider extends GuiComponent {
 		if (isShown()) {
 
 		}
+	}
+
+	public boolean isDisplayed() {
+		return displayed;
 	}
 
 	private void removeSecondaryScreen() {
