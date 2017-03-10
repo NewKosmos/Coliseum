@@ -1,13 +1,4 @@
-/*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
- *
- * This source file is part of New Kosmos
- *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- */
-
-package kosmos.uis.console;
+package kosmos.uis;
 
 import flounder.maths.*;
 
@@ -17,8 +8,9 @@ public class ConsoleDelay {
 	private boolean delayOver;
 
 	protected ConsoleDelay() {
-		this.delayTimer = new Timer(0.35);
-		this.repeatTimer = new Timer(0.05);
+		// TODO: Save to configs.
+		this.delayTimer = new Timer(0.4);
+		this.repeatTimer = new Timer(0.1);
 		this.delayOver = false;
 	}
 

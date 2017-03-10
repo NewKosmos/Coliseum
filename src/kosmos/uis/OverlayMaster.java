@@ -24,7 +24,7 @@ import kosmos.world.*;
 import java.util.*;
 import java.util.Timer;
 
-public class MasterOverlay extends GuiComponent {
+public class OverlayMaster extends GuiComponent {
 	private Text fpsText;
 	private Text upsText;
 	private Text positionText;
@@ -34,7 +34,7 @@ public class MasterOverlay extends GuiComponent {
 
 	private GuiTexture crossHair;
 
-	public MasterOverlay() {
+	public OverlayMaster() {
 		fpsText = createStatus("FPS: 0", 0.02f);
 		upsText = createStatus("UPS: 0", 0.06f);
 		positionText = createStatus("POSITION: [0, 0, 0]", 0.10f);
@@ -55,7 +55,7 @@ public class MasterOverlay extends GuiComponent {
 			}
 		}, 0, 100);
 
-		super.show(true);
+		super.show(false);
 	}
 
 	private Text createStatus(String content, float yPos) {

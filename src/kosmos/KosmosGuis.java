@@ -15,19 +15,18 @@ import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.inputs.*;
+import flounder.maths.*;
 import flounder.physics.bounding.*;
 import flounder.visual.*;
 import kosmos.uis.*;
-import kosmos.uis.console.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class KosmosGuis extends GuiMaster {
 	protected static final float SLIDE_TIME = 0.7f;
 
-	private MasterOverlay masterOverlay;
-
-	private ConsoleUi consoleUi;
+	private OverlayMaster overlayMaster;
+	private OverlayChat overlayChat;
 
 	private ValueDriver slideDriver;
 	private float backgroundAlpha;
@@ -38,16 +37,33 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public void init() {
-		this.masterOverlay = new MasterOverlay();
-		masterOverlay.show(false);
-		FlounderGuis.addComponent(masterOverlay, 0.0f, 0.0f, 1.0f, 1.0f);
+		this.overlayMaster = new OverlayMaster();
+		FlounderGuis.addComponent(overlayMaster, 0.0f, 0.0f, 1.0f, 1.0f);
 
-		this.consoleUi = new ConsoleUi();
-		consoleUi.show(false);
-		FlounderGuis.addComponent(consoleUi, 0.0f, 0.0f, 1.0f, 1.0f);
+		this.overlayChat = new OverlayChat();
+		FlounderGuis.addComponent(overlayChat, 0.0f, 0.0f, 1.0f, 1.0f);
+
+		overlayChat.addText("Type in plain text to create a message, hit enter to send, escape for discarding or editing.", new Colour(0.81f, 0.37f, 0.24f));
+		overlayChat.addText("To find command type '/h', to enter commands enter '/command params'.", new Colour(0.81f, 0.37f, 0.24f));
 
 		this.slideDriver = new ConstantDriver(0.0f);
 		this.backgroundAlpha = 0.0f;
+
+		FlounderEvents.addEvent(new IEvent() {
+			private KeyButton k = new KeyButton(GLFW_KEY_ENTER);
+
+			@Override
+			public boolean eventTriggered() {
+				return k.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				overlayMaster.show(false);
+				overlayChat.show(true);
+				slideDriver = new SlideDriver(backgroundAlpha, 1.0f, SLIDE_TIME);
+			}
+		});
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton k = new KeyButton(GLFW_KEY_ESCAPE);
@@ -59,10 +75,14 @@ public class KosmosGuis extends GuiMaster {
 
 			@Override
 			public void onEvent() {
-				consoleUi.show(!consoleUi.isShown());
-				masterOverlay.show(false);
+				if (overlayChat.isShown()) {
+					overlayChat.show(false);
+				} else {
+					overlayMaster.show(false);
+					// TODO: Toggle pause!
+				}
 
-				if (consoleUi.isShown()) {
+				if (isGamePaused()) {
 					slideDriver = new SlideDriver(backgroundAlpha, 1.0f, SLIDE_TIME);
 				} else {
 					slideDriver = new SlideDriver(backgroundAlpha, 0.0f, SLIDE_TIME);
@@ -71,7 +91,7 @@ public class KosmosGuis extends GuiMaster {
 		});
 
 		FlounderEvents.addEvent(new IEvent() {
-			private KeyButton k = new KeyButton(GLFW_KEY_F1);
+			private KeyButton k = new KeyButton(GLFW_KEY_F3);
 
 			@Override
 			public boolean eventTriggered() {
@@ -81,7 +101,7 @@ public class KosmosGuis extends GuiMaster {
 			@Override
 			public void onEvent() {
 				if (!isGamePaused()) {
-					masterOverlay.show(!masterOverlay.isShown());
+					overlayMaster.show(!overlayMaster.isShown());
 				}
 			}
 		});
@@ -94,21 +114,15 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public void profile() {
-
-	}
-
-	public ConsoleUi getConsoleUi() {
-		return consoleUi;
 	}
 
 	@Override
 	public boolean isGamePaused() {
-		return consoleUi.isShown();
+		return overlayChat.isShown();
 	}
 
 	@Override
 	public void openMenu() {
-
 	}
 
 	@Override
@@ -116,9 +130,16 @@ public class KosmosGuis extends GuiMaster {
 		return backgroundAlpha;
 	}
 
+	public OverlayMaster getOverlayMaster() {
+		return overlayMaster;
+	}
+
+	public OverlayChat getOverlayChat() {
+		return overlayChat;
+	}
+
 	@Override
 	public void dispose() {
-
 	}
 
 	@Override
