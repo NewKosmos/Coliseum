@@ -55,7 +55,7 @@ public class BiomeGrass implements IBiome {
 				);
 				break;
 			case 3:
-				if (spawn - 3 < 0.2f) {
+				if (spawn - 3 < 0.123f) {
 					new InstancePod(chunk.getEntities(),
 							new Vector3f(
 									chunk.getPosition().x + (float) (tilePosition.x * 0.5),

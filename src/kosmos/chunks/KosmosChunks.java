@@ -109,7 +109,7 @@ public class KosmosChunks extends Module {
 			FlounderBounding.addShapeRender(chunkRange);
 		}
 
-		if (FlounderCamera.getCamera() != null && FlounderMouse.getMouse(0)) {
+		/*if (FlounderCamera.getCamera() != null && FlounderMouse.getMouse(0)) {
 			Ray viewRay = FlounderCamera.getCamera().getViewRay();
 			Entity entityInRay = null;
 			float entityRayDistance = 0.0f;
@@ -128,7 +128,7 @@ public class KosmosChunks extends Module {
 			if (entityInRay != null) {
 				entityInRay.forceRemove(true);
 			}
-		}
+		}*/
 	}
 
 	@Override

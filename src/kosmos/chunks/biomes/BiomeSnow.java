@@ -45,14 +45,16 @@ public class BiomeSnow implements IBiome {
 				);
 				break;
 			case 2:
-				new InstanceTreeSnow(chunk.getEntities(),
-						new Vector3f(
-								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((1.5 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
-								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
-						),
-						new Vector3f(0.0f, rotation, 0.0f)
-				);
+				if (spawn - 2 < 0.2f) {
+					new InstanceTreeSnow(chunk.getEntities(),
+							new Vector3f(
+									chunk.getPosition().x + (float) (tilePosition.x * 0.5),
+									(float) ((1.5 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+									chunk.getPosition().z + (float) (tilePosition.y * 0.5)
+							),
+							new Vector3f(0.0f, rotation, 0.0f)
+					);
+				}
 				break;
 			default:
 				break;
