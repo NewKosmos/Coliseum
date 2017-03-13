@@ -22,7 +22,7 @@ import kosmos.shadows.*;
 import kosmos.world.*;
 
 public class FilterMRT extends PostFilter {
-	private static final int LIGHTS = 40;
+	private static final int LIGHTS = 64;
 
 	private int shadowPCF;
 	private float shadowBias;
