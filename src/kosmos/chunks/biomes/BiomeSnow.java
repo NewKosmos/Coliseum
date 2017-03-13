@@ -19,6 +19,9 @@ import kosmos.particles.loading.*;
 import kosmos.world.*;
 
 public class BiomeSnow implements IBiome {
+	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "snow.png")).clampEdges().create();
+	private static final ParticleTemplate particle = new ParticleTemplate("snow", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "snowParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.20f);
+
 	@Override
 	public String getBiomeName() {
 		return "snow";
@@ -26,7 +29,7 @@ public class BiomeSnow implements IBiome {
 
 	@Override
 	public TextureObject getTexture() {
-		return TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "snow.png")).clampEdges().create();
+		return texture;
 	}
 
 	@Override
@@ -64,7 +67,7 @@ public class BiomeSnow implements IBiome {
 
 	@Override
 	public ParticleTemplate getWeatherParticle() {
-		return KosmosParticles.load("snow");
+		return particle;
 	}
 
 	@Override

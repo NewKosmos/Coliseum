@@ -29,6 +29,8 @@ public class KosmosChunks extends Module {
 	private static final KosmosChunks INSTANCE = new KosmosChunks();
 	public static final String PROFILE_TAB_NAME = "Kosmos Chunks";
 
+	public static final MyFile TERRAINS_FOLDER = new MyFile(MyFile.RES_FOLDER, "terrains");
+
 	private ISpatialStructure<Entity> chunks;
 
 	private Entity entityPlayer;

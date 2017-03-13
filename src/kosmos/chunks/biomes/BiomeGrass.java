@@ -9,6 +9,7 @@
 
 package kosmos.chunks.biomes;
 
+import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
@@ -19,6 +20,9 @@ import kosmos.particles.loading.*;
 import kosmos.world.*;
 
 public class BiomeGrass implements IBiome {
+	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "grass.png")).clampEdges().create();
+	private static final ParticleTemplate particle = new ParticleTemplate("rain", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "rainParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.15f);
+
 	@Override
 	public String getBiomeName() {
 		return "grass";
@@ -26,7 +30,7 @@ public class BiomeGrass implements IBiome {
 
 	@Override
 	public TextureObject getTexture() {
-		return TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "grass.png")).clampEdges().create();
+		return texture;
 	}
 
 	@Override
@@ -118,7 +122,7 @@ public class BiomeGrass implements IBiome {
 
 	@Override
 	public ParticleTemplate getWeatherParticle() {
-		return KosmosParticles.load("rain");
+		return particle;
 	}
 
 	@Override

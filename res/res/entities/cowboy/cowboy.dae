@@ -3,10 +3,10 @@
   <asset>
     <contributor>
       <author>Blender User</author>
-      <authoring_tool>Blender 2.78.0 commit date:2016-10-24, commit time:12:20, hash:e8299c8</authoring_tool>
+      <authoring_tool>Blender 2.78.0 commit date:2017-02-08, commit time:13:50, hash:3c04373</authoring_tool>
     </contributor>
-    <created>2016-12-25T13:17:06</created>
-    <modified>2016-12-25T13:17:06</modified>
+    <created>2017-03-13T15:25:48</created>
+    <modified>2017-03-13T15:25:48</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -31,24 +31,10 @@
       </extra>
     </camera>
   </library_cameras>
-  <library_images>
-    <image id="character_Texture_png" name="character_Texture_png">
-      <init_from>character%20Texture.png</init_from>
-    </image>
-  </library_images>
+  <library_images/>
   <library_effects>
     <effect id="Material-effect">
       <profile_COMMON>
-        <newparam sid="character_Texture_png-surface">
-          <surface type="2D">
-            <init_from>character_Texture_png</init_from>
-          </surface>
-        </newparam>
-        <newparam sid="character_Texture_png-sampler">
-          <sampler2D>
-            <source>character_Texture_png-surface</source>
-          </sampler2D>
-        </newparam>
         <technique sid="common">
           <phong>
             <emission>
@@ -58,7 +44,7 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <texture texture="character_Texture_png-sampler" texcoord="UVMap"/>
+              <color sid="diffuse">0.64 0.64 0.64 1</color>
             </diffuse>
             <specular>
               <color sid="specular">0.5 0.5 0.5 1</color>
@@ -594,7 +580,7 @@
         </technique_common>
       </source>
       <source id="Armature_Lower_Leg_R_pose_matrix-output">
-        <float_array id="Armature_Lower_Leg_R_pose_matrix-output-array" count="80">-0.9993554 -0.03432656 0.01052349 0 -0.02550453 0.4724305 -0.880999 1.282774 0.02527004 -0.8806993 -0.4730012 0 0 0 0 1 -0.9165812 0.1853303 -0.3543049 0 0.3137054 -0.2161184 -0.9245985 1.282774 -0.2479279 -0.9586166 0.1399511 0 0 0 0 1 -0.9992183 -0.03895055 0.006769582 0 -0.0366651 0.8489661 -0.527174 1.282774 0.01478657 -0.5270101 -0.8497304 0 0 0 0 1 -0.9991939 -0.03977513 0.005454904 0 -0.03853514 0.9120547 -0.4082542 1.282774 0.01126319 -0.4081353 -0.9128519 0 0 0 0 1 -0.9993554 -0.03432656 0.01052349 0 -0.02550453 0.4724305 -0.880999 1.282774 0.02527004 -0.8806993 -0.4730012 0 0 0 0 1</float_array>
+        <float_array id="Armature_Lower_Leg_R_pose_matrix-output-array" count="80">-0.9993554 -0.03432656 0.01052349 0 -0.02550453 0.4724305 -0.880999 1.282774 0.02527004 -0.8806993 -0.4730012 0 0 0 0 1 -0.998215 0.0463069 0.03771945 0 -0.04530171 -0.1754824 -0.9834398 1.282774 -0.03892094 -0.9833929 0.1772669 0 0 0 0 1 -0.9992183 -0.03895055 0.006769582 0 -0.0366651 0.8489661 -0.527174 1.282774 0.01478657 -0.5270101 -0.8497304 0 0 0 0 1 -0.9991939 -0.03977513 0.005454904 0 -0.03853514 0.9120547 -0.4082542 1.282774 0.01126319 -0.4081353 -0.9128519 0 0 0 0 1 -0.9993554 -0.03432656 0.01052349 0 -0.02550453 0.4724305 -0.880999 1.282774 0.02527004 -0.8806993 -0.4730012 0 0 0 0 1</float_array>
         <technique_common>
           <accessor source="#Armature_Lower_Leg_R_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
@@ -886,9 +872,7 @@
           <skeleton>#Torso</skeleton>
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material-material" target="#Material-material">
-                <bind_vertex_input semantic="UVMap" input_semantic="TEXCOORD" input_set="0"/>
-              </instance_material>
+              <instance_material symbol="Material-material" target="#Material-material"/>
             </technique_common>
           </bind_material>
         </instance_controller>

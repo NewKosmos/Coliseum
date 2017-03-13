@@ -5,6 +5,8 @@ import flounder.entities.components.*;
 import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
+import flounder.resources.*;
+import flounder.textures.*;
 import kosmos.entities.components.particles.*;
 import kosmos.particles.*;
 import kosmos.particles.loading.*;
@@ -63,8 +65,8 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 	public void update() {
 		if (particleSystem != null) {
 			if (particleSystem.getTypes().isEmpty()) {
-				particleSystem.addParticleType(KosmosParticles.load("rain"));
-				particleSystem.addParticleType(KosmosParticles.load("snow"));
+				particleSystem.addParticleType(new ParticleTemplate("rain", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "rainParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.15f));
+				particleSystem.addParticleType(new ParticleTemplate("snow", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "snowParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.20f));
 			}
 
 			if (super.getEntity().hasMoved()) {

@@ -14,10 +14,14 @@ import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.entities.instances.*;
+import kosmos.particles.*;
 import kosmos.particles.loading.*;
 import kosmos.world.*;
 
 public class BiomeStone implements IBiome {
+	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "stone.png")).clampEdges().create();
+	private static final ParticleTemplate particle = null;
+
 	@Override
 	public String getBiomeName() {
 		return "stone";
@@ -25,7 +29,7 @@ public class BiomeStone implements IBiome {
 
 	@Override
 	public TextureObject getTexture() {
-		return TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "stone.png")).clampEdges().create();
+		return texture;
 	}
 
 	@Override
@@ -81,7 +85,7 @@ public class BiomeStone implements IBiome {
 
 	@Override
 	public ParticleTemplate getWeatherParticle() {
-		return null;
+		return particle;
 	}
 
 	@Override
