@@ -11,10 +11,12 @@ package kosmos.uis;
 
 import flounder.camera.*;
 import flounder.entities.*;
+import flounder.framework.*;
 import flounder.guis.*;
 import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
+import flounder.networking.*;
 import kosmos.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
@@ -41,9 +43,6 @@ public interface ICommand {
 
 			@Override
 			public void runCommand(String fullCommand) {
-				//	((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText("Type in plain text to create a message, hit enter to send, escape for discarding or editing.", new Colour(0.81f, 0.37f, 0.24f));
-				//	((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText("To find command type '/h', to enter commands enter '/command params'.", new Colour(0.81f, 0.37f, 0.24f));
-
 				for (ConsoleCommands commands : ConsoleCommands.values()) {
 					((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText("    [" + commands.getCommand().commandPrefix() + "]: " + commands.getCommand().commandDescription(), new Colour(0.81f, 0.81f, 0.81f));
 				}
@@ -63,21 +62,21 @@ public interface ICommand {
 			@Override
 			public void runCommand(String fullCommand) {
 				// Removes /tp from the string.
-				String player = fullCommand.substring(3, fullCommand.length()).trim();
+				String string = fullCommand.substring(3, fullCommand.length()).trim();
 
-				if (!KosmosWorld.containsPlayer(player)) {
-					String log = "Could not teleport to player " + player;
+				if (!KosmosWorld.containsPlayer(string)) {
+					String log = "Could not teleport to player " + string;
 					FlounderLogger.log(log);
 					((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.8f, 0.1f, 0.0f));
 					return;
 				}
 
-				Entity other = KosmosWorld.getPlayer(player);
+				Entity other = KosmosWorld.getPlayer(string);
 				ComponentMultiplayer componentMultiplayer = (ComponentMultiplayer) other.getComponent(ComponentMultiplayer.ID);
 				float chunkX = componentMultiplayer.getChunkX();
 				float chunkZ = componentMultiplayer.getChunkZ();
 
-				String log = "Teleporting to " + player + " in chunk [" + chunkX + ", " + chunkZ + "].";
+				String log = "Teleporting to " + string + " in chunk [" + chunkX + ", " + chunkZ + "].";
 				FlounderLogger.log(log);
 				((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
@@ -85,6 +84,38 @@ public interface ICommand {
 				other.setMoved();
 				KosmosChunks.clear();
 				KosmosChunks.setCurrent(new Chunk(KosmosChunks.getChunks(), new Vector3f(chunkX, 0.0f, chunkZ)));
+			}
+		}),
+		TIME(new ICommand() {
+			@Override
+			public String commandPrefix() {
+				return "time";
+			}
+
+			@Override
+			public String commandDescription() {
+				return "Changes the time offset of the framework (seconds).";
+			}
+
+			@Override
+			public void runCommand(String fullCommand) {
+				// Removes /time from the string.
+				String string = fullCommand.substring(5, fullCommand.length()).trim();
+
+				if (FlounderNetwork.getSocketClient() == null || string.isEmpty()) {
+					String log = "Could not change the time offset of the framework.";
+					FlounderLogger.log(log);
+					((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.8f, 0.1f, 0.0f));
+					return;
+				}
+
+				float timeOffset = Float.parseFloat(string);
+
+				String log = "Changing the time offset of the framework to: " + timeOffset;
+				FlounderLogger.log(log);
+				((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.1f, 0.8f, 0.0f));
+
+				Framework.setTimeOffset(timeOffset);
 			}
 		});
 
