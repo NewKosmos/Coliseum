@@ -56,6 +56,8 @@ public class ChunkMesh {
 			vertices.clear();
 		}
 
+		// TODO: Break model into face objects and transform those, remove matching faces from world (never seen), take all faces left and mesh into the model.
+
 		// Loads all tiles into a tile mesh with all positional instances within the chunk.
 		for (int p = 0; p < positions.size(); p++) {
 			for (int i = 0; i < model.getIndices().length; i++) {
