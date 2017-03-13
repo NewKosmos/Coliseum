@@ -10,8 +10,9 @@
 package kosmos.chunks.biomes;
 
 import flounder.maths.vectors.*;
+import flounder.resources.*;
+import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.chunks.tiles.*;
 import kosmos.entities.instances.*;
 import kosmos.particles.*;
 import kosmos.particles.loading.*;
@@ -24,8 +25,8 @@ public class BiomeSnow implements IBiome {
 	}
 
 	@Override
-	public Tile getMainTile() {
-		return Tile.TILE_SNOW;
+	public TextureObject getTexture() {
+		return TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "snow.png")).clampEdges().create();
 	}
 
 	@Override

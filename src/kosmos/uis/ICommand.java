@@ -41,8 +41,8 @@ public interface ICommand {
 
 			@Override
 			public void runCommand(String fullCommand) {
-			//	((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText("Type in plain text to create a message, hit enter to send, escape for discarding or editing.", new Colour(0.81f, 0.37f, 0.24f));
-			//	((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText("To find command type '/h', to enter commands enter '/command params'.", new Colour(0.81f, 0.37f, 0.24f));
+				//	((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText("Type in plain text to create a message, hit enter to send, escape for discarding or editing.", new Colour(0.81f, 0.37f, 0.24f));
+				//	((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText("To find command type '/h', to enter commands enter '/command params'.", new Colour(0.81f, 0.37f, 0.24f));
 
 				for (ConsoleCommands commands : ConsoleCommands.values()) {
 					((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText("    [" + commands.getCommand().commandPrefix() + "]: " + commands.getCommand().commandDescription(), new Colour(0.81f, 0.81f, 0.81f));

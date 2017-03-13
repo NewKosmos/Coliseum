@@ -102,7 +102,7 @@ public class EntitiesRenderer extends Renderer {
 		ComponentSway componentSway = (ComponentSway) entity.getComponent(ComponentSway.ID);
 		final int vaoLength;
 
-		if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded() && componentModel.getModel().getVaoID() != -1) {
+		if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded()) {
 			OpenGlUtils.bindVAO(componentModel.getModel().getVaoID(), 0, 1, 2, 3);
 			shader.getUniformBool("animated").loadBoolean(false);
 
@@ -115,7 +115,7 @@ public class EntitiesRenderer extends Renderer {
 			}
 
 			vaoLength = componentModel.getModel().getVaoLength();
-		} else if (componentAnimation != null && componentAnimation.getModel() != null && componentAnimation.getModel().getVaoID() != -1) { // TODO: Check if loaded.
+		} else if (componentAnimation != null && componentAnimation.getModel() != null && componentAnimation.getModel().isLoaded()) {
 			OpenGlUtils.bindVAO(componentAnimation.getModel().getVaoID(), 0, 1, 2, 3, 4, 5);
 			shader.getUniformBool("animated").loadBoolean(true);
 

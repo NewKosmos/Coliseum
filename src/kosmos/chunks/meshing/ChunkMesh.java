@@ -14,7 +14,6 @@ import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
 import kosmos.chunks.*;
-import kosmos.chunks.tiles.*;
 import kosmos.entities.components.*;
 
 import java.util.*;
@@ -22,7 +21,7 @@ import java.util.*;
 public class ChunkMesh {
 	private Chunk chunk;
 
-	private ModelObject model;
+	private ModelObject chunkModel;
 
 	protected float minX, minY, minZ;
 	protected float maxX, maxY, maxZ;
@@ -33,28 +32,21 @@ public class ChunkMesh {
 	public ChunkMesh(Chunk chunk) {
 		this.chunk = chunk;
 
-		this.model = null;
+		this.chunkModel = null;
 
 		this.vertices = new ArrayList<>();
 	}
 
-	public synchronized void rebuild(List<Vector3f> positions) {
-		// Makes sure all chunk and biome info is good.
-		if (chunk == null || chunk.getBiome() == null || chunk.getBiome().getBiome().getMainTile() == null) {
+	public synchronized void rebuild(List<Vector3f> positions, ModelObject model) {
+		// Makes sure all chunk, model, and biome info is good.
+		if (chunk == null || chunk.getBiome() == null || model == null || !model.isLoaded()) {
 			return;
 		}
 
-		// Makes sure the tiles model has been loaded, and has data.
-		Tile tile = chunk.getBiome().getBiome().getMainTile();
-
-		if (!tile.getModel().isLoaded()) {
-			return;
-		}
-
-		// Removes the old model.
-		if (model != null) {
-			model.delete();
-			model = null;
+		// Removes the old chunk model.
+		if (chunkModel != null) {
+			chunkModel.delete();
+			chunkModel = null;
 		}
 
 		// Prepares a set of data to write into.
@@ -66,21 +58,21 @@ public class ChunkMesh {
 
 		// Loads all tiles into a tile mesh with all positional instances within the chunk.
 		for (int p = 0; p < positions.size(); p++) {
-			for (int i = 0; i < tile.getModel().getIndices().length; i++) {
-				int pointer = tile.getModel().getIndices()[i];
+			for (int i = 0; i < model.getIndices().length; i++) {
+				int pointer = model.getIndices()[i];
 
-				int index = pointer + (tile.getModel().getIndices().length * p);
-				float vertex0 = tile.getModel().getVertices()[pointer * 3] + (positions.get(p).x / 2.0f);
-				float vertex1 = tile.getModel().getVertices()[pointer * 3 + 1] + (positions.get(p).y / 2.0f);
-				float vertex2 = tile.getModel().getVertices()[pointer * 3 + 2] + (positions.get(p).z / 2.0f);
-				float texture0 = tile.getModel().getTextures()[pointer * 2];
-				float texture1 = tile.getModel().getTextures()[pointer * 2 + 1];
-				float normal0 = tile.getModel().getNormals()[pointer * 3];
-				float normal1 = tile.getModel().getNormals()[pointer * 3 + 1];
-				float normal2 = tile.getModel().getNormals()[pointer * 3 + 2];
-				float tangent0 = tile.getModel().getTangents()[pointer * 3];
-				float tangent1 = tile.getModel().getTangents()[pointer * 3 + 1];
-				float tangent2 = tile.getModel().getTangents()[pointer * 3 + 2];
+				int index = pointer + (model.getIndices().length * p);
+				float vertex0 = model.getVertices()[pointer * 3] + (positions.get(p).x / 2.0f);
+				float vertex1 = model.getVertices()[pointer * 3 + 1] + (positions.get(p).y / 2.0f);
+				float vertex2 = model.getVertices()[pointer * 3 + 2] + (positions.get(p).z / 2.0f);
+				float texture0 = model.getTextures()[pointer * 2];
+				float texture1 = model.getTextures()[pointer * 2 + 1];
+				float normal0 = model.getNormals()[pointer * 3];
+				float normal1 = model.getNormals()[pointer * 3 + 1];
+				float normal2 = model.getNormals()[pointer * 3 + 2];
+				float tangent0 = model.getTangents()[pointer * 3];
+				float tangent1 = model.getTangents()[pointer * 3 + 1];
+				float tangent2 = model.getTangents()[pointer * 3 + 2];
 
 				minX = (vertex0 < minX) ? vertex0 : minX;
 				minY = (vertex1 < minY) ? vertex1 : minY;
@@ -98,7 +90,7 @@ public class ChunkMesh {
 		this.maxRadius = Chunk.CHUNK_WORLD_SIZE; // Maths.maxValue(maxX, maxY, maxZ, Math.abs(minX), Math.abs(minY), Math.abs(minZ));
 
 		// Then all model data is used to create a manual model loader, a hull is not generated and materials are baked into the textures. he model is then loaded into a object and OpenGL.
-		this.model = ModelFactory.newBuilder().setManual(new ModelLoadManual("chunk" + chunk.getPosition().x + "p" + chunk.getPosition().z) {
+		this.chunkModel = ModelFactory.newBuilder().setManual(new ModelLoadManual("chunk" + chunk.getPosition().x + "p" + chunk.getPosition().z) {
 			@Override
 			public float[] getVertices() {
 				float[] result = new float[vertices.size() * 3];
@@ -181,7 +173,7 @@ public class ChunkMesh {
 		ComponentModel componentModel = (ComponentModel) chunk.getComponent(ComponentModel.ID);
 
 		if (componentModel != null) {
-			componentModel.setModel(model);
+			componentModel.setModel(chunkModel);
 		} else {
 			FlounderLogger.error(chunk + " does not have a model component! Model cannot be set.");
 		}
@@ -211,7 +203,7 @@ public class ChunkMesh {
 	}
 
 	public ModelObject getModel() {
-		return model;
+		return chunkModel;
 	}
 
 	public void delete() {
@@ -220,9 +212,9 @@ public class ChunkMesh {
 			vertices = null;
 		}
 
-		if (model != null) {
-			model.delete();
-			model = null;
+		if (chunkModel != null) {
+			chunkModel.delete();
+			chunkModel = null;
 		}
 	}
 }

@@ -10,8 +10,9 @@
 package kosmos.chunks.biomes;
 
 import flounder.maths.vectors.*;
+import flounder.resources.*;
+import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.chunks.tiles.*;
 import kosmos.entities.instances.*;
 import kosmos.particles.loading.*;
 import kosmos.world.*;
@@ -19,12 +20,12 @@ import kosmos.world.*;
 public class BiomeStone implements IBiome {
 	@Override
 	public String getBiomeName() {
-		return "rock";
+		return "stone";
 	}
 
 	@Override
-	public Tile getMainTile() {
-		return Tile.TILE_STONE;
+	public TextureObject getTexture() {
+		return TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "stone.png")).clampEdges().create();
 	}
 
 	@Override

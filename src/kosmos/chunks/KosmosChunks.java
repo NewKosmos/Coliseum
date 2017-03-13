@@ -10,13 +10,14 @@
 package kosmos.chunks;
 
 import flounder.camera.*;
-import flounder.devices.*;
 import flounder.entities.*;
 import flounder.framework.*;
 import flounder.maths.vectors.*;
+import flounder.models.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
 import flounder.profiling.*;
+import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
 import kosmos.*;
@@ -39,6 +40,8 @@ public class KosmosChunks extends Module {
 	private Vector3f lastPlayerPos;
 	private Chunk currentChunk;
 
+	private ModelObject modelHexagon;
+
 	public KosmosChunks() {
 		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderBounding.class, FlounderTextures.class);
 	}
@@ -59,6 +62,8 @@ public class KosmosChunks extends Module {
 				0.0f,
 				KosmosConfigs.configSave.getFloatWithDefault("chunk_z", 0.0f, () -> KosmosChunks.getCurrent().getPosition().z)
 		))); // The root chunk.
+
+		this.modelHexagon = ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "hexagon.obj")).create();
 	}
 
 	@Override
@@ -167,6 +172,10 @@ public class KosmosChunks extends Module {
 		INSTANCE.chunks.getAll().forEach((Entity chunk) -> ((Chunk) chunk).delete());
 		INSTANCE.chunks.clear();
 		setCurrent(new Chunk(KosmosChunks.getChunks(), getCurrent().getPosition())); // The new root chunk.
+	}
+
+	public static ModelObject getModelHexagon() {
+		return INSTANCE.modelHexagon;
 	}
 
 	@Override

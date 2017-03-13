@@ -10,8 +10,8 @@
 package kosmos.chunks.biomes;
 
 import flounder.maths.vectors.*;
+import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.chunks.tiles.*;
 import kosmos.particles.loading.*;
 
 /**
@@ -40,11 +40,11 @@ public interface IBiome {
 	String getBiomeName();
 
 	/**
-	 * Gets the type of tile to use as the surface. (null will not spawn any tile in the biomes area.
+	 * Gets the type of texture to use as the surface. (null will not spawn any tile in the biomes area.
 	 *
-	 * @return The type of tile to use as the surface.
+	 * @return The type of texture to use as the surface.
 	 */
-	Tile getMainTile();
+	TextureObject getTexture();
 
 	void generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height);
 

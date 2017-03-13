@@ -17,7 +17,6 @@ import flounder.physics.bounding.*;
 import flounder.space.*;
 import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;
-import kosmos.chunks.tiles.*;
 import kosmos.entities.components.*;
 import kosmos.entities.instances.*;
 import kosmos.particles.*;
@@ -71,7 +70,7 @@ public class Chunk extends Entity {
 
 		this.tilesChanged = true;
 
-		new ComponentModel(this, 1.0f, null, biome.getBiome().getMainTile().getTexture(), 0);
+		new ComponentModel(this, 1.0f, chunkMesh.getModel(), biome.getBiome().getTexture(), 0);
 		new ComponentSurface(this, 1.0f, 0.0f, false, false);
 		new ComponentCollider(this);
 		new ComponentCollision(this);
@@ -147,7 +146,7 @@ public class Chunk extends Entity {
 	public void update() {
 		// Builds or rebulds this chunks mesh.
 		if (tilesChanged || chunkMesh.getModel() == null) {
-			chunkMesh.rebuild(generate());
+			chunkMesh.rebuild(generate(), KosmosChunks.getModelHexagon());
 			tilesChanged = false;
 			super.setMoved();
 		}
@@ -170,7 +169,7 @@ public class Chunk extends Entity {
 			float r = 0.0f;
 			float g = -i;
 			float b = i;
-			generateTile(tiles, Tile.worldSpace2D(r, g, b, HEXAGON_SIDE_LENGTH, null));
+			generateTile(tiles, tileWorldSpace(r, g, b, HEXAGON_SIDE_LENGTH, null));
 
 			for (int j = 0; j < 6; j++) {
 				if (j == 5) {
@@ -182,7 +181,7 @@ public class Chunk extends Entity {
 					r = r + TILE_DELTAS[j][0];
 					g = g + TILE_DELTAS[j][1];
 					b = b + TILE_DELTAS[j][2];
-					generateTile(tiles, Tile.worldSpace2D(r, g, b, HEXAGON_SIDE_LENGTH, null));
+					generateTile(tiles, tileWorldSpace(r, g, b, HEXAGON_SIDE_LENGTH, null));
 				}
 			}
 		}
@@ -224,7 +223,29 @@ public class Chunk extends Entity {
 		}*/
 	}
 
+	public static Vector3f tileHexagonSpace(float x, float z, double length, Vector3f destination) {
+		if (destination == null) {
+			destination = new Vector3f();
+		}
+
+		destination.x = (float) (((Math.sqrt(3.0) / 3.0) * x - (z / 3.0f)) / length);
+		destination.y = (float) (-((Math.sqrt(3.0) / 3.0) * x + (z / 3.0f)) / length);
+		destination.z = (float) ((2.0 / 3.0) * z / length);
+		return destination;
+	}
+
+	public static Vector2f tileWorldSpace(float r, float g, float b, double length, Vector2f destination) {
+		if (destination == null) {
+			destination = new Vector2f();
+		}
+
+		destination.x = (float) (Math.sqrt(3.0) * length * ((b / 2.0) + r));
+		destination.y = (float) ((3.0 / 2.0) * length * b);
+		return destination;
+	}
+
 	public float getHeight(float worldX, float worldZ) {
+		// TODO: Static and not using the chunk object, chunk height gen would then use a direct world offset per tile.
 		float positionX = worldX - super.getPosition().getX();
 		float positionZ = worldZ - super.getPosition().getZ();
 
@@ -263,7 +284,7 @@ public class Chunk extends Entity {
 	}
 
 	public boolean isLoaded() {
-		return chunkMesh.getModel() != null && chunkMesh.getModel().isLoaded() && chunkMesh.getModel().getVaoID() != -1 && chunkMesh.getModel().getVaoLength() != -1;
+		return chunkMesh.getModel() != null && chunkMesh.getModel().isLoaded();
 	}
 
 	@Override

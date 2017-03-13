@@ -14,7 +14,6 @@ import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.logger.*;
 import flounder.maths.*;
-import flounder.networking.*;
 import flounder.resources.*;
 import flounder.textures.*;
 

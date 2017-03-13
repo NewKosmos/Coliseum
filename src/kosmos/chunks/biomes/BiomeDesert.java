@@ -10,8 +10,9 @@
 package kosmos.chunks.biomes;
 
 import flounder.maths.vectors.*;
+import flounder.resources.*;
+import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.chunks.tiles.*;
 import kosmos.entities.instances.*;
 import kosmos.particles.loading.*;
 import kosmos.world.*;
@@ -23,8 +24,8 @@ public class BiomeDesert implements IBiome {
 	}
 
 	@Override
-	public Tile getMainTile() {
-		return Tile.TILE_SAND;
+	public TextureObject getTexture() {
+		return TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "sand.png")).clampEdges().create();
 	}
 
 	@Override
