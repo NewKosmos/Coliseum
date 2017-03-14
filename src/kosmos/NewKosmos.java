@@ -29,17 +29,15 @@ public class NewKosmos extends Framework {
 
 	public NewKosmos() {
 		super("kosmos", new UpdaterDefault(GLFW::glfwGetTime), -1,new KosmosInterface(), new KosmosRenderer(), new KosmosGuis(), new CameraFocus(), new PlayerBasic());
-
-		FlounderDisplay.setup(1080, 720, "New Kosmos", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")}, false, false, 0, false, false);
-		/*FlounderDisplay.setup(KosmosConfigs.configMain.getIntWithDefault("width", 1080, FlounderDisplay::getWindowWidth),
+		FlounderDisplay.setup(KosmosConfigs.configMain.getIntWithDefault("width", 1080, FlounderDisplay::getWindowWidth),
 				KosmosConfigs.configMain.getIntWithDefault("height", 720, FlounderDisplay::getWindowHeight),
 				"New Kosmos", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
 				KosmosConfigs.configMain.getBooleanWithDefault("vsync", false, FlounderDisplay::isVSync),
-				false, // KosmosConfigs.configMain.getBooleanWithDefault("antialias", true, FlounderDisplay::isAntialiasing)
+				KosmosConfigs.configMain.getBooleanWithDefault("antialias", true, FlounderDisplay::isAntialiasing),
 				0, // KosmosConfigs.configMain.getIntWithDefault("samples", 0, FlounderDisplay::getSamples)
 				KosmosConfigs.configMain.getBooleanWithDefault("fullscreen", false, FlounderDisplay::isFullscreen),
 				false
-		);*/
+		);
 		setFpsLimit(KosmosConfigs.configMain.getIntWithDefault("fps_limit", -1, Framework::getFpsLimit));
 		FlounderTextures.setup(KosmosConfigs.configMain.getFloatWithDefault("anisotropy_level", 4, FlounderTextures::getAnisotropyLevel));
 		FlounderBounding.toggle(KosmosConfigs.configMain.getBooleanWithDefault("boundings_render", false, FlounderBounding::renders));
