@@ -12,6 +12,7 @@ package dev;
 import flounder.devices.*;
 import flounder.fonts.*;
 import flounder.framework.*;
+import flounder.framework.updater.*;
 import flounder.resources.*;
 
 public class DevMain extends Framework {
@@ -22,7 +23,7 @@ public class DevMain extends Framework {
 	}
 
 	public DevMain() {
-		super("devguis", -1, new DevInterface(), new DevRenderer(), new DevGuis());
+		super("devguis", new UpdaterDefault(), -1, new DevInterface(), new DevRenderer(), new DevGuis());
 		FlounderDisplay.setup(1080, 720, "Dev Guis", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")}, false, false, 0, false, false);
 		TextBuilder.DEFAULT_TYPE = FlounderFonts.SEGO_UI;
 	}

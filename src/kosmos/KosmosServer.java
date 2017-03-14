@@ -1,6 +1,7 @@
 package kosmos;
 
 import flounder.framework.*;
+import flounder.framework.updater.*;
 import flounder.logger.*;
 import flounder.maths.*;
 import flounder.networking.*;
@@ -18,7 +19,7 @@ public class KosmosServer extends Framework {
 	}
 
 	public KosmosServer() {
-		super("Server", -1, new ServerInterface());
+		super("Server", new UpdaterDefault(), -1, new ServerInterface());
 	}
 
 	public static class ServerInterface extends Standard {

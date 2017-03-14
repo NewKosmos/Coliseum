@@ -12,6 +12,7 @@ package kosmos;
 import flounder.devices.*;
 import flounder.fonts.*;
 import flounder.framework.*;
+import flounder.framework.updater.*;
 import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.resources.*;
@@ -26,7 +27,7 @@ public class NewKosmos extends Framework {
 	}
 
 	public NewKosmos() {
-		super("kosmos", -1, new KosmosInterface(), new KosmosRenderer(), new CameraFocus(), new PlayerBasic(), new KosmosGuis());
+		super("kosmos", new UpdaterDefault(), -1, new KosmosInterface(), new KosmosRenderer(), new CameraFocus(), new PlayerBasic(), new KosmosGuis());
 
 
 		FlounderDisplay.setup(KosmosConfigs.configMain.getIntWithDefault("width", 1080, FlounderDisplay::getWindowWidth),
