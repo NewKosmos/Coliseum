@@ -14,7 +14,6 @@ import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.entities.instances.*;
-import kosmos.particles.*;
 import kosmos.particles.loading.*;
 import kosmos.world.*;
 

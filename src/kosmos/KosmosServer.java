@@ -7,6 +7,7 @@ import flounder.maths.*;
 import flounder.networking.*;
 import flounder.standards.*;
 import kosmos.network.packets.*;
+import org.lwjgl.glfw.*;
 
 import java.util.*;
 import java.util.Timer;
@@ -19,7 +20,7 @@ public class KosmosServer extends Framework {
 	}
 
 	public KosmosServer() {
-		super("Server", new UpdaterDefault(), -1, new ServerInterface());
+		super("Server", new UpdaterDefault(GLFW::glfwGetTime), -1, new ServerInterface());
 	}
 
 	public static class ServerInterface extends Standard {

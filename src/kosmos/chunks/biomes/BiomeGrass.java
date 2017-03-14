@@ -9,7 +9,6 @@
 
 package kosmos.chunks.biomes;
 
-import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;

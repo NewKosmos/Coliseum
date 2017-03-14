@@ -22,7 +22,6 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.particles.loading.*;
 
-import java.io.*;
 import java.lang.ref.*;
 import java.util.*;
 
