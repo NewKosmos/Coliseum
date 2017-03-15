@@ -85,12 +85,11 @@ public class KosmosChunks extends Module {
 			for (Entity entity : chunks.getAll()) {
 				Chunk chunk = (Chunk) entity;
 
-				if (chunk != null && chunk.isLoaded() && chunk.getBounding() != null) {
-					// Checks if it is in the view.
-					if (chunk.getBounding().inFrustum(FlounderCamera.getCamera().getViewFrustum())) {
-						if (chunk.getBounding().contains(entityPlayer.getPosition())) {
-							playerChunk = chunk; // This chunk is now the chunk with the player in it.
-						}
+				if (chunk != null) {
+					// Checks if the player position is in this chunk.
+					if (chunk.isLoaded() && chunk.getBounding() != null && chunk.getBounding().contains(playerPos)) {
+						// This chunk is now the chunk with the player in it.
+						playerChunk = chunk;
 					}
 
 					// Updates the chunk.
@@ -98,9 +97,11 @@ public class KosmosChunks extends Module {
 				}
 			}
 
-			setCurrent(playerChunk); // This chunk is now the current chunk.
+			// This chunk is now the current chunk.
+			setCurrent(playerChunk);
+
+			// Updates the last player position value.
 			lastPlayerPos.set(playerPos);
-			FlounderBounding.addShapeRender(chunkRange);
 		}
 
 		/*if (FlounderCamera.getCamera() != null && FlounderMouse.getMouse(0)) {
@@ -123,6 +124,9 @@ public class KosmosChunks extends Module {
 				entityInRay.forceRemove(true);
 			}
 		}*/
+
+		// Renders the chunks range.
+		FlounderBounding.addShapeRender(chunkRange);
 	}
 
 	@Override
@@ -198,9 +202,11 @@ public class KosmosChunks extends Module {
 	 */
 	public static void setCurrent(Chunk currentChunk) {
 		if (currentChunk != null && INSTANCE.currentChunk != currentChunk) {
+			// Creates the children chunks for the new current chunk.
 			currentChunk.createChunksAround();
 			currentChunk.getChildrenChunks().forEach(Chunk::createChunksAround);
 
+			// Removes any old chunks that are out of range.
 			Iterator it = INSTANCE.chunks.getAll().iterator();
 
 			while (it.hasNext()) {
@@ -214,14 +220,20 @@ public class KosmosChunks extends Module {
 				}
 			}
 
+			// The current instance chunk is what was calculated for in this function.
 			INSTANCE.currentChunk = currentChunk;
 		}
 	}
 
+	/**
+	 * Clears all chunks, then creates a current at the previous chunks position.
+	 */
 	public static void clear() {
 		INSTANCE.chunks.getAll().forEach((Entity chunk) -> ((Chunk) chunk).delete());
 		INSTANCE.chunks.clear();
-		setCurrent(new Chunk(KosmosChunks.getChunks(), getCurrent().getPosition())); // The new root chunk.
+
+		// Sets up the new root chunk.
+		setCurrent(new Chunk(KosmosChunks.getChunks(), getCurrent().getPosition()));
 	}
 
 	public static ModelObject getModelHexagon() {

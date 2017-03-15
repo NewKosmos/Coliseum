@@ -47,7 +47,7 @@ public class BiomeGrass implements IBiome {
 				return new InstanceTree1(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((2.0 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								0.5f + height * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
@@ -56,7 +56,7 @@ public class BiomeGrass implements IBiome {
 				return new InstanceTree3(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((2.5 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								0.625f + height * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
@@ -66,7 +66,7 @@ public class BiomeGrass implements IBiome {
 					return new InstancePod(chunk.getEntities(),
 							new Vector3f(
 									chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-									(float) ((4.20 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+									1.05f + height * 0.5f,
 									chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 							),
 							new Vector3f(0.0f, rotation, 0.0f)
@@ -78,7 +78,7 @@ public class BiomeGrass implements IBiome {
 				return new InstanceBush(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((2.5 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								0.625f + height * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
@@ -89,7 +89,7 @@ public class BiomeGrass implements IBiome {
 				return new InstanceFlowerpatch1(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((1.5 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								0.375f + height * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f()
@@ -100,7 +100,7 @@ public class BiomeGrass implements IBiome {
 				return new InstanceTallGrass(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((1.0 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								0.25f + height * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f()
@@ -109,7 +109,7 @@ public class BiomeGrass implements IBiome {
 				return new InstanceTreeBlossom(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((1.0 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								0.25f + height * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f()

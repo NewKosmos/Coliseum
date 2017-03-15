@@ -46,7 +46,7 @@ public class BiomeDesert implements IBiome {
 				return new InstanceCactus1(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((1.75 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								0.4375f + height * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
@@ -55,7 +55,7 @@ public class BiomeDesert implements IBiome {
 				return new InstanceCactus2(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((1.75 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								0.4375f + height * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
@@ -64,7 +64,7 @@ public class BiomeDesert implements IBiome {
 				return new InstanceTreePalm(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((1.75 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								0.4375f + height * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
@@ -73,7 +73,7 @@ public class BiomeDesert implements IBiome {
 				return new InstanceCattail(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((1.5 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								0.375f + height * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)

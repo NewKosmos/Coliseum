@@ -46,7 +46,7 @@ public class BiomeStone implements IBiome {
 				return new InstanceBush(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((2.5 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								0.625f + height * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
@@ -55,7 +55,7 @@ public class BiomeStone implements IBiome {
 				return new InstanceGemGreen(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((-1.2f * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								-0.3f + height * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
@@ -64,7 +64,7 @@ public class BiomeStone implements IBiome {
 				return new InstanceGemPurple(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((1.7f * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								0.425f + height * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
@@ -73,7 +73,7 @@ public class BiomeStone implements IBiome {
 				return new InstanceGemRed(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((1.7f * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								0.425f + height * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)

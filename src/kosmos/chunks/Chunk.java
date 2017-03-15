@@ -149,7 +149,6 @@ public class Chunk extends Entity {
 		// Builds or rebulds this chunks mesh.
 		if (forceRebuild) {
 			forceRebuild = !chunkMesh.rebuild(generate(), KosmosChunks.getModelHexagon());
-			super.setMoved();
 		}
 
 		// Adds this mesh AABB to the bounding render pool.
@@ -193,7 +192,7 @@ public class Chunk extends Entity {
 
 		if (height >= 0.0f) {
 			tiles.add(new Vector3f(position.x, height, position.y));
-			//	biome.getBiome().generateEntity(this, worldPos, position, height);
+			biome.getBiome().generateEntity(this, worldPos, position, height);
 		}
 	}
 

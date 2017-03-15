@@ -164,11 +164,6 @@ public class ChunkMesh {
 			public AABB getAABB() {
 				return new AABB(new Vector3f(minX, minY, minZ), new Vector3f(maxX, maxY, maxZ));
 			}
-
-			@Override
-			public QuickHull getHull() {
-				return null; // hull
-			}
 		}).create();
 
 		// The chunks model component is also updated.
@@ -179,6 +174,9 @@ public class ChunkMesh {
 		} else {
 			FlounderLogger.error(chunk + " does not have a model component! Model cannot be set.");
 		}
+
+		// Forces things for the chunk to recalculate.
+		chunk.setMoved();
 
 		// Updates the chunks sphere.
 		chunk.getSphere().setRadius(1.0f);

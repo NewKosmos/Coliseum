@@ -47,7 +47,7 @@ public class BiomeSnow implements IBiome {
 				return new InstanceTreePine(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								(float) ((1.5 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+								0.375f + height * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
@@ -57,7 +57,7 @@ public class BiomeSnow implements IBiome {
 					return new InstanceTreeSnow(chunk.getEntities(),
 							new Vector3f(
 									chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-									(float) ((1.5 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
+									0.375f + height * 0.5f,
 									chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 							),
 							new Vector3f(0.0f, rotation, 0.0f)

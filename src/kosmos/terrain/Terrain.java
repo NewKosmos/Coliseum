@@ -113,11 +113,6 @@ public class Terrain extends Entity {
 			public AABB getAABB() {
 				return new AABB(new Vector3f(getPosition().getX(), getPosition().getY(), getPosition().getZ()), new Vector3f(getPosition().getX() + TERRAIN_SIZE, getPosition().getY() + TERRAIN_SIZE, getPosition().getZ() + TERRAIN_SIZE));
 			}
-
-			@Override
-			public QuickHull getHull() {
-				return null;
-			}
 		}).create();
 
 		new ComponentModel(this, 1.0f, model, TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "entities", "bushBerry", "bush.png")).clampEdges().create(), 0);
