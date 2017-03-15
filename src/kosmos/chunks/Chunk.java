@@ -10,6 +10,7 @@
 package kosmos.chunks;
 
 import flounder.entities.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
@@ -32,38 +33,38 @@ import java.util.*;
  * http://stackoverflow.com/questions/2459402/hexagonal-grid-coordinates-to-pixel-coordinates
  */
 public class Chunk extends Entity {
-	protected static final float[][] TILE_DELTAS = new float[][]{{1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 0.0f}};
-	protected static final double[][] CHUNK_DELTAS = new double[][]{{9.5, 7.0}, {-0.5, 13.0}, {-10.0, 6.0}, {-9.5, -7.0}, {0.5, -13.0}, {10.0, -6.0}};
+	// Deltas used to position tiles in a chunk of any size.
+	private static final double[][] DELTA_TILES = new double[][]{{1.0, -1.0}, {0.0, -1.0}, {-1.0, 0.0}, {-1.0, 1.0}, {0.0, 1.0}, {1.0, 0.0}};
 
-	public static final double HEXAGON_SIDE_LENGTH = 2.0; //  Each tile can be broken into equilateral triangles with sides of length.
+	// Deltas used to position chunks around a centre chunk when the radius is 7 for each chunk.
+	private static final double[][] DELTA_CHUNK = new double[][]{{9.5, 7.0}, {-0.5, 13.0}, {-10.0, 6.0}, {-9.5, -7.0}, {0.5, -13.0}, {10.0, -6.0}};
 
-	public static final int CHUNK_RADIUS = 7; // The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
+	// Each tile can be broken into equilateral triangles with sides of length.
+	private static final double HEXAGON_SIDE_LENGTH = 2.0;
 
-	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * (CHUNK_RADIUS - 0.5f); // The overall world radius footprint per chunk.
+	// The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
+	private static final int CHUNK_RADIUS = 7;
+
+	// The overall world radius footprint per chunk.
+	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * (CHUNK_RADIUS - 0.5f);
 
 	private ISpatialStructure<Entity> entities;
+	private ParticleSystem particleSystem;
 
 	private List<Chunk> childrenChunks;
 	private IBiome.Biomes biome;
 	private ChunkMesh chunkMesh;
-
 	private Sphere sphere;
 
 	private boolean forceRebuild;
-
-	private ParticleSystem particleSystem;
 
 	public Chunk(ISpatialStructure<Entity> structure, Vector3f position) {
 		super(structure, position, new Vector3f());
 		this.entities = new StructureBasic<>();
 
-		float biomeID = Math.abs(KosmosWorld.getNoise().noise1((position.x + position.z) / 300.0f)) * 3.0f * (IBiome.Biomes.values().length + 1);
-		biomeID = Maths.clamp((int) biomeID, 0.0f, IBiome.Biomes.values().length - 1);
-
 		this.childrenChunks = new ArrayList<>();
-		this.biome = IBiome.Biomes.values()[(int) biomeID];
+		this.biome = KosmosChunks.getWorldBiome(position.x, position.z);
 		this.chunkMesh = new ChunkMesh(this);
-
 		this.sphere = new Sphere();
 
 		this.forceRebuild = true;
@@ -106,10 +107,13 @@ public class Chunk extends Entity {
 		}
 	}
 
+	/**
+	 * Generates the 6 chunks around this one if they do not exist.
+	 */
 	protected void createChunksAround() {
-		if (childrenChunks.size() == 6) {
-			childrenChunks.removeIf((Chunk child) -> child == null || !KosmosChunks.getChunks().contains(child));
+		childrenChunks.removeIf((Chunk child) -> child == null || !KosmosChunks.getChunks().contains(child));
 
+		if (childrenChunks.size() == 6) {
 			if (childrenChunks.size() == 6) {
 				return;
 			}
@@ -117,8 +121,8 @@ public class Chunk extends Entity {
 
 		for (int i = 0; i < 6; i++) {
 			// These three variables find the positioning for chunks around the parent.
-			float x = this.getPosition().x + (float) (CHUNK_DELTAS[i][0] * Math.sqrt(3.0));
-			float z = this.getPosition().z + (float) (CHUNK_DELTAS[i][1] * 1.5f);
+			float x = this.getPosition().x + (float) (DELTA_CHUNK[i][0] * Math.sqrt(3.0));
+			float z = this.getPosition().z + (float) (DELTA_CHUNK[i][1] * 1.5f);
 			Vector3f p = new Vector3f(x, 0.0f, z);
 			Chunk duplicate = null;
 
@@ -163,10 +167,9 @@ public class Chunk extends Entity {
 
 		for (int i = 0; i < CHUNK_RADIUS; i++) {
 			int shapesOnEdge = i;
-			float r = 0.0f;
-			float g = -i;
-			float b = i;
-			generateTile(tiles, tileWorldSpace(r, g, b, HEXAGON_SIDE_LENGTH, null));
+			double x = 0.0;
+			double y = i;
+			generateTile(tiles, tileWorldSpace(x, y, HEXAGON_SIDE_LENGTH, null));
 
 			for (int j = 0; j < 6; j++) {
 				if (j == 5) {
@@ -174,11 +177,9 @@ public class Chunk extends Entity {
 				}
 
 				for (int w = 0; w < shapesOnEdge; w++) {
-					// r + g + b = 0
-					r = r + TILE_DELTAS[j][0];
-					g = g + TILE_DELTAS[j][1];
-					b = b + TILE_DELTAS[j][2];
-					generateTile(tiles, tileWorldSpace(r, g, b, HEXAGON_SIDE_LENGTH, null));
+					x += DELTA_TILES[j][0];
+					y += DELTA_TILES[j][1];
+					generateTile(tiles, tileWorldSpace(x, y, HEXAGON_SIDE_LENGTH, null));
 				}
 			}
 		}
@@ -192,11 +193,11 @@ public class Chunk extends Entity {
 
 		if (height >= 0.0f) {
 			tiles.add(new Vector3f(position.x, height, position.y));
-			biome.getBiome().generateEntity(this, worldPos, position, height);
+			//	biome.getBiome().generateEntity(this, worldPos, position, height);
 		}
 	}
 
-	public static Vector3f tileHexagonSpace(float x, float z, double length, Vector3f destination) {
+	public static Vector3f tileHexagonSpace(double x, double z, double length, Vector3f destination) {
 		if (destination == null) {
 			destination = new Vector3f();
 		}
@@ -207,13 +208,13 @@ public class Chunk extends Entity {
 		return destination;
 	}
 
-	public static Vector2f tileWorldSpace(float r, float g, float b, double length, Vector2f destination) {
+	public static Vector2f tileWorldSpace(double x, double y, double length, Vector2f destination) {
 		if (destination == null) {
 			destination = new Vector2f();
 		}
 
-		destination.x = (float) (Math.sqrt(3.0) * length * ((b / 2.0) + r));
-		destination.y = (float) ((3.0 / 2.0) * length * b);
+		destination.x = (float) (Math.sqrt(3.0) * length * ((y / 2.0) + x));
+		destination.y = (float) ((3.0 / 2.0) * length * y);
 		return destination;
 	}
 

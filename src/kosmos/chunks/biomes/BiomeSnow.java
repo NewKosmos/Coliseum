@@ -64,7 +64,7 @@ public class BiomeSnow implements IBiome {
 					);
 				}
 
-					return null;
+				return null;
 			default:
 				return null;
 		}

@@ -185,9 +185,9 @@ public class ChunkMesh {
 		Sphere.recalculate(chunk.getSphere(), chunk.getPosition(), maxRadius, chunk.getSphere());
 
 		// Updates the chunks AABB.
-	//	chunk.getAABB().getMinExtents().set(minX, minY - 3.0f, minZ);
-	//	chunk.getAABB().getMaxExtents().set(maxX, maxY + 7.0f, maxZ);
-	//	AABB.recalculate(chunk.getAABB(), chunk.getPosition(), chunk.getRotation(), 1.0f, chunk.getAABB());
+		//	chunk.getAABB().getMinExtents().set(minX, minY - 3.0f, minZ);
+		//	chunk.getAABB().getMaxExtents().set(maxX, maxY + 7.0f, maxZ);
+		//	AABB.recalculate(chunk.getAABB(), chunk.getPosition(), chunk.getRotation(), 1.0f, chunk.getAABB());
 
 		// Removes vertex data after some time.
 		new java.util.Timer().schedule(

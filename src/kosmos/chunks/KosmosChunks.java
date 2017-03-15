@@ -12,6 +12,7 @@ package kosmos.chunks;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.framework.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
@@ -21,6 +22,7 @@ import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
 import kosmos.*;
+import kosmos.chunks.biomes.*;
 import kosmos.entities.instances.*;
 import kosmos.world.*;
 
@@ -82,37 +84,19 @@ public class KosmosChunks extends Module {
 			for (Entity entity : chunks.getAll()) {
 				Chunk chunk = (Chunk) entity;
 
-				if (chunk.isLoaded() && chunk.getBounding().inFrustum(FlounderCamera.getCamera().getViewFrustum())) {
-					if (chunk.getBounding().contains(entityPlayer.getPosition())) {
-						playerChunk = chunk;
+				if (chunk.isLoaded() && chunk.getBounding() != null) {
+					if (chunk.getBounding().inFrustum(FlounderCamera.getCamera().getViewFrustum())) {
+						if (chunk.getBounding().contains(entityPlayer.getPosition())) {
+							playerChunk = chunk; // This chunk is now the chunk with the player in it.
+						}
 					}
 				}
 
+				// Updates the chunk.
 				chunk.update();
 			}
 
-			if (playerChunk != currentChunk) {
-				if (playerChunk != null) {
-					playerChunk.createChunksAround();
-					playerChunk.getChildrenChunks().forEach(Chunk::createChunksAround);
-
-					Iterator it = chunks.getAll().iterator();
-
-					while (it.hasNext()) {
-						Chunk chunk = (Chunk) it.next();
-
-						if (chunk != currentChunk && chunk.isLoaded()) {
-							if (!chunk.getBounding().intersects(chunkRange).isIntersection() && !chunkRange.contains((Sphere) chunk.getBounding())) {
-								chunk.delete();
-								it.remove();
-							}
-						}
-					}
-
-					currentChunk = playerChunk;
-				}
-			}
-
+			setCurrent(playerChunk); // This chunk is now the current chunk.
 			lastPlayerPos.set(playerPos);
 			FlounderBounding.addShapeRender(chunkRange);
 		}
@@ -145,19 +129,44 @@ public class KosmosChunks extends Module {
 		FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Current", currentChunk);
 	}
 
+	/**
+	 * Gets the terrain height for a position in the world.
+	 *
+	 * @param positionX The worlds X position.
+	 * @param positionZ The worlds Z position.
+	 *
+	 * @return The found height at that world position.
+	 */
 	public static float getWorldHeight(float positionX, float positionZ) {
-		// Takes the world position and rounds it to the tiles.
-		//	worldPos.x = (int) worldPos.x;
-		//	worldPos.y = (int) worldPos.y;
-
-		// Calculates the final height for the position.
+		// Calculates the final height for the world position using perlin.
 		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(positionX / 64.0f, positionZ / 64.0f) * 10.0f);
 
+		// Ignore height that would be water/nothing.
 		if (height < 0.0f) {
 			height = Float.NEGATIVE_INFINITY;
 		}
 
+		// Returns the final height,
 		return height;
+	}
+
+	/**
+	 * Gets the type of biome for the position in the world.
+	 *
+	 * @param positionX The worlds X position.
+	 * @param positionZ The worlds Z position.
+	 *
+	 * @return The found biome at that world position.
+	 */
+	public static IBiome.Biomes getWorldBiome(float positionX, float positionZ) {
+		// Calculates the biome id based off of the world position using perlin.
+		float biomeID = Math.abs(KosmosWorld.getNoise().noise1((positionX + positionZ) / 300.0f)) * 3.0f * (IBiome.Biomes.values().length + 1);
+
+		// Limits the search for biomes in the size provided.
+		biomeID = Maths.clamp((int) biomeID, 0.0f, IBiome.Biomes.values().length - 1);
+
+		// Returns the biome at the generated ID.
+		return IBiome.Biomes.values()[(int) biomeID];
 	}
 
 	public static ISpatialStructure<Entity> getChunks() {
@@ -180,10 +189,33 @@ public class KosmosChunks extends Module {
 		return INSTANCE.currentChunk;
 	}
 
+	/**
+	 * Sets the current chunk that that player is contained in. This will generate surrounding chunks.
+	 *
+	 * @param currentChunk
+	 */
 	public static void setCurrent(Chunk currentChunk) {
-		currentChunk.createChunksAround();
-		currentChunk.getChildrenChunks().forEach(Chunk::createChunksAround);
-		INSTANCE.currentChunk = currentChunk;
+		if (currentChunk != null && INSTANCE.currentChunk != currentChunk) {
+			currentChunk.createChunksAround();
+			currentChunk.getChildrenChunks().forEach(Chunk::createChunksAround);
+
+			Iterator it = INSTANCE.chunks.getAll().iterator();
+
+			while (it.hasNext()) {
+				Chunk chunk = (Chunk) it.next();
+
+				if (chunk != currentChunk && chunk.isLoaded()) {
+					if (!chunk.getBounding().intersects(INSTANCE.chunkRange).isIntersection() && !INSTANCE.chunkRange.contains((Sphere) chunk.getBounding())) {
+						chunk.delete();
+						it.remove();
+					}
+				}
+			}
+
+			currentChunk.createChunksAround();
+			currentChunk.getChildrenChunks().forEach(Chunk::createChunksAround);
+			INSTANCE.currentChunk = currentChunk;
+		}
 	}
 
 	public static void clear() {
