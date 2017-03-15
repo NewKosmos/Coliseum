@@ -81,19 +81,21 @@ public class KosmosChunks extends Module {
 				Sphere.recalculate(chunkRange, playerPos, 1.0f, chunkRange);
 			}
 
+			// Goes though all chunks looking for changes.
 			for (Entity entity : chunks.getAll()) {
 				Chunk chunk = (Chunk) entity;
 
-				if (chunk.isLoaded() && chunk.getBounding() != null) {
+				if (chunk != null && chunk.isLoaded() && chunk.getBounding() != null) {
+					// Checks if it is in the view.
 					if (chunk.getBounding().inFrustum(FlounderCamera.getCamera().getViewFrustum())) {
 						if (chunk.getBounding().contains(entityPlayer.getPosition())) {
 							playerChunk = chunk; // This chunk is now the chunk with the player in it.
 						}
 					}
-				}
 
-				// Updates the chunk.
-				chunk.update();
+					// Updates the chunk.
+					chunk.update();
+				}
 			}
 
 			setCurrent(playerChunk); // This chunk is now the current chunk.
@@ -212,8 +214,6 @@ public class KosmosChunks extends Module {
 				}
 			}
 
-			currentChunk.createChunksAround();
-			currentChunk.getChildrenChunks().forEach(Chunk::createChunksAround);
 			INSTANCE.currentChunk = currentChunk;
 		}
 	}
