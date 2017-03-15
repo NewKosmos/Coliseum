@@ -9,6 +9,7 @@
 
 package kosmos.chunks.biomes;
 
+import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
@@ -33,13 +34,13 @@ public class BiomeSnow implements IBiome {
 	}
 
 	@Override
-	public void generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height) {
+	public Entity generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height) {
 		float rotation = KosmosWorld.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
 		float spawn = Math.abs(KosmosWorld.getNoise().noise1((worldPos.y - worldPos.x) / 10.0f) * 250.0f);
 
 		switch ((int) spawn) {
 			case 1:
-				new InstanceTreePine(chunk.getEntities(),
+				return new InstanceTreePine(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
 								(float) ((1.5 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
@@ -47,10 +48,9 @@ public class BiomeSnow implements IBiome {
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
-				break;
 			case 2:
 				if (spawn - 2 < 0.2f) {
-					new InstanceTreeSnow(chunk.getEntities(),
+					return new InstanceTreeSnow(chunk.getEntities(),
 							new Vector3f(
 									chunk.getPosition().x + (float) (tilePosition.x * 0.5),
 									(float) ((1.5 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
@@ -59,9 +59,10 @@ public class BiomeSnow implements IBiome {
 							new Vector3f(0.0f, rotation, 0.0f)
 					);
 				}
-				break;
+
+					return null;
 			default:
-				break;
+				return null;
 		}
 	}
 

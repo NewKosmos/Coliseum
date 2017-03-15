@@ -20,9 +20,11 @@ public class SkyCycle {
 	public static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.30f, 0.70f);
 
 	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.9921f, 0.490f, 0.004f);
-	public static final Colour SUN_COLOUR_DAY = new Colour(0.5f, 0.5f, 0.5f);
+	public static final Colour SUN_COLOUR_DAY = new Colour(0.64f, 0.64f, 0.64f);
 
-	public static final float DAY_NIGHT_CYCLE = 180.0f; // The day/night length (sec)
+	public static final Colour MOON_COLOUR = new Colour(0.32f, 0.32f, 0.32f);
+
+	public static final float DAY_NIGHT_CYCLE = 160.0f; // The day/night length (sec).
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.5f, 0.0f, 0.5f); // The starting light direction.
 

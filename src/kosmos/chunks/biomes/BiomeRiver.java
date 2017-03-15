@@ -9,6 +9,7 @@
 
 package kosmos.chunks.biomes;
 
+import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
@@ -31,8 +32,8 @@ public class BiomeRiver implements IBiome {
 	}
 
 	@Override
-	public void generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height) {
-
+	public Entity generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height) {
+		return null;
 	}
 
 	@Override

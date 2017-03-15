@@ -13,6 +13,7 @@ import flounder.camera.*;
 import flounder.devices.*;
 import flounder.entities.*;
 import flounder.helpers.*;
+import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
@@ -128,8 +129,10 @@ public class EntitiesRenderer extends Renderer {
 			vaoLength = componentAnimation.getModel().getVaoLength();
 
 			// Loads joint transforms.
-			for (int i = 0; i < componentAnimation.getJointTransforms().length; i++) {
-				shader.getUniformMat4("jointTransforms[" + i + "]").loadMat4(componentAnimation.getJointTransforms()[i]);
+			Matrix4f[] jointMatrices = componentAnimation.getJointTransforms();
+
+			for (int i = 0; i < jointMatrices.length; i++) {
+				shader.getUniformMat4("jointTransforms[" + i + "]").loadMat4(jointMatrices[i]);
 			}
 		} else {
 			// No model, so no render!

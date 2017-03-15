@@ -9,6 +9,7 @@
 
 package kosmos.chunks.biomes;
 
+import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
@@ -46,7 +47,7 @@ public interface IBiome {
 	 */
 	TextureObject getTexture();
 
-	void generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height);
+	Entity generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height);
 
 	/**
 	 * Gets the type of weather particle to spawn when weather is active.

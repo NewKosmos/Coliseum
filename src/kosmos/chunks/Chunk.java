@@ -48,9 +48,8 @@ public class Chunk extends Entity {
 	private ChunkMesh chunkMesh;
 
 	private Sphere sphere;
-	private AABB aabb;
 
-	private boolean tilesChanged;
+	private boolean forceRebuild;
 
 	private ParticleSystem particleSystem;
 
@@ -66,9 +65,8 @@ public class Chunk extends Entity {
 		this.chunkMesh = new ChunkMesh(this);
 
 		this.sphere = new Sphere();
-		this.aabb = new AABB();
 
-		this.tilesChanged = true;
+		this.forceRebuild = true;
 
 		new ComponentModel(this, 1.0f, chunkMesh.getModel(), biome.getBiome().getTexture(), 0);
 		new ComponentSurface(this, 1.0f, 0.0f, false, false);
@@ -145,9 +143,8 @@ public class Chunk extends Entity {
 	@Override
 	public void update() {
 		// Builds or rebulds this chunks mesh.
-		if (tilesChanged || chunkMesh.getModel() == null) {
-			chunkMesh.rebuild(generate(), KosmosChunks.getModelHexagon());
-			tilesChanged = false;
+		if (forceRebuild) {
+			forceRebuild = !chunkMesh.rebuild(generate(), KosmosChunks.getModelHexagon());
 			super.setMoved();
 		}
 
@@ -190,37 +187,15 @@ public class Chunk extends Entity {
 	}
 
 	private void generateTile(List<Vector3f> tiles, Vector2f position) {
-		Vector2f worldPos = new Vector2f(position.x + (getPosition().x * 2.0f), position.y + (getPosition().z * 2.0f));
-		int height = (int) (KosmosWorld.getNoise().noise2(worldPos.x / 75.0f, worldPos.y / 75.0f) * 14.0f);
-		//FlounderLogger.log(position.x + ", " + height + ", " + position.y);
+		float height = getHeight(position.x, position.y, false);
 
-		if (height >= 0) {
-			tiles.add(new Vector3f(position.x, height * (float) Math.sqrt(2.0f), position.y));
+		if (height >= 0.0f) {
+			tiles.add(new Vector3f(position.x, height, position.y));
 
-			if (KosmosWorld.getNoise().noise2(worldPos.x / 50.0f * (float) Math.sin(worldPos.y), worldPos.y / 50.0f * (float) Math.sin(worldPos.x)) > 0.1f) {
-				biome.getBiome().generateEntity(this, worldPos, position, height);
-			}
-		} else {
-			float spawn = Math.abs(KosmosWorld.getNoise().noise1((worldPos.y - worldPos.x) / 10.0f) * 250.0f);
-
-			if (Math.abs(spawn) < 2.0f) {
-				new InstanceLilipad(entities, new Vector3f(
-						getPosition().x + (float) (position.x * 0.5),
-						0.0f,
-						getPosition().z + (float) (position.y * 0.5)
-				), new Vector3f());
-			}
+		//	if (KosmosWorld.getNoise().noise2(worldPos.x / 50.0f * (float) Math.sin(worldPos.y), worldPos.y / 50.0f * (float) Math.sin(worldPos.x)) > 0.1f) {
+		//		Entity entity = biome.getBiome().generateEntity(this, worldPos, position, height);
+		//	}
 		}
-
-	/*	for (int i = 0; i < height; i++) {
-			tiles.add(new Vector3f(position.x, i * (float) Math.sqrt(2.0f), position.y));
-
-			if (i == height - 1 && height > 0) {
-				if (!((KosmosChunks.getNoise().noise1((worldPos.x + worldPos.y) / 11.0f) * 20.0f) > 1.0f)) {
-					biome.getBiome().generateEntity(this, worldPos, position, i);
-				}
-			}
-		}*/
 	}
 
 	public static Vector3f tileHexagonSpace(float x, float z, double length, Vector3f destination) {
@@ -244,19 +219,18 @@ public class Chunk extends Entity {
 		return destination;
 	}
 
-	public float getHeight(float worldX, float worldZ) {
-		// TODO: Static and not using the chunk object, chunk height gen would then use a direct world offset per tile.
-		float positionX = worldX - super.getPosition().getX();
-		float positionZ = worldZ - super.getPosition().getZ();
+	public float getHeight(float positionX, float positionZ, boolean worldPosition) {
+		Vector2f worldPos;
 
-		Vector2f worldPos = new Vector2f(positionX + (getPosition().x * 2.0f), positionZ + (getPosition().z * 2.0f));
-		int height = (int) (KosmosWorld.getNoise().noise2(worldPos.x / 75.0f, worldPos.y / 75.0f) * 14.0f);
-
-		if (height >= 0) {
-			return height * 0.5f * (float) Math.sqrt(2.0);
+		if (worldPosition) {
+			float worldX = positionX - super.getPosition().getX();
+			float worldZ = positionZ - super.getPosition().getZ();
+			worldPos = new Vector2f(worldX + (getPosition().x * 2.0f), worldZ + (getPosition().z * 2.0f));
 		} else {
-			return Float.NEGATIVE_INFINITY;
+			worldPos = new Vector2f(positionX + (getPosition().x * 2.0f), positionZ + (getPosition().z * 2.0f));
 		}
+
+		return (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(worldPos.x / 64.0f, worldPos.x / 64.0f) * 10.0f);
 	}
 
 	public ISpatialStructure<Entity> getEntities() {
@@ -275,10 +249,6 @@ public class Chunk extends Entity {
 		return sphere;
 	}
 
-	public AABB getAABB() {
-		return aabb;
-	}
-
 	public IBiome.Biomes getBiome() {
 		return biome;
 	}
@@ -289,7 +259,7 @@ public class Chunk extends Entity {
 
 	@Override
 	public IBounding getBounding() {
-		return getSphere();
+		return sphere;
 	}
 
 	public void delete() {
@@ -299,6 +269,7 @@ public class Chunk extends Entity {
 
 		entities.clear();
 		chunkMesh.delete();
+		forceRebuild = true;
 
 		if (particleSystem != null) {
 			particleSystem.delete();

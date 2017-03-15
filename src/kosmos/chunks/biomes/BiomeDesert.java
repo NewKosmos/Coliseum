@@ -9,6 +9,7 @@
 
 package kosmos.chunks.biomes;
 
+import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
@@ -32,13 +33,13 @@ public class BiomeDesert implements IBiome {
 	}
 
 	@Override
-	public void generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height) {
+	public Entity generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height) {
 		float rotation = KosmosWorld.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
 		float spawn = Math.abs(KosmosWorld.getNoise().noise1((worldPos.y - worldPos.x) / 10.0f) * 250.0f);
 
 		switch ((int) spawn) {
 			case 1:
-				new InstanceCactus1(chunk.getEntities(),
+				return new InstanceCactus1(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
 								(float) ((1.75 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
@@ -46,9 +47,8 @@ public class BiomeDesert implements IBiome {
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
-				break;
 			case 2:
-				new InstanceCactus2(chunk.getEntities(),
+				return new InstanceCactus2(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
 								(float) ((1.75 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
@@ -56,9 +56,8 @@ public class BiomeDesert implements IBiome {
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
-				break;
 			case 3:
-				new InstanceTreePalm(chunk.getEntities(),
+				return new InstanceTreePalm(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
 								(float) ((1.75 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
@@ -66,9 +65,8 @@ public class BiomeDesert implements IBiome {
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
-				break;
 			case 4:
-				new InstanceCattail(chunk.getEntities(),
+				return new InstanceCattail(chunk.getEntities(),
 						new Vector3f(
 								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
 								(float) ((1.5 * 0.25) + (height * Math.sqrt(2.0)) * 0.5),
@@ -76,9 +74,8 @@ public class BiomeDesert implements IBiome {
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
-				break;
 			default:
-				break;
+				return null;
 		}
 	}
 

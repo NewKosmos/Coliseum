@@ -37,10 +37,10 @@ public class ChunkMesh {
 		this.vertices = new ArrayList<>();
 	}
 
-	public synchronized void rebuild(List<Vector3f> positions, ModelObject model) {
+	public boolean rebuild(List<Vector3f> positions, ModelObject model) {
 		// Makes sure all chunk, model, and biome info is good.
 		if (chunk == null || chunk.getBiome() == null || model == null || !model.isLoaded()) {
-			return;
+			return false;
 		}
 
 		// Removes the old chunk model.
@@ -185,9 +185,9 @@ public class ChunkMesh {
 		Sphere.recalculate(chunk.getSphere(), chunk.getPosition(), maxRadius, chunk.getSphere());
 
 		// Updates the chunks AABB.
-		chunk.getAABB().getMinExtents().set(minX, minY - 3.0f, minZ);
-		chunk.getAABB().getMaxExtents().set(maxX, maxY + 7.0f, maxZ);
-		AABB.recalculate(chunk.getAABB(), chunk.getPosition(), chunk.getRotation(), 1.0f, chunk.getAABB());
+	//	chunk.getAABB().getMinExtents().set(minX, minY - 3.0f, minZ);
+	//	chunk.getAABB().getMaxExtents().set(maxX, maxY + 7.0f, maxZ);
+	//	AABB.recalculate(chunk.getAABB(), chunk.getPosition(), chunk.getRotation(), 1.0f, chunk.getAABB());
 
 		// Removes vertex data after some time.
 		new java.util.Timer().schedule(
@@ -202,6 +202,8 @@ public class ChunkMesh {
 				},
 				2500
 		);
+
+		return true;
 	}
 
 	public ModelObject getModel() {
