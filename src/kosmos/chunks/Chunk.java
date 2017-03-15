@@ -148,7 +148,7 @@ public class Chunk extends Entity {
 	public void update() {
 		// Builds or rebulds this chunks mesh.
 		if (forceRebuild) {
-			forceRebuild = !chunkMesh.rebuild(generate(), KosmosChunks.getModelHexagon());
+			forceRebuild = !chunkMesh.rebuild(KosmosChunks.getModelHexagon());
 		}
 
 		// Adds this mesh AABB to the bounding render pool.
@@ -161,14 +161,14 @@ public class Chunk extends Entity {
 		super.update();
 	}
 
-	private List<Vector3f> generate() {
+	public static List<Vector3f> generate(Chunk chunk) {
 		List<Vector3f> tiles = new ArrayList<>();
 
 		for (int i = 0; i < CHUNK_RADIUS; i++) {
 			int shapesOnEdge = i;
 			double x = 0.0;
 			double y = i;
-			generateTile(tiles, tileWorldSpace(x, y, HEXAGON_SIDE_LENGTH, null));
+			generateTile(chunk, tiles, tileWorldSpace(x, y, HEXAGON_SIDE_LENGTH, null));
 
 			for (int j = 0; j < 6; j++) {
 				if (j == 5) {
@@ -178,7 +178,7 @@ public class Chunk extends Entity {
 				for (int w = 0; w < shapesOnEdge; w++) {
 					x += DELTA_TILES[j][0];
 					y += DELTA_TILES[j][1];
-					generateTile(tiles, tileWorldSpace(x, y, HEXAGON_SIDE_LENGTH, null));
+					generateTile(chunk, tiles, tileWorldSpace(x, y, HEXAGON_SIDE_LENGTH, null));
 				}
 			}
 		}
@@ -186,13 +186,13 @@ public class Chunk extends Entity {
 		return tiles;
 	}
 
-	private void generateTile(List<Vector3f> tiles, Vector2f position) {
-		Vector2f worldPos = new Vector2f(position.x + (getPosition().x * 2.0f), position.y + (getPosition().z * 2.0f)); // TODO
+	private static void generateTile(Chunk chunk, List<Vector3f> tiles, Vector2f position) {
+		Vector2f worldPos = new Vector2f(position.x + (chunk.getPosition().x * 2.0f), position.y + (chunk.getPosition().z * 2.0f)); // TODO
 		float height = KosmosChunks.getWorldHeight(worldPos.x, worldPos.y);
 
 		if (height >= 0.0f) {
 			tiles.add(new Vector3f(position.x, height, position.y));
-			biome.getBiome().generateEntity(this, worldPos, position, height);
+			chunk.biome.getBiome().generateEntity(chunk, worldPos, position, height);
 		}
 	}
 

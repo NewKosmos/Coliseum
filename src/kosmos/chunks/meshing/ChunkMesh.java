@@ -37,7 +37,7 @@ public class ChunkMesh {
 		this.vertices = new ArrayList<>();
 	}
 
-	public boolean rebuild(List<Vector3f> positions, ModelObject model) {
+	public boolean rebuild(ModelObject model) {
 		// Makes sure all chunk, model, and biome info is good.
 		if (chunk == null || chunk.getBiome() == null || model == null || !model.isLoaded()) {
 			return false;
@@ -48,6 +48,9 @@ public class ChunkMesh {
 			chunkModel.delete();
 			chunkModel = null;
 		}
+
+		// Generates all tile positions for this chunk.
+		List<Vector3f> positions = Chunk.generate(chunk);
 
 		// Prepares a set of data to write into.
 		if (vertices == null) {
