@@ -187,14 +187,12 @@ public class Chunk extends Entity {
 	}
 
 	private void generateTile(List<Vector3f> tiles, Vector2f position) {
-		float height = getHeight(position.x, position.y, false);
+		Vector2f worldPos = new Vector2f(position.x + (getPosition().x * 2.0f), position.y + (getPosition().z * 2.0f)); // TODO
+		float height = KosmosChunks.getWorldHeight(worldPos.x, worldPos.y);
 
 		if (height >= 0.0f) {
 			tiles.add(new Vector3f(position.x, height, position.y));
-
-		//	if (KosmosWorld.getNoise().noise2(worldPos.x / 50.0f * (float) Math.sin(worldPos.y), worldPos.y / 50.0f * (float) Math.sin(worldPos.x)) > 0.1f) {
-		//		Entity entity = biome.getBiome().generateEntity(this, worldPos, position, height);
-		//	}
+			biome.getBiome().generateEntity(this, worldPos, position, height);
 		}
 	}
 
@@ -217,31 +215,6 @@ public class Chunk extends Entity {
 		destination.x = (float) (Math.sqrt(3.0) * length * ((b / 2.0) + r));
 		destination.y = (float) ((3.0 / 2.0) * length * b);
 		return destination;
-	}
-
-	public float getHeight(float positionX, float positionZ, boolean worldPosition) {
-		Vector2f worldPos;
-
-		if (worldPosition) {
-			float worldX = positionX - super.getPosition().getX();
-			float worldZ = positionZ - super.getPosition().getZ();
-			worldPos = new Vector2f(worldX + (getPosition().x * 2.0f), worldZ + (getPosition().z * 2.0f));
-		} else {
-			worldPos = new Vector2f(positionX + (getPosition().x * 2.0f), positionZ + (getPosition().z * 2.0f));
-		}
-
-		float p0 = getNoiseSample(worldPos.x + 0.0f, worldPos.y + 1.0f);
-		float p1 = getNoiseSample(worldPos.x + 0.5f, worldPos.y + 0.5f);
-		float p2 = getNoiseSample(worldPos.x + 0.5f, worldPos.y + -0.5f);
-		float p3 = getNoiseSample(worldPos.x + 0.0f, worldPos.y + -1.0f);
-		float p4 = getNoiseSample(worldPos.x + -0.5f, worldPos.y + -0.5f);
-		float p5 = getNoiseSample(worldPos.x + -0.5f, worldPos.y + 0.5f);
-
-		return (float) Math.sqrt(2.0) * (int) ((p0 + p1 + p2 + p3 + p4 + p5) / 6.0f);
-	}
-
-	public float getNoiseSample(float x, float z) {
-		return KosmosWorld.getNoise().noise2(x / 64.0f, z / 64.0f) * 10.0f;
 	}
 
 	public ISpatialStructure<Entity> getEntities() {

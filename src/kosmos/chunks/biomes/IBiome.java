@@ -47,7 +47,7 @@ public interface IBiome {
 	 */
 	TextureObject getTexture();
 
-	Entity generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height);
+	Entity generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, float height);
 
 	/**
 	 * Gets the type of weather particle to spawn when weather is active.

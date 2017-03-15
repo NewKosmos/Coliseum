@@ -33,7 +33,11 @@ public class BiomeDesert implements IBiome {
 	}
 
 	@Override
-	public Entity generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height) {
+	public Entity generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, float height) {
+		if (KosmosWorld.getNoise().noise2(worldPos.x / 50.0f * (float) Math.sin(worldPos.y), worldPos.y / 50.0f * (float) Math.sin(worldPos.x)) <= 0.1f) {
+			return null;
+		}
+
 		float rotation = KosmosWorld.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
 		float spawn = Math.abs(KosmosWorld.getNoise().noise1((worldPos.y - worldPos.x) / 10.0f) * 250.0f);
 

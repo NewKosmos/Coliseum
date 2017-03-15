@@ -22,6 +22,7 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.*;
 import kosmos.entities.instances.*;
+import kosmos.world.*;
 
 import java.util.*;
 
@@ -142,6 +143,21 @@ public class KosmosChunks extends Module {
 	public void profile() {
 		FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Size", chunks.getSize());
 		FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Current", currentChunk);
+	}
+
+	public static float getWorldHeight(float positionX, float positionZ) {
+		// Takes the world position and rounds it to the tiles.
+		//	worldPos.x = (int) worldPos.x;
+		//	worldPos.y = (int) worldPos.y;
+
+		// Calculates the final height for the position.
+		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(positionX / 64.0f, positionZ / 64.0f) * 10.0f);
+
+		if (height < 0.0f) {
+			height = Float.NEGATIVE_INFINITY;
+		}
+
+		return height;
 	}
 
 	public static ISpatialStructure<Entity> getChunks() {

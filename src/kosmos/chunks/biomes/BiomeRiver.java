@@ -32,7 +32,7 @@ public class BiomeRiver implements IBiome {
 	}
 
 	@Override
-	public Entity generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, int height) {
+	public Entity generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, float height) {
 		return null;
 	}
 
