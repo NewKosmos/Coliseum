@@ -230,7 +230,18 @@ public class Chunk extends Entity {
 			worldPos = new Vector2f(positionX + (getPosition().x * 2.0f), positionZ + (getPosition().z * 2.0f));
 		}
 
-		return (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(worldPos.x / 64.0f, worldPos.x / 64.0f) * 10.0f);
+		float p0 = getNoiseSample(worldPos.x + 0.0f, worldPos.y + 1.0f);
+		float p1 = getNoiseSample(worldPos.x + 0.5f, worldPos.y + 0.5f);
+		float p2 = getNoiseSample(worldPos.x + 0.5f, worldPos.y + -0.5f);
+		float p3 = getNoiseSample(worldPos.x + 0.0f, worldPos.y + -1.0f);
+		float p4 = getNoiseSample(worldPos.x + -0.5f, worldPos.y + -0.5f);
+		float p5 = getNoiseSample(worldPos.x + -0.5f, worldPos.y + 0.5f);
+
+		return (float) Math.sqrt(2.0) * (int) ((p0 + p1 + p2 + p3 + p4 + p5) / 6.0f);
+	}
+
+	public float getNoiseSample(float x, float z) {
+		return KosmosWorld.getNoise().noise2(x / 64.0f, z / 64.0f) * 10.0f;
 	}
 
 	public ISpatialStructure<Entity> getEntities() {
