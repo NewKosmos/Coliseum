@@ -33,7 +33,7 @@ public class FilterMRT extends PostFilter {
 
 		this.shadowPCF = KosmosConfigs.configMain.getIntWithDefault("shadow_pcf", 0, () -> shadowPCF);
 		this.shadowBias = KosmosConfigs.configMain.getFloatWithDefault("shadow_bias", 0.001f, () -> shadowBias);
-		this.shadowDarkness = KosmosConfigs.configMain.getFloatWithDefault("shadow_darkness", 0.6f, () -> shadowDarkness);
+		this.shadowDarkness = KosmosConfigs.configMain.getFloatWithDefault("shadow_darkness", 0.5f, () -> shadowDarkness);
 	}
 
 	@Override

@@ -35,14 +35,11 @@ public class OverlayMaster extends GuiComponent {
 	private GuiTexture crossHair;
 
 	public OverlayMaster() {
-		fpsText = createStatus("FPS: 0", 0.02f);
-		upsText = createStatus("UPS: 0", 0.06f);
-		positionText = createStatus("POSITION: [0, 0, 0]", 0.10f);
-		timeText = createStatus("TIME: 0", 0.14f);
-		seedText = createStatus("SEED: 0", 0.18f);
-		createStatus("C TO TOGGLE EFFECTS", 0.23f);
-		createStatus("ESC TO HIDE HUD", 0.27f);
-
+		fpsText = createStatus("FPS: 0", 0.01f);
+		upsText = createStatus("UPS: 0", 0.04f);
+		positionText = createStatus("POSITION: [0, 0, 0]", 0.07f);
+		timeText = createStatus("TIME: 0", 0.10f);
+		seedText = createStatus("SEED: 0", 0.13f);
 
 		crossHair = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "crosshair.png")).setNumberOfRows(4).create());
 		crossHair.setSelectedRow(KosmosConfigs.configMain.getIntWithDefault("crosshair", 1, () -> crossHair.getSelectedRow()));
@@ -73,7 +70,7 @@ public class OverlayMaster extends GuiComponent {
 			fpsText.setText("FPS: " + Maths.roundToPlace(1.0f / Framework.getDeltaRender(), 1));
 			upsText.setText("UPS: " + Maths.roundToPlace(1.0f / Framework.getDelta(), 1));
 			positionText.setText("POSITION: [" + (FlounderCamera.getPlayer() == null ? "NULL" : Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().x, 1) + ", " + Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().y, 1) + ", " + Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().z, 1) + "]"));
-			timeText.setText("TIME: " + KosmosWorld.getSkyCycle().getDayFactor());
+			timeText.setText("TIME: " + Maths.roundToPlace(KosmosWorld.getSkyCycle().getDayFactor(), 3));
 			seedText.setText("SEED: " + KosmosWorld.getNoise().getSeed());
 			updateText = false;
 		}
@@ -85,8 +82,8 @@ public class OverlayMaster extends GuiComponent {
 
 	@Override
 	protected void getGuiTextures(List<GuiTexture> guiTextures) {
-		//	if (isShown()) {
-		//		guiTextures.add(crossHair);
-		//	}
+		if (isShown()) {
+			guiTextures.add(crossHair);
+		}
 	}
 }

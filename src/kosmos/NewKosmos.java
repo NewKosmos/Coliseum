@@ -42,6 +42,6 @@ public class NewKosmos extends Framework {
 		FlounderTextures.setup(KosmosConfigs.configMain.getFloatWithDefault("anisotropy_level", 4, FlounderTextures::getAnisotropyLevel));
 		FlounderBounding.toggle(KosmosConfigs.configMain.getBooleanWithDefault("boundings_render", false, FlounderBounding::renders));
 		FlounderProfiler.toggle(KosmosConfigs.configMain.getBooleanWithDefault("profiler_open", false, FlounderProfiler::isOpen));
-		TextBuilder.DEFAULT_TYPE = FlounderFonts.FFF_FORWARD;
+		TextBuilder.DEFAULT_TYPE = FlounderFonts.FORTE;
 	}
 }

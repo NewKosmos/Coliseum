@@ -187,7 +187,7 @@ public class Chunk extends Entity {
 	}
 
 	private static void generateTile(Chunk chunk, List<Vector3f> tiles, Vector2f position) {
-		Vector2f worldPos = new Vector2f(position.x + (chunk.getPosition().x * 2.0f), position.y + (chunk.getPosition().z * 2.0f)); // TODO
+		Vector2f worldPos = new Vector2f(0.5f * position.x + chunk.getPosition().x, 0.5f * position.y + chunk.getPosition().z);
 		float height = KosmosChunks.getWorldHeight(worldPos.x, worldPos.y);
 
 		if (height >= 0.0f) {

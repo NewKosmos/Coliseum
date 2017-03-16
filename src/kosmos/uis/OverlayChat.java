@@ -40,7 +40,7 @@ public class OverlayChat extends GuiComponent {
 		this.lastKey = 0;
 
 		this.textureInput = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "console_input.png")).create());
-		this.currentInput = Text.newText(START_STRING).textAlign(GuiAlign.LEFT).setFontSize(0.875f).setFont(FlounderFonts.SEGO_UI).create();
+		this.currentInput = Text.newText(START_STRING).textAlign(GuiAlign.LEFT).setFontSize(0.875f).create();
 		this.currentInput.setColour(1.0f, 1.0f, 1.0f);
 		addText(currentInput, 0.01f, 0.972f, 1.0f);
 
@@ -96,9 +96,9 @@ public class OverlayChat extends GuiComponent {
 	}
 
 	public void addText(String string, Colour colour) {
-		Text text = Text.newText(" > " + string).textAlign(GuiAlign.LEFT).setFontSize(0.8f).setFont(FlounderFonts.SEGO_UI).create();
+		Text text = Text.newText(" > " + string).textAlign(GuiAlign.LEFT).setFontSize(0.8f).create();
 		text.setColour(colour);
-		addText(text, 0.01f, 0.02f + (chatMessages.size() * 0.03f), 1.0f);
+		addText(text, 0.01f, 0.02f + (chatMessages.size() * 0.03f), 1.5f);
 		chatMessages.add(text);
 
 		if (string.charAt(0) == '/') {

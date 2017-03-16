@@ -145,7 +145,7 @@ public class KosmosChunks extends Module {
 	 */
 	public static float getWorldHeight(float positionX, float positionZ) {
 		// Calculates the final height for the world position using perlin.
-		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(positionX / 64.0f, positionZ / 64.0f) * 10.0f);
+		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(positionX / 50.0f, positionZ / 50.0f) * 10.0f);
 
 		// Ignore height that would be water/nothing.
 		if (height < 0.0f) {
@@ -166,7 +166,7 @@ public class KosmosChunks extends Module {
 	 */
 	public static IBiome.Biomes getWorldBiome(float positionX, float positionZ) {
 		// Calculates the biome id based off of the world position using perlin.
-		float biomeID = Math.abs(KosmosWorld.getNoise().noise1((positionX + positionZ) / 300.0f)) * 3.0f * (IBiome.Biomes.values().length + 1);
+		float biomeID = Math.abs(KosmosWorld.getNoise().noise1((positionX + positionZ) / 256.0f)) * 2.56f * (IBiome.Biomes.values().length + 1);
 
 		// Limits the search for biomes in the size provided.
 		biomeID = Maths.clamp((int) biomeID, 0.0f, IBiome.Biomes.values().length - 1);

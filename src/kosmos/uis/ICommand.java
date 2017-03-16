@@ -17,6 +17,7 @@ import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
+import flounder.profiling.*;
 import kosmos.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
@@ -116,6 +117,58 @@ public interface ICommand {
 				((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
 				Framework.setTimeOffset(timeOffset);
+			}
+		}),
+		PROFILER(new ICommand() {
+			@Override
+			public String commandPrefix() {
+				return "profiler";
+			}
+
+			@Override
+			public String commandDescription() {
+				return "Opens or closes the developer profiler.";
+			}
+
+			@Override
+			public void runCommand(String fullCommand) {
+				// Removes /profiler from the string.
+				String string = fullCommand.substring(9, fullCommand.length()).trim();
+
+				if (string.isEmpty()) {
+					String log = "Could not open/close the developer profiler.";
+					FlounderLogger.log(log);
+					((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.8f, 0.1f, 0.0f));
+					return;
+				}
+
+				boolean profilerOpen = Boolean.parseBoolean(string);
+
+				String log = "Changing the developer profiler to: " + profilerOpen;
+				FlounderLogger.log(log);
+				((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.1f, 0.8f, 0.0f));
+
+				FlounderProfiler.toggle(profilerOpen);
+			}
+		}),
+		EXIT(new ICommand() {
+			@Override
+			public String commandPrefix() {
+				return "exit";
+			}
+
+			@Override
+			public String commandDescription() {
+				return "Quits the game to the desktop.";
+			}
+
+			@Override
+			public void runCommand(String fullCommand) {
+				String log = "Requesting to exit the game to desktop.";
+				FlounderLogger.log(log);
+				((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.1f, 0.8f, 0.0f));
+
+				Framework.requestClose();
 			}
 		});
 
