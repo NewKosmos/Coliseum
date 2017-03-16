@@ -55,7 +55,11 @@ public class KosmosChunks extends Module {
 	public void init() {
 		this.chunks = new StructureBasic<>();
 
-		this.entityPlayer = new InstancePlayer(FlounderEntities.getEntities(), new Vector3f(), new Vector3f());
+		this.entityPlayer = new InstancePlayer(FlounderEntities.getEntities(), new Vector3f(
+				KosmosConfigs.configSave.getFloatWithDefault("player_x", 0.0f, () -> KosmosChunks.getEntityPlayer().getPosition().x),
+				0.0f,
+				KosmosConfigs.configSave.getFloatWithDefault("player_z", 0.0f, () -> KosmosChunks.getEntityPlayer().getPosition().z)
+		), new Vector3f());
 		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 		this.entitySun = new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-200.0f, -200.0f, -200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 

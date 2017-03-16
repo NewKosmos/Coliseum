@@ -9,20 +9,33 @@
 
 package kosmos.entities.components;
 
-import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.framework.*;
+import flounder.guis.*;
 import flounder.helpers.*;
+import flounder.inputs.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import kosmos.camera.*;
+import kosmos.chunks.*;
+import kosmos.water.*;
+import kosmos.world.*;
 
 import javax.swing.*;
+
+import static org.lwjgl.glfw.GLFW.*;
 
 public class ComponentPlayer extends IComponentEntity implements IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
-	private Vector3f lastPosition;
-	private Vector3f lastRotation;
+	private float currentSpeed;
+	private float currentUpwardSpeed;
+	private float currentTurnSpeed;
+	private IAxis inputForward;
+	private IAxis inputTurn;
+	private IButton inputBoost;
+	private IButton inputJump;
 
 	/**
 	 * Creates a new ComponentPlayer.
@@ -31,26 +44,61 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 	 */
 	public ComponentPlayer(Entity entity) {
 		super(entity, ID);
-		this.lastPosition = new Vector3f();
-		this.lastRotation = new Vector3f();
+
+		IButton leftKeyButtons = new KeyButton(GLFW_KEY_A, GLFW_KEY_LEFT);
+		IButton rightKeyButtons = new KeyButton(GLFW_KEY_D, GLFW_KEY_RIGHT);
+		IButton upKeyButtons = new KeyButton(GLFW_KEY_W, GLFW_KEY_UP);
+		IButton downKeyButtons = new KeyButton(GLFW_KEY_S, GLFW_KEY_DOWN);
+		IButton boostButtons = new KeyButton(GLFW_KEY_LEFT_SHIFT, GLFW_KEY_RIGHT_SHIFT);
+		IButton jumpButtons = new KeyButton(GLFW_KEY_SPACE);
+
+		this.currentSpeed = 0.0f;
+		this.currentUpwardSpeed = 0.0f;
+		this.currentTurnSpeed = 0.0f;
+		this.inputForward = new CompoundAxis(new ButtonAxis(upKeyButtons, downKeyButtons), new JoystickAxis(0, 1));
+		this.inputTurn = new CompoundAxis(new ButtonAxis(leftKeyButtons, rightKeyButtons), new JoystickAxis(0, 0));
+		this.inputBoost = new CompoundButton(boostButtons);
+		this.inputJump = new CompoundButton(jumpButtons);
 	}
 
 	@Override
 	public void update() {
-		if (FlounderCamera.getPlayer() == null) {
-			return;
+		// Gets movement and rotation data from player inputs.
+		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
+			currentSpeed = -(inputBoost.isDown() ? PlayerBasic.BOOST_SPEED : PlayerBasic.RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
+			currentUpwardSpeed = (inputJump.wasDown() && Maths.deadband(0.05f, currentUpwardSpeed) == 0.0f) ? PlayerBasic.JUMP_POWER : currentUpwardSpeed;
+			currentTurnSpeed = -PlayerBasic.TURN_SPEED * Maths.deadband(0.05f, inputTurn.getAmount());
+		} else {
+			currentSpeed = 0.0f;
+			currentTurnSpeed = 0.0f;
 		}
 
-		getEntity().getPosition().set(FlounderCamera.getPlayer().getPosition());
-		getEntity().getPosition().y += PlayerBasic.PLAYER_OFFSET_Y;
-		getEntity().getRotation().set(FlounderCamera.getPlayer().getRotation());
+		// Applies gravity over time.
+		currentUpwardSpeed += KosmosWorld.GRAVITY * Framework.getDelta();
 
-		if (!getEntity().getPosition().equals(lastPosition) || !getEntity().getRotation().equals(lastRotation)) {
-			getEntity().setMoved();
+		// Calculates the deltas to the moved distance, and rotations.
+		float distance = currentSpeed * Framework.getDelta();
+		float dx = (float) (distance * Math.sin(Math.toRadians(getEntity().getRotation().y)));
+		float dy = currentUpwardSpeed * Framework.getDelta();
+		float dz = (float) (distance * Math.cos(Math.toRadians(getEntity().getRotation().y)));
+		float ry = currentTurnSpeed * Framework.getDelta();
 
-			lastPosition.set(getEntity().getPosition());
-			lastRotation.set(getEntity().getRotation());
+		// Finds the water level at the next player xz pos.
+		float waterLevel = (KosmosWater.getWater() != null) ? KosmosWater.getWater().getPosition().y : 0.0f;
+
+		// Finds the chunk height at the next player xz pos.
+		float chunkHeight = Chunk.getWorldHeight(getEntity().getPosition().x + dx, getEntity().getPosition().z + dz) * 0.5f;
+
+		// Does collision with the highest world object.
+		float worldHeight = Math.max(waterLevel - (float) Math.sqrt(2.0), chunkHeight) + PlayerBasic.PLAYER_OFFSET_Y;
+
+		if (getEntity().getPosition().y + dy < worldHeight) {
+			dy = worldHeight - getEntity().getPosition().getY();
+			currentUpwardSpeed = 0.0f;
 		}
+
+		// Moves and rotates the player.
+		getEntity().move(new Vector3f(dx, dy, dz), new Vector3f(0.0f, ry, 0.0f));
 	}
 
 	@Override
