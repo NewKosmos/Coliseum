@@ -192,7 +192,7 @@ public class Chunk extends Entity {
 
 		if (height >= 0.0f) {
 			tiles.add(new Vector3f(position.x, height, position.y));
-			chunk.biome.getBiome().generateEntity(chunk, worldPos, position, height);
+		//	chunk.biome.getBiome().generateEntity(chunk, worldPos, position, height);
 		}
 	}
 

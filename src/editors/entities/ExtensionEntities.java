@@ -43,7 +43,7 @@ public class ExtensionEntities extends IEditorType {
 
 		// Sets the world to constant fog and a sun.
 		//	EbonWorld.addFog(new Fog(new Colour(1.0f, 1.0f, 1.0f), 0.003f, 2.0f, 0.0f, 50.0f));
-		//	EbonWorld.addSun(new Light(new Colour(1.0f, 1.0f, 1.0f), new Vector3f(0.0f, 2000.0f, 2000.0f)));
+		//	EbonWorld.addSun(new LightPoint(new Colour(1.0f, 1.0f, 1.0f), new Vector3f(0.0f, 2000.0f, 2000.0f)));
 
 		// Default editor values.
 		entityRotate = false;

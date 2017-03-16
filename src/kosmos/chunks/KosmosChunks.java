@@ -156,6 +156,10 @@ public class KosmosChunks extends Module {
 		return height;
 	}
 
+	private static float getPerlinHeight(float x, float z) {
+		return KosmosWorld.getNoise().noise2(x / 50.0f, z / 50.0f);
+	}
+
 	/**
 	 * Gets the type of biome for the position in the world.
 	 *
