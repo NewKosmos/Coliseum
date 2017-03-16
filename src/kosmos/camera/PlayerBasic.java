@@ -21,7 +21,8 @@ import kosmos.chunks.*;
 import kosmos.network.packets.*;
 import kosmos.water.*;
 import kosmos.world.*;
-import org.lwjgl.glfw.*;
+
+import static org.lwjgl.glfw.GLFW.*;
 
 public class PlayerBasic extends Player {
 	private static final float RUN_SPEED = 5.0f;
@@ -58,12 +59,12 @@ public class PlayerBasic extends Player {
 		);
 		this.rotation = new Vector3f();
 
-		IButton leftKeyButtons = new KeyButton(GLFW.GLFW_KEY_A, GLFW.GLFW_KEY_LEFT);
-		IButton rightKeyButtons = new KeyButton(GLFW.GLFW_KEY_D, GLFW.GLFW_KEY_RIGHT);
-		IButton upKeyButtons = new KeyButton(GLFW.GLFW_KEY_W, GLFW.GLFW_KEY_UP);
-		IButton downKeyButtons = new KeyButton(GLFW.GLFW_KEY_S, GLFW.GLFW_KEY_DOWN);
-		IButton boostButtons = new KeyButton(GLFW.GLFW_KEY_LEFT_SHIFT, GLFW.GLFW_KEY_RIGHT_SHIFT);
-		IButton jumpButtons = new KeyButton(GLFW.GLFW_KEY_SPACE);
+		IButton leftKeyButtons = new KeyButton(GLFW_KEY_A, GLFW_KEY_LEFT);
+		IButton rightKeyButtons = new KeyButton(GLFW_KEY_D, GLFW_KEY_RIGHT);
+		IButton upKeyButtons = new KeyButton(GLFW_KEY_W, GLFW_KEY_UP);
+		IButton downKeyButtons = new KeyButton(GLFW_KEY_S, GLFW_KEY_DOWN);
+		IButton boostButtons = new KeyButton(GLFW_KEY_LEFT_SHIFT, GLFW_KEY_RIGHT_SHIFT);
+		IButton jumpButtons = new KeyButton(GLFW_KEY_SPACE);
 
 		this.currentSpeed = 0.0f;
 		this.currentUpwardSpeed = 0.0f;
@@ -73,7 +74,7 @@ public class PlayerBasic extends Player {
 		this.inputBoost = new CompoundButton(boostButtons);
 		this.inputJump = new CompoundButton(jumpButtons);
 
-		this.timer = new Timer(1.0 / 32.0); // 32 ticks per second.
+		this.timer = new Timer(1.0 / 20.0); // 20 ticks per second.
 		this.needSendData = true;
 	}
 
@@ -101,7 +102,7 @@ public class PlayerBasic extends Player {
 		float waterLevel = (KosmosWater.getWater() != null) ? KosmosWater.getWater().getPosition().y : 0.0f;
 
 		// Finds the chunk height at the next player xz pos.
-		float chunkHeight = KosmosChunks.getWorldHeight(position.x + dx, position.z + dz) * 0.5f;
+		float chunkHeight = Chunk.getWorldHeight(position.x + dx, position.z + dz) * 0.5f;
 
 		// Does collision with the highest world object.
 		float worldHeight = Math.max(waterLevel - (float) Math.sqrt(2.0), chunkHeight);

@@ -63,7 +63,7 @@ public class Chunk extends Entity {
 		this.entities = new StructureBasic<>();
 
 		this.childrenChunks = new ArrayList<>();
-		this.biome = KosmosChunks.getWorldBiome(position.x, position.z);
+		this.biome = getWorldBiome(position.x, position.z);
 		this.chunkMesh = new ChunkMesh(this);
 		this.sphere = new Sphere();
 
@@ -188,7 +188,7 @@ public class Chunk extends Entity {
 
 	private static void generateTile(Chunk chunk, List<Vector3f> tiles, Vector2f position) {
 		Vector2f worldPos = new Vector2f(0.5f * position.x + chunk.getPosition().x, 0.5f * position.y + chunk.getPosition().z);
-		float height = KosmosChunks.getWorldHeight(worldPos.x, worldPos.y);
+		float height = getWorldHeight(worldPos.x, worldPos.y);
 
 		if (height >= 0.0f) {
 			tiles.add(new Vector3f(position.x, height, position.y));
@@ -215,6 +215,46 @@ public class Chunk extends Entity {
 		destination.x = (float) (Math.sqrt(3.0) * length * ((y / 2.0) + x));
 		destination.y = (float) ((3.0 / 2.0) * length * y);
 		return destination;
+	}
+
+	/**
+	 * Gets the terrain height for a position in the world.
+	 *
+	 * @param positionX The worlds X position.
+	 * @param positionZ The worlds Z position.
+	 *
+	 * @return The found height at that world position.
+	 */
+	public static float getWorldHeight(float positionX, float positionZ) {
+		// Calculates the final height for the world position using perlin.
+		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(positionX / 35.0f, positionZ / 35.0f) * 10.0f);
+
+		// Ignore height that would be water/nothing.
+		if (height < 0.0f) {
+			height = Float.NEGATIVE_INFINITY;
+		}
+
+		// Returns the final height,
+		return height;
+	}
+
+	/**
+	 * Gets the type of biome for the position in the world.
+	 *
+	 * @param positionX The worlds X position.
+	 * @param positionZ The worlds Z position.
+	 *
+	 * @return The found biome at that world position.
+	 */
+	public static IBiome.Biomes getWorldBiome(float positionX, float positionZ) {
+		// Calculates the biome id based off of the world position using perlin.
+		float biomeID = Math.abs(KosmosWorld.getNoise().noise1((positionX + positionZ) / 256.0f)) * 2.56f * (IBiome.Biomes.values().length + 1);
+
+		// Limits the search for biomes in the size provided.
+		biomeID = Maths.clamp((int) biomeID, 0.0f, IBiome.Biomes.values().length - 1);
+
+		// Returns the biome at the generated ID.
+		return IBiome.Biomes.values()[(int) biomeID];
 	}
 
 	public ISpatialStructure<Entity> getEntities() {

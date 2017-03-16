@@ -104,27 +104,6 @@ public class KosmosChunks extends Module {
 			lastPlayerPos.set(playerPos);
 		}
 
-		/*if (FlounderCamera.getCamera() != null && FlounderMouse.getMouse(0)) {
-			Ray viewRay = FlounderCamera.getCamera().getViewRay();
-			Entity entityInRay = null;
-			float entityRayDistance = 0.0f;
-
-			for (Entity entity : currentChunk.getEntities().getAll()) {
-				IntersectData data = entity.getBounding().intersects(viewRay);
-
-				if (entity.getBounding() != null && data.isIntersection()) {
-					if (entityInRay == null || data.getDistance() < entityRayDistance) {
-						entityInRay = entity;
-						entityRayDistance = data.getDistance();
-					}
-				}
-			}
-
-			if (entityInRay != null) {
-				entityInRay.forceRemove(true);
-			}
-		}*/
-
 		// Renders the chunks range.
 		FlounderBounding.addShapeRender(chunkRange);
 	}
@@ -133,50 +112,6 @@ public class KosmosChunks extends Module {
 	public void profile() {
 		FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Size", chunks.getSize());
 		FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Current", currentChunk);
-	}
-
-	/**
-	 * Gets the terrain height for a position in the world.
-	 *
-	 * @param positionX The worlds X position.
-	 * @param positionZ The worlds Z position.
-	 *
-	 * @return The found height at that world position.
-	 */
-	public static float getWorldHeight(float positionX, float positionZ) {
-		// Calculates the final height for the world position using perlin.
-		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(positionX / 50.0f, positionZ / 50.0f) * 10.0f);
-
-		// Ignore height that would be water/nothing.
-		if (height < 0.0f) {
-			height = Float.NEGATIVE_INFINITY;
-		}
-
-		// Returns the final height,
-		return height;
-	}
-
-	private static float getPerlinHeight(float x, float z) {
-		return KosmosWorld.getNoise().noise2(x / 50.0f, z / 50.0f);
-	}
-
-	/**
-	 * Gets the type of biome for the position in the world.
-	 *
-	 * @param positionX The worlds X position.
-	 * @param positionZ The worlds Z position.
-	 *
-	 * @return The found biome at that world position.
-	 */
-	public static IBiome.Biomes getWorldBiome(float positionX, float positionZ) {
-		// Calculates the biome id based off of the world position using perlin.
-		float biomeID = Math.abs(KosmosWorld.getNoise().noise1((positionX + positionZ) / 256.0f)) * 2.56f * (IBiome.Biomes.values().length + 1);
-
-		// Limits the search for biomes in the size provided.
-		biomeID = Maths.clamp((int) biomeID, 0.0f, IBiome.Biomes.values().length - 1);
-
-		// Returns the biome at the generated ID.
-		return IBiome.Biomes.values()[(int) biomeID];
 	}
 
 	public static ISpatialStructure<Entity> getChunks() {
