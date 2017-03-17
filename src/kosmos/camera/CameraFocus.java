@@ -96,7 +96,7 @@ public class CameraFocus extends Camera {
 		this.rotation = new Vector3f();
 
 		this.viewFrustum = new Frustum();
-		this.viewRay = new Ray(false, new Vector2f());
+		this.viewRay = new Ray(true, new Vector2f());
 		this.viewMatrix = new Matrix4f();
 		this.projectionMatrix = new Matrix4f();
 
