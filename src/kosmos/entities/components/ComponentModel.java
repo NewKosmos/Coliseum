@@ -40,6 +40,8 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 	private MyFile editorPathModel;
 	private MyFile editorPathTexture;
 
+	private boolean wasLoaded;
+
 	/**
 	 * Creates a new ComponentModel.
 	 *
@@ -66,10 +68,17 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 
 		this.texture = texture;
 		this.textureIndex = textureIndex;
+
+		this.wasLoaded = false;
 	}
 
 	@Override
 	public void update() {
+		if (model != null && model.isLoaded() != wasLoaded) {
+			getEntity().setMoved();
+			wasLoaded = model.isLoaded();
+		}
+
 		if (getEntity().hasMoved()) {
 			Matrix4f.transformationMatrix(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, modelMatrix);
 		}

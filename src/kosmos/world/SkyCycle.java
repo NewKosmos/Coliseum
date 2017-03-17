@@ -9,7 +9,6 @@
 
 package kosmos.world;
 
-import flounder.framework.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;

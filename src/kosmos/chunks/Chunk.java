@@ -10,7 +10,6 @@
 package kosmos.chunks;
 
 import flounder.entities.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
@@ -212,7 +211,7 @@ public class Chunk extends Entity {
 	 */
 	public static float getWorldHeight(float positionX, float positionZ) {
 		// Calculates the final height for the world position using perlin.
-		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(positionX / 35.0f, positionZ / 35.0f) * 10.0f);
+		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(positionX / 25.0f, positionZ / 25.0f) * 10.0f);
 
 		// Ignore height that would be water/nothing.
 		if (height < 0.0f) {

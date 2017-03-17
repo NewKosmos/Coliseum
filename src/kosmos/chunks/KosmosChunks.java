@@ -12,7 +12,6 @@ package kosmos.chunks;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.framework.*;
-import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
@@ -22,9 +21,7 @@ import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
 import kosmos.*;
-import kosmos.chunks.biomes.*;
 import kosmos.entities.instances.*;
-import kosmos.world.*;
 
 import java.util.*;
 

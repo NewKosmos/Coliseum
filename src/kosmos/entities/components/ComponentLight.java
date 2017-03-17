@@ -15,7 +15,6 @@ import flounder.helpers.*;
 import flounder.lights.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
-import flounder.physics.bounding.*;
 
 import javax.swing.*;
 import javax.swing.event.*;

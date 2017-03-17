@@ -46,6 +46,8 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	private MyFile editorPathCollada;
 	private MyFile editorPathTexture;
 
+	private boolean wasLoaded;
+
 	/**
 	 * Creates a new ComponentAnimation.
 	 *
@@ -77,6 +79,8 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 
 		this.texture = texture;
 		this.textureIndex = textureIndex;
+
+		this.wasLoaded = false;
 
 		if (model != null) {
 			model.getHeadJoint().calculateInverseBindTransform(Matrix4f.rotate(new Matrix4f(), new Vector3f(1.0f, 0.0f, 0.0f), (float) Math.toRadians(-90.0f), null));
@@ -131,13 +135,18 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 
 	@Override
 	public void update() {
+		if (model != null && model.isLoaded() != wasLoaded) {
+			getEntity().setMoved();
+			wasLoaded = model.isLoaded();
+		}
+
 		if (animator != null) {
 			animator.update();
 		}
 
-		//if (getEntity().hasMoved()) {
-		Matrix4f.transformationMatrix(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, modelMatrix);
-		//}
+		if (getEntity().hasMoved()) {
+			Matrix4f.transformationMatrix(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, modelMatrix);
+		}
 	}
 
 	/**

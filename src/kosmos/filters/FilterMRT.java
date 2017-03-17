@@ -16,7 +16,6 @@ import flounder.profiling.*;
 import flounder.renderer.*;
 import flounder.resources.*;
 import kosmos.*;
-import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.shadows.*;
 import kosmos.world.*;
