@@ -101,8 +101,8 @@ public class KosmosWorld extends Module {
 		return INSTANCE.players.containsKey(username);
 	}
 
-	public static void addPlayer(Vector3f position, Vector3f rotation, String username) {
-		INSTANCE.players.put(username, new InstanceMuliplayer(FlounderEntities.getEntities(), position, rotation, username));
+	public static void quePlayer(String username, Vector3f position, Vector3f rotation) {
+		INSTANCE.playerQue.put(username, new Pair<>(position, rotation));
 	}
 
 	public static void movePlayer(String username, float x, float y, float z, float w, float chunkX, float chunkZ) {
@@ -113,6 +113,9 @@ public class KosmosWorld extends Module {
 		if (!INSTANCE.players.containsKey(username)) {
 			if (!INSTANCE.playerQue.containsKey(username)) {
 				INSTANCE.playerQue.put(username, new Pair<>(new Vector3f(x, y, z), new Vector3f(0.0f, w, 0.0f)));
+			} else {
+				INSTANCE.playerQue.get(username).getFirst().set(x, y, z);
+				INSTANCE.playerQue.get(username).getSecond().set(0.0f, w, 0.0f);
 			}
 
 			return;
