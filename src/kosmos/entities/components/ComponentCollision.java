@@ -12,6 +12,7 @@ package kosmos.entities.components;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
+import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
 
@@ -43,7 +44,7 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 	 *
 	 * @param amount The amount attempting to be moved.
 	 *
-	 * @return New move vector that will not cause collisions after movement.
+	 * @return New verifyMove vector that will not cause collisions after movement.
 	 */
 	public Vector3f resolveAABBCollisions(Vector3f amount) {
 		Vector3f result = new Vector3f(amount.getX(), amount.getY(), amount.getZ());
@@ -54,7 +55,6 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 		}
 
 		AABB aabb1 = collider1.getAABB();
-		QuickHull hull1 = collider1.getHull();
 		final AABB collisionRange = AABB.stretch(aabb1, null, amount); // The range in where there can be collisions!
 
 		getEntity().visitInRange(ComponentCollision.ID, collisionRange, (Entity entity, IComponentEntity component) -> {
@@ -69,13 +69,9 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 			}
 
 			AABB aabb2 = collider2.getAABB();
-			QuickHull hull2 = collider2.getHull();
 
 			if (aabb2 != null && aabb2.intersects(collisionRange).isIntersection()) {
-				if (hull1.intersects(hull2)) {
-					// TODO: Mesh collision maths not from AABB.
-					result.set((float) resolveCollisionX(aabb1, aabb2, result.getX()), (float) resolveCollisionY(aabb1, aabb2, result.getY()), (float) resolveCollisionZ(aabb1, aabb2, result.getZ()));
-				}
+				result.set((float) resolveCollisionX(aabb1, aabb2, result.getX()), (float) resolveCollisionY(aabb1, aabb2, result.getY()), (float) resolveCollisionZ(aabb1, aabb2, result.getZ()));
 			}
 		});
 
@@ -89,7 +85,7 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 			return moveAmountX;
 		}
 
-		if (moveAmountX > 0) { // This max == other min
+		if (moveAmountX > 0.0) { // This max == other min
 			newAmtX = other.getMinExtents().getX() - thisAABB.getMaxExtents().getX();
 		} else { // This min == other max
 			newAmtX = other.getMaxExtents().getX() - thisAABB.getMinExtents().getX();
@@ -109,7 +105,7 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 			return moveAmountY;
 		}
 
-		if (moveAmountY > 0) { // This max == other min.
+		if (moveAmountY > 0.0) { // This max == other min.
 			newAmtY = other.getMinExtents().getY() - thisAABB.getMaxExtents().getY();
 		} else { // This min == other max.
 			newAmtY = other.getMaxExtents().getY() - thisAABB.getMinExtents().getY();
@@ -129,7 +125,7 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 			return moveAmountZ;
 		}
 
-		if (moveAmountZ > 0) { // This max == other min.
+		if (moveAmountZ > 0.0) { // This max == other min.
 			newAmtZ = other.getMinExtents().getZ() - thisAABB.getMaxExtents().getZ();
 		} else { // This min == other max.
 			newAmtZ = other.getMaxExtents().getZ() - thisAABB.getMinExtents().getZ();
@@ -143,11 +139,9 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 	}
 
 	@Override
-	public void move(Entity entity, Vector3f moveAmount, Vector3f rotateAmount) {
-		Vector3f move = resolveAABBCollisions(moveAmount);
-		Vector3f rotate = rotateAmount; // TODO: Stop some rotations?
-		entity.getPosition().set(entity.getPosition().x + move.x, entity.getPosition().y + move.y, entity.getPosition().z + move.z);
-		entity.getRotation().set(entity.getRotation().x + rotate.x, entity.getRotation().y + rotate.y, entity.getRotation().z + rotate.z);
+	public void verifyMove(Entity entity, Vector3f moveAmount, Vector3f rotateAmount) {
+		moveAmount.set(resolveAABBCollisions(moveAmount));
+		// rotateAmount = rotateAmount; // TODO: Stop some rotations?
 	}
 
 	@Override

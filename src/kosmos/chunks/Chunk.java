@@ -48,7 +48,6 @@ public class Chunk extends Entity {
 	// The overall world radius footprint per chunk.
 	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * (CHUNK_RADIUS - 0.5f);
 
-	private ISpatialStructure<Entity> entities;
 	private ParticleSystem particleSystem;
 
 	private List<Chunk> childrenChunks;
@@ -60,7 +59,6 @@ public class Chunk extends Entity {
 
 	public Chunk(ISpatialStructure<Entity> structure, Vector3f position) {
 		super(structure, position, new Vector3f());
-		this.entities = new StructureBasic<>();
 
 		this.childrenChunks = new ArrayList<>();
 		this.biome = getWorldBiome(position.x, position.z);
@@ -96,13 +94,14 @@ public class Chunk extends Entity {
 				float rotationY = KosmosWorld.getNoise().noise1((x - y) / 60.0f) * 3600.0f;
 				float rotationZ = KosmosWorld.getNoise().noise1((x - y) / 20.0f) * 3600.0f;
 
-				new InstanceCloud(entities, new Vector3f(
+				Entity entity = new InstanceCloud(FlounderEntities.getEntities(), new Vector3f(
 						getPosition().x + (x * 11.0f) + offsetX,
 						getPosition().y + 7.0f * height,
 						getPosition().z + (y * 11.0f) + offsetZ),
 						new Vector3f(0.0f, rotationY, rotationZ),
 						Maths.randomInRange(1.0f, 2.25f)
 				);
+				new ComponentChild(entity, this);
 			}
 		}
 	}
@@ -151,14 +150,11 @@ public class Chunk extends Entity {
 			forceRebuild = !chunkMesh.rebuild(KosmosChunks.getModelHexagon());
 		}
 
+		// Updates the entity super class.
+		super.update();
+
 		// Adds this mesh AABB to the bounding render pool.
 		FlounderBounding.addShapeRender(getSphere());
-
-		for (Entity entity : entities.getAll()) {
-			entity.update();
-		}
-
-		super.update();
 	}
 
 	public static List<Vector3f> generate(Chunk chunk) {
@@ -194,8 +190,15 @@ public class Chunk extends Entity {
 		float height = getWorldHeight(worldPos.x, worldPos.y);
 
 		if (height >= 0.0f) {
-			tiles.add(new Vector3f(positionX, height, positionZ));
-			chunk.biome.getBiome().generateEntity(chunk, worldPos, new Vector2f(positionX, positionZ), height);
+			Vector3f tile = new Vector3f(worldPos.x, height, worldPos.y);
+			Entity entity = chunk.biome.getBiome().generateEntity(chunk, tile);
+
+			if (entity != null) {
+				new ComponentChild(entity, chunk);
+			}
+
+			tile.set(positionX, height, positionZ);
+			tiles.add(tile);
 		}
 	}
 
@@ -239,10 +242,6 @@ public class Chunk extends Entity {
 		return IBiome.Biomes.values()[(int) biomeID];
 	}
 
-	public ISpatialStructure<Entity> getEntities() {
-		return entities;
-	}
-
 	public List<Chunk> getChildrenChunks() {
 		return childrenChunks;
 	}
@@ -269,11 +268,6 @@ public class Chunk extends Entity {
 	}
 
 	public void delete() {
-		for (Entity entity : entities.getAll()) {
-			entity.forceRemove(false);
-		}
-
-		entities.clear();
 		chunkMesh.delete();
 		forceRebuild = true;
 
@@ -281,5 +275,7 @@ public class Chunk extends Entity {
 			particleSystem.delete();
 			particleSystem = null;
 		}
+
+		forceRemove(false);
 	}
 }

@@ -67,10 +67,6 @@ public class EntitiesRenderer extends Renderer {
 
 				if (chunk.isLoaded()) {
 					renderEntity(entityc);
-
-					for (Entity entity : chunk.getEntities().getAll()) {
-						renderEntity(entity);
-					}
 				}
 			}
 		}

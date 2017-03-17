@@ -12,6 +12,7 @@ package kosmos.entities.components;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
+import flounder.logger.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
 
@@ -27,7 +28,6 @@ public class ComponentCollider extends IComponentEntity implements IComponentBou
 	public static final int ID = EntityIDAssigner.getId();
 
 	private AABB aabb;
-	private QuickHull hull;
 	private boolean renderAABB;
 
 	/**
@@ -38,7 +38,6 @@ public class ComponentCollider extends IComponentEntity implements IComponentBou
 	public ComponentCollider(Entity entity) {
 		super(entity, ID);
 		this.aabb = new AABB();
-		this.hull = new QuickHull();
 		this.renderAABB = true;
 	}
 
@@ -47,15 +46,6 @@ public class ComponentCollider extends IComponentEntity implements IComponentBou
 	 */
 	public AABB getAABB() {
 		return aabb;
-	}
-
-	/**
-	 * Gets the flounder.models convex hull.
-	 *
-	 * @return The flounder.models convex hull.
-	 */
-	public QuickHull getHull() {
-		return hull;
 	}
 
 	/**
@@ -78,20 +68,17 @@ public class ComponentCollider extends IComponentEntity implements IComponentBou
 
 	@Override
 	public void update() {
-		if (super.getEntity().hasMoved()) { //  || aabb.getMinExtents().length() == 0.0f || aabb.getMaxExtents().length() == 0.0f
+		if (super.getEntity().hasMoved()) {
 			ComponentModel componentModel = (ComponentModel) getEntity().getComponent(ComponentModel.ID);
 
 			if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded() && componentModel.getModel().getAABB() != null) {
 				AABB.recalculate(componentModel.getModel().getAABB(), super.getEntity().getPosition(), super.getEntity().getRotation(), componentModel.getScale(), aabb);
-				//	QuickHull.recalculate(componentModel.getModel().getMeshData().getHull(), hull, super.getEntity().getPosition(), super.getEntity().getRotation(), componentModel.getScale());
 			}
 
-			// TODO: Calculate the AABBs and Hulls from animated models.
 			ComponentAnimation componentAnimation = (ComponentAnimation) getEntity().getComponent(ComponentAnimation.ID);
 
 			if (componentAnimation != null && componentAnimation.getModel() != null && componentAnimation.getModel().getAABB() != null) {
 				AABB.recalculate(componentAnimation.getModel().getAABB(), super.getEntity().getPosition(), super.getEntity().getRotation(), componentAnimation.getScale(), aabb);
-				//	QuickHull.recalculate(componentAnimation.getModel().getHull(), hull, super.getEntity().getPosition(), super.getEntity().getRotation(), componentAnimation.getScale());
 			}
 		}
 

@@ -11,44 +11,41 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.framework.*;
 import flounder.helpers.*;
-import flounder.maths.vectors.*;
-import flounder.visual.*;
 
 import javax.swing.*;
 
-public class ComponentCloud extends IComponentEntity implements IComponentEditor {
+public class ComponentChild extends IComponentEntity implements IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
-	private Vector3f startPosition;
-
-	private SinWaveDriver driverHeight;
+	private Entity parent;
 
 	/**
 	 * Creates a new ComponentChild.
 	 *
 	 * @param entity The entity this component is attached to.
 	 */
-	public ComponentCloud(Entity entity) {
+	public ComponentChild(Entity entity) {
+		this(entity, null);
+	}
+
+	/**
+	 * Creates a new ComponentChild.
+	 *
+	 * @param entity The entity this component is attached to.
+	 * @param parent
+	 */
+	public ComponentChild(Entity entity, Entity parent) {
 		super(entity, ID);
 
-		if (entity != null) {
-			this.startPosition = new Vector3f(entity.getPosition());
-			float variation = Math.abs(2.0f - entity.getPosition().y);
-			this.driverHeight = new SinWaveDriver(-variation, variation, 30.0f * variation);
-		} else {
-			this.startPosition = new Vector3f();
-			this.driverHeight = new SinWaveDriver(-2.0f, 3.0f, 30.0f);
-		}
+		this.parent = parent;
 	}
 
 	@Override
 	public void update() {
-		//Vector3f.rotate(startPosition, new Vector3f(0.0f, KosmosWorld.getSkyCycle().getDayFactor() * 180.0f, 0.0f), getEntity().getPosition());
-		float height = driverHeight.update(Framework.getDelta());
-		getEntity().getPosition().y = startPosition.y + height;
-		getEntity().setMoved();
+		if (parent == null || parent.isRemoved()) {
+			getEntity().forceRemove(false);
+		}
 	}
 
 	@Override

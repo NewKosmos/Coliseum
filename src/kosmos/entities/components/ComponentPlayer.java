@@ -98,13 +98,20 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		// Does collision with the highest world object.
 		float worldHeight = Math.max(waterLevel - (float) Math.sqrt(2.0), chunkHeight) + PlayerBasic.PLAYER_OFFSET_Y;
 
+		// If the player is below the world height then force the player back on the ground.
 		if (getEntity().getPosition().y + dy < worldHeight) {
 			dy = worldHeight - getEntity().getPosition().getY();
 			currentUpwardSpeed = 0.0f;
 		}
 
 		// Moves and rotates the player.
+		float lastY = getEntity().getPosition().y;
 		getEntity().move(moveAmount.set(dx, dy, dz), rotateAmount.set(0.0f, ry, 0.0f));
+
+		// If there has been no change then the player has probably landed.
+		if (getEntity().getPosition().y - lastY == 0.0f) {
+			currentUpwardSpeed = 0.0f;
+		}
 	}
 
 	@Override

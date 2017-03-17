@@ -33,48 +33,48 @@ public class BiomeStone implements IBiome {
 	}
 
 	@Override
-	public Entity generateEntity(Chunk chunk, Vector2f worldPos, Vector2f tilePosition, float height) {
-		if (KosmosWorld.getNoise().noise2(worldPos.x / 50.0f * (float) Math.sin(worldPos.y), worldPos.y / 50.0f * (float) Math.sin(worldPos.x)) <= 0.1f) {
+	public Entity generateEntity(Chunk chunk, Vector3f tilePosition) {
+		if (KosmosWorld.getNoise().noise2(tilePosition.x / 50.0f * (float) Math.sin(tilePosition.z), tilePosition.z / 50.0f * (float) Math.sin(tilePosition.x)) <= 0.1f) {
 			return null;
 		}
 
-		float rotation = KosmosWorld.getNoise().noise1((worldPos.x - worldPos.y) / 66.6f) * 3600.0f;
-		float spawn = KosmosWorld.getNoise().noise1((worldPos.y - worldPos.x) / 11.0f) * 400.0f;
+		float spawn = KosmosWorld.getNoise().noise1((tilePosition.z - tilePosition.x) / 11.0f) * 400.0f;
+		float rotation = KosmosWorld.getNoise().noise1((tilePosition.x - tilePosition.z) / 66.6f) * 3600.0f;
 
 		switch ((int) spawn) {
 			case 1:
-				return new InstanceBush(chunk.getEntities(),
+				return new InstanceBush(FlounderEntities.getEntities(),
 						new Vector3f(
-								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								0.625f + height * 0.5f,
+								tilePosition.x,
+								0.625f + tilePosition.y * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
 			case 2:
-				return new InstanceGemGreen(chunk.getEntities(),
+				return new InstanceGemGreen(FlounderEntities.getEntities(),
 						new Vector3f(
-								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								-0.3f + height * 0.5f,
+								tilePosition.x,
+								-0.3f + tilePosition.y * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
 			case 3:
-				return new InstanceGemPurple(chunk.getEntities(),
+				return new InstanceGemPurple(FlounderEntities.getEntities(),
 						new Vector3f(
-								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								0.425f + height * 0.5f,
+								tilePosition.x,
+								0.425f + tilePosition.y * 0.5f,
 								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
 			case 4:
-				return new InstanceGemRed(chunk.getEntities(),
+				return new InstanceGemRed(FlounderEntities.getEntities(),
 						new Vector3f(
-								chunk.getPosition().x + (float) (tilePosition.x * 0.5),
-								0.425f + height * 0.5f,
-								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
+								tilePosition.x,
+								0.425f + tilePosition.y * 0.5f,
+								tilePosition.z
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
