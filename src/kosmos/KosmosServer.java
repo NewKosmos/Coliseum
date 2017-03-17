@@ -1,5 +1,6 @@
 package kosmos;
 
+import flounder.devices.*;
 import flounder.framework.*;
 import flounder.framework.updater.*;
 import flounder.logger.*;
@@ -29,7 +30,7 @@ public class KosmosServer extends Framework {
 		public static Scanner scanner;
 
 		public ServerInterface() {
-			super(FlounderNetwork.class);
+			super(FlounderNetwork.class, FlounderDisplay.class);
 		}
 
 		@Override
@@ -39,7 +40,7 @@ public class KosmosServer extends Framework {
 			scanner = new Scanner(System.in);
 
 			try {
-				Thread.sleep(10);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				FlounderLogger.log(e);
 			}
@@ -59,13 +60,12 @@ public class KosmosServer extends Framework {
 
 		@Override
 		public void update() {
-			if (scanner.hasNext()) {
-				String string = scanner.next().trim();
-
-				if (string.toLowerCase().equals("exit") || string.toLowerCase().equals("q")) {
-					Framework.requestClose();
-				}
-			}
+		//	if (scanner.hasNext()) {
+		//		String string = scanner.next().trim();
+		//		if (string.toLowerCase().equals("exit") || string.toLowerCase().equals("q")) {
+		//			Framework.requestClose();
+		//		}
+		//	}
 		}
 
 		@Override
