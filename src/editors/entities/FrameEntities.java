@@ -51,10 +51,16 @@ public class FrameEntities extends Standard {
 		frame = new JFrame();
 		frame.setTitle(FlounderDisplay.getTitle());
 		frame.setSize(FlounderDisplay.getWidth(), FlounderDisplay.getHeight());
-		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 		frame.setResizable(true);
 
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+			ex.printStackTrace();
+		}
+
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent windowEvent) {
@@ -68,12 +74,6 @@ public class FrameEntities extends Standard {
 				}
 			}
 		});
-
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-			ex.printStackTrace();
-		}
 
 		editorComponents = new ArrayList<>();
 

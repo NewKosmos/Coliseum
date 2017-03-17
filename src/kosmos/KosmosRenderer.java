@@ -31,6 +31,7 @@ import kosmos.filters.*;
 import kosmos.particles.*;
 import kosmos.shadows.*;
 import kosmos.water.*;
+import kosmos.world.*;
 import org.lwjgl.glfw.*;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -189,9 +190,11 @@ public class KosmosRenderer extends RendererMaster {
 				filterBlurMotion.applyFilter(output.getColourTexture(0), rendererFBO.getDepthTexture());
 				output = filterBlurMotion.fbo;
 
-				filterLensFlare.setSunPosition(KosmosChunks.getEntitySun().getPosition());
-				filterLensFlare.applyFilter(output.getColourTexture(0));
-				output = filterLensFlare.fbo;
+				if (KosmosWorld.getEntitySun() != null) {
+					filterLensFlare.setSunPosition(KosmosWorld.getEntitySun().getPosition());
+					filterLensFlare.applyFilter(output.getColourTexture(0));
+					output = filterLensFlare.fbo;;
+				}
 				break;
 			case 2:
 				filterPixel.applyFilter(output.getColourTexture(0));

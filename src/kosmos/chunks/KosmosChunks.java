@@ -33,10 +33,6 @@ public class KosmosChunks extends Module {
 
 	private ISpatialStructure<Entity> chunks;
 
-	private Entity entityPlayer;
-	private Entity entitySun;
-	private Entity entityMoon;
-
 	private Sphere chunkRange;
 
 	private Vector3f lastPlayerPos;
@@ -51,14 +47,6 @@ public class KosmosChunks extends Module {
 	@Override
 	public void init() {
 		this.chunks = new StructureBasic<>();
-
-		this.entityPlayer = new InstancePlayer(FlounderEntities.getEntities(), new Vector3f(
-				KosmosConfigs.configSave.getFloatWithDefault("player_x", 0.0f, () -> KosmosChunks.getEntityPlayer().getPosition().x),
-				0.0f,
-				KosmosConfigs.configSave.getFloatWithDefault("player_z", 0.0f, () -> KosmosChunks.getEntityPlayer().getPosition().z)
-		), new Vector3f());
-		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
-		this.entitySun = new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-200.0f, -200.0f, -200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 
 		this.chunkRange = new Sphere(40.0f);
 
@@ -117,18 +105,6 @@ public class KosmosChunks extends Module {
 
 	public static ISpatialStructure<Entity> getChunks() {
 		return INSTANCE.chunks;
-	}
-
-	public static Entity getEntityPlayer() {
-		return INSTANCE.entityPlayer;
-	}
-
-	public static Entity getEntitySun() {
-		return INSTANCE.entitySun;
-	}
-
-	public static Entity getEntityMoon() {
-		return INSTANCE.entityMoon;
 	}
 
 	public static Chunk getCurrent() {

@@ -19,6 +19,7 @@ import flounder.networking.*;
 import flounder.noise.*;
 import flounder.profiling.*;
 import kosmos.*;
+import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.entities.instances.*;
 
@@ -35,6 +36,10 @@ public class KosmosWorld extends Module {
 	private Map<String, Pair<Vector3f, Vector3f>> playerQue;
 	private Map<String, Entity> players;
 
+	private Entity entityPlayer;
+	private Entity entitySun;
+	private Entity entityMoon;
+
 	private Fog fog;
 	private SkyCycle skyCycle;
 
@@ -46,11 +51,22 @@ public class KosmosWorld extends Module {
 	public void init() {
 		this.noise = new PerlinNoise(KosmosConfigs.configSave.getIntWithDefault("seed", (int) Maths.randomInRange(1.0, 10000.0), () -> KosmosWorld.getNoise().getSeed()));
 
+		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+		this.entitySun = new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-200.0f, -200.0f, -200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+
 		this.playerQue = new HashMap<>();
 		this.players = new HashMap<>();
 
 		this.fog = new Fog(new Colour(), 0.02f, 2.0f, 0.0f, 50.0f);
 		this.skyCycle = new SkyCycle();
+	}
+
+	public static void generatePlayer() {
+		INSTANCE.entityPlayer = new InstancePlayer(FlounderEntities.getEntities(), new Vector3f(
+				KosmosConfigs.configSave.getFloatWithDefault("player_x", 0.0f, () -> KosmosWorld.getEntityPlayer().getPosition().x),
+				0.0f,
+				KosmosConfigs.configSave.getFloatWithDefault("player_z", 0.0f, () -> KosmosWorld.getEntityPlayer().getPosition().z)
+		), new Vector3f());
 	}
 
 	@Override
@@ -118,6 +134,18 @@ public class KosmosWorld extends Module {
 		return INSTANCE.players.size();
 	}
 
+	public static Entity getEntityPlayer() {
+		return INSTANCE.entityPlayer;
+	}
+
+	public static Entity getEntitySun() {
+		return INSTANCE.entitySun;
+	}
+
+	public static Entity getEntityMoon() {
+		return INSTANCE.entityMoon;
+	}
+
 	public static Fog getFog() {
 		return INSTANCE.fog;
 	}
@@ -127,14 +155,14 @@ public class KosmosWorld extends Module {
 	}
 
 	public static float getSwayOffsetX(float x) {
-		float wx = (float) Math.sin(x * 0.6f);
+		float wx = 1.0f; // (float) Math.sin(x * 0.6f); // TODO
 		float windPower = 0.24f;
 		float systemTime = Framework.getTimeSec() * wx;
 		return windPower * (float) (Math.sin(0.25 * systemTime) - Math.sin(1.2 * systemTime) + Math.cos(0.5 * systemTime));
 	}
 
 	public static float getSwayOffsetZ(float z) {
-		float wz = (float) Math.sin(z * 0.6f);
+		float wz = 1.0f; // (float) Math.sin(z * 0.6f); // TODO
 		float windPower = 0.24f;
 		float systemTime = Framework.getTimeSec() * wz;
 		return windPower * (float) (Math.cos(0.25 * systemTime) - Math.cos(1.2 * systemTime) + Math.sin(0.5 * systemTime));

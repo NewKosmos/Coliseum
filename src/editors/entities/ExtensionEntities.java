@@ -12,8 +12,10 @@ import flounder.models.*;
 import flounder.physics.bounding.*;
 import flounder.resources.*;
 import flounder.textures.*;
+import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.particles.*;
+import kosmos.water.*;
 import kosmos.world.*;
 
 import javax.swing.*;
@@ -29,7 +31,7 @@ public class ExtensionEntities extends IEditorType {
 	public Entity focusEntity;
 
 	public ExtensionEntities() {
-		super(FlounderMouse.class, KosmosParticles.class, KosmosWorld.class);
+		super(FlounderDisplay.class, FlounderBounding.class, KosmosParticles.class, KosmosWorld.class);
 		ACTIVE = true;
 	}
 
@@ -59,7 +61,12 @@ public class ExtensionEntities extends IEditorType {
 
 		focusEntity = new Entity(FlounderEntities.getEntities(), new Vector3f(), new Vector3f());
 		//focusEntity = FlounderEntities.load("dragon").createEntity(FlounderEntities.getEntities(), new Vector3f(), new Vector3f());
-		new ComponentModel(focusEntity, 1.0f, ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "cactus1.obj")).create(), TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "cactus1Diffuse.png")).create(), 1);
+		new ComponentModel(
+				focusEntity, 1.0f,
+				ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "cactus1.obj")).create(),
+				TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "cactus1Diffuse.png")).create(),
+				1
+		);
 		new ComponentSway(focusEntity, TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "cactus1Sway.png")).create());
 		new ComponentSurface(focusEntity, 1.0f, 0.0f, false, false);
 		new ComponentCollider(focusEntity);

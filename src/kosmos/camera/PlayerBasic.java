@@ -15,6 +15,7 @@ import flounder.maths.vectors.*;
 import flounder.networking.*;
 import kosmos.chunks.*;
 import kosmos.network.packets.*;
+import kosmos.world.*;
 
 public class PlayerBasic extends Player {
 	public static final float PLAYER_OFFSET_Y = (float) (Math.sqrt(2.0) * 0.25);
@@ -46,8 +47,8 @@ public class PlayerBasic extends Player {
 	@Override
 	public void update() {
 		// Gets the current position and deltas.
-		Vector3f newPosition = KosmosChunks.getEntityPlayer().getPosition();
-		Vector3f newRotation = KosmosChunks.getEntityPlayer().getRotation();
+		Vector3f newPosition = KosmosWorld.getEntityPlayer().getPosition();
+		Vector3f newRotation = KosmosWorld.getEntityPlayer().getRotation();
 		float dx = newPosition.x - position.x;
 		float dy = newPosition.y - position.y;
 		float dz = newPosition.z - position.z;

@@ -57,6 +57,8 @@ public class KosmosInterface extends Standard {
 		this.aabbs = new KeyButton(GLFW_KEY_O);
 		this.closeWindow = new KeyButton(GLFW_KEY_DELETE);
 
+		KosmosWorld.generatePlayer();
+
 		this.username = KosmosConfigs.configServer.getStringWithDefault("username", "USERNAME" + ((int) (Math.random() * 10000)), this::getUsername);
 		this.serverIP = KosmosConfigs.configServer.getStringWithDefault("connect_ip", "localhost", this::getServerIP);
 		this.serverPort = KosmosConfigs.configServer.getIntWithDefault("connect_port", FlounderNetwork.getPort(), this::getServerPort);
