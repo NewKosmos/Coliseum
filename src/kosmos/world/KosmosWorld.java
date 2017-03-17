@@ -126,15 +126,17 @@ public class KosmosWorld extends Module {
 		return INSTANCE.skyCycle;
 	}
 
-	public static float getSwayOffsetX() {
-		float windPower = 0.2f;
-		float systemTime = Framework.getTimeSec();
+	public static float getSwayOffsetX(float x) {
+		float wx = (float) Math.sin(x * 0.6f);
+		float windPower = 0.24f;
+		float systemTime = Framework.getTimeSec() * wx;
 		return windPower * (float) (Math.sin(0.25 * systemTime) - Math.sin(1.2 * systemTime) + Math.cos(0.5 * systemTime));
 	}
 
-	public static float getSwayOffsetY() {
-		float windPower = 0.2f;
-		float systemTime = Framework.getTimeSec();
+	public static float getSwayOffsetZ(float z) {
+		float wz = (float) Math.sin(z * 0.6f);
+		float windPower = 0.24f;
+		float systemTime = Framework.getTimeSec() * wz;
 		return windPower * (float) (Math.cos(0.25 * systemTime) - Math.cos(1.2 * systemTime) + Math.sin(0.5 * systemTime));
 	}
 

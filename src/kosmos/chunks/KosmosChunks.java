@@ -48,7 +48,7 @@ public class KosmosChunks extends Module {
 	private ModelObject modelHexagon;
 
 	public KosmosChunks() {
-		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderBounding.class, FlounderTextures.class);
+		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderBounding.class, FlounderEntities.class, FlounderTextures.class);
 	}
 
 	@Override

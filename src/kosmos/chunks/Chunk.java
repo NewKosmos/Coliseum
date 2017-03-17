@@ -168,7 +168,7 @@ public class Chunk extends Entity {
 			int shapesOnEdge = i;
 			double x = 0.0;
 			double y = i;
-			generateTile(chunk, tiles, tileWorldSpace(x, y, HEXAGON_SIDE_LENGTH, null));
+			generateTile(chunk, tiles, x, y);
 
 			for (int j = 0; j < 6; j++) {
 				if (j == 5) {
@@ -178,7 +178,7 @@ public class Chunk extends Entity {
 				for (int w = 0; w < shapesOnEdge; w++) {
 					x += DELTA_TILES[j][0];
 					y += DELTA_TILES[j][1];
-					generateTile(chunk, tiles, tileWorldSpace(x, y, HEXAGON_SIDE_LENGTH, null));
+					generateTile(chunk, tiles, x, y);
 				}
 			}
 		}
@@ -186,35 +186,17 @@ public class Chunk extends Entity {
 		return tiles;
 	}
 
-	private static void generateTile(Chunk chunk, List<Vector3f> tiles, Vector2f position) {
-		Vector2f worldPos = new Vector2f(0.5f * position.x + chunk.getPosition().x, 0.5f * position.y + chunk.getPosition().z);
+	private static void generateTile(Chunk chunk, List<Vector3f> tiles, double x, double y) {
+		float positionX = (float) (Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH * ((y / 2.0) + x));
+		float positionZ = (float) ((3.0 / 2.0) * HEXAGON_SIDE_LENGTH * y);
+
+		Vector2f worldPos = new Vector2f(0.5f * positionX + chunk.getPosition().x, 0.5f * positionZ + chunk.getPosition().z);
 		float height = getWorldHeight(worldPos.x, worldPos.y);
 
 		if (height >= 0.0f) {
-			tiles.add(new Vector3f(position.x, height, position.y));
-			//	chunk.biome.getBiome().generateEntity(chunk, worldPos, position, height);
+			tiles.add(new Vector3f(positionX, height, positionZ));
+			chunk.biome.getBiome().generateEntity(chunk, worldPos, new Vector2f(positionX, positionZ), height);
 		}
-	}
-
-	public static Vector3f tileHexagonSpace(double x, double z, double length, Vector3f destination) {
-		if (destination == null) {
-			destination = new Vector3f();
-		}
-
-		destination.x = (float) (((Math.sqrt(3.0) / 3.0) * x - (z / 3.0f)) / length);
-		destination.y = (float) (-((Math.sqrt(3.0) / 3.0) * x + (z / 3.0f)) / length);
-		destination.z = (float) ((2.0 / 3.0) * z / length);
-		return destination;
-	}
-
-	public static Vector2f tileWorldSpace(double x, double y, double length, Vector2f destination) {
-		if (destination == null) {
-			destination = new Vector2f();
-		}
-
-		destination.x = (float) (Math.sqrt(3.0) * length * ((y / 2.0) + x));
-		destination.y = (float) ((3.0 / 2.0) * length * y);
-		return destination;
 	}
 
 	/**

@@ -13,7 +13,6 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.fbos.*;
 import flounder.helpers.*;
-import flounder.logger.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
@@ -205,7 +204,7 @@ public class ShadowRenderer extends Renderer {
 
 		if (componentSway != null) {
 			shader.getUniformBool("swaying").loadBoolean(true);
-			shader.getUniformVec2("swayOffset").loadVec2(KosmosWorld.getSwayOffsetX(), KosmosWorld.getSwayOffsetY());
+			shader.getUniformVec2("swayOffset").loadVec2(KosmosWorld.getSwayOffsetX(entity.getPosition().x), KosmosWorld.getSwayOffsetZ(entity.getPosition().z));
 
 			if (componentSway.getTextureSway() != null && componentSway.getTextureSway().isLoaded()) {
 				OpenGlUtils.bindTexture(componentSway.getTextureSway(), 1);

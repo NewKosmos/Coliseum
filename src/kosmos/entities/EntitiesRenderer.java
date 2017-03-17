@@ -183,7 +183,7 @@ public class EntitiesRenderer extends Renderer {
 
 		if (componentSway != null) {
 			shader.getUniformBool("useSwayMap").loadBoolean(true);
-			shader.getUniformVec2("swayOffset").loadVec2(KosmosWorld.getSwayOffsetX(), KosmosWorld.getSwayOffsetY());
+			shader.getUniformVec2("swayOffset").loadVec2(KosmosWorld.getSwayOffsetX(entity.getPosition().x), KosmosWorld.getSwayOffsetZ(entity.getPosition().z));
 
 			if (componentSway.getTextureSway() != null && componentSway.getTextureSway().isLoaded()) {
 				OpenGlUtils.bindTexture(componentSway.getTextureSway(), 2);

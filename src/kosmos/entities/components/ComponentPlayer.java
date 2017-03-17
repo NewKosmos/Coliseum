@@ -37,6 +37,9 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 	private IButton inputBoost;
 	private IButton inputJump;
 
+	private Vector3f moveAmount;
+	private Vector3f rotateAmount;
+
 	/**
 	 * Creates a new ComponentPlayer.
 	 *
@@ -59,6 +62,9 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		this.inputTurn = new CompoundAxis(new ButtonAxis(leftKeyButtons, rightKeyButtons), new JoystickAxis(0, 0));
 		this.inputBoost = new CompoundButton(boostButtons);
 		this.inputJump = new CompoundButton(jumpButtons);
+
+		this.moveAmount = new Vector3f();
+		this.rotateAmount = new Vector3f();
 	}
 
 	@Override
@@ -98,7 +104,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		}
 
 		// Moves and rotates the player.
-		getEntity().move(new Vector3f(dx, dy, dz), new Vector3f(0.0f, ry, 0.0f));
+		getEntity().move(moveAmount.set(dx, dy, dz), rotateAmount.set(0.0f, ry, 0.0f));
 	}
 
 	@Override
