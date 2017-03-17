@@ -29,7 +29,7 @@ public class PlayerBasic extends Player {
 	private Vector3f rotation;
 
 	private Timer timer;
-	private boolean needSendData;
+	private static boolean needSendData;
 
 	public PlayerBasic() {
 		super();
@@ -41,7 +41,7 @@ public class PlayerBasic extends Player {
 		this.rotation = new Vector3f();
 
 		this.timer = new Timer(1.0 / 20.0); // 20 ticks per second.
-		this.needSendData = true;
+		PlayerBasic.needSendData = true;
 	}
 
 	@Override
@@ -75,12 +75,16 @@ public class PlayerBasic extends Player {
 	/**
 	 * Sends this players data to the server.
 	 */
-	public void sendData() {
+	private void sendData() {
 		if (FlounderNetwork.getUsername() != null && FlounderNetwork.getSocketClient() != null && KosmosChunks.getCurrent() != null) {
 			new PacketMove(FlounderNetwork.getUsername(), position, rotation, KosmosChunks.getCurrent().getPosition().x, KosmosChunks.getCurrent().getPosition().z).writeData(FlounderNetwork.getSocketClient());
 			needSendData = false;
 			timer.resetStartTime();
 		}
+	}
+
+	public static void askSendData() {
+		PlayerBasic.needSendData = true;
 	}
 
 	@Override

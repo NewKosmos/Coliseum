@@ -1,5 +1,6 @@
 package kosmos.network.packets;
 
+import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import kosmos.world.*;
@@ -48,13 +49,13 @@ public class PacketMove extends Packet {
 
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
-		//	FlounderLogger.log("[" + client + "]: moved to: " + x + "," + y + "," + z + " : " + w + ", chunk[" + chunkX + "," + chunkZ + "]");
+		FlounderLogger.log("[" + client + "]: moved to: " + x + "," + y + "," + z + " : " + w + ", chunk[" + chunkX + "," + chunkZ + "]");
 		KosmosWorld.movePlayer(username, x, y, z, w, chunkX, chunkZ);
 	}
 
 	@Override
 	public void serverHandlePacket(Server server, InetAddress address, int port) {
-		//	FlounderLogger.log("[" + username + "]: moved to: " + x + "," + y + "," + z + " : " + w + ", chunk[" + chunkX + "," + chunkZ + "]");
+		FlounderLogger.log("[" + username + "]: moved to: " + x + "," + y + "," + z + " : " + w + ", chunk[" + chunkX + "," + chunkZ + "]");
 		this.writeData(server);
 	}
 

@@ -49,7 +49,7 @@ public class PacketLogin extends Packet {
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
 		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "] " + username + " has joined the game.");
 		KosmosWorld.quePlayer(username, new Vector3f(), new Vector3f());
-		((PlayerBasic) FlounderCamera.getPlayer()).sendData();
+		PlayerBasic.askSendData();
 	}
 
 	@Override
