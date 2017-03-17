@@ -59,6 +59,15 @@ public class OverlayChat extends GuiComponent {
 			return;
 		}
 
+		// Add new chat messages.
+		if (!newMessages.isEmpty()) {
+			for (String message : newMessages) {
+				addText(message, new Colour(0.9f, 1.0f, 0.9f));
+			}
+
+			newMessages.clear();
+		}
+
 		textureInput.setPosition(0.5f, 1.0f - (INPUT_AREA_HEIGHT / 2.0f), FlounderDisplay.getWidth(), INPUT_AREA_HEIGHT);
 		textureInput.update();
 
