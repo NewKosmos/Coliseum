@@ -52,7 +52,7 @@ public class KosmosChunks extends Module {
 	public void init() {
 		this.chunks = new StructureBasic<>();
 
-		this.chunkRange = new Sphere(40.0f);
+		this.chunkRange = new Sphere(40.0f); // 3.0f * Chunk.CHUNK_WORLD_SIZE
 
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
 		setCurrent(new Chunk(KosmosChunks.getChunks(), new Vector3f(

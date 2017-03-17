@@ -23,7 +23,7 @@ public class ComponentLight extends IComponentEntity implements IComponentEditor
 	public static final int ID = EntityIDAssigner.getId();
 
 	private Vector3f offset;
-	private LightPoint light;
+	private Light light;
 
 	/**
 	 * Creates a new ComponentLight.
@@ -47,9 +47,9 @@ public class ComponentLight extends IComponentEntity implements IComponentEditor
 		this.offset = offset;
 
 		if (entity != null) {
-			this.light = new LightPoint(colour, Vector3f.add(entity.getPosition(), offset, null), attenuation);
+			this.light = new Light(colour, Vector3f.add(entity.getPosition(), offset, null), attenuation);
 		} else {
-			this.light = new LightPoint(colour, new Vector3f(offset), attenuation);
+			this.light = new Light(colour, new Vector3f(offset), attenuation);
 		}
 	}
 
@@ -60,7 +60,7 @@ public class ComponentLight extends IComponentEntity implements IComponentEditor
 		//	}
 	}
 
-	public LightPoint getLight() {
+	public Light getLight() {
 		return light;
 	}
 
@@ -110,7 +110,7 @@ public class ComponentLight extends IComponentEntity implements IComponentEditor
 
 		// X Offset Field.
 		JSpinner xOffsetField = new JSpinner(new SpinnerNumberModel((double) offset.x, Double.NEGATIVE_INFINITY + 1.0, Double.POSITIVE_INFINITY - 1.0, 0.1));
-		xOffsetField.setToolTipText("LightPoint X Offset");
+		xOffsetField.setToolTipText("Light X Offset");
 		xOffsetField.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -121,7 +121,7 @@ public class ComponentLight extends IComponentEntity implements IComponentEditor
 
 		// Y Offset Field.
 		JSpinner yOffsetField = new JSpinner(new SpinnerNumberModel((double) offset.x, Double.NEGATIVE_INFINITY + 1.0, Double.POSITIVE_INFINITY - 1.0, 0.1));
-		yOffsetField.setToolTipText("LightPoint Y Offset");
+		yOffsetField.setToolTipText("Light Y Offset");
 		yOffsetField.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -132,7 +132,7 @@ public class ComponentLight extends IComponentEntity implements IComponentEditor
 
 		// Z Offset Field.
 		JSpinner zOffsetField = new JSpinner(new SpinnerNumberModel((double) offset.x, Double.NEGATIVE_INFINITY + 1.0, Double.POSITIVE_INFINITY - 1.0, 0.1));
-		yOffsetField.setToolTipText("LightPoint Z Offset");
+		yOffsetField.setToolTipText("Light Z Offset");
 		zOffsetField.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
