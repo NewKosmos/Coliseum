@@ -9,6 +9,7 @@
 
 package kosmos.world;
 
+import flounder.framework.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;
@@ -42,7 +43,7 @@ public class SkyCycle {
 	}
 
 	public void update() {
-		dayFactor = 0.2f; // dayDriver.update(Framework.getDelta()) / 100.0f; // 0.52f
+		dayFactor = dayDriver.update(Framework.getDelta()) / 100.0f; // 0.52f
 		Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), skyColour);
 		Colour.interpolate(skyColour, SKY_COLOUR_DAY, getShadowFactor(), skyColour);
 		Vector3f.rotate(LIGHT_DIRECTION, new Vector3f(dayFactor * 360.0f, 0.0f, 0.0f), lightPosition);
