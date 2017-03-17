@@ -14,8 +14,10 @@ import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.logger.*;
 import flounder.maths.*;
+import flounder.networking.*;
 import flounder.resources.*;
 import flounder.textures.*;
+import kosmos.network.packets.*;
 
 import java.util.*;
 
@@ -26,6 +28,8 @@ import static org.lwjgl.glfw.GLFW.*;
 public class OverlayChat extends GuiComponent {
 	private static final float INPUT_AREA_HEIGHT = 0.05f;
 	private static final String START_STRING = "Message: ";
+
+	public static final List<String> newMessages = new ArrayList<>();
 
 	private ConsoleDelay inputDelay;
 	private int lastKey;
@@ -86,6 +90,11 @@ public class OverlayChat extends GuiComponent {
 			if (!s.isEmpty()) {
 				FlounderLogger.log("[Chat]: " + s);
 				this.addText(s, new Colour(1.0f, 1.0f, 1.0f));
+
+				if (FlounderNetwork.getSocketClient() != null && s.charAt(0) != '/') {
+					new PacketChat(FlounderNetwork.getUsername(), s).writeData(FlounderNetwork.getSocketClient());
+				}
+
 				currentInput.setText(START_STRING);
 				lastKey = 13;
 			}

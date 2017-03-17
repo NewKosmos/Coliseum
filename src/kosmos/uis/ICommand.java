@@ -81,7 +81,7 @@ public interface ICommand {
 				FlounderLogger.log(log);
 				((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
-				KosmosWorld.getEntityPlayer().setPosition(other.getPosition());
+				KosmosWorld.getEntityPlayer().getPosition().set(other.getPosition());
 				KosmosChunks.clear();
 				KosmosChunks.setCurrent(new Chunk(KosmosChunks.getChunks(), new Vector3f(chunkX, 0.0f, chunkZ)));
 			}
