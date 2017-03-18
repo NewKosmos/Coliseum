@@ -47,7 +47,7 @@ public class BiomeStone implements IBiome {
 						new Vector3f(
 								tilePosition.x,
 								0.625f + tilePosition.y * 0.5f,
-								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
+								tilePosition.z
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
@@ -56,7 +56,7 @@ public class BiomeStone implements IBiome {
 						new Vector3f(
 								tilePosition.x,
 								-0.3f + tilePosition.y * 0.5f,
-								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
+								tilePosition.z
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
@@ -65,7 +65,7 @@ public class BiomeStone implements IBiome {
 						new Vector3f(
 								tilePosition.x,
 								0.425f + tilePosition.y * 0.5f,
-								chunk.getPosition().z + (float) (tilePosition.y * 0.5)
+								tilePosition.z
 						),
 						new Vector3f(0.0f, rotation, 0.0f)
 				);

@@ -189,15 +189,13 @@ public class Chunk extends Entity {
 		float height = getWorldHeight(worldPos.x, worldPos.y);
 
 		if (height >= 0.0f) {
-			Vector3f tile = new Vector3f(worldPos.x, height, worldPos.y);
-			Entity entity = chunk.biome.getBiome().generateEntity(chunk, tile);
+			tiles.add(new Vector3f(positionX, height, positionZ));
+
+			Entity entity = chunk.biome.getBiome().generateEntity(chunk, new Vector3f(worldPos.x, height, worldPos.y));
 
 			if (entity != null) {
 				new ComponentChild(entity, chunk);
 			}
-
-			tile.set(positionX, height, positionZ);
-			tiles.add(tile);
 		}
 	}
 
@@ -211,7 +209,7 @@ public class Chunk extends Entity {
 	 */
 	public static float getWorldHeight(float positionX, float positionZ) {
 		// Calculates the final height for the world position using perlin.
-		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(positionX / 25.0f, positionZ / 25.0f) * 10.0f);
+		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(positionX / 30.0f, positionZ / 30.0f) * 12.0f);
 
 		// Ignore height that would be water/nothing.
 		if (height < 0.0f) {
