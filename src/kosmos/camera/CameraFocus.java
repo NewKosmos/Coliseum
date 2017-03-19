@@ -160,7 +160,7 @@ public class CameraFocus extends Camera {
 		float angleChange = 0.0f;
 
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
-			if (FlounderJoysticks.isConnected(0)) {
+			if (FlounderJoysticks.isConnected(0) && Maths.deadband(0.05f, joystickHorizontal.getAmount()) != 0.0f) {
 				angleChange = joystickHorizontal.getAmount() * INFLUENCE_OF_JOYSTICK_DX;
 			} else if (FlounderMouse.getMouse(reangleButton)) {
 				angleChange = -FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSE_DX;
@@ -186,7 +186,7 @@ public class CameraFocus extends Camera {
 		float angleChange = 0.0f;
 
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
-			if (FlounderJoysticks.isConnected(0)) {
+			if (FlounderJoysticks.isConnected(0) && Maths.deadband(0.05f, joystickVertical.getAmount()) != 0.0f) {
 				angleChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_DY;
 			} else if (FlounderMouse.getMouse(reangleButton)) {
 				angleChange = FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSE_DY;

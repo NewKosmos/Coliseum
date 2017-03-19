@@ -198,8 +198,8 @@ public class KosmosRenderer extends RendererMaster {
 				pipelineBloom.renderMRT(rendererFBO, output);
 				output = pipelineBloom.getOutput();
 
-			//	filterBlurMotion.applyFilter(output.getColourTexture(0), rendererFBO.getDepthTexture());
-			//	output = filterBlurMotion.fbo;
+				filterBlurMotion.applyFilter(output.getColourTexture(0), rendererFBO.getDepthTexture());
+				output = filterBlurMotion.fbo;
 
 				if (KosmosWorld.getEntitySun() != null) {
 					filterLensFlare.setSunPosition(KosmosWorld.getEntitySun().getPosition());
