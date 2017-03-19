@@ -97,7 +97,7 @@ public class KosmosShadows extends Module {
 	public void update() {
 		shadowBox.update(FlounderCamera.getCamera());
 		updateOrthographicProjectionMatrix(shadowBox.getWidth(), shadowBox.getHeight(), shadowBox.getLength());
-		updateLightViewMatrix(KosmosWorld.getSkyCycle().getLightPosition(), shadowBox.getCenter());
+		updateLightViewMatrix(KosmosWorld.getLightPosition(), shadowBox.getCenter());
 		Matrix4f.multiply(projectionMatrix, lightViewMatrix, projectionViewMatrix);
 	}
 

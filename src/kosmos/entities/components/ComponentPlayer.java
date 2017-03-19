@@ -9,14 +9,12 @@
 
 package kosmos.entities.components;
 
-import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import kosmos.camera.*;

@@ -70,7 +70,7 @@ public class OverlayMaster extends GuiComponent {
 			fpsText.setText("FPS: " + Maths.roundToPlace(1.0f / Framework.getDeltaRender(), 1));
 			upsText.setText("UPS: " + Maths.roundToPlace(1.0f / Framework.getDelta(), 1));
 			positionText.setText("POSITION: [" + (FlounderCamera.getPlayer() == null ? "NULL" : Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().x, 1) + ", " + Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().y, 1) + ", " + Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().z, 1) + "]"));
-			timeText.setText("TIME: " + Maths.roundToPlace(KosmosWorld.getSkyCycle().getDayFactor(), 3));
+			timeText.setText("TIME: " + Maths.roundToPlace(KosmosWorld.getDayFactor(), 3));
 			seedText.setText("SEED: " + KosmosWorld.getNoise().getSeed());
 			updateText = false;
 		}

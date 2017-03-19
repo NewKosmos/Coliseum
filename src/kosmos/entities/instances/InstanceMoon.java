@@ -29,7 +29,7 @@ public class InstanceMoon extends Entity {
 		new ComponentCelestial(this, false);
 		new ComponentModel(this, 12.0f, model, texture, 1);
 		new ComponentSurface(this, 1.0f, 0.0f, true, true);
-		new ComponentLight(this, new Vector3f(), new Colour(SkyCycle.MOON_COLOUR), new Attenuation(1.0f, 0.0f, 0.0f));
+		new ComponentLight(this, new Vector3f(), new Colour(KosmosWorld.MOON_COLOUR), new Attenuation(1.0f, 0.0f, 0.0f));
 		//new ComponentCollider(this);
 		//new ComponentCollision(this);
 	}

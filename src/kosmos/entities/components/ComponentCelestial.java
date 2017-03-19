@@ -57,7 +57,7 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 
 	@Override
 	public void update() {
-		getEntity().getPosition().set(KosmosWorld.getSkyCycle().getLightPosition());
+		getEntity().getPosition().set(KosmosWorld.getLightPosition());
 		Vector3f.multiply(getEntity().getPosition(), startPosition, getEntity().getPosition());
 
 		if (FlounderCamera.getCamera() != null) {
@@ -70,12 +70,8 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 			ComponentLight componentLight = (ComponentLight) getEntity().getComponent(ComponentLight.ID);
 
 			if (componentLight != null) {
-				Colour.interpolate(SkyCycle.SUN_COLOUR_SUNRISE, SkyCycle.SUN_COLOUR_DAY, KosmosWorld.getSkyCycle().getSunriseFactor(), componentLight.getLight().getColour());
-				Colour.interpolate(componentLight.getLight().getColour(), SkyCycle.SUN_COLOUR_DAY, KosmosWorld.getSkyCycle().getShadowFactor(), componentLight.getLight().getColour());
-				//	float daySin = (float) Math.sin(2.0 * Math.PI * KosmosWorld.getSkyCycle().getDayFactor());
-				//	Colour.interpolate(SkyCycle.SUN_COLOUR_DAY, SkyCycle.SUN_COLOUR_SUNRISE, daySin, componentLight.getLight().getColour());
-				//	FlounderLogger.log("["+daySin+"]: " + componentLight.getLight().colour);
-				////	componentLight.getLight().getColour().set(KosmosWorld.getSkyCycle().getSkyColour());
+				Colour.interpolate(KosmosWorld.SUN_COLOUR_SUNRISE, KosmosWorld.SUN_COLOUR_DAY, KosmosWorld.getSunriseFactor(), componentLight.getLight().getColour());
+				Colour.interpolate(componentLight.getLight().getColour(), KosmosWorld.SUN_COLOUR_DAY, KosmosWorld.getShadowFactor(), componentLight.getLight().getColour());
 			}
 		}
 	}
