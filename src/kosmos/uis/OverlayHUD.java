@@ -64,6 +64,7 @@ public class OverlayHUD extends GuiComponent {
 	private static class HudStatus {
 		private GuiTexture background;
 		private GuiTexture foreground;
+		private GuiTexture circularProgress;
 		private GuiTexture mainIcon;
 		private float offset;
 
@@ -74,6 +75,10 @@ public class OverlayHUD extends GuiComponent {
 			this.foreground = new GuiTexture(hudTexture);
 			this.foreground.setSelectedRow(1);
 
+			this.circularProgress = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "circularProgress.png")).setNumberOfRows(4).create());
+			this.circularProgress.setSelectedRow((int) Math.floor(Maths.randomInRange(1, 16)));
+			this.circularProgress.setColourOffset(new Colour(1.0f, 0.2f, 0.2f));
+
 			this.mainIcon = new GuiTexture(hudTexture);
 			this.mainIcon.setSelectedRow(main);
 
@@ -82,11 +87,14 @@ public class OverlayHUD extends GuiComponent {
 		}
 
 		protected void update() {
-			background.setPosition(0.06f + offset, 0.94f, 0.09f, 0.09f);
+			background.setPosition(0.06f + offset, 0.94f, 0.1f, 0.1f);
 			background.update();
 
-			foreground.setPosition(0.06f + offset, 0.94f, 0.07f, 0.07f);
+			foreground.setPosition(0.06f + offset, 0.94f, 0.08f, 0.08f);
 			foreground.update();
+
+			circularProgress.setPosition(0.06f + offset, 0.94f, 0.08f, 0.08f);
+			circularProgress.update();
 
 			mainIcon.setPosition(0.06f + offset, 0.94f, 0.06f, 0.06f);
 			mainIcon.update();
@@ -95,6 +103,7 @@ public class OverlayHUD extends GuiComponent {
 		protected void getGuiTextures(List<GuiTexture> guiTextures) {
 			guiTextures.add(background);
 			guiTextures.add(foreground);
+			guiTextures.add(circularProgress);
 			guiTextures.add(mainIcon);
 		}
 	}
