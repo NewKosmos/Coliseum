@@ -111,7 +111,7 @@ public class CameraFocus extends Camera {
 		this.horizontalDistanceFromFocus = 0.0f;
 		this.verticalDistanceFromFocus = 0.0f;
 
-		this.reangleButton = KosmosConfigs.CAMERA_RENGLE.getInteger();
+		this.reangleButton = KosmosConfigs.CAMERA_REANGLE.setReference(() -> reangleButton).getInteger();
 		// GLFW_MOUSE_BUTTON_LEFT   = GLFW_MOUSE_BUTTON_1,
 		// GLFW_MOUSE_BUTTON_RIGHT  = GLFW_MOUSE_BUTTON_2,
 		// GLFW_MOUSE_BUTTON_MIDDLE = GLFW_MOUSE_BUTTON_3;

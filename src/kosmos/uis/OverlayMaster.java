@@ -42,7 +42,7 @@ public class OverlayMaster extends GuiComponent {
 		seedText = createStatus("SEED: 0", 0.13f);
 
 		crossHair = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "crosshair.png")).setNumberOfRows(4).create());
-		crossHair.setSelectedRow(KosmosConfigs.HUD_COSSHAIR_TYPE.getInteger());
+		crossHair.setSelectedRow(KosmosConfigs.HUD_COSSHAIR_TYPE.setReference(() -> crossHair.getSelectedRow()).getInteger());
 
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {

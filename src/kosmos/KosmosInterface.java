@@ -22,6 +22,7 @@ import flounder.standards.*;
 import kosmos.chunks.*;
 import kosmos.network.packets.*;
 import kosmos.particles.*;
+import kosmos.shadows.*;
 import kosmos.water.*;
 import kosmos.world.*;
 
@@ -36,12 +37,11 @@ public class KosmosInterface extends Standard {
 	private KeyButton aabbs;
 	private KeyButton closeWindow;
 
-	private String username;
 	private String serverIP;
 	private int serverPort;
 
 	public KosmosInterface() {
-		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderNetwork.class, FlounderBounding.class, KosmosParticles.class, KosmosWater.class, KosmosWorld.class, KosmosChunks.class);
+		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderNetwork.class, FlounderBounding.class, KosmosShadows.class, KosmosParticles.class, KosmosWater.class, KosmosWorld.class, KosmosChunks.class);
 	}
 
 	@Override
@@ -59,9 +59,9 @@ public class KosmosInterface extends Standard {
 
 		KosmosWorld.generatePlayer();
 
-		this.username = KosmosConfigs.CLIENT_USERNAME.getString();
-		this.serverIP = KosmosConfigs.SERVER_IP.getString();
-		this.serverPort = KosmosConfigs.SERVER_PORT.getInteger();
+		String username = KosmosConfigs.CLIENT_USERNAME.getString();
+		this.serverIP = KosmosConfigs.SERVER_IP.setReference(() -> serverIP).getString();
+		this.serverPort = KosmosConfigs.SERVER_PORT.setReference(() -> serverPort).getInteger();
 		FlounderNetwork.startClient(username, serverIP, serverPort);
 		PacketLogin loginPacket = new PacketLogin(username);
 		loginPacket.writeData(FlounderNetwork.getSocketClient());
@@ -153,18 +153,6 @@ public class KosmosInterface extends Standard {
 	@Override
 	public void profile() {
 
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public String getServerIP() {
-		return serverIP;
-	}
-
-	public int getServerPort() {
-		return serverPort;
 	}
 
 	@Override

@@ -48,7 +48,7 @@ public class KosmosWorld extends Module {
 
 	@Override
 	public void init() {
-		this.noise = new PerlinNoise(KosmosConfigs.SAVE_SEED.getInteger());
+		this.noise = new PerlinNoise(KosmosConfigs.SAVE_SEED.setReference(() -> noise.getSeed()).getInteger());
 
 		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 		this.entitySun = new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-200.0f, -200.0f, -200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
@@ -62,7 +62,10 @@ public class KosmosWorld extends Module {
 
 	public static void generatePlayer() {
 		INSTANCE.entityPlayer = new InstancePlayer(FlounderEntities.getEntities(),
-				new Vector3f(KosmosConfigs.SAVE_PLAYER_X.getFloat(), KosmosConfigs.SAVE_PLAYER_Y.getFloat(), KosmosConfigs.SAVE_PLAYER_Z.getFloat()),
+				new Vector3f(
+						KosmosConfigs.SAVE_PLAYER_X.setReference(() -> INSTANCE.entityPlayer.getPosition().x).getFloat(),
+						KosmosConfigs.SAVE_PLAYER_Y.setReference(() -> INSTANCE.entityPlayer.getPosition().y).getFloat(),
+						KosmosConfigs.SAVE_PLAYER_Z.setReference(() -> INSTANCE.entityPlayer.getPosition().z).getFloat()),
 				new Vector3f()
 		);
 	}

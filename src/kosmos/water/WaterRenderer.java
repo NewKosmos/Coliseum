@@ -18,7 +18,6 @@ import flounder.profiling.*;
 import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
-import kosmos.*;
 import kosmos.chunks.*;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -28,14 +27,11 @@ public class WaterRenderer extends Renderer {
 	private static final MyFile VERTEX_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "water", "waterVertex.glsl");
 	private static final MyFile FRAGMENT_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "water", "waterFragment.glsl");
 
-	private float reflectionQuality;
-
 	private FBO reflectionFBO;
 	private ShaderObject shader;
 
 	public WaterRenderer() {
-		this.reflectionQuality = KosmosConfigs.WATER_REFLECTION_QUALITY.getFloat();
-		this.reflectionFBO = FBO.newFBO(reflectionQuality).disableTextureWrap().depthBuffer(DepthBufferType.RENDER_BUFFER).create();
+		this.reflectionFBO = FBO.newFBO(KosmosWater.getReflectionQuality()).disableTextureWrap().depthBuffer(DepthBufferType.RENDER_BUFFER).create();
 		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 
 		/*FlounderEvents.addEvent(new IEvent() {
@@ -70,6 +66,7 @@ public class WaterRenderer extends Renderer {
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 
 		Chunk chunk = KosmosChunks.getCurrent();
+
 		if (chunk != null) {
 			// Vector3f position = chunk.getPosition();
 			Vector3f position = FlounderCamera.getPlayer().getPosition();
@@ -85,6 +82,12 @@ public class WaterRenderer extends Renderer {
 		}*/
 
 		if (KosmosWater.reflectionsEnabled()) {
+			// Update the quality scalar.
+			if (reflectionFBO.getSizeScalar() != KosmosWater.getReflectionQuality()) {
+				reflectionFBO.setSizeScalar(KosmosWater.getReflectionQuality());
+			}
+
+			// Binds the reflection FBO.
 			OpenGlUtils.bindTexture(reflectionFBO.getColourTexture(0), GL_TEXTURE_2D, 0);
 		}
 
@@ -118,17 +121,7 @@ public class WaterRenderer extends Renderer {
 	}
 
 	private void endRendering() {
-		//	FlounderBounding.addShapeRender(water.getAABB());
 		shader.stop();
-	}
-
-	public float getReflectionQuality() {
-		return reflectionQuality;
-	}
-
-	public void setReflectionQuality(float reflectionQuality) {
-		this.reflectionQuality = reflectionQuality;
-		this.reflectionFBO.setSizeScalar(reflectionQuality);
 	}
 
 	public FBO getReflectionFBO() {

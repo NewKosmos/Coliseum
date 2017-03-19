@@ -13,9 +13,7 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.post.*;
 import flounder.profiling.*;
-import flounder.renderer.*;
 import flounder.resources.*;
-import kosmos.*;
 import kosmos.entities.components.*;
 import kosmos.shadows.*;
 import kosmos.world.*;
@@ -23,16 +21,8 @@ import kosmos.world.*;
 public class FilterMRT extends PostFilter {
 	private static final int LIGHTS = 64;
 
-	private int shadowPCF;
-	private float shadowBias;
-	private float shadowDarkness;
-
 	public FilterMRT() {
 		super("filterMrt", new MyFile(PostFilter.POST_LOC, "mrtFragment.glsl"));
-
-		this.shadowPCF = KosmosConfigs.SHADOWMAP_PCF.getInteger();
-		this.shadowBias = KosmosConfigs.SHADOWMAP_BIAS.getFloat();
-		this.shadowDarkness = KosmosConfigs.SHADOWMAP_DARKNESS.getFloat();
 	}
 
 	@Override
@@ -67,13 +57,13 @@ public class FilterMRT extends PostFilter {
 			}
 		}
 
-		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getToShadowMapSpaceMatrix());
-		shader.getUniformFloat("shadowDistance").loadFloat(((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowDistance());
-		shader.getUniformFloat("shadowTransition").loadFloat(10.0f);
-		shader.getUniformInt("shadowMapSize").loadInt(ShadowRenderer.getShadowMapSize());
-		shader.getUniformInt("shadowPCF").loadInt(shadowPCF);
-		shader.getUniformFloat("shadowBias").loadFloat(shadowBias);
-		shader.getUniformFloat("shadowDarkness").loadFloat(shadowDarkness * KosmosWorld.getSkyCycle().getShadowFactor());
+		shader.getUniformMat4("shadowSpaceMatrix").loadMat4(KosmosShadows.getToShadowMapSpaceMatrix());
+		shader.getUniformFloat("shadowDistance").loadFloat(KosmosShadows.getShadowDistance());
+		shader.getUniformFloat("shadowTransition").loadFloat(KosmosShadows.getShadowTransition());
+		shader.getUniformInt("shadowMapSize").loadInt(KosmosShadows.getShadowSize());
+		shader.getUniformInt("shadowPCF").loadInt(KosmosShadows.getShadowPCF());
+		shader.getUniformFloat("shadowBias").loadFloat(KosmosShadows.getShadowBias());
+		shader.getUniformFloat("shadowDarkness").loadFloat(KosmosShadows.getShadowDarkness() * KosmosWorld.getSkyCycle().getShadowFactor());
 
 		if (KosmosWorld.getFog() != null) {
 			shader.getUniformVec3("fogColour").loadVec3(KosmosWorld.getFog().getFogColour());
@@ -84,17 +74,5 @@ public class FilterMRT extends PostFilter {
 			shader.getUniformFloat("fogDensity").loadFloat(0.003f);
 			shader.getUniformFloat("fogGradient").loadFloat(2.0f);
 		}
-	}
-
-	public int getShadowPCF() {
-		return shadowPCF;
-	}
-
-	public float getShadowBias() {
-		return shadowBias;
-	}
-
-	public float getShadowDarkness() {
-		return shadowDarkness;
 	}
 }

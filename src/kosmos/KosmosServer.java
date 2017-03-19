@@ -25,7 +25,6 @@ public class KosmosServer extends Framework {
 	public static class ServerInterface extends Standard {
 		public static int serverPort;
 		public static int serverSeed;
-		public static Scanner scanner;
 
 		public ServerInterface() {
 			super(FlounderNetwork.class, FlounderDisplay.class);
@@ -33,9 +32,8 @@ public class KosmosServer extends Framework {
 
 		@Override
 		public void init() {
-			serverPort = KosmosConfigs.HOST_PORT.getInteger();
-			serverSeed = KosmosConfigs.HOST_SEED.getInteger();
-			scanner = new Scanner(System.in);
+			ServerInterface.serverPort = KosmosConfigs.HOST_PORT.setReference(() -> serverPort).getInteger();
+			ServerInterface.serverSeed = KosmosConfigs.HOST_SEED.setReference(() -> serverSeed).getInteger();
 
 			try {
 				Thread.sleep(100);
@@ -58,12 +56,6 @@ public class KosmosServer extends Framework {
 
 		@Override
 		public void update() {
-			//	if (scanner.hasNext()) {
-			//		String string = scanner.next().trim();
-			//		if (string.toLowerCase().equals("exit") || string.toLowerCase().equals("q")) {
-			//			Framework.requestClose();
-			//		}
-			//	}
 		}
 
 		@Override

@@ -13,6 +13,7 @@ public class KosmosWater extends Module {
 	private float waveTime;
 
 	private boolean enableReflections;
+	private float reflectionQuality;
 
 	public KosmosWater() {
 		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderBounding.class);
@@ -24,6 +25,7 @@ public class KosmosWater extends Module {
 		this.waveTime = 0.0f;
 
 		this.enableReflections = KosmosConfigs.WATER_REFLECTION_ENABLED.getBoolean();
+		this.reflectionQuality = KosmosConfigs.WATER_REFLECTION_QUALITY.getFloat();
 	}
 
 	@Override
@@ -52,6 +54,14 @@ public class KosmosWater extends Module {
 
 	public static void setReflectionsEnabled(boolean enableReflections) {
 		INSTANCE.enableReflections = enableReflections;
+	}
+
+	public static float getReflectionQuality() {
+		return INSTANCE.reflectionQuality;
+	}
+
+	public static void setReflectionQuality(float reflectionQuality) {
+		INSTANCE.reflectionQuality = reflectionQuality;
 	}
 
 	@Override

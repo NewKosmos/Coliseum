@@ -19,7 +19,6 @@ import flounder.profiling.*;
 import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
-import kosmos.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.world.*;
@@ -31,35 +30,19 @@ public class ShadowRenderer extends Renderer {
 	private static final MyFile VERTEX_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "shadows", "shadowVertex.glsl");
 	private static final MyFile FRAGMENT_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "shadows", "shadowFragment.glsl");
 
-	public static final int SHADOW_MAP_SIZE = KosmosConfigs.SHADOWMAP_SIZE.getInteger(); // TODO
-
 	private FBO shadowFBO;
 	private ShaderObject shader;
 
 	private Matrix4f mvpReusableMatrix;
 
-	private Matrix4f projectionMatrix;
-	private Matrix4f lightViewMatrix;
-	private Matrix4f projectionViewMatrix;
-	private Matrix4f offset;
-
-	private ShadowBox shadowBox;
-
 	/**
 	 * Creates a new entity renderer.
 	 */
 	public ShadowRenderer() {
-		this.shadowFBO = FBO.newFBO(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).noColourBuffer().disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
+		this.shadowFBO = FBO.newFBO(KosmosShadows.getShadowSize(), KosmosShadows.getShadowSize()).noColourBuffer().disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
 		this.shader = ShaderFactory.newBuilder().setName("shadows").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 
 		this.mvpReusableMatrix = new Matrix4f();
-
-		this.projectionMatrix = new Matrix4f();
-		this.lightViewMatrix = new Matrix4f();
-		this.projectionViewMatrix = new Matrix4f();
-		this.offset = createOffset();
-
-		this.shadowBox = new ShadowBox(lightViewMatrix);
 	}
 
 	@Override
@@ -90,10 +73,9 @@ public class ShadowRenderer extends Renderer {
 	}
 
 	private void prepareRendering(Vector4f clipPlane, Camera camera) {
-		shadowBox.update(camera);
-		updateOrthographicProjectionMatrix(shadowBox.getWidth(), shadowBox.getHeight(), shadowBox.getLength());
-		updateLightViewMatrix(KosmosWorld.getSkyCycle().getLightPosition(), shadowBox.getCenter());
-		Matrix4f.multiply(projectionMatrix, lightViewMatrix, projectionViewMatrix);
+		if (shadowFBO.getWidth() != KosmosShadows.getShadowSize() || shadowFBO.getHeight() != KosmosShadows.getShadowSize()) {
+			shadowFBO.setSize(KosmosShadows.getShadowSize(), KosmosShadows.getShadowSize());
+		}
 
 		shadowFBO.bindFrameBuffer();
 		shader.start();
@@ -102,52 +84,6 @@ public class ShadowRenderer extends Renderer {
 		OpenGlUtils.antialias(true);
 		OpenGlUtils.cullBackFaces(false);
 		OpenGlUtils.enableDepthTesting();
-	}
-
-	/**
-	 * Creates the orthographic projection matrix.
-	 *
-	 * @param width Shadow box width.
-	 * @param height Shadow box height.
-	 * @param length Shadow box length.
-	 */
-	private void updateOrthographicProjectionMatrix(float width, float height, float length) {
-		projectionMatrix.setIdentity();
-		projectionMatrix.m00 = 2.0f / width;
-		projectionMatrix.m11 = 2.0f / height;
-		projectionMatrix.m22 = -2.0f / length;
-		projectionMatrix.m33 = 1.0f;
-	}
-
-	/**
-	 * Updates the "view" matrix of the light. The light itself has no position, so the "view" matrix is centered at the center of the shadow box.
-	 *
-	 * @param direction The light direct.
-	 * @param position The center of the shadow box.
-	 */
-	private void updateLightViewMatrix(Vector3f direction, Vector3f position) {
-		direction.normalize();
-		position.negate();
-
-		lightViewMatrix.setIdentity();
-		float pitch = (float) Math.acos(new Vector2f(direction.x, direction.z).length());
-		Matrix4f.rotate(lightViewMatrix, new Vector3f(1.0f, 0.0f, 0.0f), pitch, lightViewMatrix);
-		float yaw = (float) Math.toDegrees(((float) Math.atan(direction.x / direction.z)));
-		yaw = direction.z > 0.0f ? yaw - 180.0f : yaw;
-		Matrix4f.rotate(lightViewMatrix, new Vector3f(0.0f, 1.0f, 0.0f), (float) -Math.toRadians(yaw), lightViewMatrix);
-		Matrix4f.translate(lightViewMatrix, position, lightViewMatrix);
-	}
-
-	/**
-	 * Create the offset for part of the conversion to shadow map space.
-	 *
-	 * @return The offset as a matrix.
-	 */
-	private static Matrix4f createOffset() {
-		Matrix4f offset = new Matrix4f();
-		Matrix4f.translate(offset, new Vector3f(0.5f, 0.5f, 0.5f), offset);
-		Matrix4f.scale(offset, new Vector3f(0.5f, 0.5f, 0.5f), offset);
-		return offset;
 	}
 
 	private void renderEntity(Entity entity) {
@@ -165,7 +101,7 @@ public class ShadowRenderer extends Renderer {
 			shader.getUniformBool("animated").loadBoolean(false);
 
 			if (componentModel.getModelMatrix() != null) {
-				Matrix4f.multiply(projectionViewMatrix, componentModel.getModelMatrix(), mvpReusableMatrix);
+				Matrix4f.multiply(KosmosShadows.getProjectionViewMatrix(), componentModel.getModelMatrix(), mvpReusableMatrix);
 				shader.getUniformMat4("mvpMatrix").loadMat4(mvpReusableMatrix);
 			}
 
@@ -179,7 +115,7 @@ public class ShadowRenderer extends Renderer {
 			shader.getUniformBool("animated").loadBoolean(true);
 
 			if (componentAnimation.getModelMatrix() != null) {
-				Matrix4f.multiply(projectionViewMatrix, componentAnimation.getModelMatrix(), mvpReusableMatrix);
+				Matrix4f.multiply(KosmosShadows.getProjectionViewMatrix(), componentAnimation.getModelMatrix(), mvpReusableMatrix);
 				shader.getUniformMat4("mvpMatrix").loadMat4(mvpReusableMatrix);
 			}
 
@@ -231,37 +167,6 @@ public class ShadowRenderer extends Renderer {
 	 */
 	public int getShadowMap() {
 		return shadowFBO.getDepthTexture();
-	}
-
-	public float getShadowDistance() {
-		return shadowBox.getShadowDistance();
-	}
-
-	/**
-	 * @return The shadow box, so that it can be used by other class to test if engine.entities are inside the box.
-	 */
-	public ShadowBox getShadowBox() {
-		return shadowBox;
-	}
-
-	/**
-	 * This biased projection-view matrix is used to convert fragments into "shadow map space" when rendering the main renderObjects pass.
-	 *
-	 * @return The to-shadow-map-space matrix.
-	 */
-	public Matrix4f getToShadowMapSpaceMatrix() {
-		return Matrix4f.multiply(offset, projectionViewMatrix, null);
-	}
-
-	public static int getShadowMapSize() {
-		return SHADOW_MAP_SIZE;
-	}
-
-	/**
-	 * @return The light's "view" matrix.
-	 */
-	protected Matrix4f getLightSpaceTransform() {
-		return lightViewMatrix;
 	}
 
 	@Override
