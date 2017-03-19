@@ -29,19 +29,19 @@ public class NewKosmos extends Framework {
 
 	public NewKosmos() {
 		super("kosmos", new UpdaterDefault(GLFW::glfwGetTime), -1, new KosmosInterface(), new KosmosRenderer(), new KosmosGuis(), new CameraFocus(), new PlayerBasic());
-		FlounderDisplay.setup(KosmosConfigs.configMain.getIntWithDefault("width", 1080, FlounderDisplay::getWindowWidth),
-				KosmosConfigs.configMain.getIntWithDefault("height", 720, FlounderDisplay::getWindowHeight),
+		FlounderDisplay.setup(KosmosConfigs.DISPLAY_WIDTH.getInteger(),
+				KosmosConfigs.DISPLAY_HEIGHT.getInteger(),
 				"New Kosmos", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
-				KosmosConfigs.configMain.getBooleanWithDefault("vsync", false, FlounderDisplay::isVSync),
-				KosmosConfigs.configMain.getBooleanWithDefault("antialias", true, FlounderDisplay::isAntialiasing),
-				0, // KosmosConfigs.configMain.getIntWithDefault("samples", 0, FlounderDisplay::getSamples)
-				KosmosConfigs.configMain.getBooleanWithDefault("fullscreen", false, FlounderDisplay::isFullscreen),
+				KosmosConfigs.DISPLAY_VSYNC.getBoolean(),
+				KosmosConfigs.DISPLAY_ANTIALIAS.getBoolean(),
+				0,
+				KosmosConfigs.DISPLAY_FULLSCREEN.getBoolean(),
 				false
 		);
-		setFpsLimit(KosmosConfigs.configMain.getIntWithDefault("fps_limit", -1, Framework::getFpsLimit));
-		FlounderTextures.setup(KosmosConfigs.configMain.getFloatWithDefault("anisotropy_level", 4, FlounderTextures::getAnisotropyLevel));
-		FlounderBounding.toggle(KosmosConfigs.configMain.getBooleanWithDefault("boundings_render", false, FlounderBounding::renders));
-		FlounderProfiler.toggle(KosmosConfigs.configMain.getBooleanWithDefault("profiler_open", false, FlounderProfiler::isOpen));
+		setFpsLimit(KosmosConfigs.FRAMEWORK_FPS_LIMIT.getInteger());
+		FlounderTextures.setup(KosmosConfigs.TEXTURES_ANISOTROPY_MAX.getFloat());
+		FlounderBounding.toggle(KosmosConfigs.BOUNDINGS_RENDER.getBoolean());
+		FlounderProfiler.toggle(KosmosConfigs.PROFILER_OPEN.getBoolean());
 		TextBuilder.DEFAULT_TYPE = FlounderFonts.SEGOE_UI_SEMIBOLD;
 	}
 }

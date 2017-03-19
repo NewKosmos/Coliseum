@@ -9,7 +9,6 @@
 
 package kosmos.uis;
 
-import flounder.camera.*;
 import flounder.entities.*;
 import flounder.framework.*;
 import flounder.guis.*;

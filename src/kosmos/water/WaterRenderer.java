@@ -34,7 +34,7 @@ public class WaterRenderer extends Renderer {
 	private ShaderObject shader;
 
 	public WaterRenderer() {
-		this.reflectionQuality = KosmosConfigs.configMain.getFloatWithDefault("water_quality", 0.3f, () -> reflectionQuality);
+		this.reflectionQuality = KosmosConfigs.WATER_REFLECTION_QUALITY.getFloat();
 		this.reflectionFBO = FBO.newFBO(reflectionQuality).disableTextureWrap().depthBuffer(DepthBufferType.RENDER_BUFFER).create();
 		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 

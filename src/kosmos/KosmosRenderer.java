@@ -25,7 +25,6 @@ import flounder.post.filters.*;
 import flounder.post.piplines.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
-import kosmos.chunks.*;
 import kosmos.entities.*;
 import kosmos.filters.*;
 import kosmos.particles.*;
@@ -74,7 +73,7 @@ public class KosmosRenderer extends RendererMaster {
 		this.guisRenderer = new GuisRenderer();
 		this.fontRenderer = new FontRenderer();
 
-		this.displayScale = KosmosConfigs.configMain.getFloatWithDefault("render_scale", 1.0f, this::getDisplayScale);
+		this.displayScale = KosmosConfigs.RENDERER_SCALE.getFloat();
 		this.rendererFBO = FBO.newFBO(displayScale).attachments(3).withAlphaChannel(true).disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
 
 		this.pipelineMRT = new PipelineMRT();
@@ -193,7 +192,8 @@ public class KosmosRenderer extends RendererMaster {
 				if (KosmosWorld.getEntitySun() != null) {
 					filterLensFlare.setSunPosition(KosmosWorld.getEntitySun().getPosition());
 					filterLensFlare.applyFilter(output.getColourTexture(0));
-					output = filterLensFlare.fbo;;
+					output = filterLensFlare.fbo;
+					;
 				}
 				break;
 			case 2:

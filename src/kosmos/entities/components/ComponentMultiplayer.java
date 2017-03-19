@@ -12,7 +12,6 @@ package kosmos.entities.components;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
-import kosmos.camera.*;
 import kosmos.world.*;
 
 import javax.swing.*;

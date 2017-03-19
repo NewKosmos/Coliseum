@@ -59,9 +59,9 @@ public class KosmosInterface extends Standard {
 
 		KosmosWorld.generatePlayer();
 
-		this.username = KosmosConfigs.configServer.getStringWithDefault("username", "USERNAME" + ((int) (Math.random() * 10000)), this::getUsername);
-		this.serverIP = KosmosConfigs.configServer.getStringWithDefault("connect_ip", "localhost", this::getServerIP);
-		this.serverPort = KosmosConfigs.configServer.getIntWithDefault("connect_port", FlounderNetwork.getPort(), this::getServerPort);
+		this.username = KosmosConfigs.CLIENT_USERNAME.getString();
+		this.serverIP = KosmosConfigs.SERVER_IP.getString();
+		this.serverPort = KosmosConfigs.SERVER_PORT.getInteger();
 		FlounderNetwork.startClient(username, serverIP, serverPort);
 		PacketLogin loginPacket = new PacketLogin(username);
 		loginPacket.writeData(FlounderNetwork.getSocketClient());

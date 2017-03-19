@@ -1,6 +1,5 @@
 package kosmos.network.packets;
 
-import flounder.camera.*;
 import flounder.framework.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;

@@ -30,9 +30,9 @@ public class FilterMRT extends PostFilter {
 	public FilterMRT() {
 		super("filterMrt", new MyFile(PostFilter.POST_LOC, "mrtFragment.glsl"));
 
-		this.shadowPCF = KosmosConfigs.configMain.getIntWithDefault("shadow_pcf", 0, () -> shadowPCF);
-		this.shadowBias = KosmosConfigs.configMain.getFloatWithDefault("shadow_bias", 0.001f, () -> shadowBias);
-		this.shadowDarkness = KosmosConfigs.configMain.getFloatWithDefault("shadow_darkness", 0.5f, () -> shadowDarkness);
+		this.shadowPCF = KosmosConfigs.SHADOWMAP_PCF.getInteger();
+		this.shadowBias = KosmosConfigs.SHADOWMAP_BIAS.getFloat();
+		this.shadowDarkness = KosmosConfigs.SHADOWMAP_DARKNESS.getFloat();
 	}
 
 	@Override

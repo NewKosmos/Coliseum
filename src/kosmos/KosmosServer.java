@@ -4,14 +4,12 @@ import flounder.devices.*;
 import flounder.framework.*;
 import flounder.framework.updater.*;
 import flounder.logger.*;
-import flounder.maths.*;
 import flounder.networking.*;
 import flounder.standards.*;
 import kosmos.network.packets.*;
 import org.lwjgl.glfw.*;
 
 import java.util.*;
-import java.util.Timer;
 
 public class KosmosServer extends Framework {
 	public static void main(String[] args) {
@@ -35,8 +33,8 @@ public class KosmosServer extends Framework {
 
 		@Override
 		public void init() {
-			serverPort = KosmosConfigs.configServer.getIntWithDefault("server_port", FlounderNetwork.getPort(), () -> serverPort);
-			serverSeed = KosmosConfigs.configServer.getIntWithDefault("server_seed", (int) Maths.randomInRange(1.0, 10000.0), () -> serverSeed);
+			serverPort = KosmosConfigs.HOST_PORT.getInteger();
+			serverSeed = KosmosConfigs.HOST_SEED.getInteger();
 			scanner = new Scanner(System.in);
 
 			try {
@@ -60,12 +58,12 @@ public class KosmosServer extends Framework {
 
 		@Override
 		public void update() {
-		//	if (scanner.hasNext()) {
-		//		String string = scanner.next().trim();
-		//		if (string.toLowerCase().equals("exit") || string.toLowerCase().equals("q")) {
-		//			Framework.requestClose();
-		//		}
-		//	}
+			//	if (scanner.hasNext()) {
+			//		String string = scanner.next().trim();
+			//		if (string.toLowerCase().equals("exit") || string.toLowerCase().equals("q")) {
+			//			Framework.requestClose();
+			//		}
+			//	}
 		}
 
 		@Override

@@ -12,10 +12,8 @@ import flounder.models.*;
 import flounder.physics.bounding.*;
 import flounder.resources.*;
 import flounder.textures.*;
-import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.particles.*;
-import kosmos.water.*;
 import kosmos.world.*;
 
 import javax.swing.*;

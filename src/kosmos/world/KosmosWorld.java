@@ -19,7 +19,6 @@ import flounder.networking.*;
 import flounder.noise.*;
 import flounder.profiling.*;
 import kosmos.*;
-import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.entities.instances.*;
 
@@ -49,7 +48,7 @@ public class KosmosWorld extends Module {
 
 	@Override
 	public void init() {
-		this.noise = new PerlinNoise(KosmosConfigs.configSave.getIntWithDefault("seed", (int) Maths.randomInRange(1.0, 10000.0), () -> KosmosWorld.getNoise().getSeed()));
+		this.noise = new PerlinNoise(KosmosConfigs.SAVE_SEED.getInteger());
 
 		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(200.0f, 200.0f, 200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 		this.entitySun = new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-200.0f, -200.0f, -200.0f), new Vector3f(0.0f, 0.0f, 0.0f));
@@ -62,11 +61,10 @@ public class KosmosWorld extends Module {
 	}
 
 	public static void generatePlayer() {
-		INSTANCE.entityPlayer = new InstancePlayer(FlounderEntities.getEntities(), new Vector3f(
-				KosmosConfigs.configSave.getFloatWithDefault("player_x", 0.0f, () -> KosmosWorld.getEntityPlayer().getPosition().x),
-				0.0f,
-				KosmosConfigs.configSave.getFloatWithDefault("player_z", 0.0f, () -> KosmosWorld.getEntityPlayer().getPosition().z)
-		), new Vector3f());
+		INSTANCE.entityPlayer = new InstancePlayer(FlounderEntities.getEntities(),
+				new Vector3f(KosmosConfigs.SAVE_PLAYER_X.getFloat(), KosmosConfigs.SAVE_PLAYER_Y.getFloat(), KosmosConfigs.SAVE_PLAYER_Z.getFloat()),
+				new Vector3f()
+		);
 	}
 
 	@Override

@@ -31,7 +31,7 @@ public class ShadowRenderer extends Renderer {
 	private static final MyFile VERTEX_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "shadows", "shadowVertex.glsl");
 	private static final MyFile FRAGMENT_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "shadows", "shadowFragment.glsl");
 
-	public static final int SHADOW_MAP_SIZE = KosmosConfigs.configMain.getIntWithDefault("shadow_size", Math.min(FBO.getMaxFBOSize(), 8192), ShadowRenderer::getShadowMapSize);
+	public static final int SHADOW_MAP_SIZE = KosmosConfigs.SHADOWMAP_SIZE.getInteger(); // TODO
 
 	private FBO shadowFBO;
 	private ShaderObject shader;
