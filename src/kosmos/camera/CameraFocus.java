@@ -37,6 +37,7 @@ public class CameraFocus extends Camera {
 	// Defines the strength of motion from the mouse.
 	private static final float INFLUENCE_OF_JOYSTICK_DY = 0.05f;
 	private static final float INFLUENCE_OF_JOYSTICK_DX = INFLUENCE_OF_JOYSTICK_DY * 100.0f;
+	private static final float INFLUENCE_OF_JOYSTICK_ZOOM = 2.0f * INFLUENCE_OF_JOYSTICK_DY;
 
 	private static final float INFLUENCE_OF_MOUSE_DY = 300.0f;
 	private static final float INFLUENCE_OF_MOUSE_DX = INFLUENCE_OF_MOUSE_DY * 100.0f;
@@ -78,6 +79,7 @@ public class CameraFocus extends Camera {
 	private int reangleButton;
 	private JoystickAxis joystickVertical;
 	private JoystickAxis joystickHorizontal;
+	private JoystickButton joystickZoom;
 
 	public CameraFocus() {
 		super(FlounderLogger.class, FlounderProfiler.class, FlounderJoysticks.class, FlounderKeyboard.class, FlounderMouse.class);
@@ -109,6 +111,7 @@ public class CameraFocus extends Camera {
 		this.reangleButton = KosmosConfigs.CAMERA_REANGLE.setReference(() -> reangleButton).getInteger();
 		this.joystickVertical = new JoystickAxis(0, 3);
 		this.joystickHorizontal = new JoystickAxis(0, 2);
+		this.joystickZoom = new JoystickButton(0, 9);
 
 		calculateDistances();
 	}
@@ -160,7 +163,7 @@ public class CameraFocus extends Camera {
 		float angleChange = 0.0f;
 
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
-			if (FlounderJoysticks.isConnected(0) && Maths.deadband(0.05f, joystickHorizontal.getAmount()) != 0.0f) {
+			if (Maths.deadband(0.05f, joystickHorizontal.getAmount()) != 0.0f && !joystickZoom.isDown()) {
 				angleChange = joystickHorizontal.getAmount() * INFLUENCE_OF_JOYSTICK_DX;
 			} else if (FlounderMouse.getMouse(reangleButton)) {
 				angleChange = -FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSE_DX;
@@ -186,7 +189,7 @@ public class CameraFocus extends Camera {
 		float angleChange = 0.0f;
 
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
-			if (FlounderJoysticks.isConnected(0) && Maths.deadband(0.05f, joystickVertical.getAmount()) != 0.0f) {
+			if (Maths.deadband(0.05f, joystickVertical.getAmount()) != 0.0f && !joystickZoom.isDown()) {
 				angleChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_DY;
 			} else if (FlounderMouse.getMouse(reangleButton)) {
 				angleChange = FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSE_DY;
@@ -212,7 +215,9 @@ public class CameraFocus extends Camera {
 		float zoomChange = 0.0f;
 
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
-			if (Math.abs(FlounderMouse.getDeltaWheel()) > 0.1f) {
+			if (joystickZoom.isDown()) {
+				zoomChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_ZOOM;
+			} else if (Math.abs(FlounderMouse.getDeltaWheel()) > 0.1f) {
 				zoomChange = FlounderMouse.getDeltaWheel() * INFLUENCE_OF_MOUSE_WHEEL;
 			}
 		}
