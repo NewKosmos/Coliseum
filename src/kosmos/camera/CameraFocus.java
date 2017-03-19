@@ -11,6 +11,7 @@ package kosmos.camera;
 
 import flounder.camera.*;
 import flounder.devices.*;
+import flounder.events.*;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.inputs.*;
@@ -22,12 +23,15 @@ import flounder.physics.*;
 import flounder.profiling.*;
 import flounder.space.*;
 import kosmos.*;
+import org.lwjgl.glfw.*;
 
 public class CameraFocus extends Camera {
 	// Defines basic view frustum sizes.
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 300.0f;
-	private static final float FIELD_OF_VIEW = 45.0f;
+
+	private static final float FIELD_OF_VIEW_FP = 60.0f; // First person.
+	private static final float FIELD_OF_VIEW_FO = 45.0f; // Focus view.
 
 	// Defines how snappy these camera functions will be.
 	private static final float ZOOM_AGILITY = 20.0f;
@@ -48,12 +52,16 @@ public class CameraFocus extends Camera {
 	private static final float MAX_ZOOM_CHANGE = 0.5f;
 
 	private static final float CAMERA_AIM_OFFSET = 2.0f;
+	private static final float MAX_ANGLE_OF_ELEVATION_FPS = (float) Math.PI / 4.0f;
+	private static final float MIN_ANGLE_OF_ELEVATION_FPS = (float) -Math.PI / 4.0f;
 	private static final float MAX_ANGLE_OF_ELEVATION = (float) Math.PI / 4.0f;
 	private static final float MIN_ANGLE_OF_ELEVATION = 0.0f;
 	private static final float PITCH_OFFSET = 0.0f;
 	private static final float MINIMUM_ZOOM = 0.5f;
 	private static final float MAXIMUM_ZOOM = 28.0f;
 	private static final float NORMAL_ZOOM = 8.0f;
+
+	private boolean firstPerson;
 
 	private Vector3f position;
 	private Vector3f rotation;
@@ -87,6 +95,8 @@ public class CameraFocus extends Camera {
 
 	@Override
 	public void init() {
+		this.firstPerson = false;
+
 		this.position = new Vector3f();
 		this.rotation = new Vector3f();
 
@@ -113,6 +123,20 @@ public class CameraFocus extends Camera {
 		this.joystickHorizontal = new JoystickAxis(0, 2);
 		this.joystickZoom = new JoystickButton(0, 9);
 
+		FlounderEvents.addEvent(new IEvent() {
+			private KeyButton fpsToggle = new KeyButton(GLFW.GLFW_KEY_V);
+
+			@Override
+			public boolean eventTriggered() {
+				return fpsToggle.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				firstPerson = !firstPerson;
+			}
+		});
+
 		calculateDistances();
 	}
 
@@ -128,7 +152,7 @@ public class CameraFocus extends Camera {
 
 	@Override
 	public float getFOV() {
-		return FIELD_OF_VIEW;
+		return firstPerson ? FIELD_OF_VIEW_FP : FIELD_OF_VIEW_FO;
 	}
 
 	@Override
@@ -139,7 +163,10 @@ public class CameraFocus extends Camera {
 
 		if (player != null) {
 			this.targetPosition.set(player.getPosition());
-			//this.targetRotation.set(player.getRotation());
+
+			//if (firstPerson) {
+			//	this.targetRotation.set(player.getRotation());
+			//}
 		}
 
 		updateActualZoom();
@@ -208,10 +235,18 @@ public class CameraFocus extends Camera {
 
 		targetElevation -= angleChange;
 
-		if (targetElevation >= MAX_ANGLE_OF_ELEVATION) {
-			targetElevation = MAX_ANGLE_OF_ELEVATION;
-		} else if (targetElevation <= MIN_ANGLE_OF_ELEVATION) {
-			targetElevation = MIN_ANGLE_OF_ELEVATION;
+		if (!firstPerson) {
+			if (targetElevation >= MAX_ANGLE_OF_ELEVATION) {
+				targetElevation = MAX_ANGLE_OF_ELEVATION;
+			} else if (targetElevation <= MIN_ANGLE_OF_ELEVATION) {
+				targetElevation = MIN_ANGLE_OF_ELEVATION;
+			}
+		} else {
+			if (targetElevation >= MAX_ANGLE_OF_ELEVATION_FPS) {
+				targetElevation = MAX_ANGLE_OF_ELEVATION_FPS;
+			} else if (targetElevation <= MIN_ANGLE_OF_ELEVATION_FPS) {
+				targetElevation = MIN_ANGLE_OF_ELEVATION_FPS;
+			}
 		}
 	}
 
@@ -288,8 +323,13 @@ public class CameraFocus extends Camera {
 	}
 
 	private void calculateDistances() {
-		horizontalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.cos(angleOfElevation));
-		verticalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.sin(angleOfElevation));
+		if (!firstPerson) {
+			horizontalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.cos(angleOfElevation));
+			verticalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.sin(angleOfElevation));
+		} else {
+			horizontalDistanceFromFocus = 0.0f;
+			verticalDistanceFromFocus = 0.0f;
+		}
 	}
 
 	private void calculatePosition() {
@@ -313,7 +353,7 @@ public class CameraFocus extends Camera {
 	}
 
 	private void updateProjectionMatrix() {
-		Matrix4f.perspectiveMatrix(FIELD_OF_VIEW, FlounderDisplay.getAspectRatio(), NEAR_PLANE, FAR_PLANE, projectionMatrix);
+		Matrix4f.perspectiveMatrix(getFOV(), FlounderDisplay.getAspectRatio(), getNearPlane(), getFarPlane(), projectionMatrix);
 	}
 
 	@Override
@@ -360,6 +400,10 @@ public class CameraFocus extends Camera {
 	@Override
 	public void setRotation(Vector3f rotation) {
 		this.rotation.set(rotation);
+	}
+
+	public boolean isFirstPerson() {
+		return firstPerson;
 	}
 
 	@Override

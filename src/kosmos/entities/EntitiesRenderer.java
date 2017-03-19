@@ -20,6 +20,7 @@ import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
 import flounder.textures.*;
+import kosmos.camera.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.world.*;
@@ -89,6 +90,10 @@ public class EntitiesRenderer extends Renderer {
 
 	private void renderEntity(Entity entity) {
 		if (entity == null) {
+			return;
+		}
+
+		if (((CameraFocus) FlounderCamera.getCamera()).isFirstPerson() && entity.getComponent(ComponentPlayer.ID) != null) {
 			return;
 		}
 

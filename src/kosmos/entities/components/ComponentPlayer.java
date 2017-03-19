@@ -9,6 +9,7 @@
 
 package kosmos.entities.components;
 
+import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.framework.*;
@@ -108,6 +109,13 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		//float cry = FlounderCamera.getCamera().getRotation().y;
 		//float rot = Maths.clamp(getEntity().getRotation().y, Maths.normalizeAngle(cry - 90.0f), Maths.normalizeAngle(cry + 90.0f));
 		//ry = rot - getEntity().getRotation().y;
+
+		// First person rotation.
+		if (((CameraFocus) FlounderCamera.getCamera()).isFirstPerson()) {
+			ry = FlounderCamera.getCamera().getRotation().y - getEntity().getRotation().y;
+			dx *= -1.0f;
+			dz *= -1.0f;
+		}
 
 		// Moves and rotates the player.
 		float lastY = getEntity().getPosition().y;

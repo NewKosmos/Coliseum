@@ -32,8 +32,8 @@ public class OverlayHUD extends GuiComponent {
 	public OverlayHUD() {
 		this.hudTexture = TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "hudSprites.png")).setNumberOfRows(3).create();
 		this.statusHealth = new HudStatus(hudTexture, 2, 0.0f, new Colour(1.0f, 0.2f, 0.2f));
-		this.statusThirst = new HudStatus(hudTexture, 4, 0.1f, new Colour(0.2f, 0.2f, 1.0f));
-		this.statusHunger = new HudStatus(hudTexture, 5, 0.2f, new Colour(1.0f, 0.4f, 0.0f));
+		this.statusThirst = new HudStatus(hudTexture, 3, 0.1f, new Colour(0.2f, 0.2f, 1.0f));
+		this.statusHunger = new HudStatus(hudTexture, 4, 0.2f, new Colour(1.0f, 0.4f, 0.0f));
 
 		this.crossHair = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "crosshair.png")).setNumberOfRows(4).create());
 		this.crossHair.setSelectedRow(KosmosConfigs.HUD_COSSHAIR_TYPE.setReference(() -> crossHair.getSelectedRow()).getInteger());
