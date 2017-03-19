@@ -37,7 +37,7 @@ public class KosmosWorld extends Module {
 	public static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.30f, 0.70f);
 
 	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.9921f, 0.490f, 0.004f);
-	public static final Colour SUN_COLOUR_DAY = new Colour(0.64f, 0.64f, 0.64f);
+	public static final Colour SUN_COLOUR_DAY = new Colour(0.70f, 0.70f, 0.70f);
 
 	public static final Colour MOON_COLOUR = new Colour(0.32f, 0.32f, 0.32f);
 

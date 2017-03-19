@@ -89,6 +89,6 @@ public class ComponentMultiplayer extends IComponentEntity implements IComponent
 
 	@Override
 	public void dispose() {
-		KosmosWorld.removePlayer(username);
+	//	KosmosWorld.removePlayer(username);
 	}
 }
