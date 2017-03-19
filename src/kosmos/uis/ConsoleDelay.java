@@ -8,7 +8,6 @@ public class ConsoleDelay {
 	private boolean delayOver;
 
 	protected ConsoleDelay() {
-		// TODO: Save to configs.
 		this.delayTimer = new Timer(0.4);
 		this.repeatTimer = new Timer(0.1);
 		this.delayOver = false;

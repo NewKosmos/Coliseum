@@ -9,12 +9,14 @@
 
 package kosmos.entities.components;
 
+import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import kosmos.camera.*;
@@ -103,6 +105,11 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 			dy = worldHeight - getEntity().getPosition().getY();
 			currentUpwardSpeed = 0.0f;
 		}
+
+		// Limits ry rotation. TODO
+		//float cry = FlounderCamera.getCamera().getRotation().y;
+		//float rot = Maths.clamp(getEntity().getRotation().y, Maths.normalizeAngle(cry - 90.0f), Maths.normalizeAngle(cry + 90.0f));
+		//ry = rot - getEntity().getRotation().y;
 
 		// Moves and rotates the player.
 		float lastY = getEntity().getPosition().y;

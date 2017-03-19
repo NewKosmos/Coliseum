@@ -142,7 +142,6 @@ public class CameraFocus extends Camera {
 
 		if (player != null) {
 			this.targetPosition.set(player.getPosition());
-			// TODO: Rotate if camera rotation is 90 degrees below player rotation (astroneer like player camera).
 			//this.targetRotation.set(player.getRotation());
 		}
 
