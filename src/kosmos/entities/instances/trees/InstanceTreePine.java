@@ -7,7 +7,7 @@
  * Proprietary and confidential
  */
 
-package kosmos.entities.instances;
+package kosmos.entities.instances.trees;
 
 import flounder.entities.*;
 import flounder.maths.vectors.*;
@@ -17,16 +17,17 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.entities.components.*;
 
-public class InstanceLilipad extends Entity {
-	private static final ModelObject model = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "lilipad", "lilipad.obj")).create();
-	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "lilipad", "lilipadTexture.png")).create();
+public class InstanceTreePine extends Entity {
+	private static final ModelObject model = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "treePine", "treePine.obj")).create();
+	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "treePine", "treePine.png")).create();
+	private static final TextureObject textureSway = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "treePine", "treePineSway.png")).create();
 
-	public InstanceLilipad(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+	public InstanceTreePine(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 
-		new ComponenWaterBob(this);
 		ComponentModel componentModel = new ComponentModel(this, 1.0f, model, texture, 1);
 		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.0f, false, false);
+		ComponentSway componentSway = new ComponentSway(this, textureSway);
 		ComponentCollider componentCollider = new ComponentCollider(this);
 		ComponentCollision componentCollision = new ComponentCollision(this);
 	}

@@ -24,7 +24,7 @@ import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
 import kosmos.*;
-import kosmos.entities.instances.*;
+import kosmos.entities.instances.trees.*;
 import org.lwjgl.glfw.*;
 
 import java.util.*;

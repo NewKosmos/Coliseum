@@ -7,7 +7,7 @@
  * Proprietary and confidential
  */
 
-package kosmos.entities.instances;
+package kosmos.entities.instances.world;
 
 import flounder.entities.*;
 import flounder.lights.*;

@@ -7,7 +7,7 @@
  * Proprietary and confidential
  */
 
-package kosmos.entities.instances;
+package kosmos.entities.instances.plants;
 
 import flounder.entities.*;
 import flounder.maths.vectors.*;
@@ -17,12 +17,12 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.entities.components.*;
 
-public class InstanceCattail extends Entity {
-	private static final ModelObject model = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cattail", "cattail.obj")).create();
-	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cattail", "cattail.png")).create();
-	private static final TextureObject textureSway = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cattail", "cattailSway.png")).create();
+public class InstanceCactus2 extends Entity {
+	private static final ModelObject model = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus2", "cactus2.obj")).create();
+	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus2", "cactus2.png")).create();
+	private static final TextureObject textureSway = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus2", "cactusSway2.png")).create();
 
-	public InstanceCattail(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+	public InstanceCactus2(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 
 		ComponentModel componentModel = new ComponentModel(this, 1.0f, model, texture, 1);

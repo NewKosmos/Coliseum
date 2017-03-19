@@ -13,7 +13,6 @@ import flounder.entities.*;
 import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.lights.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
@@ -22,7 +21,7 @@ import flounder.profiling.*;
 import flounder.visual.*;
 import kosmos.*;
 import kosmos.entities.components.*;
-import kosmos.entities.instances.*;
+import kosmos.entities.instances.world.*;
 
 import java.util.*;
 

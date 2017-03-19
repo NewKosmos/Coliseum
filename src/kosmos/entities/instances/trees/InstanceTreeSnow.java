@@ -7,7 +7,7 @@
  * Proprietary and confidential
  */
 
-package kosmos.entities.instances;
+package kosmos.entities.instances.trees;
 
 import flounder.entities.*;
 import flounder.maths.vectors.*;
@@ -17,12 +17,12 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.entities.components.*;
 
-public class InstanceTallGrass extends Entity {
-	private static final ModelObject model = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "tallGrass", "tallGrass.obj")).create();
-	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "tallGrass", "tallGrass.png")).create();
-	private static final TextureObject textureSway = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "tallGrass", "tallGrass.png")).create();
+public class InstanceTreeSnow extends Entity {
+	private static final ModelObject model = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "treeSnow", "treeSnow.obj")).create();
+	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "treeSnow", "treeSnow.png")).create();
+	private static final TextureObject textureSway = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "treeSnow", "treeSnowSway.png")).create();
 
-	public InstanceTallGrass(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+	public InstanceTreeSnow(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 
 		ComponentModel componentModel = new ComponentModel(this, 1.0f, model, texture, 1);

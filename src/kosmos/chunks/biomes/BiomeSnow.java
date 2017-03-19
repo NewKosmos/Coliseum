@@ -14,7 +14,7 @@ import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.entities.instances.*;
+import kosmos.entities.instances.trees.*;
 import kosmos.particles.*;
 import kosmos.particles.loading.*;
 import kosmos.world.*;

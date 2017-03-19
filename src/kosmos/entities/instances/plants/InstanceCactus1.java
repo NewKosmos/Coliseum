@@ -3,7 +3,7 @@
  * Date generated: 1.3.2017 - 15:47
  * Created by: mattp
  */
-package kosmos.entities.instances;
+package kosmos.entities.instances.plants;
 
 import flounder.entities.*;
 import flounder.maths.vectors.*;

@@ -7,7 +7,7 @@
  * Proprietary and confidential
  */
 
-package kosmos.entities.instances;
+package kosmos.entities.instances.plants;
 
 import flounder.entities.*;
 import flounder.maths.vectors.*;
