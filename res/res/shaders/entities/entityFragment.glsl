@@ -25,10 +25,10 @@ uniform bool useGlowMap;
 void main(void) {
 	vec4 diffuseColour = texture(diffuseMap, pass_textureCoords);
 
-	if (diffuseColour.a < 0.2){
-		out_albedo = vec4(0.0);
-		discard;
-	}
+	//if (diffuseColour.a < 0.2){
+	//	out_albedo = vec4(0.0);
+	//	discard;
+	//}
 
 	bool glowing = false;
 

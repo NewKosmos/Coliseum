@@ -14,6 +14,7 @@ import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
+import kosmos.entities.instances.objects.*;
 import kosmos.entities.instances.trees.*;
 import kosmos.particles.*;
 import kosmos.particles.loading.*;
@@ -53,7 +54,38 @@ public class BiomeSnow implements IBiome {
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
 			case 2:
-				if (spawn - 2 < 0.2f) {
+				return new InstanceTreeMaple(FlounderEntities.getEntities(),
+						new Vector3f(
+								tilePosition.x,
+								0.53f + tilePosition.y * 0.5f,
+								tilePosition.z
+						),
+						new Vector3f(0.0f, rotation, 0.0f)
+				);
+			case 3:
+				return new InstanceTreeYellow(FlounderEntities.getEntities(),
+						new Vector3f(
+								tilePosition.x,
+								0.5f + tilePosition.y * 0.5f,
+								tilePosition.z
+						),
+						new Vector3f(0.0f, rotation, 0.0f)
+				);
+			case 4:
+				if (spawn - 4 < 0.2f) {
+					return new InstanceBottleMaple(FlounderEntities.getEntities(),
+							new Vector3f(
+									tilePosition.x,
+									-0.35f + tilePosition.y * 0.5f,
+									tilePosition.z
+							),
+							new Vector3f(0.0f, rotation, 0.0f)
+					);
+				}
+
+				return null;
+			case 5:
+				if (spawn - 5 < 0.2f) {
 					return new InstanceTreeSnow(FlounderEntities.getEntities(),
 							new Vector3f(
 									tilePosition.x,
