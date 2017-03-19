@@ -11,6 +11,7 @@ package kosmos.filters;
 
 import flounder.camera.*;
 import flounder.entities.*;
+import flounder.fbos.*;
 import flounder.post.*;
 import flounder.profiling.*;
 import flounder.resources.*;
@@ -23,6 +24,10 @@ public class FilterMRT extends PostFilter {
 
 	public FilterMRT() {
 		super("filterMrt", new MyFile(PostFilter.POST_LOC, "mrtFragment.glsl"));
+	}
+
+	public FilterMRT(FBO fbo) {
+		super("filterMrt", new MyFile(PostFilter.POST_LOC, "mrtFragment.glsl"), fbo);
 	}
 
 	@Override

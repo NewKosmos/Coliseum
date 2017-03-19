@@ -19,6 +19,7 @@ import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
 import kosmos.chunks.*;
+import kosmos.filters.*;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -28,12 +29,12 @@ public class WaterRenderer extends Renderer {
 	private static final MyFile FRAGMENT_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "water", "waterFragment.glsl");
 
 	private FBO reflectionFBO;
-	private FBO reflectionResult;
+	private FilterMRT pipelineMRT;
 	private ShaderObject shader;
 
 	public WaterRenderer() {
 		this.reflectionFBO = FBO.newFBO(KosmosWater.getReflectionQuality()).attachments(3).withAlphaChannel(true).disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
-		this.reflectionResult = null;
+		this.pipelineMRT = new FilterMRT(FBO.newFBO(1.0f).disableTextureWrap().create());
 		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 
 		/*FlounderEvents.addEvent(new IEvent() {
@@ -90,8 +91,8 @@ public class WaterRenderer extends Renderer {
 			}
 
 			// Binds the reflection FBO.
-			if (reflectionResult != null) {
-				OpenGlUtils.bindTexture(reflectionResult.getColourTexture(0), GL_TEXTURE_2D, 0);
+			if (pipelineMRT != null) {
+				OpenGlUtils.bindTexture(pipelineMRT.fbo.getColourTexture(0), GL_TEXTURE_2D, 0);
 			} else {
 				OpenGlUtils.bindTexture(reflectionFBO.getColourTexture(0), GL_TEXTURE_2D, 0);
 			}
@@ -134,8 +135,8 @@ public class WaterRenderer extends Renderer {
 		return reflectionFBO;
 	}
 
-	public void setReflectionResult(FBO reflectionResult) {
-		this.reflectionResult = reflectionResult;
+	public FilterMRT getPipelineMRT() {
+		return pipelineMRT;
 	}
 
 	@Override

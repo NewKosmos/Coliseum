@@ -111,7 +111,6 @@ public class KosmosRenderer extends RendererMaster {
 		/* Water Reflection & Refraction */
 		if (KosmosWater.reflectionsEnabled()) {
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
-			waterRenderer.setReflectionResult(null);
 
 			if (KosmosWater.reflectionShadows()) {
 				shadowRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
@@ -125,11 +124,15 @@ public class KosmosRenderer extends RendererMaster {
 			}
 			glDisable(GL_CLIP_DISTANCE0);
 
-			pipelineMRT.setRunFXAA(false);
-			pipelineMRT.renderPipeline(waterRenderer.getReflectionFBO());
+			waterRenderer.getPipelineMRT().applyFilter(
+					waterRenderer.getReflectionFBO().getColourTexture(0), // Colours
+					waterRenderer.getReflectionFBO().getColourTexture(1), // Normals
+					waterRenderer.getReflectionFBO().getColourTexture(2), // Extras
+					waterRenderer.getReflectionFBO().getDepthTexture(), // Depth
+					((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap() // Shadow Map
+			);
 			pipelineBloom.setBloomThreshold(0.6f);
-			pipelineBloom.renderMRT(rendererFBO, pipelineMRT.getOutput());
-			waterRenderer.setReflectionResult(pipelineBloom.getOutput());
+			pipelineBloom.renderMRT(rendererFBO, waterRenderer.getPipelineMRT().fbo);
 
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
 		}
