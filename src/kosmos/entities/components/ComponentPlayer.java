@@ -72,9 +72,9 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 	public void update() {
 		// Gets movement and rotation data from player inputs.
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
-			currentSpeed = (inputBoost.isDown() ? PlayerBasic.BOOST_SPEED : PlayerBasic.RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
-			currentUpwardSpeed = (inputJump.wasDown() && Maths.deadband(0.05f, currentUpwardSpeed) == 0.0f) ? PlayerBasic.JUMP_POWER : currentUpwardSpeed;
-			currentTurnSpeed = -PlayerBasic.TURN_SPEED * Maths.deadband(0.05f, inputTurn.getAmount());
+			currentSpeed = (inputBoost.isDown() ? KosmosPlayer.BOOST_SPEED : KosmosPlayer.RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
+			currentUpwardSpeed = (inputJump.wasDown() && Maths.deadband(0.05f, currentUpwardSpeed) == 0.0f) ? KosmosPlayer.JUMP_POWER : currentUpwardSpeed;
+			currentTurnSpeed = -KosmosPlayer.TURN_SPEED * Maths.deadband(0.05f, inputTurn.getAmount());
 		} else {
 			currentSpeed = 0.0f;
 			currentTurnSpeed = 0.0f;
@@ -97,7 +97,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		float chunkHeight = Chunk.getWorldHeight(getEntity().getPosition().x + dx, getEntity().getPosition().z + dz) * 0.5f;
 
 		// Does collision with the highest world object.
-		float worldHeight = Math.max(waterLevel - (float) Math.sqrt(2.0), chunkHeight) + PlayerBasic.PLAYER_OFFSET_Y;
+		float worldHeight = Math.max(waterLevel - (float) Math.sqrt(2.0), chunkHeight) + KosmosPlayer.PLAYER_OFFSET_Y;
 
 		// If the player is below the world height then force the player back on the ground.
 		if (getEntity().getPosition().y + dy < worldHeight) {
@@ -106,12 +106,14 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		}
 
 		// First person rotation.
-		if (((CameraFocus) FlounderCamera.getCamera()).isFirstPerson()) {
-			dx *= -1.0f;
-			dz *= -1.0f;
-			dx += ry * (PlayerBasic.RUN_SPEED / PlayerBasic.TURN_SPEED); // TODO: Fix strafe.
-			dx = Maths.clamp(dx, -PlayerBasic.RUN_SPEED, PlayerBasic.RUN_SPEED);
-			ry = FlounderCamera.getCamera().getRotation().y - getEntity().getRotation().y;
+		if (((KosmosCamera) FlounderCamera.getCamera()).isFirstPerson()) {
+			float x = currentSpeed * Framework.getDelta();
+			float y = ry * (KosmosPlayer.RUN_SPEED / KosmosPlayer.TURN_SPEED);
+			double theta = Math.toRadians(FlounderCamera.getCamera().getRotation().y);
+
+			dz = (float) -(x * Math.cos(theta) - y * Math.sin(theta));
+			dx = (float) -(x * Math.sin(theta) + y * Math.cos(theta));
+			ry = (FlounderCamera.getCamera().getRotation().y + 180.0f) - getEntity().getRotation().y;
 		} else {
 			// Limits ry rotation. TODO
 			//float cry = FlounderCamera.getCamera().getRotation().y;

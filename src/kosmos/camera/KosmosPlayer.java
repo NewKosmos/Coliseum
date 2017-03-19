@@ -17,7 +17,7 @@ import kosmos.chunks.*;
 import kosmos.network.packets.*;
 import kosmos.world.*;
 
-public class PlayerBasic extends Player {
+public class KosmosPlayer extends Player {
 	public static final float PLAYER_OFFSET_Y = (float) (Math.sqrt(2.0) * 0.25);
 
 	public static final float RUN_SPEED = 5.0f;
@@ -31,7 +31,7 @@ public class PlayerBasic extends Player {
 	private Timer timer;
 	private static boolean needSendData;
 
-	public PlayerBasic() {
+	public KosmosPlayer() {
 		super();
 	}
 
@@ -41,7 +41,7 @@ public class PlayerBasic extends Player {
 		this.rotation = new Vector3f();
 
 		this.timer = new Timer(1.0 / 20.0); // 20 ticks per second.
-		PlayerBasic.needSendData = true;
+		KosmosPlayer.needSendData = true;
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class PlayerBasic extends Player {
 	}
 
 	public static void askSendData() {
-		PlayerBasic.needSendData = true;
+		KosmosPlayer.needSendData = true;
 	}
 
 	@Override

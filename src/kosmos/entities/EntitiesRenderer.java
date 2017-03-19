@@ -20,7 +20,6 @@ import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
 import flounder.textures.*;
-import kosmos.camera.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.world.*;

@@ -28,7 +28,7 @@ public class NewKosmos extends Framework {
 	}
 
 	public NewKosmos() {
-		super("kosmos", new UpdaterDefault(GLFW::glfwGetTime), -1, new KosmosInterface(), new KosmosRenderer(), new KosmosGuis(), new CameraFocus(), new PlayerBasic());
+		super("kosmos", new UpdaterDefault(GLFW::glfwGetTime), -1, new KosmosInterface(), new KosmosRenderer(), new KosmosGuis(), new KosmosCamera(), new KosmosPlayer());
 		FlounderDisplay.setup(KosmosConfigs.DISPLAY_WIDTH.getInteger(),
 				KosmosConfigs.DISPLAY_HEIGHT.getInteger(),
 				"New Kosmos", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},

@@ -25,7 +25,7 @@ import flounder.space.*;
 import kosmos.*;
 import org.lwjgl.glfw.*;
 
-public class CameraFocus extends Camera {
+public class KosmosCamera extends Camera {
 	// Defines basic view frustum sizes.
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 300.0f;
@@ -89,13 +89,13 @@ public class CameraFocus extends Camera {
 	private JoystickAxis joystickHorizontal;
 	private JoystickButton joystickZoom;
 
-	public CameraFocus() {
+	public KosmosCamera() {
 		super(FlounderLogger.class, FlounderProfiler.class, FlounderJoysticks.class, FlounderKeyboard.class, FlounderMouse.class);
 	}
 
 	@Override
 	public void init() {
-		this.firstPerson = false;
+		this.firstPerson = KosmosConfigs.CAMERA_FIRST_PERSON.setReference(() -> firstPerson).getBoolean();
 
 		this.position = new Vector3f();
 		this.rotation = new Vector3f();

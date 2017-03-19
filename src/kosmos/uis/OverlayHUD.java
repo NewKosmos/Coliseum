@@ -10,9 +10,7 @@
 package kosmos.uis;
 
 import flounder.devices.*;
-import flounder.framework.*;
 import flounder.guis.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.resources.*;
 import flounder.textures.*;
@@ -28,6 +26,7 @@ public class OverlayHUD extends GuiComponent {
 	private HudStatus statusHunger;
 
 	private GuiTexture crossHair;
+	private GuiTexture cornerAlpha;
 
 	public OverlayHUD() {
 		this.hudTexture = TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "hudSprites.png")).setNumberOfRows(3).create();
@@ -38,12 +37,16 @@ public class OverlayHUD extends GuiComponent {
 		this.crossHair = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "crosshair.png")).setNumberOfRows(4).create());
 		this.crossHair.setSelectedRow(KosmosConfigs.HUD_COSSHAIR_TYPE.setReference(() -> crossHair.getSelectedRow()).getInteger());
 		this.crossHair.setColourOffset(new Colour(0.6f, 0.2f, 0.5f));
+		this.cornerAlpha = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "cornerAlpha.png")).create());
 
 		super.show(true);
 	}
 
 	@Override
 	protected void updateSelf() {
+		cornerAlpha.setPosition(0.05f, 0.05f, 0.10f, 0.10f);
+		cornerAlpha.update();
+
 		statusHealth.update();
 		statusThirst.update();
 		statusHunger.update();
@@ -62,6 +65,8 @@ public class OverlayHUD extends GuiComponent {
 
 			guiTextures.add(crossHair);
 		}
+
+		guiTextures.add(cornerAlpha);
 	}
 
 	private static class HudStatus {

@@ -140,7 +140,7 @@ public class KosmosRenderer extends RendererMaster {
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
 		}
 
-		entitiesRenderer.setRenderPlayer(!((CameraFocus) FlounderCamera.getCamera()).isFirstPerson());
+		entitiesRenderer.setRenderPlayer(!((KosmosCamera) FlounderCamera.getCamera()).isFirstPerson());
 
 		/* Shadow rendering. */
 		shadowRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
