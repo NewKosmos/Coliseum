@@ -5,6 +5,7 @@ import flounder.framework.*;
 import flounder.framework.updater.*;
 import flounder.logger.*;
 import flounder.networking.*;
+import flounder.resources.*;
 import flounder.standards.*;
 import kosmos.network.packets.*;
 import org.lwjgl.glfw.*;
@@ -20,6 +21,7 @@ public class KosmosServer extends Framework {
 
 	public KosmosServer() {
 		super("Server", new UpdaterDefault(GLFW::glfwGetTime), -1, new ServerInterface());
+		FlounderDisplay.setup(100, 100, "New Kosmos Server", new MyFile[]{}, false, false, 0, false, true);
 	}
 
 	public static class ServerInterface extends Standard {

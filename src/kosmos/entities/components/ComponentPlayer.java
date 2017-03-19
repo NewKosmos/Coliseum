@@ -58,10 +58,10 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		this.currentSpeed = 0.0f;
 		this.currentUpwardSpeed = 0.0f;
 		this.currentTurnSpeed = 0.0f;
-		this.inputForward = new CompoundAxis(new ButtonAxis(upKeyButtons, downKeyButtons), new JoystickAxis(0, 1));
+		this.inputForward = new CompoundAxis(new ButtonAxis(downKeyButtons, upKeyButtons), new JoystickAxis(0, 1));
 		this.inputTurn = new CompoundAxis(new ButtonAxis(leftKeyButtons, rightKeyButtons), new JoystickAxis(0, 0));
-		this.inputBoost = new CompoundButton(boostButtons);
-		this.inputJump = new CompoundButton(jumpButtons);
+		this.inputBoost = new CompoundButton(boostButtons, new JoystickButton(0, 1));
+		this.inputJump = new CompoundButton(jumpButtons, new JoystickButton(0, 0));
 
 		this.moveAmount = new Vector3f();
 		this.rotateAmount = new Vector3f();
@@ -71,7 +71,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 	public void update() {
 		// Gets movement and rotation data from player inputs.
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
-			currentSpeed = -(inputBoost.isDown() ? PlayerBasic.BOOST_SPEED : PlayerBasic.RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
+			currentSpeed = (inputBoost.isDown() ? PlayerBasic.BOOST_SPEED : PlayerBasic.RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
 			currentUpwardSpeed = (inputJump.wasDown() && Maths.deadband(0.05f, currentUpwardSpeed) == 0.0f) ? PlayerBasic.JUMP_POWER : currentUpwardSpeed;
 			currentTurnSpeed = -PlayerBasic.TURN_SPEED * Maths.deadband(0.05f, inputTurn.getAmount());
 		} else {

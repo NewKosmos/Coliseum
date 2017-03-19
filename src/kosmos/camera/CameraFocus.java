@@ -13,6 +13,7 @@ import flounder.camera.*;
 import flounder.devices.*;
 import flounder.framework.*;
 import flounder.guis.*;
+import flounder.inputs.*;
 import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.matrices.*;
@@ -34,6 +35,9 @@ public class CameraFocus extends Camera {
 	private static final float PITCH_AGILITY = 20.0f;
 
 	// Defines the strength of motion from the mouse.
+	private static final float INFLUENCE_OF_JOYSTICK_DY = 0.05f;
+	private static final float INFLUENCE_OF_JOYSTICK_DX = INFLUENCE_OF_JOYSTICK_DY * 100.0f;
+
 	private static final float INFLUENCE_OF_MOUSE_DY = 300.0f;
 	private static final float INFLUENCE_OF_MOUSE_DX = INFLUENCE_OF_MOUSE_DY * 100.0f;
 	private static final float INFLUENCE_OF_MOUSE_WHEEL = 0.05f;
@@ -72,6 +76,8 @@ public class CameraFocus extends Camera {
 	private float verticalDistanceFromFocus;
 
 	private int reangleButton;
+	private JoystickAxis joystickVertical;
+	private JoystickAxis joystickHorizontal;
 
 	public CameraFocus() {
 		super(FlounderLogger.class, FlounderProfiler.class, FlounderJoysticks.class, FlounderKeyboard.class, FlounderMouse.class);
@@ -79,17 +85,6 @@ public class CameraFocus extends Camera {
 
 	@Override
 	public void init() {
-		/*FlounderEvents.addEvent(new IEvent() {
-			private KeyButton k = new KeyButton(GLFW.GLFW_KEY_KP_ADD);
-			@Override public boolean eventTriggered() {return k.wasDown();}
-			@Override public void onEvent() {FIELD_OF_VIEW += 2.0f; FlounderLogger.log("FOV: " + FIELD_OF_VIEW);}
-		});
-		FlounderEvents.addEvent(new IEvent() {
-			private KeyButton k = new KeyButton(org.lwjgl.glfw.GLFW.GLFW_KEY_KP_SUBTRACT);
-			@Override public boolean eventTriggered() {return k.wasDown();}
-			@Override public void onEvent() {FIELD_OF_VIEW -= 2.0f; FlounderLogger.log("FOV: " + FIELD_OF_VIEW);}
-		});*/
-
 		this.position = new Vector3f();
 		this.rotation = new Vector3f();
 
@@ -112,9 +107,8 @@ public class CameraFocus extends Camera {
 		this.verticalDistanceFromFocus = 0.0f;
 
 		this.reangleButton = KosmosConfigs.CAMERA_REANGLE.setReference(() -> reangleButton).getInteger();
-		// GLFW_MOUSE_BUTTON_LEFT   = GLFW_MOUSE_BUTTON_1,
-		// GLFW_MOUSE_BUTTON_RIGHT  = GLFW_MOUSE_BUTTON_2,
-		// GLFW_MOUSE_BUTTON_MIDDLE = GLFW_MOUSE_BUTTON_3;
+		this.joystickVertical = new JoystickAxis(0, 3);
+		this.joystickHorizontal = new JoystickAxis(0, 2);
 
 		calculateDistances();
 	}
@@ -166,7 +160,9 @@ public class CameraFocus extends Camera {
 		float angleChange = 0.0f;
 
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
-			if (FlounderMouse.getMouse(reangleButton)) {
+			if (FlounderJoysticks.isConnected(0)) {
+				angleChange = joystickHorizontal.getAmount() * INFLUENCE_OF_JOYSTICK_DX;
+			} else if (FlounderMouse.getMouse(reangleButton)) {
 				angleChange = -FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSE_DX;
 			}
 		}
@@ -190,7 +186,9 @@ public class CameraFocus extends Camera {
 		float angleChange = 0.0f;
 
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
-			if (FlounderMouse.getMouse(reangleButton)) {
+			if (FlounderJoysticks.isConnected(0)) {
+				angleChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_DY;
+			} else if (FlounderMouse.getMouse(reangleButton)) {
 				angleChange = FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSE_DY;
 			}
 		}
