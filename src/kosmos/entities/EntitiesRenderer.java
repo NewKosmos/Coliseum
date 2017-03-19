@@ -38,6 +38,7 @@ public class EntitiesRenderer extends Renderer {
 	private ShaderObject shader;
 	private TextureObject textureUndefined;
 	private int renderedCount;
+	private boolean renderPlayer;
 
 	/**
 	 * Creates a new entity renderer.
@@ -46,6 +47,7 @@ public class EntitiesRenderer extends Renderer {
 		this.shader = ShaderFactory.newBuilder().setName("entities").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 		this.textureUndefined = TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "undefined.png")).create();
 		this.renderedCount = 0;
+		this.renderPlayer = true;
 	}
 
 	@Override
@@ -93,7 +95,7 @@ public class EntitiesRenderer extends Renderer {
 			return;
 		}
 
-		if (((CameraFocus) FlounderCamera.getCamera()).isFirstPerson() && entity.getComponent(ComponentPlayer.ID) != null) {
+		if (!renderPlayer && entity.getComponent(ComponentPlayer.ID) != null) {
 			return;
 		}
 
@@ -203,6 +205,10 @@ public class EntitiesRenderer extends Renderer {
 
 	private void endRendering() {
 		shader.stop();
+	}
+
+	public void setRenderPlayer(boolean renderPlayer) {
+		this.renderPlayer = renderPlayer;
 	}
 
 	@Override

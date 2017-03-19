@@ -105,16 +105,18 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 			currentUpwardSpeed = 0.0f;
 		}
 
-		// Limits ry rotation. TODO
-		//float cry = FlounderCamera.getCamera().getRotation().y;
-		//float rot = Maths.clamp(getEntity().getRotation().y, Maths.normalizeAngle(cry - 90.0f), Maths.normalizeAngle(cry + 90.0f));
-		//ry = rot - getEntity().getRotation().y;
-
 		// First person rotation.
 		if (((CameraFocus) FlounderCamera.getCamera()).isFirstPerson()) {
-			ry = FlounderCamera.getCamera().getRotation().y - getEntity().getRotation().y;
 			dx *= -1.0f;
 			dz *= -1.0f;
+			dx += ry * (PlayerBasic.RUN_SPEED / PlayerBasic.TURN_SPEED); // TODO: Fix strafe.
+			dx = Maths.clamp(dx, -PlayerBasic.RUN_SPEED, PlayerBasic.RUN_SPEED);
+			ry = FlounderCamera.getCamera().getRotation().y - getEntity().getRotation().y;
+		} else {
+			// Limits ry rotation. TODO
+			//float cry = FlounderCamera.getCamera().getRotation().y;
+			//float rot = Maths.clamp(getEntity().getRotation().y, Maths.normalizeAngle(cry - 90.0f), Maths.normalizeAngle(cry + 90.0f));
+			//ry = rot - getEntity().getRotation().y;
 		}
 
 		// Moves and rotates the player.

@@ -25,6 +25,7 @@ import flounder.post.filters.*;
 import flounder.post.piplines.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
+import kosmos.camera.*;
 import kosmos.entities.*;
 import kosmos.filters.*;
 import kosmos.particles.*;
@@ -108,6 +109,8 @@ public class KosmosRenderer extends RendererMaster {
 
 	@Override
 	public void render() {
+		entitiesRenderer.setRenderPlayer(true);
+
 		/* Water Reflection & Refraction */
 		if (KosmosWater.reflectionsEnabled()) {
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
@@ -136,6 +139,8 @@ public class KosmosRenderer extends RendererMaster {
 
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
 		}
+
+		entitiesRenderer.setRenderPlayer(!((CameraFocus) FlounderCamera.getCamera()).isFirstPerson());
 
 		/* Shadow rendering. */
 		shadowRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
