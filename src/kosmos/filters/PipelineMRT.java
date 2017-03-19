@@ -19,10 +19,12 @@ import kosmos.*;
 public class PipelineMRT extends PostPipeline {
 	private FilterMRT filterMRT;
 	private FilterFXAA filterFXAA;
+	private boolean runFXAA;
 
 	public PipelineMRT() {
-		filterMRT = new FilterMRT();
-		filterFXAA = new FilterFXAA();
+		this.filterMRT = new FilterMRT();
+		this.filterFXAA = new FilterFXAA();
+		this.runFXAA = FlounderDisplay.isAntialiasing();
 	}
 
 	@Override
@@ -35,14 +37,18 @@ public class PipelineMRT extends PostPipeline {
 				((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap() // Shadow Map
 		);
 
-		if (FlounderDisplay.isAntialiasing()) {
+		if (runFXAA) {
 			filterFXAA.applyFilter(filterMRT.fbo.getColourTexture(0));
 		}
 	}
 
+	public void setRunFXAA(boolean runFXAA) {
+		this.runFXAA = runFXAA;
+	}
+
 	@Override
 	public FBO getOutput() {
-		if (FlounderDisplay.isAntialiasing()) {
+		if (runFXAA) {
 			return filterFXAA.fbo;
 		} else {
 			return filterMRT.fbo;

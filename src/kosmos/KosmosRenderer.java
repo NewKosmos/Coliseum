@@ -111,6 +111,11 @@ public class KosmosRenderer extends RendererMaster {
 		/* Water Reflection & Refraction */
 		if (KosmosWater.reflectionsEnabled()) {
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
+			waterRenderer.setReflectionResult(null);
+
+			if (KosmosWater.reflectionShadows()) {
+				shadowRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
+			}
 
 			glEnable(GL_CLIP_DISTANCE0);
 			{
@@ -119,6 +124,12 @@ public class KosmosRenderer extends RendererMaster {
 				waterRenderer.getReflectionFBO().unbindFrameBuffer();
 			}
 			glDisable(GL_CLIP_DISTANCE0);
+
+			pipelineMRT.setRunFXAA(false);
+			pipelineMRT.renderPipeline(waterRenderer.getReflectionFBO());
+			pipelineBloom.setBloomThreshold(0.6f);
+			pipelineBloom.renderMRT(rendererFBO, pipelineMRT.getOutput());
+			waterRenderer.setReflectionResult(pipelineBloom.getOutput());
 
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
 		}
@@ -175,6 +186,7 @@ public class KosmosRenderer extends RendererMaster {
 	}
 
 	private void renderPost(boolean isPaused, float blurFactor) {
+		pipelineMRT.setRunFXAA(FlounderDisplay.isAntialiasing());
 		pipelineMRT.renderPipeline(rendererFBO);
 		FBO output = pipelineMRT.getOutput();
 
@@ -193,7 +205,6 @@ public class KosmosRenderer extends RendererMaster {
 					filterLensFlare.setSunPosition(KosmosWorld.getEntitySun().getPosition());
 					filterLensFlare.applyFilter(output.getColourTexture(0));
 					output = filterLensFlare.fbo;
-					;
 				}
 				break;
 			case 2:
