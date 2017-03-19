@@ -43,7 +43,7 @@ public class OverlayChat extends GuiComponent {
 		this.inputDelay = new ConsoleDelay();
 		this.lastKey = 0;
 
-		this.textureInput = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "console_input.png")).create());
+		this.textureInput = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "chatInput.png")).create());
 		this.currentInput = Text.newText(START_STRING).textAlign(GuiAlign.LEFT).setFontSize(0.875f).create();
 		this.currentInput.setColour(1.0f, 1.0f, 1.0f);
 		addText(currentInput, 0.01f, 0.972f, 1.0f);

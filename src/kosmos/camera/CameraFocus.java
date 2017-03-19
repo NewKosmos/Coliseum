@@ -91,7 +91,7 @@ public class CameraFocus extends Camera {
 		this.rotation = new Vector3f();
 
 		this.viewFrustum = new Frustum();
-		this.viewRay = new Ray(true, new Vector2f());
+		this.viewRay = new Ray(false, new Vector2f());
 		this.viewMatrix = new Matrix4f();
 		this.projectionMatrix = new Matrix4f();
 
@@ -165,8 +165,10 @@ public class CameraFocus extends Camera {
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
 			if (Maths.deadband(0.05f, joystickHorizontal.getAmount()) != 0.0f && !joystickZoom.isDown()) {
 				angleChange = joystickHorizontal.getAmount() * INFLUENCE_OF_JOYSTICK_DX;
-			} else if (FlounderMouse.getMouse(reangleButton)) {
-				angleChange = -FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSE_DX;
+			} else {
+				if (FlounderMouse.isCursorDisabled() || FlounderMouse.getMouse(reangleButton)) {
+					angleChange = -FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSE_DX;
+				}
 			}
 		}
 
@@ -191,8 +193,10 @@ public class CameraFocus extends Camera {
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
 			if (Maths.deadband(0.05f, joystickVertical.getAmount()) != 0.0f && !joystickZoom.isDown()) {
 				angleChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_DY;
-			} else if (FlounderMouse.getMouse(reangleButton)) {
-				angleChange = FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSE_DY;
+			} else {
+				if (FlounderMouse.isCursorDisabled() || FlounderMouse.getMouse(reangleButton)) {
+					angleChange = FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSE_DY;
+				}
 			}
 		}
 

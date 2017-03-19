@@ -40,6 +40,7 @@ public class KosmosConfigs {
 
 	public static final ConfigData HUD_COSSHAIR_TYPE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "hudCrosshairType", 1); // Reference set in master overlay.
 	public static final ConfigData CAMERA_REANGLE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraReangle", GLFW.GLFW_MOUSE_BUTTON_RIGHT); // Reference set in camera.
+	public static final ConfigData CAMERA_MOUSE_LOCKED = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraMouseLocked", true, FlounderMouse::isCursorDisabled);
 
 	// Client configs.
 	private static final Config CONFIG_CLIENT = new Config(new MyFile(Framework.getRoamingFolder(), "configs", "client.conf"));

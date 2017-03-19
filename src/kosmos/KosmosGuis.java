@@ -25,7 +25,8 @@ import static org.lwjgl.glfw.GLFW.*;
 public class KosmosGuis extends GuiMaster {
 	protected static final float SLIDE_TIME = 0.7f;
 
-	private OverlayMaster overlayMaster;
+	private OverlayHUD overlayHUD;
+	private OverlayDebug overlayDebug;
 	private OverlayChat overlayChat;
 
 	private ValueDriver slideDriver;
@@ -37,12 +38,14 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public void init() {
-		this.overlayMaster = new OverlayMaster();
-		FlounderGuis.addComponent(overlayMaster, 0.0f, 0.0f, 1.0f, 1.0f);
+		this.overlayHUD = new OverlayHUD();
+		FlounderGuis.addComponent(overlayHUD, 0.0f, 0.0f, 1.0f, 1.0f);
+
+		this.overlayDebug = new OverlayDebug();
+		FlounderGuis.addComponent(overlayDebug, 0.0f, 0.0f, 1.0f, 1.0f);
 
 		this.overlayChat = new OverlayChat();
 		FlounderGuis.addComponent(overlayChat, 0.0f, 0.0f, 1.0f, 1.0f);
-
 		overlayChat.addText("Type in plain text to create a message, hit enter to send, escape for discarding or editing.", new Colour(0.81f, 0.37f, 0.24f));
 		overlayChat.addText("To find command type '/h', to enter commands enter '/command params'.", new Colour(0.81f, 0.37f, 0.24f));
 
@@ -59,7 +62,8 @@ public class KosmosGuis extends GuiMaster {
 
 			@Override
 			public void onEvent() {
-				overlayMaster.show(false);
+				overlayDebug.show(false);
+				overlayHUD.show(false);
 				overlayChat.show(true);
 				slideDriver = new SlideDriver(backgroundAlpha, 1.0f, SLIDE_TIME);
 			}
@@ -76,9 +80,10 @@ public class KosmosGuis extends GuiMaster {
 			@Override
 			public void onEvent() {
 				if (overlayChat.isShown()) {
+					overlayDebug.show(false);
+					overlayHUD.show(true);
 					overlayChat.show(false);
 				} else {
-					overlayMaster.show(false);
 					// TODO: Toggle pause!
 				}
 
@@ -101,7 +106,7 @@ public class KosmosGuis extends GuiMaster {
 			@Override
 			public void onEvent() {
 				if (!isGamePaused()) {
-					overlayMaster.show(!overlayMaster.isShown());
+					overlayDebug.show(!overlayDebug.isShown());
 				}
 			}
 		});
@@ -110,6 +115,12 @@ public class KosmosGuis extends GuiMaster {
 	@Override
 	public void update() {
 		backgroundAlpha = slideDriver.update(Framework.getDelta());
+
+		if (!isGamePaused()) {
+			FlounderMouse.setCursorHidden(KosmosConfigs.CAMERA_MOUSE_LOCKED.getBoolean());
+		} else {
+			FlounderMouse.setCursorHidden(false);
+		}
 	}
 
 	@Override
@@ -130,8 +141,12 @@ public class KosmosGuis extends GuiMaster {
 		return backgroundAlpha;
 	}
 
-	public OverlayMaster getOverlayMaster() {
-		return overlayMaster;
+	public OverlayHUD getOverlayHUD() {
+		return overlayHUD;
+	}
+
+	public OverlayDebug getOverlayDebug() {
+		return overlayDebug;
 	}
 
 	public OverlayChat getOverlayChat() {

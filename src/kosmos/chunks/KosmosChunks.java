@@ -13,6 +13,7 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.events.*;
 import flounder.framework.*;
+import flounder.guis.*;
 import flounder.inputs.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
@@ -63,14 +64,14 @@ public class KosmosChunks extends Module {
 		this.modelHexagon = ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "hexagon.obj")).create();
 
 		FlounderEvents.addEvent(new IEvent() {
-			private static final int RECURSION_COUNT = 200;
-			private static final float RAY_RANGE = 100;
+			private static final int RECURSION_COUNT = 512;
+			private static final float RAY_RANGE = 32.0f;
 
 			private MouseButton button = new MouseButton(GLFW.GLFW_MOUSE_BUTTON_1);
 
 			@Override
 			public boolean eventTriggered() {
-				return button.wasDown();
+				return button.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
 			}
 
 			@Override

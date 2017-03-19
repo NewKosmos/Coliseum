@@ -10,21 +10,17 @@
 package kosmos.uis;
 
 import flounder.camera.*;
-import flounder.devices.*;
 import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.maths.*;
-import flounder.resources.*;
-import flounder.textures.*;
 import flounder.visual.*;
-import kosmos.*;
 import kosmos.world.*;
 
 import java.util.*;
 import java.util.Timer;
 
-public class OverlayMaster extends GuiComponent {
+public class OverlayDebug extends GuiComponent {
 	private Text fpsText;
 	private Text upsText;
 	private Text positionText;
@@ -32,17 +28,12 @@ public class OverlayMaster extends GuiComponent {
 	private Text seedText;
 	private boolean updateText;
 
-	private GuiTexture crossHair;
-
-	public OverlayMaster() {
+	public OverlayDebug() {
 		fpsText = createStatus("FPS: 0", 0.01f);
 		upsText = createStatus("UPS: 0", 0.04f);
 		positionText = createStatus("POSITION: [0, 0, 0]", 0.07f);
 		timeText = createStatus("TIME: 0", 0.10f);
 		seedText = createStatus("SEED: 0", 0.13f);
-
-		crossHair = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "crosshair.png")).setNumberOfRows(4).create());
-		crossHair.setSelectedRow(KosmosConfigs.HUD_COSSHAIR_TYPE.setReference(() -> crossHair.getSelectedRow()).getInteger());
 
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -74,16 +65,9 @@ public class OverlayMaster extends GuiComponent {
 			seedText.setText("SEED: " + KosmosWorld.getNoise().getSeed());
 			updateText = false;
 		}
-
-		float size = (66.6f / (FlounderDisplay.getWidth() + FlounderDisplay.getHeight()));
-		crossHair.setPosition((FlounderDisplay.getAspectRatio() / 2.0f) + super.getPosition().x, 0.5f, size, size);
-		crossHair.update();
 	}
 
 	@Override
 	protected void getGuiTextures(List<GuiTexture> guiTextures) {
-		if (isShown()) {
-			guiTextures.add(crossHair);
-		}
 	}
 }
