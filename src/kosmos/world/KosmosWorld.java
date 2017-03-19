@@ -13,6 +13,7 @@ import flounder.entities.*;
 import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.lights.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
@@ -98,6 +99,7 @@ public class KosmosWorld extends Module {
 		if (!playerQue.isEmpty()) {
 			for (String name : playerQue.keySet()) {
 				Pair<Vector3f, Vector3f> data = playerQue.get(name);
+				FlounderLogger.log("Qued player " + name + " has been added to the players list!");
 				players.put(name, new InstanceMuliplayer(FlounderEntities.getEntities(), data.getFirst(), data.getSecond(), name));
 			}
 
@@ -131,6 +133,7 @@ public class KosmosWorld extends Module {
 
 	public static void quePlayer(String username, Vector3f position, Vector3f rotation) {
 		INSTANCE.playerQue.put(username, new Pair<>(position, rotation));
+		FlounderLogger.log("World Player Que Added: " + username);
 	}
 
 	public static void movePlayer(String username, float x, float y, float z, float w, float chunkX, float chunkZ) {
@@ -153,12 +156,18 @@ public class KosmosWorld extends Module {
 	}
 
 	public static void removePlayer(String username) {
-		if (!INSTANCE.players.containsKey(username)) {
-			return;
+		FlounderLogger.log("World Removing Player: " + username);
+
+		if (INSTANCE.playerQue.containsKey(username)) {
+			INSTANCE.playerQue.remove(username);
 		}
 
-		INSTANCE.players.get(username).forceRemove(true);
-		INSTANCE.players.remove(username);
+		if (INSTANCE.players.containsKey(username)) {
+			Entity otherPlayer = INSTANCE.players.get(username);
+			otherPlayer.forceRemove(false);
+			INSTANCE.players.remove(username);
+			FlounderEntities.getEntities().remove(otherPlayer);
+		}
 	}
 
 	public static int connectedPlayers() {
