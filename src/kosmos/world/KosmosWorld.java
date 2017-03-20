@@ -32,10 +32,10 @@ public class KosmosWorld extends Module {
 	public static final float GRAVITY = -9.81f;
 
 	public static final Colour SKY_COLOUR_NIGHT = new Colour(0.0f, 0.07f, 0.19f);
-	public static final Colour SKY_COLOUR_SUNRISE = new Colour(0.9921f, 0.490f, 0.004f);
+	public static final Colour SKY_COLOUR_SUNRISE = new Colour(0.713f, 0.494f, 0.356f);
 	public static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.30f, 0.70f);
 
-	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.9921f, 0.490f, 0.004f);
+	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.713f, 0.494f, 0.356f);
 	public static final Colour SUN_COLOUR_DAY = new Colour(0.70f, 0.70f, 0.70f);
 
 	public static final Colour MOON_COLOUR = new Colour(0.32f, 0.32f, 0.32f);
