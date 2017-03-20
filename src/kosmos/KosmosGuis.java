@@ -23,8 +23,9 @@ public class KosmosGuis extends GuiMaster {
 		FontType h2f = new FontType(new MyFile(MyFile.RES_FOLDER, "fonts", "harry.png"),new MyFile(MyFile.RES_FOLDER, "fonts", "harry.fnt"));
 		FontType vf = new FontType(new MyFile(MyFile.RES_FOLDER, "fonts", "verdana.png"),new MyFile(MyFile.RES_FOLDER, "fonts", "verdana.fnt"));
 
-		TextObject to = new TextObject("Hello World", 2.0f, vf, new Vector2f(0.5f, 0.5f), 1.0f, false);
-		to.setColour(1.0f, 0.6f, 0.1f);
+		Text t = new Text("Hello World", 2.0f, vf, new Vector2f(), 1.0f, false);
+		t.setColour(1.0f, 0.6f, 0.1f);
+		TextObject to = new TextObject(FlounderGuis.getContainer(), new Vector2f(0.5f, 0.5f), t);
 	}
 
 	@Override
