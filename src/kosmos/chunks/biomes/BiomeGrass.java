@@ -86,8 +86,33 @@ public class BiomeGrass implements IBiome {
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
 			case 5:
+				return new InstanceTreeCherryLarge(FlounderEntities.getEntities(),
+						new Vector3f(
+								tilePosition.x,
+								0.5f + tilePosition.y * 0.5f,
+								tilePosition.z
+						),
+						new Vector3f(0.0f, rotation, 0.0f)
+				);
 			case 6:
+				return new InstanceTreeCherryMedium(FlounderEntities.getEntities(),
+						new Vector3f(
+								tilePosition.x,
+								0.4f + tilePosition.y * 0.5f,
+								tilePosition.z
+						),
+						new Vector3f(0.0f, rotation, 0.0f)
+				);
 			case 7:
+				return new InstanceTreeCherrySmall(FlounderEntities.getEntities(),
+						new Vector3f(
+								tilePosition.x,
+								0.5f + tilePosition.y * 0.5f,
+								tilePosition.z
+						),
+						new Vector3f(0.0f, rotation, 0.0f)
+				);
+			case 8:
 				return new InstanceFlowerpatch1(FlounderEntities.getEntities(),
 						new Vector3f(
 								tilePosition.x,
@@ -96,7 +121,6 @@ public class BiomeGrass implements IBiome {
 						),
 						new Vector3f()
 				);
-			case 8:
 			case 9:
 			case 10:
 				return new InstanceTallGrass(FlounderEntities.getEntities(),
