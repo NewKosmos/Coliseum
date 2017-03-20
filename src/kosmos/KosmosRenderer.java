@@ -75,7 +75,7 @@ public class KosmosRenderer extends RendererMaster {
 		this.fontRenderer = new FontRenderer();
 
 		this.displayScale = KosmosConfigs.RENDERER_SCALE.setReference(() -> displayScale).getFloat();
-		this.rendererFBO = FBO.newFBO(displayScale).attachments(3).withAlphaChannel(true).disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
+		this.rendererFBO = FBO.newFBO(displayScale).attachments(3).withAlphaChannel(true).depthBuffer(DepthBufferType.TEXTURE).create();
 
 		this.pipelineMRT = new PipelineMRT();
 		this.pipelineBloom = new PipelineBloom();

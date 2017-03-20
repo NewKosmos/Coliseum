@@ -10,6 +10,8 @@
 package kosmos;
 
 import flounder.devices.*;
+import flounder.entities.*;
+import flounder.entities.components.*;
 import flounder.events.*;
 import flounder.framework.*;
 import flounder.guis.*;
@@ -25,6 +27,8 @@ import kosmos.particles.*;
 import kosmos.shadows.*;
 import kosmos.water.*;
 import kosmos.world.*;
+
+import java.util.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -100,6 +104,33 @@ public class KosmosInterface extends Standard {
 			public void onEvent() {
 				if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
 					OpenGlUtils.goWireframe(!OpenGlUtils.isInWireframe());
+				}
+			}
+		});
+
+		FlounderEvents.addEvent(new IEvent() {
+			private KeyButton key = new KeyButton(GLFW_KEY_E);
+
+			@Override
+			public boolean eventTriggered() {
+				return key.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				for (Entity entity : FlounderEntities.getEntities().getAll()) {
+					String[] path = entity.getClass().getName().split("\\.");
+					String name = path[path.length - 1].trim();
+
+					List<IComponentEditor> editorList = new ArrayList<>();
+
+					for (IComponentEntity ce : entity.getComponents()) {
+						if (ce instanceof IComponentEditor) {
+							editorList.add((IComponentEditor) ce);
+						}
+					}
+
+					FlounderEntities.save("kosmos.entities.instances", editorList, name);
 				}
 			}
 		});
