@@ -13,6 +13,7 @@ import flounder.camera.*;
 import flounder.devices.*;
 import flounder.events.*;
 import flounder.fbos.*;
+import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
@@ -45,6 +46,7 @@ public class KosmosRenderer extends RendererMaster {
 	private WaterRenderer waterRenderer;
 	private BoundingRenderer boundingRenderer;
 	private GuisRenderer guisRenderer;
+	private FontRenderer fontRenderer;
 
 	private float displayScale;
 	private FBO rendererFBO;
@@ -70,6 +72,7 @@ public class KosmosRenderer extends RendererMaster {
 		this.waterRenderer = new WaterRenderer();
 		this.boundingRenderer = new BoundingRenderer();
 		this.guisRenderer = new GuisRenderer();
+		this.fontRenderer = new FontRenderer();
 
 		this.displayScale = KosmosConfigs.RENDERER_SCALE.setReference(() -> displayScale).getFloat();
 		this.rendererFBO = FBO.newFBO(displayScale).attachments(3).withAlphaChannel(true).depthBuffer(DepthBufferType.TEXTURE).create();
@@ -150,6 +153,7 @@ public class KosmosRenderer extends RendererMaster {
 		renderPost(false, 0.0f);
 
 		guisRenderer.render(null, null);
+		fontRenderer.render(null, null);
 
 		/* Unbinds the FBO. */
 		unbindRelevantFBO();
@@ -241,6 +245,8 @@ public class KosmosRenderer extends RendererMaster {
 		entitiesRenderer.dispose();
 		waterRenderer.dispose();
 		boundingRenderer.dispose();
+		guisRenderer.dispose();
+		fontRenderer.dispose();
 
 		rendererFBO.delete();
 
