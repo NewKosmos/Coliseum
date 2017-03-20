@@ -36,7 +36,7 @@ public class OverlayHUD extends GuiComponent {
 
 		this.crossHair = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "crosshair.png")).setNumberOfRows(4).create());
 		this.crossHair.setSelectedRow(KosmosConfigs.HUD_COSSHAIR_TYPE.setReference(() -> crossHair.getSelectedRow()).getInteger());
-		this.crossHair.setColourOffset(new Colour(0.6f, 0.2f, 0.5f));
+		this.crossHair.setColourOffset(new Colour(0.2f, 0.6f, 0.2f));
 		this.cornerAlpha = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "cornerAlpha.png")).create());
 
 		super.show(true);

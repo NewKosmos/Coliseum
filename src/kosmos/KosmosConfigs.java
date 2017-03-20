@@ -39,23 +39,22 @@ public class KosmosConfigs {
 	public static final ConfigData SHADOWMAP_DARKNESS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapDarkness", 0.5f, KosmosShadows::getShadowDarkness);
 
 	public static final ConfigData HUD_COSSHAIR_TYPE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "hudCrosshairType", 1); // Reference set in master overlay.
+	public static final ConfigData CAMERA_SENSITIVITY = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraSensitivity", 1.0f); // Reference set in camera.
 	public static final ConfigData CAMERA_REANGLE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraReangle", GLFW.GLFW_MOUSE_BUTTON_RIGHT); // Reference set in camera.
 	public static final ConfigData CAMERA_MOUSE_LOCKED = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraMouseLocked", true); // , FlounderMouse::isCursorDisabled
 	public static final ConfigData CAMERA_FIRST_PERSON = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraFirstPerson", false); // Reference set in camera.
 
-	// Client configs.
-	private static final Config CONFIG_CLIENT = new Config(new MyFile(Framework.getRoamingFolder(), "configs", "client.conf"));
-	public static final ConfigData CLIENT_USERNAME = CONFIG_CLIENT.getData(ConfigSection.GENERAL, "username", "USERNAME" + ((int) (Math.random() * 10000)), FlounderNetwork::getUsername);
+	public static final ConfigData CLIENT_USERNAME = CONFIG_MAIN.getData(ConfigSection.CLIENT, "username", "USERNAME" + ((int) (Math.random() * 10000)), FlounderNetwork::getUsername);
 
 	// Host server configs.
 	private static final Config CONFIG_HOST = new Config(new MyFile(Framework.getRoamingFolder(), "configs", "host.conf"));
-	public static final ConfigData HOST_PORT = CONFIG_HOST.getData(ConfigSection.GENERAL, "hostPort", FlounderNetwork.getPort()); // Reference set in server interface.
+	public static final ConfigData HOST_PORT = CONFIG_HOST.getData(ConfigSection.SEVER, "hostPort", FlounderNetwork.getPort()); // Reference set in server interface.
 	public static final ConfigData HOST_SEED = CONFIG_HOST.getData(ConfigSection.WORLD, "hostSeed", (int) Maths.randomInRange(1.0, 10000.0)); // Reference set in server interface.
 
 	// Server0 configs.
 	private static final Config CONFIG_SERVER0 = new Config(new MyFile(Framework.getRoamingFolder(), "servers", "server0.conf"));
-	public static final ConfigData SERVER_PORT = CONFIG_SERVER0.getData(ConfigSection.WORLD, "serverPort", FlounderNetwork.DEFAULT_PORT); // Reference set in client interface.
-	public static final ConfigData SERVER_IP = CONFIG_SERVER0.getData(ConfigSection.GENERAL, "serverIP", "localhost"); // Reference set in client interface.
+	public static final ConfigData SERVER_PORT = CONFIG_SERVER0.getData(ConfigSection.SEVER, "serverPort", FlounderNetwork.DEFAULT_PORT); // Reference set in client interface.
+	public static final ConfigData SERVER_IP = CONFIG_SERVER0.getData(ConfigSection.SEVER, "serverIP", "localhost"); // Reference set in client interface.
 
 	// Save0 configs.
 	private static final Config CONFIG_SAVE0 = new Config(new MyFile(Framework.getRoamingFolder(), "saves", "save0.conf"));
@@ -71,7 +70,6 @@ public class KosmosConfigs {
 	 */
 	protected static void closeConfigs() {
 		CONFIG_MAIN.save();
-		CONFIG_CLIENT.save();
 		CONFIG_HOST.save();
 		CONFIG_SERVER0.save();
 		CONFIG_SAVE0.save();

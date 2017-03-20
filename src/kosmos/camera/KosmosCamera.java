@@ -86,6 +86,7 @@ public class KosmosCamera extends Camera {
 	private float horizontalDistanceFromFocus;
 	private float verticalDistanceFromFocus;
 
+	private float cameraSensitivity;
 	private int reangleButton;
 	private JoystickAxis joystickVertical;
 	private JoystickAxis joystickHorizontal;
@@ -120,6 +121,7 @@ public class KosmosCamera extends Camera {
 		this.horizontalDistanceFromFocus = 0.0f;
 		this.verticalDistanceFromFocus = 0.0f;
 
+		this.cameraSensitivity = KosmosConfigs.CAMERA_SENSITIVITY.setReference(() -> cameraSensitivity).getFloat();
 		this.reangleButton = KosmosConfigs.CAMERA_REANGLE.setReference(() -> reangleButton).getInteger();
 		this.joystickVertical = new JoystickAxis(0, 3);
 		this.joystickHorizontal = new JoystickAxis(0, 2);
@@ -189,10 +191,10 @@ public class KosmosCamera extends Camera {
 
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
 			if (Maths.deadband(0.05f, joystickHorizontal.getAmount()) != 0.0f && !joystickZoom.isDown()) {
-				angleChange = joystickHorizontal.getAmount() * INFLUENCE_OF_JOYSTICK_DX;
+				angleChange = joystickHorizontal.getAmount() * INFLUENCE_OF_JOYSTICK_DX * cameraSensitivity;
 			} else {
 				if (FlounderMouse.isCursorDisabled() || FlounderMouse.getMouse(reangleButton)) {
-					angleChange = -FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSE_DX;
+					angleChange = -FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSE_DX * cameraSensitivity;
 				}
 			}
 		}
@@ -217,10 +219,10 @@ public class KosmosCamera extends Camera {
 
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
 			if (Maths.deadband(0.05f, joystickVertical.getAmount()) != 0.0f && !joystickZoom.isDown()) {
-				angleChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_DY;
+				angleChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_DY * cameraSensitivity;
 			} else {
 				if (FlounderMouse.isCursorDisabled() || FlounderMouse.getMouse(reangleButton)) {
-					angleChange = FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSE_DY;
+					angleChange = FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSE_DY * cameraSensitivity;
 				}
 			}
 		}
@@ -253,9 +255,9 @@ public class KosmosCamera extends Camera {
 
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused() && !firstPerson) {
 			if (joystickZoom.isDown()) {
-				zoomChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_ZOOM;
+				zoomChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_ZOOM * cameraSensitivity;
 			} else if (Math.abs(FlounderMouse.getDeltaWheel()) > 0.1f) {
-				zoomChange = FlounderMouse.getDeltaWheel() * INFLUENCE_OF_MOUSE_WHEEL;
+				zoomChange = FlounderMouse.getDeltaWheel() * INFLUENCE_OF_MOUSE_WHEEL * cameraSensitivity;
 			}
 		}
 
@@ -331,13 +333,14 @@ public class KosmosCamera extends Camera {
 	}
 
 	private void calculatePosition() {
-		float theta = targetRotation.y + angleAroundPlayer;
-		position.x = targetPosition.x - (float) (horizontalDistanceFromFocus * Math.sin(Math.toRadians(theta)));
-		position.z = targetPosition.z - (float) (horizontalDistanceFromFocus * Math.cos(Math.toRadians(theta)));
+		double theta = Math.toRadians(Maths.normalizeAngle(targetRotation.y + angleAroundPlayer));
+		position.x = targetPosition.x - (float) (horizontalDistanceFromFocus * Math.sin(theta));
+		position.z = targetPosition.z - (float) (horizontalDistanceFromFocus * Math.cos(theta));
 		position.y = targetPosition.y + (verticalDistanceFromFocus + (firstPerson ? CAMERA_AIM_OFFSET_FPS : CAMERA_AIM_OFFSET));
 
-		rotation.y = targetRotation.y + Maths.DEGREES_IN_HALF_CIRCLE + angleAroundPlayer;
-		rotation.x = (float) Math.toDegrees(angleOfElevation) - PITCH_OFFSET;
+		rotation.y = Maths.normalizeAngle(targetRotation.y + Maths.DEGREES_IN_HALF_CIRCLE + angleAroundPlayer);
+		rotation.z = 0.0f;
+		rotation.x = Maths.normalizeAngle((float) Math.toDegrees(angleOfElevation) - PITCH_OFFSET);
 	}
 
 	private void updateViewMatrix() {
