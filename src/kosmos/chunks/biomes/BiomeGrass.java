@@ -46,7 +46,7 @@ public class BiomeGrass implements IBiome {
 
 		switch ((int) spawn) {
 			case 1:
-				return new InstanceTree1(FlounderEntities.getEntities(),
+				return new InstanceTreeBirchLarge(FlounderEntities.getEntities(),
 						new Vector3f(
 								tilePosition.x,
 								0.5f + tilePosition.y * 0.5f,
@@ -55,7 +55,7 @@ public class BiomeGrass implements IBiome {
 						new Vector3f(0.0f, rotation, 0.0f)
 				);
 			case 2:
-				return new InstanceTree3(FlounderEntities.getEntities(),
+				return new InstanceTreeBirchMedium(FlounderEntities.getEntities(),
 						new Vector3f(
 								tilePosition.x,
 								0.625f + tilePosition.y * 0.5f,
@@ -108,7 +108,7 @@ public class BiomeGrass implements IBiome {
 						new Vector3f()
 				);
 			case 11:
-				return new InstanceTreeBlossom(FlounderEntities.getEntities(),
+				return new InstanceTreeBirchSmall(FlounderEntities.getEntities(),
 						new Vector3f(
 								tilePosition.x,
 								0.42f + tilePosition.y * 0.5f,

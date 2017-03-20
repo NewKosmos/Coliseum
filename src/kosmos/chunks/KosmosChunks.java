@@ -82,7 +82,7 @@ public class KosmosChunks extends Module {
 					Vector3f terrainPosition = binarySearch(cameraRay, 0, 0, RAY_RANGE);
 
 					if (terrainPosition.getY() >= 0.0f) {
-						new InstanceTree1(FlounderEntities.getEntities(),
+						new InstanceTreeBirchLarge(FlounderEntities.getEntities(),
 								new Vector3f(
 										terrainPosition.x,
 										0.5f + terrainPosition.y * 0.5f,
