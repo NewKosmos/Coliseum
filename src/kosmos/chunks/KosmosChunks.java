@@ -13,7 +13,6 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.events.*;
 import flounder.framework.*;
-import flounder.guis.*;
 import flounder.inputs.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
@@ -71,7 +70,7 @@ public class KosmosChunks extends Module {
 
 			@Override
 			public boolean eventTriggered() {
-				return button.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
+				return button.wasDown();// && !FlounderGuis.getGuiMaster().isGamePaused();
 			}
 
 			@Override

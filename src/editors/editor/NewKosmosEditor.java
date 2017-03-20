@@ -2,7 +2,6 @@ package editors.editor;
 
 import editors.entities.*;
 import flounder.devices.*;
-import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.framework.updater.*;
 import flounder.resources.*;
@@ -84,9 +83,8 @@ public class NewKosmosEditor extends TimerTask {
 			startEntrance = false;
 
 			if (optionEntities.isSelected()) {
-				Framework entrance = new Framework("Kosmos Editors", new UpdaterDefault(GLFW::glfwGetTime), -1, new ExtensionEntities(), new FrameEntities(), new KosmosRenderer(), new KosmosCamera(), new EditorPlayer(), new EditorGuis());
+				Framework entrance = new Framework("Kosmos Editors", new UpdaterDefault(GLFW::glfwGetTime), -1, new ExtensionEntities(), new FrameEntities(), new KosmosRenderer(), new KosmosCamera(), new EditorPlayer());
 				FlounderDisplay.setup(1080, 720, "Kosmos Editor Entities", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")}, false, true, 0, false, true);
-				TextBuilder.DEFAULT_TYPE = FlounderFonts.FFF_FORWARD;
 				frame.setVisible(false);
 				entrance.run();
 			} else {

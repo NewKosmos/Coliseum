@@ -11,7 +11,6 @@ package kosmos.particles;
 
 import flounder.devices.*;
 import flounder.framework.*;
-import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.loaders.*;
 import flounder.logger.*;
@@ -59,9 +58,9 @@ public class KosmosParticles extends Module {
 
 	@Override
 	public void update() {
-		if (FlounderGuis.getGuiMaster().isGamePaused()) {
-			return;
-		}
+	//	if (FlounderGuis.getGuiMaster().isGamePaused()) {
+	//		return;
+	//	}
 
 		particleSystems.forEach(ParticleSystem::generateParticles);
 

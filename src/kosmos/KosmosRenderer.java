@@ -13,8 +13,6 @@ import flounder.camera.*;
 import flounder.devices.*;
 import flounder.events.*;
 import flounder.fbos.*;
-import flounder.fonts.*;
-import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
 import flounder.logger.*;
@@ -45,8 +43,6 @@ public class KosmosRenderer extends RendererMaster {
 	private ParticleRenderer particleRenderer;
 	private WaterRenderer waterRenderer;
 	private BoundingRenderer boundingRenderer;
-	private GuisRenderer guisRenderer;
-	private FontRenderer fontRenderer;
 
 	private float displayScale;
 	private FBO rendererFBO;
@@ -71,8 +67,6 @@ public class KosmosRenderer extends RendererMaster {
 		this.particleRenderer = new ParticleRenderer();
 		this.waterRenderer = new WaterRenderer();
 		this.boundingRenderer = new BoundingRenderer();
-		this.guisRenderer = new GuisRenderer();
-		this.fontRenderer = new FontRenderer();
 
 		this.displayScale = KosmosConfigs.RENDERER_SCALE.setReference(() -> displayScale).getFloat();
 		this.rendererFBO = FBO.newFBO(displayScale).attachments(3).withAlphaChannel(true).depthBuffer(DepthBufferType.TEXTURE).create();
@@ -96,13 +90,11 @@ public class KosmosRenderer extends RendererMaster {
 
 			@Override
 			public void onEvent() {
-				if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
 					effect++;
 
 					if (effect > 2) {
 						effect = 0;
 					}
-				}
 			}
 		});
 	}
@@ -152,10 +144,7 @@ public class KosmosRenderer extends RendererMaster {
 		renderScene(POSITIVE_INFINITY, false);
 
 		/* Post rendering. */
-		renderPost(FlounderGuis.getGuiMaster().isGamePaused(), FlounderGuis.getGuiMaster().getBlurFactor());
-
-		/* Scene independents. */
-		renderIndependents();
+		renderPost(false, 0.0f);
 
 		/* Unbinds the FBO. */
 		unbindRelevantFBO();
@@ -186,11 +175,6 @@ public class KosmosRenderer extends RendererMaster {
 		}
 
 		particleRenderer.render(clipPlane, camera);
-	}
-
-	private void renderIndependents() {
-		guisRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
-		fontRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
 	}
 
 	private void renderPost(boolean isPaused, float blurFactor) {
@@ -252,8 +236,6 @@ public class KosmosRenderer extends RendererMaster {
 		entitiesRenderer.dispose();
 		waterRenderer.dispose();
 		boundingRenderer.dispose();
-		guisRenderer.dispose();
-		fontRenderer.dispose();
 
 		rendererFBO.delete();
 
