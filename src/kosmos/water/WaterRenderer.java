@@ -33,7 +33,7 @@ public class WaterRenderer extends Renderer {
 	private ShaderObject shader;
 
 	public WaterRenderer() {
-		this.reflectionFBO = FBO.newFBO(KosmosWater.getReflectionQuality()).attachments(3).withAlphaChannel(true).disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
+		this.reflectionFBO = FBO.newFBO(KosmosWater.getReflectionQuality()).attachments(3).withAlphaChannel(true).depthBuffer(DepthBufferType.TEXTURE).create();
 		this.pipelineMRT = new FilterMRT(FBO.newFBO(1.0f).disableTextureWrap().create());
 		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 
