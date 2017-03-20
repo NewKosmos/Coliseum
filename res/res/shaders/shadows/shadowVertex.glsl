@@ -28,8 +28,9 @@ void main(void) {
 
     if (animated) {
         for (int i = 0; i < MAX_WEIGHTS; i++){
-            vec4 localPosition = jointTransforms[in_jointIndices[i]] * vec4(in_position, 1.0);
-            totalLocalPos += localPosition * in_weights[i];
+		    mat4 jointTransform = jointTransforms[in_jointIndices[i]];
+            vec4 posePosition = jointTransform * vec4(in_position, 1.0);
+            totalLocalPos += posePosition * in_weights[i];
         }
 	} else {
 	    totalLocalPos = vec4(in_position, 1.0);
