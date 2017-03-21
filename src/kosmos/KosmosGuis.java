@@ -30,15 +30,15 @@ public class KosmosGuis extends GuiMaster {
 		this.crossHair.setRotationDriver(new LinearDriver(0.0f, 360.0f, 5.0f));
 		this.crossHair.setScaleDriver(new SinWaveDriver(0.0f, 3.0f, 2.5f));
 
-		String s = "Hello World!"; // "I'm Harambe, and this is my zoo enclosure. I work here with my zoo keeper and my friend, cecil the lion. Everything in here has a story and a price. One thing I've learned after 21 years - you never know WHO is gonna come over that fence.";
-		this.helloWorld = new TextObject(FlounderGuis.getContainer(), new Vector2f(0.5f, 0.5f), s, 2.0f, FlounderFonts.BERLIN_SANS, 0.7f, false);
+		String s = "I'm Harambe, and this is my zoo enclosure. I work here with my zoo keeper and my friend, cecil the lion. Everything in here has a story and a price. One thing I've learned after 21 years - you never know WHO is gonna come over that fence.";
+		this.helloWorld = new TextObject(FlounderGuis.getContainer(), new Vector2f(0.5f, 0.5f), s, 1.6f, FlounderFonts.BERLIN_SANS, 0.6f, GuiAlign.RIGHT);
 		this.helloWorld.setInScreenCoords(false);
 		this.helloWorld.setColour(new Colour(1.0f, 0.6f, 0.1f));
 		this.helloWorld.setBorderColour(new Colour(1.0f, 0.6f, 0.1f));
 		//this.helloWorld.setBorder(new SinWaveDriver(0.1f, 0.3f, 3.0f));
 		this.helloWorld.setGlowing(new SinWaveDriver(0.1f, 0.5f, 4.0f));
-		this.helloWorld.setRotationDriver(new LinearDriver(0.0f, 360.0f, 5.0f));
-		//this.helloWorld.setScaleDriver(new SinWaveDriver(0.0f, 2.0f, 8.5f));
+		//this.helloWorld.setRotationDriver(new LinearDriver(0.0f, 360.0f, 5.0f));
+		//this.helloWorld.setScaleDriver(new SinWaveDriver(0.0f, 5.0f, 8.5f));
 	}
 
 	@Override
