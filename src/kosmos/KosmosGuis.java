@@ -21,9 +21,9 @@ public class KosmosGuis extends GuiMaster {
 		//this.cornerAlpha.setRotationDriver(new LinearDriver(0.0f, 360.0f, 5.0f));
 		//this.cornerAlpha.setScaleDriver(new SinWaveDriver(0.0f, 2.0f, 2.5f));
 
-		String s = "I'm Harambe, and this is my zoo enclosure. I work here with my zoo keeper and my friend, cecil the lion. Everything in here has a story and a price. One thing I've learned after 21 years - you never know WHO is gonna come over that fence.";
-		TextObject to = new TextObject(FlounderGuis.getContainer(), new Vector2f(0.3f, 0.5f), s, 1.0f, FlounderFonts.BERLIN_SANS, 0.7f, true);
-		to.setInScreenCoords(false);
+		String s = "Hello World!"; // "I'm Harambe, and this is my zoo enclosure. I work here with my zoo keeper and my friend, cecil the lion. Everything in here has a story and a price. One thing I've learned after 21 years - you never know WHO is gonna come over that fence.";
+		TextObject to = new TextObject(FlounderGuis.getContainer(), new Vector2f(0.1f, 0.5f), s, 1.0f, FlounderFonts.BERLIN_SANS, 0.7f, false);
+		to.setInScreenCoords(true);
 		to.setColour(1.0f, 0.6f, 0.1f);
 		//to.setRotationDriver(new LinearDriver(0.0f, 360.0f, 5.0f));
 		//to.setScaleDriver(new SinWaveDriver(0.0f, 2.0f, 8.5f));
