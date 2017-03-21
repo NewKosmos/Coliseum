@@ -18,14 +18,8 @@ public class KosmosGuis extends GuiMaster {
 		this.cornerAlpha = new GuiObject(FlounderGuis.getContainer(), new Vector2f(0.06f, 0.06f), new Vector2f(0.12f, 0.12f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "cornerAlpha.png")).create(), 1);
 		this.cornerAlpha.setInScreenCoords(true);
 
-		FontType cf = new FontType(new MyFile(MyFile.RES_FOLDER, "fonts", "crazyFont.png"),new MyFile(MyFile.RES_FOLDER, "fonts", "crazyFont.fnt"));
-		FontType hf = new FontType(new MyFile(MyFile.RES_FOLDER, "fonts", "harrington.png"),new MyFile(MyFile.RES_FOLDER, "fonts", "harrington.fnt"));
-		FontType h2f = new FontType(new MyFile(MyFile.RES_FOLDER, "fonts", "harry.png"),new MyFile(MyFile.RES_FOLDER, "fonts", "harry.fnt"));
-		FontType vf = new FontType(new MyFile(MyFile.RES_FOLDER, "fonts", "verdana.png"),new MyFile(MyFile.RES_FOLDER, "fonts", "verdana.fnt"));
-
-		Text t = new Text("Hello World", 2.0f, vf, new Vector2f(), 1.0f, false);
-		t.setColour(1.0f, 0.6f, 0.1f);
-		TextObject to = new TextObject(FlounderGuis.getContainer(), new Vector2f(0.5f, 0.5f), t);
+		TextObject to = new TextObject(FlounderGuis.getContainer(), new Vector2f(0.3f, 0.5f), "A sample string of text!", 3.0f, FlounderFonts.BERLIN_SANS, 1.0f, false);
+		to.setColour(1.0f, 0.6f, 0.1f);
 	}
 
 	@Override
