@@ -13,6 +13,7 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.framework.*;
+import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
 import flounder.maths.*;
@@ -70,14 +71,14 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 	@Override
 	public void update() {
 		// Gets movement and rotation data from player inputs.
-		//if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
+		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
 			currentSpeed = (inputBoost.isDown() ? KosmosPlayer.BOOST_SPEED : KosmosPlayer.RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
 			currentUpwardSpeed = (inputJump.wasDown() && Maths.deadband(0.05f, currentUpwardSpeed) == 0.0f) ? KosmosPlayer.JUMP_POWER : currentUpwardSpeed;
 			currentTurnSpeed = -KosmosPlayer.TURN_SPEED * Maths.deadband(0.05f, inputTurn.getAmount());
-		//} else {
-		//	currentSpeed = 0.0f;
-		//	currentTurnSpeed = 0.0f;
-		//}
+		} else {
+			currentSpeed = 0.0f;
+			currentTurnSpeed = 0.0f;
+		}
 
 		// Applies gravity over time.
 		currentUpwardSpeed += KosmosWorld.GRAVITY * Framework.getDelta();

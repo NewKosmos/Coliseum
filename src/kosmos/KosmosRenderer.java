@@ -150,10 +150,10 @@ public class KosmosRenderer extends RendererMaster {
 		renderScene(POSITIVE_INFINITY, false);
 
 		/* Post rendering. */
-		renderPost(false, 0.0f);
+		renderPost(FlounderGuis.getGuiMaster().isGamePaused(), FlounderGuis.getGuiMaster().getBlurFactor());
 
-		guisRenderer.render(null, null);
-		fontRenderer.render(null, null);
+		/* Scene independents. */
+		renderIndependents();
 
 		/* Unbinds the FBO. */
 		unbindRelevantFBO();
@@ -223,6 +223,11 @@ public class KosmosRenderer extends RendererMaster {
 		}
 
 		output.blitToScreen();
+	}
+
+	private void renderIndependents() {
+		guisRenderer.render(null, null);
+		fontRenderer.render(null, null);
 	}
 
 	@Override

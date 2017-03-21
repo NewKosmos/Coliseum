@@ -1,17 +1,24 @@
 package kosmos;
 
-import flounder.fonts.*;
+import flounder.devices.*;
+import flounder.events.*;
+import flounder.framework.*;
 import flounder.guis.*;
-import flounder.maths.*;
-import flounder.maths.vectors.*;
-import flounder.resources.*;
-import flounder.textures.*;
+import flounder.inputs.*;
 import flounder.visual.*;
+import kosmos.uis.*;
+
+import static org.lwjgl.glfw.GLFW.*;
 
 public class KosmosGuis extends GuiMaster {
-	private GuiObject cornerAlpha;
-	private GuiObject crossHair;
-	private TextObject helloWorld;
+	protected static final float SLIDE_TIME = 0.7f;
+
+	private OverlayHUD overlayHUD;
+	private OverlayDebug overlayDebug;
+	private OverlayChat overlayChat;
+
+	private ValueDriver slideDriver;
+	private float backgroundAlpha;
 
 	public KosmosGuis() {
 		super();
@@ -19,34 +26,85 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public void init() {
-		this.cornerAlpha = new GuiObject(FlounderGuis.getContainer(), new Vector2f(0.06f, 0.06f), new Vector2f(0.12f, 0.12f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "cornerAlpha.png")).create(), 1);
-		this.cornerAlpha.setInScreenCoords(true);
-		//this.cornerAlpha.setRotationDriver(new LinearDriver(0.0f, 360.0f, 5.0f));
-		//this.cornerAlpha.setScaleDriver(new SinWaveDriver(0.0f, 2.0f, 2.5f));
+		this.overlayHUD = new OverlayHUD(FlounderGuis.getContainer());
+		this.overlayDebug = new OverlayDebug(FlounderGuis.getContainer());
+		this.overlayChat = new OverlayChat(FlounderGuis.getContainer());
 
-		this.crossHair = new GuiObject(FlounderGuis.getContainer(), new Vector2f(0.5f, 0.5f), new Vector2f(0.04f, 0.04f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "crosshair.png")).setNumberOfRows(4).create(), 1);
-		this.crossHair.setInScreenCoords(false);
-		this.crossHair.setColourOffset(new Colour(0.1f, 0.8f, 0.2f));
-		this.crossHair.setRotationDriver(new LinearDriver(0.0f, 360.0f, 5.0f));
-		this.crossHair.setScaleDriver(new SinWaveDriver(0.0f, 3.0f, 2.5f));
+		this.overlayHUD.setVisible(true);
+		this.overlayDebug.setVisible(false);
+		this.overlayChat.setVisible(false);
 
-		String s = "I'm Harambe, and this is my zoo enclosure. I work here with my zoo keeper and my friend, cecil the lion. Everything in here has a story and a price. One thing I've learned after 21 years - you never know WHO is gonna come over that fence.";
-		this.helloWorld = new TextObject(FlounderGuis.getContainer(), new Vector2f(0.5f, 0.5f), s, 1.6f, FlounderFonts.BERLIN_SANS, 0.6f, GuiAlign.RIGHT);
-		this.helloWorld.setInScreenCoords(false);
-		this.helloWorld.setColour(new Colour(1.0f, 0.6f, 0.1f));
-		this.helloWorld.setBorderColour(new Colour(1.0f, 0.6f, 0.1f));
-		//this.helloWorld.setBorder(new SinWaveDriver(0.1f, 0.3f, 3.0f));
-		this.helloWorld.setGlowing(new SinWaveDriver(0.1f, 0.5f, 4.0f));
-		//this.helloWorld.setRotationDriver(new LinearDriver(0.0f, 360.0f, 5.0f));
-		//this.helloWorld.setScaleDriver(new SinWaveDriver(0.0f, 5.0f, 8.5f));
+		this.slideDriver = new ConstantDriver(0.0f);
+		this.backgroundAlpha = 0.0f;
+
+		FlounderEvents.addEvent(new IEvent() {
+			private KeyButton k = new KeyButton(GLFW_KEY_ENTER);
+
+			@Override
+			public boolean eventTriggered() {
+				return k.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				overlayDebug.setVisible(false);
+				overlayHUD.setVisible(false);
+				overlayChat.setVisible(true);
+				slideDriver = new SlideDriver(backgroundAlpha, 1.0f, SLIDE_TIME);
+			}
+		});
+
+		FlounderEvents.addEvent(new IEvent() {
+			private KeyButton k = new KeyButton(GLFW_KEY_ESCAPE);
+
+			@Override
+			public boolean eventTriggered() {
+				return k.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				if (overlayChat.isVisible()) {
+					overlayDebug.setVisible(false);
+					overlayHUD.setVisible(true);
+					overlayChat.setVisible(false);
+				} else {
+					// TODO: Toggle pause!
+				}
+
+				if (isGamePaused()) {
+					slideDriver = new SlideDriver(backgroundAlpha, 1.0f, SLIDE_TIME);
+				} else {
+					slideDriver = new SlideDriver(backgroundAlpha, 0.0f, SLIDE_TIME);
+				}
+			}
+		});
+
+		FlounderEvents.addEvent(new IEvent() {
+			private KeyButton k = new KeyButton(GLFW_KEY_F3);
+
+			@Override
+			public boolean eventTriggered() {
+				return k.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				if (!isGamePaused()) {
+					overlayDebug.setVisible(!overlayDebug.isVisible());
+				}
+			}
+		});
 	}
 
 	@Override
 	public void update() {
-		if (FlounderGuis.getSelector().isSelected(helloWorld)) {
-			helloWorld.setColour(new Colour(0.0f, 0.6f, 1.0f));
+		backgroundAlpha = slideDriver.update(Framework.getDelta());
+
+		if (!isGamePaused() && FlounderMouse.isDisplaySelected() && FlounderDisplay.isFocused()) {
+			FlounderMouse.setCursorHidden(KosmosConfigs.CAMERA_MOUSE_LOCKED.getBoolean());
 		} else {
-			helloWorld.setColour(new Colour(1.0f, 0.6f, 0.1f));
+			FlounderMouse.setCursorHidden(false);
 		}
 	}
 
@@ -57,12 +115,24 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public boolean isGamePaused() {
-		return false;
+		return overlayChat.isVisible();
 	}
 
 	@Override
 	public float getBlurFactor() {
-		return 0;
+		return backgroundAlpha;
+	}
+
+	public OverlayHUD getOverlayHUD() {
+		return overlayHUD;
+	}
+
+	public OverlayDebug getOverlayDebug() {
+		return overlayDebug;
+	}
+
+	public OverlayChat getOverlayChat() {
+		return overlayChat;
 	}
 
 	@Override

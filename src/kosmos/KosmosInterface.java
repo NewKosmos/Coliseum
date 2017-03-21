@@ -14,6 +14,7 @@ import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.events.*;
 import flounder.framework.*;
+import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
 import flounder.networking.*;
@@ -96,12 +97,12 @@ public class KosmosInterface extends Standard {
 		FlounderEvents.addEvent(new IEvent() {
 			@Override
 			public boolean eventTriggered() {
-				return polygons.wasDown();
+				return polygons.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
 			}
 
 			@Override
 			public void onEvent() {
-					OpenGlUtils.goWireframe(!OpenGlUtils.isInWireframe());
+				OpenGlUtils.goWireframe(!OpenGlUtils.isInWireframe());
 			}
 		});
 
@@ -140,7 +141,7 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public void onEvent() {
-					FlounderBounding.toggle(!FlounderBounding.renders());
+				FlounderBounding.toggle(!FlounderBounding.renders());
 			}
 		});
 
@@ -152,7 +153,7 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public void onEvent() {
-					Framework.requestClose();
+				Framework.requestClose();
 			}
 		});
 

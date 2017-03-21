@@ -13,6 +13,7 @@ import flounder.camera.*;
 import flounder.devices.*;
 import flounder.events.*;
 import flounder.framework.*;
+import flounder.guis.*;
 import flounder.inputs.*;
 import flounder.logger.*;
 import flounder.maths.*;
@@ -127,9 +128,9 @@ public class KosmosCamera extends Camera {
 		this.joystickHorizontal = new JoystickAxis(0, 2);
 		this.joystickZoom = new JoystickButton(0, 9);
 
-		if (KosmosConfigs.CAMERA_MOUSE_LOCKED.getBoolean()) {
-			FlounderMouse.setCursorHidden(true);
-		}
+		//if (KosmosConfigs.CAMERA_MOUSE_LOCKED.getBoolean()) {
+		//	FlounderMouse.setCursorHidden(true);
+		//}
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton fpsToggle = new KeyButton(GLFW.GLFW_KEY_V);
@@ -193,7 +194,7 @@ public class KosmosCamera extends Camera {
 	private void calculateHorizontalAngle() {
 		float angleChange = 0.0f;
 
-		//if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
+		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
 			if (Maths.deadband(0.05f, joystickHorizontal.getAmount()) != 0.0f && !joystickZoom.isDown()) {
 				angleChange = joystickHorizontal.getAmount() * INFLUENCE_OF_JOYSTICK_DX * cameraSensitivity;
 			} else {
@@ -201,7 +202,7 @@ public class KosmosCamera extends Camera {
 					angleChange = -FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSE_DX * cameraSensitivity;
 				}
 			}
-		//}
+		}
 
 		if (angleChange > MAX_HORIZONTAL_CHANGE) {
 			angleChange = MAX_HORIZONTAL_CHANGE;
@@ -221,7 +222,7 @@ public class KosmosCamera extends Camera {
 	private void calculateVerticalAngle() {
 		float angleChange = 0.0f;
 
-		//if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
+		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
 			if (Maths.deadband(0.05f, joystickVertical.getAmount()) != 0.0f && !joystickZoom.isDown()) {
 				angleChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_DY * cameraSensitivity;
 			} else {
@@ -229,7 +230,7 @@ public class KosmosCamera extends Camera {
 					angleChange = FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSE_DY * cameraSensitivity;
 				}
 			}
-		//}
+		}
 
 		if (angleChange > MAX_VERTICAL_CHANGE) {
 			angleChange = MAX_VERTICAL_CHANGE;
@@ -257,13 +258,13 @@ public class KosmosCamera extends Camera {
 	private void calculateZoom() {
 		float zoomChange = 0.0f;
 
-		//if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused() && !firstPerson) {
+		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused() && !firstPerson) {
 			if (joystickZoom.isDown()) {
 				zoomChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_ZOOM * cameraSensitivity;
 			} else if (Math.abs(FlounderMouse.getDeltaWheel()) > 0.1f) {
 				zoomChange = FlounderMouse.getDeltaWheel() * INFLUENCE_OF_MOUSE_WHEEL * cameraSensitivity;
 			}
-		//}
+		}
 
 		if (zoomChange > MAX_VERTICAL_CHANGE) {
 			zoomChange = MAX_VERTICAL_CHANGE;
