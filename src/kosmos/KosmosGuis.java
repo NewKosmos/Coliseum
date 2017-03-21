@@ -37,7 +37,7 @@ public class KosmosGuis extends GuiMaster {
 		this.helloWorld.setBorderColour(new Colour(1.0f, 0.6f, 0.1f));
 		//this.helloWorld.setBorder(new SinWaveDriver(0.1f, 0.3f, 3.0f));
 		this.helloWorld.setGlowing(new SinWaveDriver(0.1f, 0.5f, 4.0f));
-		//this.helloWorld.setRotationDriver(new LinearDriver(0.0f, 360.0f, 5.0f));
+		this.helloWorld.setRotationDriver(new LinearDriver(0.0f, 360.0f, 5.0f));
 		//this.helloWorld.setScaleDriver(new SinWaveDriver(0.0f, 2.0f, 8.5f));
 	}
 
