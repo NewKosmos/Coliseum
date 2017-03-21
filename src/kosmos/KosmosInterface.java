@@ -97,14 +97,12 @@ public class KosmosInterface extends Standard {
 		FlounderEvents.addEvent(new IEvent() {
 			@Override
 			public boolean eventTriggered() {
-				return polygons.wasDown();
+				return polygons.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
 			}
 
 			@Override
 			public void onEvent() {
-				if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
-					OpenGlUtils.goWireframe(!OpenGlUtils.isInWireframe());
-				}
+				OpenGlUtils.goWireframe(!OpenGlUtils.isInWireframe());
 			}
 		});
 
@@ -143,9 +141,7 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public void onEvent() {
-				if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
-					FlounderBounding.toggle(!FlounderBounding.renders());
-				}
+				FlounderBounding.toggle(!FlounderBounding.renders());
 			}
 		});
 
@@ -157,9 +153,7 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public void onEvent() {
-				if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
-					Framework.requestClose();
-				}
+				Framework.requestClose();
 			}
 		});
 

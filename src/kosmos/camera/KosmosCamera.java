@@ -23,6 +23,7 @@ import flounder.physics.*;
 import flounder.profiling.*;
 import flounder.space.*;
 import kosmos.*;
+import kosmos.chunks.*;
 import org.lwjgl.glfw.*;
 
 public class KosmosCamera extends Camera {
@@ -126,6 +127,10 @@ public class KosmosCamera extends Camera {
 		this.joystickVertical = new JoystickAxis(0, 3);
 		this.joystickHorizontal = new JoystickAxis(0, 2);
 		this.joystickZoom = new JoystickButton(0, 9);
+
+		//if (KosmosConfigs.CAMERA_MOUSE_LOCKED.getBoolean()) {
+		//	FlounderMouse.setCursorHidden(true);
+		//}
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton fpsToggle = new KeyButton(GLFW.GLFW_KEY_V);

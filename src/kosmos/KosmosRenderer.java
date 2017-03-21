@@ -96,13 +96,11 @@ public class KosmosRenderer extends RendererMaster {
 
 			@Override
 			public void onEvent() {
-				if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
 					effect++;
 
 					if (effect > 2) {
 						effect = 0;
 					}
-				}
 			}
 		});
 	}
@@ -188,11 +186,6 @@ public class KosmosRenderer extends RendererMaster {
 		particleRenderer.render(clipPlane, camera);
 	}
 
-	private void renderIndependents() {
-		guisRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
-		fontRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
-	}
-
 	private void renderPost(boolean isPaused, float blurFactor) {
 		pipelineMRT.setRunFXAA(FlounderDisplay.isAntialiasing());
 		pipelineMRT.renderPipeline(rendererFBO);
@@ -230,6 +223,11 @@ public class KosmosRenderer extends RendererMaster {
 		}
 
 		output.blitToScreen();
+	}
+
+	private void renderIndependents() {
+		guisRenderer.render(null, null);
+		fontRenderer.render(null, null);
 	}
 
 	@Override

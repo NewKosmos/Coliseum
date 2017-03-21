@@ -1,12 +1,3 @@
-/*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
- *
- * This source file is part of New Kosmos
- *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- */
-
 package kosmos.uis;
 
 import flounder.devices.*;
@@ -14,6 +5,7 @@ import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.logger.*;
 import flounder.maths.*;
+import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.resources.*;
 import flounder.textures.*;
@@ -25,7 +17,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 // TODO: Add blinking addition point + arrow controls, fix shift items.
 
-public class OverlayChat extends GuiComponent {
+public class OverlayChat extends ScreenObject {
 	private static final float INPUT_AREA_HEIGHT = 0.05f;
 	private static final String START_STRING = "Message: ";
 
@@ -34,31 +26,30 @@ public class OverlayChat extends GuiComponent {
 	private ConsoleDelay inputDelay;
 	private int lastKey;
 
-	private GuiTexture textureInput;
-	private Text currentInput;
+	private GuiObject textureInput;
+	private TextObject currentInput;
 
-	private List<Text> chatMessages;
+	private List<TextObject> chatMessages;
 
-	public OverlayChat() {
+	public OverlayChat(ScreenObject parent) {
+		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
+		super.setInScreenCoords(false);
+
 		this.inputDelay = new ConsoleDelay();
 		this.lastKey = 0;
 
-		this.textureInput = new GuiTexture(TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "chatInput.png")).create());
-		this.currentInput = Text.newText(START_STRING).textAlign(GuiAlign.LEFT).setFontSize(0.875f).create();
-		this.currentInput.setColour(1.0f, 1.0f, 1.0f);
-		addText(currentInput, 0.01f, 0.972f, 1.0f);
+		this.textureInput = new GuiObject(this, new Vector2f(0.5f, 1.0f - (INPUT_AREA_HEIGHT / 2.0f)), new Vector2f(1.0f, INPUT_AREA_HEIGHT), TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "chatInput.png")).create(), 1);
+		this.textureInput.setInScreenCoords(false);
+
+		this.currentInput = new TextObject(this, new Vector2f(0.01f, 0.972f), START_STRING, 0.875f, FlounderFonts.CANDARA, 1.0f, GuiAlign.LEFT);
+		this.currentInput.setInScreenCoords(false);
+		this.currentInput.setColour(new Colour(1.0f, 1.0f, 1.0f));
 
 		this.chatMessages = new ArrayList<>();
-
-		super.show(false);
 	}
 
 	@Override
-	protected void updateSelf() {
-		if (!isShown()) {
-			return;
-		}
-
+	public void updateObject() {
 		// Add new chat messages.
 		if (!newMessages.isEmpty()) {
 			for (String message : newMessages) {
@@ -68,8 +59,7 @@ public class OverlayChat extends GuiComponent {
 			newMessages.clear();
 		}
 
-		textureInput.setPosition(0.5f, 1.0f - (INPUT_AREA_HEIGHT / 2.0f), FlounderDisplay.getWidth(), INPUT_AREA_HEIGHT);
-		textureInput.update();
+		textureInput.getDimensions().set(2.0f * FlounderDisplay.getAspectRatio(), textureInput.getDimensions().y);
 
 		int key = FlounderKeyboard.getKeyboardChar();
 
@@ -114,9 +104,8 @@ public class OverlayChat extends GuiComponent {
 	}
 
 	public void addText(String string, Colour colour) {
-		Text text = Text.newText(" > " + string).textAlign(GuiAlign.LEFT).setFontSize(0.8f).create();
+		TextObject text = new TextObject(this, new Vector2f(0.01f, 0.02f + (chatMessages.size() * 0.03f)), " > " + string, 0.7f, FlounderFonts.SEGOE, 1.5f, GuiAlign.LEFT);
 		text.setColour(colour);
-		addText(text, 0.01f, 0.02f + (chatMessages.size() * 0.03f), 1.5f);
 		chatMessages.add(text);
 
 		if (string.charAt(0) == '/') {
@@ -136,9 +125,6 @@ public class OverlayChat extends GuiComponent {
 	}
 
 	@Override
-	protected void getGuiTextures(List<GuiTexture> guiTextures) {
-		if (isShown()) {
-			guiTextures.add(textureInput);
-		}
+	public void deleteObject() {
 	}
 }
