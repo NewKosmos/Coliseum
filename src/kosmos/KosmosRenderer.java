@@ -91,7 +91,7 @@ public class KosmosRenderer extends RendererMaster {
 
 			@Override
 			public boolean eventTriggered() {
-				return c.wasDown();
+				return c.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
 			}
 
 			@Override

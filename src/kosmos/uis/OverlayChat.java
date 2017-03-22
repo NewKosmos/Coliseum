@@ -50,6 +50,10 @@ public class OverlayChat extends ScreenObject {
 
 	@Override
 	public void updateObject() {
+		if (!isVisible()) {
+			return;
+		}
+
 		// Add new chat messages.
 		if (!newMessages.isEmpty()) {
 			for (String message : newMessages) {

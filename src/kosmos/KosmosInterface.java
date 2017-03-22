@@ -111,7 +111,7 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public boolean eventTriggered() {
-				return key.wasDown();
+				return key.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
 			}
 
 			@Override
@@ -136,7 +136,7 @@ public class KosmosInterface extends Standard {
 		FlounderEvents.addEvent(new IEvent() {
 			@Override
 			public boolean eventTriggered() {
-				return aabbs.wasDown();
+				return aabbs.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
 			}
 
 			@Override
@@ -148,7 +148,7 @@ public class KosmosInterface extends Standard {
 		FlounderEvents.addEvent(new IEvent() {
 			@Override
 			public boolean eventTriggered() {
-				return closeWindow.wasDown();
+				return closeWindow.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
 			}
 
 			@Override
