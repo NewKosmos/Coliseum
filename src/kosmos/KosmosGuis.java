@@ -2,9 +2,14 @@ package kosmos;
 
 import flounder.devices.*;
 import flounder.events.*;
+import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.inputs.*;
+import flounder.maths.*;
+import flounder.maths.vectors.*;
+import flounder.resources.*;
+import flounder.textures.*;
 import flounder.visual.*;
 import kosmos.uis.*;
 
@@ -20,6 +25,9 @@ public class KosmosGuis extends GuiMaster {
 	private ValueDriver slideDriver;
 	private float backgroundAlpha;
 
+	private TextObject to;
+	private GuiObject go;
+
 	public KosmosGuis() {
 		super();
 	}
@@ -33,6 +41,16 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayHUD.setVisible(true);
 		this.overlayDebug.setVisible(false);
 		this.overlayChat.setVisible(false);
+
+		String s = "I'm Harambe, and this is my zoo enclosure. I work here with my zoo keeper and my friend, cecil the lion. Everything in here has a story and a price. One thing I've learned after 21 years - you never know WHO is gonna come over that fence.";
+		to = new TextObject(FlounderGuis.getContainer(), new Vector2f(0.5f, 0.5f), s, 1.5f, FlounderFonts.CANDARA, 0.3f, GuiAlign.RIGHT);
+		to.setInScreenCoords(false);
+		to.setColour(new Colour(1.0f, 1.0f, 1.0f));
+		to.setBorderColour(new Colour(1.0f, 0.3f, 0.3f));
+		to.setGlowing(new SinWaveDriver(0.35f, 0.5f, 3.0f));
+
+		go = new GuiObject(FlounderGuis.getContainer(), new Vector2f(0.5f, 0.5f), new Vector2f(), TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "undefined.png")).create(), 1);
+		go.setInScreenCoords(false);
 
 		this.slideDriver = new ConstantDriver(0.0f);
 		this.backgroundAlpha = 0.0f;
@@ -100,6 +118,16 @@ public class KosmosGuis extends GuiMaster {
 	@Override
 	public void update() {
 		backgroundAlpha = slideDriver.update(Framework.getDelta());
+
+		Vector2f.multiply(to.getDimensions(), to.getMeshSize(), go.getDimensions());
+		go.getDimensions().scale(2.0f * to.getScale());
+		go.getPositionOffsets().set(to.getPositionOffsets());
+
+		if (FlounderGuis.getSelector().isSelected(to)) {
+			to.setColour(new Colour(1.0f, 0.0f, 0.0f));
+		} else {
+			to.setColour(new Colour(1.0f, 1.0f, 1.0f));
+		}
 
 		if (!isGamePaused() && FlounderMouse.isDisplaySelected() && FlounderDisplay.isFocused()) {
 			FlounderMouse.setCursorHidden(KosmosConfigs.CAMERA_MOUSE_LOCKED.getBoolean());

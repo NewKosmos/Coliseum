@@ -41,7 +41,7 @@ public class OverlayChat extends ScreenObject {
 		this.textureInput = new GuiObject(this, new Vector2f(0.5f, 1.0f - (INPUT_AREA_HEIGHT / 2.0f)), new Vector2f(1.0f, INPUT_AREA_HEIGHT), TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "chatInput.png")).create(), 1);
 		this.textureInput.setInScreenCoords(false);
 
-		this.currentInput = new TextObject(this, new Vector2f(0.01f, 0.972f), START_STRING, 0.875f, FlounderFonts.CANDARA, 1.0f, GuiAlign.LEFT);
+		this.currentInput = new TextObject(this, new Vector2f(0.01f, 1.0f - (INPUT_AREA_HEIGHT / 2.0f)), START_STRING, 1.1f, FlounderFonts.CANDARA, 1.0f, GuiAlign.LEFT);
 		this.currentInput.setInScreenCoords(false);
 		this.currentInput.setColour(new Colour(1.0f, 1.0f, 1.0f));
 
@@ -108,7 +108,7 @@ public class OverlayChat extends ScreenObject {
 	}
 
 	public void addText(String string, Colour colour) {
-		TextObject text = new TextObject(this, new Vector2f(0.01f, 0.02f + (chatMessages.size() * 0.03f)), " > " + string, 0.7f, FlounderFonts.SEGOE, 1.5f, GuiAlign.LEFT);
+		TextObject text = new TextObject(this, new Vector2f(0.01f, 0.02f + (chatMessages.size() * 0.03f)), " > " + string, 1.0f, FlounderFonts.CANDARA, 1.5f, GuiAlign.LEFT);
 		text.setColour(colour);
 		chatMessages.add(text);
 
