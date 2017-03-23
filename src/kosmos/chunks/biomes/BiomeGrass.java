@@ -14,6 +14,7 @@ import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
+import kosmos.entities.instances.animals.InstanceChicken;
 import kosmos.entities.instances.plants.*;
 import kosmos.entities.instances.structures.*;
 import kosmos.entities.instances.trees.*;
@@ -122,6 +123,14 @@ public class BiomeGrass implements IBiome {
 						new Vector3f()
 				);
 			case 9:
+				return new InstanceChicken(FlounderEntities.getEntities(),
+						new Vector3f(
+								tilePosition.x,
+								0.61f + tilePosition.y * 0.5f,
+								tilePosition.z
+						),
+						new Vector3f()
+				);
 			case 10:
 				return new InstanceTallGrass(FlounderEntities.getEntities(),
 						new Vector3f(

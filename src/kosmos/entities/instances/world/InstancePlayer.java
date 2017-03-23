@@ -22,8 +22,8 @@ public class InstancePlayer extends Entity {
 	private static final MyFile colladaFile = new MyFile(FlounderEntities.ENTITIES_FOLDER, "cowboy", "cowboy.dae");
 	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cowboy", "cowboy.png")).create();
 
-//	private static final MyFile colladaFile = new MyFile(FlounderEntities.ENTITIES_FOLDER, "testanim", "testanim.dae");
-//	private static final TextureObject texture = null;
+//	private static final MyFile colladaFile = new MyFile(FlounderEntities.ENTITIES_FOLDER, "chicken", "chickenRun.dae");
+//	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "chicken", "chicken.png")).create();
 
 	public InstancePlayer(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
