@@ -25,12 +25,12 @@ public class OverlayHUD extends ScreenObject {
 		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
 
-		this.cornerAlpha = new GuiObject(FlounderGuis.getContainer(), new Vector2f(0.06f, 0.06f), new Vector2f(0.12f, 0.12f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "cornerAlpha.png")).create(), 1);
-		this.cornerAlpha.setInScreenCoords(true);
-	//	this.cornerAlpha.setRotationDriver(new ConstantDriver(-45.0f));
+		this.cornerAlpha = new GuiObject(FlounderGuis.getContainer(), new Vector2f(0.042f, 0.042f), new Vector2f(0.30f, 0.06f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "cornerAlpha.png")).create(), 1);
+		this.cornerAlpha.setInScreenCoords(false);
+		this.cornerAlpha.setRotationDriver(new ConstantDriver(-45.0f));
 
 		this.cornerVersion = new TextObject(this, new Vector2f(0.042f, 0.042f), "New Kosmos \n Alpha", 0.61f, FlounderFonts.CANDARA, 0.2f, GuiAlign.CENTRE);
-		this.cornerVersion.setInScreenCoords(true);
+		this.cornerVersion.setInScreenCoords(false);
 		this.cornerVersion.setColour(new Colour(1.0f, 1.0f, 1.0f));
 		this.cornerVersion.setRotationDriver(new ConstantDriver(-45.0f));
 
@@ -41,7 +41,7 @@ public class OverlayHUD extends ScreenObject {
 		this.statusHunger = new HudStatus(this, hudTexture, hudProgress, 4, 0.2f, new Colour(1.0f, 0.4f, 0.0f));
 
 		this.crossHair = new GuiObject(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.04f, 0.04f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "crosshair.png")).setNumberOfRows(4).create(), 1);
-		this.crossHair.setInScreenCoords(false);
+		this.crossHair.setInScreenCoords(true);
 		this.crossHair.setColourOffset(new Colour(0.1f, 0.8f, 0.2f));
 	}
 
@@ -64,13 +64,17 @@ public class OverlayHUD extends ScreenObject {
 			super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 
 			this.background = new GuiObject(this, new Vector2f(0.06f + offset, 0.94f), new Vector2f(0.1f, 0.1f), hudTexture, 0);
+			this.background.setInScreenCoords(false);
 
 			this.foreground = new GuiObject(this, new Vector2f(0.06f + offset, 0.94f), new Vector2f(0.08f, 0.08f), hudTexture, 1);
+			this.foreground.setInScreenCoords(false);
 
 			this.progress = new GuiObject(this, new Vector2f(0.06f + offset, 0.94f), new Vector2f(0.08f, 0.08f), hudProgress, 1);
+			this.progress.setInScreenCoords(false);
 			this.progress.setColourOffset(colour);
 
 			this.mainIcon = new GuiObject(this, new Vector2f(0.06f + offset, 0.94f), new Vector2f(0.06f, 0.06f), hudTexture, main);
+			this.mainIcon.setInScreenCoords(false);
 		}
 
 		@Override

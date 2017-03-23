@@ -3,10 +3,10 @@
   <asset>
     <contributor>
       <author>Blender User</author>
-      <authoring_tool>Blender 2.78.0 commit date:2017-02-08, commit time:13:50, hash:3c04373</authoring_tool>
+      <authoring_tool>Blender 2.78.0 commit date:2017-02-24, commit time:14:33, hash:e92f235283</authoring_tool>
     </contributor>
-    <created>2017-03-13T15:25:48</created>
-    <modified>2017-03-13T15:25:48</modified>
+    <created>2017-03-22T15:54:31</created>
+    <modified>2017-03-22T15:54:31</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -700,24 +700,7 @@
               <matrix sid="transform">-1 -1.44018e-7 6.05564e-7 1.42109e-14 4.5605e-8 0.9532991 0.3020283 1.29516 -6.20781e-7 0.3020284 -0.9532989 2.98023e-8 0 0 0 1</matrix>
               <node id="Head" name="Head" sid="Head" type="JOINT">
                 <matrix sid="transform">1 2.99489e-8 -2.48448e-7 -1.42109e-14 -8.79698e-8 0.9715177 -0.2369666 0.3023291 2.34275e-7 0.2369666 0.9715177 0 0 0 0 1</matrix>
-                <extra>
-                  <technique profile="blender">
-                    <connect>1</connect>
-                    <layer>0</layer>
-                    <roll>3.141592</roll>
-                    <tip_x>0</tip_x>
-                    <tip_y>0.03244501</tip_y>
-                    <tip_z>1.809549</tip_z>
-                  </technique>
-                </extra>
               </node>
-              <extra>
-                <technique profile="blender">
-                  <connect>1</connect>
-                  <layer>0</layer>
-                  <roll>-3.141593</roll>
-                </technique>
-              </extra>
             </node>
             <node id="Upper_Arm_L" name="Upper_Arm.L" sid="Upper_Arm_L" type="JOINT">
               <matrix sid="transform">-0.8112749 0.5809818 0.06550956 0.9250668 -0.5825275 -0.7936531 -0.1754316 0.7715869 -0.04993029 -0.1804848 0.9823095 -0.1557154 0 0 0 1</matrix>
@@ -725,31 +708,8 @@
                 <matrix sid="transform">-0.01571842 0.0488483 -0.9986826 2.38419e-7 -0.4106451 0.9103682 0.05099156 1.480745 0.9116597 0.4109055 0.00574974 0 0 0 0 1</matrix>
                 <node id="Hand_L" name="Hand.L" sid="Hand_L" type="JOINT">
                   <matrix sid="transform">0.9920121 -0.1146643 -0.05257294 -5.96046e-8 0.1225457 0.9748494 0.186148 1.083281 0.02990615 -0.1911037 0.9811141 -4.76837e-7 0 0 0 1</matrix>
-                  <extra>
-                    <technique profile="blender">
-                      <connect>1</connect>
-                      <layer>0</layer>
-                      <roll>1.200649</roll>
-                      <tip_x>0.2580857</tip_x>
-                      <tip_y>-0.1351876</tip_y>
-                      <tip_z>-0.6513591</tip_z>
-                    </technique>
-                  </extra>
                 </node>
-                <extra>
-                  <technique profile="blender">
-                    <connect>1</connect>
-                    <layer>0</layer>
-                    <roll>0.997668</roll>
-                  </technique>
-                </extra>
               </node>
-              <extra>
-                <technique profile="blender">
-                  <layer>0</layer>
-                  <roll>2.517127</roll>
-                </technique>
-              </extra>
             </node>
             <node id="Upper_Arm_R" name="Upper_Arm.R" sid="Upper_Arm_R" type="JOINT">
               <matrix sid="transform">-0.8112755 -0.5809815 0.06550941 -0.9250666 0.5468315 -0.7936532 -0.2666267 0.7715869 0.2068968 -0.1804854 0.9615709 -0.1557163 0 0 0 1</matrix>
@@ -757,39 +717,9 @@
                 <matrix sid="transform">0.5250607 0.0177151 -0.8508802 -9.53674e-7 -0.3603516 0.9103685 -0.2034118 1.480746 0.7710111 0.4134195 0.4843824 2.38419e-7 0 0 0 1</matrix>
                 <node id="Hand_R" name="Hand.R" sid="Hand_R" type="JOINT">
                   <matrix sid="transform">0.9693303 -0.1787559 -0.1686576 -1.19209e-7 0.1513024 0.9748496 -0.1636334 1.083282 0.1936662 0.1330966 0.9719973 0 0 0 0 1</matrix>
-                  <extra>
-                    <technique profile="blender">
-                      <connect>1</connect>
-                      <layer>0</layer>
-                      <roll>2.105003</roll>
-                      <tip_x>-0.2580857</tip_x>
-                      <tip_y>-0.1351876</tip_y>
-                      <tip_z>-0.6513591</tip_z>
-                    </technique>
-                  </extra>
                 </node>
-                <extra>
-                  <technique profile="blender">
-                    <connect>1</connect>
-                    <layer>0</layer>
-                    <roll>2.534275</roll>
-                  </technique>
-                </extra>
               </node>
-              <extra>
-                <technique profile="blender">
-                  <layer>0</layer>
-                  <roll>3.604909</roll>
-                </technique>
-              </extra>
             </node>
-            <extra>
-              <technique profile="blender">
-                <connect>1</connect>
-                <layer>0</layer>
-                <roll>4.76837e-7</roll>
-              </technique>
-            </extra>
           </node>
           <node id="Upper_Leg_L" name="Upper_Leg.L" sid="Upper_Leg_L" type="JOINT">
             <matrix sid="transform">-0.9999336 0.01149671 -8.33571e-4 0.5668193 -0.01149641 -0.9893998 0.1447591 -0.001348972 8.38965e-4 0.1447601 0.9894629 -0.1043749 0 0 0 1</matrix>
@@ -797,31 +727,8 @@
               <matrix sid="transform">-0.9991559 0.04105417 -0.001461088 -5.96046e-8 0.04052995 0.9793479 -0.1980785 1.282774 -0.006701034 -0.1979705 -0.980185 -1.49012e-8 0 0 0 1</matrix>
               <node id="Foot_L" name="Foot.L" sid="Foot_L" type="JOINT">
                 <matrix sid="transform">-0.999561 0.008794559 -0.02829164 5.96046e-8 0.02962703 0.296683 -0.9545164 1.493334 -9.03878e-7 -0.9549353 -0.2968133 -1.49012e-8 0 0 0 1</matrix>
-                <extra>
-                  <technique profile="blender">
-                    <connect>1</connect>
-                    <layer>0</layer>
-                    <roll>3.141592</roll>
-                    <tip_x>0</tip_x>
-                    <tip_y>-0.8317734</tip_y>
-                    <tip_z>-0.3716434</tip_z>
-                  </technique>
-                </extra>
               </node>
-              <extra>
-                <technique profile="blender">
-                  <connect>1</connect>
-                  <layer>0</layer>
-                  <roll>0.02630496</roll>
-                </technique>
-              </extra>
             </node>
-            <extra>
-              <technique profile="blender">
-                <layer>0</layer>
-                <roll>3.129964</roll>
-              </technique>
-            </extra>
           </node>
           <node id="Upper_Leg_R" name="Upper_Leg.R" sid="Upper_Leg_R" type="JOINT">
             <matrix sid="transform">-0.9999335 -0.01149671 -8.34063e-4 -0.5668193 0.01125496 -0.9893999 0.1447781 -0.001348972 -0.002489135 0.1447601 0.9894602 -0.1043749 0 0 0 1</matrix>
@@ -829,37 +736,9 @@
               <matrix sid="transform">-0.9991658 -0.04072399 0.003094593 0 -0.04052972 0.979348 -0.1980785 1.282774 0.005035869 -0.1980387 -0.9801812 2.98023e-8 0 0 0 1</matrix>
               <node id="Foot_R" name="Foot.R" sid="Foot_R" type="JOINT">
                 <matrix sid="transform">-0.9995611 -0.008793429 0.02829201 -5.96046e-8 -0.02962703 0.2966829 -0.9545164 1.493333 -2.82292e-7 -0.9549352 -0.2968132 1.49012e-8 0 0 0 1</matrix>
-                <extra>
-                  <technique profile="blender">
-                    <connect>1</connect>
-                    <layer>0</layer>
-                    <roll>3.141593</roll>
-                    <tip_x>0</tip_x>
-                    <tip_y>-0.8317734</tip_y>
-                    <tip_z>-0.3716434</tip_z>
-                  </technique>
-                </extra>
               </node>
-              <extra>
-                <technique profile="blender">
-                  <connect>1</connect>
-                  <layer>0</layer>
-                  <roll>-0.02630376</roll>
-                </technique>
-              </extra>
             </node>
-            <extra>
-              <technique profile="blender">
-                <layer>0</layer>
-                <roll>3.154889</roll>
-              </technique>
-            </extra>
           </node>
-          <extra>
-            <technique profile="blender">
-              <layer>0</layer>
-            </technique>
-          </extra>
         </node>
       </node>
       <node id="Cube" name="Cube" type="NODE">
