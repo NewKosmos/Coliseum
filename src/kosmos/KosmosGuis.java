@@ -52,8 +52,8 @@ public class KosmosGuis extends GuiMaster {
 		go.setInScreenCoords(true);
 		//go.setRotationDriver(new SinWaveDriver(0.0f, 360.0f, 6.0f));
 
-		to.setVisible(false);
-		go.setVisible(false);
+		to.setVisible(true);
+		go.setVisible(true);
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton k = new KeyButton(GLFW_KEY_ENTER);
