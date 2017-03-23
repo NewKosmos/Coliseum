@@ -25,7 +25,7 @@ public class OverlayHUD extends ScreenObject {
 		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
 
-		this.cornerAlpha = new GuiObject(FlounderGuis.getContainer(), new Vector2f(0.042f, 0.042f), new Vector2f(0.30f, 0.06f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "cornerAlpha.png")).create(), 1);
+		this.cornerAlpha = new GuiObject(this, new Vector2f(0.042f, 0.042f), new Vector2f(0.30f, 0.06f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "cornerAlpha.png")).create(), 1);
 		this.cornerAlpha.setInScreenCoords(false);
 		this.cornerAlpha.setRotationDriver(new ConstantDriver(-45.0f));
 

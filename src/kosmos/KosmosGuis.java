@@ -22,9 +22,6 @@ public class KosmosGuis extends GuiMaster {
 	private OverlayDebug overlayDebug;
 	private OverlayChat overlayChat;
 
-	private ValueDriver slideDriver;
-	private float backgroundAlpha;
-
 	private TextObject to;
 	private GuiObject go;
 
@@ -41,6 +38,7 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayHUD.setVisible(true);
 		this.overlayDebug.setVisible(false);
 		this.overlayChat.setVisible(false);
+		this.overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
 
 		String s = "I'm Harambe, and this is my zoo enclosure. I work here with my zoo keeper and my friend, cecil the lion. Everything in here has a story and a price. One thing I've learned after 21 years - you never know WHO is gonna come over that fence.";
 		to = new TextObject(FlounderGuis.getContainer(), new Vector2f(0.5f, 0.5f), s, 1.5f, FlounderFonts.CANDARA, 0.5f, GuiAlign.CENTRE);
@@ -48,17 +46,14 @@ public class KosmosGuis extends GuiMaster {
 		to.setColour(new Colour(1.0f, 1.0f, 1.0f));
 		to.setBorderColour(new Colour(1.0f, 0.3f, 0.3f));
 		to.setGlowing(new SinWaveDriver(0.35f, 0.5f, 3.0f));
-		to.setRotationDriver(new SinWaveDriver(0.0f, 360.0f, 6.0f));
+		//to.setRotationDriver(new SinWaveDriver(0.0f, 360.0f, 6.0f));
 
 		go = new GuiObject(FlounderGuis.getContainer(), new Vector2f(0.5f, 0.5f), new Vector2f(), TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "undefined.png")).create(), 1);
 		go.setInScreenCoords(true);
-		go.setRotationDriver(new SinWaveDriver(0.0f, 360.0f, 6.0f));
+		//go.setRotationDriver(new SinWaveDriver(0.0f, 360.0f, 6.0f));
 
 		to.setVisible(false);
 		go.setVisible(false);
-
-		this.slideDriver = new ConstantDriver(0.0f);
-		this.backgroundAlpha = 0.0f;
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton k = new KeyButton(GLFW_KEY_ENTER);
@@ -73,7 +68,8 @@ public class KosmosGuis extends GuiMaster {
 				overlayDebug.setVisible(false);
 				overlayHUD.setVisible(false);
 				overlayChat.setVisible(true);
-				slideDriver = new SlideDriver(backgroundAlpha, 1.0f, SLIDE_TIME);
+				overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 1.0f, SLIDE_TIME));
+				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 			}
 		});
 
@@ -96,9 +92,11 @@ public class KosmosGuis extends GuiMaster {
 				}
 
 				if (isGamePaused()) {
-					slideDriver = new SlideDriver(backgroundAlpha, 1.0f, SLIDE_TIME);
+					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 1.0f, SLIDE_TIME));
+					overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
 				} else {
-					slideDriver = new SlideDriver(backgroundAlpha, 0.0f, SLIDE_TIME);
+					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
+					overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
 				}
 			}
 		});
@@ -122,8 +120,6 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public void update() {
-		backgroundAlpha = slideDriver.update(Framework.getDelta());
-
 		Vector2f.multiply(to.getDimensions(), to.getMeshSize(), go.getDimensions());
 		go.getDimensions().scale(2.0f * to.getScale());
 		go.getPositionOffsets().set(to.getPositionOffsets());
@@ -143,7 +139,6 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public void profile() {
-
 	}
 
 	@Override
@@ -153,7 +148,7 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public float getBlurFactor() {
-		return backgroundAlpha;
+		return overlayChat.getAlpha();
 	}
 
 	public OverlayHUD getOverlayHUD() {
