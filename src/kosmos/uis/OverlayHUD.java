@@ -28,16 +28,16 @@ public class OverlayHUD extends ScreenObject {
 
 		this.crossHair = new GuiObject(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.04f, 0.04f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "crosshair.png")).setNumberOfRows(4).create(), 1);
 		this.crossHair.setInScreenCoords(true);
-		this.crossHair.setColourOffset(new Colour(0.1f, 0.8f, 0.2f));
+		this.crossHair.setColourOffset(new Colour(FlounderGuis.getGuiMaster().getPrimaryColour()));
 	}
 
 	@Override
 	public void updateObject() {
+		this.crossHair.setColourOffset(FlounderGuis.getGuiMaster().getPrimaryColour());
 	}
 
 	@Override
 	public void deleteObject() {
-
 	}
 
 	private static class HudStatus extends ScreenObject {

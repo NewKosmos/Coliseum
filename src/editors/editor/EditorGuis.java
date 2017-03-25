@@ -1,8 +1,11 @@
 package editors.editor;
 
 import flounder.guis.*;
+import flounder.maths.*;
 
 public class EditorGuis extends GuiMaster {
+	private static final Colour COLOUR_PRIMARY = new Colour(1.0f, 0.0f, 0.0f);
+
 	public EditorGuis() {
 		super();
 	}
@@ -30,6 +33,11 @@ public class EditorGuis extends GuiMaster {
 	@Override
 	public float getBlurFactor() {
 		return 0.0f;
+	}
+
+	@Override
+	public Colour getPrimaryColour() {
+		return COLOUR_PRIMARY;
 	}
 
 	@Override

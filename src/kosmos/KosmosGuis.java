@@ -4,12 +4,17 @@ import flounder.devices.*;
 import flounder.events.*;
 import flounder.guis.*;
 import flounder.inputs.*;
+import flounder.maths.*;
 import flounder.visual.*;
 import kosmos.uis.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class KosmosGuis extends GuiMaster {
+	private static final Colour COLOUR_PRIMARY = new Colour(0.90196078431f, 0.08235294117f, 0.08235294117f); // Charger Red.
+	// private static final Colour COLOUR_PRIMARY = new Colour(0.1f, 0.8f, 0.2f); // Neon Green.
+	// private static final Colour COLOUR_PRIMARY = new Colour(0.0824f, 0.396f, 0.753f); // Water Blue.
+
 	protected static final float SLIDE_TIME = 0.7f;
 
 	private OverlayAlpha overlayAlpha;
@@ -121,6 +126,11 @@ public class KosmosGuis extends GuiMaster {
 	@Override
 	public float getBlurFactor() {
 		return overlayPause.getAlpha();
+	}
+
+	@Override
+	public Colour getPrimaryColour() {
+		return COLOUR_PRIMARY;
 	}
 
 	public OverlayHUD getOverlayHUD() {

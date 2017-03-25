@@ -21,7 +21,7 @@ public class OverlayAlpha extends ScreenObject {
 
 		this.cornerAlpha = new GuiObject(this, new Vector2f(FlounderDisplay.getAspectRatio() - SIZE, SIZE), new Vector2f(0.30f, 0.06f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "cornerAlpha.png")).create(), 1);
 		this.cornerAlpha.setInScreenCoords(false);
-		this.cornerAlpha.setColourOffset(new Colour(0.0824f, 0.396f, 0.753f));
+		this.cornerAlpha.setColourOffset(new Colour());
 		this.cornerAlpha.setRotationDriver(new ConstantDriver(45.0f));
 
 		this.cornerVersion = new TextObject(this, new Vector2f(FlounderDisplay.getAspectRatio() - SIZE, SIZE), "New Kosmos \n Alpha", 0.61f, FlounderFonts.CANDARA, 0.2f, GuiAlign.CENTRE);
@@ -34,6 +34,8 @@ public class OverlayAlpha extends ScreenObject {
 	public void updateObject() {
 		this.cornerAlpha.getPosition().x = FlounderDisplay.getAspectRatio() - SIZE;
 		this.cornerVersion.getPosition().x = FlounderDisplay.getAspectRatio() - SIZE;
+
+		this.cornerAlpha.setColourOffset(FlounderGuis.getGuiMaster().getPrimaryColour());
 	}
 
 	@Override
