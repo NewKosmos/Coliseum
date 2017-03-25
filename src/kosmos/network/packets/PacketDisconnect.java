@@ -1,7 +1,9 @@
 package kosmos.network.packets;
 
+import flounder.guis.*;
 import flounder.logger.*;
 import flounder.networking.*;
+import kosmos.*;
 import kosmos.world.*;
 
 import java.net.*;
@@ -43,6 +45,7 @@ public class PacketDisconnect extends Packet {
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
 		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "] " + username + " has quit the game.");
+		((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayUsernames().removeMultiplayer(username);
 		KosmosWorld.removePlayer(username);
 	}
 
