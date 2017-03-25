@@ -205,20 +205,6 @@ public class KosmosWorld extends Module {
 		return INSTANCE.lightPosition;
 	}
 
-	public static float getSwayOffsetX(float x) {
-		float wx = 1.0f; // (float) Math.sin(x * 0.6f); // TODO
-		float windPower = 0.24f;
-		float systemTime = Framework.getTimeSec() * wx;
-		return windPower * (float) (Math.sin(0.25 * systemTime) - Math.sin(1.2 * systemTime) + Math.cos(0.5 * systemTime));
-	}
-
-	public static float getSwayOffsetZ(float z) {
-		float wz = 1.0f; // (float) Math.sin(z * 0.6f); // TODO
-		float windPower = 0.24f;
-		float systemTime = Framework.getTimeSec() * wz;
-		return windPower * (float) (Math.cos(0.25 * systemTime) - Math.cos(1.2 * systemTime) + Math.sin(0.5 * systemTime));
-	}
-
 	@Override
 	public Module getInstance() {
 		return INSTANCE;

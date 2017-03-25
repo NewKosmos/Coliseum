@@ -21,9 +21,6 @@ public class KosmosGuis extends GuiMaster {
 	private OverlayDebug overlayDebug;
 	private OverlayChat overlayChat;
 
-	private TextObject to;
-	private GuiObject go;
-
 	public KosmosGuis() {
 		super();
 	}
@@ -38,21 +35,6 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayDebug.setVisible(false);
 		this.overlayChat.setVisible(false);
 		this.overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
-
-		String s = "I'm Harambe, and this is my zoo enclosure. I work here with my zoo keeper and my friend, cecil the lion. Everything in here has a story and a price. One thing I've learned after 21 years - you never know WHO is gonna come over that fence.";
-		to = new TextObject(FlounderGuis.getContainer(), new Vector2f(0.5f, 0.5f), s, 1.5f, FlounderFonts.CANDARA, 0.5f, GuiAlign.CENTRE);
-		to.setInScreenCoords(true);
-		to.setColour(new Colour(1.0f, 1.0f, 1.0f));
-		to.setBorderColour(new Colour(1.0f, 0.3f, 0.3f));
-		to.setGlowing(new SinWaveDriver(0.35f, 0.5f, 3.0f));
-		//to.setRotationDriver(new SinWaveDriver(0.0f, 360.0f, 6.0f));
-
-		go = new GuiObject(FlounderGuis.getContainer(), new Vector2f(0.5f, 0.5f), new Vector2f(), TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "undefined.png")).create(), 1);
-		go.setInScreenCoords(true);
-		//go.setRotationDriver(new SinWaveDriver(0.0f, 360.0f, 6.0f));
-
-		to.setVisible(false);
-		go.setVisible(false);
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton k = new KeyButton(GLFW_KEY_ENTER);
@@ -119,16 +101,6 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public void update() {
-		Vector2f.multiply(to.getDimensions(), to.getMeshSize(), go.getDimensions());
-		go.getDimensions().scale(2.0f * to.getScale());
-		go.getPositionOffsets().set(to.getPositionOffsets());
-
-		if (FlounderGuis.getSelector().isSelected(to)) {
-			to.setColour(new Colour(1.0f, 0.0f, 0.0f));
-		} else {
-			to.setColour(new Colour(1.0f, 1.0f, 1.0f));
-		}
-
 		if (!isGamePaused() && FlounderMouse.isDisplaySelected() && FlounderDisplay.isFocused()) {
 			FlounderMouse.setCursorHidden(KosmosConfigs.CAMERA_MOUSE_LOCKED.getBoolean());
 		} else {

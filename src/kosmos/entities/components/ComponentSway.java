@@ -11,6 +11,7 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.resources.*;
@@ -57,6 +58,20 @@ public class ComponentSway extends IComponentEntity implements IComponentEditor 
 
 	public void setTextureSway(TextureObject textureSway) {
 		this.textureSway = textureSway;
+	}
+
+	public float getSwayOffsetX() {
+		float wx = 1.0f; // (float) Math.sin(x * 0.6f); // TODO
+		float windPower = 0.24f;
+		float systemTime = Framework.getTimeSec() * wx;
+		return windPower * (float) (Math.sin(0.25 * systemTime) - Math.sin(1.2 * systemTime) + Math.cos(0.5 * systemTime));
+	}
+
+	public float getSwayOffsetZ() {
+		float wz = 1.0f; // (float) Math.sin(z * 0.6f); // TODO
+		float windPower = 0.24f;
+		float systemTime = Framework.getTimeSec() * wz;
+		return windPower * (float) (Math.cos(0.25 * systemTime) - Math.cos(1.2 * systemTime) + Math.sin(0.5 * systemTime));
 	}
 
 	@Override
