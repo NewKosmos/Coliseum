@@ -38,12 +38,12 @@ public class BiomeGrass implements IBiome {
 
 	@Override
 	public Entity generateEntity(Chunk chunk, Vector3f tilePosition) {
-		if (KosmosWorld.getNoise().noise2(tilePosition.x / 50.0f * (float) Math.sin(tilePosition.z), tilePosition.z / 50.0f * (float) Math.sin(tilePosition.x)) <= 0.1f) {
+		if (Math.abs(KosmosWorld.getNoise().noise2(tilePosition.z * (float) Math.sin(tilePosition.x), tilePosition.x * (float) Math.sin(tilePosition.z))) <= 0.3f) {
 			return null;
 		}
 
-		float spawn = KosmosWorld.getNoise().noise1((tilePosition.z - tilePosition.x) / 11.0f) * 400.0f;
-		float rotation = KosmosWorld.getNoise().noise1((tilePosition.x - tilePosition.z) / 66.6f) * 3600.0f;
+		float spawn = KosmosWorld.getNoise().noise1((tilePosition.z - tilePosition.x) * (float) Math.sin(tilePosition.x + tilePosition.z)) * 100.0f;
+		float rotation = KosmosWorld.getNoise().noise1(tilePosition.x - tilePosition.z) * 3600.0f;
 
 		switch ((int) spawn) {
 			case 1:
