@@ -91,7 +91,9 @@ public class OverlayUsernames extends ScreenObject {
 		pair.getFirst().getPosition().set(screenPosition.x + (FlounderDisplay.getAspectRatio() / 2.0f), -screenPosition.y);
 
 		// Update background size.
-		Vector2f.multiply(pair.getFirst().getDimensions(), pair.getFirst().getMeshSize(), pair.getSecond().getDimensions());
+		pair.getSecond().getDimensions().set(pair.getFirst().getMeshSize());
+		pair.getSecond().getDimensions().y = 0.5f * (float) pair.getFirst().getFont().getMaxSizeY();
+		Vector2f.multiply(pair.getFirst().getDimensions(), pair.getSecond().getDimensions(), pair.getSecond().getDimensions());
 		pair.getSecond().getDimensions().scale(2.0f * pair.getFirst().getScale());
 		pair.getSecond().getPositionOffsets().set(pair.getFirst().getPositionOffsets());
 		pair.getSecond().getPosition().set(pair.getFirst().getPosition());
