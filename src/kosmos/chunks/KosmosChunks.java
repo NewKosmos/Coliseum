@@ -36,13 +36,12 @@ public class KosmosChunks extends Module {
 	public static final MyFile TERRAINS_FOLDER = new MyFile(MyFile.RES_FOLDER, "terrains");
 
 	private ISpatialStructure<Entity> chunks;
-
 	private Sphere chunkRange;
+
+	private ModelObject modelHexagon;
 
 	private Vector3f lastPlayerPos;
 	private Chunk currentChunk;
-
-	private ModelObject modelHexagon;
 
 	public KosmosChunks() {
 		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEvents.class, FlounderBounding.class, FlounderEntities.class, FlounderTextures.class);
@@ -51,8 +50,9 @@ public class KosmosChunks extends Module {
 	@Override
 	public void init() {
 		this.chunks = new StructureBasic<>();
-
 		this.chunkRange = new Sphere(40.0f); // 3.0f * Chunk.CHUNK_WORLD_SIZE
+
+		this.modelHexagon = ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "hexagon.obj")).create();
 
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
 		setCurrent(new Chunk(KosmosChunks.getChunks(), new Vector3f(
@@ -60,8 +60,6 @@ public class KosmosChunks extends Module {
 				0.0f,
 				KosmosConfigs.SAVE_CHUNK_Z.setReference(() -> getCurrent().getPosition().z).getFloat()
 		))); // The root chunk.
-
-		this.modelHexagon = ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "hexagon.obj")).create();
 
 		FlounderEvents.addEvent(new IEvent() {
 			private static final int RECURSION_COUNT = 512;

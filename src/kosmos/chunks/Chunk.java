@@ -14,6 +14,7 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
+import flounder.processing.*;
 import flounder.space.*;
 import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;
@@ -54,8 +55,6 @@ public class Chunk extends Entity {
 	private ChunkMesh chunkMesh;
 	private Sphere sphere;
 
-	private boolean forceRebuild;
-
 	public Chunk(ISpatialStructure<Entity> structure, Vector3f position) {
 		super(structure, position, new Vector3f());
 
@@ -63,8 +62,6 @@ public class Chunk extends Entity {
 		this.biome = getWorldBiome(position.x, position.z);
 		this.chunkMesh = new ChunkMesh(this);
 		this.sphere = new Sphere();
-
-		this.forceRebuild = true;
 
 		new ComponentModel(this, 1.0f, chunkMesh.getModel(), biome.getBiome().getTexture(), 0);
 		new ComponentSurface(this, 1.0f, 0.0f, false, false);
@@ -144,13 +141,11 @@ public class Chunk extends Entity {
 
 	@Override
 	public void update() {
-		// Builds or rebulds this chunks mesh.
-		if (forceRebuild) {
-			forceRebuild = !chunkMesh.rebuild(KosmosChunks.getModelHexagon());
-		}
-
 		// Updates the entity super class.
 		super.update();
+
+		// Updates the mesh.
+		this.chunkMesh.update();
 
 		// Adds this mesh AABB to the bounding render pool.
 		FlounderBounding.addShapeRender(getSphere());
@@ -266,7 +261,6 @@ public class Chunk extends Entity {
 
 	public void delete() {
 		chunkMesh.delete();
-		forceRebuild = true;
 
 		if (particleSystem != null) {
 			particleSystem.delete();

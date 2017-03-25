@@ -89,8 +89,10 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 	}
 
 	public void setModel(ModelObject model) {
-		this.model = model;
-		getEntity().setMoved();
+		if (this.model != model) {
+			this.model = model;
+			getEntity().setMoved();
+		}
 	}
 
 	public float getScale() {
@@ -98,8 +100,10 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 	}
 
 	public void setScale(float scale) {
-		this.scale = scale;
-		getEntity().setMoved();
+		if (this.scale != scale) {
+			this.scale = scale;
+			getEntity().setMoved();
+		}
 	}
 
 	/**
@@ -116,7 +120,9 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 	}
 
 	public void setTexture(TextureObject texture) {
-		this.texture = texture;
+		if (this.texture != texture) {
+			this.texture = texture;
+		}
 	}
 
 	/**

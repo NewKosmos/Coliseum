@@ -5,6 +5,7 @@ import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.logger.*;
 import flounder.maths.*;
+import flounder.maths.Timer;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.resources.*;
@@ -18,14 +19,16 @@ import static org.lwjgl.glfw.GLFW.*;
 // TODO: Add blinking addition point + arrow controls, fix shift items.
 
 public class OverlayChat extends ScreenObject {
+	private static final float VIEW_AREA_HEIGHT = 0.5f;
 	private static final float INPUT_AREA_HEIGHT = 0.05f;
 	private static final String START_STRING = "Message: ";
 
 	public static final List<String> newMessages = new ArrayList<>();
 
-	private ConsoleDelay inputDelay;
+	private ChatDelay inputDelay;
 	private int lastKey;
 
+	private GuiObject textureView;
 	private GuiObject textureInput;
 	private TextObject currentInput;
 
@@ -35,8 +38,11 @@ public class OverlayChat extends ScreenObject {
 		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
 
-		this.inputDelay = new ConsoleDelay();
+		this.inputDelay = new ChatDelay();
 		this.lastKey = 0;
+
+		this.textureView = new GuiObject(this, new Vector2f(0.5f, 1.0f - (VIEW_AREA_HEIGHT / 2.0f)), new Vector2f(1.0f, VIEW_AREA_HEIGHT), TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "chatView.png")).create(), 1);
+		this.textureView.setInScreenCoords(false);
 
 		this.textureInput = new GuiObject(this, new Vector2f(0.5f, 1.0f - (INPUT_AREA_HEIGHT / 2.0f)), new Vector2f(1.0f, INPUT_AREA_HEIGHT), TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "chatInput.png")).create(), 1);
 		this.textureInput.setInScreenCoords(false);
@@ -50,7 +56,7 @@ public class OverlayChat extends ScreenObject {
 
 	@Override
 	public void updateObject() {
-		if (!isVisible()) {
+		if (!isVisible() || getAlpha() < 0.1f) {
 			return;
 		}
 
@@ -63,6 +69,7 @@ public class OverlayChat extends ScreenObject {
 			newMessages.clear();
 		}
 
+		textureView.getDimensions().set(2.0f * FlounderDisplay.getAspectRatio(), textureView.getDimensions().y);
 		textureInput.getDimensions().set(2.0f * FlounderDisplay.getAspectRatio(), textureInput.getDimensions().y);
 
 		int key = FlounderKeyboard.getKeyboardChar();
@@ -108,7 +115,7 @@ public class OverlayChat extends ScreenObject {
 	}
 
 	public void addText(String string, Colour colour) {
-		TextObject text = new TextObject(this, new Vector2f(0.01f, 0.02f + (chatMessages.size() * 0.03f)), " > " + string, 1.0f, FlounderFonts.CANDARA, 1.5f, GuiAlign.LEFT);
+		TextObject text = new TextObject(this, new Vector2f(0.01f, VIEW_AREA_HEIGHT + 0.02f + (chatMessages.size() * 0.03f)), " > " + string, 1.0f, FlounderFonts.CANDARA, 1.5f, GuiAlign.LEFT);
 		text.setColour(colour);
 		chatMessages.add(text);
 
@@ -123,12 +130,41 @@ public class OverlayChat extends ScreenObject {
 			}
 
 			addText("Could not find command: " + data[0], new Colour(0.81f, 0.37f, 0.24f));
-		} else {
-
 		}
 	}
 
 	@Override
 	public void deleteObject() {
+	}
+
+	public class ChatDelay {
+		private Timer delayTimer;
+		private Timer repeatTimer;
+		private boolean delayOver;
+
+		protected ChatDelay() {
+			this.delayTimer = new Timer(0.4);
+			this.repeatTimer = new Timer(0.1);
+			this.delayOver = false;
+		}
+
+		protected void update(boolean keyIsDown) {
+			if (keyIsDown) {
+				delayOver = delayTimer.isPassedTime();
+			} else {
+				delayOver = false;
+				delayTimer.resetStartTime();
+				repeatTimer.resetStartTime();
+			}
+		}
+
+		protected boolean canInput() {
+			if (delayOver && repeatTimer.isPassedTime()) {
+				repeatTimer.resetStartTime();
+				return true;
+			}
+
+			return false;
+		}
 	}
 }

@@ -25,14 +25,14 @@ public class OverlayHUD extends ScreenObject {
 		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
 
-		this.cornerAlpha = new GuiObject(this, new Vector2f(0.042f, 0.042f), new Vector2f(0.30f, 0.06f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "cornerAlpha.png")).create(), 1);
-		this.cornerAlpha.setInScreenCoords(false);
-		this.cornerAlpha.setRotationDriver(new ConstantDriver(-45.0f));
+		this.cornerAlpha = new GuiObject(this, new Vector2f(0.972f, 0.044f), new Vector2f(0.30f, 0.06f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "cornerAlpha.png")).create(), 1);
+		this.cornerAlpha.setInScreenCoords(true);
+		this.cornerAlpha.setRotationDriver(new ConstantDriver(45.0f));
 
-		this.cornerVersion = new TextObject(this, new Vector2f(0.042f, 0.042f), "New Kosmos \n Alpha", 0.61f, FlounderFonts.CANDARA, 0.2f, GuiAlign.CENTRE);
-		this.cornerVersion.setInScreenCoords(false);
+		this.cornerVersion = new TextObject(this, new Vector2f(0.972f, 0.044f), "New Kosmos \n Alpha", 0.61f, FlounderFonts.CANDARA, 0.2f, GuiAlign.CENTRE);
+		this.cornerVersion.setInScreenCoords(true);
 		this.cornerVersion.setColour(new Colour(1.0f, 1.0f, 1.0f));
-		this.cornerVersion.setRotationDriver(new ConstantDriver(-45.0f));
+		this.cornerVersion.setRotationDriver(new ConstantDriver(45.0f));
 
 		this.hudTexture = TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "hudSprites.png")).setNumberOfRows(3).create();
 		this.hudProgress = TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "circularProgress.png")).setNumberOfRows(4).create();

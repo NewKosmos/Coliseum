@@ -31,9 +31,8 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayDebug = new OverlayDebug(FlounderGuis.getContainer());
 		this.overlayChat = new OverlayChat(FlounderGuis.getContainer());
 
-		this.overlayHUD.setVisible(true);
-		this.overlayDebug.setVisible(false);
-		this.overlayChat.setVisible(false);
+		this.overlayHUD.setAlphaDriver(new ConstantDriver(1.0f));
+		this.overlayDebug.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
 
 		FlounderEvents.addEvent(new IEvent() {
@@ -46,11 +45,10 @@ public class KosmosGuis extends GuiMaster {
 
 			@Override
 			public void onEvent() {
-				overlayDebug.setVisible(false);
-				overlayHUD.setVisible(false);
-				overlayChat.setVisible(true);
-				overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 1.0f, SLIDE_TIME));
-				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
+				if (overlayChat.getAlpha() < 0.5f && !isGamePaused()) {
+					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 1.0f, SLIDE_TIME));
+					overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
+				}
 			}
 		});
 
@@ -65,17 +63,14 @@ public class KosmosGuis extends GuiMaster {
 			@Override
 			public void onEvent() {
 				if (overlayChat.isVisible()) {
-					overlayDebug.setVisible(false);
-					overlayHUD.setVisible(true);
-					overlayChat.setVisible(false);
+				//	overlayDebug.setVisible(false);
+				//	overlayHUD.setVisible(true);
+				//	overlayChat.setVisible(false);
 				} else {
 					// TODO: Toggle pause!
 				}
 
-				if (isGamePaused()) {
-					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 1.0f, SLIDE_TIME));
-					overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
-				} else {
+				if (overlayChat.getAlpha() == 1.0f) {
 					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
 					overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
 				}
@@ -92,8 +87,12 @@ public class KosmosGuis extends GuiMaster {
 
 			@Override
 			public void onEvent() {
-				if (!isGamePaused()) {
-					overlayDebug.setVisible(!overlayDebug.isVisible());
+				if (overlayChat.getAlpha() != 1.0f && !isGamePaused()) {
+					if (overlayDebug.getAlpha() < 0.5f) {
+						overlayDebug.setAlphaDriver(new SlideDriver(overlayDebug.getAlpha(), 1.0f, SLIDE_TIME));
+					} else {
+						overlayDebug.setAlphaDriver(new SlideDriver(overlayDebug.getAlpha(), 0.0f, SLIDE_TIME));
+					}
 				}
 			}
 		});
@@ -114,12 +113,12 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public boolean isGamePaused() {
-		return overlayChat.isVisible();
+		return overlayChat.getAlpha() == 1.0f;
 	}
 
 	@Override
 	public float getBlurFactor() {
-		return overlayChat.getAlpha();
+		return 0.0f; // overlayChat.getAlpha();
 	}
 
 	public OverlayHUD getOverlayHUD() {
