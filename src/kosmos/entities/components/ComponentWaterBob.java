@@ -16,7 +16,7 @@ import kosmos.water.*;
 
 import javax.swing.*;
 
-public class ComponenWaterBob extends IComponentEntity implements IComponentEditor {
+public class ComponentWaterBob extends IComponentEntity implements IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
 	private float startY;
@@ -26,7 +26,7 @@ public class ComponenWaterBob extends IComponentEntity implements IComponentEdit
 	 *
 	 * @param entity The entity this component is attached to.
 	 */
-	public ComponenWaterBob(Entity entity) {
+	public ComponentWaterBob(Entity entity) {
 		super(entity, ID);
 
 		if (entity != null) {

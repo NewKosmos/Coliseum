@@ -22,7 +22,7 @@ public class KosmosPlayer extends Player {
 
 	public static final float RUN_SPEED = 5.0f;
 	public static final float BOOST_SPEED = 10.0f;
-	public static final float JUMP_POWER = 5.5f;
+	public static final float JUMP_POWER = 5.0f;
 	public static final float TURN_SPEED = 300.0f;
 
 	private Vector3f position;

@@ -45,6 +45,14 @@ public class BiomeGrass implements IBiome {
 		float spawn = KosmosWorld.getNoise().noise1((tilePosition.z - tilePosition.x) * (float) Math.sin(tilePosition.x + tilePosition.z)) * 100.0f;
 		float rotation = KosmosWorld.getNoise().noise1(tilePosition.x - tilePosition.z) * 3600.0f;
 
+		if (tilePosition.y <= 0.0f) {
+			if (spawn == 1) {
+				return new InstanceLilipad(FlounderEntities.getEntities(), new Vector3f(tilePosition.x, 0.025f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
+			}
+
+			return null;
+		}
+
 		switch ((int) spawn) {
 			case 1:
 				return new InstanceTreeBirchLarge(FlounderEntities.getEntities(),

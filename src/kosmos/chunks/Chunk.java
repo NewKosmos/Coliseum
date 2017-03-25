@@ -14,7 +14,6 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
-import flounder.processing.*;
 import flounder.space.*;
 import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;
@@ -186,11 +185,12 @@ public class Chunk extends Entity {
 		if (height >= 0.0f) {
 			tiles.add(new Vector3f(positionX, height, positionZ));
 
-			Entity entity = chunk.biome.getBiome().generateEntity(chunk, new Vector3f(worldPos.x, height, worldPos.y));
+		}
 
-			if (entity != null) {
-				new ComponentChild(entity, chunk);
-			}
+		Entity entity = chunk.biome.getBiome().generateEntity(chunk, new Vector3f(worldPos.x, height, worldPos.y));
+
+		if (entity != null) {
+			new ComponentChild(entity, chunk);
 		}
 	}
 

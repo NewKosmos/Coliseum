@@ -29,7 +29,7 @@ public class KosmosWorld extends Module {
 	private static final KosmosWorld INSTANCE = new KosmosWorld();
 	public static final String PROFILE_TAB_NAME = "Kosmos World";
 
-	public static final float GRAVITY = -9.81f;
+	public static final float GRAVITY = -12.26f;
 
 	public static final Colour SKY_COLOUR_NIGHT = new Colour(0.0f, 0.07f, 0.19f);
 	public static final Colour SKY_COLOUR_SUNRISE = new Colour(0.713f, 0.494f, 0.356f);
@@ -40,7 +40,7 @@ public class KosmosWorld extends Module {
 
 	public static final Colour MOON_COLOUR = new Colour(0.32f, 0.32f, 0.32f);
 
-	public static final float DAY_NIGHT_CYCLE = 160.0f; // The day/night length (sec).
+	public static final float DAY_NIGHT_CYCLE = 200.0f; // The day/night length (sec).
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.5f, 0.0f, 0.5f); // The starting light direction.
 

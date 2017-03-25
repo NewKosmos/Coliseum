@@ -170,7 +170,14 @@ public class KosmosCamera extends Camera {
 		calculateZoom();
 
 		if (player != null) {
+			//targetPosition.y = player.getPosition().y;
+			//float stepPower = 0.12f;
+			//float velocity = 10000.0f * Vector3f.subtract(targetPosition, player.getPosition(), targetPosition).lengthSquared() * Framework.getDelta();
+			//float systemTime = Framework.getTimeSec();
+			//double yOffset = velocity * stepPower * (float) (Math.sin(0.5 * Math.PI * systemTime) - Math.sin(1.4 * Math.PI * systemTime) + Math.abs(Math.cos(1.0 * Math.PI * systemTime)));
+
 			this.targetPosition.set(player.getPosition());
+			//this.targetPosition.y += yOffset;
 		}
 
 		updateActualZoom();

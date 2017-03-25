@@ -24,7 +24,7 @@ public class InstanceLilipad extends Entity {
 	public InstanceLilipad(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 
-		new ComponenWaterBob(this);
+		new ComponentWaterBob(this);
 		ComponentModel componentModel = new ComponentModel(this, 1.0f, model, texture, 1);
 		ComponentSurface componentSurface = new ComponentSurface(this, 1.0f, 0.0f, false, false);
 		ComponentCollider componentCollider = new ComponentCollider(this);

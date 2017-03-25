@@ -13,8 +13,6 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.events.*;
 import flounder.framework.*;
-import flounder.guis.*;
-import flounder.inputs.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
@@ -24,8 +22,6 @@ import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
 import kosmos.*;
-import kosmos.entities.instances.trees.*;
-import org.lwjgl.glfw.*;
 
 import java.util.*;
 
@@ -61,7 +57,33 @@ public class KosmosChunks extends Module {
 				KosmosConfigs.SAVE_CHUNK_Z.setReference(() -> getCurrent().getPosition().z).getFloat()
 		))); // The root chunk.
 
-		FlounderEvents.addEvent(new IEvent() {
+		/*FlounderEvents.addEvent(new IEvent() {
+			private MouseButton button = new MouseButton(GLFW.GLFW_MOUSE_BUTTON_1);
+
+			@Override
+			public boolean eventTriggered() {
+				return button.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
+			}
+
+			@Override
+			public void onEvent() {
+				Ray cameraRay = FlounderCamera.getCamera().getViewRay();
+
+				for (Entity entity : FlounderEntities.getEntities().getAll()) {
+					if (entity.getBounding() != null && entity.getComponent(ComponentPlayer.ID) == null && entity.getComponent(ComponentMultiplayer.ID) == null) {
+						IntersectData data = entity.getBounding().intersects(cameraRay);
+						float distance = Vector3f.getDistance(entity.getPosition(), KosmosWorld.getEntityPlayer().getPosition());
+
+						if (data.isIntersection() && distance < 4.20f) {
+							entity.forceRemove(false);
+							return;
+						}
+					}
+				}
+			}
+		});*/
+
+		/*FlounderEvents.addEvent(new IEvent() {
 			private static final int RECURSION_COUNT = 512;
 			private static final float RAY_RANGE = 32.0f;
 
@@ -133,7 +155,7 @@ public class KosmosChunks extends Module {
 					return false;
 				}
 			}
-		});
+		});*/
 	}
 
 	@Override
