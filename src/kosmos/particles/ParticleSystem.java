@@ -123,7 +123,7 @@ public class ParticleSystem {
 	}
 
 	public void setSystemCentre(Vector3f systemCentre) {
-		this.systemCentre = systemCentre;
+		this.systemCentre.set(systemCentre);
 	}
 
 	public Vector3f getVelocityCentre() {
@@ -131,7 +131,7 @@ public class ParticleSystem {
 	}
 
 	public void setVelocityCentre(Vector3f velocityCentre) {
-		this.velocityCentre = velocityCentre;
+		this.velocityCentre.set(velocityCentre);
 	}
 
 	public void setDirection(Vector3f direction, float deviation) {
@@ -187,6 +187,10 @@ public class ParticleSystem {
 			velocity = generateRandomUnitVectorWithinCone(direction, directionDeviation);
 		} else {
 			velocity = generateRandomUnitVector();
+		}
+
+		if (types.isEmpty()) {
+			return;
 		}
 
 		ParticleTemplate emitType = types.get((int) Math.floor(Maths.randomInRange(0, types.size())));

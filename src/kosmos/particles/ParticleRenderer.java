@@ -46,7 +46,6 @@ public class ParticleRenderer extends Renderer {
 
 	public ParticleRenderer() {
 		this.shader = ShaderFactory.newBuilder().setName("particles").addType(new ShaderType(GL20.GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
-
 		this.pointer = 0;
 		this.rendered = 0;
 
@@ -112,12 +111,13 @@ public class ParticleRenderer extends Renderer {
 	private void prepareTexturedModel(ParticleTemplate particleTemplate) {
 		unbindTexturedModel();
 
-		OpenGlUtils.bindVAO(VAO, 0, 1, 2, 3, 4, 5, 6, 7);
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.cullBackFaces(true);
 		OpenGlUtils.enableDepthTesting();
 		OpenGlUtils.enableAlphaBlending();
-		//	glDepthMask(false); // Stops particles from being rendered to the depth BUFFER.
+		// glDepthMask(false); // Stops particles from being rendered to the depth BUFFER.
+
+		OpenGlUtils.bindVAO(VAO, 0, 1, 2, 3, 4, 5, 6, 7);
 
 		if (particleTemplate.getTexture() != null) {
 			shader.getUniformFloat("numberOfRows").loadFloat(particleTemplate.getTexture().getNumberOfRows());
@@ -126,7 +126,7 @@ public class ParticleRenderer extends Renderer {
 	}
 
 	private void unbindTexturedModel() {
-		//	glDepthMask(true);
+		// glDepthMask(true);
 		OpenGlUtils.disableBlending();
 		OpenGlUtils.unbindVAO(0, 1, 2, 3, 4, 5, 6, 7);
 	}

@@ -55,10 +55,14 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 	 */
 	public ComponentParticles(Entity entity, List<ParticleTemplate> types, IParticleSpawn spawn, Vector3f offset, float pps, float speed, float gravityEffect) {
 		super(entity, ID);
-		particleSystem = new ParticleSystem(types, spawn, pps, speed, gravityEffect);
-		particleSystem.setSystemCentre(new Vector3f());
-		centreOffset = offset;
-		lastPosition = new Vector3f();
+		this.particleSystem = new ParticleSystem(types, spawn, pps, speed, gravityEffect);
+		this.particleSystem.setSystemCentre(new Vector3f());
+		this.centreOffset = offset;
+		this.lastPosition = new Vector3f();
+
+		if (entity != null) {
+			this.lastPosition.set(entity.getPosition());
+		}
 	}
 
 	@Override
@@ -77,8 +81,8 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 				Vector3f difference = Vector3f.subtract(lastPosition, translated, null);
 				lastPosition.set(translated);
 
-				particleSystem.getSystemCentre().set(translated);
-				particleSystem.getVelocityCentre().set(difference);
+				particleSystem.setSystemCentre(translated);
+				particleSystem.setVelocityCentre(difference);
 			}
 		}
 	}
