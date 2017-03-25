@@ -1,12 +1,10 @@
 package kosmos.chunks.meshing;
 
-import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
 import flounder.processing.resource.*;
 import kosmos.chunks.*;
-import kosmos.entities.components.*;
 
 import java.util.*;
 

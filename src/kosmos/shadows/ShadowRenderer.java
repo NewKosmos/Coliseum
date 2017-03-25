@@ -21,7 +21,6 @@ import flounder.resources.*;
 import flounder.shaders.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
-import kosmos.world.*;
 import org.lwjgl.opengl.*;
 
 public class ShadowRenderer extends Renderer {

@@ -41,10 +41,10 @@ public class OverlayChat extends ScreenObject {
 		this.inputDelay = new ChatDelay();
 		this.lastKey = 0;
 
-		this.textureView = new GuiObject(this, new Vector2f(0.5f, 1.0f - (VIEW_AREA_HEIGHT / 2.0f)), new Vector2f(1.0f, VIEW_AREA_HEIGHT), TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "chatView.png")).create(), 1);
+		this.textureView = new GuiObject(this, new Vector2f(0.5f, 1.0f - (VIEW_AREA_HEIGHT / 2.0f)), new Vector2f(1.0f, VIEW_AREA_HEIGHT), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "chatView.png")).create(), 1);
 		this.textureView.setInScreenCoords(false);
 
-		this.textureInput = new GuiObject(this, new Vector2f(0.5f, 1.0f - (INPUT_AREA_HEIGHT / 2.0f)), new Vector2f(1.0f, INPUT_AREA_HEIGHT), TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "guis", "chatInput.png")).create(), 1);
+		this.textureInput = new GuiObject(this, new Vector2f(0.5f, 1.0f - (INPUT_AREA_HEIGHT / 2.0f)), new Vector2f(1.0f, INPUT_AREA_HEIGHT), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "chatInput.png")).create(), 1);
 		this.textureInput.setInScreenCoords(false);
 
 		this.currentInput = new TextObject(this, new Vector2f(0.01f, 1.0f - (INPUT_AREA_HEIGHT / 2.0f)), START_STRING, 1.1f, FlounderFonts.CANDARA, 1.0f, GuiAlign.LEFT);

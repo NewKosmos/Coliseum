@@ -22,7 +22,6 @@ import flounder.shaders.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
-import kosmos.world.*;
 import org.lwjgl.opengl.*;
 
 /**
