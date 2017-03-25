@@ -35,6 +35,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 	private float currentTurnSpeed;
 	private IAxis inputForward;
 	private IAxis inputTurn;
+	private IAxis inputFlyHeight;
 	private IButton inputBoost;
 	private IButton inputJump;
 
@@ -54,6 +55,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		IButton upKeyButtons = new KeyButton(GLFW_KEY_W, GLFW_KEY_UP);
 		IButton downKeyButtons = new KeyButton(GLFW_KEY_S, GLFW_KEY_DOWN);
 		IButton boostButtons = new KeyButton(GLFW_KEY_LEFT_SHIFT, GLFW_KEY_RIGHT_SHIFT);
+		IButton crouchButtons = new KeyButton(GLFW_KEY_LEFT_CONTROL, GLFW_KEY_RIGHT_CONTROL);
 		IButton jumpButtons = new KeyButton(GLFW_KEY_SPACE);
 
 		this.currentSpeed = 0.0f;
@@ -63,6 +65,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		this.inputTurn = new CompoundAxis(new ButtonAxis(leftKeyButtons, rightKeyButtons), new JoystickAxis(0, 0));
 		this.inputBoost = new CompoundButton(boostButtons, new JoystickButton(0, 1));
 		this.inputJump = new CompoundButton(jumpButtons, new JoystickButton(0, 0));
+		this.inputFlyHeight = new CompoundAxis(new ButtonAxis(crouchButtons, new CompoundButton(boostButtons, jumpButtons)), new JoystickAxis(0, 0));
 
 		this.moveAmount = new Vector3f();
 		this.rotateAmount = new Vector3f();
@@ -70,6 +73,9 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 
 	@Override
 	public void update() {
+		// Gets if noclip is enabled.
+		boolean noclip = ((KosmosPlayer) FlounderCamera.getPlayer()).isNoclipEnabled();
+
 		// Gets movement and rotation data from player inputs.
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
 			currentSpeed = (inputBoost.isDown() ? KosmosPlayer.BOOST_SPEED : KosmosPlayer.RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
@@ -81,7 +87,12 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		}
 
 		// Applies gravity over time.
-		currentUpwardSpeed += KosmosWorld.GRAVITY * Framework.getDelta();
+		if (!noclip) {
+			currentUpwardSpeed += KosmosWorld.GRAVITY * Framework.getDelta();
+		} else {
+			currentSpeed *= 0.5f * KosmosPlayer.FLY_SPEED;
+			currentUpwardSpeed = inputFlyHeight.getAmount() * KosmosPlayer.FLY_SPEED;
+		}
 
 		// Calculates the deltas to the moved distance, and rotations.
 		float distance = currentSpeed * Framework.getDelta();
@@ -100,7 +111,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		float worldHeight = Math.max(waterLevel - (float) Math.sqrt(2.0), chunkHeight) + KosmosPlayer.PLAYER_OFFSET_Y;
 
 		// If the player is below the world height then force the player back on the ground.
-		if (getEntity().getPosition().y + dy < worldHeight) {
+		if (!noclip && getEntity().getPosition().y + dy < worldHeight) {
 			dy = worldHeight - getEntity().getPosition().getY();
 			currentUpwardSpeed = 0.0f;
 		}
@@ -123,7 +134,17 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 
 		// Moves and rotates the player.
 		float lastY = getEntity().getPosition().y;
-		getEntity().move(moveAmount.set(dx, dy, dz), rotateAmount.set(0.0f, ry, 0.0f));
+
+		if (!noclip) {
+			getEntity().move(moveAmount.set(dx, dy, dz), rotateAmount.set(0.0f, ry, 0.0f));
+		} else {
+			Vector3f.add(getEntity().getPosition(), moveAmount.set(dx, dy, dz), getEntity().getPosition());
+			Vector3f.add(getEntity().getRotation(), rotateAmount.set(0.0f, ry, 0.0f), getEntity().getRotation());
+
+			if (moveAmount.lengthSquared() != 0.0f || rotateAmount.lengthSquared() != 0.0f) {
+				getEntity().setMoved();
+			}
+		}
 
 		// If there has been no change then the player has probably landed.
 		if (getEntity().getPosition().y - lastY == 0.0f) {

@@ -11,14 +11,15 @@ import kosmos.uis.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class KosmosGuis extends GuiMaster {
-	private static final Colour COLOUR_PRIMARY = new Colour(0.90196078431f, 0.08235294117f, 0.08235294117f); // Charger Red.
+	// private static final Colour COLOUR_PRIMARY = new Colour(0.90196078431f, 0.08235294117f, 0.08235294117f); // Charger Red.
 	// private static final Colour COLOUR_PRIMARY = new Colour(0.1f, 0.8f, 0.2f); // Neon Green.
-	// private static final Colour COLOUR_PRIMARY = new Colour(0.0824f, 0.396f, 0.753f); // Water Blue.
+	private static final Colour COLOUR_PRIMARY = new Colour(0.0824f, 0.396f, 0.753f); // Water Blue.
 
 	protected static final float SLIDE_TIME = 0.7f;
 
 	private OverlayAlpha overlayAlpha;
 	private OverlayHUD overlayHUD;
+	private OverlayUsernames overlayUsernames;
 	private OverlayDebug overlayDebug;
 	private OverlayChat overlayChat;
 	private OverlayPause overlayPause;
@@ -31,12 +32,14 @@ public class KosmosGuis extends GuiMaster {
 	public void init() {
 		this.overlayAlpha = new OverlayAlpha(FlounderGuis.getContainer());
 		this.overlayHUD = new OverlayHUD(FlounderGuis.getContainer());
+		this.overlayUsernames = new OverlayUsernames(FlounderGuis.getContainer());
 		this.overlayDebug = new OverlayDebug(FlounderGuis.getContainer());
 		this.overlayChat = new OverlayChat(FlounderGuis.getContainer());
 		this.overlayPause = new OverlayPause(FlounderGuis.getContainer());
 
 		this.overlayAlpha.setAlphaDriver(new ConstantDriver(1.0f));
 		this.overlayHUD.setAlphaDriver(new ConstantDriver(1.0f));
+		this.overlayUsernames.setAlphaDriver(new ConstantDriver(1.0f));
 		this.overlayDebug.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayPause.setAlphaDriver(new ConstantDriver(0.0f));
@@ -54,6 +57,7 @@ public class KosmosGuis extends GuiMaster {
 				if (overlayChat.getAlpha() < 0.5f && !isGamePaused()) {
 					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 1.0f, SLIDE_TIME));
 					overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
+					overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 				}
 			}
 		});
@@ -69,14 +73,17 @@ public class KosmosGuis extends GuiMaster {
 			@Override
 			public void onEvent() {
 				if (overlayChat.getAlpha() == 1.0f) {
-					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
 					overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
+					overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
+					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
 				} else if (isGamePaused()) {
 					overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
+					overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
 					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
 					overlayPause.setAlphaDriver(new SlideDriver(overlayPause.getAlpha(), 0.0f, SLIDE_TIME));
 				} else {
 					overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
+					overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 					overlayDebug.setAlphaDriver(new SlideDriver(overlayDebug.getAlpha(), 0.0f, SLIDE_TIME));
 					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
 					overlayPause.setAlphaDriver(new SlideDriver(overlayPause.getAlpha(), 1.0f, SLIDE_TIME));
@@ -120,7 +127,7 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public boolean isGamePaused() {
-		return overlayPause.getAlpha() > 0.1f;
+		return overlayPause.getAlpha() > 0.1f || overlayChat.getAlpha() >= 0.1f;
 	}
 
 	@Override
@@ -133,8 +140,16 @@ public class KosmosGuis extends GuiMaster {
 		return COLOUR_PRIMARY;
 	}
 
+	public OverlayAlpha getOverlayAlpha() {
+		return overlayAlpha;
+	}
+
 	public OverlayHUD getOverlayHUD() {
 		return overlayHUD;
+	}
+
+	public OverlayUsernames getOverlayUsernames() {
+		return overlayUsernames;
 	}
 
 	public OverlayDebug getOverlayDebug() {
@@ -143,6 +158,10 @@ public class KosmosGuis extends GuiMaster {
 
 	public OverlayChat getOverlayChat() {
 		return overlayChat;
+	}
+
+	public OverlayPause getOverlayPause() {
+		return overlayPause;
 	}
 
 	@Override

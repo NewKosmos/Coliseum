@@ -9,6 +9,7 @@
 
 package kosmos.uis;
 
+import flounder.camera.*;
 import flounder.entities.*;
 import flounder.framework.*;
 import flounder.guis.*;
@@ -18,6 +19,7 @@ import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.profiling.*;
 import kosmos.*;
+import kosmos.camera.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.world.*;
@@ -147,6 +149,27 @@ public interface ICommand {
 				((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
 				FlounderProfiler.toggle(profilerOpen);
+			}
+		}),
+		NOCLIP(new ICommand() {
+			@Override
+			public String commandPrefix() {
+				return "noclip";
+			}
+
+			@Override
+			public String commandDescription() {
+				return "Enabled collisionless noclip mode.";
+			}
+
+			@Override
+			public void runCommand(String fullCommand) {
+				boolean enable = !((KosmosPlayer) FlounderCamera.getPlayer()).isNoclipEnabled();
+				((KosmosPlayer) FlounderCamera.getPlayer()).setNoclipEnabled(enable);
+
+				String log = "Setting noclip mode to: " + enable;
+				FlounderLogger.log(log);
+				((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.1f, 0.8f, 0.0f));
 			}
 		}),
 		EXIT(new ICommand() {

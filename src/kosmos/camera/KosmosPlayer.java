@@ -23,10 +23,13 @@ public class KosmosPlayer extends Player {
 	public static final float RUN_SPEED = 5.0f;
 	public static final float BOOST_SPEED = 10.0f;
 	public static final float JUMP_POWER = 5.0f;
+	public static final float FLY_SPEED = 8.0f;
 	public static final float TURN_SPEED = 300.0f;
 
 	private Vector3f position;
 	private Vector3f rotation;
+
+	private boolean noclipEnabled;
 
 	private Timer timer;
 	private static boolean needSendData;
@@ -39,6 +42,8 @@ public class KosmosPlayer extends Player {
 	public void init() {
 		this.position = new Vector3f();
 		this.rotation = new Vector3f();
+
+		this.noclipEnabled = false;
 
 		this.timer = new Timer(1.0 / 20.0); // 20 ticks per second.
 		KosmosPlayer.needSendData = true;
@@ -81,6 +86,14 @@ public class KosmosPlayer extends Player {
 			needSendData = false;
 			timer.resetStartTime();
 		}
+	}
+
+	public boolean isNoclipEnabled() {
+		return noclipEnabled;
+	}
+
+	public void setNoclipEnabled(boolean noclipEnabled) {
+		this.noclipEnabled = noclipEnabled;
 	}
 
 	public static void askSendData() {

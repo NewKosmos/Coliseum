@@ -113,6 +113,9 @@ public class KosmosRenderer extends RendererMaster {
 		/* Shadow rendering. */
 		renderShadows();
 
+		/* Binds the relevant FBO. */
+		rendererFBO.bindFrameBuffer();
+
 		/* Scene rendering. */
 		renderScene(POSITIVE_INFINITY, false);
 
@@ -121,6 +124,9 @@ public class KosmosRenderer extends RendererMaster {
 
 		/* Scene independents. */
 		renderIndependents();
+
+		/* Unbinds the FBO. */
+		rendererFBO.unbindFrameBuffer();
 	}
 
 	private void renderWater() {
@@ -169,9 +175,6 @@ public class KosmosRenderer extends RendererMaster {
 		/* Sets the player model to render in first person view. */
 		entitiesRenderer.setRenderPlayer(!((KosmosCamera) FlounderCamera.getCamera()).isFirstPerson());
 
-		/* Binds the relevant FBO. */
-		rendererFBO.bindFrameBuffer();
-
 		/* Clears and renders. */
 		Camera camera = FlounderCamera.getCamera();
 		OpenGlUtils.prepareNewRenderParse(0.0f, 0.0f, 0.0f);
@@ -184,9 +187,6 @@ public class KosmosRenderer extends RendererMaster {
 		}
 
 		particleRenderer.render(clipPlane, camera);
-
-		/* Unbinds the FBO. */
-		rendererFBO.unbindFrameBuffer();
 	}
 
 	private void renderPost(boolean isPaused, float blurFactor) {
