@@ -20,9 +20,7 @@ import flounder.resources.*;
 import flounder.shaders.*;
 import kosmos.chunks.*;
 import kosmos.filters.*;
-
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
+import org.lwjgl.opengl.*;
 
 public class WaterRenderer extends Renderer {
 	private static final MyFile VERTEX_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "water", "waterVertex.glsl");
@@ -35,7 +33,7 @@ public class WaterRenderer extends Renderer {
 	public WaterRenderer() {
 		this.reflectionFBO = FBO.newFBO(KosmosWater.getReflectionQuality()).attachments(3).withAlphaChannel(true).depthBuffer(DepthBufferType.TEXTURE).create();
 		this.pipelineMRT = new FilterMRT(FBO.newFBO(1.0f).disableTextureWrap().create());
-		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
+		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL20.GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 
 		/*FlounderEvents.addEvent(new IEvent() {
 			private KeyButton k = new KeyButton(GLFW.GLFW_KEY_KP_ADD);
@@ -92,9 +90,9 @@ public class WaterRenderer extends Renderer {
 
 			// Binds the reflection FBO.
 			if (pipelineMRT != null) {
-				OpenGlUtils.bindTexture(pipelineMRT.fbo.getColourTexture(0), GL_TEXTURE_2D, 0);
+				OpenGlUtils.bindTexture(pipelineMRT.fbo.getColourTexture(0), GL11.GL_TEXTURE_2D, 0);
 			} else {
-				OpenGlUtils.bindTexture(reflectionFBO.getColourTexture(0), GL_TEXTURE_2D, 0);
+				OpenGlUtils.bindTexture(reflectionFBO.getColourTexture(0), GL11.GL_TEXTURE_2D, 0);
 			}
 		}
 
@@ -121,7 +119,7 @@ public class WaterRenderer extends Renderer {
 
 		shader.getUniformBool("ignoreReflections").loadBoolean(!KosmosWater.reflectionsEnabled());
 
-		glDrawArrays(GL_TRIANGLES, 0, water.getVertexCount());
+		OpenGlUtils.renderArrays(GL11.GL_TRIANGLES, water.getVertexCount());
 
 		OpenGlUtils.disableBlending();
 		OpenGlUtils.unbindVAO(0);

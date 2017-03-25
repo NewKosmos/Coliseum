@@ -3,7 +3,6 @@ package kosmos;
 import flounder.devices.*;
 import flounder.events.*;
 import flounder.fonts.*;
-import flounder.framework.*;
 import flounder.guis.*;
 import flounder.inputs.*;
 import flounder.maths.*;
@@ -52,8 +51,8 @@ public class KosmosGuis extends GuiMaster {
 		go.setInScreenCoords(true);
 		//go.setRotationDriver(new SinWaveDriver(0.0f, 360.0f, 6.0f));
 
-		to.setVisible(true);
-		go.setVisible(true);
+		to.setVisible(false);
+		go.setVisible(false);
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton k = new KeyButton(GLFW_KEY_ENTER);

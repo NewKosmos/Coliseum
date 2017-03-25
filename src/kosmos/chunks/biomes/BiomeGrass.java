@@ -14,7 +14,7 @@ import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.entities.instances.animals.InstanceChicken;
+import kosmos.entities.instances.animals.*;
 import kosmos.entities.instances.plants.*;
 import kosmos.entities.instances.structures.*;
 import kosmos.entities.instances.trees.*;

@@ -23,7 +23,6 @@ import flounder.physics.*;
 import flounder.profiling.*;
 import flounder.space.*;
 import kosmos.*;
-import kosmos.chunks.*;
 import org.lwjgl.glfw.*;
 
 public class KosmosCamera extends Camera {

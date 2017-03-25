@@ -9,18 +9,12 @@
 
 package kosmos.entities.instances.animals;
 
-import flounder.entities.Entity;
-import flounder.entities.FlounderEntities;
-import flounder.lights.Attenuation;
-import flounder.maths.Colour;
-import flounder.maths.vectors.Vector3f;
-import flounder.resources.MyFile;
-import flounder.space.ISpatialStructure;
-import flounder.textures.TextureFactory;
-import flounder.textures.TextureObject;
-import kosmos.entities.components.ComponentAnimation;
-import kosmos.entities.components.ComponentLight;
-import kosmos.entities.components.ComponentSurface;
+import flounder.entities.*;
+import flounder.maths.vectors.*;
+import flounder.resources.*;
+import flounder.space.*;
+import flounder.textures.*;
+import kosmos.entities.components.*;
 
 public class InstanceChicken extends Entity {
 	private static final MyFile colladaFile = new MyFile(FlounderEntities.ENTITIES_FOLDER, "chicken", "chickenIdle.dae");

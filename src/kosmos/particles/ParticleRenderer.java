@@ -23,13 +23,10 @@ import flounder.shaders.*;
 import flounder.space.*;
 import kosmos.particles.loading.*;
 import org.lwjgl.*;
+import org.lwjgl.opengl.*;
 
 import java.nio.*;
 import java.util.*;
-
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL31.*;
 
 public class ParticleRenderer extends Renderer {
 	private static final MyFile VERTEX_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "particles", "particleVertex.glsl");
@@ -48,7 +45,7 @@ public class ParticleRenderer extends Renderer {
 	private int rendered;
 
 	public ParticleRenderer() {
-		this.shader = ShaderFactory.newBuilder().setName("particles").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
+		this.shader = ShaderFactory.newBuilder().setName("particles").addType(new ShaderType(GL20.GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 
 		this.pointer = 0;
 		this.rendered = 0;
@@ -95,7 +92,7 @@ public class ParticleRenderer extends Renderer {
 
 				// Renders the particles list.
 				FlounderLoader.updateVBO(VBO, vboData, BUFFER);
-				glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, VERTICES.length, particles.size());
+				OpenGlUtils.renderInstanced(GL11.GL_TRIANGLE_STRIP, VERTICES.length, particles.size());
 				unbindTexturedModel();
 			}
 		}

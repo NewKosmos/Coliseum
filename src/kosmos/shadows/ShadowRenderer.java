@@ -22,9 +22,7 @@ import flounder.shaders.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.world.*;
-
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
+import org.lwjgl.opengl.*;
 
 public class ShadowRenderer extends Renderer {
 	private static final MyFile VERTEX_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "shadows", "shadowVertex.glsl");
@@ -40,7 +38,7 @@ public class ShadowRenderer extends Renderer {
 	 */
 	public ShadowRenderer() {
 		this.shadowFBO = FBO.newFBO(KosmosShadows.getShadowSize(), KosmosShadows.getShadowSize()).noColourBuffer().disableTextureWrap().depthBuffer(DepthBufferType.TEXTURE).create();
-		this.shader = ShaderFactory.newBuilder().setName("shadows").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
+		this.shader = ShaderFactory.newBuilder().setName("shadows").addType(new ShaderType(GL20.GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 
 		this.mvpReusableMatrix = new Matrix4f();
 	}
@@ -146,7 +144,7 @@ public class ShadowRenderer extends Renderer {
 		}
 
 		if (vaoLength > 0) {
-			glDrawElements(GL_TRIANGLES, vaoLength, GL_UNSIGNED_INT, 0);
+			OpenGlUtils.renderElements(GL11.GL_TRIANGLES, GL11.GL_UNSIGNED_INT, vaoLength);
 		}
 
 		OpenGlUtils.unbindVAO(0, 4, 5);

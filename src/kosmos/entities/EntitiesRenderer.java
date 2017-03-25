@@ -13,7 +13,6 @@ import flounder.camera.*;
 import flounder.devices.*;
 import flounder.entities.*;
 import flounder.helpers.*;
-import flounder.logger.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
@@ -24,9 +23,7 @@ import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.world.*;
-
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
+import org.lwjgl.opengl.*;
 
 /**
  * A renderer that is used to render entity's.
@@ -44,7 +41,7 @@ public class EntitiesRenderer extends Renderer {
 	 * Creates a new entity renderer.
 	 */
 	public EntitiesRenderer() {
-		this.shader = ShaderFactory.newBuilder().setName("entities").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
+		this.shader = ShaderFactory.newBuilder().setName("entities").addType(new ShaderType(GL20.GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 		this.textureUndefined = TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "undefined.png")).create();
 		this.renderedCount = 0;
 		this.renderPlayer = true;
@@ -196,7 +193,7 @@ public class EntitiesRenderer extends Renderer {
 		}
 
 		if (vaoLength > 0) {
-			glDrawElements(GL_TRIANGLES, vaoLength, GL_UNSIGNED_INT, 0);
+			OpenGlUtils.renderElements(GL11.GL_TRIANGLES, GL11.GL_UNSIGNED_INT, vaoLength);
 		}
 
 		OpenGlUtils.unbindVAO(0, 1, 2, 3, 4, 5);

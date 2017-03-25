@@ -9,8 +9,8 @@ import flounder.maths.vectors.*;
 import flounder.visual.*;
 import kosmos.world.*;
 
-import java.util.*;
 import java.util.Timer;
+import java.util.*;
 
 public class OverlayDebug extends ScreenObject {
 	private TextObject fpsText;
@@ -40,7 +40,7 @@ public class OverlayDebug extends ScreenObject {
 	}
 
 	private TextObject createStatus(String content, float yPos) {
-		TextObject text = new TextObject(this, new Vector2f( 0.5f, 0.01f + yPos), content, 0.75f, FlounderFonts.CANDARA, 0.5f, GuiAlign.CENTRE);
+		TextObject text = new TextObject(this, new Vector2f(0.5f, 0.01f + yPos), content, 0.75f, FlounderFonts.CANDARA, 0.5f, GuiAlign.CENTRE);
 		text.setInScreenCoords(true);
 		text.setColour(new Colour(1.0f, 1.0f, 1.0f));
 		text.setBorderColour(new Colour(0.15f, 0.15f, 0.15f));

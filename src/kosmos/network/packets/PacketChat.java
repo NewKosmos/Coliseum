@@ -34,7 +34,7 @@ public class PacketChat extends Packet {
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
 		String message = username + " has said: " + chatMessage;
 		FlounderLogger.log(message);
-	//	OverlayChat.newMessages.add(message);
+		//	OverlayChat.newMessages.add(message);
 	}
 
 	@Override

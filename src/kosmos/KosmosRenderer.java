@@ -96,11 +96,11 @@ public class KosmosRenderer extends RendererMaster {
 
 			@Override
 			public void onEvent() {
-					effect++;
+				effect++;
 
-					if (effect > 2) {
-						effect = 0;
-					}
+				if (effect > 2) {
+					effect = 0;
+				}
 			}
 		});
 	}
