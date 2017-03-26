@@ -114,7 +114,7 @@ public class KosmosWorld extends Module {
 	public void update() {
 		// Move qued players to the world.
 		if (!playerQue.isEmpty()) {
-			for (String name : playerQue.keySet()) {
+			for (String name : new HashMap<>(playerQue).keySet()) {
 				Pair<Vector3f, Vector3f> data = playerQue.get(name);
 				players.put(name, new InstanceMuliplayer(FlounderEntities.getEntities(), data.getFirst(), data.getSecond(), name));
 			}

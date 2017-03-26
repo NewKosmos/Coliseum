@@ -168,7 +168,7 @@ public class OverlayChat extends ScreenObject {
 		public void updateObject() {
 			// Add new chat messages.
 			if (!newMessages.isEmpty()) {
-				for (Pair<String, Colour> message : newMessages) {
+				for (Pair<String, Colour> message : new ArrayList<>(newMessages)) {
 					generateObject(message.getFirst(), message.getSecond());
 				}
 
@@ -188,10 +188,6 @@ public class OverlayChat extends ScreenObject {
 					}
 				}
 			}
-		}
-
-		private static void addText(String string, Colour colour) {
-			newMessages.add(new Pair<>(string, colour));
 		}
 
 		private void generateObject(String string, Colour colour) {

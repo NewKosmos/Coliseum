@@ -46,7 +46,7 @@ public interface ICommand {
 			@Override
 			public void runCommand(String fullCommand) {
 				for (ConsoleCommands commands : ConsoleCommands.values()) {
-					((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText("    [" + commands.getCommand().commandPrefix() + "]: " + commands.getCommand().commandDescription(), new Colour(0.81f, 0.81f, 0.81f));
+					OverlayChat.addText("    [" + commands.getCommand().commandPrefix() + "]: " + commands.getCommand().commandDescription(), new Colour(0.81f, 0.81f, 0.81f));
 				}
 			}
 		}),
@@ -69,7 +69,7 @@ public interface ICommand {
 				if (!KosmosWorld.containsPlayer(string)) {
 					String log = "Could not teleport to player " + string;
 					FlounderLogger.log(log);
-					((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.8f, 0.1f, 0.0f));
+					OverlayChat.addText(log, new Colour(0.8f, 0.1f, 0.0f));
 					return;
 				}
 
@@ -80,7 +80,7 @@ public interface ICommand {
 
 				String log = "Teleporting to " + string + " in chunk [" + chunkX + ", " + chunkZ + "].";
 				FlounderLogger.log(log);
-				((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.1f, 0.8f, 0.0f));
+				OverlayChat.addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
 				KosmosWorld.getEntityPlayer().getPosition().set(other.getPosition());
 				KosmosChunks.clear(true);
@@ -106,7 +106,7 @@ public interface ICommand {
 				if (FlounderNetwork.getSocketClient() == null || string.isEmpty()) {
 					String log = "Could not change the time offset of the framework.";
 					FlounderLogger.log(log);
-					((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.8f, 0.1f, 0.0f));
+					OverlayChat.addText(log, new Colour(0.8f, 0.1f, 0.0f));
 					return;
 				}
 
@@ -114,7 +114,7 @@ public interface ICommand {
 
 				String log = "Changing the time offset of the framework to: " + timeOffset;
 				FlounderLogger.log(log);
-				((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.1f, 0.8f, 0.0f));
+				OverlayChat.addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
 				Framework.setTimeOffset(timeOffset);
 			}
@@ -138,7 +138,7 @@ public interface ICommand {
 				if (string.isEmpty()) {
 					String log = "Could not open/close the developer profiler.";
 					FlounderLogger.log(log);
-					((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.8f, 0.1f, 0.0f));
+					OverlayChat.addText(log, new Colour(0.8f, 0.1f, 0.0f));
 					return;
 				}
 
@@ -146,7 +146,7 @@ public interface ICommand {
 
 				String log = "Changing the developer profiler to: " + profilerOpen;
 				FlounderLogger.log(log);
-				((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.1f, 0.8f, 0.0f));
+				OverlayChat.addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
 				FlounderProfiler.toggle(profilerOpen);
 			}
@@ -169,7 +169,7 @@ public interface ICommand {
 
 				String log = "Setting noclip mode to: " + enable;
 				FlounderLogger.log(log);
-				((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.1f, 0.8f, 0.0f));
+				OverlayChat.addText(log, new Colour(0.1f, 0.8f, 0.0f));
 			}
 		}),
 		EXIT(new ICommand() {
@@ -187,7 +187,7 @@ public interface ICommand {
 			public void runCommand(String fullCommand) {
 				String log = "Requesting to exit the game to desktop.";
 				FlounderLogger.log(log);
-				((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().addText(log, new Colour(0.1f, 0.8f, 0.0f));
+				OverlayChat.addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
 				Framework.requestClose();
 			}
