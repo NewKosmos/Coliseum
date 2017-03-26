@@ -58,6 +58,7 @@ public class KosmosWorld extends Module {
 	private LinearDriver dayDriver;
 	private float dayFactor;
 	private Colour skyColour;
+	private Vector3f lightRotation;
 	private Vector3f lightPosition;
 
 	public KosmosWorld() {
@@ -79,6 +80,7 @@ public class KosmosWorld extends Module {
 		this.dayDriver = new LinearDriver(0.0f, 100.0f, DAY_NIGHT_CYCLE);
 		this.dayFactor = 0.0f;
 		this.skyColour = new Colour(SKY_COLOUR_DAY);
+		this.lightRotation = new Vector3f();
 		this.lightPosition = new Vector3f(LIGHT_DIRECTION);
 	}
 
@@ -108,7 +110,7 @@ public class KosmosWorld extends Module {
 		dayFactor = dayDriver.update(Framework.getDelta()) / 100.0f; // 0.52f
 		Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), skyColour);
 		Colour.interpolate(skyColour, SKY_COLOUR_DAY, getShadowFactor(), skyColour);
-		Vector3f.rotate(LIGHT_DIRECTION, new Vector3f(dayFactor * 360.0f, 0.0f, 0.0f), lightPosition);
+		Vector3f.rotate(LIGHT_DIRECTION, lightRotation.set(dayFactor * 360.0f, 0.0f, 0.0f), lightPosition);
 		fog.setFogColour(skyColour);
 	}
 
@@ -199,6 +201,10 @@ public class KosmosWorld extends Module {
 
 	public static Colour getSkyColour() {
 		return INSTANCE.skyColour;
+	}
+
+	public static Vector3f getLightRotation() {
+		return INSTANCE.lightRotation;
 	}
 
 	public static Vector3f getLightPosition() {
