@@ -11,6 +11,7 @@ import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.shadows.*;
 import kosmos.water.*;
+import kosmos.world.*;
 import org.lwjgl.glfw.*;
 
 /**
@@ -39,6 +40,7 @@ public class KosmosConfigs {
 	public static final ConfigData SHADOWMAP_PCF = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapPcf", 0, KosmosShadows::getShadowPCF);
 	public static final ConfigData SHADOWMAP_BIAS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapBias", 0.001f, KosmosShadows::getShadowBias);
 	public static final ConfigData SHADOWMAP_DARKNESS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapDarkness", 0.5f, KosmosShadows::getShadowDarkness);
+	public static final ConfigData BRIGHTNESS_BOOST = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "brightnessBoost", 0.05f, KosmosWorld::getBrightnessBoost);
 
 	public static final ConfigData HUD_COSSHAIR_TYPE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "hudCrosshairType", 1); // Reference set in master overlay.
 	public static final ConfigData CAMERA_SENSITIVITY = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraSensitivity", 1.0f); // Reference set in camera.

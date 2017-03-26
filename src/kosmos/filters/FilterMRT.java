@@ -70,6 +70,8 @@ public class FilterMRT extends PostFilter {
 		shader.getUniformFloat("shadowBias").loadFloat(KosmosShadows.getShadowBias());
 		shader.getUniformFloat("shadowDarkness").loadFloat(KosmosShadows.getShadowDarkness() * KosmosWorld.getShadowFactor());
 
+		shader.getUniformFloat("brightnessBoost").loadFloat(KosmosWorld.getBrightnessBoost());
+
 		if (KosmosWorld.getFog() != null) {
 			shader.getUniformVec3("fogColour").loadVec3(KosmosWorld.getFog().getFogColour());
 			shader.getUniformFloat("fogDensity").loadFloat(KosmosWorld.getFog().getFogDensity());

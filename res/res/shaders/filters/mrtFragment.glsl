@@ -32,6 +32,8 @@ uniform int shadowPCF;
 uniform float shadowBias;
 uniform float shadowDarkness;
 
+uniform float brightnessBoost;
+
 uniform vec3 fogColour;
 uniform float fogDensity;
 uniform float fogGradient;
@@ -132,7 +134,7 @@ void main(void) {
             }
         }
 
-        out_colour = (vec4(totalDiffuse, 1.0) * out_colour) + vec4(totalSpecular, 1.0);
+        out_colour = (vec4(totalDiffuse + brightnessBoost, 1.0) * out_colour) + vec4(totalSpecular, 1.0);
     }
 
     if (!ignoreFog) {

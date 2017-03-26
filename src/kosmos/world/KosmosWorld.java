@@ -39,11 +39,11 @@ public class KosmosWorld extends Module {
 	public static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.30f, 0.70f);
 
 	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.713f, 0.494f, 0.356f);
-	public static final Colour SUN_COLOUR_DAY = new Colour(0.70f, 0.70f, 0.70f);
+	public static final Colour SUN_COLOUR_DAY = new Colour(0.60f, 0.60f, 0.60f);
 
-	public static final Colour MOON_COLOUR = new Colour(0.233f, 0.233f, 0.233f);
+	public static final Colour MOON_COLOUR = new Colour(0.20f, 0.20f, 0.20f);
 
-	public static final float DAY_NIGHT_CYCLE = 210.0f; // The day/night length (sec).
+	public static final float DAY_NIGHT_CYCLE = 300.0f; // The day/night length (sec).
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.5f, 0.0f, 0.5f); // The starting light direction.
 
@@ -63,6 +63,8 @@ public class KosmosWorld extends Module {
 	private Colour skyColour;
 	private Vector3f lightRotation;
 	private Vector3f lightPosition;
+
+	private float brightnessBoost;
 
 	public KosmosWorld() {
 		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEntities.class);
@@ -85,6 +87,8 @@ public class KosmosWorld extends Module {
 		this.skyColour = new Colour(SKY_COLOUR_DAY);
 		this.lightRotation = new Vector3f();
 		this.lightPosition = new Vector3f(LIGHT_DIRECTION);
+
+		this.brightnessBoost = KosmosConfigs.BRIGHTNESS_BOOST.getFloat();
 	}
 
 	public static void generatePlayer() {
@@ -238,6 +242,14 @@ public class KosmosWorld extends Module {
 
 	public static Vector3f getLightPosition() {
 		return INSTANCE.lightPosition;
+	}
+
+	public static float getBrightnessBoost() {
+		return INSTANCE.brightnessBoost;
+	}
+
+	public static void setBrightnessBoost(float brightnessBoost) {
+		INSTANCE.brightnessBoost = brightnessBoost;
 	}
 
 	@Override
