@@ -20,6 +20,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class OverlayChat extends ScreenObject {
 	private static final float VIEW_AREA_HEIGHT = 0.5f;
+	private static final float VIEW_WRAP_HEIGHT = 0.94f;
 	private static final float INPUT_AREA_HEIGHT = 0.05f;
 	private static final String START_STRING = "Message: ";
 
@@ -33,6 +34,7 @@ public class OverlayChat extends ScreenObject {
 	private TextObject currentInput;
 
 	private List<TextObject> chatMessages;
+	private float chatHeight;
 
 	public OverlayChat(ScreenObject parent) {
 		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
@@ -52,6 +54,7 @@ public class OverlayChat extends ScreenObject {
 		this.currentInput.setColour(new Colour(1.0f, 1.0f, 1.0f));
 
 		this.chatMessages = new ArrayList<>();
+		this.chatHeight = VIEW_AREA_HEIGHT;// + 0.02f;
 	}
 
 	@Override
@@ -115,9 +118,21 @@ public class OverlayChat extends ScreenObject {
 	}
 
 	public void addText(String string, Colour colour) {
-		TextObject text = new TextObject(this, new Vector2f(0.01f, VIEW_AREA_HEIGHT + 0.02f + (chatMessages.size() * 0.03f)), " > " + string, 1.0f, FlounderFonts.CANDARA, 1.5f, GuiAlign.LEFT);
+		TextObject text = new TextObject(this, new Vector2f(0.01f, chatHeight += 0.03f), " > " + string, 1.0f, FlounderFonts.CANDARA, 1.5f, GuiAlign.LEFT);
 		text.setColour(colour);
 		chatMessages.add(text);
+
+		if (text.getPosition().y >= VIEW_WRAP_HEIGHT) {
+			for (TextObject m : chatMessages) {
+				m.getPosition().y -= 0.03f;
+
+				if (m.getPosition().y < VIEW_AREA_HEIGHT) {
+					m.setVisible(false);
+				}
+			}
+
+			chatHeight = text.getPosition().y;
+		}
 
 		if (string.charAt(0) == '/') {
 			String[] data = string.substring(1, string.length()).split("\\s+");

@@ -12,12 +12,12 @@ public class KosmosSkybox extends Module {
 	public static final MyFile SKYBOX_FOLDER = new MyFile(MyFile.RES_FOLDER, "skybox");
 
 	private static MyFile[] TEXTURE_FILES = {
-			new MyFile(SKYBOX_FOLDER, "nightRight.png"),
-			new MyFile(SKYBOX_FOLDER, "nightLeft.png"),
-			new MyFile(SKYBOX_FOLDER, "nightTop.png"),
-			new MyFile(SKYBOX_FOLDER, "nightBottom.png"),
-			new MyFile(SKYBOX_FOLDER, "nightBack.png"),
-			new MyFile(SKYBOX_FOLDER, "nightFront.png")
+			new MyFile(SKYBOX_FOLDER, "starsRight.png"),
+			new MyFile(SKYBOX_FOLDER, "starsLeft.png"),
+			new MyFile(SKYBOX_FOLDER, "starsTop.png"),
+			new MyFile(SKYBOX_FOLDER, "starsBottom.png"),
+			new MyFile(SKYBOX_FOLDER, "starsBack.png"),
+			new MyFile(SKYBOX_FOLDER, "starsFront.png")
 	};
 
 	private TextureObject cubemap;
@@ -50,5 +50,6 @@ public class KosmosSkybox extends Module {
 
 	@Override
 	public void dispose() {
+		this.cubemap.delete();
 	}
 }
