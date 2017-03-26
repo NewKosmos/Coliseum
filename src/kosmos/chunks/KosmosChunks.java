@@ -21,7 +21,6 @@ import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
-import kosmos.*;
 
 import java.util.*;
 
@@ -51,11 +50,6 @@ public class KosmosChunks extends Module {
 		this.modelHexagon = ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "hexagon.obj")).create();
 
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
-		setCurrent(new Chunk(KosmosChunks.getChunks(), new Vector3f(
-				KosmosConfigs.SAVE_CHUNK_X.setReference(() -> getCurrent().getPosition().x).getFloat(),
-				0.0f,
-				KosmosConfigs.SAVE_CHUNK_Z.setReference(() -> getCurrent().getPosition().z).getFloat()
-		))); // The root chunk.
 
 		/*FlounderEvents.addEvent(new IEvent() {
 			private MouseButton button = new MouseButton(GLFW.GLFW_MOUSE_BUTTON_1);
@@ -241,13 +235,17 @@ public class KosmosChunks extends Module {
 
 	/**
 	 * Clears all chunks, then creates a current at the previous chunks position.
+	 *
+	 * @param loadCurrent If the current chunk will be replaced.
 	 */
-	public static void clear() {
+	public static void clear(boolean loadCurrent) {
 		INSTANCE.chunks.getAll().forEach((Entity chunk) -> ((Chunk) chunk).delete());
 		INSTANCE.chunks.clear();
 
 		// Sets up the new root chunk.
-		setCurrent(new Chunk(KosmosChunks.getChunks(), getCurrent().getPosition()));
+		if (loadCurrent) {
+			setCurrent(new Chunk(KosmosChunks.getChunks(), getCurrent().getPosition()));
+		}
 	}
 
 	public static ModelObject getModelHexagon() {
@@ -261,6 +259,6 @@ public class KosmosChunks extends Module {
 
 	@Override
 	public void dispose() {
-		clear();
+		clear(false);
 	}
 }

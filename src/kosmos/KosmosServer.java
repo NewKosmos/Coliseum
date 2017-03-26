@@ -68,7 +68,7 @@ public class KosmosServer extends Framework {
 		@Override
 		public void dispose() {
 			new PacketDisconnect("server").writeData(FlounderNetwork.getSocketServer());
-			KosmosConfigs.closeConfigs();
+			KosmosConfigs.saveAllConfigs();
 		}
 
 		@Override

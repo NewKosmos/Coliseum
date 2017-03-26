@@ -1,6 +1,5 @@
 package kosmos.uis;
 
-import flounder.framework.*;
 import flounder.guis.*;
 import flounder.inputs.*;
 import flounder.maths.vectors.*;
@@ -12,6 +11,9 @@ import org.lwjgl.glfw.*;
 public class OverlaySlider extends ScreenObject {
 	public static KeyButton BACK_KEY = new KeyButton(GLFW.GLFW_KEY_BACKSPACE);
 
+	private ScreenPause screenPause;
+	private ScreenStart screenStart;
+
 	private ScreenObject menuActive;
 	private ScreenObject secondaryScreen;
 	private ScreenObject newSecondaryScreen;
@@ -20,15 +22,13 @@ public class OverlaySlider extends ScreenObject {
 		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
 
-		ScreenPause screenPause = new ScreenPause(this);
+		this.screenPause = new ScreenPause(this);
+		this.screenStart = new ScreenStart(this);
 
-		if (Framework.isRunningFromJar()) {
-		//	this.menuActive = screenStart;
-		} else {
-			this.menuActive = screenPause;
-		}
+		sliderStartMenu(true); // Framework.isRunningFromJar()
 
 		this.secondaryScreen = null;
+		this.newSecondaryScreen = null;
 	}
 
 	@Override
@@ -77,6 +77,22 @@ public class OverlaySlider extends ScreenObject {
 		}
 
 		menuActive.setAlphaDriver(new SlideDriver(0.0f, 1.0f, KosmosGuis.SLIDE_TIME));
+	}
+
+	public void sliderStartMenu(boolean useStartMenu) {
+		if (useStartMenu) {
+			this.menuActive = screenStart;
+			this.screenPause.setAlphaDriver(new ConstantDriver(0.0f));
+		} else {
+			this.menuActive = screenPause;
+			this.screenStart.setAlphaDriver(new ConstantDriver(0.0f));
+		}
+
+		this.menuActive.setAlphaDriver(new ConstantDriver(1.0f));
+	}
+
+	public boolean inStartMenu() {
+		return menuActive == screenStart;
 	}
 
 	public float getBlurFactor() {

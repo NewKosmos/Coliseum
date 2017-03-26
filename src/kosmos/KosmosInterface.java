@@ -62,8 +62,6 @@ public class KosmosInterface extends Standard {
 		this.aabbs = new KeyButton(GLFW_KEY_O);
 		this.closeWindow = new KeyButton(GLFW_KEY_DELETE);
 
-		KosmosWorld.generatePlayer();
-
 		String username = KosmosConfigs.CLIENT_USERNAME.getString();
 		this.serverIP = KosmosConfigs.SERVER_IP.setReference(() -> serverIP).getString();
 		this.serverPort = KosmosConfigs.SERVER_PORT.setReference(() -> serverPort).getInteger();
@@ -186,7 +184,7 @@ public class KosmosInterface extends Standard {
 		new PacketDisconnect(FlounderNetwork.getUsername()).writeData(FlounderNetwork.getSocketClient());
 
 		//	SteamAPI.shutdown();
-		KosmosConfigs.closeConfigs();
+		KosmosConfigs.saveAllConfigs();
 	}
 
 	@Override

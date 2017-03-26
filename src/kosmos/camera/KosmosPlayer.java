@@ -52,6 +52,10 @@ public class KosmosPlayer extends Player {
 
 	@Override
 	public void update() {
+		if (KosmosWorld.getEntityPlayer() == null) {
+			return;
+		}
+
 		// Gets the current position and deltas.
 		Vector3f newPosition = KosmosWorld.getEntityPlayer().getPosition();
 		Vector3f newRotation = KosmosWorld.getEntityPlayer().getRotation();

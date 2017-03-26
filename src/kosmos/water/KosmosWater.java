@@ -22,7 +22,6 @@ public class KosmosWater extends Module {
 
 	@Override
 	public void init() {
-		this.water = new Water(new Vector3f(0.0f, -0.1f, 0.0f), new Vector3f(), 1.0f);
 		this.waveTime = 0.0f;
 
 		this.enableReflections = KosmosConfigs.WATER_REFLECTION_ENABLED.getBoolean();
@@ -32,10 +31,23 @@ public class KosmosWater extends Module {
 
 	@Override
 	public void update() {
+		if (water == null) {
+			return;
+		}
+
 		water.update();
 		waveTime += Framework.getDelta();
 		waveTime %= Water.WAVE_SPEED;
 		FlounderBounding.addShapeRender(water.getAABB());
+	}
+
+	public static void generateWater() {
+		INSTANCE.water = new Water(new Vector3f(0.0f, -0.1f, 0.0f), new Vector3f(), 1.0f);
+	}
+
+	public static void deleteWater() {
+		INSTANCE.water.delete();
+		INSTANCE.water = null;
 	}
 
 	@Override
@@ -81,6 +93,8 @@ public class KosmosWater extends Module {
 
 	@Override
 	public void dispose() {
-		water.delete();
+		if (water != null) {
+			water.delete();
+		}
 	}
 }

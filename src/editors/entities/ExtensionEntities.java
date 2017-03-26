@@ -15,6 +15,7 @@ import flounder.textures.*;
 import kosmos.entities.components.*;
 import kosmos.particles.*;
 import kosmos.shadows.*;
+import kosmos.skybox.*;
 import kosmos.world.*;
 
 import javax.swing.*;
@@ -30,7 +31,7 @@ public class ExtensionEntities extends IEditorType {
 	public Entity focusEntity;
 
 	public ExtensionEntities() {
-		super(FlounderDisplay.class, FlounderBounding.class, KosmosShadows.class, KosmosParticles.class, KosmosWorld.class);
+		super(FlounderDisplay.class, FlounderBounding.class, KosmosShadows.class, KosmosParticles.class, KosmosSkybox.class, KosmosWorld.class);
 		ACTIVE = true;
 	}
 

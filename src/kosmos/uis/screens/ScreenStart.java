@@ -1,21 +1,31 @@
 package kosmos.uis.screens;
 
+import flounder.framework.*;
 import flounder.guis.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;
 import kosmos.uis.*;
 import kosmos.world.*;
 
-public class ScreenPause extends ScreenObject {
-	public ScreenPause(OverlaySlider slider) {
+public class ScreenStart extends ScreenObject {
+	public ScreenStart(OverlaySlider slider) {
 		super(slider, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
 
 		float yPosition = 0.30f;
 		float ySpacing = 0.07f;
 
-		GuiButtonText saveGame = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "Save Game", GuiAlign.CENTRE);
-		saveGame.addLeftListener(new GuiButtonText.ListenerBasic() {
+		GuiButtonText loadSave = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "Load Save", GuiAlign.CENTRE);
+		loadSave.addLeftListener(new GuiButtonText.ListenerBasic() {
+			@Override
+			public void eventOccurred() {
+				slider.sliderStartMenu(false);
+				KosmosWorld.generatePlayer();
+			}
+		});
+
+		GuiButtonText multiplayer = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "Multiplayer", GuiAlign.CENTRE);
+		multiplayer.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
 			}
@@ -41,12 +51,11 @@ public class ScreenPause extends ScreenObject {
 			}
 		});
 
-		GuiButtonText exitToMenu = new GuiButtonText(this, new Vector2f(0.5f, yPosition += 1.2f * ySpacing), "Exit To Menu", GuiAlign.CENTRE);
-		exitToMenu.addLeftListener(new GuiButtonText.ListenerBasic() {
+		GuiButtonText exitGame = new GuiButtonText(this, new Vector2f(0.5f, yPosition += 1.2f * ySpacing), "Exit To Desktop", GuiAlign.CENTRE);
+		exitGame.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
-				slider.sliderStartMenu(true);
-				KosmosWorld.deletePlayer();
+				Framework.requestClose();
 			}
 		});
 	}

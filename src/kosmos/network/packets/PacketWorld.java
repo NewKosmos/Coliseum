@@ -44,7 +44,7 @@ public class PacketWorld extends Packet {
 
 		if (KosmosWorld.getNoise().getSeed() != seed) {
 			KosmosWorld.getNoise().setSeed(seed);
-			KosmosChunks.clear();
+			KosmosChunks.clear(true);
 		}
 
 		if (offServerTime) {

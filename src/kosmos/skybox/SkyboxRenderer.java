@@ -42,7 +42,7 @@ public class SkyboxRenderer extends Renderer {
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 		shader.getUniformBool("polygonMode").loadBoolean(OpenGlUtils.isInWireframe());
 		shader.getUniformVec3("skyColour").loadVec3(KosmosWorld.getSkyColour());
-		shader.getUniformFloat("blendFactor").loadFloat(1.0f - KosmosWorld.getShadowFactor());
+		shader.getUniformFloat("blendFactor").loadFloat(KosmosWorld.starIntensity());
 
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();

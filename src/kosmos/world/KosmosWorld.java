@@ -11,6 +11,7 @@ package kosmos.world;
 
 import flounder.entities.*;
 import flounder.framework.*;
+import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.lights.*;
 import flounder.maths.*;
@@ -20,8 +21,10 @@ import flounder.noise.*;
 import flounder.profiling.*;
 import flounder.visual.*;
 import kosmos.*;
+import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.entities.instances.world.*;
+import kosmos.water.*;
 
 import java.util.*;
 
@@ -92,6 +95,19 @@ public class KosmosWorld extends Module {
 						KosmosConfigs.SAVE_PLAYER_Z.setReference(() -> INSTANCE.entityPlayer.getPosition().z).getFloat()),
 				new Vector3f()
 		);
+		KosmosWater.generateWater();
+		KosmosChunks.setCurrent(new Chunk(KosmosChunks.getChunks(), new Vector3f(
+				KosmosConfigs.SAVE_CHUNK_X.setReference(() -> KosmosChunks.getCurrent().getPosition().x).getFloat(),
+				0.0f,
+				KosmosConfigs.SAVE_CHUNK_Z.setReference(() -> KosmosChunks.getCurrent().getPosition().z).getFloat()
+		))); // The root chunk.
+	}
+
+	public static void deletePlayer() {
+		KosmosConfigs.saveAllConfigs();
+		KosmosWater.deleteWater();
+		KosmosChunks.clear(false);
+		INSTANCE.entityPlayer.forceRemove(true);
 	}
 
 	@Override
@@ -197,6 +213,10 @@ public class KosmosWorld extends Module {
 
 	public static float getShadowFactor() {
 		return (float) Maths.clamp(1.7f * Math.sin(2.0f * Math.PI * getDayFactor()), 0.0, 1.0);
+	}
+
+	public static float starIntensity() {
+		return (1.0f - KosmosWorld.getShadowFactor()) + (((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 0.5f : 0.0f);
 	}
 
 	public static Colour getSkyColour() {

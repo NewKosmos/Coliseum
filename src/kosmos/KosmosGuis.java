@@ -38,99 +38,36 @@ public class KosmosGuis extends GuiMaster {
 		this.overlaySlider = new OverlaySlider(FlounderGuis.getContainer());
 
 		this.overlayAlpha.setAlphaDriver(new ConstantDriver(1.0f));
-		this.overlayHUD.setAlphaDriver(new ConstantDriver(1.0f));
-		this.overlayUsernames.setAlphaDriver(new ConstantDriver(1.0f));
+		this.overlayHUD.setAlphaDriver(new ConstantDriver(0.0f));
+		this.overlayUsernames.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayDebug.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
-		this.overlaySlider.setAlphaDriver(new ConstantDriver(0.0f));
+		this.overlaySlider.setAlphaDriver(new ConstantDriver(1.0f));
 
 		FlounderGuis.getSelector().initJoysticks(0, 0, 1, 2, 3);
 
 		FlounderEvents.addEvent(new IEvent() {
-			private KeyButton k = new KeyButton(GLFW_KEY_ENTER);
-
-			@Override
-			public boolean eventTriggered() {
-				return k.wasDown();
-			}
-
-			@Override
-			public void onEvent() {
-				if (overlayChat.getAlpha() < 0.5f && !isGamePaused()) {
-					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 1.0f, SLIDE_TIME));
-					overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
-					overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
-				}
-			}
-		});
-
-		FlounderEvents.addEvent(new IEvent() {
 			private CompoundButton k = new CompoundButton(new KeyButton(GLFW_KEY_ESCAPE), new JoystickButton(0, 7));
-
-			@Override
-			public boolean eventTriggered() {
-				return k.wasDown();
-			}
-
-			@Override
-			public void onEvent() {
-				if (overlayChat.getAlpha() == 1.0f) {
-					overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
-					overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
-					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
-				} else if (isGamePaused()) {
-					overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
-					overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
-					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
-					overlaySlider.setAlphaDriver(new SlideDriver(overlaySlider.getAlpha(), 0.0f, SLIDE_TIME));
-				} else {
-					overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
-					overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
-					overlayDebug.setAlphaDriver(new SlideDriver(overlayDebug.getAlpha(), 0.0f, SLIDE_TIME));
-					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
-					overlaySlider.setAlphaDriver(new SlideDriver(overlaySlider.getAlpha(), 1.0f, SLIDE_TIME));
-				}
-			}
+			@Override public boolean eventTriggered() {return k.wasDown();}
+			@Override public void onEvent() {togglePause();}
 		});
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton k = new KeyButton(GLFW_KEY_F3);
-
-			@Override
-			public boolean eventTriggered() {
-				return k.wasDown();
-			}
-
-			@Override
-			public void onEvent() {
-				if (overlayChat.getAlpha() != 1.0f && !isGamePaused()) {
-					if (overlayDebug.getAlpha() < 0.5f) {
-						overlayDebug.setAlphaDriver(new SlideDriver(overlayDebug.getAlpha(), 1.0f, SLIDE_TIME));
-					} else {
-						overlayDebug.setAlphaDriver(new SlideDriver(overlayDebug.getAlpha(), 0.0f, SLIDE_TIME));
-					}
-				}
-			}
+			@Override public boolean eventTriggered() {return k.wasDown();}
+			@Override public void onEvent() {toggleDebug();}
 		});
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton k = new KeyButton(GLFW_KEY_F4);
+			@Override public boolean eventTriggered() {return k.wasDown();}
+			@Override public void onEvent() {toggleHUD();}
+		});
 
-			@Override
-			public boolean eventTriggered() {
-				return k.wasDown();
-			}
-
-			@Override
-			public void onEvent() {
-				if (overlayChat.getAlpha() != 1.0f && !isGamePaused()) {
-					if (overlayHUD.getAlpha() < 0.5f) {
-						overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
-					} else {
-						overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
-					}
-				}
-			}
+		FlounderEvents.addEvent(new IEvent() {
+			private KeyButton k = new KeyButton(GLFW_KEY_ENTER);
+			@Override public boolean eventTriggered() {return k.wasDown();}
+			@Override public void onEvent() {toggleChat();}
 		});
 	}
 
@@ -154,12 +91,67 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public float getBlurFactor() {
-		return overlaySlider.getBlurFactor();
+		if (!overlaySlider.inStartMenu()) {
+			return overlaySlider.getBlurFactor();
+		} else {
+			return 0.0f;
+		}
 	}
 
 	@Override
 	public Colour getPrimaryColour() {
 		return COLOUR_PRIMARY;
+	}
+
+	public void togglePause() {
+		if (overlaySlider.inStartMenu()) {
+			return;
+		}
+
+		if (overlayChat.getAlpha() == 1.0f) {
+			overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
+			overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
+			overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
+		} else if (isGamePaused()) {
+			overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
+			overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
+			overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
+			overlaySlider.setAlphaDriver(new SlideDriver(overlaySlider.getAlpha(), 0.0f, SLIDE_TIME));
+		} else {
+			overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
+			overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
+			overlayDebug.setAlphaDriver(new SlideDriver(overlayDebug.getAlpha(), 0.0f, SLIDE_TIME));
+			overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
+			overlaySlider.setAlphaDriver(new SlideDriver(overlaySlider.getAlpha(), 1.0f, SLIDE_TIME));
+		}
+	}
+
+	public void toggleDebug() {
+		if (overlayChat.getAlpha() != 1.0f && !isGamePaused()) {
+			if (overlayDebug.getAlpha() < 0.5f) {
+				overlayDebug.setAlphaDriver(new SlideDriver(overlayDebug.getAlpha(), 1.0f, SLIDE_TIME));
+			} else {
+				overlayDebug.setAlphaDriver(new SlideDriver(overlayDebug.getAlpha(), 0.0f, SLIDE_TIME));
+			}
+		}
+	}
+
+	public void toggleHUD() {
+		if (overlayChat.getAlpha() != 1.0f && !isGamePaused()) {
+			if (overlayHUD.getAlpha() < 0.5f) {
+				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
+			} else {
+				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
+			}
+		}
+	}
+
+	public void toggleChat() {
+		if (overlayChat.getAlpha() < 0.5f && !isGamePaused()) {
+			overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 1.0f, SLIDE_TIME));
+			overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
+			overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
+		}
 	}
 
 	public OverlayAlpha getOverlayAlpha() {

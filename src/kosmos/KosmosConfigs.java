@@ -70,7 +70,7 @@ public class KosmosConfigs {
 	/**
 	 * Saves the configs when closing the game.
 	 */
-	protected static void closeConfigs() {
+	public static void saveAllConfigs() {
 		CONFIG_MAIN.save();
 		CONFIG_HOST.save();
 		CONFIG_SERVER0.save();
