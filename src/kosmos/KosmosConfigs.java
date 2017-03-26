@@ -22,6 +22,8 @@ public class KosmosConfigs {
 	public static final ConfigData PROFILER_OPEN = CONFIG_MAIN.getData(ConfigSection.DEBUG, "profilerOpen", false, FlounderProfiler::isOpen);
 	public static final ConfigData BOUNDINGS_RENDER = CONFIG_MAIN.getData(ConfigSection.DEBUG, "boundingsRender", false, FlounderBounding::renders);
 
+	public static final ConfigData MUSIC_ENABLED = CONFIG_MAIN.getData(ConfigSection.AUDIO, "musicEnabled", true);
+
 	public static final ConfigData DISPLAY_WIDTH = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "displayWidth", 1080, FlounderDisplay::getWindowWidth);
 	public static final ConfigData DISPLAY_HEIGHT = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "displayHeight", 720, FlounderDisplay::getWindowHeight);
 	public static final ConfigData DISPLAY_VSYNC = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "displayVSync", false, FlounderDisplay::isVSync);

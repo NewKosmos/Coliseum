@@ -110,6 +110,26 @@ public class KosmosGuis extends GuiMaster {
 				}
 			}
 		});
+
+		FlounderEvents.addEvent(new IEvent() {
+			private KeyButton k = new KeyButton(GLFW_KEY_F4);
+
+			@Override
+			public boolean eventTriggered() {
+				return k.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				if (overlayChat.getAlpha() != 1.0f && !isGamePaused()) {
+					if (overlayHUD.getAlpha() < 0.5f) {
+						overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
+					} else {
+						overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
+					}
+				}
+			}
+		});
 	}
 
 	@Override

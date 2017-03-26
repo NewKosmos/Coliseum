@@ -10,8 +10,6 @@
 package kosmos;
 
 import flounder.devices.*;
-import flounder.entities.*;
-import flounder.entities.components.*;
 import flounder.events.*;
 import flounder.framework.*;
 import flounder.guis.*;
@@ -29,8 +27,6 @@ import kosmos.shadows.*;
 import kosmos.skybox.*;
 import kosmos.water.*;
 import kosmos.world.*;
-
-import java.util.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -55,7 +51,10 @@ public class KosmosInterface extends Standard {
 		gamePlaylist = new Playlist();
 		gamePlaylist.addMusic(Sound.loadSoundInBackground(new MyFile(MyFile.RES_FOLDER, "music", "09-hitori-bocchi-1b.wav"), 0.80f, 1.0f));
 		FlounderSound.getMusicPlayer().playMusicPlaylist(gamePlaylist, true, 4.0f, 10.0f);
-		FlounderSound.getMusicPlayer().unpauseTrack();
+
+		if (KosmosConfigs.MUSIC_ENABLED.getBoolean()) {
+			FlounderSound.getMusicPlayer().unpauseTrack();
+		}
 
 		this.screenshot = new KeyButton(GLFW_KEY_F2);
 		this.fullscreen = new KeyButton(GLFW_KEY_F11);
@@ -108,7 +107,7 @@ public class KosmosInterface extends Standard {
 			}
 		});
 
-		FlounderEvents.addEvent(new IEvent() {
+		/*FlounderEvents.addEvent(new IEvent() {
 			private KeyButton key = new KeyButton(GLFW_KEY_E);
 
 			@Override
@@ -133,7 +132,7 @@ public class KosmosInterface extends Standard {
 					FlounderEntities.save("kosmos.entities.instances", editorList, name);
 				}
 			}
-		});
+		});*/
 
 		FlounderEvents.addEvent(new IEvent() {
 			@Override

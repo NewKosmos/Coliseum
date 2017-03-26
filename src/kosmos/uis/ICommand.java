@@ -159,7 +159,7 @@ public interface ICommand {
 
 			@Override
 			public String commandDescription() {
-				return "Enabled collisionless noclip mode.";
+				return "Enables collisionless noclip mode.";
 			}
 
 			@Override

@@ -36,6 +36,8 @@ public class OverlayChat extends ScreenObject {
 	private List<TextObject> chatMessages;
 	private float chatHeight;
 
+	private float scrollOffset;
+
 	public OverlayChat(ScreenObject parent) {
 		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
@@ -54,14 +56,23 @@ public class OverlayChat extends ScreenObject {
 		this.currentInput.setColour(new Colour(1.0f, 1.0f, 1.0f));
 
 		this.chatMessages = new ArrayList<>();
-		this.chatHeight = VIEW_AREA_HEIGHT;// + 0.02f;
+		this.chatHeight = VIEW_AREA_HEIGHT;
+
+		this.scrollOffset = 0.0f;
 	}
 
 	@Override
 	public void updateObject() {
 		if (!isVisible() || getAlpha() < 0.1f) {
+			scrollOffset = 0.0f;
 			return;
 		}
+
+		// Update scroll.
+		//scrollOffset += FlounderMouse.getDeltaWheel();
+		//for (TextObject m : chatMessages) {
+		//	m.getPosition().y += scrollOffset;
+		//}
 
 		// Add new chat messages.
 		if (!newMessages.isEmpty()) {
