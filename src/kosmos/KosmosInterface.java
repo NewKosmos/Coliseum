@@ -26,6 +26,7 @@ import kosmos.chunks.*;
 import kosmos.network.packets.*;
 import kosmos.particles.*;
 import kosmos.shadows.*;
+import kosmos.skybox.*;
 import kosmos.water.*;
 import kosmos.world.*;
 
@@ -46,7 +47,7 @@ public class KosmosInterface extends Standard {
 	private int serverPort;
 
 	public KosmosInterface() {
-		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderNetwork.class, FlounderBounding.class, KosmosShadows.class, KosmosParticles.class, KosmosWater.class, KosmosWorld.class, KosmosChunks.class);
+		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderNetwork.class, FlounderBounding.class, KosmosShadows.class, KosmosParticles.class, KosmosWater.class, KosmosSkybox.class, KosmosWorld.class, KosmosChunks.class);
 	}
 
 	@Override

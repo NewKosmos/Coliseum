@@ -4,9 +4,10 @@
 #include "maths.glsl"
 
 //---------IN------------
+in vec3 pass_textureCoords;
 
 //---------UNIFORM------------
-//layout(binding = 0) uniform samplerCube cubeMap;
+layout(binding = 0) uniform samplerCube cubeMap;
 uniform vec3 skyColour;
 uniform float blendFactor;
 
@@ -17,11 +18,9 @@ layout(location = 2) out vec4 out_extras;
 
 //---------MAIN------------
 void main(void) {
-	vec2 x = gl_FragCoord.xy;
-	// texture(cubeMap, gl_FragCoord).rgb;
-	vec3 starColour = vec3(max((fract(dot(sin(x), x)) - 0.99) * 90.0, 0.0));
+    vec3 cubemapColour =  texture(cubeMap, pass_textureCoords).rgb;
 
-	out_albedo = vec4(skyColour + mix(vec3(0.0), starColour, blendFactor), 1.0);
+	out_albedo = vec4(skyColour + mix(vec3(0.0), cubemapColour, blendFactor), 1.0);
 	out_normals = vec4(0.0, 1.0, 0.0, 1.0);
 	out_extras = vec4(1.0, 0.0, 1.0, 1.0); // Ignores lighting.
 }

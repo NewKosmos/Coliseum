@@ -56,6 +56,7 @@ public class SkyboxRenderer extends Renderer {
 		OpenGlUtils.disableBlending();
 
 		OpenGlUtils.bindVAO(vao, 0);
+		OpenGlUtils.bindTexture(KosmosSkybox.getCubemap(), 0);
 
 		OpenGlUtils.renderArrays(GL11.GL_TRIANGLES, VERTICES.length);
 
@@ -65,7 +66,7 @@ public class SkyboxRenderer extends Renderer {
 
 	@Override
 	public void profile() {
-		FlounderProfiler.add("Kosmos Skybox", "Render Time", super.getRenderTime());
+		FlounderProfiler.add(KosmosSkybox.PROFILE_TAB_NAME, "Render Time", super.getRenderTime());
 	}
 
 	@Override
