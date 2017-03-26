@@ -172,8 +172,10 @@ public class KosmosGuis extends GuiMaster {
 		if (overlayChat.getAlpha() != 1.0f && !isGamePaused()) {
 			if (overlayHUD.getAlpha() < 0.5f) {
 				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
+				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
 			} else {
 				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
+				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 			}
 		}
 	}

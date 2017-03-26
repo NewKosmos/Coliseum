@@ -68,7 +68,7 @@ public class PacketLogin extends Packet {
 
 		// If new client connects tell them the connected clients.
 		for (ClientInfo info : FlounderNetwork.getSocketServer().getConnected()) {
-			new PacketLogin(info.getUsername()).writeData(server);
+			server.sendData(new PacketLogin(info.getUsername()).getData(), address, port);
 		}
 	}
 

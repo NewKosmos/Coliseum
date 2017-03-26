@@ -169,6 +169,7 @@ public class OverlayChat extends ScreenObject {
 			// Add new chat messages.
 			if (!newMessages.isEmpty()) {
 				for (Pair<String, Colour> message : new ArrayList<>(newMessages)) {
+					FlounderLogger.log("Adding Message: " + message.toString());
 					generateObject(message.getFirst(), message.getSecond());
 				}
 
