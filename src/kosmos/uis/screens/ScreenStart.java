@@ -4,6 +4,7 @@ import flounder.framework.*;
 import flounder.guis.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;
+import kosmos.*;
 import kosmos.uis.*;
 import kosmos.world.*;
 
@@ -21,6 +22,7 @@ public class ScreenStart extends ScreenObject {
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
 				KosmosWorld.generatePlayer();
+				((KosmosGuis) FlounderGuis.getGuiMaster()).togglePause();
 			}
 		});
 

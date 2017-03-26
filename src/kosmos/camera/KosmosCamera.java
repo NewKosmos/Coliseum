@@ -101,7 +101,7 @@ public class KosmosCamera extends Camera {
 		this.firstPerson = KosmosConfigs.CAMERA_FIRST_PERSON.setReference(() -> firstPerson).getBoolean();
 
 		this.position = new Vector3f();
-		this.rotation = new Vector3f();
+		this.rotation = new Vector3f(0.0f, 20.0f, 0.0f);
 
 		this.viewFrustum = new Frustum();
 		this.viewRay = new Ray(false, new Vector2f());

@@ -12,14 +12,24 @@ public class ScreenSettings extends ScreenObject {
 		super.setInScreenCoords(false);
 
 		ScreenObject paneLeft = new ScreenObject(this, new Vector2f(0.25f, 0.5f), new Vector2f(0.5f, 1.0f)) {
-			@Override public void updateObject() {}
-			@Override public void deleteObject() {}
+			@Override
+			public void updateObject() {
+			}
+
+			@Override
+			public void deleteObject() {
+			}
 		};
 		paneLeft.setInScreenCoords(true);
 
 		ScreenObject paneRight = new ScreenObject(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.5f, 1.0f)) {
-			@Override public void updateObject() {}
-			@Override public void deleteObject() {}
+			@Override
+			public void updateObject() {
+			}
+
+			@Override
+			public void deleteObject() {
+			}
 		};
 		paneRight.setInScreenCoords(true);
 

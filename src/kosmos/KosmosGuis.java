@@ -48,26 +48,58 @@ public class KosmosGuis extends GuiMaster {
 
 		FlounderEvents.addEvent(new IEvent() {
 			private CompoundButton k = new CompoundButton(new KeyButton(GLFW_KEY_ESCAPE), new JoystickButton(0, 7));
-			@Override public boolean eventTriggered() {return k.wasDown();}
-			@Override public void onEvent() {togglePause();}
+
+			@Override
+			public boolean eventTriggered() {
+				return k.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				togglePause();
+			}
 		});
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton k = new KeyButton(GLFW_KEY_F3);
-			@Override public boolean eventTriggered() {return k.wasDown();}
-			@Override public void onEvent() {toggleDebug();}
+
+			@Override
+			public boolean eventTriggered() {
+				return k.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				toggleDebug();
+			}
 		});
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton k = new KeyButton(GLFW_KEY_F4);
-			@Override public boolean eventTriggered() {return k.wasDown();}
-			@Override public void onEvent() {toggleHUD();}
+
+			@Override
+			public boolean eventTriggered() {
+				return k.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				toggleHUD();
+			}
 		});
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton k = new KeyButton(GLFW_KEY_ENTER);
-			@Override public boolean eventTriggered() {return k.wasDown();}
-			@Override public void onEvent() {toggleChat();}
+
+			@Override
+			public boolean eventTriggered() {
+				return k.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				toggleChat();
+			}
 		});
 	}
 

@@ -90,9 +90,9 @@ public class KosmosWorld extends Module {
 	public static void generatePlayer() {
 		INSTANCE.entityPlayer = new InstancePlayer(FlounderEntities.getEntities(),
 				new Vector3f(
-						KosmosConfigs.SAVE_PLAYER_X.setReference(() -> INSTANCE.entityPlayer.getPosition().x).getFloat(),
-						KosmosConfigs.SAVE_PLAYER_Y.setReference(() -> INSTANCE.entityPlayer.getPosition().y).getFloat(),
-						KosmosConfigs.SAVE_PLAYER_Z.setReference(() -> INSTANCE.entityPlayer.getPosition().z).getFloat()),
+						KosmosConfigs.SAVE_PLAYER_X.setReference(() -> KosmosWorld.getEntityPlayer().getPosition().x).getFloat(),
+						KosmosConfigs.SAVE_PLAYER_Y.setReference(() -> KosmosWorld.getEntityPlayer().getPosition().y).getFloat(),
+						KosmosConfigs.SAVE_PLAYER_Z.setReference(() -> KosmosWorld.getEntityPlayer().getPosition().z).getFloat()),
 				new Vector3f()
 		);
 		KosmosWater.generateWater();
