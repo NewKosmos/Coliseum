@@ -22,7 +22,7 @@ public class KosmosGuis extends GuiMaster {
 	private OverlayUsernames overlayUsernames;
 	private OverlayDebug overlayDebug;
 	private OverlayChat overlayChat;
-	private OverlayPause overlayPause;
+	private OverlaySlider overlaySlider;
 
 	public KosmosGuis() {
 		super();
@@ -35,14 +35,14 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayUsernames = new OverlayUsernames(FlounderGuis.getContainer());
 		this.overlayDebug = new OverlayDebug(FlounderGuis.getContainer());
 		this.overlayChat = new OverlayChat(FlounderGuis.getContainer());
-		this.overlayPause = new OverlayPause(FlounderGuis.getContainer());
+		this.overlaySlider = new OverlaySlider(FlounderGuis.getContainer());
 
 		this.overlayAlpha.setAlphaDriver(new ConstantDriver(1.0f));
 		this.overlayHUD.setAlphaDriver(new ConstantDriver(1.0f));
 		this.overlayUsernames.setAlphaDriver(new ConstantDriver(1.0f));
 		this.overlayDebug.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
-		this.overlayPause.setAlphaDriver(new ConstantDriver(0.0f));
+		this.overlaySlider.setAlphaDriver(new ConstantDriver(0.0f));
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton k = new KeyButton(GLFW_KEY_ENTER);
@@ -80,13 +80,13 @@ public class KosmosGuis extends GuiMaster {
 					overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
 					overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
 					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
-					overlayPause.setAlphaDriver(new SlideDriver(overlayPause.getAlpha(), 0.0f, SLIDE_TIME));
+					overlaySlider.setAlphaDriver(new SlideDriver(overlaySlider.getAlpha(), 0.0f, SLIDE_TIME));
 				} else {
 					overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 					overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 					overlayDebug.setAlphaDriver(new SlideDriver(overlayDebug.getAlpha(), 0.0f, SLIDE_TIME));
 					overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
-					overlayPause.setAlphaDriver(new SlideDriver(overlayPause.getAlpha(), 1.0f, SLIDE_TIME));
+					overlaySlider.setAlphaDriver(new SlideDriver(overlaySlider.getAlpha(), 1.0f, SLIDE_TIME));
 				}
 			}
 		});
@@ -147,12 +147,12 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public boolean isGamePaused() {
-		return overlayPause.getAlpha() > 0.1f || overlayChat.getAlpha() >= 0.1f;
+		return overlaySlider.getAlpha() > 0.1f || overlayChat.getAlpha() >= 0.1f;
 	}
 
 	@Override
 	public float getBlurFactor() {
-		return overlayPause.getAlpha();
+		return overlaySlider.getBlurFactor();
 	}
 
 	@Override
@@ -180,8 +180,8 @@ public class KosmosGuis extends GuiMaster {
 		return overlayChat;
 	}
 
-	public OverlayPause getOverlayPause() {
-		return overlayPause;
+	public OverlaySlider getOverlaySlider() {
+		return overlaySlider;
 	}
 
 	@Override

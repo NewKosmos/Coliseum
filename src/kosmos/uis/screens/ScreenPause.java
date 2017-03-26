@@ -1,13 +1,23 @@
-package kosmos.uis;
+package kosmos.uis.screens;
 
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.maths.vectors.*;
+import kosmos.uis.*;
 
-public class OverlayPause extends ScreenObject {
-	public OverlayPause(ScreenObject parent) {
-		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
+public class ScreenPause extends ScreenObject {
+	private ScreenSettings screenSettings;
+	private ScreenAbout screenAbout;
+
+	public ScreenPause(OverlaySlider slider) {
+		super(slider, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
+
+		this.screenSettings = new ScreenSettings(slider);
+		this.screenAbout = new ScreenAbout(slider);
+
+		this.screenSettings.setVisible(false);
+		this.screenAbout.setVisible(false);
 
 		float yPosition = 0.30f;
 		float ySpacing = 0.07f;
@@ -30,6 +40,7 @@ public class OverlayPause extends ScreenObject {
 		settings.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
+				slider.setNewSecondaryScreen(screenSettings, true);
 			}
 		});
 
@@ -37,6 +48,7 @@ public class OverlayPause extends ScreenObject {
 		about.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
+				slider.setNewSecondaryScreen(screenAbout, true);
 			}
 		});
 
