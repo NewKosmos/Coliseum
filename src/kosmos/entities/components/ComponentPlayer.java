@@ -65,7 +65,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		this.inputTurn = new CompoundAxis(new ButtonAxis(leftKeyButtons, rightKeyButtons), new JoystickAxis(0, 0));
 		this.inputBoost = new CompoundButton(boostButtons, new JoystickButton(0, 1));
 		this.inputJump = new CompoundButton(jumpButtons, new JoystickButton(0, 0));
-		this.inputFlyHeight = new CompoundAxis(new ButtonAxis(crouchButtons, new CompoundButton(boostButtons, jumpButtons)), new JoystickAxis(0, 0));
+		this.inputFlyHeight = new CompoundAxis(new ButtonAxis(crouchButtons, jumpButtons), new JoystickAxis(0, 0));
 
 		this.moveAmount = new Vector3f();
 		this.rotateAmount = new Vector3f();

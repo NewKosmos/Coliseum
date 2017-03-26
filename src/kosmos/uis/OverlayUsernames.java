@@ -63,8 +63,8 @@ public class OverlayUsernames extends ScreenObject {
 			Pair<TextObject, GuiObject> object = iterator.next();
 
 			if (object.getFirst().getTextString().equals(username)) {
-				object.getFirst().delete();
-				object.getSecond().delete();
+			//	object.getFirst().delete();
+			//	object.getSecond().delete();
 				iterator.remove();
 				return;
 			}

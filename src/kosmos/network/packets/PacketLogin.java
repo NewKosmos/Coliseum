@@ -3,6 +3,7 @@ package kosmos.network.packets;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.logger.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import kosmos.*;
@@ -49,6 +50,7 @@ public class PacketLogin extends Packet {
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
 		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "] " + username + " has joined the game.");
+		OverlayChat.addText(username + " has joined the game.", new Colour(0.1f, 0.7f, 0.1f));
 		OverlayUsernames.addMultiplayer(username);
 		KosmosWorld.quePlayer(username, new Vector3f(), new Vector3f());
 		KosmosPlayer.askSendData();
