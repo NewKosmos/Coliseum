@@ -39,9 +39,6 @@ public class KosmosInterface extends Standard {
 	private KeyButton aabbs;
 	private KeyButton closeWindow;
 
-	private String serverIP;
-	private int serverPort;
-
 	public KosmosInterface() {
 		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderNetwork.class, FlounderBounding.class, KosmosShadows.class, KosmosParticles.class, KosmosWater.class, KosmosSkybox.class, KosmosWorld.class, KosmosChunks.class);
 	}
@@ -52,7 +49,7 @@ public class KosmosInterface extends Standard {
 		gamePlaylist.addMusic(Sound.loadSoundInBackground(new MyFile(MyFile.RES_FOLDER, "music", "09-hitori-bocchi-1b.wav"), 0.80f, 1.0f));
 		FlounderSound.getMusicPlayer().playMusicPlaylist(gamePlaylist, true, 4.0f, 10.0f);
 
-		if (KosmosConfigs.MUSIC_ENABLED.getBoolean()) {
+		if (KosmosConfigs.MUSIC_ENABLED.setReference(() -> !FlounderSound.getMusicPlayer().isPaused()).getBoolean()) {
 			FlounderSound.getMusicPlayer().unpauseTrack();
 		}
 
@@ -61,13 +58,6 @@ public class KosmosInterface extends Standard {
 		this.polygons = new KeyButton(GLFW_KEY_P);
 		this.aabbs = new KeyButton(GLFW_KEY_O);
 		this.closeWindow = new KeyButton(GLFW_KEY_DELETE);
-
-		String username = KosmosConfigs.CLIENT_USERNAME.getString();
-		this.serverIP = KosmosConfigs.SERVER_IP.setReference(() -> serverIP).getString();
-		this.serverPort = KosmosConfigs.SERVER_PORT.setReference(() -> serverPort).getInteger();
-		FlounderNetwork.startClient(username, serverIP, serverPort);
-		PacketLogin loginPacket = new PacketLogin(username);
-		loginPacket.writeData(FlounderNetwork.getSocketClient());
 
 		FlounderEvents.addEvent(new IEvent() {
 			@Override
@@ -181,8 +171,6 @@ public class KosmosInterface extends Standard {
 
 	@Override
 	public void dispose() {
-		new PacketDisconnect(FlounderNetwork.getUsername()).writeData(FlounderNetwork.getSocketClient());
-
 		//	SteamAPI.shutdown();
 		KosmosConfigs.saveAllConfigs();
 	}

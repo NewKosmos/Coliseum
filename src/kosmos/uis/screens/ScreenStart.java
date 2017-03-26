@@ -5,8 +5,10 @@ import flounder.framework.*;
 import flounder.guis.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
+import flounder.networking.*;
 import flounder.visual.*;
 import kosmos.*;
+import kosmos.network.packets.*;
 import kosmos.uis.*;
 import kosmos.world.*;
 
@@ -38,6 +40,16 @@ public class ScreenStart extends ScreenObject {
 		multiplayer.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
+				slider.sliderStartMenu(false);
+				KosmosWorld.generatePlayer();
+				((KosmosGuis) FlounderGuis.getGuiMaster()).togglePause();
+
+				String username = KosmosConfigs.CLIENT_USERNAME.getString();
+				String serverIP = KosmosConfigs.SERVER_IP.setReference(() -> FlounderNetwork.getSocketClient() == null ? null : FlounderNetwork.getSocketClient().getIpAddress()).getString();
+				int serverPort = KosmosConfigs.SERVER_PORT.setReference(() -> FlounderNetwork.getSocketClient() == null ? null : FlounderNetwork.getSocketClient().getServerPort()).getInteger();
+				FlounderNetwork.startClient(username, serverIP, serverPort);
+				PacketLogin loginPacket = new PacketLogin(username);
+				loginPacket.writeData(FlounderNetwork.getSocketClient());
 			}
 		});
 

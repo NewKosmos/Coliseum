@@ -2,7 +2,10 @@ package kosmos.uis.screens;
 
 import flounder.guis.*;
 import flounder.maths.vectors.*;
+import flounder.networking.*;
 import flounder.visual.*;
+import kosmos.*;
+import kosmos.network.packets.*;
 import kosmos.uis.*;
 import kosmos.world.*;
 
@@ -18,6 +21,7 @@ public class ScreenPause extends ScreenObject {
 		saveGame.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
+				KosmosConfigs.saveAllConfigs();
 			}
 		});
 
@@ -46,6 +50,11 @@ public class ScreenPause extends ScreenObject {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(true);
+				if (FlounderNetwork.getSocketClient() != null) {
+					new PacketDisconnect(FlounderNetwork.getUsername()).writeData(FlounderNetwork.getSocketClient());
+					FlounderNetwork.closeClient();
+				}
+				KosmosWorld.removeAllPlayers();
 				KosmosWorld.deletePlayer();
 			}
 		});

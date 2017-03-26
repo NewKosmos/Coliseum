@@ -183,6 +183,16 @@ public class KosmosWorld extends Module {
 		}
 	}
 
+	public synchronized static void removeAllPlayers() {
+		for (String username : INSTANCE.players.keySet()) {
+			Entity otherPlayer = INSTANCE.players.get(username);
+			otherPlayer.forceRemove(true);
+		}
+
+		INSTANCE.playerQue.clear();
+		INSTANCE.players.clear();
+	}
+
 	public static int connectedPlayers() {
 		return INSTANCE.players.size();
 	}
