@@ -47,7 +47,6 @@ public interface ICommand {
 			public void runCommand(String fullCommand) {
 				for (ConsoleCommands commands : ConsoleCommands.values()) {
 					String log = "    [" + commands.getCommand().commandPrefix() + "]: " + commands.getCommand().commandDescription();
-					FlounderLogger.log(log);
 					OverlayChat.addText(log, new Colour(0.81f, 0.81f, 0.81f));
 				}
 			}

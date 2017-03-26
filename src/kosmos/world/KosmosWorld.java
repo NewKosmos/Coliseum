@@ -117,9 +117,8 @@ public class KosmosWorld extends Module {
 			for (String name : new HashMap<>(playerQue).keySet()) {
 				Pair<Vector3f, Vector3f> data = playerQue.get(name);
 				players.put(name, new InstanceMuliplayer(FlounderEntities.getEntities(), data.getFirst(), data.getSecond(), name));
+				playerQue.remove(name);
 			}
-
-			playerQue.clear();
 		}
 
 		// Update the sky colours and sun position.
