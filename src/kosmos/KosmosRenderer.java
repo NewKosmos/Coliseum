@@ -30,6 +30,7 @@ import kosmos.entities.*;
 import kosmos.filters.*;
 import kosmos.particles.*;
 import kosmos.shadows.*;
+import kosmos.skybox.*;
 import kosmos.water.*;
 import kosmos.world.*;
 import org.lwjgl.glfw.*;
@@ -41,6 +42,7 @@ public class KosmosRenderer extends RendererMaster {
 	private static final Vector4f POSITIVE_INFINITY = new Vector4f(0.0f, 1.0f, 0.0f, Float.POSITIVE_INFINITY);
 
 	private ShadowRenderer shadowRenderer;
+	private SkyboxRenderer skyboxRenderer;
 	private EntitiesRenderer entitiesRenderer;
 	private ParticleRenderer particleRenderer;
 	private WaterRenderer waterRenderer;
@@ -67,6 +69,7 @@ public class KosmosRenderer extends RendererMaster {
 	@Override
 	public void init() {
 		this.shadowRenderer = new ShadowRenderer();
+		this.skyboxRenderer = new SkyboxRenderer();
 		this.entitiesRenderer = new EntitiesRenderer();
 		this.particleRenderer = new ParticleRenderer();
 		this.waterRenderer = new WaterRenderer();
@@ -179,6 +182,7 @@ public class KosmosRenderer extends RendererMaster {
 		Camera camera = FlounderCamera.getCamera();
 		OpenGlUtils.prepareNewRenderParse(0.0f, 0.0f, 0.0f);
 
+		skyboxRenderer.render(clipPlane, camera);
 		entitiesRenderer.render(clipPlane, camera);
 
 		if (!waterPass) {
@@ -253,8 +257,9 @@ public class KosmosRenderer extends RendererMaster {
 	@Override
 	public void dispose() {
 		shadowRenderer.dispose();
-		particleRenderer.dispose();
+		skyboxRenderer.dispose();
 		entitiesRenderer.dispose();
+		particleRenderer.dispose();
 		waterRenderer.dispose();
 		boundingRenderer.dispose();
 		guisRenderer.dispose();

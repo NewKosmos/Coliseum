@@ -15,7 +15,7 @@ public class KosmosGuis extends GuiMaster {
 	// private static final Colour COLOUR_PRIMARY = new Colour(0.1f, 0.8f, 0.2f); // Neon Green.
 	private static final Colour COLOUR_PRIMARY = new Colour(0.0824f, 0.396f, 0.753f); // Water Blue.
 
-	protected static final float SLIDE_TIME = 0.7f;
+	public static final float SLIDE_TIME = 0.7f;
 
 	private OverlayAlpha overlayAlpha;
 	private OverlayHUD overlayHUD;

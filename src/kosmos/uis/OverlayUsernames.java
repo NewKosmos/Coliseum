@@ -8,10 +8,10 @@ import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
-import flounder.networking.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import flounder.visual.*;
+import kosmos.*;
 import kosmos.camera.*;
 import kosmos.world.*;
 
@@ -20,7 +20,7 @@ import java.util.*;
 public class OverlayUsernames extends ScreenObject {
 	private Vector3f screenPosition;
 
-	private Pair<TextObject, GuiObject> playerUsername;
+	// private Pair<TextObject, GuiObject> playerUsername;
 	private List<Pair<TextObject, GuiObject>> multiplayerNames;
 
 	public OverlayUsernames(ScreenObject parent) {
@@ -29,13 +29,13 @@ public class OverlayUsernames extends ScreenObject {
 
 		this.screenPosition = new Vector3f();
 
-		this.playerUsername = generate(FlounderNetwork.getUsername());
+		// this.playerUsername = generate(FlounderNetwork.getUsername());
 		this.multiplayerNames = new ArrayList<>();
 	}
 
 	@Override
 	public void updateObject() {
-		updateUsername(playerUsername, KosmosWorld.getEntityPlayer());
+		// updateUsername(playerUsername, KosmosWorld.getEntityPlayer());
 
 		for (Pair<TextObject, GuiObject> object : multiplayerNames) {
 			updateUsername(object, KosmosWorld.getPlayer(object.getFirst().getTextString()));
@@ -64,7 +64,7 @@ public class OverlayUsernames extends ScreenObject {
 	private Pair<TextObject, GuiObject> generate(String username) {
 		TextObject text = new TextObject(this, new Vector2f(0.5f, 0.5f), username, 1.0f, FlounderFonts.CANDARA, 0.2f, GuiAlign.CENTRE);
 		text.setInScreenCoords(false);
-		text.setColour(new Colour(1.0f, 1.0f, 1.0f));
+		text.setColour(new Colour(1.0f, 1.0f, 1.0f, 1.0f));
 		text.setBorderColour(new Colour(0.0f, 0.0f, 0.0f));
 		text.setBorder(new ConstantDriver(0.175f));
 		text.setAlphaDriver(new ConstantDriver(0.75f));
@@ -81,11 +81,20 @@ public class OverlayUsernames extends ScreenObject {
 		screenPosition.set(entity.getPosition());
 		screenPosition.y += KosmosPlayer.PLAYER_OFFSET_Y;
 		float distance = Vector3f.getDistance(screenPosition, FlounderCamera.getCamera().getPosition());
+		boolean shouldRender = distance < 30.0f;
 		Maths.worldToScreenSpace(screenPosition, FlounderCamera.getCamera().getViewMatrix(), FlounderCamera.getCamera().getProjectionMatrix(), this.screenPosition);
 		// FlounderLogger.log(screenPosition.x + ", " + screenPosition.y);
 
-		pair.getFirst().setVisible(distance < 50.0f);
-		pair.getSecond().setVisible(distance < 50.0f);
+		// Updates the alpha, hides if far away.
+		if (pair.getFirst().getColour().a == 1.0f && !shouldRender) {
+			pair.getFirst().setAlphaDriver(new SlideDriver(pair.getFirst().getAlpha(), 0.0f, KosmosGuis.SLIDE_TIME));
+			pair.getSecond().setAlphaDriver(new SlideDriver(pair.getFirst().getAlpha(), 0.0f, KosmosGuis.SLIDE_TIME));
+			pair.getFirst().getColour().a = 0.0f;
+		} else if (pair.getFirst().getColour().a == 0.0f && shouldRender) {
+			pair.getFirst().setAlphaDriver(new SlideDriver(pair.getFirst().getAlpha(), 1.0f, KosmosGuis.SLIDE_TIME));
+			pair.getSecond().setAlphaDriver(new SlideDriver(pair.getFirst().getAlpha(), 1.0f, KosmosGuis.SLIDE_TIME));
+			pair.getFirst().getColour().a = 1.0f;
+		}
 
 		// Updates the text positioning.
 		pair.getFirst().getPosition().set(screenPosition.x + (FlounderDisplay.getAspectRatio() / 2.0f), -screenPosition.y);

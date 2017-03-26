@@ -51,16 +51,24 @@ float shadow(sampler2D shadowMap, vec4 shadowCoords, float shadowMapSize) {
     float totalTextels = (shadowPCF * 2.0 + 1.0) * (shadowPCF * 2.0 + 1.0);
     float texelSize = 1.0 / shadowMapSize;
     float total = 0.0;
-    for (int x = -shadowPCF; x <= shadowPCF; x++) {
-        for (int y = -shadowPCF; y <= shadowPCF; y++) {
-            float shadowValue = texture(shadowMap, shadowCoords.xy + vec2(x, y) * texelSize).r;
-            if (shadowCoords.z > shadowValue + shadowBias) {
-                total += 1.0;
+
+    if (shadowCoords.x > 0.0 && shadowCoords.x < 1.0 && shadowCoords.y > 0.0 && shadowCoords.y < 1.0 && shadowCoords.z > 0.0 && shadowCoords.z < 1.0) {
+        for (int x = -shadowPCF; x <= shadowPCF; x++) {
+            for (int y = -shadowPCF; y <= shadowPCF; y++) {
+                float shadowValue = texture(shadowMap, shadowCoords.xy + vec2(x, y) * texelSize).r;
+
+                if (shadowCoords.z > shadowValue + shadowBias) {
+                    total += shadowDarkness * shadowCoords.w;
+                }
             }
         }
+
+        total /= totalTextels;
+    } else {
+        total = 0.0;
     }
-    total /= totalTextels;
-    return 1.0 - (total * shadowDarkness * shadowCoords.w);
+
+    return 1.0 - total;
 }
 
 //---------FOG VISIBILITY------------
