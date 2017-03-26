@@ -227,7 +227,7 @@ public class OverlayChat extends ScreenObject {
 					}
 				}
 
-				addText("Could not find command: " + data[0], new Colour(0.81f, 0.37f, 0.24f));
+				generateObject("Could not find command: " + data[0], new Colour(0.81f, 0.37f, 0.24f));
 			}
 		}
 

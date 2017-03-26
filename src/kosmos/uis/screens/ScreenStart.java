@@ -1,7 +1,9 @@
 package kosmos.uis.screens;
 
+import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.guis.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;
 import kosmos.*;
@@ -15,6 +17,12 @@ public class ScreenStart extends ScreenObject {
 
 		float yPosition = 0.30f;
 		float ySpacing = 0.07f;
+
+		TextObject title = new TextObject(this, new Vector2f(0.5f, 0.15f), "New Kosmos", 5.0f, FlounderFonts.CANDARA, 1.0f, GuiAlign.CENTRE);
+		title.setInScreenCoords(true);
+		title.setColour(new Colour(1.0f, 1.0f, 1.0f, 1.0f));
+		title.setBorderColour(new Colour(0.0f, 0.0f, 0.0f));
+		title.setBorder(new ConstantDriver(0.022f));
 
 		GuiButtonText loadSave = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "Load Save", GuiAlign.CENTRE);
 		loadSave.addLeftListener(new GuiButtonText.ListenerBasic() {

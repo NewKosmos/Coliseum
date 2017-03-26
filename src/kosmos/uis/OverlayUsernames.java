@@ -18,6 +18,8 @@ import kosmos.world.*;
 import java.util.*;
 
 public class OverlayUsernames extends ScreenObject {
+	public static final List<String> newUsernames = new ArrayList<>();
+
 	private Vector3f screenPosition;
 
 	// private Pair<TextObject, GuiObject> playerUsername;
@@ -37,13 +39,21 @@ public class OverlayUsernames extends ScreenObject {
 	public void updateObject() {
 		// updateUsername(playerUsername, KosmosWorld.getEntityPlayer());
 
+		if (!newUsernames.isEmpty()) {
+			for (String m : newUsernames) {
+				multiplayerNames.add(generate(m));
+			}
+
+			newUsernames.clear();
+		}
+
 		for (Pair<TextObject, GuiObject> object : multiplayerNames) {
 			updateUsername(object, KosmosWorld.getPlayer(object.getFirst().getTextString()));
 		}
 	}
 
-	public void addMultiplayer(String username) {
-		multiplayerNames.add(generate(username));
+	public static void addMultiplayer(String username) {
+		newUsernames.add(username);
 	}
 
 	public void removeMultiplayer(String username) {
@@ -77,6 +87,10 @@ public class OverlayUsernames extends ScreenObject {
 	}
 
 	private void updateUsername(Pair<TextObject, GuiObject> pair, Entity entity) {
+		if (entity == null) {
+			return;
+		}
+
 		// Get 2D label space.
 		screenPosition.set(entity.getPosition());
 		screenPosition.y += KosmosPlayer.PLAYER_OFFSET_Y;

@@ -7,6 +7,7 @@ import flounder.maths.vectors.*;
 import flounder.networking.*;
 import kosmos.*;
 import kosmos.camera.*;
+import kosmos.uis.*;
 import kosmos.world.*;
 
 import java.net.*;
@@ -48,7 +49,7 @@ public class PacketLogin extends Packet {
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
 		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "] " + username + " has joined the game.");
-		((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayUsernames().addMultiplayer(username);
+		OverlayUsernames.addMultiplayer(username);
 		KosmosWorld.quePlayer(username, new Vector3f(), new Vector3f());
 		KosmosPlayer.askSendData();
 	}
