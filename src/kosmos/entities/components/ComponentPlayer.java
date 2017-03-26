@@ -77,7 +77,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		boolean noclip = ((KosmosPlayer) FlounderCamera.getPlayer()).isNoclipEnabled();
 
 		// Gets movement and rotation data from player inputs.
-		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
+		if (!FlounderGuis.getGuiMaster().isGamePaused()) {
 			currentSpeed = (inputBoost.isDown() ? KosmosPlayer.BOOST_SPEED : KosmosPlayer.RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
 			currentUpwardSpeed = (inputJump.wasDown() && Maths.deadband(0.05f, currentUpwardSpeed) == 0.0f) ? KosmosPlayer.JUMP_POWER : currentUpwardSpeed;
 			currentTurnSpeed = -KosmosPlayer.TURN_SPEED * Maths.deadband(0.05f, inputTurn.getAmount());
@@ -89,7 +89,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		// Applies gravity over time.
 		if (!noclip) {
 			currentUpwardSpeed += KosmosWorld.GRAVITY * Framework.getDelta();
-		} else {
+		} else if (!FlounderGuis.getGuiMaster().isGamePaused()) {
 			currentSpeed *= 0.5f * KosmosPlayer.FLY_SPEED;
 			currentUpwardSpeed = inputFlyHeight.getAmount() * KosmosPlayer.FLY_SPEED;
 		}

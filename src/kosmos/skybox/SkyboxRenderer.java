@@ -9,7 +9,6 @@ import flounder.profiling.*;
 import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
-import kosmos.world.*;
 import org.lwjgl.opengl.*;
 
 public class SkyboxRenderer extends Renderer {
@@ -41,8 +40,8 @@ public class SkyboxRenderer extends Renderer {
 		shader.getUniformMat4("modelMatrix").loadMat4(KosmosSkybox.getModelMatrix());
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 		shader.getUniformBool("polygonMode").loadBoolean(OpenGlUtils.isInWireframe());
-		shader.getUniformVec3("skyColour").loadVec3(KosmosWorld.getSkyColour());
-		shader.getUniformFloat("blendFactor").loadFloat(KosmosWorld.starIntensity());
+		shader.getUniformVec3("skyColour").loadVec3(KosmosSkybox.getSkyColour());
+		shader.getUniformFloat("blendFactor").loadFloat(KosmosSkybox.starIntensity());
 
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
 		OpenGlUtils.enableDepthTesting();

@@ -7,7 +7,7 @@ import flounder.maths.vectors.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
 import kosmos.*;
-import kosmos.world.*;
+import kosmos.skybox.*;
 
 public class KosmosShadows extends Module {
 	private static final KosmosShadows INSTANCE = new KosmosShadows();
@@ -97,7 +97,7 @@ public class KosmosShadows extends Module {
 	public void update() {
 		shadowBox.update(FlounderCamera.getCamera());
 		updateOrthographicProjectionMatrix(shadowBox.getWidth(), shadowBox.getHeight(), shadowBox.getLength());
-		updateLightViewMatrix(KosmosWorld.getLightPosition(), shadowBox.getCenter());
+		updateLightViewMatrix(KosmosSkybox.getLightPosition(), shadowBox.getCenter());
 		Matrix4f.multiply(projectionMatrix, lightViewMatrix, projectionViewMatrix);
 	}
 

@@ -90,11 +90,11 @@ public class KosmosRenderer extends RendererMaster {
 		this.effect = 1;
 
 		FlounderEvents.addEvent(new IEvent() {
-			private KeyButton c = new KeyButton(GLFW.GLFW_KEY_C);
+			private KeyButton effectBump = new KeyButton(GLFW.GLFW_KEY_C);
 
 			@Override
 			public boolean eventTriggered() {
-				return c.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
+				return effectBump.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
 			}
 
 			@Override

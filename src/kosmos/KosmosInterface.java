@@ -25,6 +25,7 @@ import kosmos.network.packets.*;
 import kosmos.particles.*;
 import kosmos.shadows.*;
 import kosmos.skybox.*;
+import kosmos.steam.*;
 import kosmos.water.*;
 import kosmos.world.*;
 
@@ -33,14 +34,8 @@ import static org.lwjgl.glfw.GLFW.*;
 public class KosmosInterface extends Standard {
 	private Playlist gamePlaylist;
 
-	private KeyButton screenshot;
-	private KeyButton fullscreen;
-	private KeyButton polygons;
-	private KeyButton aabbs;
-	private KeyButton closeWindow;
-
 	public KosmosInterface() {
-		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderNetwork.class, FlounderBounding.class, KosmosShadows.class, KosmosParticles.class, KosmosWater.class, KosmosSkybox.class, KosmosWorld.class, KosmosChunks.class);
+		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderNetwork.class, KosmosSteam.class, FlounderBounding.class, KosmosShadows.class, KosmosParticles.class, KosmosWater.class, KosmosSkybox.class, KosmosWorld.class, KosmosChunks.class);
 	}
 
 	@Override
@@ -53,13 +48,9 @@ public class KosmosInterface extends Standard {
 			FlounderSound.getMusicPlayer().unpauseTrack();
 		}
 
-		this.screenshot = new KeyButton(GLFW_KEY_F2);
-		this.fullscreen = new KeyButton(GLFW_KEY_F11);
-		this.polygons = new KeyButton(GLFW_KEY_P);
-		this.aabbs = new KeyButton(GLFW_KEY_O);
-		this.closeWindow = new KeyButton(GLFW_KEY_DELETE);
-
 		FlounderEvents.addEvent(new IEvent() {
+			KeyButton screenshot = new KeyButton(GLFW_KEY_F2);
+
 			@Override
 			public boolean eventTriggered() {
 				return screenshot.wasDown();
@@ -72,6 +63,8 @@ public class KosmosInterface extends Standard {
 		});
 
 		FlounderEvents.addEvent(new IEvent() {
+			KeyButton fullscreen = new KeyButton(GLFW_KEY_F11);
+
 			@Override
 			public boolean eventTriggered() {
 				return fullscreen.wasDown();
@@ -84,6 +77,8 @@ public class KosmosInterface extends Standard {
 		});
 
 		FlounderEvents.addEvent(new IEvent() {
+			KeyButton polygons = new KeyButton(GLFW_KEY_P);
+
 			@Override
 			public boolean eventTriggered() {
 				return polygons.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
@@ -95,34 +90,9 @@ public class KosmosInterface extends Standard {
 			}
 		});
 
-		/*FlounderEvents.addEvent(new IEvent() {
-			private KeyButton key = new KeyButton(GLFW_KEY_E);
-
-			@Override
-			public boolean eventTriggered() {
-				return key.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
-			}
-
-			@Override
-			public void onEvent() {
-				for (Entity entity : FlounderEntities.getEntities().getAll()) {
-					String[] path = entity.getClass().getName().split("\\.");
-					String name = path[path.length - 1].trim();
-
-					List<IComponentEditor> editorList = new ArrayList<>();
-
-					for (IComponentEntity ce : entity.getComponents()) {
-						if (ce instanceof IComponentEditor) {
-							editorList.add((IComponentEditor) ce);
-						}
-					}
-
-					FlounderEntities.save("kosmos.entities.instances", editorList, name);
-				}
-			}
-		});*/
-
 		FlounderEvents.addEvent(new IEvent() {
+			KeyButton aabbs = new KeyButton(GLFW_KEY_O);
+
 			@Override
 			public boolean eventTriggered() {
 				return aabbs.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
@@ -135,6 +105,8 @@ public class KosmosInterface extends Standard {
 		});
 
 		FlounderEvents.addEvent(new IEvent() {
+			KeyButton closeWindow = new KeyButton(GLFW_KEY_DELETE);
+
 			@Override
 			public boolean eventTriggered() {
 				return closeWindow.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
@@ -142,26 +114,18 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public void onEvent() {
+				if (FlounderNetwork.getSocketClient() != null) {
+					new PacketDisconnect(FlounderNetwork.getUsername()).writeData(FlounderNetwork.getSocketClient());
+					FlounderNetwork.closeClient();
+				}
+
 				Framework.requestClose();
 			}
 		});
-
-		/*try {
-			if (!SteamAPI.init()) {
-				// Steamworks initialization error, e.g. Steam client not running
-			}
-		} catch (SteamException e) {
-			FlounderLogger.exception(e);
-		}
-
-		SteamAPI.printDebugInfo(System.out);*/
 	}
 
 	@Override
 	public void update() {
-	/*	if (SteamAPI.isSteamRunning()) {
-			SteamAPI.runCallbacks();
-		}*/
 	}
 
 	@Override
@@ -171,7 +135,6 @@ public class KosmosInterface extends Standard {
 
 	@Override
 	public void dispose() {
-		//	SteamAPI.shutdown();
 		KosmosConfigs.saveAllConfigs();
 	}
 

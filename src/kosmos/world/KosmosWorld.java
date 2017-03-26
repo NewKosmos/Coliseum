@@ -11,15 +11,11 @@ package kosmos.world;
 
 import flounder.entities.*;
 import flounder.framework.*;
-import flounder.guis.*;
 import flounder.helpers.*;
-import flounder.lights.*;
-import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.noise.*;
 import flounder.profiling.*;
-import flounder.visual.*;
 import kosmos.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
@@ -34,19 +30,6 @@ public class KosmosWorld extends Module {
 
 	public static final float GRAVITY = -11.0f;
 
-	public static final Colour SKY_COLOUR_NIGHT = new Colour(0.0f, 0.07f, 0.19f);
-	public static final Colour SKY_COLOUR_SUNRISE = new Colour(0.713f, 0.494f, 0.356f);
-	public static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.30f, 0.70f);
-
-	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.713f, 0.494f, 0.356f);
-	public static final Colour SUN_COLOUR_DAY = new Colour(0.60f, 0.60f, 0.60f);
-
-	public static final Colour MOON_COLOUR = new Colour(0.20f, 0.20f, 0.20f);
-
-	public static final float DAY_NIGHT_CYCLE = 300.0f; // The day/night length (sec).
-
-	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.5f, 0.0f, 0.5f); // The starting light direction.
-
 	private PerlinNoise noise;
 
 	private Map<String, Pair<Vector3f, Vector3f>> playerQue;
@@ -55,14 +38,6 @@ public class KosmosWorld extends Module {
 	private Entity entityPlayer;
 	private Entity entitySun;
 	private Entity entityMoon;
-
-	private Fog fog;
-
-	private LinearDriver dayDriver;
-	private float dayFactor;
-	private Colour skyColour;
-	private Vector3f lightRotation;
-	private Vector3f lightPosition;
 
 	private float brightnessBoost;
 
@@ -79,14 +54,6 @@ public class KosmosWorld extends Module {
 
 		this.playerQue = new HashMap<>();
 		this.players = new HashMap<>();
-
-		this.fog = new Fog(new Colour(), 0.02f, 2.0f, 0.0f, 50.0f);
-
-		this.dayDriver = new LinearDriver(0.0f, 100.0f, DAY_NIGHT_CYCLE);
-		this.dayFactor = 0.0f;
-		this.skyColour = new Colour(SKY_COLOUR_DAY);
-		this.lightRotation = new Vector3f();
-		this.lightPosition = new Vector3f(LIGHT_DIRECTION);
 
 		this.brightnessBoost = KosmosConfigs.BRIGHTNESS_BOOST.getFloat();
 	}
@@ -124,13 +91,6 @@ public class KosmosWorld extends Module {
 				playerQue.remove(name);
 			}
 		}
-
-		// Update the sky colours and sun position.
-		dayFactor = dayDriver.update(Framework.getDelta()) / 100.0f; // 0.52f
-		Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), skyColour);
-		Colour.interpolate(skyColour, SKY_COLOUR_DAY, getShadowFactor(), skyColour);
-		Vector3f.rotate(LIGHT_DIRECTION, lightRotation.set(dayFactor * 360.0f, 0.0f, 0.0f), lightPosition);
-		fog.setFogColour(skyColour);
 	}
 
 	@Override
@@ -196,6 +156,10 @@ public class KosmosWorld extends Module {
 		INSTANCE.players.clear();
 	}
 
+	public static Map<String, Entity> getPlayers() {
+		return INSTANCE.players;
+	}
+
 	public static int connectedPlayers() {
 		return INSTANCE.players.size();
 	}
@@ -210,38 +174,6 @@ public class KosmosWorld extends Module {
 
 	public static Entity getEntityMoon() {
 		return INSTANCE.entityMoon;
-	}
-
-	public static Fog getFog() {
-		return INSTANCE.fog;
-	}
-
-	public static float getDayFactor() {
-		return INSTANCE.dayFactor;
-	}
-
-	public static float getSunriseFactor() {
-		return (float) -(Math.sin(2.0 * Math.PI * getDayFactor()) - 1.0) / 2.0f;
-	}
-
-	public static float getShadowFactor() {
-		return (float) Maths.clamp(1.7f * Math.sin(2.0f * Math.PI * getDayFactor()), 0.0, 1.0);
-	}
-
-	public static float starIntensity() {
-		return (1.0f - KosmosWorld.getShadowFactor()) + (((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 0.5f : 0.0f);
-	}
-
-	public static Colour getSkyColour() {
-		return INSTANCE.skyColour;
-	}
-
-	public static Vector3f getLightRotation() {
-		return INSTANCE.lightRotation;
-	}
-
-	public static Vector3f getLightPosition() {
-		return INSTANCE.lightPosition;
 	}
 
 	public static float getBrightnessBoost() {

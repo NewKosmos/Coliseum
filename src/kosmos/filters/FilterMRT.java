@@ -17,6 +17,7 @@ import flounder.profiling.*;
 import flounder.resources.*;
 import kosmos.entities.components.*;
 import kosmos.shadows.*;
+import kosmos.skybox.*;
 import kosmos.world.*;
 
 public class FilterMRT extends PostFilter {
@@ -68,14 +69,14 @@ public class FilterMRT extends PostFilter {
 		shader.getUniformInt("shadowMapSize").loadInt(KosmosShadows.getShadowSize());
 		shader.getUniformInt("shadowPCF").loadInt(KosmosShadows.getShadowPCF());
 		shader.getUniformFloat("shadowBias").loadFloat(KosmosShadows.getShadowBias());
-		shader.getUniformFloat("shadowDarkness").loadFloat(KosmosShadows.getShadowDarkness() * KosmosWorld.getShadowFactor());
+		shader.getUniformFloat("shadowDarkness").loadFloat(KosmosShadows.getShadowDarkness() * KosmosSkybox.getShadowFactor());
 
 		shader.getUniformFloat("brightnessBoost").loadFloat(KosmosWorld.getBrightnessBoost());
 
-		if (KosmosWorld.getFog() != null) {
-			shader.getUniformVec3("fogColour").loadVec3(KosmosWorld.getFog().getFogColour());
-			shader.getUniformFloat("fogDensity").loadFloat(KosmosWorld.getFog().getFogDensity());
-			shader.getUniformFloat("fogGradient").loadFloat(KosmosWorld.getFog().getFogGradient());
+		if (KosmosSkybox.getFog() != null) {
+			shader.getUniformVec3("fogColour").loadVec3(KosmosSkybox.getFog().getFogColour());
+			shader.getUniformFloat("fogDensity").loadFloat(KosmosSkybox.getFog().getFogDensity());
+			shader.getUniformFloat("fogGradient").loadFloat(KosmosSkybox.getFog().getFogGradient());
 		} else {
 			shader.getUniformVec3("fogColour").loadVec3(1.0f, 1.0f, 1.0f);
 			shader.getUniformFloat("fogDensity").loadFloat(0.003f);

@@ -5,7 +5,7 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
-import kosmos.world.*;
+import kosmos.skybox.*;
 
 public class OverlayHUD extends ScreenObject {
 	private GuiObject crossHair;
@@ -65,7 +65,7 @@ public class OverlayHUD extends ScreenObject {
 
 		@Override
 		public void updateObject() {
-			float p = KosmosWorld.getDayFactor();
+			float p = KosmosSkybox.getDayFactor();
 			progress.setSelectedRow((int) Math.floor(p * Math.pow(progress.getTexture().getNumberOfRows(), 2)));
 		}
 

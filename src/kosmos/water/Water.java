@@ -69,24 +69,6 @@ public class Water {
 		this.modelMatrix = new Matrix4f();
 		this.moved = true;
 
-		/*FlounderEvents.addEvent(new IEvent() {
-			private KeyButton keyButton = new KeyButton(GLFW.GLFW_KEY_I);
-
-			@Override
-			public boolean eventTriggered() {
-				return keyButton.wasDown();
-			}
-
-			@Override
-			public void onEvent() {
-				if (colour.a == 1.0f) {
-					colour.a = COLOUR_INTENSITY;
-				} else {
-					colour.a = 1.0f;
-				}
-			}
-		});*/
-
 		generateMesh();
 	}
 

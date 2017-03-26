@@ -12,13 +12,11 @@ package kosmos.uis;
 import flounder.camera.*;
 import flounder.entities.*;
 import flounder.framework.*;
-import flounder.guis.*;
 import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.profiling.*;
-import kosmos.*;
 import kosmos.camera.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
@@ -47,6 +45,30 @@ public interface ICommand {
 			public void runCommand(String fullCommand) {
 				for (ConsoleCommands commands : ConsoleCommands.values()) {
 					String log = "    [" + commands.getCommand().commandPrefix() + "]: " + commands.getCommand().commandDescription();
+					OverlayChat.addText(log, new Colour(0.81f, 0.81f, 0.81f));
+				}
+			}
+		}),
+		PLAYERS(new ICommand() {
+			@Override
+			public String commandPrefix() {
+				return "players";
+			}
+
+			@Override
+			public String commandDescription() {
+				return "Lists all the players connected to the server.";
+			}
+
+			@Override
+			public void runCommand(String fullCommand) {
+				for (String username : KosmosWorld.getPlayers().keySet()) {
+					String log = "    [" + username + "]: " + KosmosWorld.getPlayers().get(username).toString();
+					OverlayChat.addText(log, new Colour(0.81f, 0.81f, 0.81f));
+				}
+
+				if (FlounderNetwork.getSocketClient() == null) {
+					String log = "    You are in single player! No other players connected.";
 					OverlayChat.addText(log, new Colour(0.81f, 0.81f, 0.81f));
 				}
 			}

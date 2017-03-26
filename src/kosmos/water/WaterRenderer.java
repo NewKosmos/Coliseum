@@ -34,17 +34,6 @@ public class WaterRenderer extends Renderer {
 		this.reflectionFBO = FBO.newFBO(KosmosWater.getReflectionQuality()).attachments(3).withAlphaChannel(true).depthBuffer(DepthBufferType.TEXTURE).create();
 		this.pipelineMRT = new FilterMRT(FBO.newFBO(1.0f).disableTextureWrap().create());
 		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL20.GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
-
-		/*FlounderEvents.addEvent(new IEvent() {
-			private KeyButton k = new KeyButton(GLFW.GLFW_KEY_KP_ADD);
-			@Override public boolean eventTriggered() {return k.wasDown();}
-			@Override public void onEvent() {setReflectionQuality(getReflectionQuality() + 0.1f);}
-		});
-		FlounderEvents.addEvent(new IEvent() {
-			private KeyButton k = new KeyButton(GLFW.GLFW_KEY_KP_SUBTRACT);
-			@Override public boolean eventTriggered() {return k.wasDown();}
-			@Override public void onEvent() {setReflectionQuality(getReflectionQuality() - 0.1f);}
-		});*/
 	}
 
 	@Override

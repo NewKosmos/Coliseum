@@ -18,7 +18,7 @@ import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
 import kosmos.entities.components.*;
-import kosmos.world.*;
+import kosmos.skybox.*;
 
 public class InstanceSun extends Entity {
 	private static final ModelObject model = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "sun", "sun.obj")).create();
@@ -28,7 +28,7 @@ public class InstanceSun extends Entity {
 		super(structure, position, rotation);
 		new ComponentCelestial(this, true);
 		new ComponentModel(this, 13.0f, model, texture, 0);
-		new ComponentLight(this, new Vector3f(), new Colour(KosmosWorld.SUN_COLOUR_DAY), new Attenuation(1.0f, 0.0f, 0.0f));
+		new ComponentLight(this, new Vector3f(), new Colour(KosmosSkybox.SUN_COLOUR_DAY), new Attenuation(1.0f, 0.0f, 0.0f));
 		new ComponentSurface(this, 1.0f, 0.0f, true, true);
 		//new ComponentCollider(this);
 		//new ComponentCollision(this);

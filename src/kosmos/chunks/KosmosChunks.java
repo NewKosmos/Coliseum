@@ -52,11 +52,11 @@ public class KosmosChunks extends Module {
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
 
 		/*FlounderEvents.addEvent(new IEvent() {
-			private MouseButton button = new MouseButton(GLFW.GLFW_MOUSE_BUTTON_1);
+			private MouseButton placeTree = new MouseButton(GLFW.GLFW_MOUSE_BUTTON_1);
 
 			@Override
 			public boolean eventTriggered() {
-				return button.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
+				return placeTree.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
 			}
 
 			@Override

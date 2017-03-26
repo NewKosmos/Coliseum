@@ -15,7 +15,7 @@ public class KosmosGuis extends GuiMaster {
 	// private static final Colour COLOUR_PRIMARY = new Colour(0.1f, 0.8f, 0.2f); // Neon Green.
 	private static final Colour COLOUR_PRIMARY = new Colour(0.0824f, 0.396f, 0.753f); // Water Blue.
 
-	public static final float SLIDE_TIME = 0.7f;
+	public static final float SLIDE_TIME = 0.5f;
 
 	private OverlayAlpha overlayAlpha;
 	private OverlayHUD overlayHUD;
@@ -47,11 +47,11 @@ public class KosmosGuis extends GuiMaster {
 		FlounderGuis.getSelector().initJoysticks(0, 0, 1, 2, 3);
 
 		FlounderEvents.addEvent(new IEvent() {
-			private CompoundButton k = new CompoundButton(new KeyButton(GLFW_KEY_ESCAPE), new JoystickButton(0, 7));
+			private CompoundButton escape = new CompoundButton(new KeyButton(GLFW_KEY_ESCAPE), new JoystickButton(0, 7));
 
 			@Override
 			public boolean eventTriggered() {
-				return k.wasDown();
+				return escape.wasDown();
 			}
 
 			@Override
@@ -61,11 +61,11 @@ public class KosmosGuis extends GuiMaster {
 		});
 
 		FlounderEvents.addEvent(new IEvent() {
-			private KeyButton k = new KeyButton(GLFW_KEY_F3);
+			private KeyButton toggleDebug = new KeyButton(GLFW_KEY_F3);
 
 			@Override
 			public boolean eventTriggered() {
-				return k.wasDown();
+				return toggleDebug.wasDown();
 			}
 
 			@Override
@@ -75,11 +75,11 @@ public class KosmosGuis extends GuiMaster {
 		});
 
 		FlounderEvents.addEvent(new IEvent() {
-			private KeyButton k = new KeyButton(GLFW_KEY_F4);
+			private KeyButton toggleHUD = new KeyButton(GLFW_KEY_F4);
 
 			@Override
 			public boolean eventTriggered() {
-				return k.wasDown();
+				return toggleHUD.wasDown();
 			}
 
 			@Override
@@ -89,11 +89,11 @@ public class KosmosGuis extends GuiMaster {
 		});
 
 		FlounderEvents.addEvent(new IEvent() {
-			private KeyButton k = new KeyButton(GLFW_KEY_ENTER);
+			private KeyButton toggleChat = new KeyButton(GLFW_KEY_ENTER);
 
 			@Override
 			public boolean eventTriggered() {
-				return k.wasDown();
+				return toggleChat.wasDown();
 			}
 
 			@Override

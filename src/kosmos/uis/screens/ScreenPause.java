@@ -50,10 +50,12 @@ public class ScreenPause extends ScreenObject {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(true);
+
 				if (FlounderNetwork.getSocketClient() != null) {
 					new PacketDisconnect(FlounderNetwork.getUsername()).writeData(FlounderNetwork.getSocketClient());
 					FlounderNetwork.closeClient();
 				}
+
 				KosmosWorld.removeAllPlayers();
 				KosmosWorld.deletePlayer();
 			}

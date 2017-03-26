@@ -1,7 +1,6 @@
 package kosmos.network.packets;
 
 import flounder.framework.*;
-import flounder.guis.*;
 import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
@@ -68,7 +67,9 @@ public class PacketLogin extends Packet {
 
 		// If new client connects tell them the connected clients.
 		for (ClientInfo info : FlounderNetwork.getSocketServer().getConnected()) {
-			server.sendData(new PacketLogin(info.getUsername()).getData(), address, port);
+			if (!info.getUsername().equals(username)) {
+				server.sendData(new PacketLogin(info.getUsername()).getData(), address, port);
+			}
 		}
 	}
 

@@ -18,7 +18,7 @@ import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
 import kosmos.entities.components.*;
-import kosmos.world.*;
+import kosmos.skybox.*;
 
 public class InstanceMoon extends Entity {
 	private static final ModelObject model = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "moon", "moon.obj")).create();
@@ -29,7 +29,7 @@ public class InstanceMoon extends Entity {
 		new ComponentCelestial(this, false);
 		new ComponentModel(this, 8.0f, model, texture, 1);
 		new ComponentSurface(this, 1.0f, 0.0f, true, true);
-		new ComponentLight(this, new Vector3f(), new Colour(KosmosWorld.MOON_COLOUR), new Attenuation(1.0f, 0.0f, 0.0f));
+		new ComponentLight(this, new Vector3f(), new Colour(KosmosSkybox.MOON_COLOUR), new Attenuation(1.0f, 0.0f, 0.0f));
 		//new ComponentCollider(this);
 		//new ComponentCollision(this);
 	}

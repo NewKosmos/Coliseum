@@ -7,6 +7,7 @@ import flounder.guis.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;
+import kosmos.skybox.*;
 import kosmos.world.*;
 
 import java.util.Timer;
@@ -54,7 +55,7 @@ public class OverlayDebug extends ScreenObject {
 			fpsText.setText("FPS: " + Maths.roundToPlace(1.0f / Framework.getDeltaRender(), 1));
 			upsText.setText("UPS: " + Maths.roundToPlace(1.0f / Framework.getDelta(), 1));
 			positionText.setText("POSITION: [" + (FlounderCamera.getPlayer() == null ? "NULL" : Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().x, 1) + ", " + Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().y, 1) + ", " + Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().z, 1) + "]"));
-			timeText.setText("TIME: " + Maths.roundToPlace(KosmosWorld.getDayFactor(), 3));
+			timeText.setText("TIME: " + Maths.roundToPlace(KosmosSkybox.getDayFactor(), 3));
 			seedText.setText("SEED: " + KosmosWorld.getNoise().getSeed());
 			updateText = false;
 		}
