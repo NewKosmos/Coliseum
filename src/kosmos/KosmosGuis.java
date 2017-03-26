@@ -44,6 +44,8 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlaySlider.setAlphaDriver(new ConstantDriver(0.0f));
 
+		FlounderGuis.getSelector().initJoysticks(0, 0, 1, 2, 3);
+
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton k = new KeyButton(GLFW_KEY_ENTER);
 
@@ -63,7 +65,7 @@ public class KosmosGuis extends GuiMaster {
 		});
 
 		FlounderEvents.addEvent(new IEvent() {
-			private KeyButton k = new KeyButton(GLFW_KEY_ESCAPE);
+			private CompoundButton k = new CompoundButton(new KeyButton(GLFW_KEY_ESCAPE), new JoystickButton(0, 7));
 
 			@Override
 			public boolean eventTriggered() {
