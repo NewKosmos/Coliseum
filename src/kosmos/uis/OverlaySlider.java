@@ -14,12 +14,11 @@ import flounder.inputs.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;
 import kosmos.*;
+import kosmos.skybox.*;
 import kosmos.uis.screens.*;
 import org.lwjgl.glfw.*;
 
 public class OverlaySlider extends ScreenObject {
-	public static KeyButton BACK_KEY = new KeyButton(GLFW.GLFW_KEY_BACKSPACE);
-
 	private ScreenPause screenPause;
 	private ScreenStart screenStart;
 
@@ -42,10 +41,6 @@ public class OverlaySlider extends ScreenObject {
 
 	@Override
 	public void updateObject() {
-		if (BACK_KEY.wasDown()) {
-			closeSecondaryScreen();
-		}
-
 		if (newSecondaryScreen != null && secondaryScreen.getAlpha() == 0.0f) {
 			secondaryScreen = newSecondaryScreen;
 			newSecondaryScreen = null;
@@ -56,7 +51,7 @@ public class OverlaySlider extends ScreenObject {
 		}
 	}
 
-	public void setNewSecondaryScreen(ScreenObject secondScreen, boolean slideForwards) {
+	public void setNewSecondaryScreen(ScreenObject secondScreen) {
 		if (secondaryScreen == secondScreen || newSecondaryScreen == secondScreen) {
 			return;
 		}
@@ -81,23 +76,22 @@ public class OverlaySlider extends ScreenObject {
 			return;
 		}
 
-		if (secondaryScreen != null) {
+		if (secondaryScreen != null && secondaryScreen.getAlpha() == 1.0f) {
 			secondaryScreen.setAlphaDriver(new SlideDriver(1.0f, 0.0f, KosmosGuis.SLIDE_TIME));
+			menuActive.setAlphaDriver(new SlideDriver(0.0f, 1.0f, KosmosGuis.SLIDE_TIME));
 		}
-
-		menuActive.setAlphaDriver(new SlideDriver(0.0f, 1.0f, KosmosGuis.SLIDE_TIME));
 	}
 
 	public void sliderStartMenu(boolean useStartMenu) {
-		if (useStartMenu) {
+		if (useStartMenu && menuActive != screenStart) {
 			this.menuActive = screenStart;
 			this.screenPause.setAlphaDriver(new ConstantDriver(0.0f));
-		} else {
+			this.menuActive.setAlphaDriver(new ConstantDriver(1.0f));
+		} else if (menuActive != screenPause) {
 			this.menuActive = screenPause;
 			this.screenStart.setAlphaDriver(new ConstantDriver(0.0f));
+			this.menuActive.setAlphaDriver(new ConstantDriver(1.0f));
 		}
-
-		this.menuActive.setAlphaDriver(new ConstantDriver(1.0f));
 	}
 
 	public boolean inStartMenu() {

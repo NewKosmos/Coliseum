@@ -131,7 +131,7 @@ public class KosmosCamera extends Camera {
 
 			@Override
 			public boolean eventTriggered() {
-				return fpsToggle.wasDown();
+				return fpsToggle.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
 			}
 
 			@Override

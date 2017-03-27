@@ -40,8 +40,10 @@ public class ScreenStart extends ScreenObject {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
-				KosmosWorld.generatePlayer();
 				((KosmosGuis) FlounderGuis.getGuiMaster()).togglePause(true);
+
+				// Generates the player and the world.
+				KosmosWorld.generatePlayer();
 			}
 		});
 
@@ -50,15 +52,18 @@ public class ScreenStart extends ScreenObject {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
-				KosmosWorld.generatePlayer();
 				((KosmosGuis) FlounderGuis.getGuiMaster()).togglePause(true);
 
+				// Connects to the server.
 				String username = KosmosConfigs.CLIENT_USERNAME.getString();
 				String serverIP = KosmosConfigs.SERVER_IP.setReference(() -> FlounderNetwork.getSocketClient() == null ? null : FlounderNetwork.getSocketClient().getIpAddress()).getString();
 				int serverPort = KosmosConfigs.SERVER_PORT.setReference(() -> FlounderNetwork.getSocketClient() == null ? null : FlounderNetwork.getSocketClient().getServerPort()).getInteger();
 				FlounderNetwork.startClient(username, serverIP, serverPort);
 				PacketLogin loginPacket = new PacketLogin(username);
 				loginPacket.writeData(FlounderNetwork.getSocketClient());
+
+				// Generates the player and the world.
+				KosmosWorld.generatePlayer();
 			}
 		});
 
@@ -68,7 +73,7 @@ public class ScreenStart extends ScreenObject {
 		settings.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenSettings, true);
+				slider.setNewSecondaryScreen(screenSettings);
 			}
 		});
 
@@ -78,7 +83,7 @@ public class ScreenStart extends ScreenObject {
 		about.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenAbout, true);
+				slider.setNewSecondaryScreen(screenAbout);
 			}
 		});
 

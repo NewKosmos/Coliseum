@@ -209,6 +209,7 @@ public class KosmosRenderer extends RendererMaster {
 
 				if (KosmosWorld.getEntitySun() != null) {
 					filterLensFlare.setSunPosition(KosmosWorld.getEntitySun().getPosition());
+					filterLensFlare.setWorldHeight(KosmosSkybox.getSunHeight());
 					filterLensFlare.applyFilter(output.getColourTexture(0));
 					output = filterLensFlare.fbo;
 				}

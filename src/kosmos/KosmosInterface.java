@@ -40,6 +40,9 @@ public class KosmosInterface extends Standard {
 
 	@Override
 	public void init() {
+		FlounderSound.getMusicPlayer().setVolume(KosmosConfigs.MUSIC_VOLUME.setReference(() -> FlounderSound.getMusicPlayer().getVolume()).getFloat());
+		FlounderSound.getSourcePool().setSystemVolume(KosmosConfigs.SOUND_VOLUME.setReference(() -> FlounderSound.getSourcePool().getSystemVolume()).getFloat());
+
 		gamePlaylist = new Playlist();
 		gamePlaylist.addMusic(Sound.loadSoundInBackground(new MyFile(MyFile.RES_FOLDER, "music", "09-hitori-bocchi-1b.wav"), 0.80f, 1.0f));
 		FlounderSound.getMusicPlayer().playMusicPlaylist(gamePlaylist, true, 4.0f, 10.0f);

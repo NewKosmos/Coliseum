@@ -39,7 +39,7 @@ public class ScreenSettingAudio extends ScreenObject {
 		back.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
-				slider.setNewSecondaryScreen(settings, false);
+				slider.setNewSecondaryScreen(settings);
 			}
 		});
 	}

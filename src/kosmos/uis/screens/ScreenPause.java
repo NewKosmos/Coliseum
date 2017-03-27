@@ -40,7 +40,7 @@ public class ScreenPause extends ScreenObject {
 		settings.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenSettings, true);
+				slider.setNewSecondaryScreen(screenSettings);
 			}
 		});
 
@@ -50,7 +50,7 @@ public class ScreenPause extends ScreenObject {
 		about.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenAbout, true);
+				slider.setNewSecondaryScreen(screenAbout);
 			}
 		});
 

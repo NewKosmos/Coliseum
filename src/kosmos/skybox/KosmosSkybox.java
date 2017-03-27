@@ -50,7 +50,7 @@ public class KosmosSkybox extends Module {
 
 	public static final Colour MOON_COLOUR = new Colour(0.20f, 0.20f, 0.20f);
 
-	public static final float DAY_NIGHT_CYCLE = 300.0f; // The day/night length (sec).
+	public static final float DAY_NIGHT_CYCLE = 1200.0f; // The day/night length (sec).
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.5f, 0.0f, 0.5f); // The starting light direction.
 
@@ -89,7 +89,13 @@ public class KosmosSkybox extends Module {
 		}
 
 		// Update the sky colours and sun position.
-		dayFactor = dayDriver.update(Framework.getDelta()) / 100.0f; // 0.52f
+		float scaledSpeed = 0.0f;
+
+		if (FlounderGuis.getGuiMaster() instanceof KosmosGuis) {
+			scaledSpeed = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 10.0f : 2.0f;
+		}
+
+		dayFactor = dayDriver.update(Framework.getDelta() * scaledSpeed) / 100.0f;
 		Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), skyColour);
 		Colour.interpolate(skyColour, SKY_COLOUR_DAY, getShadowFactor(), skyColour);
 		Vector3f.rotate(LIGHT_DIRECTION, lightRotation.set(dayFactor * 360.0f, 0.0f, 0.0f), lightPosition);
@@ -115,6 +121,10 @@ public class KosmosSkybox extends Module {
 		return INSTANCE.fog;
 	}
 
+	public static void setDayDriver(LinearDriver dayDriver) {
+		INSTANCE.dayDriver = dayDriver;
+	}
+
 	public static float getDayFactor() {
 		return INSTANCE.dayFactor;
 	}
@@ -125,6 +135,16 @@ public class KosmosSkybox extends Module {
 
 	public static float getShadowFactor() {
 		return (float) Maths.clamp(1.7f * Math.sin(2.0f * Math.PI * getDayFactor()), 0.0, 1.0);
+	}
+
+	public static float getSunHeight() {
+		float addedHeight = 0.0f;
+
+		if (FlounderGuis.getGuiMaster() instanceof KosmosGuis) {
+			addedHeight = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 500.0f : 0.0f;
+		}
+
+		return KosmosWorld.getEntitySun().getPosition().getY() + addedHeight;
 	}
 
 	public static float starIntensity() {

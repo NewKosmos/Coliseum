@@ -48,7 +48,7 @@ public class ScreenSettings extends ScreenObject {
 		general.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenGeneral, true);
+				slider.setNewSecondaryScreen(screenGeneral);
 			}
 		});
 
@@ -58,7 +58,7 @@ public class ScreenSettings extends ScreenObject {
 		debug.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenDebug, true);
+				slider.setNewSecondaryScreen(screenDebug);
 			}
 		});
 
@@ -76,7 +76,7 @@ public class ScreenSettings extends ScreenObject {
 		audio.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenAudio, true);
+				slider.setNewSecondaryScreen(screenAudio);
 			}
 		});
 
