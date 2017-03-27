@@ -18,7 +18,6 @@ import flounder.resources.*;
 import kosmos.entities.components.*;
 import kosmos.shadows.*;
 import kosmos.skybox.*;
-import kosmos.world.*;
 
 public class FilterMRT extends PostFilter {
 	private static final int LIGHTS = 64;
@@ -71,7 +70,7 @@ public class FilterMRT extends PostFilter {
 		shader.getUniformFloat("shadowBias").loadFloat(KosmosShadows.getShadowBias());
 		shader.getUniformFloat("shadowDarkness").loadFloat(KosmosShadows.getShadowDarkness() * KosmosSkybox.getShadowFactor());
 
-		shader.getUniformFloat("brightnessBoost").loadFloat(KosmosWorld.getBrightnessBoost());
+		shader.getUniformFloat("brightnessBoost").loadFloat(KosmosShadows.getBrightnessBoost());
 
 		if (KosmosSkybox.getFog() != null) {
 			shader.getUniformVec3("fogColour").loadVec3(KosmosSkybox.getFog().getFogColour());

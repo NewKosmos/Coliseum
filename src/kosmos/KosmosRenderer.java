@@ -17,7 +17,6 @@ import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
@@ -136,7 +135,7 @@ public class KosmosRenderer extends RendererMaster {
 		entitiesRenderer.setRenderPlayer(true);
 
 		/* Water Reflection & Refraction */
-		if (KosmosWater.reflectionsEnabled() && KosmosWater.getWater() != null) {
+		if (KosmosWater.reflectionsEnabled() && KosmosWater.getColourIntensity() != 1.0f && KosmosWater.getWater() != null) {
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
 
 			if (KosmosWater.reflectionShadows()) {

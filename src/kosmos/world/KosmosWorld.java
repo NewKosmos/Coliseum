@@ -39,8 +39,6 @@ public class KosmosWorld extends Module {
 	private Entity entitySun;
 	private Entity entityMoon;
 
-	private float brightnessBoost;
-
 	public KosmosWorld() {
 		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEntities.class);
 	}
@@ -54,8 +52,6 @@ public class KosmosWorld extends Module {
 
 		this.playerQue = new HashMap<>();
 		this.players = new HashMap<>();
-
-		this.brightnessBoost = KosmosConfigs.BRIGHTNESS_BOOST.getFloat();
 	}
 
 	public static void generatePlayer() {
@@ -75,7 +71,6 @@ public class KosmosWorld extends Module {
 	}
 
 	public static void deletePlayer() {
-		KosmosConfigs.saveAllConfigs();
 		KosmosWater.deleteWater();
 		KosmosChunks.clear(false);
 		INSTANCE.entityPlayer.forceRemove(true);
@@ -174,14 +169,6 @@ public class KosmosWorld extends Module {
 
 	public static Entity getEntityMoon() {
 		return INSTANCE.entityMoon;
-	}
-
-	public static float getBrightnessBoost() {
-		return INSTANCE.brightnessBoost;
-	}
-
-	public static void setBrightnessBoost(float brightnessBoost) {
-		INSTANCE.brightnessBoost = brightnessBoost;
 	}
 
 	@Override

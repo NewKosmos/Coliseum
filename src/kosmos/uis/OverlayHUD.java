@@ -14,9 +14,11 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
+import kosmos.*;
 import kosmos.skybox.*;
 
 public class OverlayHUD extends ScreenObject {
+	private static int crosshairSelected;
 	private GuiObject crossHair;
 
 	private TextureObject hudTexture;
@@ -35,7 +37,8 @@ public class OverlayHUD extends ScreenObject {
 		this.statusThirst = new HudStatus(this, hudTexture, hudProgress, 3, 0.1f, new Colour(0.2f, 0.2f, 1.0f));
 		this.statusHunger = new HudStatus(this, hudTexture, hudProgress, 4, 0.2f, new Colour(1.0f, 0.4f, 0.0f));
 
-		this.crossHair = new GuiObject(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.04f, 0.04f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "crosshair.png")).setNumberOfRows(4).create(), 1);
+		crosshairSelected = KosmosConfigs.HUD_COSSHAIR_TYPE.setReference(OverlayHUD::getCrosshairSelected).getInteger();
+		this.crossHair = new GuiObject(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.04f, 0.04f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "crosshair.png")).setNumberOfRows(4).create(), crosshairSelected);
 		this.crossHair.setInScreenCoords(true);
 		this.crossHair.setColourOffset(new Colour(FlounderGuis.getGuiMaster().getPrimaryColour()));
 	}
@@ -43,6 +46,15 @@ public class OverlayHUD extends ScreenObject {
 	@Override
 	public void updateObject() {
 		this.crossHair.setColourOffset(FlounderGuis.getGuiMaster().getPrimaryColour());
+		this.crossHair.setSelectedRow(crosshairSelected);
+	}
+
+	public static int getCrosshairSelected() {
+		return crosshairSelected;
+	}
+
+	public static void setCrosshairSelected(int crosshairSelected) {
+		OverlayHUD.crosshairSelected = (int) Maths.clamp(crosshairSelected, 0, 8);
 	}
 
 	@Override

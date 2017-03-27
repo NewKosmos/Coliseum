@@ -22,14 +22,14 @@ public class ScreenSettingAudio extends ScreenObject {
 		super.setInScreenCoords(false);
 
 		// Toggle Music.
-		GuiButtonText toggleMusic = new GuiButtonText(this, new Vector2f(0.5f, 0.20f), "Music Enabled: " + !FlounderSound.getMusicPlayer().isPaused(), GuiAlign.CENTRE);
+		GuiButtonText toggleMusic = new GuiButtonText(this, new Vector2f(0.5f, 0.20f), "Music Enabled: ", GuiAlign.CENTRE);
 		FlounderEvents.addEvent(new EventChange<Boolean>(FlounderSound.getMusicPlayer()::isPaused) {
 			@Override
-			public void onEvent() {
-				toggleMusic.setText("Music Enabled: " + !FlounderSound.getMusicPlayer().isPaused());
+			public void onEvent(Boolean newValue) {
+				toggleMusic.setText("Music Enabled: " + !newValue);
 			}
 		});
-		toggleMusic.addLeftListener(new GuiButtonText.ListenerBasic() {
+		toggleMusic.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				if (!FlounderSound.getMusicPlayer().isPaused()) {
@@ -40,9 +40,13 @@ public class ScreenSettingAudio extends ScreenObject {
 			}
 		});
 
+		// Slider Music Volume.
+
+		// Slider Sound Volume.
+
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);
-		back.addLeftListener(new GuiButtonText.ListenerBasic() {
+		back.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.setNewSecondaryScreen(settings);

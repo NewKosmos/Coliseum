@@ -23,8 +23,6 @@ import java.util.*;
  * Represents the physical mesh for all the water at a certain height in the scene.
  */
 public class Water {
-	protected static final float COLOUR_INTENSITY = 0.7f; // 0 being 100% reflective, 1 disables reflections.
-
 	protected static final float WAVE_SPEED = 10.0f;
 	protected static final float WAVE_LENGTH = 5.0f;
 	protected static final float AMPLITUDE = 0.190f;
@@ -61,7 +59,7 @@ public class Water {
 		this.loaded = false;
 
 		this.aabb = new AABB(new Vector3f(0.0f, -1.0f, 0.0f), new Vector3f(0.0f, 1.0f, 0.0f));
-		this.colour = new Colour(0.0824f, 0.396f, 0.753f, COLOUR_INTENSITY);
+		this.colour = new Colour(0.0824f, 0.396f, 0.753f);
 
 		this.position = position;
 		this.rotation = rotation;
@@ -202,6 +200,7 @@ public class Water {
 			Matrix4f.transformationMatrix(position, rotation, scale, modelMatrix);
 		}
 
+		colour.a = KosmosWater.reflectionsEnabled() ? KosmosWater.getColourIntensity() : 1.0f;
 		moved = false;
 	}
 

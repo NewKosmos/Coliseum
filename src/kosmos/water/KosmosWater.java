@@ -21,6 +21,7 @@ public class KosmosWater extends Module {
 	private Water water;
 	private float waveTime;
 
+	private float colourIntensity; // 0 being 100% reflective, 1 disables reflections.
 	private boolean enableReflections;
 	private float reflectionQuality;
 	private boolean reflectionShadows;
@@ -33,6 +34,7 @@ public class KosmosWater extends Module {
 	public void init() {
 		this.waveTime = 0.0f;
 
+		this.colourIntensity = KosmosConfigs.WATER_COLOUR_INTENSITY.getFloat();
 		this.enableReflections = KosmosConfigs.WATER_REFLECTION_ENABLED.getBoolean();
 		this.reflectionQuality = KosmosConfigs.WATER_REFLECTION_QUALITY.getFloat();
 		this.reflectionShadows = KosmosConfigs.WATER_REFLECTION_SHADOWS.getBoolean();
@@ -69,6 +71,14 @@ public class KosmosWater extends Module {
 
 	public static float getWaveTime() {
 		return INSTANCE.waveTime;
+	}
+
+	public static float getColourIntensity() {
+		return INSTANCE.colourIntensity;
+	}
+
+	public static void setColourIntensity(float colourIntensity) {
+		INSTANCE.colourIntensity = colourIntensity;
 	}
 
 	public static boolean reflectionsEnabled() {

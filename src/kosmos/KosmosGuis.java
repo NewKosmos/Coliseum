@@ -15,6 +15,7 @@ import flounder.guis.*;
 import flounder.inputs.*;
 import flounder.maths.*;
 import flounder.visual.*;
+import kosmos.camera.*;
 import kosmos.uis.*;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -115,7 +116,7 @@ public class KosmosGuis extends GuiMaster {
 	@Override
 	public void update() {
 		if (!isGamePaused() && FlounderMouse.isDisplaySelected() && FlounderDisplay.isFocused()) {
-			FlounderMouse.setCursorHidden(KosmosConfigs.CAMERA_MOUSE_LOCKED.getBoolean());
+			FlounderMouse.setCursorHidden(KosmosCamera.isMouseLocked());
 		} else {
 			FlounderMouse.setCursorHidden(false);
 		}

@@ -22,13 +22,13 @@ public class ScreenSettings extends ScreenObject {
 
 		// Left and right Panes.
 		ScreenObject paneLeft = new ScreenObjectEmpty(this, new Vector2f(0.25f, 0.5f), new Vector2f(0.5f, 1.0f), true);
-		ScreenObject paneRight = new ScreenObjectEmpty(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.5f, 1.0f), true);
+		ScreenObject paneRight = new ScreenObjectEmpty(this, new Vector2f(0.75f, 0.5f), new Vector2f(0.5f, 1.0f), true);
 
 		// Screen General.
 		ScreenSettingGeneral screenGeneral = new ScreenSettingGeneral(slider, this);
 		screenGeneral.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText general = new GuiButtonText(paneLeft, new Vector2f(0.25f, 0.2f), "General", GuiAlign.CENTRE);
-		general.addLeftListener(new GuiButtonText.ListenerBasic() {
+		general.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.setNewSecondaryScreen(screenGeneral);
@@ -39,7 +39,7 @@ public class ScreenSettings extends ScreenObject {
 		ScreenSettingDebug screenDebug = new ScreenSettingDebug(slider, this);
 		screenDebug.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText debug = new GuiButtonText(paneLeft, new Vector2f(0.25f, 0.27f), "Debug", GuiAlign.CENTRE);
-		debug.addLeftListener(new GuiButtonText.ListenerBasic() {
+		debug.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.setNewSecondaryScreen(screenDebug);
@@ -50,7 +50,7 @@ public class ScreenSettings extends ScreenObject {
 		ScreenSettingClient screenClient = new ScreenSettingClient(slider, this);
 		screenClient.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText client = new GuiButtonText(paneLeft, new Vector2f(0.25f, 0.34f), "Client", GuiAlign.CENTRE);
-		client.addLeftListener(new GuiButtonText.ListenerBasic() {
+		client.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.setNewSecondaryScreen(screenClient);
@@ -61,7 +61,7 @@ public class ScreenSettings extends ScreenObject {
 		ScreenSettingAudio screenAudio = new ScreenSettingAudio(slider, this);
 		screenAudio.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText audio = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.20f), "Audio", GuiAlign.CENTRE);
-		audio.addLeftListener(new GuiButtonText.ListenerBasic() {
+		audio.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.setNewSecondaryScreen(screenAudio);
@@ -72,7 +72,7 @@ public class ScreenSettings extends ScreenObject {
 		ScreenSettingGraphics screenGraphics = new ScreenSettingGraphics(slider, this);
 		screenGraphics.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText graphics = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.27f), "Graphics", GuiAlign.CENTRE);
-		graphics.addLeftListener(new GuiButtonText.ListenerBasic() {
+		graphics.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.setNewSecondaryScreen(screenGraphics);
@@ -83,7 +83,7 @@ public class ScreenSettings extends ScreenObject {
 		ScreenSettingControls screenControls = new ScreenSettingControls(slider, this);
 		screenControls.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText controls = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.34f), "Controls", GuiAlign.CENTRE);
-		controls.addLeftListener(new GuiButtonText.ListenerBasic() {
+		controls.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.setNewSecondaryScreen(screenControls);
@@ -92,7 +92,7 @@ public class ScreenSettings extends ScreenObject {
 
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);
-		back.addLeftListener(new GuiButtonText.ListenerBasic() {
+		back.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.closeSecondaryScreen();

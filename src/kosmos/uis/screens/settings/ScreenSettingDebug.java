@@ -24,14 +24,14 @@ public class ScreenSettingDebug extends ScreenObject {
 		super.setInScreenCoords(false);
 
 		// Toggle Profiler.
-		GuiButtonText toggleProfiler = new GuiButtonText(this, new Vector2f(0.5f, 0.20f), "Developer Profiler: " + FlounderProfiler.isOpen(), GuiAlign.CENTRE);
+		GuiButtonText toggleProfiler = new GuiButtonText(this, new Vector2f(0.5f, 0.20f), "Developer Profiler: ", GuiAlign.CENTRE);
 		FlounderEvents.addEvent(new EventChange<Boolean>(FlounderProfiler::isOpen) {
 			@Override
-			public void onEvent() {
-				toggleProfiler.setText("Developer Profiler: " + FlounderProfiler.isOpen());
+			public void onEvent(Boolean newValue) {
+				toggleProfiler.setText("Developer Profiler: " + newValue);
 			}
 		});
-		toggleProfiler.addLeftListener(new GuiButtonText.ListenerBasic() {
+		toggleProfiler.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				FlounderProfiler.toggle(!FlounderProfiler.isOpen());
@@ -39,14 +39,14 @@ public class ScreenSettingDebug extends ScreenObject {
 		});
 
 		// Toggle Boundings.
-		GuiButtonText toggleBoundings = new GuiButtonText(this, new Vector2f(0.5f, 0.27f), "Render Boundings: " + FlounderBounding.renders(), GuiAlign.CENTRE);
+		GuiButtonText toggleBoundings = new GuiButtonText(this, new Vector2f(0.5f, 0.27f), "Render Boundings: ", GuiAlign.CENTRE);
 		FlounderEvents.addEvent(new EventChange<Boolean>(FlounderBounding::renders) {
 			@Override
-			public void onEvent() {
-				toggleBoundings.setText("Render Boundings: " + FlounderBounding.renders());
+			public void onEvent(Boolean newValue) {
+				toggleBoundings.setText("Render Boundings: " + newValue);
 			}
 		});
-		toggleBoundings.addLeftListener(new GuiButtonText.ListenerBasic() {
+		toggleBoundings.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				FlounderBounding.toggle(!FlounderBounding.renders());
@@ -54,14 +54,14 @@ public class ScreenSettingDebug extends ScreenObject {
 		});
 
 		// Toggle Wireframe.
-		GuiButtonText toggleWireframe = new GuiButtonText(this, new Vector2f(0.5f, 0.34f), "Wireframe Mode: " + OpenGlUtils.isInWireframe(), GuiAlign.CENTRE);
+		GuiButtonText toggleWireframe = new GuiButtonText(this, new Vector2f(0.5f, 0.34f), "Wireframe Mode: ", GuiAlign.CENTRE);
 		FlounderEvents.addEvent(new EventChange<Boolean>(OpenGlUtils::isInWireframe) {
 			@Override
-			public void onEvent() {
-				toggleWireframe.setText("Wireframe Mode: " + OpenGlUtils.isInWireframe());
+			public void onEvent(Boolean newValue) {
+				toggleWireframe.setText("Wireframe Mode: " + newValue);
 			}
 		});
-		toggleWireframe.addLeftListener(new GuiButtonText.ListenerBasic() {
+		toggleWireframe.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				OpenGlUtils.goWireframe(!OpenGlUtils.isInWireframe());
@@ -70,7 +70,7 @@ public class ScreenSettingDebug extends ScreenObject {
 
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);
-		back.addLeftListener(new GuiButtonText.ListenerBasic() {
+		back.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.setNewSecondaryScreen(settings);

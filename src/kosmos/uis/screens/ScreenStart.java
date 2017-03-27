@@ -26,33 +26,38 @@ public class ScreenStart extends ScreenObject {
 		super(slider, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
 
-		float yPosition = 0.30f;
-		float ySpacing = 0.07f;
-
+		// Game Title.
 		TextObject title = new TextObject(this, new Vector2f(0.5f, 0.15f), "New Kosmos", 5.0f, FlounderFonts.CANDARA, 1.0f, GuiAlign.CENTRE);
 		title.setInScreenCoords(true);
 		title.setColour(new Colour(1.0f, 1.0f, 1.0f, 1.0f));
 		title.setBorderColour(new Colour(0.0f, 0.0f, 0.0f));
 		title.setBorder(new ConstantDriver(0.022f));
 
+		float yPosition = 0.30f;
+		float ySpacing = 0.07f;
+
+		// Load Save.
 		GuiButtonText loadSave = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "Load Save", GuiAlign.CENTRE);
-		loadSave.addLeftListener(new GuiButtonText.ListenerBasic() {
+		loadSave.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
 				((KosmosGuis) FlounderGuis.getGuiMaster()).togglePause(true);
+				KosmosConfigs.saveAllConfigs();
 
 				// Generates the player and the world.
 				KosmosWorld.generatePlayer();
 			}
 		});
 
+		// Multiplayer.
 		GuiButtonText multiplayer = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "Multiplayer", GuiAlign.CENTRE);
-		multiplayer.addLeftListener(new GuiButtonText.ListenerBasic() {
+		multiplayer.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
 				((KosmosGuis) FlounderGuis.getGuiMaster()).togglePause(true);
+				KosmosConfigs.saveAllConfigs();
 
 				// Connects to the server.
 				String username = KosmosConfigs.CLIENT_USERNAME.getString();
@@ -67,28 +72,31 @@ public class ScreenStart extends ScreenObject {
 			}
 		});
 
+		// Settings.
 		ScreenSettings screenSettings = new ScreenSettings(slider);
 		screenSettings.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText settings = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "Settings", GuiAlign.CENTRE);
-		settings.addLeftListener(new GuiButtonText.ListenerBasic() {
+		settings.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.setNewSecondaryScreen(screenSettings);
 			}
 		});
 
+		// About.
 		ScreenAbout screenAbout = new ScreenAbout(slider);
 		screenAbout.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText about = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "About", GuiAlign.CENTRE);
-		about.addLeftListener(new GuiButtonText.ListenerBasic() {
+		about.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.setNewSecondaryScreen(screenAbout);
 			}
 		});
 
+		// Exit.
 		GuiButtonText exitGame = new GuiButtonText(this, new Vector2f(0.5f, yPosition += 1.2f * ySpacing), "Exit To Desktop", GuiAlign.CENTRE);
-		exitGame.addLeftListener(new GuiButtonText.ListenerBasic() {
+		exitGame.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				Framework.requestClose();
