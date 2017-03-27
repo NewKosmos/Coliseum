@@ -206,7 +206,7 @@ public class KosmosChunks extends Module {
 	/**
 	 * Sets the current chunk that that player is contained in. This will generate surrounding chunks.
 	 *
-	 * @param currentChunk
+	 * @param currentChunk The chunk to be set as the current.
 	 */
 	public static void setCurrent(Chunk currentChunk) {
 		if (currentChunk != null && INSTANCE.currentChunk != currentChunk) {
@@ -248,6 +248,11 @@ public class KosmosChunks extends Module {
 		}
 	}
 
+	/**
+	 * Gets the default hexagon model.
+	 *
+	 * @return The hexagon model.
+	 */
 	public static ModelObject getModelHexagon() {
 		return INSTANCE.modelHexagon;
 	}

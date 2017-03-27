@@ -49,8 +49,8 @@ public class KosmosWorld extends Module {
 	public void init() {
 		this.noise = new PerlinNoise(KosmosConfigs.SAVE_SEED.setReference(() -> noise.getSeed()).getInteger());
 
-		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(150.0f, 150.0f, 150.0f), new Vector3f(0.0f, 0.0f, 0.0f));
-		this.entitySun = new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-150.0f, -150.0f, -150.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(250.0f, 250.0f, 250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+		this.entitySun = new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-250.0f, -250.0f, -250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 
 		this.playerQue = new HashMap<>();
 		this.players = new HashMap<>();

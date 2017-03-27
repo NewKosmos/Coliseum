@@ -13,7 +13,7 @@ import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.particles.loading.*;
+import kosmos.particles.*;
 
 /**
  * A interface used to define biome types.
@@ -54,7 +54,7 @@ public interface IBiome {
 	 *
 	 * @return The type of weather particle.
 	 */
-	ParticleTemplate getWeatherParticle();
+	ParticleType getWeatherParticle();
 
 	/**
 	 * Gets the average day temp (celsius).

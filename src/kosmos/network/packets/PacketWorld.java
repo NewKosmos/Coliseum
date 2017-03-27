@@ -1,7 +1,15 @@
+/*
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ *
+ * This source file is part of New Kosmos
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 package kosmos.network.packets;
 
 import flounder.framework.*;
-import flounder.logger.*;
 import flounder.networking.*;
 import kosmos.chunks.*;
 import kosmos.world.*;
@@ -37,10 +45,10 @@ public class PacketWorld extends Packet {
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
 		boolean offServerTime = Math.abs(timeSec - Framework.getTimeSec()) > 0.866f;
 
-		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "]: world seed=" + seed + ", off server time=" + offServerTime +
-				", server time=" + timeSec + ", client time: " + Framework.getTimeSec() + ", client offset: " + Framework.getTimeOffset() +
-				", client original time: " + (Framework.getTimeSec() - Framework.getTimeOffset())
-		);
+		//	FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "]: world seed=" + seed + ", off server time=" + offServerTime +
+		//			", server time=" + timeSec + ", client time: " + Framework.getTimeSec() + ", client offset: " + Framework.getTimeOffset() +
+		//			", client original time: " + (Framework.getTimeSec() - Framework.getTimeOffset())
+		//	);
 
 		if (KosmosWorld.getNoise().getSeed() != seed) {
 			KosmosWorld.getNoise().setSeed(seed);
@@ -54,6 +62,7 @@ public class PacketWorld extends Packet {
 
 	@Override
 	public void serverHandlePacket(Server server, InetAddress address, int port) {
+		// Fully client sided packet.
 	}
 
 	@Override

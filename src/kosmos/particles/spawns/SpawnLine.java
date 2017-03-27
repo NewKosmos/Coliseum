@@ -10,7 +10,7 @@
 package kosmos.particles.spawns;
 
 import flounder.maths.vectors.*;
-import kosmos.particles.loading.*;
+import kosmos.entities.components.*;
 
 import java.util.*;
 
@@ -29,7 +29,7 @@ public class SpawnLine implements IParticleSpawn {
 
 	public SpawnLine(String[] template) {
 		this.length = Float.parseFloat(template[0]);
-		this.axis = ParticleTemplate.createVector3f(template[1]).normalize();
+		this.axis = ComponentParticles.createVector3f(template[1]).normalize();
 		this.random = new Random();
 		this.spawnPosition = new Vector3f();
 	}

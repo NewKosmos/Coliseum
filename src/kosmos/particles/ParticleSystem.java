@@ -14,7 +14,6 @@ import flounder.maths.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.noise.*;
-import kosmos.particles.loading.*;
 import kosmos.particles.spawns.*;
 
 import java.util.*;
@@ -23,7 +22,7 @@ import java.util.*;
  * A system of particles that are to be spawned.
  */
 public class ParticleSystem {
-	private List<ParticleTemplate> types;
+	private List<ParticleType> types;
 	private IParticleSpawn spawn;
 	private float pps;
 	private float averageSpeed;
@@ -52,7 +51,7 @@ public class ParticleSystem {
 	 * @param speed The particle speed.
 	 * @param gravityEffect How much gravity will effect the particle.
 	 */
-	public ParticleSystem(List<ParticleTemplate> types, IParticleSpawn spawn, float pps, float speed, float gravityEffect) {
+	public ParticleSystem(List<ParticleType> types, IParticleSpawn spawn, float pps, float speed, float gravityEffect) {
 		this.types = types;
 		this.spawn = spawn;
 		this.pps = pps;
@@ -70,16 +69,109 @@ public class ParticleSystem {
 		KosmosParticles.addSystem(this);
 	}
 
-	public List<ParticleTemplate> getTypes() {
+	public void generateParticles() {
+		if (paused || spawn == null) {
+			return;
+		}
+
+		float delta = Framework.getDelta();
+		float particlesToCreate = this.pps * delta;
+		int count = (int) Math.floor(particlesToCreate);
+		float partialParticle = particlesToCreate % 1.0f;
+
+		for (int i = 0; i < count; i++) {
+			emitParticle();
+		}
+
+		float random = noise.noise1(Framework.getTimeMs()) * 10.0f;
+
+		if (random < partialParticle) {
+			emitParticle();
+		}
+	}
+
+	private void emitParticle() {
+		Vector3f velocity;
+
+		if (this.direction != null) {
+			velocity = generateRandomUnitVectorWithinCone(direction, directionDeviation);
+		} else {
+			velocity = generateRandomUnitVector();
+		}
+
+		if (types.isEmpty()) {
+			return;
+		}
+
+		ParticleType emitType = types.get((int) Math.floor(Maths.randomInRange(0, types.size())));
+
+		velocity.normalize();
+		velocity.scale(generateValue(averageSpeed, averageSpeed * speedError));
+		Vector3f.add(velocity, velocityCentre, velocity);
+		float scale = generateValue(emitType.getScale(), emitType.getScale() * scaleError);
+		float lifeLength = generateValue(emitType.getLifeLength(), emitType.getLifeLength() * lifeError);
+		Vector3f spawnPos = Vector3f.add(systemCentre, spawn.getBaseSpawnPosition(), null);
+
+		KosmosParticles.addParticle(emitType, spawnPos, velocity, lifeLength, generateRotation(), scale, gravityEffect);
+	}
+
+	private float generateValue(float average, float errorMargin) {
+		float offset = (Maths.RANDOM.nextFloat() - 0.5f) * 2.0f * errorMargin;
+		return average + offset;
+	}
+
+	private float generateRotation() {
+		if (this.randomRotation) {
+			return Maths.RANDOM.nextFloat() * 360.0f;
+		}
+
+		return 0.0f;
+	}
+
+	private static Vector3f generateRandomUnitVectorWithinCone(Vector3f coneDirection, float angle) {
+		float cosAngle = (float) Math.cos(angle);
+		Random random = new Random();
+		float theta = (float) (random.nextFloat() * 2.0f * Math.PI);
+		float z = cosAngle + random.nextFloat() * (1.0f - cosAngle);
+		float rootOneMinusZSquared = (float) Math.sqrt(1.0f - z * z);
+		float x = (float) (rootOneMinusZSquared * Math.cos(theta));
+		float y = (float) (rootOneMinusZSquared * Math.sin(theta));
+
+		Vector4f direction = new Vector4f(x, y, z, 1.0f);
+
+		if ((coneDirection.x != 0.0f) || (coneDirection.y != 0.0f) || ((coneDirection.z != 1.0f) && (coneDirection.z != -1.0f))) {
+			Vector3f rotateAxis = Vector3f.cross(coneDirection, new Vector3f(0.0f, 0.0f, 1.0f), null);
+			rotateAxis.normalize();
+			float rotateAngle = (float) Math.acos(Vector3f.dot(coneDirection, new Vector3f(0.0f, 0.0f, 1.0f)));
+			Matrix4f rotationMatrix = new Matrix4f();
+			Matrix4f.rotate(rotationMatrix, rotateAxis, -rotateAngle, rotationMatrix);
+			Matrix4f.transform(rotationMatrix, direction, direction);
+		} else if (coneDirection.z == -1.0f) {
+			direction.z *= -1.0f;
+		}
+
+		return new Vector3f(direction);
+	}
+
+	private Vector3f generateRandomUnitVector() {
+		float theta = (float) (Maths.RANDOM.nextFloat() * 2.0f * Math.PI);
+		float z = Maths.RANDOM.nextFloat() * 2.0f - 1.0f;
+		float rootOneMinusZSquared = (float) Math.sqrt(1.0f - z * z);
+		float x = (float) (rootOneMinusZSquared * Math.cos(theta));
+		float y = (float) (rootOneMinusZSquared * Math.sin(theta));
+		return new Vector3f(x, y, z);
+	}
+
+	public List<ParticleType> getTypes() {
 		return types;
 	}
 
-	public void addParticleType(ParticleTemplate particleTemplate) {
-		types.add(particleTemplate);
+	public void addParticleType(ParticleType particleType) {
+		types.add(particleType);
 	}
 
-	public void removeParticleType(ParticleTemplate particleTemplate) {
-		types.remove(particleTemplate);
+	public void removeParticleType(ParticleType particleType) {
+		types.remove(particleType);
 	}
 
 	public IParticleSpawn getSpawn() {
@@ -159,99 +251,9 @@ public class ParticleSystem {
 		this.paused = paused;
 	}
 
-	public void generateParticles() {
-		if (paused || spawn == null) {
-			return;
-		}
-
-		float delta = Framework.getDelta();
-		float particlesToCreate = this.pps * delta;
-		int count = (int) Math.floor(particlesToCreate);
-		float partialParticle = particlesToCreate % 1.0f;
-
-		for (int i = 0; i < count; i++) {
-			emitParticle();
-		}
-
-		float random = noise.noise1(Framework.getTimeMs()) * 10.0f;
-
-		if (random < partialParticle) {
-			emitParticle();
-		}
-	}
-
-	private void emitParticle() {
-		Vector3f velocity;
-
-		if (this.direction != null) {
-			velocity = generateRandomUnitVectorWithinCone(direction, directionDeviation);
-		} else {
-			velocity = generateRandomUnitVector();
-		}
-
-		if (types.isEmpty()) {
-			return;
-		}
-
-		ParticleTemplate emitType = types.get((int) Math.floor(Maths.randomInRange(0, types.size())));
-
-		velocity.normalize();
-		velocity.scale(generateValue(averageSpeed, averageSpeed * speedError));
-		Vector3f.add(velocity, velocityCentre, velocity);
-		float scale = generateValue(emitType.getScale(), emitType.getScale() * scaleError);
-		float lifeLength = generateValue(emitType.getLifeLength(), emitType.getLifeLength() * lifeError);
-		Vector3f spawnPos = Vector3f.add(systemCentre, spawn.getBaseSpawnPosition(), null);
-
-		KosmosParticles.addParticle(emitType, spawnPos, velocity, lifeLength, generateRotation(), scale, gravityEffect);
-	}
-
-	private float generateValue(float average, float errorMargin) {
-		float offset = (Maths.RANDOM.nextFloat() - 0.5f) * 2.0f * errorMargin;
-		return average + offset;
-	}
-
-	private float generateRotation() {
-		if (this.randomRotation) {
-			return Maths.RANDOM.nextFloat() * 360.0f;
-		}
-
-		return 0.0f;
-	}
-
-	private static Vector3f generateRandomUnitVectorWithinCone(Vector3f coneDirection, float angle) {
-		float cosAngle = (float) Math.cos(angle);
-		Random random = new Random();
-		float theta = (float) (random.nextFloat() * 2.0f * 3.141592653589793);
-		float z = cosAngle + random.nextFloat() * (1.0f - cosAngle);
-		float rootOneMinusZSquared = (float) Math.sqrt(1.0f - z * z);
-		float x = (float) (rootOneMinusZSquared * Math.cos(theta));
-		float y = (float) (rootOneMinusZSquared * Math.sin(theta));
-
-		Vector4f direction = new Vector4f(x, y, z, 1.0f);
-
-		if ((coneDirection.x != 0.0f) || (coneDirection.y != 0.0f) || ((coneDirection.z != 1.0f) && (coneDirection.z != -1.0f))) {
-			Vector3f rotateAxis = Vector3f.cross(coneDirection, new Vector3f(0.0f, 0.0f, 1.0f), null);
-			rotateAxis.normalize();
-			float rotateAngle = (float) Math.acos(Vector3f.dot(coneDirection, new Vector3f(0.0f, 0.0f, 1.0f)));
-			Matrix4f rotationMatrix = new Matrix4f();
-			Matrix4f.rotate(rotationMatrix, rotateAxis, -rotateAngle, rotationMatrix);
-			Matrix4f.transform(rotationMatrix, direction, direction);
-		} else if (coneDirection.z == -1.0f) {
-			direction.z *= -1.0f;
-		}
-
-		return new Vector3f(direction);
-	}
-
-	private Vector3f generateRandomUnitVector() {
-		float theta = (float) (Maths.RANDOM.nextFloat() * 2.0f * 3.141592653589793);
-		float z = Maths.RANDOM.nextFloat() * 2.0f - 1.0f;
-		float rootOneMinusZSquared = (float) Math.sqrt(1.0f - z * z);
-		float x = (float) (rootOneMinusZSquared * Math.cos(theta));
-		float y = (float) (rootOneMinusZSquared * Math.sin(theta));
-		return new Vector3f(x, y, z);
-	}
-
+	/**
+	 * Removes this system from the systems list.
+	 */
 	public void delete() {
 		KosmosParticles.removeSystem(this);
 	}

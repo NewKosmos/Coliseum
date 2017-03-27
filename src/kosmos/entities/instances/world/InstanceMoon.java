@@ -27,7 +27,7 @@ public class InstanceMoon extends Entity {
 	public InstanceMoon(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 		new ComponentCelestial(this, false);
-		new ComponentModel(this, 8.0f, model, texture, 1);
+		new ComponentModel(this, 10.0f, model, texture, 1);
 		new ComponentSurface(this, 1.0f, 0.0f, true, true);
 		new ComponentLight(this, new Vector3f(), new Colour(KosmosSkybox.MOON_COLOUR), new Attenuation(1.0f, 0.0f, 0.0f));
 		//new ComponentCollider(this);

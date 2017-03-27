@@ -11,7 +11,7 @@ package kosmos.particles.spawns;
 
 import flounder.maths.*;
 import flounder.maths.vectors.*;
-import kosmos.particles.loading.*;
+import kosmos.entities.components.*;
 
 public class SpawnCircle implements IParticleSpawn {
 	private float radius;
@@ -26,7 +26,7 @@ public class SpawnCircle implements IParticleSpawn {
 
 	public SpawnCircle(String[] template) {
 		this.radius = Float.parseFloat(template[2]);
-		this.heading = ParticleTemplate.createVector3f(template[1]).normalize();
+		this.heading = ComponentParticles.createVector3f(template[1]).normalize();
 		this.spawnPosition = new Vector3f();
 	}
 

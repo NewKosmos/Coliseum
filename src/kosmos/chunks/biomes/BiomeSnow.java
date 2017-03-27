@@ -18,12 +18,11 @@ import kosmos.entities.instances.objects.*;
 import kosmos.entities.instances.plants.*;
 import kosmos.entities.instances.trees.*;
 import kosmos.particles.*;
-import kosmos.particles.loading.*;
 import kosmos.world.*;
 
 public class BiomeSnow implements IBiome {
 	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "snow.png")).clampEdges().create();
-	private static final ParticleTemplate particle = new ParticleTemplate("snow", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "snowParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.20f);
+	private static final ParticleType particle = new ParticleType("snow", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "snowParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.20f);
 
 	@Override
 	public String getBiomeName() {
@@ -44,7 +43,7 @@ public class BiomeSnow implements IBiome {
 		float spawn = KosmosWorld.getNoise().noise1((tilePosition.z - tilePosition.x) * (float) Math.sin(tilePosition.x + tilePosition.z)) * 100.0f;
 		float rotation = KosmosWorld.getNoise().noise1(tilePosition.x - tilePosition.z) * 3600.0f;
 
-		if (tilePosition.y <= 0.0f) {
+		if (tilePosition.y < 0.0f) {
 			if (spawn == 1) {
 				return new InstanceLilipad(FlounderEntities.getEntities(), new Vector3f(tilePosition.x, 0.025f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
 			}
@@ -112,7 +111,7 @@ public class BiomeSnow implements IBiome {
 	}
 
 	@Override
-	public ParticleTemplate getWeatherParticle() {
+	public ParticleType getWeatherParticle() {
 		return particle;
 	}
 

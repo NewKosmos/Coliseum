@@ -27,7 +27,7 @@ public class InstanceSun extends Entity {
 	public InstanceSun(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 		new ComponentCelestial(this, true);
-		new ComponentModel(this, 13.0f, model, texture, 0);
+		new ComponentModel(this, 16.0f, model, texture, 0);
 		new ComponentLight(this, new Vector3f(), new Colour(KosmosSkybox.SUN_COLOUR_DAY), new Attenuation(1.0f, 0.0f, 0.0f));
 		new ComponentSurface(this, 1.0f, 0.0f, true, true);
 		//new ComponentCollider(this);

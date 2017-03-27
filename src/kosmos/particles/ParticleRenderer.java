@@ -21,7 +21,6 @@ import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
 import flounder.space.*;
-import kosmos.particles.loading.*;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
 
@@ -82,7 +81,7 @@ public class ParticleRenderer extends Renderer {
 				// Prepares each particle instance, and add them to the list.
 				for (Particle particle : particles) {
 					if (!textureBound) {
-						prepareTexturedModel(particle.getParticleTemplate());
+						prepareTexturedModel(particle.getParticleType());
 						textureBound = true;
 					}
 
@@ -108,7 +107,7 @@ public class ParticleRenderer extends Renderer {
 		rendered = 0;
 	}
 
-	private void prepareTexturedModel(ParticleTemplate particleTemplate) {
+	private void prepareTexturedModel(ParticleType particleType) {
 		unbindTexturedModel();
 
 		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
@@ -119,9 +118,9 @@ public class ParticleRenderer extends Renderer {
 
 		OpenGlUtils.bindVAO(VAO, 0, 1, 2, 3, 4, 5, 6, 7);
 
-		if (particleTemplate.getTexture() != null) {
-			shader.getUniformFloat("numberOfRows").loadFloat(particleTemplate.getTexture().getNumberOfRows());
-			OpenGlUtils.bindTexture(particleTemplate.getTexture(), 0);
+		if (particleType.getTexture() != null) {
+			shader.getUniformFloat("numberOfRows").loadFloat(particleType.getTexture().getNumberOfRows());
+			OpenGlUtils.bindTexture(particleType.getTexture(), 0);
 		}
 	}
 

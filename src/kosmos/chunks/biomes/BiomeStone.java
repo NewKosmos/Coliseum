@@ -16,12 +16,12 @@ import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.entities.instances.plants.*;
 import kosmos.entities.instances.rocks.*;
-import kosmos.particles.loading.*;
+import kosmos.particles.*;
 import kosmos.world.*;
 
 public class BiomeStone implements IBiome {
 	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "stone.png")).clampEdges().create();
-	private static final ParticleTemplate particle = null;
+	private static final ParticleType particle = null;
 
 	@Override
 	public String getBiomeName() {
@@ -42,7 +42,7 @@ public class BiomeStone implements IBiome {
 		float spawn = KosmosWorld.getNoise().noise1((tilePosition.z - tilePosition.x) * (float) Math.sin(tilePosition.x + tilePosition.z)) * 100.0f;
 		float rotation = KosmosWorld.getNoise().noise1(tilePosition.x - tilePosition.z) * 3600.0f;
 
-		if (tilePosition.y <= 0.0f) {
+		if (tilePosition.y < 0.0f) {
 			if (spawn == 1) {
 				return new InstanceLilipad(FlounderEntities.getEntities(), new Vector3f(tilePosition.x, 0.025f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
 			}
@@ -93,7 +93,7 @@ public class BiomeStone implements IBiome {
 	}
 
 	@Override
-	public ParticleTemplate getWeatherParticle() {
+	public ParticleType getWeatherParticle() {
 		return particle;
 	}
 

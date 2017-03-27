@@ -14,13 +14,11 @@ import flounder.framework.*;
 import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.loaders.*;
-import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
-import kosmos.particles.loading.*;
 
 import java.lang.ref.*;
 import java.util.*;
@@ -35,7 +33,7 @@ public class KosmosParticles extends Module {
 	public static final MyFile PARTICLES_FOLDER = new MyFile(MyFile.RES_FOLDER, "particles");
 	public static final float MAX_ELAPSED_TIME = 5.0f;
 
-	private Map<String, SoftReference<ParticleTemplate>> loaded;
+	private Map<String, SoftReference<ParticleType>> loaded;
 
 	private List<ParticleSystem> particleSystems;
 	private List<StructureBasic<Particle>> particles;
@@ -45,7 +43,7 @@ public class KosmosParticles extends Module {
 	 * Creates a new particle systems manager.
 	 */
 	public KosmosParticles() {
-		super(ModuleUpdate.UPDATE_POST, PROFILE_TAB_NAME, FlounderLogger.class, FlounderProfiler.class, FlounderDisplay.class, FlounderLoader.class, FlounderTextures.class);
+		super(ModuleUpdate.UPDATE_POST, PROFILE_TAB_NAME, FlounderDisplay.class, FlounderLoader.class, FlounderTextures.class);
 	}
 
 	@Override
@@ -140,7 +138,7 @@ public class KosmosParticles extends Module {
 	/**
 	 * Adds a particle to the recalculateRay loop.
 	 *
-	 * @param particleTemplate The particle template to build from.
+	 * @param particleType The particle template to build from.
 	 * @param position The particles initial position.
 	 * @param velocity The particles initial velocity.
 	 * @param lifeLength The particles life length.
@@ -148,18 +146,18 @@ public class KosmosParticles extends Module {
 	 * @param scale The particles scale.
 	 * @param gravityEffect The particles gravity effect.
 	 */
-	public static void addParticle(ParticleTemplate particleTemplate, Vector3f position, Vector3f velocity, float lifeLength, float rotation, float scale, float gravityEffect) {
+	public static void addParticle(ParticleType particleType, Vector3f position, Vector3f velocity, float lifeLength, float rotation, float scale, float gravityEffect) {
 		Particle particle;
 
 		if (INSTANCE.deadParticles.size() > 0) {
-			particle = INSTANCE.deadParticles.get(0).set(particleTemplate, position, velocity, lifeLength, rotation, scale, gravityEffect);
+			particle = INSTANCE.deadParticles.get(0).set(particleType, position, velocity, lifeLength, rotation, scale, gravityEffect);
 			INSTANCE.deadParticles.remove(0);
 		} else {
-			particle = new Particle(particleTemplate, position, velocity, lifeLength, rotation, scale, gravityEffect);
+			particle = new Particle(particleType, position, velocity, lifeLength, rotation, scale, gravityEffect);
 		}
 
 		for (StructureBasic<Particle> list : INSTANCE.particles) {
-			if (list.getSize() > 0 && list.get(0).getParticleTemplate().equals(particle.getParticleTemplate())) {
+			if (list.getSize() > 0 && list.get(0).getParticleType().equals(particle.getParticleType())) {
 				list.add(particle);
 				return;
 			}

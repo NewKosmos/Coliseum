@@ -15,11 +15,10 @@ import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.particles.*;
-import kosmos.particles.loading.*;
 
 public class BiomeRiver implements IBiome {
 	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "sand.png")).clampEdges().create();
-	private static final ParticleTemplate particle = new ParticleTemplate("rain", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "rainParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.15f);
+	private static final ParticleType particle = new ParticleType("rain", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "rainParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.15f);
 
 	@Override
 	public String getBiomeName() {
@@ -37,7 +36,7 @@ public class BiomeRiver implements IBiome {
 	}
 
 	@Override
-	public ParticleTemplate getWeatherParticle() {
+	public ParticleType getWeatherParticle() {
 		return particle;
 	}
 

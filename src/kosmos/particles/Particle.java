@@ -14,13 +14,12 @@ import flounder.framework.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
 import flounder.space.*;
-import kosmos.particles.loading.*;
 
 /**
  * A instance of a particle type.
  */
 public class Particle implements ISpatialObject, Comparable<Particle> {
-	private ParticleTemplate particleTemplate;
+	private ParticleType particleType;
 
 	private Vector3f position;
 	private Vector3f velocity;
@@ -43,7 +42,7 @@ public class Particle implements ISpatialObject, Comparable<Particle> {
 	/**
 	 * Creates a new particle object.
 	 *
-	 * @param particleTemplate The particle template to build from.
+	 * @param particleType The particle template to build from.
 	 * @param position The particles initial position.
 	 * @param velocity The particles initial velocity.
 	 * @param lifeLength The particles life length.
@@ -51,14 +50,14 @@ public class Particle implements ISpatialObject, Comparable<Particle> {
 	 * @param scale The particles scale.
 	 * @param gravityEffect The particles gravity effect.
 	 */
-	protected Particle(ParticleTemplate particleTemplate, Vector3f position, Vector3f velocity, float lifeLength, float rotation, float scale, float gravityEffect) {
-		set(particleTemplate, position, velocity, lifeLength, rotation, scale, gravityEffect);
+	protected Particle(ParticleType particleType, Vector3f position, Vector3f velocity, float lifeLength, float rotation, float scale, float gravityEffect) {
+		set(particleType, position, velocity, lifeLength, rotation, scale, gravityEffect);
 	}
 
 	/**
 	 * Sets this particle to a new particle object.
 	 *
-	 * @param particleTemplate The particle template to build from.
+	 * @param particleType The particle template to build from.
 	 * @param position The particles initial position.
 	 * @param velocity The particles initial velocity.
 	 * @param lifeLength The particles life length.
@@ -68,8 +67,8 @@ public class Particle implements ISpatialObject, Comparable<Particle> {
 	 *
 	 * @return this.
 	 */
-	protected Particle set(ParticleTemplate particleTemplate, Vector3f position, Vector3f velocity, float lifeLength, float rotation, float scale, float gravityEffect) {
-		this.particleTemplate = particleTemplate;
+	protected Particle set(ParticleType particleType, Vector3f position, Vector3f velocity, float lifeLength, float rotation, float scale, float gravityEffect) {
+		this.particleType = particleType;
 		this.position = position;
 		this.velocity = velocity;
 		this.change = new Vector3f();
@@ -112,17 +111,17 @@ public class Particle implements ISpatialObject, Comparable<Particle> {
 
 		distanceToCamera = Vector3f.subtract(FlounderCamera.getCamera().getPosition(), position, null).lengthSquared();
 
-		float size = 0.5f * particleTemplate.getScale();
+		float size = 0.5f * particleType.getScale();
 		aabb.getMinExtents().set(position.getX() - size, position.getY() - size, position.getZ() - size);
 		aabb.getMaxExtents().set(position.getX() + size, position.getY() + size, position.getZ() + size);
 
 		float lifeFactor = elapsedTime / lifeLength;
 
-		if (particleTemplate.getTexture() == null) {
+		if (particleType.getTexture() == null) {
 			return;
 		}
 
-		int stageCount = (int) Math.pow(particleTemplate.getTexture().getNumberOfRows(), 2);
+		int stageCount = (int) Math.pow(particleType.getTexture().getNumberOfRows(), 2);
 		float atlasProgression = lifeFactor * stageCount;
 		int index1 = (int) Math.floor(atlasProgression);
 		int index2 = index1 < stageCount - 1 ? index1 + 1 : index1;
@@ -134,15 +133,15 @@ public class Particle implements ISpatialObject, Comparable<Particle> {
 
 	private Vector2f updateTextureOffset(Vector2f offset, int index) {
 		offset.set(0.0f, 0.0f);
-		int column = index % particleTemplate.getTexture().getNumberOfRows();
-		int row = index / particleTemplate.getTexture().getNumberOfRows();
-		offset.x = (float) column / particleTemplate.getTexture().getNumberOfRows();
-		offset.y = (float) row / particleTemplate.getTexture().getNumberOfRows();
+		int column = index % particleType.getTexture().getNumberOfRows();
+		int row = index / particleType.getTexture().getNumberOfRows();
+		offset.x = (float) column / particleType.getTexture().getNumberOfRows();
+		offset.y = (float) row / particleType.getTexture().getNumberOfRows();
 		return offset;
 	}
 
-	protected ParticleTemplate getParticleTemplate() {
-		return particleTemplate;
+	protected ParticleType getParticleType() {
+		return particleType;
 	}
 
 	protected Vector3f getPosition() {

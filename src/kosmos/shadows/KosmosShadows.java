@@ -1,3 +1,12 @@
+/*
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ *
+ * This source file is part of New Kosmos
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 package kosmos.shadows;
 
 import flounder.camera.*;
@@ -37,7 +46,7 @@ public class KosmosShadows extends Module {
 		this.shadowPCF = KosmosConfigs.SHADOWMAP_PCF.setReference(() -> shadowPCF).getInteger();
 		this.shadowBias = KosmosConfigs.SHADOWMAP_BIAS.setReference(() -> shadowBias).getFloat();
 		this.shadowDarkness = KosmosConfigs.SHADOWMAP_DARKNESS.setReference(() -> shadowDarkness).getFloat();
-		this.shadowTransition = 10.0f; // TODO
+		this.shadowTransition = 11.0f; // TODO: This is a strange setting, but works.
 
 		this.projectionMatrix = new Matrix4f();
 		this.lightViewMatrix = new Matrix4f();

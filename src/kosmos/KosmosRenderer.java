@@ -17,13 +17,11 @@ import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
 import flounder.post.filters.*;
 import flounder.post.piplines.*;
-import flounder.profiling.*;
 import flounder.renderer.*;
 import kosmos.camera.*;
 import kosmos.entities.*;
@@ -63,7 +61,7 @@ public class KosmosRenderer extends RendererMaster {
 	private int effect;
 
 	public KosmosRenderer() {
-		super(FlounderLogger.class, FlounderProfiler.class, FlounderDisplay.class);
+		super(FlounderDisplay.class);
 	}
 
 	@Override

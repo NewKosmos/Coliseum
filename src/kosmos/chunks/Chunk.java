@@ -20,7 +20,6 @@ import kosmos.chunks.meshing.*;
 import kosmos.entities.components.*;
 import kosmos.entities.instances.world.*;
 import kosmos.particles.*;
-import kosmos.particles.loading.*;
 import kosmos.particles.spawns.*;
 import kosmos.world.*;
 
@@ -73,7 +72,7 @@ public class Chunk extends Entity {
 
 	private void generateWeather() {
 		if (biome.getBiome().getWeatherParticle() != null) {
-			List<ParticleTemplate> templates = new ArrayList<>();
+			List<ParticleType> templates = new ArrayList<>();
 			templates.add(biome.getBiome().getWeatherParticle());
 			particleSystem = new ParticleSystem(templates, new SpawnCircle(40.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 100, 0.5f, 0.5f);
 			particleSystem.setSystemCentre(new Vector3f(getPosition().x, 15.0f, getPosition().z));

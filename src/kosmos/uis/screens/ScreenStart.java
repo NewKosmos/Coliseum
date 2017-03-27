@@ -1,3 +1,12 @@
+/*
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ *
+ * This source file is part of New Kosmos
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 package kosmos.uis.screens;
 
 import flounder.fonts.*;
@@ -32,7 +41,7 @@ public class ScreenStart extends ScreenObject {
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
 				KosmosWorld.generatePlayer();
-				((KosmosGuis) FlounderGuis.getGuiMaster()).togglePause();
+				((KosmosGuis) FlounderGuis.getGuiMaster()).togglePause(true);
 			}
 		});
 
@@ -42,7 +51,7 @@ public class ScreenStart extends ScreenObject {
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
 				KosmosWorld.generatePlayer();
-				((KosmosGuis) FlounderGuis.getGuiMaster()).togglePause();
+				((KosmosGuis) FlounderGuis.getGuiMaster()).togglePause(true);
 
 				String username = KosmosConfigs.CLIENT_USERNAME.getString();
 				String serverIP = KosmosConfigs.SERVER_IP.setReference(() -> FlounderNetwork.getSocketClient() == null ? null : FlounderNetwork.getSocketClient().getIpAddress()).getString();

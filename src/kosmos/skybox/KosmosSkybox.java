@@ -1,3 +1,12 @@
+/*
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ *
+ * This source file is part of New Kosmos
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 package kosmos.skybox;
 
 import flounder.camera.*;
@@ -64,7 +73,7 @@ public class KosmosSkybox extends Module {
 		this.cubemap = TextureFactory.newBuilder().setCubemap(TEXTURE_FILES).create();
 		this.modelMatrix = new Matrix4f();
 
-		this.fog = new Fog(new Colour(), 0.02f, 2.0f, 0.0f, 50.0f);
+		this.fog = new Fog(new Colour(), 0.025f, 2.0f, 0.0f, 50.0f);
 		this.dayDriver = new LinearDriver(0.0f, 100.0f, DAY_NIGHT_CYCLE);
 		this.dayFactor = 0.0f;
 		this.skyColour = new Colour(SKY_COLOUR_DAY);
@@ -111,7 +120,7 @@ public class KosmosSkybox extends Module {
 	}
 
 	public static float getSunriseFactor() {
-		return (float) -(Math.sin(2.0 * Math.PI * getDayFactor()) - 1.0) / 2.0f;
+		return (float) Maths.clamp(-(Math.sin(2.0 * Math.PI * getDayFactor()) - 1.0) / 2.0f, 0.0, 1.0);
 	}
 
 	public static float getShadowFactor() {
@@ -119,7 +128,13 @@ public class KosmosSkybox extends Module {
 	}
 
 	public static float starIntensity() {
-		return (1.0f - getShadowFactor()) + (((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 0.5f : 0.0f);
+		float addedIntensity = 0.0f;
+
+		if (FlounderGuis.getGuiMaster() instanceof KosmosGuis) {
+			addedIntensity = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 0.5f : 0.0f;
+		}
+
+		return Maths.clamp(1.0f - getShadowFactor() + addedIntensity, 0.0f, 1.0f);
 	}
 
 	public static Colour getSkyColour() {

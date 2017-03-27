@@ -1,3 +1,12 @@
+/*
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ *
+ * This source file is part of New Kosmos
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 package kosmos.network.packets;
 
 import flounder.maths.vectors.*;
@@ -63,6 +72,11 @@ public class PacketMove extends Packet {
 		return (getDataPrefix() + username + "," + x + "," + y + "," + z + "," + w + "," + chunkX + "," + chunkZ).getBytes();
 	}
 
+	/**
+	 * Gets the username of the client that connected.
+	 *
+	 * @return The username.
+	 */
 	public String getUsername() {
 		return username;
 	}

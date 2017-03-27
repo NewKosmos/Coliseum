@@ -15,7 +15,6 @@ import flounder.events.*;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.inputs.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
@@ -28,7 +27,7 @@ import org.lwjgl.glfw.*;
 public class KosmosCamera extends Camera {
 	// Defines basic view frustum sizes.
 	private static final float NEAR_PLANE = 0.1f;
-	private static final float FAR_PLANE = 300.0f;
+	private static final float FAR_PLANE = 500.0f;
 
 	private static final float FIELD_OF_VIEW_FPS = 60.0f; // First person.
 	private static final float FIELD_OF_VIEW = 45.0f; // Focus view.
@@ -93,7 +92,7 @@ public class KosmosCamera extends Camera {
 	private JoystickButton joystickZoom;
 
 	public KosmosCamera() {
-		super(FlounderLogger.class, FlounderProfiler.class, FlounderJoysticks.class, FlounderKeyboard.class, FlounderMouse.class);
+		super(FlounderJoysticks.class, FlounderKeyboard.class, FlounderMouse.class);
 	}
 
 	@Override
@@ -126,10 +125,6 @@ public class KosmosCamera extends Camera {
 		this.joystickVertical = new JoystickAxis(0, 3);
 		this.joystickHorizontal = new JoystickAxis(0, 2);
 		this.joystickZoom = new JoystickButton(0, 9);
-
-		//if (KosmosConfigs.CAMERA_MOUSE_LOCKED.getBoolean()) {
-		//	FlounderMouse.setCursorHidden(true);
-		//}
 
 		FlounderEvents.addEvent(new IEvent() {
 			private KeyButton fpsToggle = new KeyButton(GLFW.GLFW_KEY_V);

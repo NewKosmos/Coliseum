@@ -1,3 +1,12 @@
+/*
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ *
+ * This source file is part of New Kosmos
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 package kosmos.entities.components;
 
 import flounder.entities.*;
@@ -9,7 +18,6 @@ import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.entities.components.particles.*;
 import kosmos.particles.*;
-import kosmos.particles.loading.*;
 import kosmos.particles.spawns.*;
 
 import javax.swing.*;
@@ -53,7 +61,7 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 	 * @param speed
 	 * @param gravityEffect
 	 */
-	public ComponentParticles(Entity entity, List<ParticleTemplate> types, IParticleSpawn spawn, Vector3f offset, float pps, float speed, float gravityEffect) {
+	public ComponentParticles(Entity entity, List<ParticleType> types, IParticleSpawn spawn, Vector3f offset, float pps, float speed, float gravityEffect) {
 		super(entity, ID);
 		this.particleSystem = new ParticleSystem(types, spawn, pps, speed, gravityEffect);
 		this.particleSystem.setSystemCentre(new Vector3f());
@@ -69,8 +77,8 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 	public void update() {
 		if (particleSystem != null) {
 			if (particleSystem.getTypes().isEmpty()) {
-				particleSystem.addParticleType(new ParticleTemplate("rain", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "rainParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.15f));
-				particleSystem.addParticleType(new ParticleTemplate("snow", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "snowParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.20f));
+				particleSystem.addParticleType(new ParticleType("rain", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "rainParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.15f));
+				particleSystem.addParticleType(new ParticleType("snow", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "snowParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.20f));
 			}
 
 			if (super.getEntity().hasMoved()) {
@@ -247,14 +255,14 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 
 		String particlesData = "";
 
-		for (ParticleTemplate t : particleSystem.getTypes()) {
+		for (ParticleType t : particleSystem.getTypes()) {
 			String saveTexture = (t.getTexture() != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, \"" + t.getName() + "Particle.png\")).setNumberOfRows(" + t.getTexture().getNumberOfRows() + ").create()") : null;
-			particlesData += "new ParticleTemplate(\"" + t.getName() + "\", " + saveTexture + ", " + t.getLifeLength() + "f, " + t.getScale() + "f), ";
+			particlesData += "new ParticleType(\"" + t.getName() + "\", " + saveTexture + ", " + t.getLifeLength() + "f, " + t.getScale() + "f), ";
 		}
 
 		particlesData = particlesData.replaceAll(", $", "");
 
-		String saveParticles = "new ParticleTemplate[]{" + particlesData + "}";
+		String saveParticles = "new ParticleType[]{" + particlesData + "}";
 		String saveSpawn = "new " + particleSystem.getSpawn().getClass().getName() + "(" + parameterData + ")";
 		String saveParticleOffset = "new Vector3f(" + centreOffset.x + "f, " + centreOffset.y + "f, " + centreOffset.z + "f)";
 		String saveParticlePPS = particleSystem.getPPS() + "f";
@@ -262,9 +270,18 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 		String saveParticleGravity = particleSystem.getGravityEffect() + "f";
 
 		return new Pair<>(
-				new String[]{"private static final ParticleTemplate[] TEMPLATES = " + saveParticles}, // Static variables
+				new String[]{"private static final ParticleType[] TEMPLATES = " + saveParticles}, // Static variables
 				new String[]{"Arrays.asList(TEMPLATES)", saveSpawn, saveParticleOffset, saveParticlePPS, saveParticleSpeed, saveParticleGravity} // Class constructor
 		);
+	}
+
+	public static Vector3f createVector3f(String source) {
+		String reduced = source.replace("Vector3f(", "").replace(")", "").trim();
+		String[] split = reduced.split("\\|");
+		float x = Float.parseFloat(split[0].substring(2, split[0].length()));
+		float y = Float.parseFloat(split[1].substring(2, split[0].length()));
+		float z = Float.parseFloat(split[2].substring(2, split[0].length()));
+		return new Vector3f(x, y, z);
 	}
 
 	@Override
