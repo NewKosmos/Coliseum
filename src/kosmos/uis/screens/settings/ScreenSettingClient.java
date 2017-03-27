@@ -14,8 +14,8 @@ import flounder.maths.vectors.*;
 import kosmos.uis.*;
 import kosmos.uis.screens.*;
 
-public class ScreenSettingGeneral extends ScreenObject {
-	public ScreenSettingGeneral(OverlaySlider slider, ScreenSettings settings) {
+public class ScreenSettingClient extends ScreenObject {
+	public ScreenSettingClient(OverlaySlider slider, ScreenSettings settings) {
 		super(slider, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
 

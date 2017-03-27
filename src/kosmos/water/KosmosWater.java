@@ -72,7 +72,7 @@ public class KosmosWater extends Module {
 	}
 
 	public static boolean reflectionsEnabled() {
-		return INSTANCE.enableReflections && INSTANCE.water.getColour().a != 1.0f;
+		return INSTANCE.enableReflections;
 	}
 
 	public static void setReflectionsEnabled(boolean enableReflections) {

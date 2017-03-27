@@ -95,7 +95,7 @@ public class WaterRenderer extends Renderer {
 
 		shader.getUniformMat4("modelMatrix").loadMat4(water.getModelMatrix());
 
-		shader.getUniformVec4("diffuseColour").loadVec4(water.getColour());
+		shader.getUniformVec4("diffuseColour").loadVec4(water.getColour().r, water.getColour().g, water.getColour().b, KosmosWater.reflectionsEnabled() ? water.getColour().a : 1.0f);
 
 		shader.getUniformFloat("waveTime").loadFloat(KosmosWater.getWaveTime() / Water.WAVE_SPEED);
 		shader.getUniformFloat("waveLength").loadFloat(Water.WAVE_LENGTH);

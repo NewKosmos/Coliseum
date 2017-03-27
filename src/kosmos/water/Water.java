@@ -202,12 +202,6 @@ public class Water {
 			Matrix4f.transformationMatrix(position, rotation, scale, modelMatrix);
 		}
 
-		if (KosmosWater.reflectionsEnabled()) {
-			colour.a = COLOUR_INTENSITY;
-		} else {
-			colour.a = 1.0f;
-		}
-
 		moved = false;
 	}
 

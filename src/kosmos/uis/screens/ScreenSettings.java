@@ -20,28 +20,11 @@ public class ScreenSettings extends ScreenObject {
 		super(slider, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
 
-		ScreenObject paneLeft = new ScreenObject(this, new Vector2f(0.25f, 0.5f), new Vector2f(0.5f, 1.0f)) {
-			@Override
-			public void updateObject() {
-			}
+		// Left and right Panes.
+		ScreenObject paneLeft = new ScreenObjectEmpty(this, new Vector2f(0.25f, 0.5f), new Vector2f(0.5f, 1.0f), true);
+		ScreenObject paneRight = new ScreenObjectEmpty(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.5f, 1.0f), true);
 
-			@Override
-			public void deleteObject() {
-			}
-		};
-		paneLeft.setInScreenCoords(true);
-
-		ScreenObject paneRight = new ScreenObject(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.5f, 1.0f)) {
-			@Override
-			public void updateObject() {
-			}
-
-			@Override
-			public void deleteObject() {
-			}
-		};
-		paneRight.setInScreenCoords(true);
-
+		// Screen General.
 		ScreenSettingGeneral screenGeneral = new ScreenSettingGeneral(slider, this);
 		screenGeneral.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText general = new GuiButtonText(paneLeft, new Vector2f(0.25f, 0.2f), "General", GuiAlign.CENTRE);
@@ -52,6 +35,7 @@ public class ScreenSettings extends ScreenObject {
 			}
 		});
 
+		// Screen Debug.
 		ScreenSettingDebug screenDebug = new ScreenSettingDebug(slider, this);
 		screenDebug.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText debug = new GuiButtonText(paneLeft, new Vector2f(0.25f, 0.27f), "Debug", GuiAlign.CENTRE);
@@ -62,14 +46,18 @@ public class ScreenSettings extends ScreenObject {
 			}
 		});
 
-		// TODO: Textbox
+		// Screen Client.
+		ScreenSettingClient screenClient = new ScreenSettingClient(slider, this);
+		screenClient.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText client = new GuiButtonText(paneLeft, new Vector2f(0.25f, 0.34f), "Client", GuiAlign.CENTRE);
 		client.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
+				slider.setNewSecondaryScreen(screenClient);
 			}
 		});
 
+		// Screen Audio.
 		ScreenSettingAudio screenAudio = new ScreenSettingAudio(slider, this);
 		screenAudio.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText audio = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.20f), "Audio", GuiAlign.CENTRE);
@@ -80,22 +68,29 @@ public class ScreenSettings extends ScreenObject {
 			}
 		});
 
-		// TODO: Slider, textbox
+		// Screen Graphics.
+		ScreenSettingGraphics screenGraphics = new ScreenSettingGraphics(slider, this);
+		screenGraphics.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText graphics = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.27f), "Graphics", GuiAlign.CENTRE);
 		graphics.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
+				slider.setNewSecondaryScreen(screenGraphics);
 			}
 		});
 
-		// TODO: Slider, key grab
+		// Screen Controls.
+		ScreenSettingControls screenControls = new ScreenSettingControls(slider, this);
+		screenControls.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText controls = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.34f), "Controls", GuiAlign.CENTRE);
 		controls.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override
 			public void eventOccurred() {
+				slider.setNewSecondaryScreen(screenControls);
 			}
 		});
 
+		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);
 		back.addLeftListener(new GuiButtonText.ListenerBasic() {
 			@Override

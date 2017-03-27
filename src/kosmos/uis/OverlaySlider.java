@@ -10,13 +10,10 @@
 package kosmos.uis;
 
 import flounder.guis.*;
-import flounder.inputs.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;
 import kosmos.*;
-import kosmos.skybox.*;
 import kosmos.uis.screens.*;
-import org.lwjgl.glfw.*;
 
 public class OverlaySlider extends ScreenObject {
 	private ScreenPause screenPause;
