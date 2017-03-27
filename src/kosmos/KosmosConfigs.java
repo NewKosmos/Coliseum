@@ -42,7 +42,6 @@ public class KosmosConfigs {
 	public static final ConfigData DISPLAY_FULLSCREEN = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "displayFullscreen", false, FlounderDisplay::isFullscreen);
 	public static final ConfigData FRAMEWORK_FPS_LIMIT = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "frameworkFpsLimit", 144, Framework::getFpsLimit);
 	public static final ConfigData TEXTURES_ANISOTROPY_MAX = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "texturesAnisotropyMax", 8.0f, FlounderTextures::getAnisotropyLevel);
-	public static final ConfigData RENDERER_SCALE = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "rendererScale", 1.0f); // Reference set in master renderer.
 
 	public static final ConfigData WATER_COLOUR_INTENSITY = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "waterColourIntensity", 0.7f, KosmosWater::getColourIntensity);
 	public static final ConfigData WATER_REFLECTION_ENABLED = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "waterReflectionEnabled", false, KosmosWater::reflectionsEnabled);

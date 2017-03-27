@@ -16,10 +16,14 @@ import flounder.framework.*;
 import flounder.guis.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
+import flounder.textures.*;
 import kosmos.shadows.*;
 import kosmos.uis.*;
 import kosmos.uis.screens.*;
 import kosmos.water.*;
+
+import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.*;
+import static org.lwjgl.opengl.GL11.*;
 
 public class ScreenSettingGraphics extends ScreenObject {
 	public ScreenSettingGraphics(OverlaySlider slider, ScreenSettings settings) {
@@ -90,10 +94,53 @@ public class ScreenSettingGraphics extends ScreenObject {
 			}
 		});
 
-		// Slider Render Scale.
+		// Slider Texture Anisotropy.
+		GuiSliderText sliderTextureAnisotropy = new GuiSliderText(paneLeft, new Vector2f(0.25f, 0.48f), "Texture Anisotropy: ", 0.0f, glGetFloat(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT), FlounderTextures.getAnisotropyLevel(), GuiAlign.CENTRE);
+		FlounderEvents.addEvent(new EventChange<Float>(FlounderTextures::getAnisotropyLevel) {
+			@Override
+			public void onEvent(Float newValue) {
+				sliderTextureAnisotropy.setText("Texture Anisotropy: " + Maths.roundToPlace(newValue, 1));
+			}
+		});
+		sliderTextureAnisotropy.addChangeListener(new ScreenListener() {
+			@Override
+			public void eventOccurred() {
+				FlounderTextures.setAnisotropyLevel(sliderTextureAnisotropy.getProgress());
+			}
+		});
+
+		// Slider Brightness Boost.
+		GuiSliderText sliderBrightnessBoost = new GuiSliderText(paneLeft, new Vector2f(0.25f, 0.55f), "Brightness Boost: ", -0.3f, 0.8f, KosmosShadows.getBrightnessBoost(), GuiAlign.CENTRE);
+		FlounderEvents.addEvent(new EventChange<Float>(KosmosShadows::getBrightnessBoost) {
+			@Override
+			public void onEvent(Float newValue) {
+				sliderBrightnessBoost.setText("Brightness Boost: " + Maths.roundToPlace(newValue, 3));
+			}
+		});
+		sliderBrightnessBoost.addChangeListener(new ScreenListener() {
+			@Override
+			public void eventOccurred() {
+				KosmosShadows.setBrightnessBoost(sliderBrightnessBoost.getProgress());
+			}
+		});
+
+		// Slider Water Intensity.
+		GuiSliderText sliderWaterIntensity = new GuiSliderText(paneRight, new Vector2f(0.75f, 0.20f), "Water Intensity: ", 0.0f, 1.0f, KosmosWater.getColourIntensity(), GuiAlign.CENTRE);
+		FlounderEvents.addEvent(new EventChange<Float>(KosmosWater::getColourIntensity) {
+			@Override
+			public void onEvent(Float newValue) {
+				sliderWaterIntensity.setText("Water Intensity: " + Maths.roundToPlace(newValue, 2));
+			}
+		});
+		sliderWaterIntensity.addChangeListener(new ScreenListener() {
+			@Override
+			public void eventOccurred() {
+				KosmosWater.setColourIntensity(sliderWaterIntensity.getProgress());
+			}
+		});
 
 		// Toggle Water Reflections.
-		GuiButtonText toggleWaterReflections = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.20f), "Water Reflections: ", GuiAlign.CENTRE);
+		GuiButtonText toggleWaterReflections = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.27f), "Water Reflections: ", GuiAlign.CENTRE);
 		FlounderEvents.addEvent(new EventChange<Boolean>(KosmosWater::reflectionsEnabled) {
 			@Override
 			public void onEvent(Boolean newValue) {
@@ -108,22 +155,22 @@ public class ScreenSettingGraphics extends ScreenObject {
 		});
 
 		// Slider Water Quality.
-		GuiSliderText sliderWaterReflectionQuality = new GuiSliderText(paneRight, new Vector2f(0.75f, 0.27f), "Water Reflection Quality: ", 0.01f, 2.0f, KosmosWater.getReflectionQuality(), GuiAlign.CENTRE);
+		GuiSliderText sliderWaterReflectionQuality = new GuiSliderText(paneRight, new Vector2f(0.75f, 0.34f), "Water Reflection Quality: ", 0.01f, 2.0f, KosmosWater.getReflectionQuality(), GuiAlign.CENTRE);
 		FlounderEvents.addEvent(new EventChange<Float>(KosmosWater::getReflectionQuality) {
 			@Override
 			public void onEvent(Float newValue) {
-				sliderWaterReflectionQuality.setText("Water Reflection Quality: " + newValue);
+				sliderWaterReflectionQuality.setText("Water Reflection Quality: " + Maths.roundToPlace(newValue, 2));
 			}
 		});
 		sliderWaterReflectionQuality.addChangeListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				KosmosWater.setReflectionQuality(Maths.roundToPlace(sliderWaterReflectionQuality.getProgress(), 2));
+				KosmosWater.setReflectionQuality(sliderWaterReflectionQuality.getProgress());
 			}
 		});
 
 		// Toggle Water Reflection Shadows.
-		GuiButtonText toggleWaterReflectionShadows = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.34f), "Water Reflection Shadows: ", GuiAlign.CENTRE);
+		GuiButtonText toggleWaterReflectionShadows = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.41f), "Water Reflection Shadows: ", GuiAlign.CENTRE);
 		FlounderEvents.addEvent(new EventChange<Boolean>(KosmosWater::reflectionShadows) {
 			@Override
 			public void onEvent(Boolean newValue) {
@@ -138,7 +185,7 @@ public class ScreenSettingGraphics extends ScreenObject {
 		});
 
 		// Slider Shadowmap Size.
-		GuiSliderText sliderShadowSize = new GuiSliderText(paneRight, new Vector2f(0.75f, 0.41f), "Shadowmap Size: ", 512.0f, FBO.getMaxFBOSize(), KosmosShadows.getShadowSize(), GuiAlign.CENTRE);
+		GuiSliderText sliderShadowSize = new GuiSliderText(paneRight, new Vector2f(0.75f, 0.48f), "Shadowmap Size: ", 512.0f, FBO.getMaxFBOSize(), KosmosShadows.getShadowSize(), GuiAlign.CENTRE);
 		FlounderEvents.addEvent(new EventChange<Integer>(KosmosShadows::getShadowSize) {
 			@Override
 			public void onEvent(Integer newValue) {
@@ -153,7 +200,7 @@ public class ScreenSettingGraphics extends ScreenObject {
 		});
 
 		// Slider Shadowmap PCFs.
-		GuiSliderText sliderShadowPCFs = new GuiSliderText(paneRight, new Vector2f(0.75f, 0.48f), "Shadow PCF Count: ", 0.0f, 8.0f, KosmosShadows.getShadowPCF(), GuiAlign.CENTRE);
+		GuiSliderText sliderShadowPCFs = new GuiSliderText(paneRight, new Vector2f(0.75f, 0.55f), "Shadow PCF Count: ", 0.0f, 8.0f, KosmosShadows.getShadowPCF(), GuiAlign.CENTRE);
 		FlounderEvents.addEvent(new EventChange<Integer>(KosmosShadows::getShadowPCF) {
 			@Override
 			public void onEvent(Integer newValue) {
@@ -164,21 +211,6 @@ public class ScreenSettingGraphics extends ScreenObject {
 			@Override
 			public void eventOccurred() {
 				KosmosShadows.setShadowPCF((int) sliderShadowPCFs.getProgress());
-			}
-		});
-
-		// Slider Brightness Boost.
-		GuiSliderText sliderBrightnessBoost = new GuiSliderText(paneRight, new Vector2f(0.75f, 0.55f), "Brightness Boost: ", -0.3f, 0.8f, KosmosShadows.getBrightnessBoost(), GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Float>(KosmosShadows::getBrightnessBoost) {
-			@Override
-			public void onEvent(Float newValue) {
-				sliderBrightnessBoost.setText("Brightness Boost: " + Maths.roundToPlace(newValue, 3));
-			}
-		});
-		sliderBrightnessBoost.addChangeListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				KosmosShadows.setBrightnessBoost(sliderBrightnessBoost.getProgress());
 			}
 		});
 
