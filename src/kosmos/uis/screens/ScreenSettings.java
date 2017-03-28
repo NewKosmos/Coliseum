@@ -57,6 +57,17 @@ public class ScreenSettings extends ScreenObject {
 			}
 		});
 
+		// Screen Controls.
+		ScreenSettingControls screenControls = new ScreenSettingControls(slider, this);
+		screenControls.setAlphaDriver(new ConstantDriver(0.0f));
+		GuiButtonText controls = new GuiButtonText(paneLeft, new Vector2f(0.25f, 0.41f), "Controls", GuiAlign.CENTRE);
+		controls.addLeftListener(new ScreenListener() {
+			@Override
+			public void eventOccurred() {
+				slider.setNewSecondaryScreen(screenControls);
+			}
+		});
+
 		// Screen Audio.
 		ScreenSettingAudio screenAudio = new ScreenSettingAudio(slider, this);
 		screenAudio.setAlphaDriver(new ConstantDriver(0.0f));
@@ -79,14 +90,14 @@ public class ScreenSettings extends ScreenObject {
 			}
 		});
 
-		// Screen Controls.
-		ScreenSettingControls screenControls = new ScreenSettingControls(slider, this);
-		screenControls.setAlphaDriver(new ConstantDriver(0.0f));
-		GuiButtonText controls = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.34f), "Controls", GuiAlign.CENTRE);
-		controls.addLeftListener(new ScreenListener() {
+		// Screen Post.
+		ScreenSettingPost settingPost = new ScreenSettingPost(slider, this);
+		settingPost.setAlphaDriver(new ConstantDriver(0.0f));
+		GuiButtonText post = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.34f), "Post Effects", GuiAlign.CENTRE);
+		post.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenControls);
+				slider.setNewSecondaryScreen(settingPost);
 			}
 		});
 

@@ -25,7 +25,8 @@ import flounder.post.piplines.*;
 import flounder.renderer.*;
 import kosmos.camera.*;
 import kosmos.entities.*;
-import kosmos.filters.*;
+import kosmos.post.*;
+import kosmos.post.filters.*;
 import kosmos.particles.*;
 import kosmos.shadows.*;
 import kosmos.skybox.*;
@@ -57,7 +58,6 @@ public class KosmosRenderer extends RendererMaster {
 	private FilterPixel filterPixel;
 	private FilterCRT filterCRT;
 	private PipelinePaused pipelinePaused;
-	private int effect;
 
 	public KosmosRenderer() {
 		super(FlounderDisplay.class);
@@ -80,28 +80,9 @@ public class KosmosRenderer extends RendererMaster {
 		this.pipelineBloom = new PipelineBloom();
 		this.filterBlurMotion = new FilterBlurMotion();
 		this.filterLensFlare = new FilterLensFlare();
-		this.filterPixel = new FilterPixel(4.0f);
-		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.05f);
+		this.filterPixel = new FilterPixel(2.0f);
+		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.09f);
 		this.pipelinePaused = new PipelinePaused();
-		this.effect = 1;
-
-		FlounderEvents.addEvent(new IEvent() {
-			private KeyButton effectBump = new KeyButton(GLFW.GLFW_KEY_C);
-
-			@Override
-			public boolean eventTriggered() {
-				return effectBump.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
-			}
-
-			@Override
-			public void onEvent() {
-				effect++;
-
-				if (effect > 2) {
-					effect = 0;
-				}
-			}
-		});
 	}
 
 	@Override
@@ -112,20 +93,17 @@ public class KosmosRenderer extends RendererMaster {
 		/* Shadow rendering. */
 		renderShadows();
 
-		/* Binds the relevant FBO. */
+		/* Binds the render FBO. */
 		rendererFBO.bindFrameBuffer();
 
 		/* Scene rendering. */
 		renderScene(POSITIVE_INFINITY, false);
 
+		/* Unbinds the render FBO. */
+		rendererFBO.unbindFrameBuffer();
+
 		/* Post rendering. */
 		renderPost(FlounderGuis.getGuiMaster().isGamePaused(), FlounderGuis.getGuiMaster().getBlurFactor());
-
-		/* Scene independents. */
-		renderIndependents();
-
-		/* Unbinds the FBO. */
-		rendererFBO.unbindFrameBuffer();
 	}
 
 	private void renderWater() {
@@ -155,8 +133,11 @@ public class KosmosRenderer extends RendererMaster {
 					waterRenderer.getReflectionFBO().getDepthTexture(), // Depth
 					((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap() // Shadow Map
 			);
-			pipelineBloom.setBloomThreshold(0.6f);
-			pipelineBloom.renderMRT(rendererFBO, waterRenderer.getPipelineMRT().fbo);
+
+			if (KosmosPost.isBloomEnabled()) {
+				pipelineBloom.setBloomThreshold(0.6f);
+				pipelineBloom.renderMRT(rendererFBO, waterRenderer.getPipelineMRT().fbo);
+			}
 
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
 		}
@@ -172,7 +153,7 @@ public class KosmosRenderer extends RendererMaster {
 
 	private void renderScene(Vector4f clipPlane, boolean waterPass) {
 		/* Sets the player model to render in first person view. */
-		entitiesRenderer.setRenderPlayer(!((KosmosCamera) FlounderCamera.getCamera()).isFirstPerson());
+		entitiesRenderer.setRenderPlayer(!KosmosCamera.isFirstPerson());
 
 		/* Clears and renders. */
 		Camera camera = FlounderCamera.getCamera();
@@ -190,48 +171,62 @@ public class KosmosRenderer extends RendererMaster {
 	}
 
 	private void renderPost(boolean isPaused, float blurFactor) {
-		pipelineMRT.setRunFXAA(FlounderDisplay.isAntialiasing());
 		pipelineMRT.renderPipeline(rendererFBO);
 		FBO output = pipelineMRT.getOutput();
 
-		switch (effect) {
-			case 0:
-				break;
-			case 1:
+		// Render post effects if enabled.
+		if (KosmosPost.isEffectsEnabled()) {
+			// Render Bloom Filter.
+			if (KosmosPost.isBloomEnabled()) {
 				pipelineBloom.setBloomThreshold(0.6f);
 				pipelineBloom.renderMRT(rendererFBO, output);
 				output = pipelineBloom.getOutput();
+			}
 
+			// Render Motion Blur Filter.
+			if (KosmosPost.isMotionBlurEnabled()) {
 				filterBlurMotion.applyFilter(output.getColourTexture(0), rendererFBO.getDepthTexture());
 				output = filterBlurMotion.fbo;
+			}
 
-				if (KosmosWorld.getEntitySun() != null) {
-					filterLensFlare.setSunPosition(KosmosWorld.getEntitySun().getPosition());
-					filterLensFlare.setWorldHeight(KosmosSkybox.getSunHeight());
-					filterLensFlare.applyFilter(output.getColourTexture(0));
-					output = filterLensFlare.fbo;
-				}
-				break;
-			case 2:
+			// Render Lens Flare Filter.
+			if (KosmosPost.isLensFlareEnabled() && KosmosWorld.getEntitySun() != null) {
+				filterLensFlare.setSunPosition(KosmosWorld.getEntitySun().getPosition());
+				filterLensFlare.setWorldHeight(KosmosSkybox.getSunHeight());
+				filterLensFlare.applyFilter(output.getColourTexture(0));
+				output = filterLensFlare.fbo;
+			}
+
+			// Render Pause Pipeline.
+			if (isPaused || blurFactor != 0.0f) {
+				pipelinePaused.setBlurFactor(blurFactor);
+				pipelinePaused.renderPipeline(output);
+				output = pipelinePaused.getOutput();
+			}
+
+			/* Scene independents. */
+			renderIndependents(output);
+
+			// Render CRT Filter.
+			if (KosmosPost.isCrtEnabled()) {
 				filterPixel.applyFilter(output.getColourTexture(0));
 				output = filterPixel.fbo;
 				filterCRT.applyFilter(output.getColourTexture(0));
 				output = filterCRT.fbo;
-				break;
-		}
-
-		if (isPaused || blurFactor != 0.0f) {
-			pipelinePaused.setBlurFactor(blurFactor);
-			pipelinePaused.renderPipeline(output);
-			output = pipelinePaused.getOutput();
+			}
+		} else {
+			/* Scene independents. */
+			renderIndependents(output);
 		}
 
 		output.blitToScreen();
 	}
 
-	private void renderIndependents() {
+	private void renderIndependents(FBO output) {
+		output.bindFrameBuffer();
 		guisRenderer.render(null, null);
 		fontRenderer.render(null, null);
+		output.unbindFrameBuffer();
 	}
 
 	@Override

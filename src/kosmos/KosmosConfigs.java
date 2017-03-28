@@ -18,6 +18,7 @@ import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.textures.*;
+import kosmos.post.*;
 import kosmos.shadows.*;
 import kosmos.water.*;
 import org.lwjgl.glfw.*;
@@ -53,6 +54,12 @@ public class KosmosConfigs {
 	public static final ConfigData SHADOWMAP_PCF = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapPcf", 0, KosmosShadows::getShadowPCF);
 	public static final ConfigData SHADOWMAP_BIAS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapBias", 0.001f, KosmosShadows::getShadowBias);
 	public static final ConfigData SHADOWMAP_DARKNESS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapDarkness", 0.5f, KosmosShadows::getShadowDarkness);
+
+	public static final ConfigData POST_EFFECTS_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "effectsEnabled", true, KosmosPost::isEffectsEnabled);
+	public static final ConfigData POST_BLOOM_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "bloomEnabled", true, KosmosPost::isBloomEnabled);
+	public static final ConfigData POST_MOTIONBLUR_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "motionBlurEnabled", true, KosmosPost::isMotionBlurEnabled);
+	public static final ConfigData POST_LENSFLARE_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "lensFlareEnabled", true, KosmosPost::isLensFlareEnabled);
+	public static final ConfigData POST_CRT_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "crtEnabled", false, KosmosPost::isCrtEnabled);
 
 	public static final ConfigData HUD_COSSHAIR_TYPE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "hudCrosshairType", 1); // Reference set in master overlay.
 	public static final ConfigData CAMERA_SENSITIVITY = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraSensitivity", 1.0f); // Reference set in camera.

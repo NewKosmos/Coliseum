@@ -7,7 +7,7 @@
  * Proprietary and confidential
  */
 
-package kosmos.filters;
+package kosmos.post.filters;
 
 import flounder.devices.*;
 import flounder.fbos.*;
@@ -24,11 +24,12 @@ public class PipelineMRT extends PostPipeline {
 	public PipelineMRT() {
 		this.filterMRT = new FilterMRT();
 		this.filterFXAA = new FilterFXAA();
-		this.runFXAA = FlounderDisplay.isAntialiasing();
 	}
 
 	@Override
 	public void renderPipeline(FBO startFBO) {
+		runFXAA = FlounderDisplay.isAntialiasing();
+
 		filterMRT.applyFilter(
 				startFBO.getColourTexture(0), // Colours
 				startFBO.getColourTexture(1), // Normals
@@ -40,10 +41,6 @@ public class PipelineMRT extends PostPipeline {
 		if (runFXAA) {
 			filterFXAA.applyFilter(filterMRT.fbo.getColourTexture(0));
 		}
-	}
-
-	public void setRunFXAA(boolean runFXAA) {
-		this.runFXAA = runFXAA;
 	}
 
 	@Override

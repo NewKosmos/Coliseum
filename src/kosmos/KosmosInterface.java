@@ -23,6 +23,7 @@ import flounder.standards.*;
 import kosmos.chunks.*;
 import kosmos.network.packets.*;
 import kosmos.particles.*;
+import kosmos.post.*;
 import kosmos.shadows.*;
 import kosmos.skybox.*;
 import kosmos.steam.*;
@@ -35,7 +36,7 @@ public class KosmosInterface extends Standard {
 	private Playlist gamePlaylist;
 
 	public KosmosInterface() {
-		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderNetwork.class, KosmosSteam.class, FlounderBounding.class, KosmosShadows.class, KosmosParticles.class, KosmosWater.class, KosmosSkybox.class, KosmosWorld.class, KosmosChunks.class);
+		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderNetwork.class, KosmosSteam.class, FlounderBounding.class, KosmosPost.class, KosmosShadows.class, KosmosParticles.class, KosmosWater.class, KosmosSkybox.class, KosmosWorld.class, KosmosChunks.class);
 	}
 
 	@Override

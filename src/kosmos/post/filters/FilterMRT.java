@@ -7,7 +7,7 @@
  * Proprietary and confidential
  */
 
-package kosmos.filters;
+package kosmos.post.filters;
 
 import flounder.camera.*;
 import flounder.entities.*;
@@ -16,6 +16,7 @@ import flounder.post.*;
 import flounder.profiling.*;
 import flounder.resources.*;
 import kosmos.entities.components.*;
+import kosmos.post.*;
 import kosmos.shadows.*;
 import kosmos.skybox.*;
 
@@ -51,8 +52,8 @@ public class FilterMRT extends PostFilter {
 			}
 		}
 
-		FlounderProfiler.add("Kosmos MRT", "Maximum Lights", LIGHTS);
-		FlounderProfiler.add("Kosmos MRT", "Loaded Lights", lightsLoaded);
+		FlounderProfiler.add(KosmosPost.PROFILE_TAB_NAME, "Maximum Lights", LIGHTS);
+		FlounderProfiler.add(KosmosPost.PROFILE_TAB_NAME, "Loaded Lights", lightsLoaded);
 
 		if (lightsLoaded < LIGHTS) {
 			for (int i = lightsLoaded; i < LIGHTS; i++) {
