@@ -23,6 +23,7 @@ import flounder.shaders.*;
 import flounder.textures.*;
 import flounder.visual.*;
 import kosmos.*;
+import kosmos.shadows.*;
 import kosmos.world.*;
 
 public class KosmosSkybox extends Module {
@@ -102,7 +103,7 @@ public class KosmosSkybox extends Module {
 		fog.setFogColour(skyColour);
 
 		// Updates sun colour.
-		SUN_COLOUR_DAY.set(SUN_COLOUR_DAY_DEFAULT.r - KosmosWorld.getBrightnessBoost(), SUN_COLOUR_DAY_DEFAULT.g - KosmosWorld.getBrightnessBoost(), SUN_COLOUR_DAY_DEFAULT.b - KosmosWorld.getBrightnessBoost());
+		SUN_COLOUR_DAY.set(SUN_COLOUR_DAY_DEFAULT.r - KosmosShadows.getBrightnessBoost(), SUN_COLOUR_DAY_DEFAULT.g - KosmosShadows.getBrightnessBoost(), SUN_COLOUR_DAY_DEFAULT.b - KosmosShadows.getBrightnessBoost());
 	}
 
 	@Override

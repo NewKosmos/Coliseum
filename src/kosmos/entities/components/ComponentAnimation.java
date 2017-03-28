@@ -12,7 +12,6 @@ package kosmos.entities.components;
 import flounder.animation.*;
 import flounder.collada.*;
 import flounder.collada.animation.*;
-import flounder.collada.joints.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
@@ -26,7 +25,6 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.event.*;
 import java.io.*;
-import java.util.*;
 
 /**
  * Creates a animation used to set animation properties.
@@ -83,7 +81,7 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 		this.wasLoaded = false;
 
 		if (model != null) {
-			model.getHeadJoint().calculateInverseBindTransform(Matrix4f.rotate(new Matrix4f(), new Vector3f(1.0f, 0.0f, 0.0f), (float) Math.toRadians(-90.0f), null));
+			model.getHeadJoint().calculateInverseBindTransform(new Matrix4f());
 			this.animator = new Animator(model.getHeadJoint());
 		}
 
@@ -109,27 +107,8 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 		this.textureIndex = textureIndex;
 
 		if (model != null) {
-			model.getHeadJoint().calculateInverseBindTransform(Matrix4f.rotate(new Matrix4f(), new Vector3f(1.0f, 0.0f, 0.0f), (float) Math.toRadians(-90.0f), null));
+			model.getHeadJoint().calculateInverseBindTransform(new Matrix4f());
 			this.animator = new Animator(model.getHeadJoint());
-		}
-	}
-
-	/**
-	 * Adds children from a JointData/Children map.
-	 *
-	 * @param datasJoint The joint to add children too.
-	 * @param dataChild The children to be searching for.
-	 * @param allJoints The joint map to match the child's name with, and to get the JointData from.
-	 */
-	private void addChildren(JointData datasJoint, List<String> dataChild, Map<JointData, List<String>> allJoints) {
-		for (JointData data : allJoints.keySet()) {
-			if (dataChild.contains(data.getNameId())) {
-				datasJoint.addChild(data);
-			}
-		}
-
-		for (JointData child : datasJoint.getChildren()) {
-			addChildren(child, allJoints.get(child), allJoints);
 		}
 	}
 
@@ -198,7 +177,7 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	public void setModel(ModelAnimated model) {
 		if (this.model != model) {
 			this.model = model;
-			this.model.getHeadJoint().calculateInverseBindTransform(Matrix4f.rotate(new Matrix4f(), new Vector3f(1.0f, 0.0f, 0.0f), (float) Math.toRadians(-90.0f), null));
+			this.model.getHeadJoint().calculateInverseBindTransform(new Matrix4f());
 			this.animator = new Animator(this.model.getHeadJoint());
 			getEntity().setMoved();
 		}
@@ -212,7 +191,7 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	 * @return The array of model-space transforms of the joints in the current animation pose.
 	 */
 	public Matrix4f[] getJointTransforms() {
-		Matrix4f[] jointMatrices = new Matrix4f[model.getJointsData().getJointCount()];
+		Matrix4f[] jointMatrices = new Matrix4f[model.getSkeletonData().getJointCount()];
 		addJointsToArray(model.getHeadJoint(), jointMatrices);
 		return jointMatrices;
 	}
@@ -225,10 +204,6 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	 * @param jointMatrices The matrices transformation to add with.
 	 */
 	private void addJointsToArray(Joint headJoint, Matrix4f[] jointMatrices) {
-		//	if (headJoint.getIndex() >= jointMatrices.length) {
-		//		return;
-		//	}
-
 		jointMatrices[headJoint.getIndex()] = headJoint.getAnimatedTransform();
 
 		for (Joint childJoint : headJoint.getChildren()) {

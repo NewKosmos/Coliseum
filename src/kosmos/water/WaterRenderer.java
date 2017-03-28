@@ -71,7 +71,7 @@ public class WaterRenderer extends Renderer {
 			shader.getUniformVec3("waterOffset").loadVec3(Math.round(position.x), 0.0f, Math.round(position.z));
 		}*/
 
-		if (KosmosWater.reflectionsEnabled()) {
+		if (KosmosWater.reflectionsEnabled() && KosmosWater.getColourIntensity() != 1.0f) {
 			// Update the quality scalar.
 			if (reflectionFBO.getSizeScalar() != KosmosWater.getReflectionQuality()) {
 				reflectionFBO.setSizeScalar(KosmosWater.getReflectionQuality());
@@ -95,7 +95,7 @@ public class WaterRenderer extends Renderer {
 
 		shader.getUniformMat4("modelMatrix").loadMat4(water.getModelMatrix());
 
-		shader.getUniformVec4("diffuseColour").loadVec4(water.getColour().r, water.getColour().g, water.getColour().b, KosmosWater.reflectionsEnabled() ? water.getColour().a : 1.0f);
+		shader.getUniformVec4("diffuseColour").loadVec4(water.getColour());
 
 		shader.getUniformFloat("waveTime").loadFloat(KosmosWater.getWaveTime() / Water.WAVE_SPEED);
 		shader.getUniformFloat("waveLength").loadFloat(Water.WAVE_LENGTH);

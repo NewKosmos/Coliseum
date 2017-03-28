@@ -62,8 +62,6 @@ public class KosmosCamera extends Camera {
 	private static final float MAXIMUM_ZOOM = 28.0f;
 	private static final float NORMAL_ZOOM = 8.0f;
 
-	private boolean firstPerson;
-
 	private Vector3f position;
 	private Vector3f rotation;
 
@@ -85,7 +83,9 @@ public class KosmosCamera extends Camera {
 	private float horizontalDistanceFromFocus;
 	private float verticalDistanceFromFocus;
 
-	private float cameraSensitivity;
+	private static boolean firstPerson;
+	private static float sensitivity;
+	private static boolean mouseLocked;
 	private int reangleButton;
 	private JoystickAxis joystickVertical;
 	private JoystickAxis joystickHorizontal;
@@ -97,8 +97,6 @@ public class KosmosCamera extends Camera {
 
 	@Override
 	public void init() {
-		this.firstPerson = KosmosConfigs.CAMERA_FIRST_PERSON.setReference(() -> firstPerson).getBoolean();
-
 		this.position = new Vector3f();
 		this.rotation = new Vector3f(0.0f, 20.0f, 0.0f);
 
@@ -120,7 +118,9 @@ public class KosmosCamera extends Camera {
 		this.horizontalDistanceFromFocus = 0.0f;
 		this.verticalDistanceFromFocus = 0.0f;
 
-		this.cameraSensitivity = KosmosConfigs.CAMERA_SENSITIVITY.setReference(() -> cameraSensitivity).getFloat();
+		KosmosCamera.firstPerson = KosmosConfigs.CAMERA_FIRST_PERSON.setReference(() -> firstPerson).getBoolean();
+		KosmosCamera.sensitivity = KosmosConfigs.CAMERA_SENSITIVITY.setReference(() -> sensitivity).getFloat();
+		KosmosCamera.mouseLocked = KosmosConfigs.CAMERA_MOUSE_LOCKED.setReference(() -> mouseLocked).getBoolean();
 		this.reangleButton = KosmosConfigs.CAMERA_REANGLE.setReference(() -> reangleButton).getInteger();
 		this.joystickVertical = new JoystickAxis(0, 3);
 		this.joystickHorizontal = new JoystickAxis(0, 2);
@@ -197,10 +197,10 @@ public class KosmosCamera extends Camera {
 
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
 			if (Maths.deadband(0.05f, joystickHorizontal.getAmount()) != 0.0f && !joystickZoom.isDown()) {
-				angleChange = joystickHorizontal.getAmount() * INFLUENCE_OF_JOYSTICK_DX * cameraSensitivity;
+				angleChange = joystickHorizontal.getAmount() * INFLUENCE_OF_JOYSTICK_DX * sensitivity;
 			} else {
 				if (FlounderMouse.isCursorDisabled() || FlounderMouse.getMouse(reangleButton)) {
-					angleChange = -FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSE_DX * cameraSensitivity;
+					angleChange = -FlounderMouse.getDeltaX() * INFLUENCE_OF_MOUSE_DX * sensitivity;
 				}
 			}
 		}
@@ -225,10 +225,10 @@ public class KosmosCamera extends Camera {
 
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused()) {
 			if (Maths.deadband(0.05f, joystickVertical.getAmount()) != 0.0f && !joystickZoom.isDown()) {
-				angleChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_DY * cameraSensitivity;
+				angleChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_DY * sensitivity;
 			} else {
 				if (FlounderMouse.isCursorDisabled() || FlounderMouse.getMouse(reangleButton)) {
-					angleChange = FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSE_DY * cameraSensitivity;
+					angleChange = FlounderMouse.getDeltaY() * INFLUENCE_OF_MOUSE_DY * sensitivity;
 				}
 			}
 		}
@@ -261,9 +261,9 @@ public class KosmosCamera extends Camera {
 
 		if (FlounderGuis.getGuiMaster() != null && !FlounderGuis.getGuiMaster().isGamePaused() && !firstPerson) {
 			if (joystickZoom.isDown()) {
-				zoomChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_ZOOM * cameraSensitivity;
+				zoomChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_ZOOM * sensitivity;
 			} else if (Math.abs(FlounderMouse.getDeltaWheel()) > 0.1f) {
-				zoomChange = FlounderMouse.getDeltaWheel() * INFLUENCE_OF_MOUSE_WHEEL * cameraSensitivity;
+				zoomChange = FlounderMouse.getDeltaWheel() * INFLUENCE_OF_MOUSE_WHEEL * sensitivity;
 			}
 		}
 
@@ -409,8 +409,28 @@ public class KosmosCamera extends Camera {
 		this.rotation.set(rotation);
 	}
 
-	public boolean isFirstPerson() {
+	public static boolean isFirstPerson() {
 		return firstPerson;
+	}
+
+	public static void setFirstPerson(boolean firstPerson) {
+		KosmosCamera.firstPerson = firstPerson;
+	}
+
+	public static float getSensitivity() {
+		return sensitivity;
+	}
+
+	public static void setSensitivity(float sensitivity) {
+		KosmosCamera.sensitivity = sensitivity;
+	}
+
+	public static boolean isMouseLocked() {
+		return mouseLocked;
+	}
+
+	public static void setMouseLocked(boolean mouseLocked) {
+		KosmosCamera.mouseLocked = mouseLocked;
 	}
 
 	@Override

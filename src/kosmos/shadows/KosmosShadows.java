@@ -22,8 +22,9 @@ public class KosmosShadows extends Module {
 	private static final KosmosShadows INSTANCE = new KosmosShadows();
 	public static final String PROFILE_TAB_NAME = "Kosmos Shadows";
 
-	private int shadowSize;
+	private float brightnessBoost;
 
+	private int shadowSize;
 	private int shadowPCF;
 	private float shadowBias;
 	private float shadowDarkness;
@@ -42,6 +43,8 @@ public class KosmosShadows extends Module {
 
 	@Override
 	public void init() {
+		this.brightnessBoost = KosmosConfigs.BRIGHTNESS_BOOST.getFloat();
+
 		this.shadowSize = KosmosConfigs.SHADOWMAP_SIZE.setReference(() -> shadowSize).getInteger();
 		this.shadowPCF = KosmosConfigs.SHADOWMAP_PCF.setReference(() -> shadowPCF).getInteger();
 		this.shadowBias = KosmosConfigs.SHADOWMAP_BIAS.setReference(() -> shadowBias).getFloat();
@@ -116,6 +119,14 @@ public class KosmosShadows extends Module {
 		FlounderProfiler.add(PROFILE_TAB_NAME, "PCF Count", shadowPCF);
 		FlounderProfiler.add(PROFILE_TAB_NAME, "Surface Bias", shadowBias);
 		FlounderProfiler.add(PROFILE_TAB_NAME, "Surface Darkness", shadowDarkness);
+	}
+
+	public static float getBrightnessBoost() {
+		return INSTANCE.brightnessBoost;
+	}
+
+	public static void setBrightnessBoost(float brightnessBoost) {
+		INSTANCE.brightnessBoost = brightnessBoost;
 	}
 
 	public static int getShadowSize() {

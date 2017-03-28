@@ -17,7 +17,6 @@ import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
@@ -49,7 +48,6 @@ public class KosmosRenderer extends RendererMaster {
 	private GuisRenderer guisRenderer;
 	private FontRenderer fontRenderer;
 
-	private float displayScale;
 	private FBO rendererFBO;
 
 	private PipelineMRT pipelineMRT;
@@ -76,8 +74,7 @@ public class KosmosRenderer extends RendererMaster {
 		this.guisRenderer = new GuisRenderer();
 		this.fontRenderer = new FontRenderer();
 
-		this.displayScale = KosmosConfigs.RENDERER_SCALE.setReference(() -> displayScale).getFloat();
-		this.rendererFBO = FBO.newFBO(displayScale).attachments(3).withAlphaChannel(true).depthBuffer(DepthBufferType.TEXTURE).create();
+		this.rendererFBO = FBO.newFBO(1.0f).attachments(3).withAlphaChannel(true).depthBuffer(DepthBufferType.TEXTURE).create();
 
 		this.pipelineMRT = new PipelineMRT();
 		this.pipelineBloom = new PipelineBloom();
@@ -136,7 +133,7 @@ public class KosmosRenderer extends RendererMaster {
 		entitiesRenderer.setRenderPlayer(true);
 
 		/* Water Reflection & Refraction */
-		if (KosmosWater.reflectionsEnabled() && KosmosWater.getWater() != null) {
+		if (KosmosWater.reflectionsEnabled() && KosmosWater.getColourIntensity() != 1.0f && KosmosWater.getWater() != null) {
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
 
 			if (KosmosWater.reflectionShadows()) {
@@ -243,15 +240,6 @@ public class KosmosRenderer extends RendererMaster {
 
 	public ShadowRenderer getShadowRenderer() {
 		return shadowRenderer;
-	}
-
-	public float getDisplayScale() {
-		return displayScale;
-	}
-
-	public void setDisplayScale(float displayScale) {
-		this.displayScale = displayScale;
-		rendererFBO.setSizeScalar(displayScale);
 	}
 
 	@Override

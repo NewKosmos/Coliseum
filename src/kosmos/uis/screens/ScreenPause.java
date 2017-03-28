@@ -26,36 +26,40 @@ public class ScreenPause extends ScreenObject {
 		float yPosition = 0.30f;
 		float ySpacing = 0.07f;
 
+		// Save Game.
 		GuiButtonText saveGame = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "Save Game", GuiAlign.CENTRE);
-		saveGame.addLeftListener(new GuiButtonText.ListenerBasic() {
+		saveGame.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				KosmosConfigs.saveAllConfigs();
 			}
 		});
 
+		// Settings.
 		ScreenSettings screenSettings = new ScreenSettings(slider);
 		screenSettings.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText settings = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "Settings", GuiAlign.CENTRE);
-		settings.addLeftListener(new GuiButtonText.ListenerBasic() {
+		settings.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.setNewSecondaryScreen(screenSettings);
 			}
 		});
 
+		// About.
 		ScreenAbout screenAbout = new ScreenAbout(slider);
 		screenAbout.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText about = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "About", GuiAlign.CENTRE);
-		about.addLeftListener(new GuiButtonText.ListenerBasic() {
+		about.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.setNewSecondaryScreen(screenAbout);
 			}
 		});
 
+		// Exit.
 		GuiButtonText exitToMenu = new GuiButtonText(this, new Vector2f(0.5f, yPosition += 1.2f * ySpacing), "Exit To Menu", GuiAlign.CENTRE);
-		exitToMenu.addLeftListener(new GuiButtonText.ListenerBasic() {
+		exitToMenu.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(true);
@@ -65,6 +69,7 @@ public class ScreenPause extends ScreenObject {
 					FlounderNetwork.closeClient();
 				}
 
+				KosmosConfigs.saveAllConfigs();
 				KosmosWorld.removeAllPlayers();
 				KosmosWorld.deletePlayer();
 			}
