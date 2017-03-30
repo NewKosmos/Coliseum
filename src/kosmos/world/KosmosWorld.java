@@ -19,7 +19,7 @@ import flounder.profiling.*;
 import kosmos.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
-import kosmos.entities.instances.world.*;
+import kosmos.entities.instances.*;
 import kosmos.water.*;
 
 import java.util.*;
@@ -62,6 +62,7 @@ public class KosmosWorld extends Module {
 						KosmosConfigs.SAVE_PLAYER_Z.setReference(() -> KosmosWorld.getEntityPlayer().getPosition().z).getFloat()),
 				new Vector3f()
 		);
+		// new InstanceMuliplayer(FlounderEntities.getEntities(), INSTANCE.entityPlayer.getPosition(), new Vector3f(), "Dank Memes");
 		KosmosWater.generateWater();
 		KosmosChunks.setCurrent(new Chunk(KosmosChunks.getChunks(), new Vector3f(
 				KosmosConfigs.SAVE_CHUNK_X.setReference(() -> KosmosChunks.getCurrent().getPosition().x).getFloat(),

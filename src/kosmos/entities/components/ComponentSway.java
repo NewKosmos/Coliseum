@@ -105,9 +105,11 @@ public class ComponentSway extends IComponentEntity implements IComponentEditor 
 
 	@Override
 	public Pair<String[], String[]> getSaveValues(String entityName) {
+		String swayName = "sway"; // entityName
+
 		if (textureSway != null) {
 			try {
-				File file = new File("entities/" + entityName + "/" + entityName + "Sway.png");
+				File file = new File("entities/" + entityName + "/" + swayName + ".png");
 
 				if (file.exists()) {
 					file.delete();
@@ -131,7 +133,7 @@ public class ComponentSway extends IComponentEntity implements IComponentEditor 
 			}
 		}
 
-		String saveTexture = (textureSway != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Sway.png\")).setNumberOfRows(" + textureSway.getNumberOfRows() + ").create()") : null;
+		String saveTexture = (textureSway != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + swayName + ".png\")).setNumberOfRows(" + textureSway.getNumberOfRows() + ").create()") : null;
 
 		return new Pair<>(
 				new String[]{"private static final TextureObject TEXTURE_SWAY = " + saveTexture}, // Static variables

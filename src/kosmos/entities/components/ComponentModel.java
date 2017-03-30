@@ -205,9 +205,12 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 
 	@Override
 	public Pair<String[], String[]> getSaveValues(String entityName) {
+		String modelName = "model"; // entityName
+		String textureName = "diffuse"; // entityName
+
 		if (model != null) {
 			try {
-				File file = new File("entities/" + entityName + "/" + entityName + ".obj");
+				File file = new File("entities/" + entityName + "/" + modelName + ".obj");
 
 				if (file.exists()) {
 					file.delete();
@@ -233,7 +236,7 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 
 		if (texture != null) {
 			try {
-				File file = new File("entities/" + entityName + "/" + entityName + "Diffuse.png");
+				File file = new File("entities/" + entityName + "/" + textureName + ".png");
 
 				if (file.exists()) {
 					file.delete();
@@ -258,8 +261,8 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 		}
 
 		String saveScale = scale + "f";
-		String saveModel = (model != null) ? ("ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + ".obj\")).create()") : null;
-		String saveTexture = (texture != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Diffuse.png\")).setNumberOfRows(" + texture.getNumberOfRows() + ").create()") : null;
+		String saveModel = (model != null) ? ("ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + modelName + ".obj\")).create()") : null;
+		String saveTexture = (texture != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + textureName + ".png\")).setNumberOfRows(" + texture.getNumberOfRows() + ").create()") : null;
 		String saveTextureIndex = 1 + "";
 
 		return new Pair<>(

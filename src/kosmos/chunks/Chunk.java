@@ -18,7 +18,7 @@ import flounder.space.*;
 import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;
 import kosmos.entities.components.*;
-import kosmos.entities.instances.world.*;
+import kosmos.entities.instances.*;
 import kosmos.particles.*;
 import kosmos.particles.spawns.*;
 import kosmos.world.*;
@@ -88,14 +88,14 @@ public class Chunk extends Entity {
 				float rotationY = KosmosWorld.getNoise().noise1((x - y) / 60.0f) * 3600.0f;
 				float rotationZ = KosmosWorld.getNoise().noise1((x - y) / 20.0f) * 3600.0f;
 
-				Entity entity = new InstanceCloud(FlounderEntities.getEntities(), new Vector3f(
+				/*Entity entity = new InstanceCloud(FlounderEntities.getEntities(), new Vector3f(
 						getPosition().x + (x * 11.0f) + offsetX,
 						getPosition().y + 7.0f * height,
 						getPosition().z + (y * 11.0f) + offsetZ),
 						new Vector3f(0.0f, rotationY, rotationZ),
 						Maths.randomInRange(1.0f, 2.25f)
 				);
-				new ComponentChild(entity, this);
+				new ComponentChild(entity, this);*/
 			}
 		}
 	}

@@ -14,8 +14,7 @@ import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.entities.instances.plants.*;
-import kosmos.entities.instances.rocks.*;
+import kosmos.entities.instances.*;
 import kosmos.particles.*;
 import kosmos.world.*;
 
@@ -44,7 +43,7 @@ public class BiomeStone implements IBiome {
 
 		if (tilePosition.y < 0.0f) {
 			if (spawn == 1) {
-				return new InstanceLilipad(FlounderEntities.getEntities(), new Vector3f(tilePosition.x, 0.025f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
+			//	return new InstanceLilipad(FlounderEntities.getEntities(), new Vector3f(tilePosition.x, 0.025f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
 			}
 
 			return null;

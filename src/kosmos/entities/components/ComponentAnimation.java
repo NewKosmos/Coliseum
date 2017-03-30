@@ -32,8 +32,8 @@ import java.io.*;
 public class ComponentAnimation extends IComponentEntity implements IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
-	private ModelAnimated model;
 	private float scale;
+	private ModelAnimated model;
 	private Matrix4f modelMatrix;
 
 	private TextureObject texture;
@@ -52,27 +52,27 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	 * @param entity The entity this component is attached to.
 	 */
 	public ComponentAnimation(Entity entity) {
-		this(entity, (ModelAnimated) null, 1.0f, null, 1);
+		this(entity, 1.0f, (ModelAnimated) null, null, 1);
 	}
 
 	/**
 	 * Creates a new ComponentAnimation.
 	 *
 	 * @param entity The entity this component is attached to.
-	 * @param file The animated model file to load from.
 	 * @param scale The scale of the entity.
+	 * @param file The animated model file to load from.
 	 * @param texture The diffuse texture for the entity.
 	 * @param textureIndex What texture index this entity should renderObjects from (0 default).
 	 */
-	public ComponentAnimation(Entity entity, MyFile file, float scale, TextureObject texture, int textureIndex) {
+	public ComponentAnimation(Entity entity, float scale, MyFile file, TextureObject texture, int textureIndex) {
 		super(entity, ID);
 		ModelAnimated modelAnimated = FlounderCollada.loadCollada(file);
 
 		AnimationData animationData = FlounderCollada.loadAnimation(file);
 		Animation animation = FlounderAnimation.loadAnimation(animationData);
 
-		this.model = modelAnimated;
 		this.scale = scale;
+		this.model = modelAnimated;
 		this.modelMatrix = new Matrix4f();
 
 		this.texture = texture;
@@ -92,15 +92,15 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	 * Creates a new ComponentAnimation.
 	 *
 	 * @param entity The entity this component is attached to.
-	 * @param model The animated model to use when animating and rendering.
 	 * @param scale The scale of the entity.
+	 * @param model The animated model to use when animating and rendering.
 	 * @param texture The diffuse texture for the entity.
 	 * @param textureIndex What texture index this entity should renderObjects from (0 default).
 	 */
-	public ComponentAnimation(Entity entity, ModelAnimated model, float scale, TextureObject texture, int textureIndex) {
+	public ComponentAnimation(Entity entity, float scale, ModelAnimated model, TextureObject texture, int textureIndex) {
 		super(entity, ID);
-		this.model = model;
 		this.scale = scale;
+		this.model = model;
 		this.modelMatrix = new Matrix4f();
 
 		this.texture = texture;
@@ -324,9 +324,12 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 
 	@Override
 	public Pair<String[], String[]> getSaveValues(String entityName) {
+		String modelName = "collada"; // entityName
+		String textureName = "diffuse"; // entityName
+
 		if (model != null) {
 			try {
-				File file = new File("entities/" + entityName + "/" + entityName + ".dae");
+				File file = new File("entities/" + entityName + "/" + modelName + ".dae");
 
 				if (file.exists()) {
 					file.delete();
@@ -352,7 +355,7 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 
 		if (texture != null) {
 			try {
-				File file = new File("entities/" + entityName + "/" + entityName + "Diffuse.png");
+				File file = new File("entities/" + entityName + "/" + textureName + ".png");
 
 				if (file.exists()) {
 					file.delete();
@@ -376,14 +379,14 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 			}
 		}
 
-		String saveModel = (model != null) ? ("new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + ".dae\")") : null;
-		String saveTexture = (texture != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Diffuse.png\")).setNumberOfRows(" + texture.getNumberOfRows() + ").create()") : null;
-
 		String saveScale = scale + "f";
+		String saveModel = (model != null) ? ("new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + modelName + ".dae\")") : null;
+		String saveTexture = (texture != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + textureName + ".png\")).setNumberOfRows(" + texture.getNumberOfRows() + ").create()") : null;
+		String saveTextureIndex = 1 + "";
 
 		return new Pair<>(
 				new String[]{"private static final MyFile COLLADA = " + saveModel, "private static final TextureObject TEXTURE = " + saveTexture}, // Static variables
-				new String[]{saveScale, "COLLADA", "TEXTURE"} // Class constructor
+				new String[]{saveScale, "COLLADA", "TEXTURE", saveTextureIndex} // Class constructor
 		);
 	}
 

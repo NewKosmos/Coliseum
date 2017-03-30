@@ -58,10 +58,11 @@ public class ComponentChild extends IComponentEntity implements IComponentEditor
 
 	@Override
 	public Pair<String[], String[]> getSaveValues(String entityName) {
-		return new Pair<>(
-				new String[]{}, // Static variables
-				new String[]{} // Class constructor
-		);
+		//return new Pair<>(
+		//		new String[]{}, // Static variables
+		//		new String[]{} // Class constructor
+		//);
+		return null;
 	}
 
 	@Override

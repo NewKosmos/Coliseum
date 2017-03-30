@@ -90,9 +90,11 @@ public class ComponentGlow extends IComponentEntity implements IComponentEditor 
 
 	@Override
 	public Pair<String[], String[]> getSaveValues(String entityName) {
+		String glowName = "glow"; // entityName
+
 		if (textureGlow != null) {
 			try {
-				File file = new File("entities/" + entityName + "/" + entityName + "Glow.png");
+				File file = new File("entities/" + entityName + "/" + glowName + ".png");
 
 				if (file.exists()) {
 					file.delete();
@@ -116,7 +118,7 @@ public class ComponentGlow extends IComponentEntity implements IComponentEditor 
 			}
 		}
 
-		String saveTexture = (textureGlow != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + entityName + "Glow.png\")).setNumberOfRows(" + textureGlow.getNumberOfRows() + ").create()") : null;
+		String saveTexture = (textureGlow != null) ? ("TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, \"" + entityName + "\", \"" + glowName + ".png\")).setNumberOfRows(" + textureGlow.getNumberOfRows() + ").create()") : null;
 
 		return new Pair<>(
 				new String[]{"private static final TextureObject TEXTURE_GLOW = " + saveTexture}, // Static variables
