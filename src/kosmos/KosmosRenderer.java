@@ -11,12 +11,10 @@ package kosmos;
 
 import flounder.camera.*;
 import flounder.devices.*;
-import flounder.events.*;
 import flounder.fbos.*;
 import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.helpers.*;
-import flounder.inputs.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
@@ -25,14 +23,13 @@ import flounder.post.piplines.*;
 import flounder.renderer.*;
 import kosmos.camera.*;
 import kosmos.entities.*;
+import kosmos.particles.*;
 import kosmos.post.*;
 import kosmos.post.filters.*;
-import kosmos.particles.*;
 import kosmos.shadows.*;
 import kosmos.skybox.*;
 import kosmos.water.*;
 import kosmos.world.*;
-import org.lwjgl.glfw.*;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -135,7 +132,7 @@ public class KosmosRenderer extends RendererMaster {
 			);
 
 			if (KosmosPost.isBloomEnabled()) {
-				pipelineBloom.setBloomThreshold(0.6f);
+				pipelineBloom.setBloomThreshold(KosmosSkybox.getBloomThreshold());
 				pipelineBloom.renderMRT(rendererFBO, waterRenderer.getPipelineMRT().fbo);
 			}
 
@@ -178,7 +175,7 @@ public class KosmosRenderer extends RendererMaster {
 		if (KosmosPost.isEffectsEnabled()) {
 			// Render Bloom Filter.
 			if (KosmosPost.isBloomEnabled()) {
-				pipelineBloom.setBloomThreshold(0.6f);
+				pipelineBloom.setBloomThreshold(KosmosSkybox.getBloomThreshold());
 				pipelineBloom.renderMRT(rendererFBO, output);
 				output = pipelineBloom.getOutput();
 			}

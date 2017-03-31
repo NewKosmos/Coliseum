@@ -49,11 +49,11 @@ public class KosmosConfigs {
 	public static final ConfigData WATER_REFLECTION_QUALITY = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "waterReflectionQuality", 0.3f, KosmosWater::getReflectionQuality);
 	public static final ConfigData WATER_REFLECTION_SHADOWS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "waterReflectionShadows", true, KosmosWater::reflectionShadows);
 
-	public static final ConfigData BRIGHTNESS_BOOST = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "brightnessBoost", 0.08f, KosmosShadows::getBrightnessBoost);
+	public static final ConfigData BRIGHTNESS_BOOST = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "brightnessBoost", 0.123f, KosmosShadows::getBrightnessBoost);
 	public static final ConfigData SHADOWMAP_SIZE = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapSize", 8192, KosmosShadows::getShadowSize);
 	public static final ConfigData SHADOWMAP_PCF = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapPcf", 0, KosmosShadows::getShadowPCF);
 	public static final ConfigData SHADOWMAP_BIAS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapBias", 0.001f, KosmosShadows::getShadowBias);
-	public static final ConfigData SHADOWMAP_DARKNESS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapDarkness", 0.5f, KosmosShadows::getShadowDarkness);
+	public static final ConfigData SHADOWMAP_DARKNESS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapDarkness", 0.6f, KosmosShadows::getShadowDarkness);
 
 	public static final ConfigData POST_EFFECTS_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "effectsEnabled", true, KosmosPost::isEffectsEnabled);
 	public static final ConfigData POST_BLOOM_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "bloomEnabled", true, KosmosPost::isBloomEnabled);

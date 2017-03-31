@@ -18,7 +18,6 @@ import flounder.space.*;
 import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;
 import kosmos.entities.components.*;
-import kosmos.entities.instances.*;
 import kosmos.particles.*;
 import kosmos.particles.spawns.*;
 import kosmos.world.*;

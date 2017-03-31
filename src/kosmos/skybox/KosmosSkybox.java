@@ -23,7 +23,6 @@ import flounder.shaders.*;
 import flounder.textures.*;
 import flounder.visual.*;
 import kosmos.*;
-import kosmos.shadows.*;
 import kosmos.world.*;
 
 public class KosmosSkybox extends Module {
@@ -45,15 +44,15 @@ public class KosmosSkybox extends Module {
 	public static final Colour SKY_COLOUR_SUNRISE = new Colour(0.713f, 0.494f, 0.356f);
 	public static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.30f, 0.70f);
 
+	public static final Colour SUN_COLOUR_NIGHT = new Colour(0.0f, 0.0f, 0.0f);
 	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.713f, 0.494f, 0.356f);
-	private static final Colour SUN_COLOUR_DAY_DEFAULT = new Colour(0.65f, 0.65f, 0.65f);
-	public static final Colour SUN_COLOUR_DAY = new Colour(0.60f, 0.60f, 0.60f);
+	public static final Colour SUN_COLOUR_DAY = new Colour(0.7f, 0.7f, 0.7f);
 
-	public static final Colour MOON_COLOUR = new Colour(0.20f, 0.20f, 0.20f);
+	public static final Colour MOON_COLOUR = new Colour(0.1f, 0.1f, 0.19f);
 
 	public static final float DAY_NIGHT_CYCLE = 1200.0f; // The day/night length (sec).
 
-	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.5f, 0.0f, 0.5f); // The starting light direction.
+	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.3f, 0.0f, 0.5f); // The starting light direction.
 
 	private TextureObject cubemap;
 	private Matrix4f modelMatrix;
@@ -101,9 +100,6 @@ public class KosmosSkybox extends Module {
 		Colour.interpolate(skyColour, SKY_COLOUR_DAY, getShadowFactor(), skyColour);
 		Vector3f.rotate(LIGHT_DIRECTION, lightRotation.set(dayFactor * 360.0f, 0.0f, 0.0f), lightPosition);
 		fog.setFogColour(skyColour);
-
-		// Updates sun colour.
-		SUN_COLOUR_DAY.set(SUN_COLOUR_DAY_DEFAULT.r - KosmosShadows.getBrightnessBoost(), SUN_COLOUR_DAY_DEFAULT.g - KosmosShadows.getBrightnessBoost(), SUN_COLOUR_DAY_DEFAULT.b - KosmosShadows.getBrightnessBoost());
 	}
 
 	@Override
@@ -156,6 +152,10 @@ public class KosmosSkybox extends Module {
 		}
 
 		return Maths.clamp(1.0f - getShadowFactor() + addedIntensity, 0.0f, 1.0f);
+	}
+
+	public static float getBloomThreshold() {
+		return 0.73f; // 0.8f * (getShadowFactor()) + 0.2f; // TODO
 	}
 
 	public static Colour getSkyColour() {

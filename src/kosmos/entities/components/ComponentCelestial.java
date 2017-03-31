@@ -70,8 +70,10 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 			ComponentLight componentLight = (ComponentLight) getEntity().getComponent(ComponentLight.ID);
 
 			if (componentLight != null) {
-				Colour.interpolate(KosmosSkybox.SUN_COLOUR_SUNRISE, KosmosSkybox.SUN_COLOUR_DAY, KosmosSkybox.getSunriseFactor(), componentLight.getLight().getColour());
-				Colour.interpolate(componentLight.getLight().getColour(), KosmosSkybox.SUN_COLOUR_DAY, KosmosSkybox.getShadowFactor(), componentLight.getLight().getColour());
+				Colour newColour = new Colour();
+				Colour.interpolate(KosmosSkybox.SUN_COLOUR_SUNRISE, KosmosSkybox.SUN_COLOUR_NIGHT, KosmosSkybox.getSunriseFactor(), newColour);
+				Colour.interpolate(newColour, KosmosSkybox.SUN_COLOUR_DAY, KosmosSkybox.getShadowFactor(), newColour);
+				componentLight.getLight().setColour(newColour);
 			}
 		}
 	}

@@ -214,6 +214,21 @@ public class ScreenSettingGraphics extends ScreenObject {
 			}
 		});
 
+		// Slider Shadowmap Darkness.
+		GuiSliderText sliderShadowDarkness = new GuiSliderText(paneRight, new Vector2f(0.75f, 0.62f), "Shadow Darkness: ", 0.0f, 1.0f, KosmosShadows.getShadowDarkness(), GuiAlign.CENTRE);
+		FlounderEvents.addEvent(new EventChange<Float>(KosmosShadows::getShadowDarkness) {
+			@Override
+			public void onEvent(Float newValue) {
+				sliderShadowDarkness.setText("Shadow Darkness: " + Maths.roundToPlace(newValue, 2));
+			}
+		});
+		sliderShadowDarkness.addChangeListener(new ScreenListener() {
+			@Override
+			public void eventOccurred() {
+				KosmosShadows.setShadowDarkness(sliderShadowDarkness.getProgress());
+			}
+		});
+
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);
 		back.addLeftListener(new ScreenListener() {

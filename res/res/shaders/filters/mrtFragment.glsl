@@ -134,7 +134,8 @@ void main(void) {
             }
         }
 
-        out_colour = (vec4(totalDiffuse + brightnessBoost, 1.0) * out_colour) + vec4(totalSpecular, 1.0);
+        vec3 boost = vec3(brightnessBoost, brightnessBoost, brightnessBoost);
+        out_colour = (vec4(max(totalDiffuse, boost), 1.0) * out_colour) + vec4(totalSpecular, 1.0);
     }
 
     if (!ignoreFog) {
