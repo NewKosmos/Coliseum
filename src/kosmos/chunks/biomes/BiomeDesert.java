@@ -12,15 +12,45 @@ package kosmos.chunks.biomes;
 import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
+import flounder.space.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.entities.instances.*;
 import kosmos.particles.*;
-import kosmos.world.*;
 
-public class BiomeDesert implements IBiome {
-	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "sand.png")).clampEdges().create();
-	private static final ParticleType particle = null;
+public class BiomeDesert extends IBiome {
+	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{
+			new EntitySpawn(1.0f, 0.4375f) {
+				@Override
+				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+					return new InstanceCactus1(structure, position, rotation);
+				}
+			},
+			new EntitySpawn(1.0f, 0.4375f) {
+				@Override
+				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+					return new InstanceCactus2(structure, position, rotation);
+				}
+			},
+			new EntitySpawn(1.0f, 0.4375f) {
+				@Override
+				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+					return new InstanceTreePalm(structure, position, rotation);
+				}
+			},
+			new EntitySpawn(1.0f, 0.375f) {
+				@Override
+				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+					return new InstanceCattail(structure, position, rotation);
+				}
+			}
+	};
+	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "sand.png")).clampEdges().create();
+	private static final ParticleType PARTICLE = null;
+
+	public BiomeDesert() {
+		super();
+	}
 
 	@Override
 	public String getBiomeName() {
@@ -28,72 +58,18 @@ public class BiomeDesert implements IBiome {
 	}
 
 	@Override
-	public TextureObject getTexture() {
-		return texture;
+	public EntitySpawn[] getEntitySpawns() {
+		return SPAWNS;
 	}
 
 	@Override
-	public Entity generateEntity(Chunk chunk, Vector3f tilePosition) {
-		if (Math.abs(KosmosWorld.getNoise().noise2(tilePosition.z * (float) Math.sin(tilePosition.x), tilePosition.x * (float) Math.sin(tilePosition.z))) <= 0.3f) {
-			return null;
-		}
-
-		float spawn = KosmosWorld.getNoise().noise1((tilePosition.z - tilePosition.x) * (float) Math.sin(tilePosition.x + tilePosition.z)) * 100.0f;
-		float rotation = KosmosWorld.getNoise().noise1(tilePosition.x - tilePosition.z) * 3600.0f;
-
-		if (tilePosition.y < 0.0f) {
-			if (spawn == 1) {
-			//	return new InstanceLilipad(FlounderEntities.getEntities(), new Vector3f(tilePosition.x, 0.025f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
-			}
-
-			return null;
-		}
-
-		switch ((int) spawn) {
-			case 1:
-				return new InstanceCactus1(FlounderEntities.getEntities(),
-						new Vector3f(
-								tilePosition.x,
-								0.4375f + tilePosition.y * 0.5f,
-								tilePosition.z
-						),
-						new Vector3f(0.0f, rotation, 0.0f)
-				);
-			case 2:
-				return new InstanceCactus2(FlounderEntities.getEntities(),
-						new Vector3f(
-								tilePosition.x,
-								0.4375f + tilePosition.y * 0.5f,
-								tilePosition.z
-						),
-						new Vector3f(0.0f, rotation, 0.0f)
-				);
-			case 3:
-				return new InstanceTreePalm(FlounderEntities.getEntities(),
-						new Vector3f(
-								tilePosition.x,
-								0.4375f + tilePosition.y * 0.5f,
-								tilePosition.z
-						),
-						new Vector3f(0.0f, rotation, 0.0f)
-				);
-			case 4:
-				return new InstanceCattail(FlounderEntities.getEntities(),
-						new Vector3f(
-								tilePosition.x,
-								0.375f + tilePosition.y * 0.5f,
-								tilePosition.z
-						),
-						new Vector3f(0.0f, rotation, 0.0f)
-				);
-			default:
-				return null;
-		}
+	public TextureObject getTexture() {
+		return TEXTURE;
 	}
 
 	@Override
 	public ParticleType getWeatherParticle() {
-		return particle;
+		return PARTICLE;
 	}
 
 	@Override

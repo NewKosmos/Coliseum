@@ -14,11 +14,12 @@ import flounder.maths.vectors.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.particles.*;
+import kosmos.world.*;
 
 /**
  * A interface used to define biome types.
  */
-public interface IBiome {
+public abstract class IBiome {
 	public enum Biomes {
 		GRASS(new BiomeGrass()), SNOW(new BiomeSnow()), STONE(new BiomeStone()), DESERT(new BiomeDesert()); // RIVER(new BiomeRiver()),
 
@@ -38,49 +39,68 @@ public interface IBiome {
 	 *
 	 * @return The biome name.
 	 */
-	String getBiomeName();
+	public abstract String getBiomeName();
+
+	public abstract EntitySpawn[] getEntitySpawns();
 
 	/**
 	 * Gets the type of texture to use as the surface. (null will not spawn any tile in the biomes area.
 	 *
 	 * @return The type of texture to use as the surface.
 	 */
-	TextureObject getTexture();
+	public abstract TextureObject getTexture();
 
-	Entity generateEntity(Chunk chunk, Vector3f tilePosition);
+	public Entity generateEntity(Chunk chunk, Vector3f tilePosition) {
+		if (Math.abs(KosmosWorld.getNoise().noise2(tilePosition.z * (float) Math.sin(tilePosition.x), tilePosition.x * (float) Math.sin(tilePosition.z))) <= 0.3f) {
+			return null;
+		}
+
+		float spawn = KosmosWorld.getNoise().noise1((tilePosition.z - tilePosition.x) * (float) Math.sin(tilePosition.x + tilePosition.z)) * 23.0f * getEntitySpawns().length;
+		float rotation = KosmosWorld.getNoise().noise1(tilePosition.x - tilePosition.z) * 3600.0f;
+
+		if (getEntitySpawns().length > 0 && (int) spawn >= 0.0f && (int) spawn < getEntitySpawns().length) {
+			EntitySpawn entitySpawn = getEntitySpawns()[(int) spawn];
+
+			if (entitySpawn != null && spawn - (int) spawn <= entitySpawn.spawnChance) {
+				return entitySpawn.create(FlounderEntities.getEntities(), new Vector3f(tilePosition.x, entitySpawn.heightOffset + tilePosition.y * 0.5f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
+			}
+		}
+
+		return null;
+	}
 
 	/**
 	 * Gets the type of weather particle to spawn when weather is active.
 	 *
 	 * @return The type of weather particle.
 	 */
-	ParticleType getWeatherParticle();
+	public abstract ParticleType getWeatherParticle();
 
 	/**
 	 * Gets the average day temp (celsius).
 	 *
 	 * @return The average night day.
 	 */
-	float getTempDay();
+	public abstract float getTempDay();
 
 	/**
 	 * Gets the average night temp (celsius).
 	 *
 	 * @return The average night temp.
 	 */
-	float getTempNight();
+	public abstract float getTempNight();
 
 	/**
 	 * Gets the average humidity %.
 	 *
 	 * @return The average humidity.
 	 */
-	float getHumidity();
+	public abstract float getHumidity();
 
 	/**
 	 * Gets the wind speed % (0-1).
 	 *
 	 * @return The average wind speed.
 	 */
-	float getWindSpeed();
+	public abstract float getWindSpeed();
 }

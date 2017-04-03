@@ -12,15 +12,51 @@ package kosmos.chunks.biomes;
 import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
+import flounder.space.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.entities.instances.*;
 import kosmos.particles.*;
-import kosmos.world.*;
 
-public class BiomeSnow implements IBiome {
-	private static final TextureObject texture = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "snow.png")).clampEdges().create();
-	private static final ParticleType particle = new ParticleType("snow", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "snowParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.20f);
+public class BiomeSnow extends IBiome {
+	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{
+			new EntitySpawn(1.0f, 0.375f) {
+				@Override
+				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+					return new InstanceTreePine(structure, position, rotation);
+				}
+			},
+			new EntitySpawn(1.0f, 0.53f) {
+				@Override
+				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+					return new InstanceTreeMaple(structure, position, rotation);
+				}
+			},
+			new EntitySpawn(1.0f, 0.5f) {
+				@Override
+				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+					return new InstanceTreeYellow(structure, position, rotation);
+				}
+			},
+			new EntitySpawn(0.4f,  0.375f) {
+				@Override
+				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+					return new InstanceTreeDeadSnow(structure, position, rotation);
+				}
+			},
+			new EntitySpawn(0.3f,  -0.35f) {
+				@Override
+				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+					return new InstanceBottleMaple(structure, position, rotation);
+				}
+			}
+	};
+	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "snow.png")).clampEdges().create();
+	private static final ParticleType PARTICLE = new ParticleType("snow", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "snowParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.20f);
+
+	public BiomeSnow() {
+		super();
+	}
 
 	@Override
 	public String getBiomeName() {
@@ -28,89 +64,18 @@ public class BiomeSnow implements IBiome {
 	}
 
 	@Override
-	public TextureObject getTexture() {
-		return texture;
+	public EntitySpawn[] getEntitySpawns() {
+		return SPAWNS;
 	}
 
 	@Override
-	public Entity generateEntity(Chunk chunk, Vector3f tilePosition) {
-		if (Math.abs(KosmosWorld.getNoise().noise2(tilePosition.z * (float) Math.sin(tilePosition.x), tilePosition.x * (float) Math.sin(tilePosition.z))) <= 0.3f) {
-			return null;
-		}
-
-		float spawn = KosmosWorld.getNoise().noise1((tilePosition.z - tilePosition.x) * (float) Math.sin(tilePosition.x + tilePosition.z)) * 100.0f;
-		float rotation = KosmosWorld.getNoise().noise1(tilePosition.x - tilePosition.z) * 3600.0f;
-
-		if (tilePosition.y < 0.0f) {
-			if (spawn == 1) {
-			//	return new InstanceLilipad(FlounderEntities.getEntities(), new Vector3f(tilePosition.x, 0.025f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
-			}
-
-			return null;
-		}
-
-		switch ((int) spawn) {
-			case 1:
-				return new InstanceTreePine(FlounderEntities.getEntities(),
-						new Vector3f(
-								tilePosition.x,
-								0.375f + tilePosition.y * 0.5f,
-								tilePosition.z
-						),
-						new Vector3f(0.0f, rotation, 0.0f)
-				);
-			case 2:
-				return new InstanceTreeMaple(FlounderEntities.getEntities(),
-						new Vector3f(
-								tilePosition.x,
-								0.53f + tilePosition.y * 0.5f,
-								tilePosition.z
-						),
-						new Vector3f(0.0f, rotation, 0.0f)
-				);
-			case 3:
-				return new InstanceTreeYellow(FlounderEntities.getEntities(),
-						new Vector3f(
-								tilePosition.x,
-								0.5f + tilePosition.y * 0.5f,
-								tilePosition.z
-						),
-						new Vector3f(0.0f, rotation, 0.0f)
-				);
-			case 4:
-				if (spawn - 4 < 0.3f) {
-					return new InstanceBottleMaple(FlounderEntities.getEntities(),
-							new Vector3f(
-									tilePosition.x,
-									-0.35f + tilePosition.y * 0.5f,
-									tilePosition.z
-							),
-							new Vector3f(0.0f, rotation, 0.0f)
-					);
-				}
-
-				return null;
-			case 5:
-				if (spawn - 5 < 0.4f) {
-					return new InstanceTreeDeadSnow(FlounderEntities.getEntities(),
-							new Vector3f(
-									tilePosition.x,
-									0.375f + tilePosition.y * 0.5f,
-									tilePosition.z
-							),
-							new Vector3f(0.0f, rotation, 0.0f)
-					);
-				}
-
-				return null;
-			default:
-				return null;
-		}
+	public TextureObject getTexture() {
+		return TEXTURE;
 	}
 
 	@Override
 	public ParticleType getWeatherParticle() {
-		return particle;
+		return PARTICLE;
 	}
 
 	@Override
