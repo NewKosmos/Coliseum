@@ -115,6 +115,11 @@ public class BiomeGrass extends IBiome {
 	}
 
 	@Override
+	public float getHeightModifier() {
+		return 1.0f;
+	}
+
+	@Override
 	public float getTempDay() {
 		return 20.9f;
 	}

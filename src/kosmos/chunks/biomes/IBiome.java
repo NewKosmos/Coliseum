@@ -21,7 +21,7 @@ import kosmos.world.*;
  */
 public abstract class IBiome {
 	public enum Biomes {
-		GRASS(new BiomeGrass()), SNOW(new BiomeSnow()), STONE(new BiomeStone()), DESERT(new BiomeDesert()); // RIVER(new BiomeRiver()),
+		GRASS(new BiomeGrass()), SNOW(new BiomeSnow()), STONE(new BiomeStone()), DESERT(new BiomeDesert()), RIVER(new BiomeRiver());
 
 		private IBiome biome;
 
@@ -51,6 +51,10 @@ public abstract class IBiome {
 	public abstract TextureObject getTexture();
 
 	public Entity generateEntity(Chunk chunk, Vector3f tilePosition) {
+		if (tilePosition.y < 0.0f) {
+			return null;
+		}
+
 		if (Math.abs(KosmosWorld.getNoise().noise2(tilePosition.z * (float) Math.sin(tilePosition.x), tilePosition.x * (float) Math.sin(tilePosition.z))) <= 0.3f) {
 			return null;
 		}
@@ -75,6 +79,14 @@ public abstract class IBiome {
 	 * @return The type of weather particle.
 	 */
 	public abstract ParticleType getWeatherParticle();
+
+	/**
+	 * Gets how much the normalized terrain is effected by the biome.
+	 * If it is negative hills become valleys, thecloserr to zero the flatter the terrain becomes.
+	 *
+	 * @return The biome height modifier.
+	 */
+	public abstract float getHeightModifier();
 
 	/**
 	 * Gets the average day temp (celsius).

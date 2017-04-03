@@ -73,6 +73,11 @@ public class BiomeStone extends IBiome {
 	}
 
 	@Override
+	public float getHeightModifier() {
+		return 1.0f;
+	}
+
+	@Override
 	public float getTempDay() {
 		return 8.2f;
 	}

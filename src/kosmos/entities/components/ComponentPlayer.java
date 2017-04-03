@@ -105,7 +105,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		float waterLevel = (KosmosWater.getWater() != null) ? KosmosWater.getWater().getPosition().y : 0.0f;
 
 		// Finds the chunk height at the next player xz pos.
-		float chunkHeight = Chunk.getWorldHeight(getEntity().getPosition().x + dx, getEntity().getPosition().z + dz) * 0.5f;
+		float chunkHeight = Chunk.getWorldHeight(getEntity().getPosition().x + dx, getEntity().getPosition().z + dz, 1.0f) * 0.5f;
 
 		// Does collision with the highest world object.
 		float worldHeight = Math.max(waterLevel - (float) Math.sqrt(2.0), chunkHeight) + KosmosPlayer.PLAYER_OFFSET_Y;
@@ -117,7 +117,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		}
 
 		// First person rotation.
-		if (((KosmosCamera) FlounderCamera.getCamera()).isFirstPerson()) {
+		if (KosmosCamera.isFirstPerson()) {
 			float x = currentSpeed * Framework.getDelta();
 			float y = ry * (KosmosPlayer.RUN_SPEED / KosmosPlayer.TURN_SPEED);
 			double theta = Math.toRadians(FlounderCamera.getCamera().getRotation().y);

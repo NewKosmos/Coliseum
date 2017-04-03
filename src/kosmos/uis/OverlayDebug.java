@@ -16,6 +16,7 @@ import flounder.guis.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;
+import kosmos.chunks.*;
 import kosmos.skybox.*;
 import kosmos.world.*;
 
@@ -28,6 +29,7 @@ public class OverlayDebug extends ScreenObject {
 	private TextObject positionText;
 	private TextObject timeText;
 	private TextObject seedText;
+	private TextObject biomeText;
 	private boolean updateText;
 
 	public OverlayDebug(ScreenObject parent) {
@@ -39,6 +41,7 @@ public class OverlayDebug extends ScreenObject {
 		positionText = createStatus("POSITION: [0, 0, 0]", 0.07f);
 		timeText = createStatus("TIME: 0", 0.10f);
 		seedText = createStatus("SEED: 0", 0.13f);
+		biomeText = createStatus("BIOME: NULL", 0.16f);
 
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -66,6 +69,7 @@ public class OverlayDebug extends ScreenObject {
 			positionText.setText("POSITION: [" + (FlounderCamera.getPlayer() == null ? "NULL" : Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().x, 1) + ", " + Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().y, 1) + ", " + Maths.roundToPlace(FlounderCamera.getPlayer().getPosition().z, 1) + "]"));
 			timeText.setText("TIME: " + Maths.roundToPlace(KosmosSkybox.getDayFactor(), 3));
 			seedText.setText("SEED: " + KosmosWorld.getNoise().getSeed());
+			biomeText.setText("BIOME: " + (KosmosChunks.getCurrent() == null ? "NULL" : KosmosChunks.getCurrent().getBiome().name()));
 			updateText = false;
 		}
 	}

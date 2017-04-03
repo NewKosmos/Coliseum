@@ -79,6 +79,11 @@ public class BiomeSnow extends IBiome {
 	}
 
 	@Override
+	public float getHeightModifier() {
+		return 1.0f;
+	}
+
+	@Override
 	public float getTempDay() {
 		return -0.5f;
 	}

@@ -178,12 +178,11 @@ public class Chunk extends Entity {
 		float positionZ = (float) ((3.0 / 2.0) * HEXAGON_SIDE_LENGTH * y);
 
 		Vector2f worldPos = new Vector2f(0.5f * positionX + chunk.getPosition().x, 0.5f * positionZ + chunk.getPosition().z);
-		float height = getWorldHeight(worldPos.x, worldPos.y);
+		float height = getWorldHeight(worldPos.x, worldPos.y, chunk.biome.getBiome().getHeightModifier());
 
-		if (height >= 0.0f) {
+		//if (height >= 0.0f) {
 			tiles.add(new Vector3f(positionX, height, positionZ));
-
-		}
+		//}
 
 		Entity entity = chunk.biome.getBiome().generateEntity(chunk, new Vector3f(worldPos.x, height, worldPos.y));
 
@@ -197,12 +196,13 @@ public class Chunk extends Entity {
 	 *
 	 * @param positionX The worlds X position.
 	 * @param positionZ The worlds Z position.
+	 * @param yModifier How much the world height is scaled.
 	 *
 	 * @return The found height at that world position.
 	 */
-	public static float getWorldHeight(float positionX, float positionZ) {
+	public static float getWorldHeight(float positionX, float positionZ, float yModifier) {
 		// Calculates the final height for the world position using perlin.
-		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(positionX / 30.0f, positionZ / 30.0f) * 12.0f);
+		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(positionX / 30.0f, positionZ / 30.0f) * 12.0f * yModifier);
 
 		// Ignore height that would be water/nothing.
 		if (height < 0.0f) {
