@@ -38,6 +38,10 @@ public class ComponentWaterBob extends IComponentEntity implements IComponentEdi
 
 	@Override
 	public void update() {
+		if (KosmosWater.getWater() == null) {
+			return;
+		}
+
 		float waterHeight = KosmosWater.getWater().getHeight(getEntity().getPosition().x, getEntity().getPosition().z);
 		getEntity().getPosition().y = startY + waterHeight;
 		getEntity().setMoved();

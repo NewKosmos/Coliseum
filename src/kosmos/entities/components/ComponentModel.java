@@ -175,7 +175,7 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 		scaleSlider.addChangeListener((ChangeEvent e) -> {
 			JSlider source = (JSlider) e.getSource();
 			int reading = source.getValue();
-			this.scale = reading / 25.0f;
+			this.scale = (float) reading / 25.0f;
 		});
 		scaleSlider.setMajorTickSpacing(25);
 		scaleSlider.setMinorTickSpacing(10);

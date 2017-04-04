@@ -21,13 +21,15 @@ public enum ComponentsList {
 	CLOUD(new ComponentCloud(null)),
 	COLLIDER(new ComponentCollider(null)),
 	COLLISION(new ComponentCollision(null)),
+	GLOW(new ComponentGlow(null)),
 	LIGHT(new ComponentLight(null)),
 	MODEL(new ComponentModel(null)),
 	MULTIPLAYER(new ComponentMultiplayer(null)),
 	PARTICLES(new ComponentParticles(null)),
 	PLAYER(new ComponentPlayer(null)),
 	SURFACE(new ComponentSurface(null)),
-	SWAY(new ComponentSway(null));
+	SWAY(new ComponentSway(null)),
+	WATER_BOB(new ComponentWaterBob(null));
 
 	public static final List<Pair<String, JPanel>> ADD_SIDE_TAB = new ArrayList<>();
 	public static final List<String> REMOVE_SIDE_TAB = new ArrayList<>();

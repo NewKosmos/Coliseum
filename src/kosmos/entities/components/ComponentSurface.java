@@ -100,7 +100,7 @@ public class ComponentSurface extends IComponentEntity implements IComponentEdit
 		sliderShineDamper.addChangeListener((ChangeEvent e) -> {
 			JSlider source = (JSlider) e.getSource();
 			int reading = source.getValue();
-			this.shineDamper = reading / 100.0f;
+			this.shineDamper = (float) reading / 100.0f;
 		});
 		sliderShineDamper.setMajorTickSpacing(100);
 		sliderShineDamper.setMinorTickSpacing(50);
@@ -114,7 +114,7 @@ public class ComponentSurface extends IComponentEntity implements IComponentEdit
 		sliderReflectivity.addChangeListener((ChangeEvent e) -> {
 			JSlider source = (JSlider) e.getSource();
 			int reading = source.getValue();
-			this.reflectivity = reading / 100.0f;
+			this.reflectivity = (float) reading / 100.0f;
 		});
 		sliderReflectivity.setMajorTickSpacing(100);
 		sliderReflectivity.setMinorTickSpacing(50);

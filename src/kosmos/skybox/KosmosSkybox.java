@@ -89,10 +89,10 @@ public class KosmosSkybox extends Module {
 		}
 
 		// Update the sky colours and sun position.
-		float scaledSpeed = 0.0f;
+		float scaledSpeed = 1.0f;
 
 		if (FlounderGuis.getGuiMaster() instanceof KosmosGuis) {
-			scaledSpeed = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 10.0f : 2.0f;
+			scaledSpeed = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 10.0f : 1.0f;
 		}
 
 		dayFactor = dayDriver.update(Framework.getDelta() * scaledSpeed) / 100.0f;
