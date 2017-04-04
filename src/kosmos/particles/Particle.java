@@ -185,7 +185,7 @@ public class Particle implements ISpatialObject, Comparable<Particle> {
 	}
 
 	@Override
-	public AABB getBounding() {
+	public AABB getCollider() {
 		return aabb;
 	}
 

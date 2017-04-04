@@ -36,11 +36,11 @@ public class Chunk extends Entity {
 	// Deltas used to position chunks around a centre chunk when the radius is 7 for each chunk.
 	private static final double[][] DELTA_CHUNK = new double[][]{{9.5, 7.0}, {-0.5, 13.0}, {-10.0, 6.0}, {-9.5, -7.0}, {0.5, -13.0}, {10.0, -6.0}};
 
-	// Each tile can be broken into equilateral triangles with sides of length.
-	private static final double HEXAGON_SIDE_LENGTH = 2.0;
-
 	// The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
 	private static final int CHUNK_RADIUS = 7;
+
+	// Each tile can be broken into equilateral triangles with sides of length.
+	private static final double HEXAGON_SIDE_LENGTH = 2.0;
 
 	// The overall world radius footprint per chunk.
 	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * (CHUNK_RADIUS - 0.5f);
@@ -62,8 +62,6 @@ public class Chunk extends Entity {
 
 		new ComponentModel(this, 1.0f, chunkMesh.getModel(), biome.getBiome().getTexture(), 0);
 		new ComponentSurface(this, 1.0f, 0.0f, false, false);
-		new ComponentCollider(this);
-		new ComponentCollision(this);
 
 		// generateWeather();
 		// generateClouds();
@@ -180,9 +178,9 @@ public class Chunk extends Entity {
 		Vector2f worldPos = new Vector2f(0.5f * positionX + chunk.getPosition().x, 0.5f * positionZ + chunk.getPosition().z);
 		float height = getWorldHeight(worldPos.x, worldPos.y, chunk.biome.getBiome().getHeightModifier());
 
-		//if (height >= 0.0f) {
+		if (height >= 0.0f) {
 			tiles.add(new Vector3f(positionX, height, positionZ));
-		//}
+		}
 
 		Entity entity = chunk.biome.getBiome().generateEntity(chunk, new Vector3f(worldPos.x, height, worldPos.y));
 
@@ -253,7 +251,7 @@ public class Chunk extends Entity {
 	}
 
 	@Override
-	public Collider getBounding() {
+	public Collider getCollider() {
 		return sphere;
 	}
 

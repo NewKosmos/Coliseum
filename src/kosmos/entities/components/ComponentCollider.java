@@ -23,7 +23,7 @@ import java.awt.event.*;
  * <p>
  * For example, a checkpoint can use a ComponentCollider to detect when the player has reached it.
  */
-public class ComponentCollider extends IComponentEntity implements IComponentBounding, IComponentEditor {
+public class ComponentCollider extends IComponentEntity implements IComponentCollider, IComponentEditor {
 	public static final int ID = EntityIDAssigner.getId();
 
 	private AABB aabb;

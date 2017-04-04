@@ -73,7 +73,7 @@ public class KosmosSkybox extends Module {
 		this.cubemap = TextureFactory.newBuilder().setCubemap(TEXTURE_FILES).create();
 		this.modelMatrix = new Matrix4f();
 
-		this.fog = new Fog(new Colour(), 0.025f, 2.0f, 0.0f, 50.0f);
+		this.fog = new Fog(new Colour(), 0.032f, 2.56f, -1.28f, 51.2f);
 		this.dayDriver = new LinearDriver(0.0f, 100.0f, DAY_NIGHT_CYCLE);
 		this.dayFactor = 0.0f;
 		this.skyColour = new Colour(SKY_COLOUR_DAY);
@@ -95,7 +95,7 @@ public class KosmosSkybox extends Module {
 			scaledSpeed = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 4.20f : 1.0f;
 		}
 
-		dayFactor = dayDriver.update(Framework.getDelta() * scaledSpeed) / 100.0f;
+		dayFactor = 0.3f; // dayDriver.update(Framework.getDelta() * scaledSpeed) / 100.0f;
 		Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), skyColour);
 		Colour.interpolate(skyColour, SKY_COLOUR_DAY, getShadowFactor(), skyColour);
 		Vector3f.rotate(LIGHT_DIRECTION, lightRotation.set(dayFactor * 360.0f, 0.0f, 0.0f), lightPosition);

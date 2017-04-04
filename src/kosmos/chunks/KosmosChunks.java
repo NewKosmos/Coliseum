@@ -64,8 +64,8 @@ public class KosmosChunks extends Module {
 				Ray cameraRay = FlounderCamera.getCamera().getViewRay();
 
 				for (Entity entity : FlounderEntities.getEntities().getAll()) {
-					if (entity.getBounding() != null && entity.getComponent(ComponentPlayer.ID) == null && entity.getComponent(ComponentMultiplayer.ID) == null) {
-						IntersectData data = entity.getBounding().intersects(cameraRay);
+					if (entity.getCollider() != null && entity.getComponent(ComponentPlayer.ID) == null && entity.getComponent(ComponentMultiplayer.ID) == null) {
+						IntersectData data = entity.getCollider().intersects(cameraRay);
 						float distance = Vector3f.getDistance(entity.getPosition(), KosmosWorld.getEntityPlayer().getPosition());
 
 						if (data.isIntersection() && distance < 4.20f) {
@@ -168,7 +168,7 @@ public class KosmosChunks extends Module {
 
 				if (chunk != null) {
 					// Checks if the player position is in this chunk.
-					if (chunk.isLoaded() && chunk.getBounding() != null && chunk.getBounding().contains(playerPos)) {
+					if (chunk.isLoaded() && chunk.getCollider() != null && chunk.getCollider().contains(playerPos)) {
 						// This chunk is now the chunk with the player in it.
 						playerChunk = chunk;
 					}
@@ -221,7 +221,7 @@ public class KosmosChunks extends Module {
 				Chunk chunk = (Chunk) it.next();
 
 				if (chunk != currentChunk && chunk.isLoaded()) {
-					if (!chunk.getBounding().intersects(INSTANCE.chunkRange).isIntersection() && !INSTANCE.chunkRange.contains((Sphere) chunk.getBounding())) {
+					if (!chunk.getCollider().intersects(INSTANCE.chunkRange).isIntersection() && !INSTANCE.chunkRange.contains(chunk.getCollider())) {
 						chunk.delete();
 						it.remove();
 					}
