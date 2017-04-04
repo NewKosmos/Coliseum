@@ -10,18 +10,13 @@
 package editors.entities;
 
 import editors.editor.*;
-import flounder.camera.*;
 import flounder.devices.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.framework.*;
 import flounder.helpers.*;
-import flounder.logger.*;
 import flounder.maths.vectors.*;
-import flounder.models.*;
 import flounder.physics.bounding.*;
-import flounder.resources.*;
-import flounder.textures.*;
 import kosmos.entities.components.*;
 import kosmos.particles.*;
 import kosmos.post.*;

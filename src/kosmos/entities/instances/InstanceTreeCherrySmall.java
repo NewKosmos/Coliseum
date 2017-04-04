@@ -15,7 +15,7 @@ public class InstanceTreeCherrySmall extends Entity {
 	private static final ModelObject MODEL = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "treeCherrySmall", "model.obj")).create();
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "treeCherrySmall", "diffuse.png")).setNumberOfRows(1).create();
 	private static final TextureObject TEXTURE_SWAY = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "treeCherrySmall", "sway.png")).setNumberOfRows(1).create();
-	
+
 	public InstanceTreeCherrySmall(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 		new kosmos.entities.components.ComponentModel(this, 1.0f, MODEL, TEXTURE, 1);
@@ -23,6 +23,6 @@ public class InstanceTreeCherrySmall extends Entity {
 		new kosmos.entities.components.ComponentSway(this, TEXTURE_SWAY);
 		new kosmos.entities.components.ComponentCollider(this);
 		new kosmos.entities.components.ComponentCollision(this);
-	 }
- }
+	}
+}
 

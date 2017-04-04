@@ -38,13 +38,13 @@ public class BiomeSnow extends IBiome {
 					return new InstanceTreeYellow(structure, position, rotation);
 				}
 			},
-			new EntitySpawn(0.4f,  0.375f) {
+			new EntitySpawn(0.4f, 0.375f) {
 				@Override
 				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 					return new InstanceTreeDeadSnow(structure, position, rotation);
 				}
 			},
-			new EntitySpawn(0.3f,  -0.35f) {
+			new EntitySpawn(0.3f, -0.35f) {
 				@Override
 				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 					return new InstanceBottleMaple(structure, position, rotation);

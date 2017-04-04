@@ -17,7 +17,7 @@ public class InstanceGemPurple extends Entity {
 	private static final ModelObject MODEL = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "gemPurple", "model.obj")).create();
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "gemPurple", "diffuse.png")).setNumberOfRows(1).create();
 	private static final TextureObject TEXTURE_GLOW = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "gemPurple", "glow.png")).setNumberOfRows(1).create();
-	
+
 	public InstanceGemPurple(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 		new kosmos.entities.components.ComponentModel(this, 1.0f, MODEL, TEXTURE, 1);
@@ -26,6 +26,6 @@ public class InstanceGemPurple extends Entity {
 		new kosmos.entities.components.ComponentLight(this, new Vector3f(0.0f, 1.5f, 0.0f), new Colour(0.631f, 0.243f, 0.812f), new Attenuation(1.0f, 0.02f, 2.0f));
 		new kosmos.entities.components.ComponentCollider(this);
 		new kosmos.entities.components.ComponentCollision(this);
-	 }
- }
+	}
+}
 

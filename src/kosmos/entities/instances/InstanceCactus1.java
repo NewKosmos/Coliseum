@@ -15,7 +15,7 @@ public class InstanceCactus1 extends Entity {
 	private static final ModelObject MODEL = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "model.obj")).create();
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "diffuse.png")).setNumberOfRows(1).create();
 	private static final TextureObject TEXTURE_SWAY = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "sway.png")).setNumberOfRows(1).create();
-	
+
 	public InstanceCactus1(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 		new kosmos.entities.components.ComponentModel(this, 1.0f, MODEL, TEXTURE, 1);
@@ -23,6 +23,6 @@ public class InstanceCactus1 extends Entity {
 		new kosmos.entities.components.ComponentSurface(this, 1.0f, 0.0f, false, false);
 		new kosmos.entities.components.ComponentCollider(this);
 		new kosmos.entities.components.ComponentCollision(this);
-	 }
- }
+	}
+}
 

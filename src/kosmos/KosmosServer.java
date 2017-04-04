@@ -29,7 +29,7 @@ public class KosmosServer extends Framework {
 	}
 
 	public KosmosServer() {
-		super("Server", new UpdaterDefault(GLFW::glfwGetTime), -1, new ServerInterface());
+		super("Server", new UpdaterDefault(GLFW::glfwGetTime), 60, new ServerInterface());
 		FlounderDisplay.setup(100, 100, "New Kosmos Server", new MyFile[]{}, false, false, 0, false, true);
 	}
 
