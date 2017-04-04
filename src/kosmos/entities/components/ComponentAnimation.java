@@ -18,6 +18,8 @@ import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
+import flounder.physics.*;
+import flounder.physics.bounding.*;
 import flounder.resources.*;
 import flounder.textures.*;
 
@@ -29,10 +31,12 @@ import java.io.*;
 /**
  * Creates a animation used to set animation properties.
  */
-public class ComponentAnimation extends IComponentEntity implements IComponentEditor {
+public class ComponentAnimation extends IComponentEntity implements IComponentEditor, IComponentCollider {
 	private float scale;
 	private ModelAnimated model;
 	private Matrix4f modelMatrix;
+
+	private AABB aabb;
 
 	private TextureObject texture;
 	private int textureIndex;
@@ -74,6 +78,8 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 		this.model = modelAnimated;
 		this.modelMatrix = new Matrix4f();
 
+		this.aabb = new AABB();
+
 		this.texture = texture;
 		this.textureIndex = textureIndex;
 
@@ -103,6 +109,8 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 		this.model = model;
 		this.modelMatrix = new Matrix4f();
 
+		this.aabb = new AABB();
+
 		this.texture = texture;
 		this.textureIndex = textureIndex;
 
@@ -125,6 +133,11 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 
 		if (getEntity().hasMoved()) {
 			Matrix4f.transformationMatrix(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, modelMatrix);
+
+			if (model != null && model.getAABB() != null) {
+				AABB.update(model.getAABB(), super.getEntity().getPosition(), super.getEntity().getRotation(), scale, aabb);
+				FlounderBounding.addShapeRender(aabb);
+			}
 		}
 	}
 
@@ -388,6 +401,11 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 				new String[]{"private static final MyFile COLLADA = " + saveModel, "private static final TextureObject TEXTURE = " + saveTexture}, // Static variables
 				new String[]{saveScale, "COLLADA", "TEXTURE", saveTextureIndex} // Class constructor
 		);
+	}
+
+	@Override
+	public Collider getBounding() {
+		return aabb;
 	}
 
 	@Override

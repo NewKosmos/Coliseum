@@ -45,30 +45,28 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 	 */
 	public Vector3f resolveAABBCollisions(Vector3f amount) {
 		Vector3f result = new Vector3f(amount.getX(), amount.getY(), amount.getZ());
-		ComponentCollider collider1 = (ComponentCollider) getEntity().getComponent(ComponentCollider.class);
 
-		if (collider1 == null) {
+		Collider collider1 = getEntity().getCollider();
+
+		if (collider1 == null || !(collider1 instanceof AABB)) {
 			return result;
 		}
 
-		AABB aabb1 = collider1.getAABB();
-		final AABB collisionRange = AABB.stretch(aabb1, null, amount); // The range in where there can be collisions!
+		final AABB collisionRange = AABB.stretch((AABB) collider1, null, amount); // The range in where there can be collisions!
 
 		getEntity().visitInRange(ComponentCollision.class, collisionRange, (Entity entity, IComponentEntity component) -> {
 			if (entity.equals(getEntity())) {
 				return;
 			}
 
-			ComponentCollider collider2 = (ComponentCollider) entity.getComponent(ComponentCollider.class);
+			Collider collider2 = entity.getCollider();
 
-			if (collider2 == null) {
+			if (collider2 == null || !(collider2 instanceof AABB)) {
 				return;
 			}
 
-			AABB aabb2 = collider2.getAABB();
-
-			if (aabb2 != null && aabb2.intersects(collisionRange).isIntersection()) {
-				AABB.resolveCollision(aabb1, aabb2, result, result);
+			if (collider2.intersects(collisionRange).isIntersection()) {
+				AABB.resolveCollision((AABB) collider1, (AABB) collider2, result, result);
 			}
 		});
 

@@ -24,7 +24,6 @@ public class InstanceGemRed extends Entity {
 		new kosmos.entities.components.ComponentGlow(this, TEXTURE_GLOW);
 		new kosmos.entities.components.ComponentSurface(this, 1.0f, 0.0f, false, false);
 		new kosmos.entities.components.ComponentLight(this, new Vector3f(0.0f, 1.75f, 0.0f), new Colour(0.878f, 0.271f, 0.271f), new Attenuation(1.0f, 0.02f, 2.0f));
-		new kosmos.entities.components.ComponentCollider(this);
 		new kosmos.entities.components.ComponentCollision(this);
 	}
 }

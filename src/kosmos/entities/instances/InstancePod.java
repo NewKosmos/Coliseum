@@ -24,7 +24,6 @@ public class InstancePod extends Entity {
 		new kosmos.entities.components.ComponentGlow(this, TEXTURE_GLOW);
 		new kosmos.entities.components.ComponentSurface(this, 1.0f, 0.0f, false, false);
 		new kosmos.entities.components.ComponentLight(this, new Vector3f(0.0f, 0.5f, 0.0f), new Colour(1.0f, 1.0f, 1.0f), new Attenuation(1.0f, 0.06f, 1.0f));
-		new kosmos.entities.components.ComponentCollider(this);
 		new kosmos.entities.components.ComponentCollision(this);
 	}
 }

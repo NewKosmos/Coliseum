@@ -19,7 +19,6 @@ public enum ComponentsList {
 	ANIMATION(new ComponentAnimation(null)),
 	CELESTIAL(new ComponentCelestial(null)),
 	CLOUD(new ComponentCloud(null)),
-	COLLIDER(new ComponentCollider(null)),
 	COLLISION(new ComponentCollision(null)),
 	GLOW(new ComponentGlow(null)),
 	LIGHT(new ComponentLight(null)),

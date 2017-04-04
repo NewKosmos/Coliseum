@@ -16,6 +16,8 @@ import flounder.logger.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
+import flounder.physics.*;
+import flounder.physics.bounding.*;
 import flounder.resources.*;
 import flounder.textures.*;
 
@@ -27,10 +29,12 @@ import java.io.*;
 /**
  * Creates a model with a texture that can be rendered into the world.
  */
-public class ComponentModel extends IComponentEntity implements IComponentEditor {
+public class ComponentModel extends IComponentEntity implements IComponentEditor, IComponentCollider {
 	private float scale;
 	private ModelObject model;
 	private Matrix4f modelMatrix;
+
+	private AABB aabb;
 
 	private TextureObject texture;
 	private int textureIndex;
@@ -65,6 +69,8 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 		this.model = model;
 		this.modelMatrix = new Matrix4f();
 
+		this.aabb = new AABB();
+
 		this.texture = texture;
 		this.textureIndex = textureIndex;
 
@@ -80,6 +86,11 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 
 		if (getEntity().hasMoved()) {
 			Matrix4f.transformationMatrix(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, modelMatrix);
+
+			if (model != null && model.getAABB() != null) {
+				AABB.update(model.getAABB(), super.getEntity().getPosition(), super.getEntity().getRotation(), scale, aabb);
+				FlounderBounding.addShapeRender(aabb);
+			}
 		}
 	}
 
@@ -268,6 +279,11 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 				new String[]{"private static final ModelObject MODEL = " + saveModel, "private static final TextureObject TEXTURE = " + saveTexture}, // Static variables
 				new String[]{saveScale, "MODEL", "TEXTURE", saveTextureIndex} // Class constructor
 		);
+	}
+
+	@Override
+	public Collider getBounding() {
+		return aabb;
 	}
 
 	@Override

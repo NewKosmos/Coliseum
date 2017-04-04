@@ -19,7 +19,6 @@ public class InstanceBottleMaple extends Entity {
 		super(structure, position, rotation);
 		new kosmos.entities.components.ComponentModel(this, 1.0f, MODEL, TEXTURE, 1);
 		new kosmos.entities.components.ComponentSurface(this, 1.0f, 0.0f, false, false);
-		new kosmos.entities.components.ComponentCollider(this);
 		new kosmos.entities.components.ComponentCollision(this);
 	}
 }
