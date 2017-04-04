@@ -28,8 +28,6 @@ import javax.swing.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class ComponentPlayer extends IComponentEntity implements IComponentEditor {
-	public static final int ID = EntityIDAssigner.getId();
-
 	private float currentSpeed;
 	private float currentUpwardSpeed;
 	private float currentTurnSpeed;
@@ -48,7 +46,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 	 * @param entity The entity this component is attached to.
 	 */
 	public ComponentPlayer(Entity entity) {
-		super(entity, ID);
+		super(entity);
 
 		IButton leftKeyButtons = new KeyButton(GLFW_KEY_A, GLFW_KEY_LEFT);
 		IButton rightKeyButtons = new KeyButton(GLFW_KEY_D, GLFW_KEY_RIGHT);

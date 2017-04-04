@@ -88,9 +88,9 @@ public class ShadowRenderer extends Renderer {
 			return;
 		}
 
-		ComponentModel componentModel = (ComponentModel) entity.getComponent(ComponentModel.ID);
-		ComponentAnimation componentAnimation = (ComponentAnimation) entity.getComponent(ComponentAnimation.ID);
-		ComponentSway componentSway = (ComponentSway) entity.getComponent(ComponentSway.ID);
+		ComponentModel componentModel = (ComponentModel) entity.getComponent(ComponentModel.class);
+		ComponentAnimation componentAnimation = (ComponentAnimation) entity.getComponent(ComponentAnimation.class);
+		ComponentSway componentSway = (ComponentSway) entity.getComponent(ComponentSway.class);
 		final int vaoLength;
 
 		if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded()) {

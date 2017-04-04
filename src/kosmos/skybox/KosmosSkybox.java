@@ -95,7 +95,7 @@ public class KosmosSkybox extends Module {
 			scaledSpeed = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 4.20f : 1.0f;
 		}
 
-		dayFactor = 0.3f; // dayDriver.update(Framework.getDelta() * scaledSpeed) / 100.0f;
+		dayFactor = dayDriver.update(Framework.getDelta() * scaledSpeed) / 100.0f;
 		Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), skyColour);
 		Colour.interpolate(skyColour, SKY_COLOUR_DAY, getShadowFactor(), skyColour);
 		Vector3f.rotate(LIGHT_DIRECTION, lightRotation.set(dayFactor * 360.0f, 0.0f, 0.0f), lightPosition);

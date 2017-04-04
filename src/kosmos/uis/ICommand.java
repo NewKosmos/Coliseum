@@ -97,7 +97,7 @@ public interface ICommand {
 				}
 
 				Entity other = KosmosWorld.getPlayer(string);
-				ComponentMultiplayer componentMultiplayer = (ComponentMultiplayer) other.getComponent(ComponentMultiplayer.ID);
+				ComponentMultiplayer componentMultiplayer = (ComponentMultiplayer) other.getComponent(ComponentMultiplayer.class);
 				float chunkX = componentMultiplayer.getChunkX();
 				float chunkZ = componentMultiplayer.getChunkZ();
 

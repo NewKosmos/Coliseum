@@ -40,7 +40,7 @@ public class FilterMRT extends PostFilter {
 
 		if (FlounderEntities.getEntities() != null) {
 			for (Entity entity : FlounderEntities.getEntities().getAll()) {
-				ComponentLight componentLight = (ComponentLight) entity.getComponent(ComponentLight.ID);
+				ComponentLight componentLight = (ComponentLight) entity.getComponent(ComponentLight.class);
 
 				if (lightsLoaded < LIGHTS && componentLight != null) {
 					shader.getUniformBool("lightActive[" + lightsLoaded + "]").loadBoolean(true);

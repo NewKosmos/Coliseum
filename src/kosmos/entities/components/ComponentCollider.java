@@ -24,8 +24,6 @@ import java.awt.event.*;
  * For example, a checkpoint can use a ComponentCollider to detect when the player has reached it.
  */
 public class ComponentCollider extends IComponentEntity implements IComponentCollider, IComponentEditor {
-	public static final int ID = EntityIDAssigner.getId();
-
 	private AABB aabb;
 	private boolean renderAABB;
 
@@ -35,7 +33,8 @@ public class ComponentCollider extends IComponentEntity implements IComponentCol
 	 * @param entity The entity this component is attached to.
 	 */
 	public ComponentCollider(Entity entity) {
-		super(entity, ID);
+		super(entity);
+
 		this.aabb = new AABB();
 		this.renderAABB = true;
 	}
@@ -68,13 +67,13 @@ public class ComponentCollider extends IComponentEntity implements IComponentCol
 	@Override
 	public void update() {
 		if (super.getEntity().hasMoved()) {
-			ComponentModel componentModel = (ComponentModel) getEntity().getComponent(ComponentModel.ID);
+			ComponentModel componentModel = (ComponentModel) getEntity().getComponent(ComponentModel.class);
 
 			if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded() && componentModel.getModel().getAABB() != null) {
 				AABB.update(componentModel.getModel().getAABB(), super.getEntity().getPosition(), super.getEntity().getRotation(), componentModel.getScale(), aabb);
 			}
 
-			ComponentAnimation componentAnimation = (ComponentAnimation) getEntity().getComponent(ComponentAnimation.ID);
+			ComponentAnimation componentAnimation = (ComponentAnimation) getEntity().getComponent(ComponentAnimation.class);
 
 			if (componentAnimation != null && componentAnimation.getModel() != null && componentAnimation.getModel().getAABB() != null) {
 				AABB.update(componentAnimation.getModel().getAABB(), super.getEntity().getPosition(), super.getEntity().getRotation(), componentAnimation.getScale(), aabb);

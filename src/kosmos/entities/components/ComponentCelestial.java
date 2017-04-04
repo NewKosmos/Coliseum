@@ -20,8 +20,6 @@ import kosmos.skybox.*;
 import javax.swing.*;
 
 public class ComponentCelestial extends IComponentEntity implements IComponentEditor {
-	public static final int ID = EntityIDAssigner.getId();
-
 	private Vector3f startPosition;
 	private Vector3f startRotation;
 
@@ -42,7 +40,7 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 	 * @param entity The entity this component is attached to.
 	 */
 	public ComponentCelestial(Entity entity, boolean sunsetColours) {
-		super(entity, ID);
+		super(entity);
 
 		this.sunsetColours = sunsetColours;
 
@@ -67,7 +65,7 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 		getEntity().setMoved();
 
 		if (sunsetColours) {
-			ComponentLight componentLight = (ComponentLight) getEntity().getComponent(ComponentLight.ID);
+			ComponentLight componentLight = (ComponentLight) getEntity().getComponent(ComponentLight.class);
 
 			if (componentLight != null) {
 				Colour newColour = new Colour();

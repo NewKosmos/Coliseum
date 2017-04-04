@@ -44,7 +44,7 @@ public class ChunkMesh {
 
 		if (chunkModel != null) {
 			// The chunks model component is also updated.
-			ComponentModel componentModel = (ComponentModel) chunk.getComponent(ComponentModel.ID);
+			ComponentModel componentModel = (ComponentModel) chunk.getComponent(ComponentModel.class);
 
 			if (componentModel != null) {
 				componentModel.setModel(chunkModel);

@@ -104,7 +104,7 @@ public class ExtensionEntities extends IEditorType {
 
 		// Updates the model to be focused, and rotated.
 		if (focusEntity != null) {
-			ComponentModel componentModel = (ComponentModel) focusEntity.getComponent(ComponentModel.ID);
+			ComponentModel componentModel = (ComponentModel) focusEntity.getComponent(ComponentModel.class);
 
 			if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().getAABB() != null) {
 				if (entityRotate) {

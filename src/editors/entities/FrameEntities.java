@@ -157,7 +157,7 @@ public class FrameEntities extends Standard {
 						String tabName = IComponentEditor.getTabName((IComponentEditor) c.getComponent());
 
 						if (tabName.equals(component)) {
-							if (((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity != null && ((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity.getComponent(c.getComponent().getId()) == null) {
+							if (((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity != null && ((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity.getComponent(c.getComponent().getClass()) == null) {
 								try {
 									FlounderLogger.log("Adding component: " + component);
 									Class componentClass = Class.forName(((IComponentEditor) c.getComponent()).getClass().getName());

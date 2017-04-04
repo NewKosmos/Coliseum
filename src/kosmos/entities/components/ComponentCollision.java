@@ -23,15 +23,13 @@ import javax.swing.*;
  * Note: this component requires that both engine.entities have a ComponentCollider. Should one entity not have a ComponentCollider, then no collisions will be detected, because there is no collider to detect collisions against.
  */
 public class ComponentCollision extends IComponentEntity implements IComponentMove, IComponentEditor {
-	public static final int ID = EntityIDAssigner.getId();
-
 	/**
 	 * Creates a new ComponentCollision.
 	 *
 	 * @param entity The entity this component is attached to.
 	 */
 	public ComponentCollision(Entity entity) {
-		super(entity, ID);
+		super(entity);
 	}
 
 	@Override
@@ -47,7 +45,7 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 	 */
 	public Vector3f resolveAABBCollisions(Vector3f amount) {
 		Vector3f result = new Vector3f(amount.getX(), amount.getY(), amount.getZ());
-		ComponentCollider collider1 = (ComponentCollider) getEntity().getComponent(ComponentCollider.ID);
+		ComponentCollider collider1 = (ComponentCollider) getEntity().getComponent(ComponentCollider.class);
 
 		if (collider1 == null) {
 			return result;
@@ -56,12 +54,12 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 		AABB aabb1 = collider1.getAABB();
 		final AABB collisionRange = AABB.stretch(aabb1, null, amount); // The range in where there can be collisions!
 
-		getEntity().visitInRange(ComponentCollision.ID, collisionRange, (Entity entity, IComponentEntity component) -> {
+		getEntity().visitInRange(ComponentCollision.class, collisionRange, (Entity entity, IComponentEntity component) -> {
 			if (entity.equals(getEntity())) {
 				return;
 			}
 
-			ComponentCollider collider2 = (ComponentCollider) entity.getComponent(ComponentCollider.ID);
+			ComponentCollider collider2 = (ComponentCollider) entity.getComponent(ComponentCollider.class);
 
 			if (collider2 == null) {
 				return;

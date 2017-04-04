@@ -21,8 +21,6 @@ import java.awt.event.*;
 import java.io.*;
 
 public class ComponentGlow extends IComponentEntity implements IComponentEditor {
-	public static final int ID = EntityIDAssigner.getId();
-
 	private TextureObject textureGlow;
 
 	private MyFile editorPathTexture;
@@ -43,7 +41,8 @@ public class ComponentGlow extends IComponentEntity implements IComponentEditor 
 	 * @param textureGlow
 	 */
 	public ComponentGlow(Entity entity, TextureObject textureGlow) {
-		super(entity, ID);
+		super(entity);
+
 		this.textureGlow = textureGlow;
 	}
 

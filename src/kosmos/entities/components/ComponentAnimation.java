@@ -30,8 +30,6 @@ import java.io.*;
  * Creates a animation used to set animation properties.
  */
 public class ComponentAnimation extends IComponentEntity implements IComponentEditor {
-	public static final int ID = EntityIDAssigner.getId();
-
 	private float scale;
 	private ModelAnimated model;
 	private Matrix4f modelMatrix;
@@ -65,7 +63,8 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	 * @param textureIndex What texture index this entity should renderObjects from (0 default).
 	 */
 	public ComponentAnimation(Entity entity, float scale, MyFile file, TextureObject texture, int textureIndex) {
-		super(entity, ID);
+		super(entity);
+
 		ModelAnimated modelAnimated = FlounderCollada.loadCollada(file);
 
 		AnimationData animationData = FlounderCollada.loadAnimation(file);
@@ -98,7 +97,8 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	 * @param textureIndex What texture index this entity should renderObjects from (0 default).
 	 */
 	public ComponentAnimation(Entity entity, float scale, ModelAnimated model, TextureObject texture, int textureIndex) {
-		super(entity, ID);
+		super(entity);
+
 		this.scale = scale;
 		this.model = model;
 		this.modelMatrix = new Matrix4f();

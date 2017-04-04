@@ -19,8 +19,6 @@ import flounder.visual.*;
 import javax.swing.*;
 
 public class ComponentCloud extends IComponentEntity implements IComponentEditor {
-	public static final int ID = EntityIDAssigner.getId();
-
 	private Vector3f startPosition;
 
 	private SinWaveDriver driverHeight;
@@ -31,7 +29,7 @@ public class ComponentCloud extends IComponentEntity implements IComponentEditor
 	 * @param entity The entity this component is attached to.
 	 */
 	public ComponentCloud(Entity entity) {
-		super(entity, ID);
+		super(entity);
 
 		if (entity != null) {
 			this.startPosition = new Vector3f(entity.getPosition());

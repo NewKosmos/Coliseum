@@ -91,15 +91,15 @@ public class EntitiesRenderer extends Renderer {
 			return;
 		}
 
-		if (!renderPlayer && entity.getComponent(ComponentPlayer.ID) != null) {
+		if (!renderPlayer && entity.getComponent(ComponentPlayer.class) != null) {
 			return;
 		}
 
-		ComponentModel componentModel = (ComponentModel) entity.getComponent(ComponentModel.ID);
-		ComponentAnimation componentAnimation = (ComponentAnimation) entity.getComponent(ComponentAnimation.ID);
-		ComponentSurface componentSurface = (ComponentSurface) entity.getComponent(ComponentSurface.ID);
-		ComponentGlow componentGlow = (ComponentGlow) entity.getComponent(ComponentGlow.ID);
-		ComponentSway componentSway = (ComponentSway) entity.getComponent(ComponentSway.ID);
+		ComponentModel componentModel = (ComponentModel) entity.getComponent(ComponentModel.class);
+		ComponentAnimation componentAnimation = (ComponentAnimation) entity.getComponent(ComponentAnimation.class);
+		ComponentSurface componentSurface = (ComponentSurface) entity.getComponent(ComponentSurface.class);
+		ComponentGlow componentGlow = (ComponentGlow) entity.getComponent(ComponentGlow.class);
+		ComponentSway componentSway = (ComponentSway) entity.getComponent(ComponentSway.class);
 		final int vaoLength;
 
 		if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().isLoaded()) {

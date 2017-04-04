@@ -16,8 +16,6 @@ import flounder.helpers.*;
 import javax.swing.*;
 
 public class ComponentMultiplayer extends IComponentEntity implements IComponentEditor {
-	public static final int ID = EntityIDAssigner.getId();
-
 	private String username;
 
 	private float chunkX, chunkZ;
@@ -38,7 +36,8 @@ public class ComponentMultiplayer extends IComponentEntity implements IComponent
 	 * @param username
 	 */
 	public ComponentMultiplayer(Entity entity, String username) {
-		super(entity, ID);
+		super(entity);
+
 		this.username = username;
 		this.chunkX = 0.0f;
 		this.chunkZ = 0.0f;

@@ -27,8 +27,6 @@ import java.lang.reflect.*;
 import java.util.*;
 
 public class ComponentParticles extends IComponentEntity implements IComponentEditor {
-	public static final int ID = EntityIDAssigner.getId();
-
 	private IEditorParticleSpawn[] spawns = new IEditorParticleSpawn[]{
 			new EditorParticleCircle(),
 			new EditorParticleLine(),
@@ -62,7 +60,8 @@ public class ComponentParticles extends IComponentEntity implements IComponentEd
 	 * @param gravityEffect
 	 */
 	public ComponentParticles(Entity entity, List<ParticleType> types, IParticleSpawn spawn, Vector3f offset, float pps, float speed, float gravityEffect) {
-		super(entity, ID);
+		super(entity);
+
 		this.particleSystem = new ParticleSystem(types, spawn, pps, speed, gravityEffect);
 		this.particleSystem.setSystemCentre(new Vector3f());
 		this.centreOffset = offset;

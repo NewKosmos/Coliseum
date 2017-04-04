@@ -20,8 +20,6 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 public class ComponentLight extends IComponentEntity implements IComponentEditor {
-	public static final int ID = EntityIDAssigner.getId();
-
 	private Vector3f offset;
 	private Light light;
 
@@ -43,7 +41,8 @@ public class ComponentLight extends IComponentEntity implements IComponentEditor
 	 * @param attenuation
 	 */
 	public ComponentLight(Entity entity, Vector3f offset, Colour colour, Attenuation attenuation) {
-		super(entity, ID);
+		super(entity);
+
 		this.offset = offset;
 
 		if (entity != null) {

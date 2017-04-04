@@ -22,8 +22,6 @@ import java.awt.event.*;
 import java.io.*;
 
 public class ComponentSway extends IComponentEntity implements IComponentEditor {
-	public static final int ID = EntityIDAssigner.getId();
-
 	private TextureObject textureSway;
 
 	private MyFile editorPathTexture;
@@ -44,7 +42,8 @@ public class ComponentSway extends IComponentEntity implements IComponentEditor 
 	 * @param textureSway
 	 */
 	public ComponentSway(Entity entity, TextureObject textureSway) {
-		super(entity, ID);
+		super(entity);
+
 		this.textureSway = textureSway;
 	}
 

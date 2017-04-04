@@ -28,8 +28,6 @@ import java.io.*;
  * Creates a model with a texture that can be rendered into the world.
  */
 public class ComponentModel extends IComponentEntity implements IComponentEditor {
-	public static final int ID = EntityIDAssigner.getId();
-
 	private float scale;
 	private ModelObject model;
 	private Matrix4f modelMatrix;
@@ -61,7 +59,8 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 	 * @param textureIndex What texture index this entity should renderObjects from (0 default).
 	 */
 	public ComponentModel(Entity entity, float scale, ModelObject model, TextureObject texture, int textureIndex) {
-		super(entity, ID);
+		super(entity);
+
 		this.scale = scale;
 		this.model = model;
 		this.modelMatrix = new Matrix4f();

@@ -21,8 +21,6 @@ import java.awt.event.*;
  * Creates a set of lighting data for a entity.
  */
 public class ComponentSurface extends IComponentEntity implements IComponentEditor {
-	public static final int ID = EntityIDAssigner.getId();
-
 	private float shineDamper;
 	private float reflectivity;
 
@@ -48,7 +46,8 @@ public class ComponentSurface extends IComponentEntity implements IComponentEdit
 	 * @param ignoreFog If the rendered object will ignore fog.
 	 */
 	public ComponentSurface(Entity entity, float shineDamper, float reflectivity, boolean ignoreLighting, boolean ignoreFog) {
-		super(entity, ID);
+		super(entity);
+
 		this.shineDamper = shineDamper;
 		this.reflectivity = reflectivity;
 

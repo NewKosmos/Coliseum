@@ -126,7 +126,7 @@ public class KosmosWorld extends Module {
 			return;
 		}
 
-		((ComponentMultiplayer) INSTANCE.players.get(username).getComponent(ComponentMultiplayer.ID)).move(x, y, z, w, chunkX, chunkZ);
+		((ComponentMultiplayer) INSTANCE.players.get(username).getComponent(ComponentMultiplayer.class)).move(x, y, z, w, chunkX, chunkZ);
 	}
 
 	public synchronized static void removePlayer(String username) {

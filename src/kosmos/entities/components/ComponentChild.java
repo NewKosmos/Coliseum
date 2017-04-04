@@ -16,8 +16,6 @@ import flounder.helpers.*;
 import javax.swing.*;
 
 public class ComponentChild extends IComponentEntity implements IComponentEditor {
-	public static final int ID = EntityIDAssigner.getId();
-
 	private Entity parent;
 
 	/**
@@ -36,7 +34,7 @@ public class ComponentChild extends IComponentEntity implements IComponentEditor
 	 * @param parent
 	 */
 	public ComponentChild(Entity entity, Entity parent) {
-		super(entity, ID);
+		super(entity);
 
 		this.parent = parent;
 	}
