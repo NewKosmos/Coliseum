@@ -125,11 +125,6 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 			dz = (float) -(x * Math.cos(theta) - y * Math.sin(theta));
 			dx = (float) -(x * Math.sin(theta) + y * Math.cos(theta));
 			ry = (FlounderCamera.getCamera().getRotation().y + 180.0f) - getEntity().getRotation().y;
-		} else {
-			// Limits ry rotation. TODO
-			//float cry = FlounderCamera.getCamera().getRotation().y;
-			//float rot = Maths.clamp(getEntity().getRotation().y, Maths.normalizeAngle(cry - 90.0f), Maths.normalizeAngle(cry + 90.0f));
-			//ry = rot - getEntity().getRotation().y;
 		}
 
 		// Moves and rotates the player.

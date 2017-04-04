@@ -70,71 +70,11 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 			AABB aabb2 = collider2.getAABB();
 
 			if (aabb2 != null && aabb2.intersects(collisionRange).isIntersection()) {
-				result.set((float) resolveCollisionX(aabb1, aabb2, result.getX()), (float) resolveCollisionY(aabb1, aabb2, result.getY()), (float) resolveCollisionZ(aabb1, aabb2, result.getZ()));
+				AABB.resolveCollision(aabb1, aabb2, result, result);
 			}
 		});
 
 		return result;
-	}
-
-	public double resolveCollisionX(AABB thisAABB, AABB other, double moveAmountX) {
-		double newAmtX;
-
-		if (moveAmountX == 0.0) {
-			return moveAmountX;
-		}
-
-		if (moveAmountX > 0.0) { // This max == other min
-			newAmtX = other.getMinExtents().getX() - thisAABB.getMaxExtents().getX();
-		} else { // This min == other max
-			newAmtX = other.getMaxExtents().getX() - thisAABB.getMinExtents().getX();
-		}
-
-		if (Math.abs(newAmtX) < Math.abs(moveAmountX)) {
-			moveAmountX = newAmtX;
-		}
-
-		return moveAmountX;
-	}
-
-	public double resolveCollisionY(AABB thisAABB, AABB other, double moveAmountY) {
-		double newAmtY;
-
-		if (moveAmountY == 0.0) {
-			return moveAmountY;
-		}
-
-		if (moveAmountY > 0.0) { // This max == other min.
-			newAmtY = other.getMinExtents().getY() - thisAABB.getMaxExtents().getY();
-		} else { // This min == other max.
-			newAmtY = other.getMaxExtents().getY() - thisAABB.getMinExtents().getY();
-		}
-
-		if (Math.abs(newAmtY) < Math.abs(moveAmountY)) {
-			moveAmountY = newAmtY;
-		}
-
-		return moveAmountY;
-	}
-
-	public double resolveCollisionZ(AABB thisAABB, AABB other, double moveAmountZ) {
-		double newAmtZ;
-
-		if (moveAmountZ == 0.0) {
-			return moveAmountZ;
-		}
-
-		if (moveAmountZ > 0.0) { // This max == other min.
-			newAmtZ = other.getMinExtents().getZ() - thisAABB.getMaxExtents().getZ();
-		} else { // This min == other max.
-			newAmtZ = other.getMaxExtents().getZ() - thisAABB.getMinExtents().getZ();
-		}
-
-		if (Math.abs(newAmtZ) < Math.abs(moveAmountZ)) {
-			moveAmountZ = newAmtZ;
-		}
-
-		return moveAmountZ;
 	}
 
 	@Override

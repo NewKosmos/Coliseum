@@ -159,7 +159,7 @@ public class KosmosChunks extends Module {
 			Chunk playerChunk = null;
 
 			if (!playerPos.equals(lastPlayerPos)) {
-				Sphere.recalculate(chunkRange, playerPos, 1.0f, chunkRange);
+				Sphere.update(chunkRange, playerPos, 1.0f, chunkRange);
 			}
 
 			// Goes though all chunks looking for changes.

@@ -171,6 +171,6 @@ public class MeshBuildRequest implements RequestResource {
 
 		// Updates the chunks sphere.
 		chunkMesh.chunk.getSphere().setRadius(1.0f);
-		Sphere.recalculate(chunkMesh.chunk.getSphere(), chunkMesh.chunk.getPosition(), chunkMesh.maxRadius, chunkMesh.chunk.getSphere());
+		Sphere.update(chunkMesh.chunk.getSphere(), chunkMesh.chunk.getPosition(), chunkMesh.maxRadius, chunkMesh.chunk.getSphere());
 	}
 }

@@ -50,7 +50,7 @@ public class KosmosSkybox extends Module {
 
 	public static final Colour MOON_COLOUR = new Colour(0.1f, 0.1f, 0.19f);
 
-	public static final float DAY_NIGHT_CYCLE = 1200.0f; // The day/night length (sec).
+	public static final float DAY_NIGHT_CYCLE = 600.0f; // The day/night length (sec).
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.3f, 0.0f, 0.5f); // The starting light direction.
 
@@ -92,7 +92,7 @@ public class KosmosSkybox extends Module {
 		float scaledSpeed = 1.0f;
 
 		if (FlounderGuis.getGuiMaster() instanceof KosmosGuis) {
-			scaledSpeed = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 10.0f : 1.0f;
+			scaledSpeed = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 4.20f : 1.0f;
 		}
 
 		dayFactor = dayDriver.update(Framework.getDelta() * scaledSpeed) / 100.0f;

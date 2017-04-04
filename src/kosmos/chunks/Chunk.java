@@ -253,7 +253,7 @@ public class Chunk extends Entity {
 	}
 
 	@Override
-	public IBounding getBounding() {
+	public Collider getBounding() {
 		return sphere;
 	}
 
