@@ -107,7 +107,7 @@ public class Water {
 
 		position.x -= aabb.getMaxExtents().x / 2.0f;
 		position.z -= aabb.getMaxExtents().z / 2.0f;
-		AABB.update(aabb, position, rotation, scale, aabb);
+		aabb.update(position, rotation, scale, aabb);
 
 		//System.out.println(VERTEX_COUNT);
 		//System.out.println(aabb);

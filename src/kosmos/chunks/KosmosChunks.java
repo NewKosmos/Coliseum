@@ -159,7 +159,7 @@ public class KosmosChunks extends Module {
 			Chunk playerChunk = null;
 
 			if (!playerPos.equals(lastPlayerPos)) {
-				Sphere.update(chunkRange, playerPos, 1.0f, chunkRange);
+				chunkRange.update(playerPos, null, 1.0f, chunkRange);
 			}
 
 			// Goes though all chunks looking for changes.
@@ -186,7 +186,7 @@ public class KosmosChunks extends Module {
 		}
 
 		// Renders the chunks range.
-		FlounderBounding.addShapeRender(chunkRange);
+		// FlounderBounding.addShapeRender(chunkRange);
 	}
 
 	@Override

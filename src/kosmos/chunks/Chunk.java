@@ -143,7 +143,7 @@ public class Chunk extends Entity {
 		this.chunkMesh.update();
 
 		// Adds this mesh AABB to the bounding render pool.
-		FlounderBounding.addShapeRender(getSphere());
+		// FlounderBounding.addShapeRender(getSphere());
 	}
 
 	public static List<Vector3f> generate(Chunk chunk) {
@@ -182,11 +182,7 @@ public class Chunk extends Entity {
 			tiles.add(new Vector3f(positionX, height, positionZ));
 		}
 
-		Entity entity = chunk.biome.getBiome().generateEntity(chunk, new Vector3f(worldPos.x, height, worldPos.y));
-
-		if (entity != null) {
-			new ComponentChild(entity, chunk);
-		}
+		chunk.biome.getBiome().generateEntity(chunk, new Vector3f(worldPos.x, height, worldPos.y));
 	}
 
 	/**

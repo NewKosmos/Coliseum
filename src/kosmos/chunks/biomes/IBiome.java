@@ -13,6 +13,7 @@ import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
+import kosmos.entities.components.*;
 import kosmos.particles.*;
 import kosmos.world.*;
 
@@ -66,7 +67,13 @@ public abstract class IBiome {
 			EntitySpawn entitySpawn = getEntitySpawns()[(int) spawn];
 
 			if (entitySpawn != null && spawn - (int) spawn <= entitySpawn.spawnChance) {
-				return entitySpawn.create(FlounderEntities.getEntities(), new Vector3f(tilePosition.x, entitySpawn.heightOffset + tilePosition.y * 0.5f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
+				Entity entity = entitySpawn.create(FlounderEntities.getEntities(), new Vector3f(tilePosition.x, entitySpawn.heightOffset + tilePosition.y * 0.5f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
+
+				if (entity != null) {
+					new ComponentChild(entity, chunk);
+				}
+
+				return entity;
 			}
 		}
 

@@ -29,7 +29,7 @@ import java.io.*;
 /**
  * Creates a model with a texture that can be rendered into the world.
  */
-public class ComponentModel extends IComponentEntity implements IComponentEditor, IComponentCollider {
+public class ComponentModel extends IComponentEntity implements IComponentEditor, IComponentScale, IComponentCollider {
 	private float scale;
 	private ModelObject model;
 	private Matrix4f modelMatrix;
@@ -88,10 +88,11 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 			Matrix4f.transformationMatrix(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, modelMatrix);
 
 			if (model != null && model.getAABB() != null) {
-				AABB.update(model.getAABB(), super.getEntity().getPosition(), super.getEntity().getRotation(), scale, aabb);
-				FlounderBounding.addShapeRender(aabb);
+				model.getAABB().update(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, aabb);
 			}
 		}
+
+		FlounderBounding.addShapeRender(aabb);
 	}
 
 	public ModelObject getModel() {
@@ -101,17 +102,6 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 	public void setModel(ModelObject model) {
 		if (this.model != model) {
 			this.model = model;
-			getEntity().setMoved();
-		}
-	}
-
-	public float getScale() {
-		return scale;
-	}
-
-	public void setScale(float scale) {
-		if (this.scale != scale) {
-			this.scale = scale;
 			getEntity().setMoved();
 		}
 	}
@@ -279,6 +269,21 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 				new String[]{"private static final ModelObject MODEL = " + saveModel, "private static final TextureObject TEXTURE = " + saveTexture}, // Static variables
 				new String[]{saveScale, "MODEL", "TEXTURE", saveTextureIndex} // Class constructor
 		);
+	}
+
+	@Override
+	public float getScale() {
+		return scale;
+	}
+
+	/**
+	 * Sets the scale for this model.
+	 *
+	 * @param scale The new scale.
+	 */
+	public void setScale(float scale) {
+		this.scale = scale;
+		getEntity().setMoved();
 	}
 
 	@Override

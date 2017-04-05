@@ -158,7 +158,7 @@ public class MeshBuildRequest implements RequestResource {
 
 				@Override
 				public AABB getAABB() {
-					return new AABB(new Vector3f(chunkMesh.minX, chunkMesh.minY, chunkMesh.minZ), new Vector3f(chunkMesh.maxX, chunkMesh.maxY, chunkMesh.maxZ));
+					return null; // new AABB(new Vector3f(chunkMesh.minX, chunkMesh.minY, chunkMesh.minZ), new Vector3f(chunkMesh.maxX, chunkMesh.maxY, chunkMesh.maxZ));
 				}
 			}).create();
 		} else {
@@ -171,6 +171,6 @@ public class MeshBuildRequest implements RequestResource {
 
 		// Updates the chunks sphere.
 		chunkMesh.chunk.getSphere().setRadius(1.0f);
-		Sphere.update(chunkMesh.chunk.getSphere(), chunkMesh.chunk.getPosition(), chunkMesh.maxRadius, chunkMesh.chunk.getSphere());
+		chunkMesh.chunk.getSphere().update(chunkMesh.chunk.getPosition(), null, chunkMesh.maxRadius, chunkMesh.chunk.getSphere());
 	}
 }

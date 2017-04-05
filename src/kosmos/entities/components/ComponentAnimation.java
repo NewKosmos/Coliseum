@@ -31,7 +31,7 @@ import java.io.*;
 /**
  * Creates a animation used to set animation properties.
  */
-public class ComponentAnimation extends IComponentEntity implements IComponentEditor, IComponentCollider {
+public class ComponentAnimation extends IComponentEntity implements IComponentEditor, IComponentScale, IComponentCollider {
 	private float scale;
 	private ModelAnimated model;
 	private Matrix4f modelMatrix;
@@ -135,10 +135,11 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 			Matrix4f.transformationMatrix(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, modelMatrix);
 
 			if (model != null && model.getAABB() != null) {
-				AABB.update(model.getAABB(), super.getEntity().getPosition(), super.getEntity().getRotation(), scale, aabb);
-				FlounderBounding.addShapeRender(aabb);
+				model.getAABB().update(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, aabb);
 			}
 		}
+
+		FlounderBounding.addShapeRender(aabb);
 	}
 
 	/**
@@ -148,25 +149,6 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	 */
 	public void doAnimation(Animation animation) {
 		animator.doAnimation(animation);
-	}
-
-	/**
-	 * Gets the scale for this model.
-	 *
-	 * @return The scale for this model.
-	 */
-	public float getScale() {
-		return scale;
-	}
-
-	/**
-	 * Sets the scale for this model.
-	 *
-	 * @param scale The new scale.
-	 */
-	public void setScale(float scale) {
-		this.scale = scale;
-		getEntity().setMoved();
 	}
 
 	/**
@@ -401,6 +383,21 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 				new String[]{"private static final MyFile COLLADA = " + saveModel, "private static final TextureObject TEXTURE = " + saveTexture}, // Static variables
 				new String[]{saveScale, "COLLADA", "TEXTURE", saveTextureIndex} // Class constructor
 		);
+	}
+
+	@Override
+	public float getScale() {
+		return scale;
+	}
+
+	/**
+	 * Sets the scale for this model.
+	 *
+	 * @param scale The new scale.
+	 */
+	public void setScale(float scale) {
+		this.scale = scale;
+		getEntity().setMoved();
 	}
 
 	@Override

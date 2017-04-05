@@ -37,45 +37,64 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 	}
 
 	/**
-	 * Resolves AABB collisions with any other CollisionComponents encountered.
+	 * Resolves collisions with any other collision components encountered.
 	 *
 	 * @param amount The amount attempting to be moved.
 	 *
-	 * @return New verifyMove vector that will not cause collisions after movement.
+	 * @return A new move vector that will not cause collisions after movement.
 	 */
-	public Vector3f resolveAABBCollisions(Vector3f amount) {
-		Vector3f result = new Vector3f(amount.getX(), amount.getY(), amount.getZ());
+	public Vector3f resolveCollisions(Vector3f amount) {
+		// Sets the resulting resolved collisions.
+		Vector3f result = new Vector3f(amount);
 
+		// Gets this entities collider.
 		Collider collider1 = getEntity().getCollider();
 
+		// Verifies that this entities main collider will work.
 		if (collider1 == null || !(collider1 instanceof AABB)) {
 			return result;
 		}
 
-		final AABB collisionRange = AABB.stretch((AABB) collider1, null, amount); // The range in where there can be collisions!
+		// Gets a collider that may contain more colliders.
+		ComponentCollider componentCollider1 = (ComponentCollider) getEntity().getComponent(ComponentCollider.class);
 
+		// Calculates the range in where there can be collisions.
+		final AABB collisionRange = AABB.stretch((AABB) collider1, null, amount);
+
+		// Goes though all entities in the collision range.
 		getEntity().visitInRange(ComponentCollision.class, collisionRange, (Entity entity, IComponentEntity component) -> {
+			// Ignores the original entity.
 			if (entity.equals(getEntity())) {
 				return;
 			}
 
+			// Gets the checked entities collider.
 			Collider collider2 = entity.getCollider();
 
+			// Verifies that the checked entities main collider will work.
 			if (collider2 == null || !(collider2 instanceof AABB)) {
 				return;
 			}
 
-			if (collider2.intersects(collisionRange).isIntersection()) {
-				AABB.resolveCollision((AABB) collider1, (AABB) collider2, result, result);
+			// If the main collider intersects or if a collision type is contained in the other.
+			if (collider2.intersects(collisionRange).isIntersection() || collider2.contains(collider1) || collider1.contains(collider2)) {
+				// Gets a collider that may contain more colliders.
+				ComponentCollider componentCollider2 = (ComponentCollider) entity.getComponent(ComponentCollider.class);
+
+				// If the main colliders are the only ones use them.
+				if (componentCollider2 == null || componentCollider2.getColliders().isEmpty()) {
+					AABB.resolveCollision((AABB) collider1, (AABB) collider2, result, result);
+				}
 			}
 		});
 
+		// The final resulting move amount.
 		return result;
 	}
 
 	@Override
 	public void verifyMove(Entity entity, Vector3f moveAmount, Vector3f rotateAmount) {
-		moveAmount.set(resolveAABBCollisions(moveAmount));
+		moveAmount.set(resolveCollisions(moveAmount));
 		// rotateAmount = rotateAmount; // TODO: Stop some rotations?
 	}
 
