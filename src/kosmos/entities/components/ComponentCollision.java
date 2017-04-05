@@ -51,7 +51,7 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 		Collider collider1 = getEntity().getCollider();
 
 		// Verifies that this entities main collider will work.
-		if (collider1 == null || !(collider1 instanceof AABB)) {
+		if (collider1 == null) {
 			return result;
 		}
 
@@ -72,18 +72,18 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 			Collider collider2 = entity.getCollider();
 
 			// Verifies that the checked entities main collider will work.
-			if (collider2 == null || !(collider2 instanceof AABB)) {
+			if (collider2 == null) {
 				return;
 			}
 
+			// Gets a collider that may contain more colliders.
+			ComponentCollider componentCollider2 = (ComponentCollider) entity.getComponent(ComponentCollider.class);
+
 			// If the main collider intersects or if a collision type is contained in the other.
 			if (collider2.intersects(collisionRange).isIntersection() || collider2.contains(collider1) || collider1.contains(collider2)) {
-				// Gets a collider that may contain more colliders.
-				ComponentCollider componentCollider2 = (ComponentCollider) entity.getComponent(ComponentCollider.class);
-
 				// If the main colliders are the only ones use them.
 				if (componentCollider2 == null || componentCollider2.getColliders().isEmpty()) {
-					AABB.resolveCollision((AABB) collider1, (AABB) collider2, result, result);
+					collider1.resolveCollision(collider2, result, result);
 				}
 			}
 		});

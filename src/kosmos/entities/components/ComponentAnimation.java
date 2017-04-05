@@ -401,7 +401,7 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	}
 
 	@Override
-	public Collider getBounding() {
+	public AABB getBounding() {
 		return aabb;
 	}
 

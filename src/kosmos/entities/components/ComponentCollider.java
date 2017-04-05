@@ -7,7 +7,6 @@ import flounder.physics.*;
 
 import javax.swing.*;
 import java.util.*;
-import java.util.function.*;
 
 public class ComponentCollider extends IComponentEntity implements IComponentEditor {
 	private List<Pair<Collider, Collider>> colliders;

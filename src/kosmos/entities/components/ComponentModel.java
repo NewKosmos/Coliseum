@@ -287,7 +287,7 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 	}
 
 	@Override
-	public Collider getBounding() {
+	public AABB getBounding() {
 		return aabb;
 	}
 
