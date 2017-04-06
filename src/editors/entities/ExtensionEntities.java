@@ -16,6 +16,7 @@ import flounder.entities.components.*;
 import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.maths.vectors.*;
+import flounder.physics.*;
 import flounder.physics.bounding.*;
 import kosmos.entities.components.*;
 import kosmos.particles.*;
@@ -101,13 +102,19 @@ public class ExtensionEntities extends IEditorType {
 		if (focusEntity != null) {
 			ComponentModel componentModel = (ComponentModel) focusEntity.getComponent(ComponentModel.class);
 
-			if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().getAABB() != null) {
+			if (componentModel != null && componentModel.getModel() != null && componentModel.getModel().getCollider() != null) {
 				if (entityRotate) {
 					focusEntity.getRotation().y += 20.0f * Framework.getDelta();
 					focusEntity.setMoved();
 				}
 
-				float height = (float) componentModel.getModel().getAABB().getCentreY() * componentModel.getScale() / -2.0f;
+				float height = 0.0f;
+
+				if (componentModel.getModel().getCollider() instanceof AABB) {
+					height = -((AABB) componentModel.getModel().getCollider()).getCentreY() * componentModel.getScale() / 2.0f;
+				} else if (componentModel.getModel().getCollider() instanceof Sphere) {
+					height = -((Sphere) componentModel.getModel().getCollider()).getRadius() * componentModel.getScale();
+				}
 
 				if (focusEntity.getPosition().y != height) {
 					focusEntity.getPosition().set(0.0f, height, 0.0f);

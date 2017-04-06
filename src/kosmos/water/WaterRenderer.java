@@ -42,7 +42,7 @@ public class WaterRenderer extends Renderer {
 			return;
 		}
 
-		//if (KosmosWater.getWater().getAABB().inFrustum(camera.getViewFrustum())) {
+		//if (KosmosWater.getWater().getCollider().inFrustum(camera.getViewFrustum())) {
 		prepareRendering(clipPlane, camera);
 		renderWater(KosmosWater.getWater());
 		endRendering();

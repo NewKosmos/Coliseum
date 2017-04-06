@@ -36,7 +36,7 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	private ModelAnimated model;
 	private Matrix4f modelMatrix;
 
-	private AABB aabb;
+	private Collider collider;
 
 	private TextureObject texture;
 	private int textureIndex;
@@ -78,7 +78,7 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 		this.model = modelAnimated;
 		this.modelMatrix = new Matrix4f();
 
-		this.aabb = new AABB();
+		this.collider = null;
 
 		this.texture = texture;
 		this.textureIndex = textureIndex;
@@ -109,7 +109,7 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 		this.model = model;
 		this.modelMatrix = new Matrix4f();
 
-		this.aabb = new AABB();
+		this.collider = null;
 
 		this.texture = texture;
 		this.textureIndex = textureIndex;
@@ -134,12 +134,16 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 		if (getEntity().hasMoved()) {
 			Matrix4f.transformationMatrix(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, modelMatrix);
 
-			if (model != null && model.getAABB() != null) {
-				model.getAABB().update(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, aabb);
+			if (model != null && model.getCollider() != null) {
+				if (collider == null || !model.getCollider().getClass().isInstance(collider)) {
+					collider = model.getCollider().clone();
+				}
+
+				model.getCollider().update(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, collider);
 			}
 		}
 
-		FlounderBounding.addShapeRender(aabb);
+		FlounderBounding.addShapeRender(collider);
 	}
 
 	/**
@@ -401,8 +405,8 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 	}
 
 	@Override
-	public AABB getBounding() {
-		return aabb;
+	public Collider getCollider() {
+		return collider;
 	}
 
 	@Override

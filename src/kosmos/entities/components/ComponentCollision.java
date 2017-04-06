@@ -12,6 +12,7 @@ package kosmos.entities.components;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
+import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
 
@@ -55,11 +56,23 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 			return result;
 		}
 
+		AABB aabb1 = null;
+
+		if (collider1 instanceof AABB) {
+			aabb1 = (AABB) collider1;
+		} else if (collider1 instanceof Sphere) {
+			float radius = ((Sphere) collider1).getRadius();
+			Vector3f pos = ((Sphere) collider1).getPosition();
+			aabb1 = new AABB(new Vector3f(-radius + pos.x, -radius + pos.y, -radius + pos.z), new Vector3f(radius + pos.x, radius + pos.y, radius + pos.z));
+		} else {
+			return result;
+		}
+
 		// Gets a collider that may contain more colliders.
 		ComponentCollider componentCollider1 = (ComponentCollider) getEntity().getComponent(ComponentCollider.class);
 
 		// Calculates the range in where there can be collisions.
-		final AABB collisionRange = AABB.stretch((AABB) collider1, null, amount);
+		final AABB collisionRange = AABB.stretch(aabb1, null, amount);
 
 		// Goes though all entities in the collision range.
 		getEntity().visitInRange(ComponentCollision.class, collisionRange, (Entity entity, IComponentEntity component) -> {

@@ -15,6 +15,7 @@ import flounder.fbos.*;
 import flounder.helpers.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
+import flounder.physics.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
 import flounder.resources.*;
@@ -102,8 +103,16 @@ public class ShadowRenderer extends Renderer {
 				shader.getUniformMat4("mvpMatrix").loadMat4(mvpReusableMatrix);
 			}
 
-			if (componentModel.getModel().getAABB() != null) {
-				shader.getUniformFloat("swayHeight").loadFloat((float) componentModel.getModel().getAABB().getHeight());
+			if (componentModel.getModel().getCollider() != null) {
+				float height = 0.0f;
+
+				if (componentModel.getModel().getCollider() instanceof AABB) {
+					height = ((AABB) componentModel.getModel().getCollider()).getHeight();
+				} else if (componentModel.getModel().getCollider() instanceof Sphere) {
+					height = 2.0f * ((Sphere) componentModel.getModel().getCollider()).getRadius();
+				}
+
+				shader.getUniformFloat("swayHeight").loadFloat(height);
 			}
 
 			vaoLength = componentModel.getModel().getVaoLength();
