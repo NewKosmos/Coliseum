@@ -12,6 +12,7 @@ public class KosmosPost extends Module {
 
 	private boolean bloomEnabled;
 	private boolean motionBlurEnabled;
+	private boolean tiltShiftEnabled;
 	private boolean lensFlareEnabled;
 	private boolean crtEnabled;
 
@@ -25,6 +26,7 @@ public class KosmosPost extends Module {
 
 		this.bloomEnabled = KosmosConfigs.POST_BLOOM_ENABLED.getBoolean();
 		this.motionBlurEnabled = KosmosConfigs.POST_MOTIONBLUR_ENABLED.getBoolean();
+		this.tiltShiftEnabled = KosmosConfigs.POST_TILTSHIFT_ENABLED.getBoolean();
 		this.lensFlareEnabled = KosmosConfigs.POST_LENSFLARE_ENABLED.getBoolean();
 		this.crtEnabled = KosmosConfigs.POST_CRT_ENABLED.getBoolean();
 	}
@@ -64,6 +66,14 @@ public class KosmosPost extends Module {
 
 	public static void setMotionBlurEnabled(boolean motionBlurEnabled) {
 		INSTANCE.motionBlurEnabled = motionBlurEnabled;
+	}
+
+	public static boolean isTiltShiftEnabled() {
+		return INSTANCE.tiltShiftEnabled;
+	}
+
+	public static void setTiltShiftEnabled(boolean tiltShiftEnabled) {
+		INSTANCE.tiltShiftEnabled = tiltShiftEnabled;
 	}
 
 	public static boolean isLensFlareEnabled() {

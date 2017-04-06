@@ -66,8 +66,23 @@ public class ScreenSettingPost extends ScreenObject {
 			}
 		});
 
+		// Toggle Tilt Shift.
+		GuiButtonText toggleTiltShift = new GuiButtonText(this, new Vector2f(0.5f, 0.41f), "Tilt Shift Enabled: ", GuiAlign.CENTRE);
+		FlounderEvents.addEvent(new EventChange<Boolean>(KosmosPost::isTiltShiftEnabled) {
+			@Override
+			public void onEvent(Boolean newValue) {
+				toggleTiltShift.setText("Tilt Shift Enabled: " + newValue);
+			}
+		});
+		toggleTiltShift.addLeftListener(new ScreenListener() {
+			@Override
+			public void eventOccurred() {
+				KosmosPost.setTiltShiftEnabled(!KosmosPost.isTiltShiftEnabled());
+			}
+		});
+
 		// Toggle Lens Flare.
-		GuiButtonText toggleLensFlare = new GuiButtonText(this, new Vector2f(0.5f, 0.41f), "Lens Flare Enabled: ", GuiAlign.CENTRE);
+		GuiButtonText toggleLensFlare = new GuiButtonText(this, new Vector2f(0.5f, 0.48f), "Lens Flare Enabled: ", GuiAlign.CENTRE);
 		FlounderEvents.addEvent(new EventChange<Boolean>(KosmosPost::isLensFlareEnabled) {
 			@Override
 			public void onEvent(Boolean newValue) {
@@ -82,7 +97,7 @@ public class ScreenSettingPost extends ScreenObject {
 		});
 
 		// Toggle Effect CRT.
-		GuiButtonText toggleEffectCRT = new GuiButtonText(this, new Vector2f(0.5f, 0.48f), "Effect CRT Enabled: ", GuiAlign.CENTRE);
+		GuiButtonText toggleEffectCRT = new GuiButtonText(this, new Vector2f(0.5f, 0.55f), "Effect CRT Enabled: ", GuiAlign.CENTRE);
 		FlounderEvents.addEvent(new EventChange<Boolean>(KosmosPost::isCrtEnabled) {
 			@Override
 			public void onEvent(Boolean newValue) {

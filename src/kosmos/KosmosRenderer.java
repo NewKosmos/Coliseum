@@ -51,6 +51,7 @@ public class KosmosRenderer extends RendererMaster {
 	private PipelineMRT pipelineMRT;
 	private PipelineBloom pipelineBloom;
 	private FilterBlurMotion filterBlurMotion;
+	private FilterTiltShift filterTiltShift;
 	private FilterLensFlare filterLensFlare;
 	private FilterPixel filterPixel;
 	private FilterCRT filterCRT;
@@ -76,6 +77,7 @@ public class KosmosRenderer extends RendererMaster {
 		this.pipelineMRT = new PipelineMRT();
 		this.pipelineBloom = new PipelineBloom();
 		this.filterBlurMotion = new FilterBlurMotion();
+		this.filterTiltShift = new FilterTiltShift(0.8f, 1.1f, 0.002f, 5.0f);
 		this.filterLensFlare = new FilterLensFlare();
 		this.filterPixel = new FilterPixel(2.0f);
 		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.09f);
@@ -186,6 +188,12 @@ public class KosmosRenderer extends RendererMaster {
 				output = filterBlurMotion.fbo;
 			}
 
+			// Render Tilt Shift Filter.
+			if (KosmosPost.isTiltShiftEnabled()) {
+				filterTiltShift.applyFilter(output.getColourTexture(0));
+				output = filterTiltShift.fbo;
+			}
+
 			// Render Lens Flare Filter.
 			if (KosmosPost.isLensFlareEnabled() && KosmosWorld.getEntitySun() != null) {
 				filterLensFlare.setSunPosition(KosmosWorld.getEntitySun().getPosition());
@@ -250,6 +258,7 @@ public class KosmosRenderer extends RendererMaster {
 		pipelineMRT.dispose();
 		pipelineBloom.dispose();
 		filterBlurMotion.dispose();
+		filterTiltShift.dispose();
 		filterLensFlare.dispose();
 		filterPixel.dispose();
 		filterCRT.dispose();
