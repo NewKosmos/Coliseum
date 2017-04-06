@@ -95,9 +95,9 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 			// If the main collider intersects or if a collision type is contained in the other.
 			if (collider2.intersects(collisionRange).isIntersection() || collider2.contains(collider1) || collider1.contains(collider2)) {
 				// If the main colliders are the only ones use them.
-				if (componentCollider2 == null || componentCollider2.getColliders().isEmpty()) {
+				//if (componentCollider2 == null || componentCollider2.getColliders().isEmpty()) {
 					collider1.resolveCollision(collider2, result, result);
-				}
+				//}
 			}
 		});
 

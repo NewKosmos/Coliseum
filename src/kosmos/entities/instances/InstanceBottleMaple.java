@@ -25,7 +25,8 @@ public class InstanceBottleMaple extends Entity {
 		new kosmos.entities.components.ComponentSurface(this, 1.0f, 0.0f, false, false);
 		new kosmos.entities.components.ComponentCollision(this);
 		List<Pair<Collider, Vector3f>> colliders = new ArrayList<>();
-		colliders.add(new Pair<>(new AABB(new Vector3f(-0.1f, -0.0f, -0.1f), new Vector3f(0.1f, 0.6f, 0.1f)), new Vector3f(0.0f, 0.7f, 0.0f)));
+		// colliders.add(new Pair<>(new AABB(new Vector3f(-0.1f, -0.0f, -0.1f), new Vector3f(0.1f, 0.6f, 0.1f)), new Vector3f(0.0f, 0.7f, 0.0f)));
+		colliders.add(new Pair<>(new Cylinder(0.1f, 0.6f, new Vector3f()), new Vector3f(0.0f, 1.0f, 0.0f)));
 		new kosmos.entities.components.ComponentCollider(this, colliders);
 	}
 }

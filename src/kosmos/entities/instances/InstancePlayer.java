@@ -29,7 +29,8 @@ public class InstancePlayer extends Entity {
 		new kosmos.entities.components.ComponentCollision(this);
 		List<Pair<Collider, Vector3f>> colliders = new ArrayList<>();
 		colliders.add(new Pair<>(new Sphere(2.2f), new Vector3f(0.0f, 8.0f, 0.0f)));
-		colliders.add(new Pair<>(new AABB(new Vector3f(-2.0f, -0.0f, -2.0f), new Vector3f(2.0f, 6.0f, 2.0f)), new Vector3f(0.0f, 0.0f, 0.0f)));
+	//	colliders.add(new Pair<>(new AABB(new Vector3f(-2.0f, -0.0f, -2.0f), new Vector3f(2.0f, 6.0f, 2.0f)), new Vector3f(0.0f, 0.0f, 0.0f)));
+		colliders.add(new Pair<>(new Cylinder(2.0f, 7.0f, new Vector3f()), new Vector3f(0.0f, 3.5f, 0.0f)));
 		new kosmos.entities.components.ComponentCollider(this, colliders);
 	}
 }

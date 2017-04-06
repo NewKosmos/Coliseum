@@ -26,7 +26,7 @@ uniform vec2 atlasOffset;
 uniform bool animated;
 uniform mat4 jointTransforms[MAX_JOINTS];
 
-uniform bool useSwayMap;
+uniform bool swaying;
 uniform float swayHeight;
 uniform vec2 swayOffset;
 
@@ -55,7 +55,7 @@ void main(void) {
 
 	pass_textureCoords = (in_textureCoords / atlasRows) + atlasOffset;
 
-	if (useSwayMap) {
+	if (swaying) {
 	    vec4 swayColour = texture(swayMap, in_textureCoords);
 	    float swayPower = 0.5 * exp(log(length(swayColour.rgb)) / 3.0) * (totalLocalPos.y / swayHeight) * length(totalLocalPos.xyz);
 	    totalLocalPos.x += swayPower * swayOffset.x;
