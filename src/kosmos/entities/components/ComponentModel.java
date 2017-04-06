@@ -96,7 +96,9 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 			}
 		}
 
-		FlounderBounding.addShapeRender(collider);
+		if (getEntity().getComponent(ComponentCollider.class) == null) {
+			FlounderBounding.addShapeRender(collider);
+		}
 	}
 
 	public ModelObject getModel() {

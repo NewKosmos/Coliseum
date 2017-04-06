@@ -143,7 +143,9 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 			}
 		}
 
-		FlounderBounding.addShapeRender(collider);
+		if (getEntity().getComponent(ComponentCollider.class) == null) {
+			FlounderBounding.addShapeRender(collider);
+		}
 	}
 
 	/**

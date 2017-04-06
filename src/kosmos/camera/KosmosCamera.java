@@ -20,7 +20,6 @@ import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
 import flounder.profiling.*;
-import flounder.space.*;
 import kosmos.*;
 import org.lwjgl.glfw.*;
 

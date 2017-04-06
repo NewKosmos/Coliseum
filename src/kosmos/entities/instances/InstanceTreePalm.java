@@ -27,7 +27,7 @@ public class InstanceTreePalm extends Entity {
 		new kosmos.entities.components.ComponentSway(this, TEXTURE_SWAY);
 		new kosmos.entities.components.ComponentCollision(this);
 		List<Pair<Collider, Vector3f>> colliders = new ArrayList<>();
-		colliders.add(new Pair<>(new Sphere(1.5f), new Vector3f(0.0f, 3.8f, 0.0f)));
+		colliders.add(new Pair<>(new Sphere(1.4f), new Vector3f(0.0f, 3.2f, 0.0f)));
 		colliders.add(new Pair<>(new AABB(new Vector3f(-0.5f, -0.0f, -0.5f), new Vector3f(0.5f, 3.7f, 0.5f)), new Vector3f(0.0f, 0.0f, 0.0f)));
 		new kosmos.entities.components.ComponentCollider(this, colliders);
 	}
