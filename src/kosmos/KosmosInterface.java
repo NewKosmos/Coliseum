@@ -139,6 +139,11 @@ public class KosmosInterface extends Standard {
 
 	@Override
 	public void dispose() {
+		if (FlounderNetwork.getSocketClient() != null) {
+			new PacketDisconnect(FlounderNetwork.getUsername()).writeData(FlounderNetwork.getSocketClient());
+			FlounderNetwork.closeClient();
+		}
+
 		KosmosConfigs.saveAllConfigs();
 	}
 
