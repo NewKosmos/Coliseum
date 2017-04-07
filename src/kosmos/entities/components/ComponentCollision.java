@@ -92,12 +92,43 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 			// Gets a collider that may contain more colliders.
 			ComponentCollider componentCollider2 = (ComponentCollider) entity.getComponent(ComponentCollider.class);
 
-			// If the main collider intersects or if a collision type is contained in the other.
-			if (collider2.intersects(collisionRange).isIntersection() || collider2.contains(collider1) || collider1.contains(collider2)) {
+			// If the main collider intersects with the other entities general collider.
+			if (collider2.intersects(collisionRange).isIntersection()) {
 				// If the main colliders are the only ones use them.
-				//if (componentCollider2 == null || componentCollider2.getColliders().isEmpty()) {
+				boolean advanced1 = componentCollider1 != null && !componentCollider1.isEmpty();
+				boolean advanced2 = componentCollider2 != null && !componentCollider2.isEmpty();
+
+				if (advanced1 && advanced2) {
+					for (Pair<Collider, Vector3f> p1 : componentCollider1.getColliders().keySet()) {
+						Collider c1 = componentCollider1.getColliders().get(p1);
+
+						for (Pair<Collider, Vector3f> p2 : componentCollider2.getColliders().keySet()) {
+							Collider c2 = componentCollider2.getColliders().get(p2);
+
+							if (c1.intersects(c2).isIntersection()) {
+								c1.resolveCollision(c2, result, result);
+							}
+						}
+					}
+				} else if (!advanced1 && advanced2) {
+					for (Pair<Collider, Vector3f> p2 : componentCollider2.getColliders().keySet()) {
+						Collider c2 = componentCollider2.getColliders().get(p2);
+
+						if (collider1.intersects(c2).isIntersection()) {
+							collider1.resolveCollision(c2, result, result);
+						}
+					}
+				} else if (advanced1 && !advanced2) {
+					for (Pair<Collider, Vector3f> p1 : componentCollider1.getColliders().keySet()) {
+						Collider c1 = componentCollider1.getColliders().get(p1);
+
+						if (c1.intersects(collider2).isIntersection()) {
+							c1.resolveCollision(collider2, result, result);
+						}
+					}
+				} else {
 					collider1.resolveCollision(collider2, result, result);
-				//}
+				}
 			}
 		});
 

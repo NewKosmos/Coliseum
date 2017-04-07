@@ -54,6 +54,10 @@ public class ComponentCollider extends IComponentEntity implements IComponentEdi
 		return colliders;
 	}
 
+	protected boolean isEmpty() {
+		return colliders.isEmpty();
+	}
+
 	@Override
 	public void addToPanel(JPanel panel) {
 	}
