@@ -12,7 +12,6 @@ package kosmos.entities.components;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
-import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
 
@@ -95,40 +94,9 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 			// If the main collider intersects with the other entities general collider.
 			if (collider2.intersects(collisionRange).isIntersection()) {
 				// If the main colliders are the only ones use them.
-				boolean advanced1 = componentCollider1 != null && !componentCollider1.isEmpty();
-				boolean advanced2 = componentCollider2 != null && !componentCollider2.isEmpty();
-
-				if (advanced1 && advanced2) {
-					for (Pair<Collider, Vector3f> p1 : componentCollider1.getColliders().keySet()) {
-						Collider c1 = componentCollider1.getColliders().get(p1);
-
-						for (Pair<Collider, Vector3f> p2 : componentCollider2.getColliders().keySet()) {
-							Collider c2 = componentCollider2.getColliders().get(p2);
-
-							if (c1.intersects(c2).isIntersection()) {
-								c1.resolveCollision(c2, result, result);
-							}
-						}
-					}
-				} else if (!advanced1 && advanced2) {
-					for (Pair<Collider, Vector3f> p2 : componentCollider2.getColliders().keySet()) {
-						Collider c2 = componentCollider2.getColliders().get(p2);
-
-						if (collider1.intersects(c2).isIntersection()) {
-							collider1.resolveCollision(c2, result, result);
-						}
-					}
-				} else if (advanced1 && !advanced2) {
-					for (Pair<Collider, Vector3f> p1 : componentCollider1.getColliders().keySet()) {
-						Collider c1 = componentCollider1.getColliders().get(p1);
-
-						if (c1.intersects(collider2).isIntersection()) {
-							c1.resolveCollision(collider2, result, result);
-						}
-					}
-				} else {
-					collider1.resolveCollision(collider2, result, result);
-				}
+				Collider colliderLeft = componentCollider1 == null || componentCollider1.getConvexHull() == null ? collider1 : componentCollider1.getConvexHull();
+				Collider colliderRight = componentCollider2 == null || componentCollider2.getConvexHull() == null ? collider2 : componentCollider2.getConvexHull();
+				colliderLeft.resolveCollision(colliderRight, result, result);
 			}
 		});
 

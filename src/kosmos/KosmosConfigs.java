@@ -57,7 +57,7 @@ public class KosmosConfigs {
 
 	public static final ConfigData POST_EFFECTS_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "effectsEnabled", true, KosmosPost::isEffectsEnabled);
 	public static final ConfigData POST_BLOOM_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "bloomEnabled", true, KosmosPost::isBloomEnabled);
-	public static final ConfigData POST_MOTIONBLUR_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "motionBlurEnabled", true, KosmosPost::isMotionBlurEnabled);
+	public static final ConfigData POST_MOTIONBLUR_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "motionBlurEnabled", false, KosmosPost::isMotionBlurEnabled);
 	public static final ConfigData POST_TILTSHIFT_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "tiltShiftEnabled", true, KosmosPost::isTiltShiftEnabled);
 	public static final ConfigData POST_LENSFLARE_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "lensFlareEnabled", true, KosmosPost::isLensFlareEnabled);
 	public static final ConfigData POST_CRT_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "crtEnabled", false, KosmosPost::isCrtEnabled);

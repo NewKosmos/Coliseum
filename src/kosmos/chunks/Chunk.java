@@ -13,7 +13,6 @@ import flounder.entities.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
-import flounder.physics.bounding.*;
 import flounder.space.*;
 import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;

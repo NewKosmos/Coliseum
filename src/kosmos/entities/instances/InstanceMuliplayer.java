@@ -23,6 +23,7 @@ public class InstanceMuliplayer extends Entity {
 		new kosmos.entities.components.ComponentSurface(this, 1.0f, 0.0f, false, false);
 		new kosmos.entities.components.ComponentLight(this, new Vector3f(0.0f, 2.0f, 0.0f), new Colour(1.0f, 1.0f, 1.0f), new Attenuation(1.0f, 0.02f, 0.5f));
 		new kosmos.entities.components.ComponentCollision(this);
+		new kosmos.entities.components.ComponentCollider(this);
 	}
 }
 

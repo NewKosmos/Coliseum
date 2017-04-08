@@ -22,6 +22,7 @@ public class InstanceTreeBirchSmall extends Entity {
 		new kosmos.entities.components.ComponentSurface(this, 1.0f, 0.0f, false, false);
 		new kosmos.entities.components.ComponentSway(this, TEXTURE_SWAY);
 		new kosmos.entities.components.ComponentCollision(this);
+		new kosmos.entities.components.ComponentCollider(this);
 	}
 }
 

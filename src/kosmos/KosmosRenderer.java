@@ -86,30 +86,30 @@ public class KosmosRenderer extends RendererMaster {
 
 	@Override
 	public void render() {
-		/* Water rendering. */
+		// Water rendering.
 		renderWater();
 
-		/* Shadow rendering. */
+		// Shadow rendering.
 		renderShadows();
 
-		/* Binds the render FBO. */
+		// Binds the render FBO.
 		rendererFBO.bindFrameBuffer();
 
-		/* Scene rendering. */
+		// Scene rendering.
 		renderScene(POSITIVE_INFINITY, false);
 
-		/* Unbinds the render FBO. */
+		// Unbinds the render FBO.
 		rendererFBO.unbindFrameBuffer();
 
-		/* Post rendering. */
+		// Post rendering.
 		renderPost(FlounderGuis.getGuiMaster().isGamePaused(), FlounderGuis.getGuiMaster().getBlurFactor());
 	}
 
 	private void renderWater() {
-		/* Sets the player model to render. */
+		// Sets the player model to render.
 		entitiesRenderer.setRenderPlayer(true);
 
-		/* Water Reflection & Refraction */
+		// Water Reflection & Refraction
 		if (KosmosWater.reflectionsEnabled() && KosmosWater.getColourIntensity() != 1.0f && KosmosWater.getWater() != null) {
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
 
@@ -143,18 +143,18 @@ public class KosmosRenderer extends RendererMaster {
 	}
 
 	private void renderShadows() {
-		/* Sets the player model to render. */
+		// Sets the player model to render.
 		entitiesRenderer.setRenderPlayer(true);
 
-		/* Renders the shadows. */
+		// Renders the shadows.
 		shadowRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
 	}
 
 	private void renderScene(Vector4f clipPlane, boolean waterPass) {
-		/* Sets the player model to render in first person view. */
+		// Sets the player model to render in first person view.
 		entitiesRenderer.setRenderPlayer(!KosmosCamera.isFirstPerson());
 
-		/* Clears and renders. */
+		// Clears and renders.
 		Camera camera = FlounderCamera.getCamera();
 		OpenGlUtils.prepareNewRenderParse(0.0f, 0.0f, 0.0f);
 
@@ -209,7 +209,7 @@ public class KosmosRenderer extends RendererMaster {
 				output = pipelinePaused.getOutput();
 			}
 
-			/* Scene independents. */
+			// Scene independents.
 			renderIndependents(output);
 
 			// Render CRT Filter.
@@ -220,7 +220,7 @@ public class KosmosRenderer extends RendererMaster {
 				output = filterCRT.fbo;
 			}
 		} else {
-			/* Scene independents. */
+			// Scene independents.
 			renderIndependents(output);
 		}
 
