@@ -89,16 +89,14 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 
 			if (model != null && model.getCollider() != null) {
 				if (collider == null || !model.getCollider().getClass().isInstance(collider)) {
-					collider = model.getCollider().clone();
+					collider = model.getCollider().clone(); // new OBB((AABB) model.getCollider());
 				}
 
 				model.getCollider().update(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, collider);
 			}
 		}
 
-		//if (getEntity().getComponent(ComponentCollider.class) == null) {
-			FlounderBounding.addShapeRender(collider);
-		//}
+		FlounderBounding.addShapeRender(collider);
 	}
 
 	public ModelObject getModel() {
