@@ -21,7 +21,26 @@ public class ComponentCollider extends IComponentEntity implements IComponentEdi
 
 	@Override
 	public void update() {
-		if (getEntity().hasMoved() && convexHull != null) {
+		if (convexHull == null) {
+			return;
+		}
+
+		// Loads convex hull data from entity models.
+		if (!convexHull.isLoaded() && getEntity().getComponent(ComponentAnimation.class) != null) {
+			ComponentAnimation componentAnimation = (ComponentAnimation) getEntity().getComponent(ComponentAnimation.class);
+
+			if (componentAnimation.getModel().isLoaded()) {
+				float[] vertices = componentAnimation.getModel().getMeshData().getVertices();
+			}
+		} else if (!convexHull.isLoaded() && getEntity().getComponent(ComponentModel.class) != null) {
+			ComponentModel componentModel = (ComponentModel) getEntity().getComponent(ComponentModel.class);
+
+			if (componentModel.getModel().isLoaded()) {
+				float[] vertices = componentModel.getModel().getVertices();
+			}
+		}
+
+		if (getEntity().hasMoved()) {
 			convexHull.update(getEntity().getPosition(), getEntity().getRotation(), getEntity().getScale(), convexHull);
 		}
 	}

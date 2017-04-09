@@ -94,8 +94,8 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 			// If the main collider intersects with the other entities general collider.
 			if (collider2.intersects(collisionRange).isIntersection()) {
 				// If the main colliders are the only ones use them.
-				Collider colliderLeft = componentCollider1 == null || componentCollider1.getConvexHull() == null ? collider1 : componentCollider1.getConvexHull();
-				Collider colliderRight = componentCollider2 == null || componentCollider2.getConvexHull() == null ? collider2 : componentCollider2.getConvexHull();
+				Collider colliderLeft = (componentCollider1 != null && componentCollider1.getConvexHull() != null && componentCollider1.getConvexHull().isLoaded()) ? componentCollider1.getConvexHull() : collider1;
+				Collider colliderRight = (componentCollider2 != null && componentCollider2.getConvexHull() != null && componentCollider2.getConvexHull().isLoaded()) ? componentCollider2.getConvexHull() : collider2;
 				colliderLeft.resolveCollision(colliderRight, result, result);
 			}
 		});
