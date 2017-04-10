@@ -40,17 +40,17 @@ public class KosmosSkybox extends Module {
 			new MyFile(SKYBOX_FOLDER, "starsFront.png")
 	};
 
-	public static final Colour SKY_COLOUR_NIGHT = new Colour(0.0f, 0.07f, 0.19f);
-	public static final Colour SKY_COLOUR_SUNRISE = new Colour(0.713f, 0.494f, 0.356f);
-	public static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.30f, 0.70f);
+	public static final Colour SKY_COLOUR_NIGHT = new Colour(0.0f, 0.05f, 0.1f);
+	public static final Colour SKY_COLOUR_SUNRISE = new Colour(0.8f, 0.4f, 0.3f);
+	public static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.3f, 0.7f);
 
 	public static final Colour SUN_COLOUR_NIGHT = new Colour(0.0f, 0.0f, 0.0f);
-	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.713f, 0.494f, 0.356f);
-	public static final Colour SUN_COLOUR_DAY = new Colour(0.7f, 0.7f, 0.7f);
+	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.8f, 0.4f, 0.3f);
+	public static final Colour SUN_COLOUR_DAY = new Colour(0.8f, 0.8f, 0.8f);
 
-	public static final Colour MOON_COLOUR = new Colour(0.1f, 0.1f, 0.19f);
+	public static final Colour MOON_COLOUR = new Colour(0.1f, 0.1f, 0.3f);
 
-	public static final float DAY_NIGHT_CYCLE = 600.0f; // The day/night length (sec).
+	public static final float DAY_NIGHT_CYCLE = 420.0f; // The day/night length (sec).
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.3f, 0.0f, 0.5f); // The starting light direction.
 

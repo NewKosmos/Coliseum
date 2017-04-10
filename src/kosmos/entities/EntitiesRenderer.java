@@ -150,17 +150,20 @@ public class EntitiesRenderer extends Renderer {
 		if (componentModel != null && componentModel.getTexture() != null && componentModel.getTexture().isLoaded()) {
 			shader.getUniformFloat("atlasRows").loadFloat(componentModel.getTexture().getNumberOfRows());
 			shader.getUniformVec2("atlasOffset").loadVec2(componentModel.getTextureOffset());
+			shader.getUniformVec3("colourOffset").loadVec3(componentModel.getColourOffset());
 			OpenGlUtils.cullBackFaces(!componentModel.getTexture().hasAlpha());
 			OpenGlUtils.bindTexture(componentModel.getTexture(), 0);
 		} else if (componentAnimation != null && componentAnimation.getTexture() != null && componentAnimation.getTexture().isLoaded()) {
 			shader.getUniformFloat("atlasRows").loadFloat(componentAnimation.getTexture().getNumberOfRows());
 			shader.getUniformVec2("atlasOffset").loadVec2(componentAnimation.getTextureOffset());
+			shader.getUniformVec3("colourOffset").loadVec3(componentAnimation.getColourOffset());
 			OpenGlUtils.cullBackFaces(!componentAnimation.getTexture().hasAlpha());
 			OpenGlUtils.bindTexture(componentAnimation.getTexture(), 0);
 		} else if (textureUndefined != null && textureUndefined.isLoaded()) {
 			// No texture, so load a 'undefined' texture.
 			shader.getUniformFloat("atlasRows").loadFloat(textureUndefined.getNumberOfRows());
 			shader.getUniformVec2("atlasOffset").loadVec2(0, 0);
+			shader.getUniformVec3("colourOffset").loadVec3(0.0f, 0.0f, 0.0f);
 			OpenGlUtils.cullBackFaces(!textureUndefined.hasAlpha());
 			OpenGlUtils.bindTexture(textureUndefined, 0);
 		}

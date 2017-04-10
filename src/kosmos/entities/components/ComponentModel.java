@@ -13,6 +13,7 @@ import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
 import flounder.logger.*;
+import flounder.maths.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
@@ -38,6 +39,8 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 
 	private TextureObject texture;
 	private int textureIndex;
+
+	private Colour colourOffset;
 
 	private MyFile editorPathModel;
 	private MyFile editorPathTexture;
@@ -73,6 +76,8 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 
 		this.texture = texture;
 		this.textureIndex = textureIndex;
+
+		this.colourOffset = new Colour();
 
 		this.wasLoaded = false;
 	}
@@ -138,6 +143,14 @@ public class ComponentModel extends IComponentEntity implements IComponentEditor
 		int column = textureIndex % texture.getNumberOfRows();
 		int row = textureIndex / texture.getNumberOfRows();
 		return new Vector2f((float) row / (float) texture.getNumberOfRows(), (float) column / (float) texture.getNumberOfRows());
+	}
+
+	public Colour getColourOffset() {
+		return colourOffset;
+	}
+
+	public void setColourOffset(Colour colourOffset) {
+		this.colourOffset.set(colourOffset);
 	}
 
 	@Override

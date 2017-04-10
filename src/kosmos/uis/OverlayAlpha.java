@@ -17,6 +17,7 @@ import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import flounder.visual.*;
+import kosmos.*;
 
 public class OverlayAlpha extends ScreenObject {
 	private static float SIZE = 0.042f;
@@ -33,7 +34,7 @@ public class OverlayAlpha extends ScreenObject {
 		this.cornerAlpha.setColourOffset(new Colour());
 		this.cornerAlpha.setRotationDriver(new ConstantDriver(45.0f));
 
-		this.cornerVersion = new TextObject(this, new Vector2f(FlounderDisplay.getAspectRatio() - SIZE, SIZE), "New Kosmos \n Alpha", 0.61f, FlounderFonts.CANDARA, 0.2f, GuiAlign.CENTRE);
+		this.cornerVersion = new TextObject(this, new Vector2f(FlounderDisplay.getAspectRatio() - SIZE, SIZE), "New Kosmos \n Alpha " + NewKosmos.VERSION, 0.64f, FlounderFonts.CANDARA, 0.2f, GuiAlign.CENTRE);
 		this.cornerVersion.setInScreenCoords(false);
 		this.cornerVersion.setColour(new Colour(1.0f, 1.0f, 1.0f));
 		this.cornerVersion.setRotationDriver(new ConstantDriver(45.0f));

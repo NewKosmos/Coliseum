@@ -13,6 +13,8 @@ layout(location = 0) out vec4 out_albedo;
 layout(location = 1) out vec4 out_normals;
 layout(location = 2) out vec4 out_extras;
 
+uniform vec3 colourOffset;
+
 uniform float shineDamper;
 uniform float reflectivity;
 
@@ -42,7 +44,7 @@ void main(void) {
 	    }
 	}
 
-	out_albedo = vec4(diffuseColour);
+	out_albedo = vec4(diffuseColour + vec4(colourOffset, 0.0));
 	out_normals = vec4(pass_surfaceNormal, 1.0);
 	out_extras = vec4(shineDamper, reflectivity, (1.0 / 3.0) * (float(ignoreFog) + (2.0 * float(ignoreLighting || glowing))), 1.0);
 }

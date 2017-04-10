@@ -23,9 +23,9 @@ import java.util.*;
  * Represents the physical mesh for all the water at a certain height in the scene.
  */
 public class Water {
-	protected static final float WAVE_SPEED = 10.0f;
+	protected static final float WAVE_SPEED = 15.0f;
 	protected static final float WAVE_LENGTH = 5.0f;
-	protected static final float AMPLITUDE = 0.190f;
+	protected static final float AMPLITUDE = 0.200f;
 
 	protected static final double SQUARE_SIZE = Math.sqrt(3.0);
 	protected static final int VERTEX_COUNT = 100;

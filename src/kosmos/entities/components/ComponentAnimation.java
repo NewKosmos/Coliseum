@@ -16,6 +16,7 @@ import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
 import flounder.logger.*;
+import flounder.maths.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
@@ -40,6 +41,8 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 
 	private TextureObject texture;
 	private int textureIndex;
+
+	private Colour colourOffset;
 
 	private Animator animator;
 
@@ -83,6 +86,8 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 		this.texture = texture;
 		this.textureIndex = textureIndex;
 
+		this.colourOffset = new Colour();
+
 		this.wasLoaded = false;
 
 		if (model != null) {
@@ -113,6 +118,8 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 
 		this.texture = texture;
 		this.textureIndex = textureIndex;
+
+		this.colourOffset = new Colour();
 
 		if (model != null) {
 			model.getHeadJoint().calculateInverseBindTransform(new Matrix4f());
@@ -223,10 +230,6 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 		this.texture = texture;
 	}
 
-	public void setAnimator(Animator animator) {
-		this.animator = animator;
-	}
-
 	public int getTextureIndex() {
 		return textureIndex;
 	}
@@ -246,8 +249,20 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 		return new Vector2f((float) row / (float) texture.getNumberOfRows(), (float) column / (float) texture.getNumberOfRows());
 	}
 
+	public Colour getColourOffset() {
+		return colourOffset;
+	}
+
+	public void setColourOffset(Colour colourOffset) {
+		this.colourOffset.set(colourOffset);
+	}
+
 	public Animator getAnimator() {
 		return animator;
+	}
+
+	public void setAnimator(Animator animator) {
+		this.animator = animator;
 	}
 
 	@Override
