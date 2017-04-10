@@ -15,6 +15,7 @@ import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.*;
+import kosmos.camera.*;
 import kosmos.skybox.*;
 
 public class OverlayHUD extends ScreenObject {
@@ -47,6 +48,7 @@ public class OverlayHUD extends ScreenObject {
 	public void updateObject() {
 		this.crossHair.setColourOffset(FlounderGuis.getGuiMaster().getPrimaryColour());
 		this.crossHair.setSelectedRow(crosshairSelected);
+		this.crossHair.setVisible(KosmosCamera.isFirstPerson());
 	}
 
 	public static int getCrosshairSelected() {

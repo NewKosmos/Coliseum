@@ -8,45 +8,52 @@ import flounder.physics.*;
 import javax.swing.*;
 
 public class ComponentCollider extends IComponentEntity implements IComponentEditor {
-	private ConvexHull convexHull;
+	private QuickHull quickHull;
 
 	public ComponentCollider(Entity entity) {
-		this(entity, new ConvexHull());
+		this(entity, new QuickHull());
 	}
 
-	public ComponentCollider(Entity entity, ConvexHull convexHull) {
+	public ComponentCollider(Entity entity, QuickHull quickHull) {
 		super(entity);
-		this.convexHull = convexHull;
+		this.quickHull = quickHull;
 	}
 
 	@Override
 	public void update() {
-		if (convexHull == null) {
+		if (quickHull == null) {
 			return;
 		}
 
-		// Loads convex hull data from entity models.
-		if (!convexHull.isLoaded() && getEntity().getComponent(ComponentAnimation.class) != null) {
+		if (getEntity().getComponent(ComponentAnimation.class) != null) {
 			ComponentAnimation componentAnimation = (ComponentAnimation) getEntity().getComponent(ComponentAnimation.class);
 
-			if (componentAnimation.getModel().isLoaded()) {
+			// Loads convex hull data from entity models.
+			if (!quickHull.isLoaded() && componentAnimation.getModel().isLoaded()) {
 				float[] vertices = componentAnimation.getModel().getMeshData().getVertices();
+				quickHull.loadData(vertices);
 			}
-		} else if (!convexHull.isLoaded() && getEntity().getComponent(ComponentModel.class) != null) {
+
+			if (getEntity().hasMoved()) {
+				componentAnimation.getModel().getQuickHull().update(getEntity().getPosition(), getEntity().getRotation(), getEntity().getScale(), quickHull);
+			}
+		} else if (getEntity().getComponent(ComponentModel.class) != null) {
 			ComponentModel componentModel = (ComponentModel) getEntity().getComponent(ComponentModel.class);
 
-			if (componentModel.getModel().isLoaded()) {
+			// Loads convex hull data from entity models.
+			if (!quickHull.isLoaded() && componentModel.getModel().isLoaded()) {
 				float[] vertices = componentModel.getModel().getVertices();
+				quickHull.loadData(vertices);
 			}
-		}
 
-		if (getEntity().hasMoved()) {
-			convexHull.update(getEntity().getPosition(), getEntity().getRotation(), getEntity().getScale(), convexHull);
+			if (getEntity().hasMoved()) {
+				componentModel.getModel().getQuickHull().update(getEntity().getPosition(), getEntity().getRotation(), getEntity().getScale(), quickHull);
+			}
 		}
 	}
 
-	public ConvexHull getConvexHull() {
-		return convexHull;
+	public QuickHull getQuickHull() {
+		return quickHull;
 	}
 
 	@Override

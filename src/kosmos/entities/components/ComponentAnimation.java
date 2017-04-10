@@ -136,7 +136,7 @@ public class ComponentAnimation extends IComponentEntity implements IComponentEd
 
 			if (model != null && model.getCollider() != null) {
 				if (collider == null || !model.getCollider().getClass().isInstance(collider)) {
-					collider = model.getCollider().clone(); // new OBB((AABB) model.getCollider());
+					collider = model.getCollider().clone();
 				}
 
 				model.getCollider().update(super.getEntity().getPosition(), super.getEntity().getRotation(), scale, collider);

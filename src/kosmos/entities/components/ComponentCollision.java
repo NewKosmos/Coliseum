@@ -94,9 +94,18 @@ public class ComponentCollision extends IComponentEntity implements IComponentMo
 			// If the main collider intersects with the other entities general collider.
 			if (collider2.intersects(collisionRange).isIntersection()) {
 				// If the main colliders are the only ones use them.
-				Collider colliderLeft = (componentCollider1 != null && componentCollider1.getConvexHull() != null && componentCollider1.getConvexHull().isLoaded()) ? componentCollider1.getConvexHull() : collider1;
-				Collider colliderRight = (componentCollider2 != null && componentCollider2.getConvexHull() != null && componentCollider2.getConvexHull().isLoaded()) ? componentCollider2.getConvexHull() : collider2;
-				colliderLeft.resolveCollision(colliderRight, result, result);
+				boolean hullLeft = componentCollider1 != null && componentCollider1.getQuickHull() != null && componentCollider1.getQuickHull().isLoaded();
+				boolean hullRight = componentCollider1 != null && componentCollider1.getQuickHull() != null && componentCollider1.getQuickHull().isLoaded();
+
+				//Collider colliderLeft = hullLeft ? componentCollider1.getQuickHull() : collider1;
+				//Collider colliderRight = hullRight ? componentCollider2.getQuickHull() : collider2;
+				//colliderLeft.resolveCollision(colliderRight, result, result);
+
+				if (hullLeft && hullRight) {
+					componentCollider1.getQuickHull().resolveCollision(componentCollider2.getQuickHull(), result, result);
+				} else {
+					collider1.resolveCollision(collider2, result, result);
+				}
 			}
 		});
 
