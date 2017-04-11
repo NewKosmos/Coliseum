@@ -17,6 +17,7 @@ import flounder.helpers.*;
 import flounder.inputs.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
+import flounder.shaders.*;
 import kosmos.camera.*;
 import kosmos.chunks.*;
 import kosmos.water.*;
@@ -26,7 +27,7 @@ import javax.swing.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class ComponentPlayer extends IComponentEntity implements IComponentEditor {
+public class ComponentPlayer extends IComponentEntity implements IComponentRender, IComponentEditor {
 	private float currentSpeed;
 	private float currentUpwardSpeed;
 	private float currentTurnSpeed;
@@ -142,6 +143,18 @@ public class ComponentPlayer extends IComponentEntity implements IComponentEdito
 		if (getEntity().getPosition().y - lastY == 0.0f) {
 			currentUpwardSpeed = 0.0f;
 		}
+	}
+
+	@Override
+	public void render(ShaderObject shader, Single<Integer> vaoLength) {
+		if (KosmosCamera.isFirstPerson()) {
+			vaoLength.setSingle(-1);
+		}
+	}
+
+	@Override
+	public void renderClear(ShaderObject shader) {
+
 	}
 
 	@Override
