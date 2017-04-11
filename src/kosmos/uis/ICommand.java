@@ -107,7 +107,7 @@ public interface ICommand {
 
 				KosmosWorld.getEntityPlayer().getPosition().set(other.getPosition());
 				KosmosChunks.clear(true);
-				KosmosChunks.setCurrent(new Chunk(KosmosChunks.getChunks(), new Vector3f(chunkX, 0.0f, chunkZ)));
+				KosmosChunks.setCurrent(new Chunk(FlounderEntities.getEntities(), new Vector3f(chunkX, 0.0f, chunkZ)));
 			}
 		}),
 		TIME(new ICommand() {

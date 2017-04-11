@@ -12,7 +12,6 @@ package editors.entities;
 import editors.editor.*;
 import flounder.devices.*;
 import flounder.entities.*;
-import flounder.entities.components.*;
 import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.logger.*;

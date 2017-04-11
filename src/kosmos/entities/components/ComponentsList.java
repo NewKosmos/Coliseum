@@ -9,6 +9,7 @@
 
 package kosmos.entities.components;
 
+import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
 

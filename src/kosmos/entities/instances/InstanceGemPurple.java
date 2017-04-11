@@ -1,6 +1,7 @@
 package kosmos.entities.instances;
 
 import flounder.entities.*;
+import flounder.entities.components.*;
 import flounder.lights.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
@@ -20,12 +21,12 @@ public class InstanceGemPurple extends Entity {
 
 	public InstanceGemPurple(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
-		new kosmos.entities.components.ComponentModel(this, 1.0f, MODEL, TEXTURE, 1);
-		new kosmos.entities.components.ComponentGlow(this, TEXTURE_GLOW);
-		new kosmos.entities.components.ComponentSurface(this, 1.0f, 0.0f, false, false);
-		new kosmos.entities.components.ComponentLight(this, new Vector3f(0.0f, 1.5f, 0.0f), new Colour(0.631f, 0.243f, 0.812f), new Attenuation(1.0f, 0.02f, 2.0f));
-		new kosmos.entities.components.ComponentCollision(this);
-		new kosmos.entities.components.ComponentCollider(this);
+		new ComponentModel(this, 1.0f, MODEL, TEXTURE, 1);
+		new ComponentGlow(this, TEXTURE_GLOW);
+		new ComponentSurface(this, 1.0f, 0.0f, false, false);
+		new ComponentLight(this, new Vector3f(0.0f, 1.5f, 0.0f), new Colour(0.631f, 0.243f, 0.812f), new Attenuation(1.0f, 0.02f, 2.0f));
+		new ComponentCollision(this);
+		new ComponentCollider(this);
 	}
 }
 

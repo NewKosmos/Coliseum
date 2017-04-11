@@ -1,6 +1,7 @@
 package kosmos.entities.instances;
 
 import flounder.entities.*;
+import flounder.entities.components.*;
 import flounder.lights.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
@@ -20,9 +21,9 @@ public class InstanceMoon extends Entity {
 	public InstanceMoon(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 		new kosmos.entities.components.ComponentCelestial(this, false);
-		new kosmos.entities.components.ComponentModel(this, 10.0f, MODEL, TEXTURE, 1);
-		new kosmos.entities.components.ComponentSurface(this, 1.0f, 0.0f, true, true);
-		new kosmos.entities.components.ComponentLight(this, new Vector3f(0.0f, 0.0f, 0.0f), KosmosSkybox.MOON_COLOUR, new Attenuation(1.0f, 0.0f, 0.0f));
+		new ComponentModel(this, 10.0f, MODEL, TEXTURE, 1);
+		new ComponentSurface(this, 1.0f, 0.0f, true, true);
+		new ComponentLight(this, new Vector3f(0.0f, 0.0f, 0.0f), KosmosSkybox.MOON_COLOUR, new Attenuation(1.0f, 0.0f, 0.0f));
 	}
 }
 

@@ -16,7 +16,7 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.entities.instances.*;
-import kosmos.particles.*;
+import flounder.particles.*;
 
 public class BiomeSnow extends IBiome {
 	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{
@@ -52,7 +52,7 @@ public class BiomeSnow extends IBiome {
 			}
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "snow.png")).clampEdges().create();
-	private static final ParticleType PARTICLE = new ParticleType("snow", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "snowParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.20f);
+	private static final ParticleType PARTICLE = new ParticleType("snow", TextureFactory.newBuilder().setFile(new MyFile(FlounderParticles.PARTICLES_FOLDER, "snowParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.20f);
 
 	public BiomeSnow() {
 		super();

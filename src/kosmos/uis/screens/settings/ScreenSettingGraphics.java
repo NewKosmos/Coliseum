@@ -17,7 +17,7 @@ import flounder.guis.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.textures.*;
-import kosmos.shadows.*;
+import flounder.shadows.*;
 import kosmos.uis.*;
 import kosmos.uis.screens.*;
 import kosmos.water.*;
@@ -110,8 +110,8 @@ public class ScreenSettingGraphics extends ScreenObject {
 		});
 
 		// Slider Brightness Boost.
-		GuiSliderText sliderBrightnessBoost = new GuiSliderText(paneLeft, new Vector2f(0.25f, 0.55f), "Brightness Boost: ", -0.3f, 0.8f, KosmosShadows.getBrightnessBoost(), GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Float>(KosmosShadows::getBrightnessBoost) {
+		GuiSliderText sliderBrightnessBoost = new GuiSliderText(paneLeft, new Vector2f(0.25f, 0.55f), "Brightness Boost: ", -0.3f, 0.8f, FlounderShadows.getBrightnessBoost(), GuiAlign.CENTRE);
+		FlounderEvents.addEvent(new EventChange<Float>(FlounderShadows::getBrightnessBoost) {
 			@Override
 			public void onEvent(Float newValue) {
 				sliderBrightnessBoost.setText("Brightness Boost: " + Maths.roundToPlace(newValue, 3));
@@ -120,7 +120,7 @@ public class ScreenSettingGraphics extends ScreenObject {
 		sliderBrightnessBoost.addChangeListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				KosmosShadows.setBrightnessBoost(sliderBrightnessBoost.getProgress());
+				FlounderShadows.setBrightnessBoost(sliderBrightnessBoost.getProgress());
 			}
 		});
 
@@ -185,8 +185,8 @@ public class ScreenSettingGraphics extends ScreenObject {
 		});
 
 		// Slider Shadowmap Size.
-		GuiSliderText sliderShadowSize = new GuiSliderText(paneRight, new Vector2f(0.75f, 0.48f), "Shadowmap Size: ", 512.0f, FBO.getMaxFBOSize(), KosmosShadows.getShadowSize(), GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Integer>(KosmosShadows::getShadowSize) {
+		GuiSliderText sliderShadowSize = new GuiSliderText(paneRight, new Vector2f(0.75f, 0.48f), "Shadowmap Size: ", 512.0f, FBO.getMaxFBOSize(), FlounderShadows.getShadowSize(), GuiAlign.CENTRE);
+		FlounderEvents.addEvent(new EventChange<Integer>(FlounderShadows::getShadowSize) {
 			@Override
 			public void onEvent(Integer newValue) {
 				sliderShadowSize.setText("Shadowmap Size: " + newValue);
@@ -195,13 +195,13 @@ public class ScreenSettingGraphics extends ScreenObject {
 		sliderShadowSize.addChangeListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				KosmosShadows.setShadowSize((int) sliderShadowSize.getProgress());
+				FlounderShadows.setShadowSize((int) sliderShadowSize.getProgress());
 			}
 		});
 
 		// Slider Shadowmap PCFs.
-		GuiSliderText sliderShadowPCFs = new GuiSliderText(paneRight, new Vector2f(0.75f, 0.55f), "Shadow PCF Count: ", 0.0f, 8.0f, KosmosShadows.getShadowPCF(), GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Integer>(KosmosShadows::getShadowPCF) {
+		GuiSliderText sliderShadowPCFs = new GuiSliderText(paneRight, new Vector2f(0.75f, 0.55f), "Shadow PCF Count: ", 0.0f, 8.0f, FlounderShadows.getShadowPCF(), GuiAlign.CENTRE);
+		FlounderEvents.addEvent(new EventChange<Integer>(FlounderShadows::getShadowPCF) {
 			@Override
 			public void onEvent(Integer newValue) {
 				sliderShadowPCFs.setText("Shadow PCF Count: " + newValue);
@@ -210,13 +210,13 @@ public class ScreenSettingGraphics extends ScreenObject {
 		sliderShadowPCFs.addChangeListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				KosmosShadows.setShadowPCF((int) sliderShadowPCFs.getProgress());
+				FlounderShadows.setShadowPCF((int) sliderShadowPCFs.getProgress());
 			}
 		});
 
 		// Slider Shadowmap Darkness.
-		GuiSliderText sliderShadowDarkness = new GuiSliderText(paneRight, new Vector2f(0.75f, 0.62f), "Shadow Darkness: ", 0.0f, 1.0f, KosmosShadows.getShadowDarkness(), GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Float>(KosmosShadows::getShadowDarkness) {
+		GuiSliderText sliderShadowDarkness = new GuiSliderText(paneRight, new Vector2f(0.75f, 0.62f), "Shadow Darkness: ", 0.0f, 1.0f, FlounderShadows.getShadowDarkness(), GuiAlign.CENTRE);
+		FlounderEvents.addEvent(new EventChange<Float>(FlounderShadows::getShadowDarkness) {
 			@Override
 			public void onEvent(Float newValue) {
 				sliderShadowDarkness.setText("Shadow Darkness: " + Maths.roundToPlace(newValue, 2));
@@ -225,7 +225,7 @@ public class ScreenSettingGraphics extends ScreenObject {
 		sliderShadowDarkness.addChangeListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				KosmosShadows.setShadowDarkness(sliderShadowDarkness.getProgress());
+				FlounderShadows.setShadowDarkness(sliderShadowDarkness.getProgress());
 			}
 		});
 

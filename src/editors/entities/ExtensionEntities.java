@@ -18,10 +18,9 @@ import flounder.helpers.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
-import kosmos.entities.components.*;
-import kosmos.particles.*;
+import flounder.particles.*;
 import kosmos.post.*;
-import kosmos.shadows.*;
+import flounder.shadows.*;
 import kosmos.skybox.*;
 import kosmos.world.*;
 
@@ -38,7 +37,7 @@ public class ExtensionEntities extends IEditorType {
 	public Entity focusEntity;
 
 	public ExtensionEntities() {
-		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderBounding.class, KosmosPost.class, KosmosShadows.class, KosmosParticles.class, KosmosSkybox.class, KosmosWorld.class);
+		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderBounding.class, KosmosPost.class, FlounderShadows.class, FlounderParticles.class, KosmosSkybox.class, KosmosWorld.class);
 		ACTIVE = true;
 	}
 

@@ -10,38 +10,30 @@
 package kosmos.entities.components;
 
 import flounder.entities.*;
-import flounder.entities.components.*;
 import flounder.helpers.*;
+import kosmos.chunks.*;
 
 import javax.swing.*;
 
-public class ComponentChild extends IComponentEntity implements IComponentEditor {
-	private Entity parent;
-
+public class ComponentChunk extends IComponentEntity implements IComponentEditor {
 	/**
-	 * Creates a new ComponentChild.
+	 * Creates a new ComponentChunk.
 	 *
 	 * @param entity The entity this component is attached to.
 	 */
-	public ComponentChild(Entity entity) {
-		this(entity, null);
-	}
-
-	/**
-	 * Creates a new ComponentChild.
-	 *
-	 * @param entity The entity this component is attached to.
-	 * @param parent
-	 */
-	public ComponentChild(Entity entity, Entity parent) {
+	public ComponentChunk(Entity entity) {
 		super(entity);
-
-		this.parent = parent;
 	}
 
 	@Override
 	public void update() {
-		if (parent == null || parent.isRemoved()) {
+		if (getEntity() == null || !(getEntity() instanceof Chunk)) {
+			return;
+		}
+
+		Chunk chunk = (Chunk) getEntity();
+
+		if (chunk.isRemoved()) {
 			getEntity().forceRemove(false);
 		}
 	}

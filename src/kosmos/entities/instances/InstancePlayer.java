@@ -1,8 +1,7 @@
 package kosmos.entities.instances;
 
 import flounder.entities.*;
-import flounder.lights.*;
-import flounder.maths.*;
+import flounder.entities.components.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.space.*;
@@ -19,11 +18,11 @@ public class InstancePlayer extends Entity {
 	public InstancePlayer(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 		new kosmos.entities.components.ComponentPlayer(this);
-		new kosmos.entities.components.ComponentAnimation(this, 0.2f, COLLADA, TEXTURE, 1);
-		new kosmos.entities.components.ComponentSurface(this, 1.0f, 0.0f, false, false);
-	//	new kosmos.entities.components.ComponentLight(this, new Vector3f(0.0f, 2.0f, 0.0f), new Colour(1.0f, 1.0f, 1.0f), new Attenuation(1.0f, 0.02f, 0.5f));
-		new kosmos.entities.components.ComponentCollision(this);
-		new kosmos.entities.components.ComponentCollider(this);
+		new ComponentAnimation(this, 0.2f, COLLADA, TEXTURE, 1);
+		new ComponentSurface(this, 1.0f, 0.0f, false, false);
+	//	new flounder.entities.components.ComponentLight(this, new Vector3f(0.0f, 2.0f, 0.0f), new Colour(1.0f, 1.0f, 1.0f), new Attenuation(1.0f, 0.02f, 0.5f));
+		new ComponentCollision(this);
+		new ComponentCollider(this);
 	}
 }
 

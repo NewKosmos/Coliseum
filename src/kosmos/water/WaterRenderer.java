@@ -14,12 +14,12 @@ import flounder.devices.*;
 import flounder.fbos.*;
 import flounder.helpers.*;
 import flounder.maths.vectors.*;
+import flounder.post.filters.*;
 import flounder.profiling.*;
 import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
 import kosmos.chunks.*;
-import kosmos.post.filters.*;
 import org.lwjgl.opengl.*;
 
 public class WaterRenderer extends Renderer {

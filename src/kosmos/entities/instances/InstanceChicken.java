@@ -1,6 +1,7 @@
 package kosmos.entities.instances;
 
 import flounder.entities.*;
+import flounder.entities.components.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.space.*;
@@ -16,8 +17,8 @@ public class InstanceChicken extends Entity {
 
 	public InstanceChicken(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
-		new kosmos.entities.components.ComponentAnimation(this, 0.2f, COLLADA, TEXTURE, 1);
-		new kosmos.entities.components.ComponentSurface(this, 1.0f, 0.0f, false, false);
+		new ComponentAnimation(this, 0.2f, COLLADA, TEXTURE, 1);
+		new ComponentSurface(this, 1.0f, 0.0f, false, false);
 	}
 }
 

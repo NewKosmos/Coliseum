@@ -10,6 +10,7 @@
 package kosmos.chunks;
 
 import flounder.entities.*;
+import flounder.entities.components.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
@@ -17,8 +18,8 @@ import flounder.space.*;
 import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;
 import kosmos.entities.components.*;
-import kosmos.particles.*;
-import kosmos.particles.spawns.*;
+import flounder.particles.*;
+import flounder.particles.spawns.*;
 import kosmos.world.*;
 
 import java.util.*;
@@ -61,6 +62,7 @@ public class Chunk extends Entity {
 
 		new ComponentModel(this, 1.0f, chunkMesh.getModel(), biome.getBiome().getTexture(), 0);
 		new ComponentSurface(this, 1.0f, 0.0f, false, false);
+		new ComponentChunk(this);
 
 		// generateWeather();
 		// generateClouds();
@@ -100,7 +102,7 @@ public class Chunk extends Entity {
 	 * Generates the 6 chunks around this one if they do not exist.
 	 */
 	protected void createChunksAround() {
-		childrenChunks.removeIf((Chunk child) -> child == null || !KosmosChunks.getChunks().contains(child));
+		childrenChunks.removeIf((Chunk child) -> child == null || !FlounderEntities.getEntities().contains(child));
 
 		if (childrenChunks.size() == 6) {
 			if (childrenChunks.size() == 6) {
@@ -115,18 +117,20 @@ public class Chunk extends Entity {
 			Vector3f p = new Vector3f(x, 0.0f, z);
 			Chunk duplicate = null;
 
-			for (Entity entity : KosmosChunks.getChunks().getAll()) {
-				Chunk chunk = (Chunk) entity;
+			for (Entity entity : FlounderEntities.getEntities().getAll()) {
+				if (entity != null && entity instanceof Chunk) {
+					Chunk chunk = (Chunk) entity;
 
-				if (p.equals(chunk.getPosition())) {
-					duplicate = chunk;
+					if (p.equals(chunk.getPosition())) {
+						duplicate = chunk;
+					}
 				}
 			}
 
 			if (duplicate == null) {
-				Chunk chunk = new Chunk(KosmosChunks.getChunks(), p);
+				Chunk chunk = new Chunk(FlounderEntities.getEntities(), p);
 				childrenChunks.add(chunk);
-				KosmosChunks.getChunks().add(chunk);
+			//	FlounderEntities.getEntities().add(chunk);
 			} else {
 				childrenChunks.add(duplicate);
 			}

@@ -64,7 +64,7 @@ public class KosmosWorld extends Module {
 		);
 		// new InstanceMuliplayer(FlounderEntities.getEntities(), INSTANCE.entityPlayer.getPosition(), new Vector3f(), "Dank Memes");
 		KosmosWater.generateWater();
-		KosmosChunks.setCurrent(new Chunk(KosmosChunks.getChunks(), new Vector3f(
+		KosmosChunks.setCurrent(new Chunk(FlounderEntities.getEntities(), new Vector3f(
 				KosmosConfigs.SAVE_CHUNK_X.setReference(() -> KosmosChunks.getCurrent().getPosition().x).getFloat(),
 				0.0f,
 				KosmosConfigs.SAVE_CHUNK_Z.setReference(() -> KosmosChunks.getCurrent().getPosition().z).getFloat()

@@ -9,11 +9,11 @@
 
 package kosmos.chunks.meshing;
 
+import flounder.entities.components.*;
 import flounder.logger.*;
 import flounder.models.*;
 import flounder.processing.*;
 import kosmos.chunks.*;
-import kosmos.entities.components.*;
 
 public class ChunkMesh {
 	protected Chunk chunk;

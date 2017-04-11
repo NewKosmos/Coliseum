@@ -19,7 +19,6 @@ import flounder.physics.*;
 import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.resources.*;
-import flounder.space.*;
 import flounder.textures.*;
 
 import java.util.*;
@@ -30,7 +29,6 @@ public class KosmosChunks extends Module {
 
 	public static final MyFile TERRAINS_FOLDER = new MyFile(MyFile.RES_FOLDER, "terrains");
 
-	private ISpatialStructure<Entity> chunks;
 	private Sphere chunkRange;
 
 	private ModelObject modelHexagon;
@@ -44,7 +42,6 @@ public class KosmosChunks extends Module {
 
 	@Override
 	public void init() {
-		this.chunks = new StructureBasic<>();
 		this.chunkRange = new Sphere(40.0f); // 3.0f * Chunk.CHUNK_WORLD_SIZE
 
 		this.modelHexagon = ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "hexagon.obj")).create();
@@ -163,10 +160,10 @@ public class KosmosChunks extends Module {
 			}
 
 			// Goes though all chunks looking for changes.
-			for (Entity entity : chunks.getAll()) {
-				Chunk chunk = (Chunk) entity;
+			for (Entity entity : FlounderEntities.getEntities().getAll()) {
+				if (entity != null && entity instanceof Chunk) {
+					Chunk chunk = (Chunk) entity;
 
-				if (chunk != null) {
 					// Checks if the player position is in this chunk.
 					if (chunk.isLoaded() && chunk.getCollider() != null && chunk.getCollider().contains(playerPos)) {
 						// This chunk is now the chunk with the player in it.
@@ -191,12 +188,8 @@ public class KosmosChunks extends Module {
 
 	@Override
 	public void profile() {
-		FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Size", chunks.getSize());
+		//	FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Size", chunks.getSize());
 		FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Current", currentChunk);
-	}
-
-	public static ISpatialStructure<Entity> getChunks() {
-		return INSTANCE.chunks;
 	}
 
 	public static Chunk getCurrent() {
@@ -215,15 +208,19 @@ public class KosmosChunks extends Module {
 			currentChunk.getChildrenChunks().forEach(Chunk::createChunksAround);
 
 			// Removes any old chunks that are out of range.
-			Iterator it = INSTANCE.chunks.getAll().iterator();
+			Iterator<Entity> it = FlounderEntities.getEntities().getAll().iterator();
 
 			while (it.hasNext()) {
-				Chunk chunk = (Chunk) it.next();
+				Entity entity = it.next();
 
-				if (chunk != currentChunk && chunk.isLoaded()) {
-					if (!chunk.getCollider().intersects(INSTANCE.chunkRange).isIntersection() && !INSTANCE.chunkRange.contains(chunk.getCollider())) {
-						chunk.delete();
-						it.remove();
+				if (entity != null && entity instanceof Chunk) {
+					Chunk chunk = (Chunk) entity;
+
+					if (chunk != currentChunk && chunk.isLoaded()) {
+						if (!chunk.getCollider().intersects(INSTANCE.chunkRange).isIntersection() && !INSTANCE.chunkRange.contains(chunk.getCollider())) {
+							chunk.delete();
+							it.remove();
+						}
 					}
 				}
 			}
@@ -239,12 +236,22 @@ public class KosmosChunks extends Module {
 	 * @param loadCurrent If the current chunk will be replaced.
 	 */
 	public static void clear(boolean loadCurrent) {
-		INSTANCE.chunks.getAll().forEach((Entity chunk) -> ((Chunk) chunk).delete());
-		INSTANCE.chunks.clear();
+		// Removes any chunks in the entity list.
+		Iterator<Entity> it = FlounderEntities.getEntities().getAll().iterator();
+
+		while (it.hasNext()) {
+			Entity entity = it.next();
+
+			if (entity != null && entity instanceof Chunk) {
+				Chunk chunk = (Chunk) entity;
+				chunk.delete();
+				it.remove();
+			}
+		}
 
 		// Sets up the new root chunk.
 		if (loadCurrent) {
-			setCurrent(new Chunk(KosmosChunks.getChunks(), getCurrent().getPosition()));
+			setCurrent(new Chunk(FlounderEntities.getEntities(), getCurrent().getPosition()));
 		}
 	}
 

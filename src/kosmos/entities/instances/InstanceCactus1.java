@@ -1,6 +1,7 @@
 package kosmos.entities.instances;
 
 import flounder.entities.*;
+import flounder.entities.components.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.resources.*;
@@ -18,11 +19,11 @@ public class InstanceCactus1 extends Entity {
 
 	public InstanceCactus1(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
-		new kosmos.entities.components.ComponentModel(this, 1.0f, MODEL, TEXTURE, 1);
-		new kosmos.entities.components.ComponentSway(this, TEXTURE_SWAY);
-		new kosmos.entities.components.ComponentSurface(this, 1.0f, 0.0f, false, false);
-		new kosmos.entities.components.ComponentCollision(this);
-		new kosmos.entities.components.ComponentCollider(this);
+		new ComponentModel(this, 1.0f, MODEL, TEXTURE, 1);
+		new ComponentSway(this, TEXTURE_SWAY);
+		new ComponentSurface(this, 1.0f, 0.0f, false, false);
+		new ComponentCollision(this);
+		new ComponentCollider(this);
 	}
 }
 

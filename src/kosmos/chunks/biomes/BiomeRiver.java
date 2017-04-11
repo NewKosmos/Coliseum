@@ -16,7 +16,7 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.entities.instances.*;
-import kosmos.particles.*;
+import flounder.particles.*;
 
 public class BiomeRiver extends IBiome {
 	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{
@@ -28,7 +28,7 @@ public class BiomeRiver extends IBiome {
 			}
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "sand.png")).clampEdges().create();
-	private static final ParticleType PARTICLE = new ParticleType("rain", TextureFactory.newBuilder().setFile(new MyFile(KosmosParticles.PARTICLES_FOLDER, "rainParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.15f);
+	private static final ParticleType PARTICLE = new ParticleType("rain", TextureFactory.newBuilder().setFile(new MyFile(FlounderParticles.PARTICLES_FOLDER, "rainParticle.png")).setNumberOfRows(4).create(), 3.5f, 0.15f);
 
 	public BiomeRiver() {
 		super();

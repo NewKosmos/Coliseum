@@ -16,7 +16,7 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.entities.instances.*;
-import kosmos.particles.*;
+import flounder.particles.*;
 
 public class BiomeDesert extends IBiome {
 	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{

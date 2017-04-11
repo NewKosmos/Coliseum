@@ -10,11 +10,11 @@
 package kosmos.chunks.biomes;
 
 import flounder.entities.*;
+import flounder.entities.components.*;
 import flounder.maths.vectors.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.entities.components.*;
-import kosmos.particles.*;
+import flounder.particles.*;
 import kosmos.world.*;
 
 /**
