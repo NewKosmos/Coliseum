@@ -17,9 +17,9 @@ import flounder.parsing.*;
 import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.resources.*;
+import flounder.shadows.*;
 import flounder.textures.*;
 import kosmos.post.*;
-import flounder.shadows.*;
 import kosmos.water.*;
 import org.lwjgl.glfw.*;
 

@@ -18,15 +18,15 @@ import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
+import flounder.particles.*;
 import flounder.physics.bounding.*;
 import flounder.post.filters.*;
 import flounder.post.piplines.*;
 import flounder.renderer.*;
-import kosmos.camera.*;
-import flounder.particles.*;
-import kosmos.post.*;
 import flounder.shadows.*;
-import kosmos.skybox.*;
+import flounder.skybox.*;
+import kosmos.camera.*;
+import kosmos.post.*;
 import kosmos.water.*;
 import kosmos.world.*;
 
@@ -133,8 +133,8 @@ public class KosmosRenderer extends RendererMaster {
 			);
 
 			if (KosmosPost.isBloomEnabled()) {
-				pipelineBloom.setBloomThreshold(KosmosSkybox.getBloomThreshold());
-				pipelineBloom.renderMRT(rendererFBO, waterRenderer.getPipelineMRT().fbo);
+				pipelineBloom.setBloomThreshold(KosmosWorld.getBloomThreshold());
+				pipelineBloom.renderPipeline(rendererFBO.getColourTexture(0), waterRenderer.getPipelineMRT().fbo.getColourTexture(0));
 			}
 
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
@@ -169,15 +169,22 @@ public class KosmosRenderer extends RendererMaster {
 	}
 
 	private void renderPost(boolean isPaused, float blurFactor) {
-		pipelineMRT.renderPipeline(rendererFBO);
+		pipelineMRT.setShadowFactor(KosmosWorld.getShadowFactor());
+		pipelineMRT.renderPipeline(
+				rendererFBO.getColourTexture(0), // Colours
+				rendererFBO.getColourTexture(1), // Normals
+				rendererFBO.getColourTexture(2), // Extras
+				rendererFBO.getDepthTexture(), // Depth
+				shadowRenderer.getShadowMap() // Shadow Map
+		);
 		FBO output = pipelineMRT.getOutput();
 
 		// Render post effects if enabled.
 		if (KosmosPost.isEffectsEnabled()) {
 			// Render Bloom Filter.
 			if (KosmosPost.isBloomEnabled()) {
-				pipelineBloom.setBloomThreshold(KosmosSkybox.getBloomThreshold());
-				pipelineBloom.renderMRT(rendererFBO, output);
+				pipelineBloom.setBloomThreshold(KosmosWorld.getBloomThreshold());
+				pipelineBloom.renderPipeline(output.getColourTexture(0));
 				output = pipelineBloom.getOutput();
 			}
 
@@ -196,7 +203,7 @@ public class KosmosRenderer extends RendererMaster {
 			// Render Lens Flare Filter.
 			if (KosmosPost.isLensFlareEnabled() && KosmosWorld.getEntitySun() != null) {
 				filterLensFlare.setSunPosition(KosmosWorld.getEntitySun().getPosition());
-				filterLensFlare.setWorldHeight(KosmosSkybox.getSunHeight());
+				filterLensFlare.setWorldHeight(KosmosWorld.getSunHeight());
 				filterLensFlare.applyFilter(output.getColourTexture(0));
 				output = filterLensFlare.fbo;
 			}
@@ -204,7 +211,7 @@ public class KosmosRenderer extends RendererMaster {
 			// Render Pause Pipeline.
 			if (isPaused || blurFactor != 0.0f) {
 				pipelinePaused.setBlurFactor(blurFactor);
-				pipelinePaused.renderPipeline(output);
+				pipelinePaused.renderPipeline(output.getColourTexture(0));
 				output = pipelinePaused.getOutput();
 			}
 

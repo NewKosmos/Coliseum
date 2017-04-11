@@ -11,12 +11,12 @@ package kosmos.chunks.biomes;
 
 import flounder.entities.*;
 import flounder.maths.vectors.*;
+import flounder.particles.*;
 import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.entities.instances.*;
-import flounder.particles.*;
 
 public class BiomeGrass extends IBiome {
 	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{

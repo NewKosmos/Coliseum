@@ -16,17 +16,17 @@ import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
 import flounder.networking.*;
+import flounder.particles.*;
 import flounder.physics.bounding.*;
 import flounder.resources.*;
+import flounder.shadows.*;
+import flounder.skybox.*;
 import flounder.sounds.*;
 import flounder.standards.*;
+import flounder.steam.*;
 import kosmos.chunks.*;
 import kosmos.network.packets.*;
-import flounder.particles.*;
 import kosmos.post.*;
-import flounder.shadows.*;
-import kosmos.skybox.*;
-import flounder.steam.*;
 import kosmos.water.*;
 import kosmos.world.*;
 
@@ -36,7 +36,7 @@ public class KosmosInterface extends Standard {
 	private Playlist gamePlaylist;
 
 	public KosmosInterface() {
-		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderNetwork.class, FlounderSteam.class, FlounderBounding.class, KosmosPost.class, FlounderShadows.class, FlounderParticles.class, KosmosWater.class, KosmosSkybox.class, KosmosWorld.class, KosmosChunks.class);
+		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderNetwork.class, FlounderSteam.class, FlounderBounding.class, KosmosPost.class, FlounderShadows.class, FlounderParticles.class, KosmosWater.class, FlounderSkybox.class, KosmosWorld.class, KosmosChunks.class);
 	}
 
 	@Override

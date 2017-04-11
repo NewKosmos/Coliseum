@@ -22,7 +22,7 @@ public class InstanceTallGrass extends Entity {
 		new ComponentModel(this, 1.0f, MODEL, TEXTURE, 1);
 		new ComponentSurface(this, 1.0f, 0.0f, false, false);
 		new ComponentSway(this, TEXTURE_SWAY);
-	//	new flounder.entities.components.ComponentCollision(this);
+		//	new flounder.entities.components.ComponentCollision(this);
 	}
 }
 

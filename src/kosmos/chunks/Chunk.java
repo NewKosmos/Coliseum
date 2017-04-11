@@ -13,13 +13,13 @@ import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
+import flounder.particles.*;
+import flounder.particles.spawns.*;
 import flounder.physics.*;
 import flounder.space.*;
 import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;
 import kosmos.entities.components.*;
-import flounder.particles.*;
-import flounder.particles.spawns.*;
 import kosmos.world.*;
 
 import java.util.*;
@@ -130,7 +130,7 @@ public class Chunk extends Entity {
 			if (duplicate == null) {
 				Chunk chunk = new Chunk(FlounderEntities.getEntities(), p);
 				childrenChunks.add(chunk);
-			//	FlounderEntities.getEntities().add(chunk);
+				//	FlounderEntities.getEntities().add(chunk);
 			} else {
 				childrenChunks.add(duplicate);
 			}
@@ -262,6 +262,6 @@ public class Chunk extends Entity {
 			particleSystem = null;
 		}
 
-		forceRemove(false);
+		forceRemove();
 	}
 }

@@ -15,7 +15,8 @@ import flounder.entities.components.*;
 import flounder.helpers.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
-import kosmos.skybox.*;
+import flounder.shadows.*;
+import kosmos.world.*;
 
 import javax.swing.*;
 
@@ -55,7 +56,7 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 
 	@Override
 	public void update() {
-		getEntity().getPosition().set(KosmosSkybox.getLightPosition());
+		getEntity().getPosition().set(FlounderShadows.getLightPosition());
 		Vector3f.multiply(getEntity().getPosition(), startPosition, getEntity().getPosition());
 
 		if (FlounderCamera.getCamera() != null) {
@@ -69,8 +70,8 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 
 			if (componentLight != null) {
 				Colour newColour = new Colour();
-				Colour.interpolate(KosmosSkybox.SUN_COLOUR_SUNRISE, KosmosSkybox.SUN_COLOUR_NIGHT, KosmosSkybox.getSunriseFactor(), newColour);
-				Colour.interpolate(newColour, KosmosSkybox.SUN_COLOUR_DAY, KosmosSkybox.getShadowFactor(), newColour);
+				Colour.interpolate(KosmosWorld.SUN_COLOUR_SUNRISE, KosmosWorld.SUN_COLOUR_NIGHT, KosmosWorld.getSunriseFactor(), newColour);
+				Colour.interpolate(newColour, KosmosWorld.SUN_COLOUR_DAY, KosmosWorld.getShadowFactor(), newColour);
 				componentLight.getLight().setColour(newColour);
 			}
 		}

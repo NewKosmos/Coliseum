@@ -16,7 +16,7 @@ import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.*;
 import kosmos.camera.*;
-import kosmos.skybox.*;
+import kosmos.world.*;
 
 public class OverlayHUD extends ScreenObject {
 	private static int crosshairSelected;
@@ -88,7 +88,7 @@ public class OverlayHUD extends ScreenObject {
 
 		@Override
 		public void updateObject() {
-			float p = KosmosSkybox.getDayFactor();
+			float p = KosmosWorld.getDayFactor();
 			progress.setSelectedRow((int) Math.floor(p * Math.pow(progress.getTexture().getNumberOfRows(), 2)));
 		}
 

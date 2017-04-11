@@ -34,7 +34,7 @@ public class ComponentChunk extends IComponentEntity implements IComponentEditor
 		Chunk chunk = (Chunk) getEntity();
 
 		if (chunk.isRemoved()) {
-			getEntity().forceRemove(false);
+			getEntity().forceRemove();
 		}
 	}
 

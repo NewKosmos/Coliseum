@@ -16,12 +16,12 @@ import flounder.entities.components.*;
 import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.maths.vectors.*;
+import flounder.particles.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
-import flounder.particles.*;
-import kosmos.post.*;
 import flounder.shadows.*;
-import kosmos.skybox.*;
+import flounder.skybox.*;
+import kosmos.post.*;
 import kosmos.world.*;
 
 import javax.swing.*;
@@ -37,7 +37,7 @@ public class ExtensionEntities extends IEditorType {
 	public Entity focusEntity;
 
 	public ExtensionEntities() {
-		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderBounding.class, KosmosPost.class, FlounderShadows.class, FlounderParticles.class, KosmosSkybox.class, KosmosWorld.class);
+		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderBounding.class, KosmosPost.class, FlounderShadows.class, FlounderParticles.class, FlounderSkybox.class, KosmosWorld.class);
 		ACTIVE = true;
 	}
 
@@ -62,7 +62,7 @@ public class ExtensionEntities extends IEditorType {
 
 	public void loadDefaultEntity() {
 		if (focusEntity != null) {
-			focusEntity.forceRemove(true);
+			focusEntity.forceRemove();
 		}
 
 		focusEntity = new Entity(FlounderEntities.getEntities(), new Vector3f(), new Vector3f());
@@ -87,7 +87,7 @@ public class ExtensionEntities extends IEditorType {
 		// Used to load a entity from a .entity file.
 		if (loadFromEntity != null) {
 			if (focusEntity != null) {
-				focusEntity.forceRemove(true);
+				focusEntity.forceRemove();
 			}
 
 			//focusEntity = FlounderEntities.load(loadFromEntity).createEntity(FlounderEntities.getEntities(), new Vector3f(), new Vector3f()); // TODO
@@ -125,7 +125,7 @@ public class ExtensionEntities extends IEditorType {
 
 	protected void setEntity(Entity entity) {
 		if (this.focusEntity != null) {
-			this.focusEntity.forceRemove(true);
+			this.focusEntity.forceRemove();
 			FrameEntities.clearSideTab();
 		}
 

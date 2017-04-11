@@ -11,11 +11,16 @@ package kosmos.world;
 
 import flounder.entities.*;
 import flounder.framework.*;
+import flounder.guis.*;
 import flounder.helpers.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.noise.*;
 import flounder.profiling.*;
+import flounder.shadows.*;
+import flounder.skybox.*;
+import flounder.visual.*;
 import kosmos.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
@@ -30,6 +35,20 @@ public class KosmosWorld extends Module {
 
 	public static final float GRAVITY = -11.0f;
 
+	public static final Colour SKY_COLOUR_NIGHT = new Colour(0.0f, 0.05f, 0.1f);
+	public static final Colour SKY_COLOUR_SUNRISE = new Colour(0.8f, 0.4f, 0.3f);
+	public static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.3f, 0.7f);
+
+	public static final Colour SUN_COLOUR_NIGHT = new Colour(0.0f, 0.0f, 0.0f);
+	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.8f, 0.4f, 0.3f);
+	public static final Colour SUN_COLOUR_DAY = new Colour(0.8f, 0.8f, 0.8f);
+
+	public static final Colour MOON_COLOUR = new Colour(0.1f, 0.1f, 0.3f);
+
+	public static final float DAY_NIGHT_CYCLE = 420.0f; // The day/night length (sec).
+
+	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.3f, 0.0f, 0.5f); // The starting light direction.
+
 	private PerlinNoise noise;
 
 	private Map<String, Pair<Vector3f, Vector3f>> playerQue;
@@ -38,6 +57,9 @@ public class KosmosWorld extends Module {
 	private Entity entityPlayer;
 	private Entity entitySun;
 	private Entity entityMoon;
+
+	private LinearDriver dayDriver;
+	private float dayFactor;
 
 	public KosmosWorld() {
 		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEntities.class);
@@ -52,6 +74,9 @@ public class KosmosWorld extends Module {
 
 		this.playerQue = new HashMap<>();
 		this.players = new HashMap<>();
+
+		this.dayDriver = new LinearDriver(0.0f, 100.0f, DAY_NIGHT_CYCLE);
+		this.dayFactor = 0.0f;
 	}
 
 	public static void generatePlayer() {
@@ -74,7 +99,7 @@ public class KosmosWorld extends Module {
 	public static void deletePlayer() {
 		KosmosWater.deleteWater();
 		KosmosChunks.clear(false);
-		INSTANCE.entityPlayer.forceRemove(true);
+		INSTANCE.entityPlayer.forceRemove();
 	}
 
 	@Override
@@ -87,6 +112,21 @@ public class KosmosWorld extends Module {
 				playerQue.remove(name);
 			}
 		}
+
+		// Update the sky colours and sun position.
+		float scaledSpeed = 1.0f;
+
+		if (FlounderGuis.getGuiMaster() instanceof KosmosGuis) {
+			scaledSpeed = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 4.20f : 1.0f;
+		}
+
+		dayFactor = dayDriver.update(Framework.getDelta() * scaledSpeed) / 100.0f;
+		Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.getFog().getFogColour());
+		Colour.interpolate(FlounderSkybox.getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.getFog().getFogColour());
+		FlounderSkybox.getFog().setFogDensity(0.032f);
+		FlounderSkybox.getFog().setFogGradient(2.56f);
+		FlounderSkybox.setBlendFactor(starIntensity());
+		Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.getLightPosition());
 	}
 
 	@Override
@@ -136,16 +176,15 @@ public class KosmosWorld extends Module {
 
 		if (INSTANCE.players.containsKey(username)) {
 			Entity otherPlayer = INSTANCE.players.get(username);
-			otherPlayer.forceRemove(false);
+			otherPlayer.forceRemove();
 			INSTANCE.players.remove(username);
-			FlounderEntities.getEntities().remove(otherPlayer);
 		}
 	}
 
 	public synchronized static void removeAllPlayers() {
 		for (String username : INSTANCE.players.keySet()) {
 			Entity otherPlayer = INSTANCE.players.get(username);
-			otherPlayer.forceRemove(true);
+			otherPlayer.forceRemove();
 		}
 
 		INSTANCE.playerQue.clear();
@@ -170,6 +209,42 @@ public class KosmosWorld extends Module {
 
 	public static Entity getEntityMoon() {
 		return INSTANCE.entityMoon;
+	}
+
+	public static float getDayFactor() {
+		return INSTANCE.dayFactor;
+	}
+
+	public static float getSunriseFactor() {
+		return (float) Maths.clamp(-(Math.sin(2.0 * Math.PI * getDayFactor()) - 1.0) / 2.0f, 0.0, 1.0);
+	}
+
+	public static float getShadowFactor() {
+		return (float) Maths.clamp(1.7f * Math.sin(2.0f * Math.PI * getDayFactor()), 0.0, 1.0);
+	}
+
+	public static float getSunHeight() {
+		float addedHeight = 0.0f;
+
+		if (FlounderGuis.getGuiMaster() instanceof KosmosGuis) {
+			addedHeight = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 500.0f : 0.0f;
+		}
+
+		return KosmosWorld.getEntitySun().getPosition().getY() + addedHeight;
+	}
+
+	public static float starIntensity() {
+		float addedIntensity = 0.0f;
+
+		if (FlounderGuis.getGuiMaster() instanceof KosmosGuis) {
+			addedIntensity = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 0.5f : 0.0f;
+		}
+
+		return Maths.clamp(1.0f - getShadowFactor() + addedIntensity, 0.0f, 1.0f);
+	}
+
+	public static float getBloomThreshold() {
+		return 0.73f; // 0.8f * (getShadowFactor()) + 0.2f; // TODO
 	}
 
 	@Override

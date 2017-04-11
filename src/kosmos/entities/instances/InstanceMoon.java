@@ -8,7 +8,7 @@ import flounder.models.*;
 import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
-import kosmos.skybox.*;
+import kosmos.world.*;
 
 /// Automatically generated entity source
 /// Date generated: 30.3.2017 - 12:8
@@ -23,7 +23,7 @@ public class InstanceMoon extends Entity {
 		new kosmos.entities.components.ComponentCelestial(this, false);
 		new ComponentModel(this, 10.0f, MODEL, TEXTURE, 1);
 		new ComponentSurface(this, 1.0f, 0.0f, true, true);
-		new ComponentLight(this, new Vector3f(0.0f, 0.0f, 0.0f), KosmosSkybox.MOON_COLOUR, new Attenuation(1.0f, 0.0f, 0.0f));
+		new ComponentLight(this, new Vector3f(0.0f, 0.0f, 0.0f), KosmosWorld.MOON_COLOUR, new Attenuation(1.0f, 0.0f, 0.0f));
 	}
 }
 
