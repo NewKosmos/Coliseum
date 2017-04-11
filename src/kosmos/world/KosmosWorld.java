@@ -18,8 +18,10 @@ import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.noise.*;
 import flounder.profiling.*;
+import flounder.resources.*;
 import flounder.shadows.*;
 import flounder.skybox.*;
+import flounder.textures.*;
 import flounder.visual.*;
 import kosmos.*;
 import kosmos.chunks.*;
@@ -35,19 +37,28 @@ public class KosmosWorld extends Module {
 
 	public static final float GRAVITY = -11.0f;
 
+	private static MyFile[] SKYBOX_TEXTURE_FILES = {
+			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsRight.png"),
+			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsLeft.png"),
+			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsTop.png"),
+			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsBottom.png"),
+			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsBack.png"),
+			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsFront.png")
+	};
+
 	public static final Colour SKY_COLOUR_NIGHT = new Colour(0.0f, 0.05f, 0.1f);
 	public static final Colour SKY_COLOUR_SUNRISE = new Colour(0.8f, 0.4f, 0.3f);
 	public static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.3f, 0.7f);
 
 	public static final Colour SUN_COLOUR_NIGHT = new Colour(0.0f, 0.0f, 0.0f);
-	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.8f, 0.4f, 0.3f);
+	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.5f, 0.4f, 0.3f);
 	public static final Colour SUN_COLOUR_DAY = new Colour(0.8f, 0.8f, 0.8f);
 
 	public static final Colour MOON_COLOUR = new Colour(0.1f, 0.1f, 0.3f);
 
 	public static final float DAY_NIGHT_CYCLE = 420.0f; // The day/night length (sec).
 
-	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.3f, 0.0f, 0.5f); // The starting light direction.
+	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, 0.0f, 0.5f); // The starting light direction.
 
 	private PerlinNoise noise;
 
@@ -77,6 +88,13 @@ public class KosmosWorld extends Module {
 
 		this.dayDriver = new LinearDriver(0.0f, 100.0f, DAY_NIGHT_CYCLE);
 		this.dayFactor = 0.0f;
+
+		FlounderShadows.setBrightnessBoost(KosmosConfigs.BRIGHTNESS_BOOST.getFloat());
+		FlounderShadows.setShadowSize(KosmosConfigs.SHADOWMAP_SIZE.getInteger());
+		FlounderShadows.setShadowPCF(KosmosConfigs.SHADOWMAP_PCF.getInteger());
+		FlounderShadows.setShadowBias(KosmosConfigs.SHADOWMAP_BIAS.getFloat());
+		FlounderShadows.setShadowDarkness(KosmosConfigs.SHADOWMAP_DARKNESS.getFloat());
+		FlounderSkybox.setCubemap(TextureFactory.newBuilder().setCubemap(SKYBOX_TEXTURE_FILES).create());
 	}
 
 	public static void generatePlayer() {
