@@ -82,7 +82,7 @@ public class KosmosRenderer extends RendererMaster {
 		this.filterPixel = new FilterPixel(2.0f);
 		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.09f);
 		this.pipelinePaused = new PipelinePaused();
-		this.filterGain = new FilterGain(false, 2.6f);
+		this.filterGain = new FilterGain(2.4f);
 	}
 
 	@Override
