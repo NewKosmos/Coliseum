@@ -11,28 +11,26 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.helpers.*;
-
-import javax.swing.*;
-import java.util.*;
 
 public enum ComponentsList {
+	// Flounder Engine.
 	ANIMATION(new ComponentAnimation(null)),
-	CELESTIAL(new ComponentCelestial(null)),
-	CLOUD(new ComponentCloud(null)),
+	CHILD(new ComponentChild(null)),
+	COLLIDER(new ComponentCollider(null)),
 	COLLISION(new ComponentCollision(null)),
 	GLOW(new ComponentGlow(null)),
 	LIGHT(new ComponentLight(null)),
 	MODEL(new ComponentModel(null)),
-	MULTIPLAYER(new ComponentMultiplayer(null)),
 	PARTICLES(new ComponentParticles(null)),
-	PLAYER(new ComponentPlayer(null)),
 	SURFACE(new ComponentSurface(null)),
 	SWAY(new ComponentSway(null)),
-	WATER_BOB(new ComponentWaterBob(null));
 
-	public static final List<Pair<String, JPanel>> ADD_SIDE_TAB = new ArrayList<>();
-	public static final List<String> REMOVE_SIDE_TAB = new ArrayList<>();
+	// New Kosmos.
+	CELESTIAL(new ComponentCelestial(null)),
+	CLOUD(new ComponentCloud(null)),
+	MULTIPLAYER(new ComponentMultiplayer(null)),
+	PLAYER(new ComponentPlayer(null)),
+	WATER_BOB(new ComponentWaterBob(null));
 
 	public static final ComponentsList[] LIST = ComponentsList.values();
 

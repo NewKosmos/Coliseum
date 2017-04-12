@@ -55,6 +55,7 @@ public class KosmosRenderer extends RendererMaster {
 	private FilterPixel filterPixel;
 	private FilterCRT filterCRT;
 	private PipelinePaused pipelinePaused;
+	private FilterGain filterGain;
 
 	public KosmosRenderer() {
 		super(FlounderDisplay.class);
@@ -81,6 +82,7 @@ public class KosmosRenderer extends RendererMaster {
 		this.filterPixel = new FilterPixel(2.0f);
 		this.filterCRT = new FilterCRT(new Colour(0.5f, 1.0f, 0.5f), 0.175f, 0.175f, 1024.0f, 0.09f);
 		this.pipelinePaused = new PipelinePaused();
+		this.filterGain = new FilterGain(false, 2.6f);
 	}
 
 	@Override
@@ -132,10 +134,10 @@ public class KosmosRenderer extends RendererMaster {
 					((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap() // Shadow Map
 			);
 
-			if (KosmosPost.isBloomEnabled()) {
-				pipelineBloom.setBloomThreshold(KosmosWorld.getBloomThreshold());
-				pipelineBloom.renderPipeline(rendererFBO.getColourTexture(0), waterRenderer.getPipelineMRT().fbo.getColourTexture(0));
-			}
+		//	if (KosmosPost.isBloomEnabled()) {
+		//		pipelineBloom.setBloomThreshold(KosmosWorld.getBloomThreshold());
+		//		pipelineBloom.renderPipeline(waterRenderer.getPipelineMRT().fbo.getColourTexture(0));
+		//	}
 
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
 		}
@@ -230,6 +232,11 @@ public class KosmosRenderer extends RendererMaster {
 			renderIndependents(output);
 		}
 
+		// Applies grain to the final image.
+		filterGain.applyFilter(output.getColourTexture(0));
+		output = filterGain.fbo;
+
+		// Displays the image to the screen.
 		output.blitToScreen();
 	}
 
@@ -269,6 +276,7 @@ public class KosmosRenderer extends RendererMaster {
 		filterPixel.dispose();
 		filterCRT.dispose();
 		pipelinePaused.dispose();
+		filterGain.dispose();
 	}
 
 	@Override

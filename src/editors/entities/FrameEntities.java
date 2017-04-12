@@ -336,16 +336,16 @@ public class FrameEntities extends Standard {
 	public void update() {
 		editorComponents.forEach(IComponentEditor::editorUpdate);
 
-		for (Pair<String, JPanel> p : ComponentsList.ADD_SIDE_TAB) {
+		for (Pair<String, JPanel> p : IComponentEditor.ADD_SIDE_TAB) {
 			addSideTab(p.getFirst(), p.getSecond());
 		}
 
-		for (String s : ComponentsList.REMOVE_SIDE_TAB) {
+		for (String s : IComponentEditor.REMOVE_SIDE_TAB) {
 			removeSideTab(s);
 		}
 
-		ComponentsList.ADD_SIDE_TAB.clear();
-		ComponentsList.REMOVE_SIDE_TAB.clear();
+		IComponentEditor.ADD_SIDE_TAB.clear();
+		IComponentEditor.REMOVE_SIDE_TAB.clear();
 	}
 
 	@Override

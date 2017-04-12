@@ -105,13 +105,12 @@ public class KosmosWorld extends Module {
 						KosmosConfigs.SAVE_PLAYER_Z.setReference(() -> KosmosWorld.getEntityPlayer().getPosition().z).getFloat()),
 				new Vector3f()
 		);
-		// new InstanceMuliplayer(FlounderEntities.getEntities(), INSTANCE.entityPlayer.getPosition(), new Vector3f(), "Dank Memes");
-		KosmosWater.generateWater();
 		KosmosChunks.setCurrent(new Chunk(FlounderEntities.getEntities(), new Vector3f(
 				KosmosConfigs.SAVE_CHUNK_X.setReference(() -> KosmosChunks.getCurrent().getPosition().x).getFloat(),
 				0.0f,
 				KosmosConfigs.SAVE_CHUNK_Z.setReference(() -> KosmosChunks.getCurrent().getPosition().z).getFloat()
 		))); // The root chunk.
+		KosmosWater.generateWater();
 	}
 
 	public static void deletePlayer() {
@@ -139,12 +138,12 @@ public class KosmosWorld extends Module {
 		}
 
 		dayFactor = dayDriver.update(Framework.getDelta() * scaledSpeed) / 100.0f;
+		Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.getLightPosition());
 		Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.getFog().getFogColour());
 		Colour.interpolate(FlounderSkybox.getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.getFog().getFogColour());
 		FlounderSkybox.getFog().setFogDensity(0.032f);
 		FlounderSkybox.getFog().setFogGradient(2.56f);
 		FlounderSkybox.setBlendFactor(starIntensity());
-		Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.getLightPosition());
 	}
 
 	@Override

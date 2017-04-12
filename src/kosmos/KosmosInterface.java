@@ -36,7 +36,7 @@ public class KosmosInterface extends Standard {
 	private Playlist gamePlaylist;
 
 	public KosmosInterface() {
-		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderSound.class, FlounderEvents.class, FlounderNetwork.class, FlounderSteam.class, FlounderBounding.class, KosmosPost.class, FlounderShadows.class, FlounderParticles.class, KosmosWater.class, FlounderSkybox.class, KosmosWorld.class, KosmosChunks.class);
+		super(FlounderDisplay.class, FlounderKeyboard.class, FlounderSound.class, FlounderEvents.class, FlounderNetwork.class, FlounderSteam.class, FlounderBounding.class, FlounderShadows.class, FlounderParticles.class, FlounderSkybox.class, KosmosWater.class, KosmosPost.class, KosmosWorld.class, KosmosChunks.class);
 	}
 
 	@Override
@@ -118,11 +118,6 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public void onEvent() {
-				if (FlounderNetwork.getSocketClient() != null) {
-					new PacketDisconnect(FlounderNetwork.getUsername()).writeData(FlounderNetwork.getSocketClient());
-					FlounderNetwork.closeClient();
-				}
-
 				Framework.requestClose();
 			}
 		});

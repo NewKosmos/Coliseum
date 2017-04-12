@@ -24,7 +24,7 @@ import java.net.*;
 /**
  * A packet that is used when a client connects.
  */
-public class PacketLogin extends Packet {
+public class PacketConnect extends Packet {
 	private String username;
 
 	/**
@@ -32,7 +32,7 @@ public class PacketLogin extends Packet {
 	 *
 	 * @param data The data to create from.
 	 */
-	public PacketLogin(byte[] data) {
+	public PacketConnect(byte[] data) {
 		this.username = readData(data);
 	}
 
@@ -41,7 +41,7 @@ public class PacketLogin extends Packet {
 	 *
 	 * @param username The username that is connecting.
 	 */
-	public PacketLogin(String username) {
+	public PacketConnect(String username) {
 		this.username = username;
 	}
 
@@ -77,7 +77,7 @@ public class PacketLogin extends Packet {
 		// If new client connects tell them the connected clients.
 		for (ClientInfo info : FlounderNetwork.getSocketServer().getConnected()) {
 			if (!info.getUsername().equals(username)) {
-				server.sendData(new PacketLogin(info.getUsername()).getData(), address, port);
+				server.sendData(new PacketConnect(info.getUsername()).getData(), address, port);
 			}
 		}
 	}

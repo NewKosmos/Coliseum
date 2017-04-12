@@ -20,17 +20,17 @@ import kosmos.camera.*;
 import org.lwjgl.glfw.*;
 
 public class NewKosmos extends Framework {
-	public static final String VERSION = "4.20";
+	public static final String VERSION = "4.11";
 
 	public static void main(String[] args) {
-		NewKosmos newKosmos = new NewKosmos();
-		newKosmos.run();
+		new NewKosmos().run();
 		System.exit(0);
 	}
 
 	public NewKosmos() {
 		super("kosmos", new UpdaterDefault(GLFW::glfwGetTime), -1, new KosmosInterface(), new KosmosRenderer(), new KosmosCamera(), new KosmosPlayer(), new KosmosGuis());
-		FlounderDisplay.setup(KosmosConfigs.DISPLAY_WIDTH.getInteger(),
+		FlounderDisplay.setup(
+				KosmosConfigs.DISPLAY_WIDTH.getInteger(),
 				KosmosConfigs.DISPLAY_HEIGHT.getInteger(),
 				"New Kosmos", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
 				KosmosConfigs.DISPLAY_VSYNC.getBoolean(),

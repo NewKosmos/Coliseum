@@ -64,7 +64,7 @@ public class ScreenStart extends ScreenObject {
 				String serverIP = KosmosConfigs.SERVER_IP.setReference(() -> FlounderNetwork.getSocketClient() == null ? null : FlounderNetwork.getSocketClient().getIpAddress()).getString();
 				int serverPort = KosmosConfigs.SERVER_PORT.setReference(() -> FlounderNetwork.getSocketClient() == null ? null : FlounderNetwork.getSocketClient().getServerPort()).getInteger();
 				FlounderNetwork.startClient(username, serverIP, serverPort);
-				PacketLogin loginPacket = new PacketLogin(username);
+				PacketConnect loginPacket = new PacketConnect(username);
 				loginPacket.writeData(FlounderNetwork.getSocketClient());
 
 				// Generates the player and the world.
