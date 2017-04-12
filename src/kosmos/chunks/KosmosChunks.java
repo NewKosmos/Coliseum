@@ -250,7 +250,7 @@ public class KosmosChunks extends Module {
 		}
 
 		// Sets up the new root chunk.
-		if (loadCurrent) {
+		if (loadCurrent && getCurrent() != null) {
 			setCurrent(new Chunk(FlounderEntities.getEntities(), getCurrent().getPosition()));
 		}
 	}
