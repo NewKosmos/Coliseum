@@ -64,7 +64,7 @@ public class Chunk extends Entity {
 		new ComponentSurface(this, 1.0f, 0.0f, false, false);
 		new ComponentChunk(this);
 
-		// generateWeather();
+		generateWeather();
 		// generateClouds();
 	}
 
@@ -72,8 +72,9 @@ public class Chunk extends Entity {
 		if (biome.getBiome().getWeatherParticle() != null) {
 			List<ParticleType> templates = new ArrayList<>();
 			templates.add(biome.getBiome().getWeatherParticle());
-			particleSystem = new ParticleSystem(templates, new SpawnCircle(40.0f, new Vector3f(0.0f, 1.0f, 0.0f)), 100, 0.5f, 0.5f);
-			particleSystem.setSystemCentre(new Vector3f(getPosition().x, 15.0f, getPosition().z));
+			particleSystem = new ParticleSystem(templates, new SpawnPoint(), 10, 0.3f, 0.3f);
+			// new SpawnCircle(40.0f, new Vector3f(0.0f, -1.0f, 0.0f))
+			particleSystem.setSystemCentre(new Vector3f(getPosition().x, 25.0f, getPosition().z));
 		}
 	}
 

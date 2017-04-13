@@ -10,6 +10,7 @@
 package kosmos.water;
 
 import flounder.framework.*;
+import flounder.loaders.*;
 import flounder.maths.vectors.*;
 import flounder.physics.bounding.*;
 import kosmos.*;
@@ -27,7 +28,7 @@ public class KosmosWater extends Module {
 	private boolean reflectionShadows;
 
 	public KosmosWater() {
-		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderBounding.class);
+		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderBounding.class, FlounderLoader.class);
 	}
 
 	@Override

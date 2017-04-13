@@ -3,6 +3,7 @@ package kosmos.entities.instances;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.lights.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.resources.*;
@@ -22,7 +23,7 @@ public class InstanceSun extends Entity {
 		super(structure, position, rotation);
 		new kosmos.entities.components.ComponentCelestial(this, true);
 		new ComponentModel(this, 16.0f, MODEL, TEXTURE, 1);
-		new ComponentLight(this, new Vector3f(0.0f, 0.0f, 0.0f), KosmosWorld.SUN_COLOUR_DAY, new Attenuation(1.0f, 0.0f, 0.0f));
+		new ComponentLight(this, new Vector3f(0.0f, 0.0f, 0.0f), new Colour(KosmosWorld.SUN_COLOUR_DAY), new Attenuation(1.0f, 0.0f, 0.0f));
 		new ComponentSurface(this, 1.0f, 0.0f, true, true);
 	}
 }

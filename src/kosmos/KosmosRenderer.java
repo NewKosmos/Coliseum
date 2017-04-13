@@ -134,10 +134,10 @@ public class KosmosRenderer extends RendererMaster {
 					((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap() // Shadow Map
 			);
 
-		//	if (KosmosPost.isBloomEnabled()) {
-		//		pipelineBloom.setBloomThreshold(KosmosWorld.getBloomThreshold());
-		//		pipelineBloom.renderPipeline(waterRenderer.getPipelineMRT().fbo.getColourTexture(0));
-		//	}
+			//	if (KosmosPost.isBloomEnabled()) {
+			//		pipelineBloom.setBloomThreshold(KosmosWorld.getBloomThreshold());
+			//		pipelineBloom.renderPipeline(waterRenderer.getPipelineMRT().fbo.getColourTexture(0));
+			//	}
 
 			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
 		}

@@ -46,17 +46,17 @@ public class KosmosWorld extends Module {
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsFront.png")
 	};
 
-	public static final Colour SKY_COLOUR_NIGHT = new Colour(0.0f, 0.05f, 0.1f);
+	public static final Colour SKY_COLOUR_NIGHT = new Colour(0.05f, 0.05f, 0.1f);
 	public static final Colour SKY_COLOUR_SUNRISE = new Colour(0.8f, 0.4f, 0.3f);
 	public static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.3f, 0.7f);
 
 	public static final Colour SUN_COLOUR_NIGHT = new Colour(0.0f, 0.0f, 0.0f);
-	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.5f, 0.4f, 0.3f);
+	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.7f, 0.4f, 0.3f);
 	public static final Colour SUN_COLOUR_DAY = new Colour(0.8f, 0.8f, 0.8f);
 
 	public static final Colour MOON_COLOUR = new Colour(0.1f, 0.1f, 0.3f);
 
-	public static final float DAY_NIGHT_CYCLE = 420.0f; // The day/night length (sec).
+	public static final float DAY_NIGHT_CYCLE = 500.0f; // The day/night length (sec).
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, 0.0f, 0.5f); // The starting light direction.
 
@@ -141,8 +141,8 @@ public class KosmosWorld extends Module {
 		Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.getLightPosition());
 		Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.getFog().getFogColour());
 		Colour.interpolate(FlounderSkybox.getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.getFog().getFogColour());
-		FlounderSkybox.getFog().setFogDensity(0.032f);
-		FlounderSkybox.getFog().setFogGradient(2.56f);
+		FlounderSkybox.getFog().setFogDensity(0.023f + ((1.0f - KosmosWorld.getShadowFactor()) * 0.016f));
+		FlounderSkybox.getFog().setFogGradient(2.80f - ((1.0f - KosmosWorld.getShadowFactor()) * 0.5f));
 		FlounderSkybox.setBlendFactor(starIntensity());
 	}
 

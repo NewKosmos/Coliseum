@@ -13,9 +13,11 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.helpers.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.shadows.*;
+import flounder.skybox.*;
 import kosmos.world.*;
 
 import javax.swing.*;
@@ -69,10 +71,8 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 			ComponentLight componentLight = (ComponentLight) getEntity().getComponent(ComponentLight.class);
 
 			if (componentLight != null) {
-				Colour newColour = new Colour();
-				Colour.interpolate(KosmosWorld.SUN_COLOUR_SUNRISE, KosmosWorld.SUN_COLOUR_NIGHT, KosmosWorld.getSunriseFactor(), newColour);
-				Colour.interpolate(newColour, KosmosWorld.SUN_COLOUR_DAY, KosmosWorld.getShadowFactor(), newColour);
-				componentLight.getLight().setColour(newColour);
+				Colour.interpolate(KosmosWorld.SUN_COLOUR_SUNRISE, KosmosWorld.SUN_COLOUR_NIGHT, KosmosWorld.getSunriseFactor(), componentLight.getLight().getColour());
+				Colour.interpolate(componentLight.getLight().getColour(), KosmosWorld.SUN_COLOUR_DAY, KosmosWorld.getShadowFactor(), componentLight.getLight().getColour());
 			}
 		}
 	}

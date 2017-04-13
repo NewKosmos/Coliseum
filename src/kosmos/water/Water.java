@@ -28,7 +28,7 @@ public class Water {
 	protected static final float AMPLITUDE = 0.200f;
 
 	protected static final double SQUARE_SIZE = Math.sqrt(3.0);
-	protected static final int VERTEX_COUNT = 100;
+	protected static final int VERTEX_COUNT = 132;
 
 	protected static final float SHINE_DAMPER = 1.0f;
 	protected static final float REFLECTIVITY = 0.0f;

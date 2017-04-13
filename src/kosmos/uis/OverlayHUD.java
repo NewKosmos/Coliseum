@@ -49,6 +49,10 @@ public class OverlayHUD extends ScreenObject {
 		this.crossHair.setColourOffset(FlounderGuis.getGuiMaster().getPrimaryColour());
 		this.crossHair.setSelectedRow(crosshairSelected);
 		this.crossHair.setVisible(KosmosCamera.isFirstPerson());
+
+		this.statusHealth.persentage = KosmosWorld.getDayFactor();
+		this.statusThirst.persentage = KosmosWorld.getShadowFactor();
+		this.statusHunger.persentage = KosmosWorld.getSunriseFactor();
 	}
 
 	public static int getCrosshairSelected() {
@@ -68,6 +72,7 @@ public class OverlayHUD extends ScreenObject {
 		private GuiObject foreground;
 		private GuiObject progress;
 		private GuiObject mainIcon;
+		private float persentage;
 
 		private HudStatus(ScreenObject parent, TextureObject hudTexture, TextureObject hudProgress, int main, float offset, Colour colour) {
 			super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
@@ -84,12 +89,13 @@ public class OverlayHUD extends ScreenObject {
 
 			this.mainIcon = new GuiObject(this, new Vector2f(0.06f + offset, 0.94f), new Vector2f(0.06f, 0.06f), hudTexture, main);
 			this.mainIcon.setInScreenCoords(false);
+
+			this.persentage = 0.0f;
 		}
 
 		@Override
 		public void updateObject() {
-			float p = KosmosWorld.getDayFactor();
-			progress.setSelectedRow((int) Math.floor(p * Math.pow(progress.getTexture().getNumberOfRows(), 2)));
+			progress.setSelectedRow((int) Math.floor(persentage * Math.pow(progress.getTexture().getNumberOfRows(), 2)));
 		}
 
 		@Override

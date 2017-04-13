@@ -89,7 +89,8 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 			currentUpwardSpeed += KosmosWorld.GRAVITY * Framework.getDelta();
 		} else if (!FlounderGuis.getGuiMaster().isGamePaused()) {
 			currentSpeed *= 0.5f * KosmosPlayer.FLY_SPEED;
-			currentUpwardSpeed = inputFlyHeight.getAmount() * KosmosPlayer.FLY_SPEED;
+			currentUpwardSpeed = 2.0f * inputFlyHeight.getAmount() * KosmosPlayer.FLY_SPEED;
+			currentTurnSpeed *= 0.5f * KosmosPlayer.FLY_SPEED;
 		}
 
 		// Calculates the deltas to the moved distance, and rotations.

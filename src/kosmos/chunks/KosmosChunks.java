@@ -37,7 +37,7 @@ public class KosmosChunks extends Module {
 	private Chunk currentChunk;
 
 	public KosmosChunks() {
-		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEvents.class, FlounderBounding.class, FlounderEntities.class, FlounderTextures.class);
+		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEntities.class, FlounderModels.class, FlounderTextures.class);
 	}
 
 	@Override
@@ -47,6 +47,7 @@ public class KosmosChunks extends Module {
 		this.modelHexagon = ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "hexagon.obj")).create();
 
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
+		this.currentChunk = null;
 
 		/*FlounderEvents.addEvent(new IEvent() {
 			private MouseButton placeTree = new MouseButton(GLFW.GLFW_MOUSE_BUTTON_1);
@@ -152,7 +153,9 @@ public class KosmosChunks extends Module {
 	@Override
 	public void update() {
 		if (FlounderCamera.getPlayer() != null) {
-			Vector3f playerPos = FlounderCamera.getPlayer().getPosition();
+			Vector3f playerPos = new Vector3f(FlounderCamera.getPlayer().getPosition());
+			playerPos.y = 0.0f;
+
 			Chunk playerChunk = null;
 
 			if (!playerPos.equals(lastPlayerPos)) {
