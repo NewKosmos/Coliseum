@@ -111,6 +111,21 @@ public class ScreenSettingPost extends ScreenObject {
 			}
 		});
 
+		// Toggle Effect Grain.
+		GuiButtonText toggleGrain = new GuiButtonText(this, new Vector2f(0.5f, 0.62f), "Grain Enabled: ", GuiAlign.CENTRE);
+		FlounderEvents.addEvent(new EventChange<Boolean>(KosmosPost::isGrainEnabled) {
+			@Override
+			public void onEvent(Boolean newValue) {
+				toggleGrain.setText("Grain Enabled: " + newValue);
+			}
+		});
+		toggleGrain.addLeftListener(new ScreenListener() {
+			@Override
+			public void eventOccurred() {
+				KosmosPost.setGrainEnabled(!KosmosPost.isGrainEnabled());
+			}
+		});
+
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);
 		back.addLeftListener(new ScreenListener() {

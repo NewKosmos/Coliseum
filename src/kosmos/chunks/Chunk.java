@@ -64,7 +64,7 @@ public class Chunk extends Entity {
 		new ComponentSurface(this, 1.0f, 0.0f, false, false);
 		new ComponentChunk(this);
 
-		generateWeather();
+		// generateWeather();
 		// generateClouds();
 	}
 

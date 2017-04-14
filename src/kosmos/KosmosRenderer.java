@@ -233,8 +233,10 @@ public class KosmosRenderer extends RendererMaster {
 		}
 
 		// Applies grain to the final image.
-		filterGain.applyFilter(output.getColourTexture(0));
-		output = filterGain.fbo;
+		if (KosmosPost.isGrainEnabled()) {
+			filterGain.applyFilter(output.getColourTexture(0));
+			output = filterGain.fbo;
+		}
 
 		// Displays the image to the screen.
 		output.blitToScreen();

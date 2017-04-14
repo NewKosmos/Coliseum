@@ -15,6 +15,7 @@ public class KosmosPost extends Module {
 	private boolean tiltShiftEnabled;
 	private boolean lensFlareEnabled;
 	private boolean crtEnabled;
+	private boolean grainEnabled;
 
 	public KosmosPost() {
 		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME);
@@ -29,6 +30,7 @@ public class KosmosPost extends Module {
 		this.tiltShiftEnabled = KosmosConfigs.POST_TILTSHIFT_ENABLED.getBoolean();
 		this.lensFlareEnabled = KosmosConfigs.POST_LENSFLARE_ENABLED.getBoolean();
 		this.crtEnabled = KosmosConfigs.POST_CRT_ENABLED.getBoolean();
+		this.grainEnabled = KosmosConfigs.POST_GRAIN_ENABLED.getBoolean();
 	}
 
 	@Override
@@ -42,6 +44,7 @@ public class KosmosPost extends Module {
 		FlounderProfiler.add(PROFILE_TAB_NAME, "Motion Blur Enabled", motionBlurEnabled);
 		FlounderProfiler.add(PROFILE_TAB_NAME, "Lens Flare Enabled", lensFlareEnabled);
 		FlounderProfiler.add(PROFILE_TAB_NAME, "CRT Filter Enabled", crtEnabled);
+		FlounderProfiler.add(PROFILE_TAB_NAME, "Grain Filter Enabled", grainEnabled);
 	}
 
 	public static boolean isEffectsEnabled() {
@@ -90,6 +93,14 @@ public class KosmosPost extends Module {
 
 	public static void setCrtEnabled(boolean crtEnabled) {
 		INSTANCE.crtEnabled = crtEnabled;
+	}
+
+	public static boolean isGrainEnabled() {
+		return INSTANCE.grainEnabled;
+	}
+
+	public static void setGrainEnabled(boolean grainEnabled) {
+		INSTANCE.grainEnabled = grainEnabled;
 	}
 
 	@Override
