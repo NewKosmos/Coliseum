@@ -18,11 +18,13 @@ import kosmos.world.*;
 public class InstanceMoon extends Entity {
 	private static final ModelObject MODEL = ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "moon", "model.obj")).create();
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "moon", "diffuse.png")).setNumberOfRows(1).create();
+	private static final TextureObject TEXTURE_GLOW = TextureFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "moon", "glow.png")).setNumberOfRows(1).create();
 
 	public InstanceMoon(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 		new kosmos.entities.components.ComponentCelestial(this, false);
 		new ComponentModel(this, 10.0f, MODEL, TEXTURE, 1);
+		new ComponentGlow(this, TEXTURE_GLOW);
 		new ComponentSurface(this, 1.0f, 0.0f, true, true);
 		new ComponentLight(this, new Vector3f(0.0f, 0.0f, 0.0f), new Colour(KosmosWorld.MOON_COLOUR), new Attenuation(1.0f, 0.0f, 0.0f));
 	}

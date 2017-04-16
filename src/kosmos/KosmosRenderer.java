@@ -185,7 +185,6 @@ public class KosmosRenderer extends RendererMaster {
 		if (KosmosPost.isEffectsEnabled()) {
 			// Render Bloom Filter.
 			if (KosmosPost.isBloomEnabled()) {
-				pipelineBloom.setBloomThreshold(KosmosWorld.getBloomThreshold());
 				pipelineBloom.renderPipeline(output.getColourTexture(0));
 				output = pipelineBloom.getOutput();
 			}

@@ -49,7 +49,7 @@ public class KosmosConfigs {
 	public static final ConfigData WATER_REFLECTION_QUALITY = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "waterReflectionQuality", 0.3f, KosmosWater::getReflectionQuality);
 	public static final ConfigData WATER_REFLECTION_SHADOWS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "waterReflectionShadows", true, KosmosWater::reflectionShadows);
 
-	public static final ConfigData BRIGHTNESS_BOOST = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "brightnessBoost", 0.123f, FlounderShadows::getBrightnessBoost);
+	public static final ConfigData BRIGHTNESS_BOOST = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "brightnessBoost", 0.1f, FlounderShadows::getBrightnessBoost);
 	public static final ConfigData SHADOWMAP_SIZE = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapSize", 8192, FlounderShadows::getShadowSize);
 	public static final ConfigData SHADOWMAP_PCF = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapPcf", 0, FlounderShadows::getShadowPCF);
 	public static final ConfigData SHADOWMAP_BIAS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapBias", 0.001f, FlounderShadows::getShadowBias);

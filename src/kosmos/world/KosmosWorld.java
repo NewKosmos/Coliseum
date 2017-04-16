@@ -54,9 +54,9 @@ public class KosmosWorld extends Module {
 	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.7f, 0.4f, 0.3f);
 	public static final Colour SUN_COLOUR_DAY = new Colour(0.8f, 0.8f, 0.8f);
 
-	public static final Colour MOON_COLOUR = new Colour(0.1f, 0.1f, 0.3f);
+	public static final Colour MOON_COLOUR = new Colour(0.12f, 0.12f, 0.36f);
 
-	public static final float DAY_NIGHT_CYCLE = 500.0f; // The day/night length (sec).
+	public static final float DAY_NIGHT_CYCLE = 420.0f; // The day/night length (sec).
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, 0.0f, 0.5f); // The starting light direction.
 
@@ -258,10 +258,6 @@ public class KosmosWorld extends Module {
 		}
 
 		return Maths.clamp(1.0f - getShadowFactor() + addedIntensity, 0.0f, 1.0f);
-	}
-
-	public static float getBloomThreshold() {
-		return 0.60f; // 0.8f * (getShadowFactor()) + 0.2f; // TODO
 	}
 
 	@Override
