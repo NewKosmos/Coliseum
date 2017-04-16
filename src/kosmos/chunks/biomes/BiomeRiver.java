@@ -17,6 +17,7 @@ import flounder.space.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.entities.instances.*;
+import kosmos.materials.*;
 
 public class BiomeRiver extends IBiome {
 	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{
@@ -57,6 +58,11 @@ public class BiomeRiver extends IBiome {
 	@Override
 	public float getHeightModifier() {
 		return 1.0f;
+	}
+
+	@Override
+	public IMaterial getMaterial() {
+		return IMaterial.Materials.WATER.getMaterial();
 	}
 
 	@Override

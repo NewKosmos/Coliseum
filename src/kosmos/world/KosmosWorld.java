@@ -261,7 +261,7 @@ public class KosmosWorld extends Module {
 	}
 
 	public static float getBloomThreshold() {
-		return 0.73f; // 0.8f * (getShadowFactor()) + 0.2f; // TODO
+		return 0.60f; // 0.8f * (getShadowFactor()) + 0.2f; // TODO
 	}
 
 	@Override

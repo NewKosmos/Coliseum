@@ -13,6 +13,8 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.events.*;
 import flounder.framework.*;
+import flounder.guis.*;
+import flounder.inputs.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
@@ -20,6 +22,10 @@ import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.textures.*;
+import kosmos.entities.components.*;
+import kosmos.entities.instances.*;
+import kosmos.world.*;
+import org.lwjgl.glfw.*;
 
 import java.util.*;
 
@@ -37,7 +43,7 @@ public class KosmosChunks extends Module {
 	private Chunk currentChunk;
 
 	public KosmosChunks() {
-		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEntities.class, FlounderModels.class, FlounderTextures.class);
+		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEvents.class, FlounderEntities.class, FlounderModels.class, FlounderTextures.class);
 	}
 
 	@Override
@@ -50,7 +56,7 @@ public class KosmosChunks extends Module {
 		this.currentChunk = null;
 
 		/*FlounderEvents.addEvent(new IEvent() {
-			private MouseButton placeTree = new MouseButton(GLFW.GLFW_MOUSE_BUTTON_1);
+			private MouseButton placeTree = new MouseButton(GLFW.GLFW_MOUSE_BUTTON_RIGHT);
 
 			@Override
 			public boolean eventTriggered() {
@@ -62,24 +68,24 @@ public class KosmosChunks extends Module {
 				Ray cameraRay = FlounderCamera.getCamera().getViewRay();
 
 				for (Entity entity : FlounderEntities.getEntities().getAll()) {
-					if (entity.getCollider() != null && entity.getComponent(ComponentPlayer.ID) == null && entity.getComponent(ComponentMultiplayer.ID) == null) {
+					if (entity.getCollider() != null && entity.getComponent(ComponentPlayer.class) == null && entity.getComponent(ComponentMultiplayer.class) == null) {
 						IntersectData data = entity.getCollider().intersects(cameraRay);
 						float distance = Vector3f.getDistance(entity.getPosition(), KosmosWorld.getEntityPlayer().getPosition());
 
-						if (data.isIntersection() && distance < 4.20f) {
-							entity.forceRemove(false);
+						if (data.isIntersection() && distance < 2.0f) {
+							entity.forceRemove();
 							return;
 						}
 					}
 				}
 			}
-		});*/
+		});
 
-		/*FlounderEvents.addEvent(new IEvent() {
-			private static final int RECURSION_COUNT = 512;
-			private static final float RAY_RANGE = 32.0f;
+		FlounderEvents.addEvent(new IEvent() {
+			private static final int RECURSION_COUNT = 256;
+			private static final float RAY_RANGE = 10.0f;
 
-			private MouseButton button = new MouseButton(GLFW.GLFW_MOUSE_BUTTON_1);
+			private MouseButton button = new MouseButton(GLFW.GLFW_MOUSE_BUTTON_LEFT);
 
 			@Override
 			public boolean eventTriggered() {
@@ -139,9 +145,9 @@ public class KosmosChunks extends Module {
 			}
 
 			private boolean isUnderGround(Vector3f testPoint) {
-				float height = Chunk.getWorldHeight(testPoint.getX(), testPoint.getZ());
+				float height = Chunk.getWorldHeight(testPoint.getX(), testPoint.getZ(), 1.0f);
 
-				if (height == Float.NEGATIVE_INFINITY || testPoint.y < height) {
+				if (height < 0.0f || testPoint.y < height) {
 					return true;
 				} else {
 					return false;

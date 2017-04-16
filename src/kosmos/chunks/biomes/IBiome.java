@@ -15,6 +15,7 @@ import flounder.maths.vectors.*;
 import flounder.particles.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
+import kosmos.materials.*;
 import kosmos.world.*;
 
 /**
@@ -94,6 +95,8 @@ public abstract class IBiome {
 	 * @return The biome height modifier.
 	 */
 	public abstract float getHeightModifier();
+
+	public abstract IMaterial getMaterial();
 
 	/**
 	 * Gets the average day temp (celsius).
