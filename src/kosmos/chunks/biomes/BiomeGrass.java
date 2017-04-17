@@ -116,11 +116,6 @@ public class BiomeGrass extends IBiome {
 	}
 
 	@Override
-	public float getHeightModifier() {
-		return 1.0f;
-	}
-
-	@Override
 	public IMaterial getMaterial() {
 		return IMaterial.Materials.GRASS.getMaterial();
 	}

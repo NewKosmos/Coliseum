@@ -80,11 +80,6 @@ public class BiomeSnow extends IBiome {
 	}
 
 	@Override
-	public float getHeightModifier() {
-		return 1.0f;
-	}
-
-	@Override
 	public IMaterial getMaterial() {
 		return IMaterial.Materials.SNOW.getMaterial();
 	}

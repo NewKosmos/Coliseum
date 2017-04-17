@@ -66,11 +66,6 @@ public class WaterRenderer extends Renderer {
 					(float) (2.0f * Water.SQUARE_SIZE) * Math.round(position.z / (2.0f * Water.SQUARE_SIZE)));
 		}
 
-		/*if (FlounderCamera.getPlayer() != null) {
-			Vector3f position = FlounderCamera.getPlayer().getPosition();
-			shader.getUniformVec3("waterOffset").loadVec3(Math.round(position.x), 0.0f, Math.round(position.z));
-		}*/
-
 		if (KosmosWater.reflectionsEnabled() && KosmosWater.getColourIntensity() != 1.0f) {
 			// Update the quality scalar.
 			if (reflectionFBO.getSizeScalar() != KosmosWater.getReflectionQuality()) {

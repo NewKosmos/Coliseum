@@ -88,14 +88,6 @@ public abstract class IBiome {
 	 */
 	public abstract ParticleType getWeatherParticle();
 
-	/**
-	 * Gets how much the normalized terrain is effected by the biome.
-	 * If it is negative hills become valleys, thecloserr to zero the flatter the terrain becomes.
-	 *
-	 * @return The biome height modifier.
-	 */
-	public abstract float getHeightModifier();
-
 	public abstract IMaterial getMaterial();
 
 	/**

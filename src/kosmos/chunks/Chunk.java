@@ -11,6 +11,7 @@ package kosmos.chunks;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.particles.*;
@@ -34,7 +35,7 @@ public class Chunk extends Entity {
 	private static final double[][] DELTA_TILES = new double[][]{{1.0, -1.0}, {0.0, -1.0}, {-1.0, 0.0}, {-1.0, 1.0}, {0.0, 1.0}, {1.0, 0.0}};
 
 	// Deltas used to position chunks around a centre chunk when the radius is 7 for each chunk.
-	private static final double[][] DELTA_CHUNK = new double[][]{{9.5, 7.0}, {-0.5, 13.0}, {-10.0, 6.0}, {-9.5, -7.0}, {0.5, -13.0}, {10.0, -6.0}};
+	private static final double[][] DELTA_CHUNK = new double[][]{{19.0, 14.0}, {-1.0, 26.0}, {-20.0, 12.0}, {-19.0, -14.0}, {1.0, -26.0}, {20.0, -12.0}};
 
 	// The amount of tiles that make up the radius. 7-9 are the optimal chunk radius ranges.
 	private static final int CHUNK_RADIUS = 7;
@@ -113,8 +114,8 @@ public class Chunk extends Entity {
 
 		for (int i = 0; i < 6; i++) {
 			// These three variables find the positioning for chunks around the parent.
-			float x = this.getPosition().x + (float) (DELTA_CHUNK[i][0] * Math.sqrt(3.0));
-			float z = this.getPosition().z + (float) (DELTA_CHUNK[i][1] * 1.5f);
+			float x = this.getPosition().x + (float) ((Math.sqrt(3.0) / 2.0) * DELTA_CHUNK[i][0]);
+			float z = this.getPosition().z + (float) ((3.0 / 4.0) * DELTA_CHUNK[i][1]);
 			Vector3f p = new Vector3f(x, 0.0f, z);
 			Chunk duplicate = null;
 
@@ -156,8 +157,8 @@ public class Chunk extends Entity {
 		for (int i = 0; i < CHUNK_RADIUS; i++) {
 			int shapesOnEdge = i;
 			double x = 0.0;
-			double y = i;
-			generateTile(chunk, tiles, x, y);
+			double z = i;
+			generateTile(chunk, tiles, x, z);
 
 			for (int j = 0; j < 6; j++) {
 				if (j == 5) {
@@ -166,8 +167,8 @@ public class Chunk extends Entity {
 
 				for (int w = 0; w < shapesOnEdge; w++) {
 					x += DELTA_TILES[j][0];
-					y += DELTA_TILES[j][1];
-					generateTile(chunk, tiles, x, y);
+					z += DELTA_TILES[j][1];
+					generateTile(chunk, tiles, x, z);
 				}
 			}
 		}
@@ -175,18 +176,41 @@ public class Chunk extends Entity {
 		return tiles;
 	}
 
-	private static void generateTile(Chunk chunk, List<Vector3f> tiles, double x, double y) {
-		float positionX = (float) (Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH * ((y / 2.0) + x));
-		float positionZ = (float) ((3.0 / 2.0) * HEXAGON_SIDE_LENGTH * y);
+	private static Vector3f convertTileToChunk(double x, double z) {
+		double cz = (3.0 / 2.0) * HEXAGON_SIDE_LENGTH * z;
+		double cx = Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH * ((z / 2.0) + x);
+		return new Vector3f((float) cx, 0.0f, (float) cz);
+	}
 
-		Vector2f worldPos = new Vector2f(0.5f * positionX + chunk.getPosition().x, 0.5f * positionZ + chunk.getPosition().z);
-		float height = getWorldHeight(worldPos.x, worldPos.y, chunk.biome.getBiome().getHeightModifier());
+	private static Vector3f convertTileToWorld(Chunk chunk, double x, double z) {
+		double wz = (3.0 / 4.0) * HEXAGON_SIDE_LENGTH * z;
+		double wx = (Math.sqrt(3.0) / 2.0) * HEXAGON_SIDE_LENGTH * ((z / 2.0) + x);
+		return new Vector3f((float) wx + chunk.getPosition().x, 0.0f, (float) wz + chunk.getPosition().z);
+	}
 
-		if (height >= 0.0f) {
-			tiles.add(new Vector3f(positionX, height, positionZ));
+	private static Vector2f convertWorldToTile(Chunk chunk, Vector3f worldPosition) {
+		double tz = (4.0 * (worldPosition.z - chunk.getPosition().z)) / (3.0 * HEXAGON_SIDE_LENGTH);
+		double tx = ((2.0 * (worldPosition.x - chunk.getPosition().x)) / (Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH)) - (tz / 2.0);
+		return new Vector2f((float) tx, (float) tz);
+	}
+
+	private static void generateTile(Chunk chunk, List<Vector3f> tiles, double x, double z) {
+		Vector3f chunkPosition = convertTileToChunk(x, z);
+		Vector3f worldPosition = convertTileToWorld(chunk, x, z);
+
+		worldPosition.y = getWorldHeight(worldPosition.x, worldPosition.z);
+		chunkPosition.y = worldPosition.y;
+
+	//	FlounderLogger.log("tile: Vector2f{" + x + ", " + z + "}");
+	//	FlounderLogger.log("world: " + convertTileToWorld(chunk, x, z));
+	//	FlounderLogger.log("cTile: " + convertWorldToTile(chunk, convertTileToWorld(chunk, x, z)));
+	//	FlounderLogger.log("====\n");
+
+		if (worldPosition.y >= 0.0f) {
+			tiles.add(chunkPosition);
 		}
 
-		chunk.biome.getBiome().generateEntity(chunk, new Vector3f(worldPos.x, height, worldPos.y));
+		chunk.biome.getBiome().generateEntity(chunk, worldPosition);
 	}
 
 	/**
@@ -194,13 +218,12 @@ public class Chunk extends Entity {
 	 *
 	 * @param positionX The worlds X position.
 	 * @param positionZ The worlds Z position.
-	 * @param yModifier How much the world height is scaled.
 	 *
 	 * @return The found height at that world position.
 	 */
-	public static float getWorldHeight(float positionX, float positionZ, float yModifier) {
+	public static float getWorldHeight(float positionX, float positionZ) {
 		// Calculates the final height for the world position using perlin.
-		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(positionX / 30.0f, positionZ / 30.0f) * 12.0f * yModifier);
+		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(positionX / 30.0f, positionZ / 30.0f) * 12.0f);
 
 		// Ignore height that would be water/nothing.
 		if (height < 0.0f) {

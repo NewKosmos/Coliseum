@@ -74,11 +74,6 @@ public class BiomeStone extends IBiome {
 	}
 
 	@Override
-	public float getHeightModifier() {
-		return 1.0f;
-	}
-
-	@Override
 	public IMaterial getMaterial() {
 		return IMaterial.Materials.STONE.getMaterial();
 	}
