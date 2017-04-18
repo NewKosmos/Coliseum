@@ -37,6 +37,6 @@ void main(void) {
         out_albedo = vec4(diffuseColour.rgb, 1.0);
 	}
 
-	out_normals = vec4(normalize(pass_surfaceNormal), 1.0);
+	out_normals = vec4(normalize(pass_surfaceNormal) + 1.0 / 2.0, 1.0);
 	out_extras = vec4(shineDamper, reflectivity, (1.0 / 3.0) * (float(false) + 2.0 * float(false)), 1.0);
 }
