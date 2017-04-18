@@ -9,6 +9,7 @@ import flounder.models.*;
 import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
+import kosmos.entities.components.*;
 import kosmos.world.*;
 
 /// Automatically generated entity source
@@ -22,11 +23,11 @@ public class InstanceMoon extends Entity {
 
 	public InstanceMoon(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
-		new kosmos.entities.components.ComponentCelestial(this, false);
+		new ComponentCelestial(this, ComponentCelestial.LightType.MOON);
 		new ComponentModel(this, 10.0f, MODEL, TEXTURE, 1);
 		new ComponentGlow(this, TEXTURE_GLOW);
 		new ComponentSurface(this, 1.0f, 0.0f, true, true);
-		new ComponentLight(this, new Vector3f(0.0f, 0.0f, 0.0f), new Colour(KosmosWorld.MOON_COLOUR), new Attenuation(1.0f, 0.0f, 0.0f));
+		new ComponentLight(this, new Vector3f(0.0f, 0.0f, 0.0f), new Colour(KosmosWorld.MOON_COLOUR_NIGHT), new Attenuation(1.0f, 0.0f, 0.0f));
 	}
 }
 

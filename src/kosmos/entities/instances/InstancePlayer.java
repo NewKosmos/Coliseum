@@ -6,6 +6,7 @@ import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.space.*;
 import flounder.textures.*;
+import kosmos.entities.components.*;
 
 /// Automatically generated entity source
 /// Date generated: 30.3.2017 - 12:8
@@ -17,7 +18,7 @@ public class InstancePlayer extends Entity {
 
 	public InstancePlayer(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
-		new kosmos.entities.components.ComponentPlayer(this);
+		new ComponentPlayer(this);
 		new ComponentAnimation(this, 0.2f, COLLADA, TEXTURE, 1);
 		new ComponentSurface(this, 1.0f, 0.0f, false, false);
 		//	new flounder.entities.components.ComponentLight(this, new Vector3f(0.0f, 2.0f, 0.0f), new Colour(1.0f, 1.0f, 1.0f), new Attenuation(1.0f, 0.02f, 0.5f));

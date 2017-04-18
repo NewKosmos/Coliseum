@@ -12,6 +12,7 @@ package kosmos;
 import flounder.devices.*;
 import flounder.framework.*;
 import flounder.framework.updater.*;
+import flounder.helpers.*;
 import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.resources.*;
@@ -20,7 +21,7 @@ import kosmos.camera.*;
 import org.lwjgl.glfw.*;
 
 public class NewKosmos extends Framework {
-	public static final String VERSION = "4.16";
+	public static final String VERSION = "4.17";
 
 	public static void main(String[] args) {
 		new NewKosmos().run();
@@ -42,6 +43,7 @@ public class NewKosmos extends Framework {
 		setFpsLimit(KosmosConfigs.FRAMEWORK_FPS_LIMIT.getInteger());
 		FlounderTextures.setup(KosmosConfigs.TEXTURES_ANISOTROPY_MAX.getFloat());
 		FlounderBounding.toggle(KosmosConfigs.BOUNDINGS_RENDER.getBoolean());
-		FlounderProfiler.toggle(KosmosConfigs.PROFILER_OPEN.getBoolean());
+		OpenGlUtils.goWireframe(KosmosConfigs.WIREFRAME_ENABLED.getBoolean());
+		FlounderProfiler.toggle(KosmosConfigs.WIREFRAME_ENABLED.getBoolean());
 	}
 }

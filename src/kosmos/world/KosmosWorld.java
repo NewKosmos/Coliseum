@@ -54,7 +54,8 @@ public class KosmosWorld extends Module {
 	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.7f, 0.4f, 0.3f);
 	public static final Colour SUN_COLOUR_DAY = new Colour(0.7f, 0.7f, 0.7f);
 
-	public static final Colour MOON_COLOUR = new Colour(0.1f, 0.1f, 0.3f);
+	public static final Colour MOON_COLOUR_NIGHT = new Colour(0.2f, 0.2f, 0.3f);
+	public static final Colour MOON_COLOUR_DAY = new Colour(0.0f, 0.0f, 0.0f);
 
 	public static final float DAY_NIGHT_CYCLE = 420.0f; // The day/night length (sec).
 
@@ -80,8 +81,9 @@ public class KosmosWorld extends Module {
 	public void init() {
 		this.noise = new PerlinNoise(KosmosConfigs.SAVE_SEED.setReference(() -> noise.getSeed()).getInteger());
 
-		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(250.0f, 250.0f, 250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+		this.entityPlayer = null;
 		this.entitySun = new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-250.0f, -250.0f, -250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(250.0f, 250.0f, 250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 
 		this.playerQue = new HashMap<>();
 		this.players = new HashMap<>();

@@ -24,7 +24,7 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 	private Vector3f startPosition;
 	private Vector3f startRotation;
 
-	private boolean sunsetColours;
+	private LightType lightType;
 
 	/**
 	 * Creates a new ComponentCelestial.
@@ -32,18 +32,19 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 	 * @param entity The entity this component is attached to.
 	 */
 	public ComponentCelestial(Entity entity) {
-		this(entity, false);
+		this(entity, LightType.NONE);
 	}
 
 	/**
 	 * Creates a new ComponentCelestial.
 	 *
 	 * @param entity The entity this component is attached to.
+	 * @param lightType
 	 */
-	public ComponentCelestial(Entity entity, boolean sunsetColours) {
+	public ComponentCelestial(Entity entity, LightType lightType) {
 		super(entity);
 
-		this.sunsetColours = sunsetColours;
+		this.lightType = lightType;
 
 		if (entity != null) {
 			this.startPosition = new Vector3f(entity.getPosition());
@@ -65,12 +66,21 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 
 		getEntity().setMoved();
 
-		if (sunsetColours) {
+		if (lightType != LightType.NONE) {
 			ComponentLight componentLight = (ComponentLight) getEntity().getComponent(ComponentLight.class);
 
 			if (componentLight != null) {
-				Colour.interpolate(KosmosWorld.SUN_COLOUR_SUNRISE, KosmosWorld.SUN_COLOUR_NIGHT, KosmosWorld.getSunriseFactor(), componentLight.getLight().getColour());
-				Colour.interpolate(componentLight.getLight().getColour(), KosmosWorld.SUN_COLOUR_DAY, KosmosWorld.getShadowFactor(), componentLight.getLight().getColour());
+				switch (lightType) {
+					case SUN:
+						Colour.interpolate(KosmosWorld.SUN_COLOUR_SUNRISE, KosmosWorld.SUN_COLOUR_NIGHT, KosmosWorld.getSunriseFactor(), componentLight.getLight().getColour());
+						Colour.interpolate(componentLight.getLight().getColour(), KosmosWorld.SUN_COLOUR_DAY, KosmosWorld.getShadowFactor(), componentLight.getLight().getColour());
+						break;
+					case MOON:
+						Colour.interpolate(KosmosWorld.MOON_COLOUR_NIGHT, KosmosWorld.MOON_COLOUR_DAY, KosmosWorld.getShadowFactor(), componentLight.getLight().getColour());
+						break;
+					case NONE:
+						break;
+				}
 			}
 		}
 	}
@@ -85,15 +95,19 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 
 	@Override
 	public Pair<String[], String[]> getSaveValues(String entityName) {
-		String saveSunsetColours = sunsetColours + "";
+		String saveLightType = lightType.name();
 
 		return new Pair<>(
 				new String[]{}, // Static variables
-				new String[]{saveSunsetColours} // Class constructor
+				new String[]{saveLightType} // Class constructor
 		);
 	}
 
 	@Override
 	public void dispose() {
+	}
+
+	public static enum LightType {
+		SUN, MOON, NONE
 	}
 }
