@@ -47,7 +47,6 @@ public class ExtensionEntities extends IEditorType {
 		// FlounderProfiler.toggle(true);
 		FlounderMouse.setCursorHidden(false);
 		OpenGlUtils.goWireframe(false);
-		FlounderBounding.toggle(true);
 
 		// Sets the world to constant fog and a sun.
 		//	EbonWorld.addFog(new Fog(new Colour(1.0f, 1.0f, 1.0f), 0.003f, 2.0f, 0.0f, 50.0f));

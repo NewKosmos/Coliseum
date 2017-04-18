@@ -11,10 +11,10 @@ package kosmos;
 
 import flounder.devices.*;
 import flounder.framework.*;
+import flounder.helpers.*;
 import flounder.maths.*;
 import flounder.networking.*;
 import flounder.parsing.*;
-import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.shadows.*;
@@ -29,8 +29,8 @@ import org.lwjgl.glfw.*;
 public class KosmosConfigs {
 	// Main configs.
 	private static final Config CONFIG_MAIN = new Config(new MyFile(Framework.getRoamingFolder(), "configs", "settings.conf"));
-	public static final ConfigData WIREFRAME_ENABLED = CONFIG_MAIN.getData(ConfigSection.DEBUG, "wireframeEnabled", false, FlounderProfiler::isOpen);
-	public static final ConfigData BOUNDINGS_RENDER = CONFIG_MAIN.getData(ConfigSection.DEBUG, "boundingsRender", false, FlounderBounding::renders);
+	public static final ConfigData PROFILER_ENABLED = CONFIG_MAIN.getData(ConfigSection.DEBUG, "profilerEnabled", false, FlounderProfiler::isOpen);
+	public static final ConfigData WIREFRAME_ENABLED = CONFIG_MAIN.getData(ConfigSection.DEBUG, "wireframeEnabled", false, OpenGlUtils::isInWireframe);
 
 	public static final ConfigData MUSIC_ENABLED = CONFIG_MAIN.getData(ConfigSection.AUDIO, "musicEnabled", true);
 	public static final ConfigData MUSIC_VOLUME = CONFIG_MAIN.getData(ConfigSection.AUDIO, "musicVolume", 0.5f);

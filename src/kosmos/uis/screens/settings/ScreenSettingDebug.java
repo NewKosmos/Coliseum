@@ -13,7 +13,6 @@ import flounder.events.*;
 import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.maths.vectors.*;
-import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import kosmos.uis.*;
 import kosmos.uis.screens.*;
@@ -38,23 +37,8 @@ public class ScreenSettingDebug extends ScreenObject {
 			}
 		});
 
-		// Toggle Boundings.
-		GuiButtonText toggleBoundings = new GuiButtonText(this, new Vector2f(0.5f, 0.27f), "Render Boundings: ", GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Boolean>(FlounderBounding::renders) {
-			@Override
-			public void onEvent(Boolean newValue) {
-				toggleBoundings.setText("Render Boundings: " + newValue);
-			}
-		});
-		toggleBoundings.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				FlounderBounding.toggle(!FlounderBounding.renders());
-			}
-		});
-
 		// Toggle Wireframe.
-		GuiButtonText toggleWireframe = new GuiButtonText(this, new Vector2f(0.5f, 0.34f), "Wireframe Mode: ", GuiAlign.CENTRE);
+		GuiButtonText toggleWireframe = new GuiButtonText(this, new Vector2f(0.5f, 0.27f), "Wireframe Mode: ", GuiAlign.CENTRE);
 		FlounderEvents.addEvent(new EventChange<Boolean>(OpenGlUtils::isInWireframe) {
 			@Override
 			public void onEvent(Boolean newValue) {

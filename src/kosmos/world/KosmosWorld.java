@@ -146,6 +146,8 @@ public class KosmosWorld extends Module {
 		FlounderSkybox.getFog().setFogDensity(0.023f + ((1.0f - getShadowFactor()) * 0.016f));
 		FlounderSkybox.getFog().setFogGradient(2.80f - ((1.0f - getShadowFactor()) * 0.5f));
 		FlounderSkybox.setBlendFactor(starIntensity());
+		FlounderShadows.setShadowBoxOffset(10.0f);
+		FlounderShadows.setShadowBoxDistance(35.0f);
 	}
 
 	@Override

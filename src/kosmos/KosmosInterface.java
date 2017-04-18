@@ -17,7 +17,6 @@ import flounder.helpers.*;
 import flounder.inputs.*;
 import flounder.networking.*;
 import flounder.particles.*;
-import flounder.physics.bounding.*;
 import flounder.resources.*;
 import flounder.shadows.*;
 import flounder.skybox.*;
@@ -91,7 +90,6 @@ public class KosmosInterface extends Standard {
 			@Override
 			public void onEvent() {
 				OpenGlUtils.goWireframe(!OpenGlUtils.isInWireframe());
-				FlounderBounding.toggle(OpenGlUtils.isInWireframe());
 			}
 		});
 
