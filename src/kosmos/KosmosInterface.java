@@ -81,30 +81,17 @@ public class KosmosInterface extends Standard {
 		});
 
 		FlounderEvents.addEvent(new IEvent() {
-			KeyButton polygons = new KeyButton(GLFW_KEY_P);
+			KeyButton wireframe = new KeyButton(GLFW_KEY_P);
 
 			@Override
 			public boolean eventTriggered() {
-				return polygons.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
+				return wireframe.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
 			}
 
 			@Override
 			public void onEvent() {
 				OpenGlUtils.goWireframe(!OpenGlUtils.isInWireframe());
-			}
-		});
-
-		FlounderEvents.addEvent(new IEvent() {
-			KeyButton aabbs = new KeyButton(GLFW_KEY_O);
-
-			@Override
-			public boolean eventTriggered() {
-				return aabbs.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
-			}
-
-			@Override
-			public void onEvent() {
-				FlounderBounding.toggle(!FlounderBounding.renders());
+				FlounderBounding.toggle(OpenGlUtils.isInWireframe());
 			}
 		});
 

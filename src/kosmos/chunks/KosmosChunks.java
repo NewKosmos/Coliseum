@@ -18,13 +18,10 @@ import flounder.inputs.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
-import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.textures.*;
-import kosmos.entities.components.*;
 import kosmos.entities.instances.*;
-import kosmos.world.*;
 import org.lwjgl.glfw.*;
 
 import java.util.*;
@@ -79,11 +76,11 @@ public class KosmosChunks extends Module {
 					}
 				}
 			}
-		});
+		});*/
 
 		FlounderEvents.addEvent(new IEvent() {
 			private static final int RECURSION_COUNT = 256;
-			private static final float RAY_RANGE = 10.0f;
+			private static final float RAY_RANGE = 100.0f; // 10.0f;
 
 			private MouseButton button = new MouseButton(GLFW.GLFW_MOUSE_BUTTON_LEFT);
 
@@ -100,11 +97,29 @@ public class KosmosChunks extends Module {
 					Vector3f terrainPosition = binarySearch(cameraRay, 0, 0, RAY_RANGE);
 
 					if (terrainPosition.getY() >= 0.0f) {
+						Chunk inChunk = null;
+
+						for (Entity entity : FlounderEntities.getEntities().getAll()) {
+							if (entity != null && entity instanceof Chunk) {
+								Chunk chunk = (Chunk) entity;
+
+								if (chunk.getCollider().contains(terrainPosition)) {
+									inChunk = chunk;
+								}
+							}
+						}
+
+						Vector2f tilePosition = Chunk.convertWorldToTile(inChunk, terrainPosition);
+						tilePosition.x = Math.round(tilePosition.x);
+						tilePosition.y = Math.round(tilePosition.y);
+						Vector3f roundedPosition = Chunk.convertTileToWorld(inChunk, tilePosition.x, tilePosition.y);
+						roundedPosition.y = Chunk.getWorldHeight(roundedPosition.x, roundedPosition.z);
+
 						new InstanceTreeBirchLarge(FlounderEntities.getEntities(),
 								new Vector3f(
-										terrainPosition.x,
-										0.5f + terrainPosition.y * 0.5f,
-										terrainPosition.z
+										roundedPosition.x,
+										0.5f + roundedPosition.y * 0.5f,
+										roundedPosition.z
 								),
 								new Vector3f()
 						);
@@ -145,7 +160,7 @@ public class KosmosChunks extends Module {
 			}
 
 			private boolean isUnderGround(Vector3f testPoint) {
-				float height = Chunk.getWorldHeight(testPoint.getX(), testPoint.getZ(), 1.0f);
+				float height = Chunk.getWorldHeight(testPoint.getX(), testPoint.getZ());
 
 				if (height < 0.0f || testPoint.y < height) {
 					return true;
@@ -153,7 +168,7 @@ public class KosmosChunks extends Module {
 					return false;
 				}
 			}
-		});*/
+		});
 	}
 
 	@Override

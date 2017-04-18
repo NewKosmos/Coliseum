@@ -10,7 +10,6 @@
 package kosmos.entities.components;
 
 import flounder.camera.*;
-import flounder.devices.*;
 import flounder.entities.*;
 import flounder.framework.*;
 import flounder.guis.*;
@@ -19,10 +18,8 @@ import flounder.inputs.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.shaders.*;
-import flounder.sounds.*;
 import kosmos.camera.*;
 import kosmos.chunks.*;
-import kosmos.materials.*;
 import kosmos.water.*;
 import kosmos.world.*;
 
@@ -111,7 +108,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 		float waterLevel = (KosmosWater.getWater() != null) ? KosmosWater.getWater().getPosition().y : 0.0f;
 
 		// Finds the chunk height at the next player xz pos.
-		float chunkHeight = Chunk.getWorldHeight(getEntity().getPosition().x + dx, getEntity().getPosition().z + dz) * 0.5f;
+		float chunkHeight = Chunk.roundedHeight(KosmosChunks.getCurrent(), getEntity().getPosition()) * 0.5f;
 
 		// Does collision with the highest world object.
 		float worldHeight = Math.max(waterLevel - (float) Math.sqrt(2.0), chunkHeight) + KosmosPlayer.PLAYER_OFFSET_Y;

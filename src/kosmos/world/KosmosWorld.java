@@ -141,8 +141,8 @@ public class KosmosWorld extends Module {
 		Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.getLightPosition());
 		Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.getFog().getFogColour());
 		Colour.interpolate(FlounderSkybox.getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.getFog().getFogColour());
-		FlounderSkybox.getFog().setFogDensity(0.023f + ((1.0f - KosmosWorld.getShadowFactor()) * 0.016f));
-		FlounderSkybox.getFog().setFogGradient(2.80f - ((1.0f - KosmosWorld.getShadowFactor()) * 0.5f));
+		FlounderSkybox.getFog().setFogDensity(0.023f + ((1.0f - getShadowFactor()) * 0.016f));
+		FlounderSkybox.getFog().setFogGradient(2.80f - ((1.0f - getShadowFactor()) * 0.5f));
 		FlounderSkybox.setBlendFactor(starIntensity());
 	}
 
@@ -247,7 +247,7 @@ public class KosmosWorld extends Module {
 			addedHeight = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 500.0f : 0.0f;
 		}
 
-		return KosmosWorld.getEntitySun().getPosition().getY() + addedHeight;
+		return getEntitySun().getPosition().getY() + addedHeight;
 	}
 
 	public static float starIntensity() {

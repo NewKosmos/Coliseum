@@ -100,7 +100,7 @@ public class KosmosCamera extends Camera {
 		this.rotation = new Vector3f(0.0f, 20.0f, 0.0f);
 
 		this.viewFrustum = new Frustum();
-		this.viewRay = new Ray(false, new Vector2f());
+		this.viewRay = new Ray(true, new Vector2f());
 		this.viewMatrix = new Matrix4f();
 		this.projectionMatrix = new Matrix4f();
 

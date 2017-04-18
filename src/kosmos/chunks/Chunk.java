@@ -11,7 +11,6 @@ package kosmos.chunks;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.particles.*;
@@ -176,19 +175,19 @@ public class Chunk extends Entity {
 		return tiles;
 	}
 
-	private static Vector3f convertTileToChunk(double x, double z) {
+	public static Vector3f convertTileToChunk(double x, double z) {
 		double cz = (3.0 / 2.0) * HEXAGON_SIDE_LENGTH * z;
 		double cx = Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH * ((z / 2.0) + x);
 		return new Vector3f((float) cx, 0.0f, (float) cz);
 	}
 
-	private static Vector3f convertTileToWorld(Chunk chunk, double x, double z) {
+	public static Vector3f convertTileToWorld(Chunk chunk, double x, double z) {
 		double wz = (3.0 / 4.0) * HEXAGON_SIDE_LENGTH * z;
 		double wx = (Math.sqrt(3.0) / 2.0) * HEXAGON_SIDE_LENGTH * ((z / 2.0) + x);
 		return new Vector3f((float) wx + chunk.getPosition().x, 0.0f, (float) wz + chunk.getPosition().z);
 	}
 
-	private static Vector2f convertWorldToTile(Chunk chunk, Vector3f worldPosition) {
+	public static Vector2f convertWorldToTile(Chunk chunk, Vector3f worldPosition) {
 		double tz = (4.0 * (worldPosition.z - chunk.getPosition().z)) / (3.0 * HEXAGON_SIDE_LENGTH);
 		double tx = ((2.0 * (worldPosition.x - chunk.getPosition().x)) / (Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH)) - (tz / 2.0);
 		return new Vector2f((float) tx, (float) tz);
@@ -200,11 +199,6 @@ public class Chunk extends Entity {
 
 		worldPosition.y = getWorldHeight(worldPosition.x, worldPosition.z);
 		chunkPosition.y = worldPosition.y;
-
-	//	FlounderLogger.log("tile: Vector2f{" + x + ", " + z + "}");
-	//	FlounderLogger.log("world: " + convertTileToWorld(chunk, x, z));
-	//	FlounderLogger.log("cTile: " + convertWorldToTile(chunk, convertTileToWorld(chunk, x, z)));
-	//	FlounderLogger.log("====\n");
 
 		if (worldPosition.y >= 0.0f) {
 			tiles.add(chunkPosition);
@@ -232,6 +226,23 @@ public class Chunk extends Entity {
 
 		// Returns the final height,
 		return height;
+	}
+
+	/**
+	 * Gets the terrain height for a position in the world.
+	 * The world position is rounded into tile space and then back into world space, creating positions rounded the the centres of the tiles.
+	 *
+	 * @param chunk The chunk to get the position from.
+	 * @param worldPosition The world position to sample from.
+	 *
+	 * @return The found height at that world position.
+	 */
+	public static float roundedHeight(Chunk chunk, Vector3f worldPosition) {
+		Vector2f tilePosition = convertWorldToTile(chunk, worldPosition);
+		tilePosition.x = Math.round(tilePosition.x);
+		tilePosition.y = Math.round(tilePosition.y);
+		Vector3f roundedPosition = convertTileToWorld(chunk, tilePosition.x, tilePosition.y);
+		return getWorldHeight(roundedPosition.x, roundedPosition.z);
 	}
 
 	/**
