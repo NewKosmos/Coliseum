@@ -36,13 +36,14 @@ public class KosmosCamera extends Camera {
 	private static final float ROTATE_AGILITY = 20.0f;
 	private static final float PITCH_AGILITY = 20.0f;
 
-	// Defines the strength of motion from the mouse.
-	private static final float INFLUENCE_OF_JOYSTICK_DY = 0.045f;
-	private static final float INFLUENCE_OF_JOYSTICK_DX = INFLUENCE_OF_JOYSTICK_DY * 100.0f;
-	private static final float INFLUENCE_OF_JOYSTICK_ZOOM = 2.0f * INFLUENCE_OF_JOYSTICK_DY;
+	// Defines the strength of motion from the joysick.
+	private static final float INFLUENCE_OF_JOYSTICK_DY = 4.5f;
+	private static final float INFLUENCE_OF_JOYSTICK_DX = 4.5f;
+	private static final float INFLUENCE_OF_JOYSTICK_ZOOM = 10.0f;
 
-	private static final float INFLUENCE_OF_MOUSE_DY = 100.0f;
-	private static final float INFLUENCE_OF_MOUSE_DX = INFLUENCE_OF_MOUSE_DY * 100.0f;
+	// Defines the strength of motion from the mouse.
+	private static final float INFLUENCE_OF_MOUSE_DY = 10000.0f;
+	private static final float INFLUENCE_OF_MOUSE_DX = 10000.0f;
 	private static final float INFLUENCE_OF_MOUSE_WHEEL = 0.05f;
 
 	private static final float MAX_HORIZONTAL_CHANGE = 30.0f;
@@ -52,11 +53,10 @@ public class KosmosCamera extends Camera {
 	private static final float CAMERA_AIM_OFFSET_FPS = 1.5f;
 	private static final float CAMERA_AIM_OFFSET = 2.0f;
 
-	private static final float MAX_ANGLE_OF_ELEVATION_FPS = (float) Math.PI / 4.0f;
-	private static final float MIN_ANGLE_OF_ELEVATION_FPS = (float) -Math.PI / 4.0f;
-	private static final float MAX_ANGLE_OF_ELEVATION = (float) Math.PI / 4.0f;
+	private static final float MAX_ANGLE_OF_ELEVATION_FPS = 45.0f;
+	private static final float MIN_ANGLE_OF_ELEVATION_FPS = -45.0f;
+	private static final float MAX_ANGLE_OF_ELEVATION = 45.0f;
 	private static final float MIN_ANGLE_OF_ELEVATION = 0.0f;
-	private static final float PITCH_OFFSET = 0.0f;
 	private static final float MINIMUM_ZOOM = 0.5f;
 	private static final float MAXIMUM_ZOOM = 28.0f;
 	private static final float NORMAL_ZOOM = 8.0f;
@@ -104,7 +104,7 @@ public class KosmosCamera extends Camera {
 		this.viewMatrix = new Matrix4f();
 		this.projectionMatrix = new Matrix4f();
 
-		this.angleOfElevation = (float) Math.PI / 8.0f;
+		this.angleOfElevation = 25.0f;
 		this.angleAroundPlayer = 0.0f;
 
 		this.targetPosition = new Vector3f();
@@ -329,8 +329,8 @@ public class KosmosCamera extends Camera {
 
 	private void calculateDistances() {
 		if (!firstPerson) {
-			horizontalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.cos(angleOfElevation));
-			verticalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.sin(angleOfElevation));
+			horizontalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.cos(Math.toRadians(angleOfElevation)));
+			verticalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.sin(Math.toRadians(angleOfElevation)));
 		} else {
 			horizontalDistanceFromFocus = 0.0f;
 			verticalDistanceFromFocus = 0.0f;
@@ -340,12 +340,12 @@ public class KosmosCamera extends Camera {
 	private void calculatePosition() {
 		double theta = Math.toRadians(Maths.normalizeAngle(targetRotation.y + angleAroundPlayer));
 		position.x = targetPosition.x - (float) (horizontalDistanceFromFocus * Math.sin(theta));
+		position.y = targetPosition.y + verticalDistanceFromFocus + (firstPerson ? CAMERA_AIM_OFFSET_FPS : CAMERA_AIM_OFFSET);
 		position.z = targetPosition.z - (float) (horizontalDistanceFromFocus * Math.cos(theta));
-		position.y = targetPosition.y + (verticalDistanceFromFocus + (firstPerson ? CAMERA_AIM_OFFSET_FPS : CAMERA_AIM_OFFSET));
 
-		rotation.y = Maths.normalizeAngle(targetRotation.y + Maths.DEGREES_IN_HALF_CIRCLE + angleAroundPlayer);
+		rotation.x = Maths.normalizeAngle(angleOfElevation);
+		rotation.y = Maths.normalizeAngle(angleAroundPlayer + targetRotation.y + Maths.DEGREES_IN_HALF_CIRCLE);
 		rotation.z = 0.0f;
-		rotation.x = Maths.normalizeAngle((float) Math.toDegrees(angleOfElevation) - PITCH_OFFSET);
 	}
 
 	private void updateViewMatrix() {
