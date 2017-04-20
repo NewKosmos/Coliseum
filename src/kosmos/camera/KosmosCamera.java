@@ -338,13 +338,13 @@ public class KosmosCamera extends Camera {
 	}
 
 	private void calculatePosition() {
-		double theta = Math.toRadians(Maths.normalizeAngle(targetRotation.y + angleAroundPlayer));
+		double theta = Math.toRadians(targetRotation.y + angleAroundPlayer);
 		position.x = targetPosition.x - (float) (horizontalDistanceFromFocus * Math.sin(theta));
 		position.y = targetPosition.y + verticalDistanceFromFocus + (firstPerson ? CAMERA_AIM_OFFSET_FPS : CAMERA_AIM_OFFSET);
 		position.z = targetPosition.z - (float) (horizontalDistanceFromFocus * Math.cos(theta));
 
-		rotation.x = Maths.normalizeAngle(angleOfElevation);
-		rotation.y = Maths.normalizeAngle(angleAroundPlayer + targetRotation.y + Maths.DEGREES_IN_HALF_CIRCLE);
+		rotation.x = angleOfElevation;
+		rotation.y = angleAroundPlayer + targetRotation.y + Maths.DEGREES_IN_HALF_CIRCLE;
 		rotation.z = 0.0f;
 	}
 
