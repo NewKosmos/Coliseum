@@ -19,7 +19,7 @@ public class InstanceBottleMaple extends Entity {
 	public InstanceBottleMaple(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 		new ComponentModel(this, 1.0f, MODEL, TEXTURE, 1);
-		new ComponentSurface(this, 1.0f, 0.0f, false, false);
+		new ComponentSurface(this, 1.0f, 0.0f, false, false, true);
 		new ComponentCollision(this);
 		new ComponentCollider(this);
 	}

@@ -21,7 +21,7 @@ public class InstanceCactus1 extends Entity {
 		super(structure, position, rotation);
 		new ComponentModel(this, 1.0f, MODEL, TEXTURE, 1);
 		new ComponentSway(this, TEXTURE_SWAY);
-		new ComponentSurface(this, 1.0f, 0.0f, false, false);
+		new ComponentSurface(this, 1.0f, 0.0f, false, false, true);
 		new ComponentCollision(this);
 		new ComponentCollider(this);
 	}

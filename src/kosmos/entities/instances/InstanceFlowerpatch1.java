@@ -20,7 +20,7 @@ public class InstanceFlowerpatch1 extends Entity {
 	public InstanceFlowerpatch1(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 		new ComponentModel(this, 1.0f, MODEL, TEXTURE, 1);
-		new ComponentSurface(this, 1.0f, 0.0f, false, false);
+		new ComponentSurface(this, 1.0f, 0.0f, false, false, true);
 		new ComponentSway(this, TEXTURE_SWAY);
 		// new flounder.entities.components.ComponentCollision(this);
 	}

@@ -61,7 +61,7 @@ public class Chunk extends Entity {
 		this.sphere = new Sphere();
 
 		new ComponentModel(this, 1.0f, chunkMesh.getModel(), biome.getBiome().getTexture(), 0);
-		new ComponentSurface(this, 1.0f, 0.0f, false, false);
+		new ComponentSurface(this, 1.0f, 0.0f, false, false, true);
 		new ComponentChunk(this);
 
 		// generateWeather();

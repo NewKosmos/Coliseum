@@ -23,7 +23,7 @@ public class InstanceGemGreen extends Entity {
 		super(structure, position, rotation);
 		new ComponentModel(this, 1.0f, MODEL, TEXTURE, 1);
 		new ComponentGlow(this, TEXTURE_GLOW);
-		new ComponentSurface(this, 1.0f, 0.0f, false, false);
+		new ComponentSurface(this, 1.0f, 0.0f, false, false, true);
 		new ComponentLight(this, new Vector3f(0.0f, 2.5f, 0.0f), new Colour(0.0f, 1.0f, 0.0f), new Attenuation(1.0f, 0.02f, 2.0f));
 		new ComponentCollision(this);
 		new ComponentCollider(this);

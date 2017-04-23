@@ -18,7 +18,7 @@ public class InstanceChicken extends Entity {
 	public InstanceChicken(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 		new ComponentAnimation(this, 0.2f, COLLADA, TEXTURE, 1);
-		new ComponentSurface(this, 1.0f, 0.0f, false, false);
+		new ComponentSurface(this, 1.0f, 0.0f, false, false, true);
 	}
 }
 
