@@ -72,11 +72,11 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 			if (componentLight != null) {
 				switch (lightType) {
 					case SUN:
-						Colour.interpolate(KosmosWorld.SUN_COLOUR_SUNRISE, KosmosWorld.SUN_COLOUR_NIGHT, KosmosWorld.getSunriseFactor(), componentLight.getLight().getColour());
-						Colour.interpolate(componentLight.getLight().getColour(), KosmosWorld.SUN_COLOUR_DAY, KosmosWorld.getShadowFactor(), componentLight.getLight().getColour());
+						Colour.interpolate(KosmosWorld.SUN_COLOUR_SUNRISE, KosmosWorld.SUN_COLOUR_NIGHT, KosmosWorld.getSunriseFactor(), componentLight.getColour());
+						Colour.interpolate(componentLight.getColour(), KosmosWorld.SUN_COLOUR_DAY, KosmosWorld.getShadowFactor(), componentLight.getColour());
 						break;
 					case MOON:
-						Colour.interpolate(KosmosWorld.MOON_COLOUR_NIGHT, KosmosWorld.MOON_COLOUR_DAY, KosmosWorld.getShadowFactor(), componentLight.getLight().getColour());
+						Colour.interpolate(KosmosWorld.MOON_COLOUR_NIGHT, KosmosWorld.MOON_COLOUR_DAY, KosmosWorld.getShadowFactor(), componentLight.getColour());
 						break;
 					case NONE:
 						break;
