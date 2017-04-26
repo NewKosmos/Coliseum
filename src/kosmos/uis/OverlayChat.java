@@ -177,10 +177,12 @@ public class OverlayChat extends ScreenObject {
 		public void updateObject() {
 			// Add new chat messages.
 			if (!newMessages.isEmpty()) {
-				for (Pair<String, Colour> message : new ArrayList<>(newMessages)) {
+				for (Pair<String, Colour> message : new ArrayList<>(newMessages)) { // TODO: Optimise.
 					generateObject(message.getFirst(), message.getSecond());
-					newMessages.remove(message);
+					newMessages.remove(message); //
 				}
+
+				//newMessages.clear();
 			}
 
 			if (!chatMessages.isEmpty()) {

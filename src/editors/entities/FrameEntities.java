@@ -275,9 +275,13 @@ public class FrameEntities extends Standard {
 		componentsPane.addTab(tabName, null, panel, "");
 	}
 
-	public static void removeSideTab(String tabName) {
+	public static void removeSideTab(String tabName, boolean force) {
 		FlounderLogger.log("Removing side panel: " + tabName);
-		addedTabs.remove(tabName);
+
+		if (force) {
+			addedTabs.remove(tabName);
+		}
+
 		List<Integer> ids = new ArrayList<>();
 
 		for (int i = 0; i < componentsPane.getTabCount(); i++) {
@@ -291,7 +295,8 @@ public class FrameEntities extends Standard {
 	}
 
 	public static void clearSideTab() {
-		new ArrayList<>(addedTabs).forEach(FrameEntities::removeSideTab);
+		addedTabs.forEach((tabName) -> FrameEntities.removeSideTab(tabName, false));
+		addedTabs.clear();
 		componentsPane.removeAll();
 		// TODO: Fix clearing not working.
 	}
@@ -324,7 +329,7 @@ public class FrameEntities extends Standard {
 						JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 					editorComponents.remove(editorComponent);
-					removeSideTab(IComponentEditor.getTabName(editorComponent));
+					removeSideTab(IComponentEditor.getTabName(editorComponent), true);
 					((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity.removeComponent((IComponentEntity) editorComponent);
 				}
 			}
@@ -341,7 +346,7 @@ public class FrameEntities extends Standard {
 		}
 
 		for (String s : IComponentEditor.REMOVE_SIDE_TAB) {
-			removeSideTab(s);
+			removeSideTab(s, true);
 		}
 
 		IComponentEditor.ADD_SIDE_TAB.clear();

@@ -103,7 +103,9 @@ public class KosmosRenderer extends RendererMaster {
 		rendererFBO.unbindFrameBuffer();
 
 		// Post rendering.
-		renderPost(FlounderGuis.getGuiMaster().isGamePaused(), FlounderGuis.getGuiMaster().getBlurFactor());
+		if (FlounderGuis.getGuiMaster() != null) {
+			renderPost(FlounderGuis.getGuiMaster().isGamePaused(), FlounderGuis.getGuiMaster().getBlurFactor());
+		}
 	}
 
 	private void renderWater() {

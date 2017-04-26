@@ -57,8 +57,7 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 
 	@Override
 	public void update() {
-		getEntity().getPosition().set(FlounderShadows.getLightPosition());
-		Vector3f.multiply(getEntity().getPosition(), startPosition, getEntity().getPosition());
+		Vector3f.multiply(FlounderShadows.getLightPosition(), startPosition, getEntity().getPosition());
 
 		if (FlounderCamera.getCamera() != null) {
 			Vector3f.add(getEntity().getPosition(), FlounderCamera.getCamera().getPosition(), getEntity().getPosition());

@@ -140,7 +140,7 @@ public class KosmosWorld extends Module {
 		}
 
 		dayFactor = dayDriver.update(Framework.getDelta() * scaledSpeed) / 100.0f;
-		Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.getLightPosition());
+		Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.getLightPosition()).normalize();
 		Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.getFog().getFogColour());
 		Colour.interpolate(FlounderSkybox.getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.getFog().getFogColour());
 		FlounderSkybox.getFog().setFogDensity(0.023f + ((1.0f - getShadowFactor()) * 0.016f));
