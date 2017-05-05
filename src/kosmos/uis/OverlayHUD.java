@@ -41,18 +41,18 @@ public class OverlayHUD extends ScreenObject {
 		crosshairSelected = KosmosConfigs.HUD_COSSHAIR_TYPE.setReference(OverlayHUD::getCrosshairSelected).getInteger();
 		this.crossHair = new GuiObject(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.04f, 0.04f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "crosshair.png")).setNumberOfRows(4).create(), crosshairSelected);
 		this.crossHair.setInScreenCoords(true);
-		this.crossHair.setColourOffset(new Colour(FlounderGuis.getGuiMaster().getPrimaryColour()));
+		this.crossHair.setColourOffset(new Colour(FlounderGuis.get().getGuiMaster().getPrimaryColour()));
 	}
 
 	@Override
 	public void updateObject() {
-		this.crossHair.setColourOffset(FlounderGuis.getGuiMaster().getPrimaryColour());
+		this.crossHair.setColourOffset(FlounderGuis.get().getGuiMaster().getPrimaryColour());
 		this.crossHair.setSelectedRow(crosshairSelected);
 		this.crossHair.setVisible(KosmosCamera.isFirstPerson());
 
-		this.statusHealth.persentage = KosmosWorld.getDayFactor();
-		this.statusThirst.persentage = KosmosWorld.getShadowFactor();
-		this.statusHunger.persentage = KosmosWorld.getSunriseFactor();
+		this.statusHealth.persentage = KosmosWorld.get().getDayFactor();
+		this.statusThirst.persentage = KosmosWorld.get().getShadowFactor();
+		this.statusHunger.persentage = KosmosWorld.get().getSunriseFactor();
 	}
 
 	public static int getCrosshairSelected() {

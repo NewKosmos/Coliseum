@@ -64,14 +64,14 @@ public class ScreenPause extends ScreenObject {
 			public void eventOccurred() {
 				slider.sliderStartMenu(true);
 
-				if (FlounderNetwork.getSocketClient() != null) {
-					new PacketDisconnect(FlounderNetwork.getUsername()).writeData(FlounderNetwork.getSocketClient());
-					FlounderNetwork.closeClient();
+				if (FlounderNetwork.get().getSocketClient() != null) {
+					new PacketDisconnect(FlounderNetwork.get().getUsername()).writeData(FlounderNetwork.get().getSocketClient());
+					FlounderNetwork.get().closeClient();
 				}
 
 				KosmosConfigs.saveAllConfigs();
-				KosmosWorld.removeAllPlayers();
-				KosmosWorld.deletePlayer();
+				KosmosWorld.get().removeAllPlayers();
+				KosmosWorld.get().deletePlayer();
 			}
 		});
 	}

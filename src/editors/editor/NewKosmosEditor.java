@@ -10,13 +10,12 @@
 package editors.editor;
 
 import editors.entities.*;
-import flounder.devices.*;
 import flounder.framework.*;
 import flounder.framework.updater.*;
+import flounder.lwjgl3.*;
 import flounder.resources.*;
 import kosmos.*;
 import kosmos.camera.*;
-import org.lwjgl.glfw.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -92,8 +91,9 @@ public class NewKosmosEditor extends TimerTask {
 			startEntrance = false;
 
 			if (optionEntities.isSelected()) {
-				Framework entrance = new Framework("Kosmos Editors", new UpdaterDefault(GLFW::glfwGetTime), -1, new ExtensionEntities(), new FrameEntities(), new KosmosRenderer(), new KosmosCamera(), new EditorPlayer(), new EditorGuis());
-				FlounderDisplay.setup(1080, 720, "Kosmos Editor Entities", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")}, false, true, 0, false, true);
+				Framework entrance = new Framework("Kosmos Editors", new UpdaterDefault(null), -1,
+						new Extension[]{new ExtensionEntities(), new FrameEntities(), new KosmosRenderer(), new KosmosCamera(), new EditorPlayer(), new EditorGuis()},
+						new Module[]{new PlatformLwjgl(1080, 720, "Kosmos Editor Entities", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")}, false, true, 0, false, true, false, 2.0f)});
 				frame.setVisible(false);
 				entrance.run();
 			} else {

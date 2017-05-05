@@ -24,7 +24,7 @@ public class ScreenSettingControls extends ScreenObject {
 
 		// Slider Crosshair HUD.
 		GuiSliderText sliderCrosshairHUD = new GuiSliderText(this, new Vector2f(0.5f, 0.20f), "Crosshair HUD: ", 1.0f, 9.0f, OverlayHUD.getCrosshairSelected(), GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Integer>(OverlayHUD::getCrosshairSelected) {
+		FlounderEvents.get().addEvent(new EventChange<Integer>(OverlayHUD::getCrosshairSelected) {
 			@Override
 			public void onEvent(Integer newValue) {
 				sliderCrosshairHUD.setText("Crosshair HUD: " + newValue);
@@ -39,7 +39,7 @@ public class ScreenSettingControls extends ScreenObject {
 
 		// Slider Camera Sensitivity.
 		GuiSliderText sliderSensitivity = new GuiSliderText(this, new Vector2f(0.5f, 0.27f), "Sensitivity: ", 0.1f, 7.0f, KosmosCamera.getSensitivity(), GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Float>(KosmosCamera::getSensitivity) {
+		FlounderEvents.get().addEvent(new EventChange<Float>(KosmosCamera::getSensitivity) {
 			@Override
 			public void onEvent(Float newValue) {
 				sliderSensitivity.setText("Sensitivity: " + Maths.roundToPlace(newValue, 2));
@@ -56,7 +56,7 @@ public class ScreenSettingControls extends ScreenObject {
 
 		// Toggle Mouse Lock.
 		GuiButtonText toggleMouseLock = new GuiButtonText(this, new Vector2f(0.5f, 0.34f), "Mouse Locked: ", GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Boolean>(KosmosCamera::isMouseLocked) {
+		FlounderEvents.get().addEvent(new EventChange<Boolean>(KosmosCamera::isMouseLocked) {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleMouseLock.setText("Mouse Locked: " + newValue);
@@ -71,7 +71,7 @@ public class ScreenSettingControls extends ScreenObject {
 
 		// Toggle First Person.
 		GuiButtonText toggleFirstPerson = new GuiButtonText(this, new Vector2f(0.5f, 0.41f), "First Person: ", GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Boolean>(KosmosCamera::isFirstPerson) {
+		FlounderEvents.get().addEvent(new EventChange<Boolean>(KosmosCamera::isFirstPerson) {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleFirstPerson.setText("First Person: " + newValue);

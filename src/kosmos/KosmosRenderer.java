@@ -30,8 +30,7 @@ import kosmos.post.*;
 import kosmos.water.*;
 import kosmos.world.*;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL30.*;
+import static flounder.platform.Constants.*;
 
 public class KosmosRenderer extends RendererMaster {
 	private static final Vector4f POSITIVE_INFINITY = new Vector4f(0.0f, 1.0f, 0.0f, Float.POSITIVE_INFINITY);
@@ -103,8 +102,8 @@ public class KosmosRenderer extends RendererMaster {
 		rendererFBO.unbindFrameBuffer();
 
 		// Post rendering.
-		if (FlounderGuis.getGuiMaster() != null) {
-			renderPost(FlounderGuis.getGuiMaster().isGamePaused(), FlounderGuis.getGuiMaster().getBlurFactor());
+		if (FlounderGuis.get().getGuiMaster() != null) {
+			renderPost(FlounderGuis.get().getGuiMaster().isGamePaused(), FlounderGuis.get().getGuiMaster().getBlurFactor());
 		}
 	}
 
@@ -113,27 +112,27 @@ public class KosmosRenderer extends RendererMaster {
 		entitiesRenderer.setRenderPlayer(true);
 
 		// Water Reflection & Refraction
-		if (KosmosWater.reflectionsEnabled() && KosmosWater.getColourIntensity() != 1.0f && KosmosWater.getWater() != null) {
-			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
+		if (KosmosWater.get().reflectionsEnabled() && KosmosWater.get().getColourIntensity() != 1.0f && KosmosWater.get().getWater() != null) {
+			FlounderCamera.get().getCamera().reflect(KosmosWater.get().getWater().getPosition().y);
 
-			if (KosmosWater.reflectionShadows()) {
+			if (KosmosWater.get().reflectionShadows()) {
 				renderShadows();
 			}
 
-			glEnable(GL_CLIP_DISTANCE0);
+			FlounderOpenGL.get().enable(GL_CLIP_DISTANCE0);
 			{
 				waterRenderer.getReflectionFBO().bindFrameBuffer();
-				renderScene(new Vector4f(0.0f, 1.0f, 0.0f, -KosmosWater.getWater().getPosition().y), true);
+				renderScene(new Vector4f(0.0f, 1.0f, 0.0f, -KosmosWater.get().getWater().getPosition().y), true);
 				waterRenderer.getReflectionFBO().unbindFrameBuffer();
 			}
-			glDisable(GL_CLIP_DISTANCE0);
+			FlounderOpenGL.get().disable(GL_CLIP_DISTANCE0);
 
 			waterRenderer.getPipelineMRT().applyFilter(
 					waterRenderer.getReflectionFBO().getColourTexture(0), // Colours
 					waterRenderer.getReflectionFBO().getColourTexture(1), // Normals
 					waterRenderer.getReflectionFBO().getColourTexture(2), // Extras
 					waterRenderer.getReflectionFBO().getDepthTexture(), // Depth
-					((KosmosRenderer) FlounderRenderer.getRendererMaster()).getShadowRenderer().getShadowMap() // Shadow Map
+					((KosmosRenderer) FlounderRenderer.get().getRendererMaster()).getShadowRenderer().getShadowMap() // Shadow Map
 			);
 
 			//	if (KosmosPost.isBloomEnabled()) {
@@ -141,7 +140,7 @@ public class KosmosRenderer extends RendererMaster {
 			//		pipelineBloom.renderPipeline(waterRenderer.getPipelineMRT().fbo.getColourTexture(0));
 			//	}
 
-			FlounderCamera.getCamera().reflect(KosmosWater.getWater().getPosition().y);
+			FlounderCamera.get().getCamera().reflect(KosmosWater.get().getWater().getPosition().y);
 		}
 	}
 
@@ -150,7 +149,7 @@ public class KosmosRenderer extends RendererMaster {
 		entitiesRenderer.setRenderPlayer(true);
 
 		// Renders the shadows.
-		shadowRenderer.render(POSITIVE_INFINITY, FlounderCamera.getCamera());
+		shadowRenderer.render(POSITIVE_INFINITY, FlounderCamera.get().getCamera());
 	}
 
 	private void renderScene(Vector4f clipPlane, boolean waterPass) {
@@ -158,8 +157,8 @@ public class KosmosRenderer extends RendererMaster {
 		entitiesRenderer.setRenderPlayer(!KosmosCamera.isFirstPerson());
 
 		// Clears and renders.
-		Camera camera = FlounderCamera.getCamera();
-		OpenGlUtils.prepareNewRenderParse(0.0f, 0.0f, 0.0f);
+		Camera camera = FlounderCamera.get().getCamera();
+		FlounderOpenGL.get().prepareNewRenderParse(0.0f, 0.0f, 0.0f);
 
 		skyboxRenderer.render(clipPlane, camera);
 		entitiesRenderer.render(clipPlane, camera);
@@ -173,7 +172,7 @@ public class KosmosRenderer extends RendererMaster {
 	}
 
 	private void renderPost(boolean isPaused, float blurFactor) {
-		pipelineMRT.setShadowFactor(KosmosWorld.getShadowFactor());
+		pipelineMRT.setShadowFactor(KosmosWorld.get().getShadowFactor());
 		pipelineMRT.renderPipeline(
 				rendererFBO.getColourTexture(0), // Colours
 				rendererFBO.getColourTexture(1), // Normals
@@ -184,29 +183,29 @@ public class KosmosRenderer extends RendererMaster {
 		FBO output = pipelineMRT.getOutput();
 
 		// Render post effects if enabled.
-		if (KosmosPost.isEffectsEnabled()) {
+		if (KosmosPost.get().isEffectsEnabled()) {
 			// Render Bloom Filter.
-			if (KosmosPost.isBloomEnabled()) {
+			if (KosmosPost.get().isBloomEnabled()) {
 				pipelineBloom.renderPipeline(output.getColourTexture(0));
 				output = pipelineBloom.getOutput();
 			}
 
 			// Render Motion Blur Filter.
-			if (KosmosPost.isMotionBlurEnabled()) {
+			if (KosmosPost.get().isMotionBlurEnabled()) {
 				filterBlurMotion.applyFilter(output.getColourTexture(0), rendererFBO.getDepthTexture());
 				output = filterBlurMotion.fbo;
 			}
 
 			// Render Tilt Shift Filter.
-			if (KosmosPost.isTiltShiftEnabled()) {
+			if (KosmosPost.get().isTiltShiftEnabled()) {
 				filterTiltShift.applyFilter(output.getColourTexture(0));
 				output = filterTiltShift.fbo;
 			}
 
 			// Render Lens Flare Filter.
-			if (KosmosPost.isLensFlareEnabled() && KosmosWorld.getEntitySun() != null) {
-				filterLensFlare.setSunPosition(KosmosWorld.getEntitySun().getPosition());
-				filterLensFlare.setWorldHeight(KosmosWorld.getSunHeight());
+			if (KosmosPost.get().isLensFlareEnabled() && KosmosWorld.get().getEntitySun() != null) {
+				filterLensFlare.setSunPosition(KosmosWorld.get().getEntitySun().getPosition());
+				filterLensFlare.setWorldHeight(KosmosWorld.get().getSunHeight());
 				filterLensFlare.applyFilter(output.getColourTexture(0));
 				output = filterLensFlare.fbo;
 			}
@@ -222,7 +221,7 @@ public class KosmosRenderer extends RendererMaster {
 			renderIndependents(output);
 
 			// Render CRT Filter.
-			if (KosmosPost.isCrtEnabled()) {
+			if (KosmosPost.get().isCrtEnabled()) {
 				filterPixel.applyFilter(output.getColourTexture(0));
 				output = filterPixel.fbo;
 				filterCRT.applyFilter(output.getColourTexture(0));
@@ -234,7 +233,7 @@ public class KosmosRenderer extends RendererMaster {
 		}
 
 		// Applies grain to the final image.
-		if (KosmosPost.isGrainEnabled()) {
+		if (KosmosPost.get().isGrainEnabled()) {
 			filterGain.applyFilter(output.getColourTexture(0));
 			output = filterGain.fbo;
 		}

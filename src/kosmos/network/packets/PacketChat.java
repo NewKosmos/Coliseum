@@ -44,13 +44,13 @@ public class PacketChat extends Packet {
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
 		String message = username + " has said: " + chatMessage;
-		FlounderLogger.log(message);
+		FlounderLogger.get().log(message);
 		OverlayChat.addText(message, new Colour(1.0f, 1.0f, 1.0f));
 	}
 
 	@Override
 	public void serverHandlePacket(Server server, InetAddress address, int port) {
-		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "] " + username + " has said: " + chatMessage);
+		FlounderLogger.get().log("[" + address.getHostAddress() + ":" + port + "] " + username + " has said: " + chatMessage);
 		this.writeData(server);
 	}
 

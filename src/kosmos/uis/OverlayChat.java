@@ -26,7 +26,7 @@ import kosmos.network.packets.*;
 
 import java.util.*;
 
-import static org.lwjgl.glfw.GLFW.*;
+import static flounder.platform.Constants.*;
 
 // TODO: Add blinking addition point + arrow controls, fix shift items.
 
@@ -71,20 +71,20 @@ public class OverlayChat extends ScreenObject {
 			return;
 		}
 
-		textureView.getDimensions().set(2.0f * FlounderDisplay.getAspectRatio(), textureView.getDimensions().y);
-		textureInput.getDimensions().set(2.0f * FlounderDisplay.getAspectRatio(), textureInput.getDimensions().y);
+		textureView.getDimensions().set(2.0f * FlounderDisplay.get().getAspectRatio(), textureView.getDimensions().y);
+		textureInput.getDimensions().set(2.0f * FlounderDisplay.get().getAspectRatio(), textureInput.getDimensions().y);
 
-		int key = FlounderKeyboard.getKeyboardChar();
+		int key = FlounderKeyboard.get().getKeyboardChar();
 
 		// TODO: Fix inputs that are not GLFW defined.
-		if (key != 0 && FlounderKeyboard.getKey(java.lang.Character.toUpperCase(key))) {
+		if (key != 0 && FlounderKeyboard.get().getKey(java.lang.Character.toUpperCase(key))) {
 			inputDelay.update(true);
 
 			if (lastKey != key || inputDelay.canInput()) {
 				currentInput.setText(currentInput.getTextString() + ((char) key));
 				lastKey = key;
 			}
-		} else if (FlounderKeyboard.getKey(GLFW_KEY_BACKSPACE)) {
+		} else if (FlounderKeyboard.get().getKey(GLFW_KEY_BACKSPACE)) {
 			inputDelay.update(true);
 
 			if (lastKey != 8 || inputDelay.canInput()) {
@@ -95,16 +95,16 @@ public class OverlayChat extends ScreenObject {
 					lastKey = 8;
 				}
 			}
-		} else if (FlounderKeyboard.getKey(GLFW_KEY_ENTER) && lastKey != 13) {
+		} else if (FlounderKeyboard.get().getKey(GLFW_KEY_ENTER) && lastKey != 13) {
 			inputDelay.update(true);
 			String s = currentInput.getTextString().replace(START_STRING, "").trim();
 
 			if (!s.isEmpty()) {
-				FlounderLogger.log("[Chat]: " + s);
+				FlounderLogger.get().log("[Chat]: " + s);
 				addText(s, new Colour(1.0f, 1.0f, 1.0f));
 
-				if (FlounderNetwork.getSocketClient() != null && s.charAt(0) != '/') {
-					new PacketChat(FlounderNetwork.getUsername(), s).writeData(FlounderNetwork.getSocketClient());
+				if (FlounderNetwork.get().getSocketClient() != null && s.charAt(0) != '/') {
+					new PacketChat(FlounderNetwork.get().getUsername(), s).writeData(FlounderNetwork.get().getSocketClient());
 				}
 
 				currentInput.setText(START_STRING);
@@ -205,7 +205,7 @@ public class OverlayChat extends ScreenObject {
 			text.setColour(colour);
 			chatMessages.add(text);
 
-			if (((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayChat().getAlpha() < 0.1f) {
+			if (((KosmosGuis) FlounderGuis.get().getGuiMaster()).getOverlayChat().getAlpha() < 0.1f) {
 				text.setAlphaDriver(new SlideDriver(1.0f, 0.0f, 6.0f));
 			} else {
 				text.setParent(overlayChat);

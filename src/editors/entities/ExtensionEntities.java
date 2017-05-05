@@ -45,8 +45,8 @@ public class ExtensionEntities extends IEditorType {
 	public void init() {
 		// Sets the engine up for the editor.
 		// FlounderProfiler.toggle(true);
-		FlounderMouse.setCursorHidden(false);
-		OpenGlUtils.goWireframe(false);
+		FlounderMouse.get().setCursorHidden(false);
+		FlounderOpenGL.get().goWireframe(false);
 
 		// Sets the world to constant fog and a sun.
 		//	EbonWorld.addFog(new Fog(new Colour(1.0f, 1.0f, 1.0f), 0.003f, 2.0f, 0.0f, 50.0f));
@@ -64,7 +64,7 @@ public class ExtensionEntities extends IEditorType {
 			focusEntity.forceRemove();
 		}
 
-		focusEntity = new Entity(FlounderEntities.getEntities(), new Vector3f(), new Vector3f());
+		focusEntity = new Entity(FlounderEntities.get().getEntities(), new Vector3f(), new Vector3f());
 		/*new ComponentModel(
 				focusEntity, 1.0f,
 				ModelFactory.newBuilder().setFile(new MyFile(FlounderEntities.ENTITIES_FOLDER, "cactus1", "model.obj")).create(),
@@ -81,7 +81,7 @@ public class ExtensionEntities extends IEditorType {
 	@Override
 	public void update() {
 		// Updates wireframe modes.
-		OpenGlUtils.goWireframe(polygonMode);
+		FlounderOpenGL.get().goWireframe(polygonMode);
 
 		// Used to load a entity from a .entity file.
 		if (loadFromEntity != null) {

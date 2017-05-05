@@ -29,7 +29,7 @@ import kosmos.post.*;
 import kosmos.water.*;
 import kosmos.world.*;
 
-import static org.lwjgl.glfw.GLFW.*;
+import static flounder.platform.Constants.*;
 
 public class KosmosInterface extends Standard {
 	private Playlist gamePlaylist;
@@ -40,18 +40,18 @@ public class KosmosInterface extends Standard {
 
 	@Override
 	public void init() {
-		FlounderSound.getMusicPlayer().setVolume(KosmosConfigs.MUSIC_VOLUME.setReference(() -> FlounderSound.getMusicPlayer().getVolume()).getFloat());
-		FlounderSound.getSourcePool().setSystemVolume(KosmosConfigs.SOUND_VOLUME.setReference(() -> FlounderSound.getSourcePool().getSystemVolume()).getFloat());
+		FlounderSound.get().getMusicPlayer().setVolume(KosmosConfigs.MUSIC_VOLUME.setReference(() -> FlounderSound.get().getMusicPlayer().getVolume()).getFloat());
+		FlounderSound.get().getSourcePool().setSystemVolume(KosmosConfigs.SOUND_VOLUME.setReference(() -> FlounderSound.get().getSourcePool().getSystemVolume()).getFloat());
 
 		gamePlaylist = new Playlist();
 		gamePlaylist.addMusic(Sound.loadSoundInBackground(new MyFile(MyFile.RES_FOLDER, "music", "09-hitori-bocchi-1b.wav"), 0.80f, 1.0f));
-		FlounderSound.getMusicPlayer().playMusicPlaylist(gamePlaylist, true, 4.0f, 10.0f);
+		FlounderSound.get().getMusicPlayer().playMusicPlaylist(gamePlaylist, true, 4.0f, 10.0f);
 
-		if (KosmosConfigs.MUSIC_ENABLED.setReference(() -> !FlounderSound.getMusicPlayer().isPaused()).getBoolean()) {
-			FlounderSound.getMusicPlayer().unpauseTrack();
+		if (KosmosConfigs.MUSIC_ENABLED.setReference(() -> !FlounderSound.get().getMusicPlayer().isPaused()).getBoolean()) {
+			FlounderSound.get().getMusicPlayer().unpauseTrack();
 		}
 
-		FlounderEvents.addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new IEvent() {
 			KeyButton screenshot = new KeyButton(GLFW_KEY_F2);
 
 			@Override
@@ -61,11 +61,11 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public void onEvent() {
-				FlounderDisplay.screenshot();
+				FlounderDisplay.get().screenshot();
 			}
 		});
 
-		FlounderEvents.addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new IEvent() {
 			KeyButton fullscreen = new KeyButton(GLFW_KEY_F11);
 
 			@Override
@@ -75,30 +75,30 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public void onEvent() {
-				FlounderDisplay.setFullscreen(!FlounderDisplay.isFullscreen());
+				FlounderDisplay.get().setFullscreen(!FlounderDisplay.get().isFullscreen());
 			}
 		});
 
-		FlounderEvents.addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new IEvent() {
 			KeyButton wireframe = new KeyButton(GLFW_KEY_P);
 
 			@Override
 			public boolean eventTriggered() {
-				return wireframe.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
+				return wireframe.wasDown() && !FlounderGuis.get().getGuiMaster().isGamePaused();
 			}
 
 			@Override
 			public void onEvent() {
-				OpenGlUtils.goWireframe(!OpenGlUtils.isInWireframe());
+				FlounderOpenGL.get().goWireframe(!FlounderOpenGL.get().isInWireframe());
 			}
 		});
 
-		FlounderEvents.addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new IEvent() {
 			KeyButton closeWindow = new KeyButton(GLFW_KEY_DELETE);
 
 			@Override
 			public boolean eventTriggered() {
-				return closeWindow.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
+				return closeWindow.wasDown() && !FlounderGuis.get().getGuiMaster().isGamePaused();
 			}
 
 			@Override
@@ -119,9 +119,9 @@ public class KosmosInterface extends Standard {
 
 	@Override
 	public void dispose() {
-		if (FlounderNetwork.getSocketClient() != null) {
-			new PacketDisconnect(FlounderNetwork.getUsername()).writeData(FlounderNetwork.getSocketClient());
-			FlounderNetwork.closeClient();
+		if (FlounderNetwork.get().getSocketClient() != null) {
+			new PacketDisconnect(FlounderNetwork.get().getUsername()).writeData(FlounderNetwork.get().getSocketClient());
+			FlounderNetwork.get().closeClient();
 		}
 
 		KosmosConfigs.saveAllConfigs();

@@ -81,11 +81,11 @@ public class Chunk extends Entity {
 	private void generateClouds() {
 		for (int x = -1; x <= 1; x++) {
 			for (int y = -1; y <= 1; y++) {
-				float offsetX = KosmosWorld.getNoise().noise2(x / 4.0f, y / 4.0f) * 20.0f;
-				float offsetZ = KosmosWorld.getNoise().noise2(x / 9.0f, y / 9.0f) * 20.0f;
-				float height = Math.abs(KosmosWorld.getNoise().noise2(x / 2.0f, y / 2.0f) * 2.0f) + 2.0f;
-				float rotationY = KosmosWorld.getNoise().noise1((x - y) / 60.0f) * 3600.0f;
-				float rotationZ = KosmosWorld.getNoise().noise1((x - y) / 20.0f) * 3600.0f;
+				float offsetX = KosmosWorld.get().getNoise().noise2(x / 4.0f, y / 4.0f) * 20.0f;
+				float offsetZ = KosmosWorld.get().getNoise().noise2(x / 9.0f, y / 9.0f) * 20.0f;
+				float height = Math.abs(KosmosWorld.get().getNoise().noise2(x / 2.0f, y / 2.0f) * 2.0f) + 2.0f;
+				float rotationY = KosmosWorld.get().getNoise().noise1((x - y) / 60.0f) * 3600.0f;
+				float rotationZ = KosmosWorld.get().getNoise().noise1((x - y) / 20.0f) * 3600.0f;
 
 				/*Entity entity = new InstanceCloud(FlounderEntities.getEntities(), new Vector3f(
 						getPosition().x + (x * 11.0f) + offsetX,
@@ -103,7 +103,7 @@ public class Chunk extends Entity {
 	 * Generates the 6 chunks around this one if they do not exist.
 	 */
 	protected void createChunksAround() {
-		childrenChunks.removeIf((Chunk child) -> child == null || !FlounderEntities.getEntities().contains(child));
+		childrenChunks.removeIf((Chunk child) -> child == null || !FlounderEntities.get().getEntities().contains(child));
 
 		if (childrenChunks.size() == 6) {
 			if (childrenChunks.size() == 6) {
@@ -118,7 +118,7 @@ public class Chunk extends Entity {
 			Vector3f p = new Vector3f(x, 0.0f, z);
 			Chunk duplicate = null;
 
-			for (Entity entity : FlounderEntities.getEntities().getAll()) {
+			for (Entity entity : FlounderEntities.get().getEntities().getAll()) {
 				if (entity != null && entity instanceof Chunk) {
 					Chunk chunk = (Chunk) entity;
 
@@ -129,7 +129,7 @@ public class Chunk extends Entity {
 			}
 
 			if (duplicate == null) {
-				Chunk chunk = new Chunk(FlounderEntities.getEntities(), p);
+				Chunk chunk = new Chunk(FlounderEntities.get().getEntities(), p);
 				childrenChunks.add(chunk);
 				//	FlounderEntities.getEntities().add(chunk);
 			} else {
@@ -217,7 +217,7 @@ public class Chunk extends Entity {
 	 */
 	public static float getWorldHeight(float positionX, float positionZ) {
 		// Calculates the final height for the world position using perlin.
-		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.getNoise().noise2(positionX / 30.0f, positionZ / 30.0f) * 12.0f);
+		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.get().getNoise().noise2(positionX / 30.0f, positionZ / 30.0f) * 12.0f);
 
 		// Ignore height that would be water/nothing.
 		if (height < 0.0f) {
@@ -255,7 +255,7 @@ public class Chunk extends Entity {
 	 */
 	public static IBiome.Biomes getWorldBiome(float positionX, float positionZ) {
 		// Calculates the biome id based off of the world position using perlin.
-		float biomeID = Math.abs(KosmosWorld.getNoise().noise1((positionX + positionZ) / 256.0f)) * 2.56f * (IBiome.Biomes.values().length + 1);
+		float biomeID = Math.abs(KosmosWorld.get().getNoise().noise1((positionX + positionZ) / 256.0f)) * 2.56f * (IBiome.Biomes.values().length + 1);
 
 		// Limits the search for biomes in the size provided.
 		biomeID = Maths.clamp((int) biomeID, 0.0f, IBiome.Biomes.values().length - 1);

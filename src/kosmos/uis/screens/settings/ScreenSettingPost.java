@@ -23,7 +23,7 @@ public class ScreenSettingPost extends ScreenObject {
 
 		// Toggle Effects.
 		GuiButtonText toggleEffects = new GuiButtonText(this, new Vector2f(0.5f, 0.20f), "Post Enabled: ", GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Boolean>(KosmosPost::isEffectsEnabled) {
+		FlounderEvents.get().addEvent(new EventChange<Boolean>(() -> KosmosPost.get().isEffectsEnabled()) {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleEffects.setText("Post Enabled: " + newValue);
@@ -32,13 +32,13 @@ public class ScreenSettingPost extends ScreenObject {
 		toggleEffects.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				KosmosPost.setEffectsEnabled(!KosmosPost.isEffectsEnabled());
+				KosmosPost.get().setEffectsEnabled(!KosmosPost.get().isEffectsEnabled());
 			}
 		});
 
 		// Toggle Bloom.
 		GuiButtonText toggleBloom = new GuiButtonText(this, new Vector2f(0.5f, 0.27f), "Bloom Enabled: ", GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Boolean>(KosmosPost::isBloomEnabled) {
+		FlounderEvents.get().addEvent(new EventChange<Boolean>(() -> KosmosPost.get().isBloomEnabled()) {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleBloom.setText("Bloom Enabled: " + newValue);
@@ -47,13 +47,13 @@ public class ScreenSettingPost extends ScreenObject {
 		toggleBloom.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				KosmosPost.setBloomEnabled(!KosmosPost.isBloomEnabled());
+				KosmosPost.get().setBloomEnabled(!KosmosPost.get().isBloomEnabled());
 			}
 		});
 
 		// Toggle Motion Blur.
 		GuiButtonText toggleMotionBlur = new GuiButtonText(this, new Vector2f(0.5f, 0.34f), "Motion Blur Enabled: ", GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Boolean>(KosmosPost::isMotionBlurEnabled) {
+		FlounderEvents.get().addEvent(new EventChange<Boolean>(() -> KosmosPost.get().isMotionBlurEnabled()) {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleMotionBlur.setText("Motion Blur Enabled: " + newValue);
@@ -62,13 +62,13 @@ public class ScreenSettingPost extends ScreenObject {
 		toggleMotionBlur.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				KosmosPost.setMotionBlurEnabled(!KosmosPost.isMotionBlurEnabled());
+				KosmosPost.get().setMotionBlurEnabled(!KosmosPost.get().isMotionBlurEnabled());
 			}
 		});
 
 		// Toggle Tilt Shift.
 		GuiButtonText toggleTiltShift = new GuiButtonText(this, new Vector2f(0.5f, 0.41f), "Tilt Shift Enabled: ", GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Boolean>(KosmosPost::isTiltShiftEnabled) {
+		FlounderEvents.get().addEvent(new EventChange<Boolean>(() -> KosmosPost.get().isTiltShiftEnabled()) {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleTiltShift.setText("Tilt Shift Enabled: " + newValue);
@@ -77,13 +77,13 @@ public class ScreenSettingPost extends ScreenObject {
 		toggleTiltShift.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				KosmosPost.setTiltShiftEnabled(!KosmosPost.isTiltShiftEnabled());
+				KosmosPost.get().setTiltShiftEnabled(!KosmosPost.get().isTiltShiftEnabled());
 			}
 		});
 
 		// Toggle Lens Flare.
 		GuiButtonText toggleLensFlare = new GuiButtonText(this, new Vector2f(0.5f, 0.48f), "Lens Flare Enabled: ", GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Boolean>(KosmosPost::isLensFlareEnabled) {
+		FlounderEvents.get().addEvent(new EventChange<Boolean>(() -> KosmosPost.get().isLensFlareEnabled()) {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleLensFlare.setText("Lens Flare Enabled: " + newValue);
@@ -92,13 +92,13 @@ public class ScreenSettingPost extends ScreenObject {
 		toggleLensFlare.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				KosmosPost.setLensFlareEnabled(!KosmosPost.isLensFlareEnabled());
+				KosmosPost.get().setLensFlareEnabled(!KosmosPost.get().isLensFlareEnabled());
 			}
 		});
 
 		// Toggle Effect CRT.
 		GuiButtonText toggleEffectCRT = new GuiButtonText(this, new Vector2f(0.5f, 0.55f), "Effect CRT Enabled: ", GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Boolean>(KosmosPost::isCrtEnabled) {
+		FlounderEvents.get().addEvent(new EventChange<Boolean>(() -> KosmosPost.get().isCrtEnabled()) {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleEffectCRT.setText("Effect CRT Enabled: " + newValue);
@@ -107,13 +107,13 @@ public class ScreenSettingPost extends ScreenObject {
 		toggleEffectCRT.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				KosmosPost.setCrtEnabled(!KosmosPost.isCrtEnabled());
+				KosmosPost.get().setCrtEnabled(!KosmosPost.get().isCrtEnabled());
 			}
 		});
 
 		// Toggle Effect Grain.
 		GuiButtonText toggleGrain = new GuiButtonText(this, new Vector2f(0.5f, 0.62f), "Grain Enabled: ", GuiAlign.CENTRE);
-		FlounderEvents.addEvent(new EventChange<Boolean>(KosmosPost::isGrainEnabled) {
+		FlounderEvents.get().addEvent(new EventChange<Boolean>(() -> KosmosPost.get().isGrainEnabled()) {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleGrain.setText("Grain Enabled: " + newValue);
@@ -122,7 +122,7 @@ public class ScreenSettingPost extends ScreenObject {
 		toggleGrain.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				KosmosPost.setGrainEnabled(!KosmosPost.isGrainEnabled());
+				KosmosPost.get().setGrainEnabled(!KosmosPost.get().isGrainEnabled());
 			}
 		});
 

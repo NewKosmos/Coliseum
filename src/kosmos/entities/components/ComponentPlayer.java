@@ -25,7 +25,7 @@ import kosmos.world.*;
 
 import javax.swing.*;
 
-import static org.lwjgl.glfw.GLFW.*;
+import static flounder.platform.Constants.*;
 
 public class ComponentPlayer extends IComponentEntity implements IComponentRender, IComponentEditor {
 	private float currentSpeed;
@@ -76,10 +76,10 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 	@Override
 	public void update() {
 		// Gets if noclip is enabled.
-		boolean noclip = ((KosmosPlayer) FlounderCamera.getPlayer()).isNoclipEnabled();
+		boolean noclip = ((KosmosPlayer) FlounderCamera.get().getPlayer()).isNoclipEnabled();
 
 		// Gets movement and rotation data from player inputs.
-		if (!FlounderGuis.getGuiMaster().isGamePaused()) {
+		if (!FlounderGuis.get().getGuiMaster().isGamePaused()) {
 			currentSpeed = (inputBoost.isDown() ? KosmosPlayer.BOOST_SPEED : KosmosPlayer.RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
 			currentUpwardSpeed = (inputJump.wasDown() && Maths.deadband(0.05f, currentUpwardSpeed) == 0.0f) ? KosmosPlayer.JUMP_POWER : currentUpwardSpeed;
 			currentTurnSpeed = -KosmosPlayer.TURN_SPEED * Maths.deadband(0.05f, inputTurn.getAmount());
@@ -91,7 +91,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 		// Applies gravity over time.
 		if (!noclip) {
 			currentUpwardSpeed += KosmosWorld.GRAVITY * Framework.getDelta();
-		} else if (!FlounderGuis.getGuiMaster().isGamePaused()) {
+		} else if (!FlounderGuis.get().getGuiMaster().isGamePaused()) {
 			currentSpeed *= 0.5f * KosmosPlayer.FLY_SPEED;
 			currentUpwardSpeed = 2.0f * inputFlyHeight.getAmount() * KosmosPlayer.FLY_SPEED;
 			currentTurnSpeed *= 0.5f * KosmosPlayer.FLY_SPEED;
@@ -105,10 +105,10 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 		float ry = currentTurnSpeed * Framework.getDelta();
 
 		// Finds the water level at the next player xz pos.
-		float waterLevel = (KosmosWater.getWater() != null) ? KosmosWater.getWater().getPosition().y : 0.0f;
+		float waterLevel = (KosmosWater.get().getWater() != null) ? KosmosWater.get().getWater().getPosition().y : 0.0f;
 
 		// Finds the chunk height at the next player xz pos.
-		float chunkHeight = Chunk.roundedHeight(KosmosChunks.getCurrent(), getEntity().getPosition()) * 0.5f;
+		float chunkHeight = Chunk.roundedHeight(KosmosChunks.get().getCurrent(), getEntity().getPosition()) * 0.5f;
 
 		// Does collision with the highest world object.
 		float worldHeight = Math.max(waterLevel - (float) Math.sqrt(2.0), chunkHeight) + KosmosPlayer.PLAYER_OFFSET_Y;
@@ -123,11 +123,11 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 		if (KosmosCamera.isFirstPerson()) {
 			float x = currentSpeed * Framework.getDelta();
 			float y = ry * (KosmosPlayer.RUN_SPEED / KosmosPlayer.TURN_SPEED);
-			double theta = Math.toRadians(FlounderCamera.getCamera().getRotation().y);
+			double theta = Math.toRadians(FlounderCamera.get().getCamera().getRotation().y);
 
 			dz = (float) -(x * Math.cos(theta) - y * Math.sin(theta));
 			dx = (float) -(x * Math.sin(theta) + y * Math.cos(theta));
-			ry = (FlounderCamera.getCamera().getRotation().y + 180.0f) - getEntity().getRotation().y;
+			ry = (FlounderCamera.get().getCamera().getRotation().y + 180.0f) - getEntity().getRotation().y;
 		}
 
 		// Moves and rotates the player.

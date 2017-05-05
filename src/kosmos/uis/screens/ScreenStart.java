@@ -42,11 +42,11 @@ public class ScreenStart extends ScreenObject {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
-				((KosmosGuis) FlounderGuis.getGuiMaster()).togglePause(true);
+				((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);
 				KosmosConfigs.saveAllConfigs();
 
 				// Generates the player and the world.
-				KosmosWorld.generatePlayer();
+				KosmosWorld.get().generatePlayer();
 			}
 		});
 
@@ -56,19 +56,19 @@ public class ScreenStart extends ScreenObject {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
-				((KosmosGuis) FlounderGuis.getGuiMaster()).togglePause(true);
+				((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);
 				KosmosConfigs.saveAllConfigs();
 
 				// Connects to the server.
 				String username = KosmosConfigs.CLIENT_USERNAME.getString();
-				String serverIP = KosmosConfigs.SERVER_IP.setReference(() -> FlounderNetwork.getSocketClient() == null ? null : FlounderNetwork.getSocketClient().getIpAddress()).getString();
-				int serverPort = KosmosConfigs.SERVER_PORT.setReference(() -> FlounderNetwork.getSocketClient() == null ? null : FlounderNetwork.getSocketClient().getServerPort()).getInteger();
-				FlounderNetwork.startClient(username, serverIP, serverPort);
+				String serverIP = KosmosConfigs.SERVER_IP.setReference(() -> FlounderNetwork.get().getSocketClient() == null ? null : FlounderNetwork.get().getSocketClient().getIpAddress()).getString();
+				int serverPort = KosmosConfigs.SERVER_PORT.setReference(() -> FlounderNetwork.get().getSocketClient() == null ? null : FlounderNetwork.get().getSocketClient().getServerPort()).getInteger();
+				FlounderNetwork.get().startClient(username, serverIP, serverPort);
 				PacketConnect loginPacket = new PacketConnect(username);
-				loginPacket.writeData(FlounderNetwork.getSocketClient());
+				loginPacket.writeData(FlounderNetwork.get().getSocketClient());
 
 				// Generates the player and the world.
-				KosmosWorld.generatePlayer();
+				KosmosWorld.get().generatePlayer();
 			}
 		});
 

@@ -9,18 +9,13 @@
 
 package kosmos;
 
-import flounder.devices.*;
 import flounder.framework.*;
 import flounder.framework.updater.*;
-import flounder.helpers.*;
 import flounder.profiling.*;
-import flounder.resources.*;
-import flounder.textures.*;
 import kosmos.camera.*;
-import org.lwjgl.glfw.*;
 
 public class NewKosmos extends Framework {
-	public static final String VERSION = "4.20";
+	public static final String VERSION = "5.05";
 
 	public static void main(String[] args) {
 		new NewKosmos().run();
@@ -28,20 +23,21 @@ public class NewKosmos extends Framework {
 	}
 
 	public NewKosmos() {
-		super("kosmos", new UpdaterDefault(GLFW::glfwGetTime), -1, new KosmosInterface(), new KosmosRenderer(), new KosmosCamera(), new KosmosPlayer(), new KosmosGuis());
-		FlounderDisplay.setup(
-				KosmosConfigs.DISPLAY_WIDTH.getInteger(),
-				KosmosConfigs.DISPLAY_HEIGHT.getInteger(),
-				"New Kosmos", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
-				KosmosConfigs.DISPLAY_VSYNC.getBoolean(),
-				KosmosConfigs.DISPLAY_ANTIALIAS.getBoolean(),
-				0,
-				KosmosConfigs.DISPLAY_FULLSCREEN.getBoolean(),
-				false
-		);
-		setFpsLimit(KosmosConfigs.FRAMEWORK_FPS_LIMIT.getInteger());
-		FlounderTextures.setup(KosmosConfigs.TEXTURES_ANISOTROPY_MAX.getFloat());
-		FlounderProfiler.toggle(KosmosConfigs.PROFILER_ENABLED.getBoolean());
-		OpenGlUtils.goWireframe(KosmosConfigs.WIREFRAME_ENABLED.getBoolean());
+		super("kosmos", new UpdaterDefault(null), -1,
+				new Extension[]{new KosmosInterface(), new KosmosRenderer(), new KosmosCamera(), new KosmosPlayer(), new KosmosGuis()},
+				new Module[]{/*new PlatformLwjgl(
+						KosmosConfigs.DISPLAY_WIDTH.getInteger(),
+						KosmosConfigs.DISPLAY_HEIGHT.getInteger(),
+						"Kosmos", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
+						KosmosConfigs.DISPLAY_VSYNC.getBoolean(),
+						KosmosConfigs.DISPLAY_ANTIALIAS.getBoolean(),
+						0,
+						KosmosConfigs.DISPLAY_FULLSCREEN.getBoolean(),
+						false,
+						KosmosConfigs.WIREFRAME_ENABLED.getBoolean(),
+						KosmosConfigs.TEXTURES_ANISOTROPY_MAX.getFloat()
+				)*/});
+		Framework.setFpsLimit(KosmosConfigs.FRAMEWORK_FPS_LIMIT.getInteger());
+		FlounderProfiler.get().toggle(KosmosConfigs.PROFILER_ENABLED.getBoolean());
 	}
 }

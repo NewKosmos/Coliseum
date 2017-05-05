@@ -18,7 +18,7 @@ import flounder.visual.*;
 import kosmos.camera.*;
 import kosmos.uis.*;
 
-import static org.lwjgl.glfw.GLFW.*;
+import static flounder.platform.Constants.*;
 
 public class KosmosGuis extends GuiMaster {
 	// private static final Colour COLOUR_PRIMARY = new Colour(0.90196078431f, 0.08235294117f, 0.08235294117f); // Charger Red.
@@ -40,12 +40,12 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public void init() {
-		this.overlayAlpha = new OverlayAlpha(FlounderGuis.getContainer());
-		this.overlayHUD = new OverlayHUD(FlounderGuis.getContainer());
-		this.overlayUsernames = new OverlayUsernames(FlounderGuis.getContainer());
-		this.overlayDebug = new OverlayDebug(FlounderGuis.getContainer());
-		this.overlayChat = new OverlayChat(FlounderGuis.getContainer());
-		this.overlaySlider = new OverlaySlider(FlounderGuis.getContainer());
+		this.overlayAlpha = new OverlayAlpha(FlounderGuis.get().getContainer());
+		this.overlayHUD = new OverlayHUD(FlounderGuis.get().getContainer());
+		this.overlayUsernames = new OverlayUsernames(FlounderGuis.get().getContainer());
+		this.overlayDebug = new OverlayDebug(FlounderGuis.get().getContainer());
+		this.overlayChat = new OverlayChat(FlounderGuis.get().getContainer());
+		this.overlaySlider = new OverlaySlider(FlounderGuis.get().getContainer());
 
 		this.overlayAlpha.setAlphaDriver(new ConstantDriver(1.0f));
 		this.overlayHUD.setAlphaDriver(new ConstantDriver(0.0f));
@@ -54,9 +54,9 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlaySlider.setAlphaDriver(new ConstantDriver(1.0f));
 
-		FlounderGuis.getSelector().initJoysticks(0, 0, 1, 0, 1);
+		FlounderGuis.get().getSelector().initJoysticks(0, 0, 1, 0, 1);
 
-		FlounderEvents.addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new IEvent() {
 			private CompoundButton escape = new CompoundButton(new KeyButton(GLFW_KEY_ESCAPE), new JoystickButton(0, 7));
 
 			@Override
@@ -70,7 +70,7 @@ public class KosmosGuis extends GuiMaster {
 			}
 		});
 
-		FlounderEvents.addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new IEvent() {
 			private KeyButton toggleDebug = new KeyButton(GLFW_KEY_F3);
 
 			@Override
@@ -84,7 +84,7 @@ public class KosmosGuis extends GuiMaster {
 			}
 		});
 
-		FlounderEvents.addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new IEvent() {
 			private KeyButton toggleHUD = new KeyButton(GLFW_KEY_F4);
 
 			@Override
@@ -98,7 +98,7 @@ public class KosmosGuis extends GuiMaster {
 			}
 		});
 
-		FlounderEvents.addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new IEvent() {
 			private KeyButton toggleChat = new KeyButton(GLFW_KEY_ENTER);
 
 			@Override
@@ -115,10 +115,10 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public void update() {
-		if (!isGamePaused() && FlounderMouse.isDisplaySelected() && FlounderDisplay.isFocused()) {
-			FlounderMouse.setCursorHidden(KosmosCamera.isMouseLocked());
+		if (!isGamePaused() && FlounderMouse.get().isDisplaySelected() && FlounderDisplay.get().isFocused()) {
+			FlounderMouse.get().setCursorHidden(KosmosCamera.isMouseLocked());
 		} else {
-			FlounderMouse.setCursorHidden(false);
+			FlounderMouse.get().setCursorHidden(false);
 		}
 	}
 

@@ -22,14 +22,12 @@ import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.entities.instances.*;
-import org.lwjgl.glfw.*;
 
 import java.util.*;
 
-public class KosmosChunks extends Module {
-	private static final KosmosChunks INSTANCE = new KosmosChunks();
-	public static final String PROFILE_TAB_NAME = "Kosmos Chunks";
+import static flounder.platform.Constants.*;
 
+public class KosmosChunks extends Module {
 	public static final MyFile TERRAINS_FOLDER = new MyFile(MyFile.RES_FOLDER, "terrains");
 
 	private Sphere chunkRange;
@@ -40,10 +38,10 @@ public class KosmosChunks extends Module {
 	private Chunk currentChunk;
 
 	public KosmosChunks() {
-		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEvents.class, FlounderEntities.class, FlounderModels.class, FlounderTextures.class);
+		super(FlounderEvents.class, FlounderEntities.class, FlounderModels.class, FlounderTextures.class);
 	}
 
-	@Override
+	@Handler.Function(Handler.FLAG_INIT)
 	public void init() {
 		this.chunkRange = new Sphere(40.0f); // 3.0f * Chunk.CHUNK_WORLD_SIZE
 
@@ -78,20 +76,20 @@ public class KosmosChunks extends Module {
 			}
 		});*/
 
-		FlounderEvents.addEvent(new IEvent() {
-			private static final int RECURSION_COUNT = 256;
-			private static final float RAY_RANGE = 100.0f; // 10.0f;
+		FlounderEvents.get().addEvent(new IEvent() {
+			private final int RECURSION_COUNT = 256;
+			private final float RAY_RANGE = 100.0f; // 10.0f;
 
-			private MouseButton button = new MouseButton(GLFW.GLFW_MOUSE_BUTTON_LEFT);
+			private MouseButton button = new MouseButton(GLFW_MOUSE_BUTTON_LEFT);
 
 			@Override
 			public boolean eventTriggered() {
-				return button.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
+				return button.wasDown() && !FlounderGuis.get().getGuiMaster().isGamePaused();
 			}
 
 			@Override
 			public void onEvent() {
-				Ray cameraRay = FlounderCamera.getCamera().getViewRay();
+				Ray cameraRay = FlounderCamera.get().getCamera().getViewRay();
 
 				if (intersectionInRange(cameraRay, 0.0f, RAY_RANGE)) {
 					Vector3f terrainPosition = binarySearch(cameraRay, 0, 0, RAY_RANGE);
@@ -99,7 +97,7 @@ public class KosmosChunks extends Module {
 					if (terrainPosition.getY() >= 0.0f) {
 						Chunk inChunk = null;
 
-						for (Entity entity : FlounderEntities.getEntities().getAll()) {
+						for (Entity entity : FlounderEntities.get().getEntities().getAll()) {
 							if (entity != null && entity instanceof Chunk) {
 								Chunk chunk = (Chunk) entity;
 
@@ -115,7 +113,7 @@ public class KosmosChunks extends Module {
 						Vector3f roundedPosition = Chunk.convertTileToWorld(inChunk, tilePosition.x, tilePosition.y);
 						roundedPosition.y = Chunk.getWorldHeight(roundedPosition.x, roundedPosition.z);
 
-						new InstanceTreeBirchLarge(FlounderEntities.getEntities(),
+						new InstanceTreeBirchLarge(FlounderEntities.get().getEntities(),
 								new Vector3f(
 										roundedPosition.x,
 										0.5f + roundedPosition.y * 0.5f,
@@ -128,7 +126,7 @@ public class KosmosChunks extends Module {
 			}
 
 			private Vector3f getPointOnRay(Ray cameraRay, float distance) {
-				Vector3f camPos = FlounderCamera.getCamera().getPosition();
+				Vector3f camPos = FlounderCamera.get().getCamera().getPosition();
 				Vector3f start = new Vector3f(camPos.x, camPos.y, camPos.z);
 				Vector3f scaledRay = new Vector3f(cameraRay.getCurrentRay().x * distance, cameraRay.getCurrentRay().y * distance, cameraRay.getCurrentRay().z * distance);
 				return Vector3f.add(start, scaledRay, null);
@@ -171,10 +169,10 @@ public class KosmosChunks extends Module {
 		});
 	}
 
-	@Override
+	@Handler.Function(Handler.FLAG_UPDATE_PRE)
 	public void update() {
-		if (FlounderCamera.getPlayer() != null) {
-			Vector3f playerPos = new Vector3f(FlounderCamera.getPlayer().getPosition());
+		if (FlounderCamera.get().getPlayer() != null) {
+			Vector3f playerPos = new Vector3f(FlounderCamera.get().getPlayer().getPosition());
 			playerPos.y = 0.0f;
 
 			Chunk playerChunk = null;
@@ -184,7 +182,7 @@ public class KosmosChunks extends Module {
 			}
 
 			// Goes though all chunks looking for changes.
-			for (Entity entity : FlounderEntities.getEntities().getAll()) {
+			for (Entity entity : FlounderEntities.get().getEntities().getAll()) {
 				if (entity != null && entity instanceof Chunk) {
 					Chunk chunk = (Chunk) entity;
 
@@ -210,14 +208,14 @@ public class KosmosChunks extends Module {
 		// FlounderBounding.addShapeRender(chunkRange);
 	}
 
-	@Override
+	@Handler.Function(Handler.FLAG_PROFILE)
 	public void profile() {
-		//	FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Size", chunks.getSize());
-		FlounderProfiler.add(PROFILE_TAB_NAME, "Chunks Current", currentChunk);
+		//	FlounderProfiler.get().add(getTab(), "Chunks Size", chunks.getSize());
+		FlounderProfiler.get().add(getTab(), "Chunks Current", currentChunk);
 	}
 
-	public static Chunk getCurrent() {
-		return INSTANCE.currentChunk;
+	public Chunk getCurrent() {
+		return this.currentChunk;
 	}
 
 	/**
@@ -225,14 +223,14 @@ public class KosmosChunks extends Module {
 	 *
 	 * @param currentChunk The chunk to be set as the current.
 	 */
-	public static void setCurrent(Chunk currentChunk) {
-		if (currentChunk != null && INSTANCE.currentChunk != currentChunk) {
+	public void setCurrent(Chunk currentChunk) {
+		if (currentChunk != null && this.currentChunk != currentChunk) {
 			// Creates the children chunks for the new current chunk.
 			currentChunk.createChunksAround();
 			currentChunk.getChildrenChunks().forEach(Chunk::createChunksAround);
 
 			// Removes any old chunks that are out of range.
-			Iterator<Entity> it = FlounderEntities.getEntities().getAll().iterator();
+			Iterator<Entity> it = FlounderEntities.get().getEntities().getAll().iterator();
 
 			while (it.hasNext()) {
 				Entity entity = it.next();
@@ -241,7 +239,7 @@ public class KosmosChunks extends Module {
 					Chunk chunk = (Chunk) entity;
 
 					if (chunk != currentChunk && chunk.isLoaded()) {
-						if (!chunk.getCollider().intersects(INSTANCE.chunkRange).isIntersection() && !INSTANCE.chunkRange.contains(chunk.getCollider())) {
+						if (!chunk.getCollider().intersects(this.chunkRange).isIntersection() && !this.chunkRange.contains(chunk.getCollider())) {
 							chunk.delete();
 							it.remove();
 						}
@@ -250,7 +248,7 @@ public class KosmosChunks extends Module {
 			}
 
 			// The current instance chunk is what was calculated for in this function.
-			INSTANCE.currentChunk = currentChunk;
+			this.currentChunk = currentChunk;
 		}
 	}
 
@@ -259,9 +257,9 @@ public class KosmosChunks extends Module {
 	 *
 	 * @param loadCurrent If the current chunk will be replaced.
 	 */
-	public static void clear(boolean loadCurrent) {
+	public void clear(boolean loadCurrent) {
 		// Removes any chunks in the entity list.
-		Iterator<Entity> it = FlounderEntities.getEntities().getAll().iterator();
+		Iterator<Entity> it = FlounderEntities.get().getEntities().getAll().iterator();
 
 		while (it.hasNext()) {
 			Entity entity = it.next();
@@ -275,7 +273,7 @@ public class KosmosChunks extends Module {
 
 		// Sets up the new root chunk.
 		if (loadCurrent && getCurrent() != null) {
-			setCurrent(new Chunk(FlounderEntities.getEntities(), getCurrent().getPosition()));
+			setCurrent(new Chunk(FlounderEntities.get().getEntities(), getCurrent().getPosition()));
 		}
 	}
 
@@ -284,17 +282,22 @@ public class KosmosChunks extends Module {
 	 *
 	 * @return The hexagon model.
 	 */
-	public static ModelObject getModelHexagon() {
-		return INSTANCE.modelHexagon;
+	public ModelObject getModelHexagon() {
+		return this.modelHexagon;
 	}
 
-	@Override
-	public Module getInstance() {
-		return INSTANCE;
-	}
-
-	@Override
+	@Handler.Function(Handler.FLAG_DISPOSE)
 	public void dispose() {
 		clear(false);
+	}
+
+	@Module.Instance
+	public static KosmosChunks get() {
+		return (KosmosChunks) Framework.getInstance(KosmosChunks.class);
+	}
+
+	@Module.TabName
+	public static String getTab() {
+		return "Kosmos Chunks";
 	}
 }

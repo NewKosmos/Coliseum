@@ -16,9 +16,6 @@ import flounder.physics.bounding.*;
 import kosmos.*;
 
 public class KosmosWater extends Module {
-	private static final KosmosWater INSTANCE = new KosmosWater();
-	public static final String PROFILE_TAB_NAME = "Kosmos Water";
-
 	private Water water;
 	private float waveTime;
 
@@ -28,10 +25,10 @@ public class KosmosWater extends Module {
 	private boolean reflectionShadows;
 
 	public KosmosWater() {
-		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderBounding.class, FlounderLoader.class);
+		super(FlounderBounding.class, FlounderLoader.class);
 	}
 
-	@Override
+	@Handler.Function(Handler.FLAG_INIT)
 	public void init() {
 		this.waveTime = 0.0f;
 
@@ -41,7 +38,7 @@ public class KosmosWater extends Module {
 		this.reflectionShadows = KosmosConfigs.WATER_REFLECTION_SHADOWS.getBoolean();
 	}
 
-	@Override
+	@Handler.Function(Handler.FLAG_UPDATE_PRE)
 	public void update() {
 		if (water == null) {
 			return;
@@ -50,71 +47,76 @@ public class KosmosWater extends Module {
 		water.update();
 		waveTime += Framework.getDelta();
 		waveTime %= Water.WAVE_SPEED;
-		FlounderBounding.addShapeRender(water.getAABB());
+		FlounderBounding.get().addShapeRender(water.getAABB());
 	}
 
-	public static void generateWater() {
-		INSTANCE.water = new Water(new Vector3f(0.0f, -0.1f, 0.0f), new Vector3f(), 1.0f);
+	public void generateWater() {
+		this.water = new Water(new Vector3f(0.0f, -0.1f, 0.0f), new Vector3f(), 1.0f);
 	}
 
-	public static void deleteWater() {
-		INSTANCE.water.delete();
-		INSTANCE.water = null;
+	public void deleteWater() {
+		this.water.delete();
+		this.water = null;
 	}
 
-	@Override
+	@Handler.Function(Handler.FLAG_PROFILE)
 	public void profile() {
 	}
 
-	public static Water getWater() {
-		return INSTANCE.water;
+	public Water getWater() {
+		return this.water;
 	}
 
-	public static float getWaveTime() {
-		return INSTANCE.waveTime;
+	public float getWaveTime() {
+		return this.waveTime;
 	}
 
-	public static float getColourIntensity() {
-		return INSTANCE.colourIntensity;
+	public float getColourIntensity() {
+		return this.colourIntensity;
 	}
 
-	public static void setColourIntensity(float colourIntensity) {
-		INSTANCE.colourIntensity = colourIntensity;
+	public void setColourIntensity(float colourIntensity) {
+		this.colourIntensity = colourIntensity;
 	}
 
-	public static boolean reflectionsEnabled() {
-		return INSTANCE.enableReflections;
+	public boolean reflectionsEnabled() {
+		return this.enableReflections;
 	}
 
-	public static void setReflectionsEnabled(boolean enableReflections) {
-		INSTANCE.enableReflections = enableReflections;
+	public void setReflectionsEnabled(boolean enableReflections) {
+		this.enableReflections = enableReflections;
 	}
 
-	public static float getReflectionQuality() {
-		return INSTANCE.reflectionQuality;
+	public float getReflectionQuality() {
+		return this.reflectionQuality;
 	}
 
-	public static void setReflectionQuality(float reflectionQuality) {
-		INSTANCE.reflectionQuality = reflectionQuality;
+	public void setReflectionQuality(float reflectionQuality) {
+		this.reflectionQuality = reflectionQuality;
 	}
 
-	public static boolean reflectionShadows() {
-		return INSTANCE.reflectionShadows;
+	public boolean reflectionShadows() {
+		return this.reflectionShadows;
 	}
 
-	public static void setReflectionShadows(boolean reflectionShadows) {
-		INSTANCE.reflectionShadows = reflectionShadows;
+	public void setReflectionShadows(boolean reflectionShadows) {
+		this.reflectionShadows = reflectionShadows;
 	}
 
-	@Override
-	public Module getInstance() {
-		return INSTANCE;
-	}
-
-	@Override
+	@Handler.Function(Handler.FLAG_DISPOSE)
 	public void dispose() {
 		if (water != null) {
 			water.delete();
 		}
+	}
+
+	@Module.Instance
+	public static KosmosWater get() {
+		return (KosmosWater) Framework.getInstance(KosmosWater.class);
+	}
+
+	@Module.TabName
+	public static String getTab() {
+		return "Kosmos Water";
 	}
 }

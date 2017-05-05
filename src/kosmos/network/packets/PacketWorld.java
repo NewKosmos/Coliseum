@@ -50,9 +50,9 @@ public class PacketWorld extends Packet {
 		//			", client original time: " + (Framework.getTimeSec() - Framework.getTimeOffset())
 		//	);
 
-		if (KosmosWorld.getNoise().getSeed() != seed) {
-			KosmosWorld.getNoise().setSeed(seed);
-			KosmosChunks.clear(true);
+		if (KosmosWorld.get().getNoise().getSeed() != seed) {
+			KosmosWorld.get().getNoise().setSeed(seed);
+			KosmosChunks.get().clear(true);
 		}
 
 		if (offServerTime) {

@@ -62,12 +62,12 @@ public interface ICommand {
 
 			@Override
 			public void runCommand(String fullCommand) {
-				for (String username : KosmosWorld.getPlayers().keySet()) {
-					String log = "    [" + username + "]: " + KosmosWorld.getPlayers().get(username).toString();
+				for (String username : KosmosWorld.get().getPlayers().keySet()) {
+					String log = "    [" + username + "]: " + KosmosWorld.get().getPlayers().get(username).toString();
 					OverlayChat.addText(log, new Colour(0.81f, 0.81f, 0.81f));
 				}
 
-				if (FlounderNetwork.getSocketClient() == null) {
+				if (FlounderNetwork.get().getSocketClient() == null) {
 					String log = "    You are in single player! No other players connected.";
 					OverlayChat.addText(log, new Colour(0.81f, 0.81f, 0.81f));
 				}
@@ -89,25 +89,25 @@ public interface ICommand {
 				// Removes /tp from the string.
 				String string = fullCommand.substring(3, fullCommand.length()).trim();
 
-				if (!KosmosWorld.containsPlayer(string)) {
+				if (!KosmosWorld.get().containsPlayer(string)) {
 					String log = "Could not teleport to player " + string;
-					FlounderLogger.log(log);
+					FlounderLogger.get().log(log);
 					OverlayChat.addText(log, new Colour(0.8f, 0.1f, 0.0f));
 					return;
 				}
 
-				Entity other = KosmosWorld.getPlayer(string);
+				Entity other = KosmosWorld.get().getPlayer(string);
 				ComponentMultiplayer componentMultiplayer = (ComponentMultiplayer) other.getComponent(ComponentMultiplayer.class);
 				float chunkX = componentMultiplayer.getChunkX();
 				float chunkZ = componentMultiplayer.getChunkZ();
 
 				String log = "Teleporting to " + string + " in chunk [" + chunkX + ", " + chunkZ + "].";
-				FlounderLogger.log(log);
+				FlounderLogger.get().log(log);
 				OverlayChat.addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
-				KosmosWorld.getEntityPlayer().getPosition().set(other.getPosition());
-				KosmosChunks.clear(true);
-				KosmosChunks.setCurrent(new Chunk(FlounderEntities.getEntities(), new Vector3f(chunkX, 0.0f, chunkZ)));
+				KosmosWorld.get().getEntityPlayer().getPosition().set(other.getPosition());
+				KosmosChunks.get().clear(true);
+				KosmosChunks.get().setCurrent(new Chunk(FlounderEntities.get().getEntities(), new Vector3f(chunkX, 0.0f, chunkZ)));
 			}
 		}),
 		TIME(new ICommand() {
@@ -126,9 +126,9 @@ public interface ICommand {
 				// Removes /time from the string.
 				String string = fullCommand.substring(5, fullCommand.length()).trim();
 
-				if (FlounderNetwork.getSocketClient() == null || string.isEmpty()) {
+				if (FlounderNetwork.get().getSocketClient() == null || string.isEmpty()) {
 					String log = "Could not change the time offset of the framework.";
-					FlounderLogger.log(log);
+					FlounderLogger.get().log(log);
 					OverlayChat.addText(log, new Colour(0.8f, 0.1f, 0.0f));
 					return;
 				}
@@ -136,7 +136,7 @@ public interface ICommand {
 				float timeOffset = Float.parseFloat(string);
 
 				String log = "Changing the time offset of the framework to: " + timeOffset;
-				FlounderLogger.log(log);
+				FlounderLogger.get().log(log);
 				OverlayChat.addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
 				Framework.setTimeOffset(timeOffset);
@@ -160,7 +160,7 @@ public interface ICommand {
 
 				if (string.isEmpty()) {
 					String log = "Could not open/close the developer profiler.";
-					FlounderLogger.log(log);
+					FlounderLogger.get().log(log);
 					OverlayChat.addText(log, new Colour(0.8f, 0.1f, 0.0f));
 					return;
 				}
@@ -168,10 +168,10 @@ public interface ICommand {
 				boolean profilerOpen = Boolean.parseBoolean(string);
 
 				String log = "Changing the developer profiler to: " + profilerOpen;
-				FlounderLogger.log(log);
+				FlounderLogger.get().log(log);
 				OverlayChat.addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
-				FlounderProfiler.toggle(profilerOpen);
+				FlounderProfiler.get().toggle(profilerOpen);
 			}
 		}),
 		NOCLIP(new ICommand() {
@@ -187,11 +187,11 @@ public interface ICommand {
 
 			@Override
 			public void runCommand(String fullCommand) {
-				boolean enable = !((KosmosPlayer) FlounderCamera.getPlayer()).isNoclipEnabled();
-				((KosmosPlayer) FlounderCamera.getPlayer()).setNoclipEnabled(enable);
+				boolean enable = !((KosmosPlayer) FlounderCamera.get().getPlayer()).isNoclipEnabled();
+				((KosmosPlayer) FlounderCamera.get().getPlayer()).setNoclipEnabled(enable);
 
 				String log = "Setting noclip mode to: " + enable;
-				FlounderLogger.log(log);
+				FlounderLogger.get().log(log);
 				OverlayChat.addText(log, new Colour(0.1f, 0.8f, 0.0f));
 			}
 		}),
@@ -209,7 +209,7 @@ public interface ICommand {
 			@Override
 			public void runCommand(String fullCommand) {
 				String log = "Requesting to exit the game to desktop.";
-				FlounderLogger.log(log);
+				FlounderLogger.get().log(log);
 				OverlayChat.addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
 				Framework.requestClose();

@@ -57,16 +57,16 @@ public class PacketConnect extends Packet {
 
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
-		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "] " + username + " has joined the game.");
+		FlounderLogger.get().log("[" + address.getHostAddress() + ":" + port + "] " + username + " has joined the game.");
 		OverlayChat.addText(username + " has joined the game.", new Colour(0.1f, 0.7f, 0.1f));
 		OverlayUsernames.addMultiplayer(username);
-		KosmosWorld.quePlayer(username, new Vector3f(), new Vector3f());
+		KosmosWorld.get().quePlayer(username, new Vector3f(), new Vector3f());
 		KosmosPlayer.askSendData();
 	}
 
 	@Override
 	public void serverHandlePacket(Server server, InetAddress address, int port) {
-		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "] " + username + " has connected.");
+		FlounderLogger.get().log("[" + address.getHostAddress() + ":" + port + "] " + username + " has connected.");
 		ClientInfo player = new ClientInfo(username, address, port);
 		server.addConnection(player);
 		this.writeData(server);
@@ -75,7 +75,7 @@ public class PacketConnect extends Packet {
 		new PacketWorld(KosmosServer.ServerInterface.serverSeed, Framework.getTimeSec()).writeData(server);
 
 		// If new client connects tell them the connected clients.
-		for (ClientInfo info : FlounderNetwork.getSocketServer().getConnected()) {
+		for (ClientInfo info : FlounderNetwork.get().getSocketServer().getConnected()) {
 			if (!info.getUsername().equals(username)) {
 				server.sendData(new PacketConnect(info.getUsername()).getData(), address, port);
 			}

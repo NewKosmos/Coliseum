@@ -57,18 +57,18 @@ public abstract class IBiome {
 			return null;
 		}
 
-		if (Math.abs(KosmosWorld.getNoise().noise2(tilePosition.z * (float) Math.sin(tilePosition.x), tilePosition.x * (float) Math.sin(tilePosition.z))) <= 0.3f) {
+		if (Math.abs(KosmosWorld.get().getNoise().noise2(tilePosition.z * (float) Math.sin(tilePosition.x), tilePosition.x * (float) Math.sin(tilePosition.z))) <= 0.3f) {
 			return null;
 		}
 
-		float spawn = KosmosWorld.getNoise().noise1((tilePosition.z - tilePosition.x) * (float) Math.sin(tilePosition.x + tilePosition.z)) * 23.0f * getEntitySpawns().length;
-		float rotation = KosmosWorld.getNoise().noise1(tilePosition.x - tilePosition.z) * 3600.0f;
+		float spawn = KosmosWorld.get().getNoise().noise1((tilePosition.z - tilePosition.x) * (float) Math.sin(tilePosition.x + tilePosition.z)) * 23.0f * getEntitySpawns().length;
+		float rotation = KosmosWorld.get().getNoise().noise1(tilePosition.x - tilePosition.z) * 3600.0f;
 
 		if (getEntitySpawns().length > 0 && (int) spawn >= 0.0f && (int) spawn < getEntitySpawns().length) {
 			EntitySpawn entitySpawn = getEntitySpawns()[(int) spawn];
 
 			if (entitySpawn != null && spawn - (int) spawn <= entitySpawn.spawnChance) {
-				Entity entity = entitySpawn.create(FlounderEntities.getEntities(), new Vector3f(tilePosition.x, entitySpawn.heightOffset + tilePosition.y * 0.5f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
+				Entity entity = entitySpawn.create(FlounderEntities.get().getEntities(), new Vector3f(tilePosition.x, entitySpawn.heightOffset + tilePosition.y * 0.5f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
 
 				if (entity != null) {
 					new ComponentChild(entity, chunk);

@@ -32,13 +32,13 @@ public class ChunkMesh {
 
 	public void update() {
 		// Makes sure all chunk, model, and biome info is good.
-		if (chunk == null || chunk.getBiome() == null || KosmosChunks.getModelHexagon() == null || !KosmosChunks.getModelHexagon().isLoaded()) {
+		if (chunk == null || chunk.getBiome() == null || KosmosChunks.get().getModelHexagon() == null || !KosmosChunks.get().getModelHexagon().isLoaded()) {
 			return;
 		}
 
 		// If not built, build.
 		if (!built) {
-			FlounderProcessors.sendRequest(new MeshBuildRequest(this, KosmosChunks.getModelHexagon()));
+			FlounderProcessors.get().sendRequest(new MeshBuildRequest(this, KosmosChunks.get().getModelHexagon()));
 			built = true;
 		}
 
@@ -49,7 +49,7 @@ public class ChunkMesh {
 			if (componentModel != null) {
 				componentModel.setModel(chunkModel);
 			} else {
-				FlounderLogger.error(chunk + " does not have a model component! Model cannot be set.");
+				FlounderLogger.get().error(chunk + " does not have a model component! Model cannot be set.");
 			}
 		}
 	}

@@ -55,15 +55,15 @@ public class PacketDisconnect extends Packet {
 
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
-		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "] " + username + " has quit the game.");
+		FlounderLogger.get().log("[" + address.getHostAddress() + ":" + port + "] " + username + " has quit the game.");
 		OverlayChat.addText(username + " has quit the game.", new Colour(0.7f, 0.1f, 0.1f));
-		((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlayUsernames().removeMultiplayer(username);
-		KosmosWorld.removePlayer(username);
+		((KosmosGuis) FlounderGuis.get().getGuiMaster()).getOverlayUsernames().removeMultiplayer(username);
+		KosmosWorld.get().removePlayer(username);
 	}
 
 	@Override
 	public void serverHandlePacket(Server server, InetAddress address, int port) {
-		FlounderLogger.log("[" + address.getHostAddress() + ":" + port + "] " + username + " has disconnected.");
+		FlounderLogger.get().log("[" + address.getHostAddress() + ":" + port + "] " + username + " has disconnected.");
 		server.removeConnection(username);
 		this.writeData(server);
 	}

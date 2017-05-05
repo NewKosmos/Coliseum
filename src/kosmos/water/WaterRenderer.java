@@ -20,7 +20,8 @@ import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
 import kosmos.chunks.*;
-import org.lwjgl.opengl.*;
+
+import static flounder.platform.Constants.*;
 
 public class WaterRenderer extends Renderer {
 	private static final MyFile VERTEX_SHADER = new MyFile(FlounderShaders.SHADERS_LOC, "water", "waterVertex.glsl");
@@ -31,20 +32,20 @@ public class WaterRenderer extends Renderer {
 	private ShaderObject shader;
 
 	public WaterRenderer() {
-		this.reflectionFBO = FBO.newFBO(KosmosWater.getReflectionQuality()).attachments(3).withAlphaChannel(true).depthBuffer(DepthBufferType.TEXTURE).create();
+		this.reflectionFBO = FBO.newFBO(KosmosWater.get().getReflectionQuality()).attachments(3).withAlphaChannel(true).depthBuffer(DepthBufferType.TEXTURE).create();
 		this.pipelineMRT = new FilterMRT(FBO.newFBO(1.0f).disableTextureWrap().create());
-		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL20.GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
+		this.shader = ShaderFactory.newBuilder().setName("water").addType(new ShaderType(GL_VERTEX_SHADER, VERTEX_SHADER)).addType(new ShaderType(GL_FRAGMENT_SHADER, FRAGMENT_SHADER)).create();
 	}
 
 	@Override
 	public void renderObjects(Vector4f clipPlane, Camera camera) {
-		if (!shader.isLoaded() || KosmosWater.getWater() == null || !KosmosWater.getWater().isLoaded()) {
+		if (!shader.isLoaded() || KosmosWater.get().getWater() == null || !KosmosWater.get().getWater().isLoaded()) {
 			return;
 		}
 
 		//if (KosmosWater.getWater().getCollider().inFrustum(camera.getViewFrustum())) {
 		prepareRendering(clipPlane, camera);
-		renderWater(KosmosWater.getWater());
+		renderWater(KosmosWater.get().getWater());
 		endRendering();
 		//}
 	}
@@ -55,44 +56,44 @@ public class WaterRenderer extends Renderer {
 		shader.getUniformMat4("viewMatrix").loadMat4(camera.getViewMatrix());
 		shader.getUniformVec4("clipPlane").loadVec4(clipPlane);
 
-		Chunk chunk = KosmosChunks.getCurrent();
+		Chunk chunk = KosmosChunks.get().getCurrent();
 
 		if (chunk != null) {
 			// Vector3f position = chunk.getPosition();
-			Vector3f position = FlounderCamera.getPlayer().getPosition();
+			Vector3f position = FlounderCamera.get().getPlayer().getPosition();
 			shader.getUniformVec3("waterOffset").loadVec3(
 					(float) (2.0f * Water.SQUARE_SIZE) * Math.round(position.x / (2.0f * Water.SQUARE_SIZE)),
 					0.0f,
 					(float) (2.0f * Water.SQUARE_SIZE) * Math.round(position.z / (2.0f * Water.SQUARE_SIZE)));
 		}
 
-		if (KosmosWater.reflectionsEnabled() && KosmosWater.getColourIntensity() != 1.0f) {
+		if (KosmosWater.get().reflectionsEnabled() && KosmosWater.get().getColourIntensity() != 1.0f) {
 			// Update the quality scalar.
-			if (reflectionFBO.getSizeScalar() != KosmosWater.getReflectionQuality()) {
-				reflectionFBO.setSizeScalar(KosmosWater.getReflectionQuality());
+			if (reflectionFBO.getSizeScalar() != KosmosWater.get().getReflectionQuality()) {
+				reflectionFBO.setSizeScalar(KosmosWater.get().getReflectionQuality());
 			}
 
 			// Binds the reflection FBO.
 			if (pipelineMRT != null) {
-				OpenGlUtils.bindTexture(pipelineMRT.fbo.getColourTexture(0), GL11.GL_TEXTURE_2D, 0);
+				FlounderOpenGL.get().bindTexture(pipelineMRT.fbo.getColourTexture(0), GL_TEXTURE_2D, 0);
 			} else {
-				OpenGlUtils.bindTexture(reflectionFBO.getColourTexture(0), GL11.GL_TEXTURE_2D, 0);
+				FlounderOpenGL.get().bindTexture(reflectionFBO.getColourTexture(0), GL_TEXTURE_2D, 0);
 			}
 		}
 
-		OpenGlUtils.antialias(FlounderDisplay.isAntialiasing());
-		OpenGlUtils.enableDepthTesting();
-		OpenGlUtils.cullBackFaces(true);
+		FlounderOpenGL.get().antialias(FlounderDisplay.get().isAntialiasing());
+		FlounderOpenGL.get().enableDepthTesting();
+		FlounderOpenGL.get().cullBackFaces(true);
 	}
 
 	private void renderWater(Water water) {
-		OpenGlUtils.bindVAO(water.getVao(), 0);
+		FlounderOpenGL.get().bindVAO(water.getVao(), 0);
 
 		shader.getUniformMat4("modelMatrix").loadMat4(water.getModelMatrix());
 
 		shader.getUniformVec4("diffuseColour").loadVec4(water.getColour());
 
-		shader.getUniformFloat("waveTime").loadFloat(KosmosWater.getWaveTime() / Water.WAVE_SPEED);
+		shader.getUniformFloat("waveTime").loadFloat(KosmosWater.get().getWaveTime() / Water.WAVE_SPEED);
 		shader.getUniformFloat("waveLength").loadFloat(Water.WAVE_LENGTH);
 		shader.getUniformFloat("amplitude").loadFloat(Water.AMPLITUDE);
 		shader.getUniformFloat("squareSize").loadFloat((float) Water.SQUARE_SIZE);
@@ -101,12 +102,12 @@ public class WaterRenderer extends Renderer {
 		shader.getUniformFloat("shineDamper").loadFloat(Water.SHINE_DAMPER);
 		shader.getUniformFloat("reflectivity").loadFloat(Water.REFLECTIVITY);
 
-		shader.getUniformBool("ignoreReflections").loadBoolean(!KosmosWater.reflectionsEnabled());
+		shader.getUniformBool("ignoreReflections").loadBoolean(!KosmosWater.get().reflectionsEnabled());
 
-		OpenGlUtils.renderArrays(GL11.GL_TRIANGLES, water.getVertexCount());
+		FlounderOpenGL.get().renderArrays(GL_TRIANGLES, water.getVertexCount());
 
-		OpenGlUtils.disableBlending();
-		OpenGlUtils.unbindVAO(0);
+		FlounderOpenGL.get().disableBlending();
+		FlounderOpenGL.get().unbindVAO(0);
 	}
 
 	private void endRendering() {
@@ -123,7 +124,7 @@ public class WaterRenderer extends Renderer {
 
 	@Override
 	public void profile() {
-		FlounderProfiler.add(KosmosWater.PROFILE_TAB_NAME, "Render Time", super.getRenderTime());
+		FlounderProfiler.get().add(KosmosWater.getTab(), "Render Time", super.getRenderTime());
 	}
 
 	@Override

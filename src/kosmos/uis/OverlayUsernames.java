@@ -57,7 +57,7 @@ public class OverlayUsernames extends ScreenObject {
 		}
 
 		for (Pair<TextObject, GuiObject> object : multiplayerNames) {
-			updateUsername(object, KosmosWorld.getPlayer(object.getFirst().getTextString()));
+			updateUsername(object, KosmosWorld.get().getPlayer(object.getFirst().getTextString()));
 		}
 	}
 
@@ -105,9 +105,9 @@ public class OverlayUsernames extends ScreenObject {
 		// Get 2D label space.
 		screenPosition.set(entity.getPosition());
 		screenPosition.y += KosmosPlayer.PLAYER_OFFSET_Y;
-		float distance = Vector3f.getDistance(screenPosition, FlounderCamera.getCamera().getPosition());
+		float distance = Vector3f.getDistance(screenPosition, FlounderCamera.get().getCamera().getPosition());
 		boolean shouldRender = distance < 30.0f;
-		Maths.worldToScreenSpace(screenPosition, FlounderCamera.getCamera().getViewMatrix(), FlounderCamera.getCamera().getProjectionMatrix(), this.screenPosition);
+		Maths.worldToScreenSpace(screenPosition, FlounderCamera.get().getCamera().getViewMatrix(), FlounderCamera.get().getCamera().getProjectionMatrix(), this.screenPosition);
 		// FlounderLogger.log(screenPosition.x + ", " + screenPosition.y);
 
 		// Updates the alpha, hides if far away.
@@ -122,7 +122,7 @@ public class OverlayUsernames extends ScreenObject {
 		}
 
 		// Updates the text positioning.
-		pair.getFirst().getPosition().set(screenPosition.x + (FlounderDisplay.getAspectRatio() / 2.0f), -screenPosition.y);
+		pair.getFirst().getPosition().set(screenPosition.x + (FlounderDisplay.get().getAspectRatio() / 2.0f), -screenPosition.y);
 
 		// Update background size.
 		pair.getSecond().getDimensions().set(pair.getFirst().getMeshSize());

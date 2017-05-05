@@ -57,10 +57,10 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 
 	@Override
 	public void update() {
-		Vector3f.multiply(FlounderShadows.getLightPosition(), startPosition, getEntity().getPosition());
+		Vector3f.multiply(FlounderShadows.get().getLightPosition(), startPosition, getEntity().getPosition());
 
-		if (FlounderCamera.getCamera() != null) {
-			Vector3f.add(getEntity().getPosition(), FlounderCamera.getCamera().getPosition(), getEntity().getPosition());
+		if (FlounderCamera.get().getCamera() != null) {
+			Vector3f.add(getEntity().getPosition(), FlounderCamera.get().getCamera().getPosition(), getEntity().getPosition());
 		}
 
 		getEntity().setMoved();
@@ -71,11 +71,11 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 			if (componentLight != null) {
 				switch (lightType) {
 					case SUN:
-						Colour.interpolate(KosmosWorld.SUN_COLOUR_SUNRISE, KosmosWorld.SUN_COLOUR_NIGHT, KosmosWorld.getSunriseFactor(), componentLight.getColour());
-						Colour.interpolate(componentLight.getColour(), KosmosWorld.SUN_COLOUR_DAY, KosmosWorld.getShadowFactor(), componentLight.getColour());
+						Colour.interpolate(KosmosWorld.SUN_COLOUR_SUNRISE, KosmosWorld.SUN_COLOUR_NIGHT, KosmosWorld.get().getSunriseFactor(), componentLight.getColour());
+						Colour.interpolate(componentLight.getColour(), KosmosWorld.SUN_COLOUR_DAY, KosmosWorld.get().getShadowFactor(), componentLight.getColour());
 						break;
 					case MOON:
-						Colour.interpolate(KosmosWorld.MOON_COLOUR_NIGHT, KosmosWorld.MOON_COLOUR_DAY, KosmosWorld.getShadowFactor(), componentLight.getColour());
+						Colour.interpolate(KosmosWorld.MOON_COLOUR_NIGHT, KosmosWorld.MOON_COLOUR_DAY, KosmosWorld.get().getShadowFactor(), componentLight.getColour());
 						break;
 					case NONE:
 						break;

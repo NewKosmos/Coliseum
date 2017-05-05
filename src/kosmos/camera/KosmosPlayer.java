@@ -51,13 +51,13 @@ public class KosmosPlayer extends Player {
 
 	@Override
 	public void update() {
-		if (KosmosWorld.getEntityPlayer() == null) {
+		if (KosmosWorld.get().getEntityPlayer() == null) {
 			return;
 		}
 
 		// Gets the current position and deltas.
-		Vector3f newPosition = KosmosWorld.getEntityPlayer().getPosition();
-		Vector3f newRotation = KosmosWorld.getEntityPlayer().getRotation();
+		Vector3f newPosition = KosmosWorld.get().getEntityPlayer().getPosition();
+		Vector3f newRotation = KosmosWorld.get().getEntityPlayer().getRotation();
 		float dx = newPosition.x - position.x;
 		float dy = newPosition.y - position.y;
 		float dz = newPosition.z - position.z;
@@ -85,8 +85,8 @@ public class KosmosPlayer extends Player {
 	 * Sends this players data to the server.
 	 */
 	private void sendData() {
-		if (FlounderNetwork.getUsername() != null && FlounderNetwork.getSocketClient() != null && KosmosChunks.getCurrent() != null) {
-			new PacketMove(FlounderNetwork.getUsername(), position, rotation, KosmosChunks.getCurrent().getPosition().x, KosmosChunks.getCurrent().getPosition().z).writeData(FlounderNetwork.getSocketClient());
+		if (FlounderNetwork.get().getUsername() != null && FlounderNetwork.get().getSocketClient() != null && KosmosChunks.get().getCurrent() != null) {
+			new PacketMove(FlounderNetwork.get().getUsername(), position, rotation, KosmosChunks.get().getCurrent().getPosition().x, KosmosChunks.get().getCurrent().getPosition().z).writeData(FlounderNetwork.get().getSocketClient());
 			needSendData = false;
 			timer.resetStartTime();
 		}

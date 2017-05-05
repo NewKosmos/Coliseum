@@ -57,8 +57,8 @@ public class FrameEntities extends Standard {
 	@Override
 	public void init() {
 		frame = new JFrame();
-		frame.setTitle(FlounderDisplay.getTitle());
-		frame.setSize(FlounderDisplay.getWidth(), FlounderDisplay.getHeight());
+		frame.setTitle(FlounderDisplay.get().getTitle());
+		frame.setSize(FlounderDisplay.get().getWidth(), FlounderDisplay.get().getHeight());
 		frame.setLayout(new BorderLayout());
 		frame.setResizable(true);
 
@@ -122,7 +122,7 @@ public class FrameEntities extends Standard {
 		save();
 		frame.add(mainPanel, BorderLayout.SOUTH);
 
-		renderPanel = FlounderDisplayJPanel.createPanel();
+		renderPanel = FlounderDisplayJPanel.get().createPanel();
 		frame.add(renderPanel, BorderLayout.CENTER);
 
 		frame.setLocationByPlatform(true);
@@ -156,26 +156,26 @@ public class FrameEntities extends Standard {
 						String tabName = IComponentEditor.getTabName((IComponentEditor) c.getComponent());
 
 						if (tabName.equals(component)) {
-							if (((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity != null && ((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity.getComponent(c.getComponent().getClass()) == null) {
+							if (((ExtensionEntities) KosmosEditor.get().getEditorType()).focusEntity != null && ((ExtensionEntities) KosmosEditor.get().getEditorType()).focusEntity.getComponent(c.getComponent().getClass()) == null) {
 								try {
-									FlounderLogger.log("Adding component: " + component);
+									FlounderLogger.get().log("Adding component: " + component);
 									Class componentClass = Class.forName(((IComponentEditor) c.getComponent()).getClass().getName());
 									Class[] componentTypes = new Class[]{Entity.class};
 									@SuppressWarnings("unchecked") Constructor componentConstructor = componentClass.getConstructor(componentTypes);
-									Object[] componentParameters = new Object[]{((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity};
+									Object[] componentParameters = new Object[]{((ExtensionEntities) KosmosEditor.get().getEditorType()).focusEntity};
 									editorComponent = (IComponentEditor) componentConstructor.newInstance(componentParameters);
 								} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException ex) {
-									FlounderLogger.error("While loading component" + c.getComponent() + "'s constructor could not be found!");
-									FlounderLogger.exception(ex);
+									FlounderLogger.get().error("While loading component" + c.getComponent() + "'s constructor could not be found!");
+									FlounderLogger.get().exception(ex);
 								}
 							} else {
-								FlounderLogger.error("Entity already has instance of " + c.getComponent());
+								FlounderLogger.get().error("Entity already has instance of " + c.getComponent());
 							}
 						}
 					}
 				}
 
-				FlounderLogger.log(editorComponent);
+				FlounderLogger.get().log(editorComponent);
 
 				if (editorComponent != null) {
 					editorComponents.add(editorComponent);
@@ -209,7 +209,7 @@ public class FrameEntities extends Standard {
 			}
 
 			private void textUpdate() {
-				((ExtensionEntities) KosmosEditor.getEditorType()).entityName = nameField.getText();
+				((ExtensionEntities) KosmosEditor.get().getEditorType()).entityName = nameField.getText();
 			}
 		});
 		mainPanel.add(nameField);
@@ -230,7 +230,7 @@ public class FrameEntities extends Standard {
 					String[] filepath = selectedFile.split("/");
 					String fileName = filepath[filepath.length - 1];
 
-					FlounderLogger.error(fileName);
+					FlounderLogger.get().error(fileName);
 
 					//	try {
 					//		((ExtensionEntities) KosmosEditor.getEditorType()).setEntity((Entity) ClassLoader.getSystemClassLoader().loadClass(selectedFile).newInstance());
@@ -251,7 +251,7 @@ public class FrameEntities extends Standard {
 		polygonMode.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((ExtensionEntities) KosmosEditor.getEditorType()).polygonMode = !((ExtensionEntities) KosmosEditor.getEditorType()).polygonMode;
+				((ExtensionEntities) KosmosEditor.get().getEditorType()).polygonMode = !((ExtensionEntities) KosmosEditor.get().getEditorType()).polygonMode;
 			}
 		});
 		mainPanel.add(polygonMode);
@@ -263,20 +263,20 @@ public class FrameEntities extends Standard {
 		rotateEntity.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				((ExtensionEntities) KosmosEditor.getEditorType()).entityRotate = rotateEntity.isSelected();
+				((ExtensionEntities) KosmosEditor.get().getEditorType()).entityRotate = rotateEntity.isSelected();
 			}
 		});
 		mainPanel.add(rotateEntity);
 	}
 
 	public static void addSideTab(String tabName, JPanel panel) {
-		FlounderLogger.log("Adding side panel: " + tabName);
+		FlounderLogger.get().log("Adding side panel: " + tabName);
 		addedTabs.add(tabName);
 		componentsPane.addTab(tabName, null, panel, "");
 	}
 
 	public static void removeSideTab(String tabName, boolean force) {
-		FlounderLogger.log("Removing side panel: " + tabName);
+		FlounderLogger.get().log("Removing side panel: " + tabName);
 
 		if (force) {
 			addedTabs.remove(tabName);
@@ -311,7 +311,7 @@ public class FrameEntities extends Standard {
 						JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 					nameField.setText("unnamed");
-					((ExtensionEntities) KosmosEditor.getEditorType()).loadDefaultEntity();
+					((ExtensionEntities) KosmosEditor.get().getEditorType()).loadDefaultEntity();
 					clearSideTab();
 				}
 			}
@@ -330,7 +330,7 @@ public class FrameEntities extends Standard {
 						JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 					editorComponents.remove(editorComponent);
 					removeSideTab(IComponentEditor.getTabName(editorComponent), true);
-					((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity.removeComponent((IComponentEntity) editorComponent);
+					((ExtensionEntities) KosmosEditor.get().getEditorType()).focusEntity.removeComponent((IComponentEntity) editorComponent);
 				}
 			}
 		});
@@ -362,8 +362,8 @@ public class FrameEntities extends Standard {
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (((ExtensionEntities) KosmosEditor.getEditorType()).focusEntity != null) {
-					FlounderEntities.save("kosmos.entities.instances", editorComponents, ((ExtensionEntities) KosmosEditor.getEditorType()).entityName);
+				if (((ExtensionEntities) KosmosEditor.get().getEditorType()).focusEntity != null) {
+					FlounderEntities.get().save("kosmos.entities.instances", editorComponents, ((ExtensionEntities) KosmosEditor.get().getEditorType()).entityName);
 				}
 			}
 		});

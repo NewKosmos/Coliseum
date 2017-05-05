@@ -100,8 +100,8 @@ public class Water {
 		}
 
 		vertexCount = array.length / 3;
-		FlounderProcessors.sendRequest((RequestOpenGL) () -> {
-			vao = FlounderLoader.createInterleavedVAO(array, 3);
+		FlounderProcessors.get().sendRequest((RequestOpenGL) () -> {
+			vao = FlounderLoader.get().createInterleavedVAO(array, 3);
 			loaded = true;
 		});
 
@@ -200,12 +200,12 @@ public class Water {
 			Matrix4f.transformationMatrix(position, rotation, scale, modelMatrix);
 		}
 
-		colour.a = KosmosWater.reflectionsEnabled() ? KosmosWater.getColourIntensity() : 1.0f;
+		colour.a = KosmosWater.get().reflectionsEnabled() ? KosmosWater.get().getColourIntensity() : 1.0f;
 		moved = false;
 	}
 
 	public float getHeight(float x, float z) {
-		float waveTime = KosmosWater.getWaveTime() / WAVE_SPEED;
+		float waveTime = KosmosWater.get().getWaveTime() / WAVE_SPEED;
 
 		final double val1 = 0.1;
 		final double val2 = 0.3;
@@ -273,9 +273,9 @@ public class Water {
 	}
 
 	public void delete() {
-		FlounderProcessors.sendRequest((RequestOpenGL) () -> {
+		FlounderProcessors.get().sendRequest((RequestOpenGL) () -> {
 			loaded = false;
-			FlounderLoader.deleteVAOFromCache(vao);
+			FlounderLoader.get().deleteVAOFromCache(vao);
 		});
 	}
 }

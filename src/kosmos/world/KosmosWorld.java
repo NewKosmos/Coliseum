@@ -32,12 +32,9 @@ import kosmos.water.*;
 import java.util.*;
 
 public class KosmosWorld extends Module {
-	private static final KosmosWorld INSTANCE = new KosmosWorld();
-	public static final String PROFILE_TAB_NAME = "Kosmos World";
-
 	public static final float GRAVITY = -11.0f;
 
-	private static MyFile[] SKYBOX_TEXTURE_FILES = {
+	private MyFile[] SKYBOX_TEXTURE_FILES = {
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsRight.png"),
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsLeft.png"),
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsTop.png"),
@@ -74,16 +71,16 @@ public class KosmosWorld extends Module {
 	private float dayFactor;
 
 	public KosmosWorld() {
-		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME, FlounderEntities.class);
+		super(FlounderEntities.class);
 	}
 
-	@Override
+	@Handler.Function(Handler.FLAG_INIT)
 	public void init() {
 		this.noise = new PerlinNoise(KosmosConfigs.SAVE_SEED.setReference(() -> noise.getSeed()).getInteger());
 
 		this.entityPlayer = null;
-		this.entitySun = new InstanceSun(FlounderEntities.getEntities(), new Vector3f(-250.0f, -250.0f, -250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
-		this.entityMoon = new InstanceMoon(FlounderEntities.getEntities(), new Vector3f(250.0f, 250.0f, 250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+		this.entitySun = new InstanceSun(FlounderEntities.get().getEntities(), new Vector3f(-250.0f, -250.0f, -250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+		this.entityMoon = new InstanceMoon(FlounderEntities.get().getEntities(), new Vector3f(250.0f, 250.0f, 250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 
 		this.playerQue = new HashMap<>();
 		this.players = new HashMap<>();
@@ -91,43 +88,43 @@ public class KosmosWorld extends Module {
 		this.dayDriver = new LinearDriver(0.0f, 100.0f, DAY_NIGHT_CYCLE);
 		this.dayFactor = 0.0f;
 
-		FlounderShadows.setBrightnessBoost(KosmosConfigs.BRIGHTNESS_BOOST.getFloat());
-		FlounderShadows.setShadowSize(KosmosConfigs.SHADOWMAP_SIZE.getInteger());
-		FlounderShadows.setShadowPCF(KosmosConfigs.SHADOWMAP_PCF.getInteger());
-		FlounderShadows.setShadowBias(KosmosConfigs.SHADOWMAP_BIAS.getFloat());
-		FlounderShadows.setShadowDarkness(KosmosConfigs.SHADOWMAP_DARKNESS.getFloat());
-		FlounderSkybox.setCubemap(TextureFactory.newBuilder().setCubemap(SKYBOX_TEXTURE_FILES).create());
+		FlounderShadows.get().setBrightnessBoost(KosmosConfigs.BRIGHTNESS_BOOST.getFloat());
+		FlounderShadows.get().setShadowSize(KosmosConfigs.SHADOWMAP_SIZE.getInteger());
+		FlounderShadows.get().setShadowPCF(KosmosConfigs.SHADOWMAP_PCF.getInteger());
+		FlounderShadows.get().setShadowBias(KosmosConfigs.SHADOWMAP_BIAS.getFloat());
+		FlounderShadows.get().setShadowDarkness(KosmosConfigs.SHADOWMAP_DARKNESS.getFloat());
+		FlounderSkybox.get().setCubemap(TextureFactory.newBuilder().setCubemap(SKYBOX_TEXTURE_FILES).create());
 	}
 
-	public static void generatePlayer() {
-		INSTANCE.entityPlayer = new InstancePlayer(FlounderEntities.getEntities(),
+	public void generatePlayer() {
+		this.entityPlayer = new InstancePlayer(FlounderEntities.get().getEntities(),
 				new Vector3f(
-						KosmosConfigs.SAVE_PLAYER_X.setReference(() -> KosmosWorld.getEntityPlayer().getPosition().x).getFloat(),
-						KosmosConfigs.SAVE_PLAYER_Y.setReference(() -> KosmosWorld.getEntityPlayer().getPosition().y).getFloat(),
-						KosmosConfigs.SAVE_PLAYER_Z.setReference(() -> KosmosWorld.getEntityPlayer().getPosition().z).getFloat()),
+						KosmosConfigs.SAVE_PLAYER_X.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().x).getFloat(),
+						KosmosConfigs.SAVE_PLAYER_Y.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().y).getFloat(),
+						KosmosConfigs.SAVE_PLAYER_Z.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().z).getFloat()),
 				new Vector3f()
 		);
-		KosmosChunks.setCurrent(new Chunk(FlounderEntities.getEntities(), new Vector3f(
-				KosmosConfigs.SAVE_CHUNK_X.setReference(() -> KosmosChunks.getCurrent().getPosition().x).getFloat(),
+		KosmosChunks.get().setCurrent(new Chunk(FlounderEntities.get().getEntities(), new Vector3f(
+				KosmosConfigs.SAVE_CHUNK_X.setReference(() -> KosmosChunks.get().getCurrent().getPosition().x).getFloat(),
 				0.0f,
-				KosmosConfigs.SAVE_CHUNK_Z.setReference(() -> KosmosChunks.getCurrent().getPosition().z).getFloat()
+				KosmosConfigs.SAVE_CHUNK_Z.setReference(() -> KosmosChunks.get().getCurrent().getPosition().z).getFloat()
 		))); // The root chunk.
-		KosmosWater.generateWater();
+		KosmosWater.get().generateWater();
 	}
 
-	public static void deletePlayer() {
-		KosmosWater.deleteWater();
-		KosmosChunks.clear(false);
-		INSTANCE.entityPlayer.forceRemove();
+	public void deletePlayer() {
+		KosmosWater.get().deleteWater();
+		KosmosChunks.get().clear(false);
+		this.entityPlayer.forceRemove();
 	}
 
-	@Override
+	@Handler.Function(Handler.FLAG_UPDATE_PRE)
 	public void update() {
 		// Move qued players to the world.
 		if (!playerQue.isEmpty()) {
 			for (String name : new HashMap<>(playerQue).keySet()) {
 				Pair<Vector3f, Vector3f> data = playerQue.get(name);
-				players.put(name, new InstanceMuliplayer(FlounderEntities.getEntities(), data.getFirst(), data.getSecond(), name));
+				players.put(name, new InstanceMuliplayer(FlounderEntities.get().getEntities(), data.getFirst(), data.getSecond(), name));
 				playerQue.remove(name);
 			}
 		}
@@ -135,130 +132,130 @@ public class KosmosWorld extends Module {
 		// Update the sky colours and sun position.
 		float scaledSpeed = 1.0f;
 
-		if (FlounderGuis.getGuiMaster() instanceof KosmosGuis) {
-			scaledSpeed = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 4.20f : 1.0f;
+		if (FlounderGuis.get().getGuiMaster() instanceof KosmosGuis) {
+			scaledSpeed = ((KosmosGuis) FlounderGuis.get().getGuiMaster()).getOverlaySlider().inStartMenu() ? 4.20f : 1.0f;
 		}
 
 		dayFactor = dayDriver.update(Framework.getDelta() * scaledSpeed) / 100.0f;
-		Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.getLightPosition()).normalize();
-		Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.getFog().getFogColour());
-		Colour.interpolate(FlounderSkybox.getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.getFog().getFogColour());
-		FlounderSkybox.getFog().setFogDensity(0.023f + ((1.0f - getShadowFactor()) * 0.016f));
-		FlounderSkybox.getFog().setFogGradient(2.80f - ((1.0f - getShadowFactor()) * 0.5f));
-		FlounderSkybox.setBlendFactor(starIntensity());
-		FlounderShadows.setShadowBoxOffset(10.0f);
-		FlounderShadows.setShadowBoxDistance(35.0f);
+		Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.get().getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.get().getLightPosition()).normalize();
+		Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.get().getFog().getFogColour());
+		Colour.interpolate(FlounderSkybox.get().getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.get().getFog().getFogColour());
+		FlounderSkybox.get().getFog().setFogDensity(0.023f + ((1.0f - getShadowFactor()) * 0.016f));
+		FlounderSkybox.get().getFog().setFogGradient(2.80f - ((1.0f - getShadowFactor()) * 0.5f));
+		FlounderSkybox.get().setBlendFactor(starIntensity());
+		FlounderShadows.get().setShadowBoxOffset(10.0f);
+		FlounderShadows.get().setShadowBoxDistance(35.0f);
 	}
 
-	@Override
+	@Handler.Function(Handler.FLAG_PROFILE)
 	public void profile() {
-		FlounderProfiler.add(PROFILE_TAB_NAME, "Seed", noise.getSeed());
+		FlounderProfiler.get().add(getTab(), "Seed", noise.getSeed());
 	}
 
-	public static PerlinNoise getNoise() {
-		return INSTANCE.noise;
+	public PerlinNoise getNoise() {
+		return this.noise;
 	}
 
-	public static Entity getPlayer(String username) {
-		return INSTANCE.players.get(username);
+	public Entity getPlayer(String username) {
+		return this.players.get(username);
 	}
 
-	public static boolean containsPlayer(String username) {
-		return INSTANCE.players.containsKey(username);
+	public boolean containsPlayer(String username) {
+		return this.players.containsKey(username);
 	}
 
-	public synchronized static void quePlayer(String username, Vector3f position, Vector3f rotation) {
-		INSTANCE.playerQue.put(username, new Pair<>(position, rotation));
+	public synchronized void quePlayer(String username, Vector3f position, Vector3f rotation) {
+		this.playerQue.put(username, new Pair<>(position, rotation));
 	}
 
-	public synchronized static void movePlayer(String username, float x, float y, float z, float w, float chunkX, float chunkZ) {
-		if (FlounderNetwork.getUsername().equals(username)) {
+	public synchronized void movePlayer(String username, float x, float y, float z, float w, float chunkX, float chunkZ) {
+		if (FlounderNetwork.get().getUsername().equals(username)) {
 			return;
 		}
 
-		if (!INSTANCE.players.containsKey(username)) {
-			if (!INSTANCE.playerQue.containsKey(username)) {
-				INSTANCE.playerQue.put(username, new Pair<>(new Vector3f(x, y, z), new Vector3f(0.0f, w, 0.0f)));
+		if (!this.players.containsKey(username)) {
+			if (!this.playerQue.containsKey(username)) {
+				this.playerQue.put(username, new Pair<>(new Vector3f(x, y, z), new Vector3f(0.0f, w, 0.0f)));
 			} else {
-				INSTANCE.playerQue.get(username).getFirst().set(x, y, z);
-				INSTANCE.playerQue.get(username).getSecond().set(0.0f, w, 0.0f);
+				this.playerQue.get(username).getFirst().set(x, y, z);
+				this.playerQue.get(username).getSecond().set(0.0f, w, 0.0f);
 			}
 
 			return;
 		}
 
-		((ComponentMultiplayer) INSTANCE.players.get(username).getComponent(ComponentMultiplayer.class)).move(x, y, z, w, chunkX, chunkZ);
+		((ComponentMultiplayer) this.players.get(username).getComponent(ComponentMultiplayer.class)).move(x, y, z, w, chunkX, chunkZ);
 	}
 
-	public synchronized static void removePlayer(String username) {
-		if (INSTANCE.playerQue.containsKey(username)) {
-			INSTANCE.playerQue.remove(username);
+	public synchronized void removePlayer(String username) {
+		if (this.playerQue.containsKey(username)) {
+			this.playerQue.remove(username);
 		}
 
-		if (INSTANCE.players.containsKey(username)) {
-			Entity otherPlayer = INSTANCE.players.get(username);
+		if (this.players.containsKey(username)) {
+			Entity otherPlayer = this.players.get(username);
 			otherPlayer.forceRemove();
-			INSTANCE.players.remove(username);
+			this.players.remove(username);
 		}
 	}
 
-	public synchronized static void removeAllPlayers() {
-		for (String username : INSTANCE.players.keySet()) {
-			Entity otherPlayer = INSTANCE.players.get(username);
+	public synchronized void removeAllPlayers() {
+		for (String username : this.players.keySet()) {
+			Entity otherPlayer = this.players.get(username);
 			otherPlayer.forceRemove();
 		}
 
-		INSTANCE.playerQue.clear();
-		INSTANCE.players.clear();
+		this.playerQue.clear();
+		this.players.clear();
 	}
 
-	public static Map<String, Entity> getPlayers() {
-		return INSTANCE.players;
+	public Map<String, Entity> getPlayers() {
+		return this.players;
 	}
 
-	public static int connectedPlayers() {
-		return INSTANCE.players.size();
+	public int connectedPlayers() {
+		return this.players.size();
 	}
 
-	public static Entity getEntityPlayer() {
-		return INSTANCE.entityPlayer;
+	public Entity getEntityPlayer() {
+		return this.entityPlayer;
 	}
 
-	public static Entity getEntitySun() {
-		return INSTANCE.entitySun;
+	public Entity getEntitySun() {
+		return this.entitySun;
 	}
 
-	public static Entity getEntityMoon() {
-		return INSTANCE.entityMoon;
+	public Entity getEntityMoon() {
+		return this.entityMoon;
 	}
 
-	public static float getDayFactor() {
-		return INSTANCE.dayFactor;
+	public float getDayFactor() {
+		return this.dayFactor;
 	}
 
-	public static float getSunriseFactor() {
+	public float getSunriseFactor() {
 		return (float) Maths.clamp(-(Math.sin(2.0 * Math.PI * getDayFactor()) - 1.0) / 2.0f, 0.0, 1.0);
 	}
 
-	public static float getShadowFactor() {
+	public float getShadowFactor() {
 		return (float) Maths.clamp(1.7f * Math.sin(2.0f * Math.PI * getDayFactor()), 0.0, 1.0);
 	}
 
-	public static float getSunHeight() {
+	public float getSunHeight() {
 		float addedHeight = 0.0f;
 
-		if (FlounderGuis.getGuiMaster() instanceof KosmosGuis) {
-			addedHeight = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 500.0f : 0.0f;
+		if (FlounderGuis.get().getGuiMaster() instanceof KosmosGuis) {
+			addedHeight = ((KosmosGuis) FlounderGuis.get().getGuiMaster()).getOverlaySlider().inStartMenu() ? 500.0f : 0.0f;
 		}
 
 		return getEntitySun().getPosition().getY() + addedHeight;
 	}
 
-	public static float starIntensity() {
+	public float starIntensity() {
 		float addedIntensity = 0.0f;
 
-		if (FlounderGuis.getGuiMaster() instanceof KosmosGuis) {
-			addedIntensity = ((KosmosGuis) FlounderGuis.getGuiMaster()).getOverlaySlider().inStartMenu() ? 0.5f : 0.0f;
+		if (FlounderGuis.get().getGuiMaster() instanceof KosmosGuis) {
+			addedIntensity = ((KosmosGuis) FlounderGuis.get().getGuiMaster()).getOverlaySlider().inStartMenu() ? 0.5f : 0.0f;
 		}
 
 		return Maths.clamp(1.0f - getShadowFactor() + addedIntensity, 0.0f, 1.0f);
@@ -266,10 +263,20 @@ public class KosmosWorld extends Module {
 
 	@Override
 	public Module getInstance() {
-		return INSTANCE;
+		return this;
 	}
 
-	@Override
+	@Handler.Function(Handler.FLAG_DISPOSE)
 	public void dispose() {
+	}
+
+	@Module.Instance
+	public static KosmosWorld get() {
+		return (KosmosWorld) Framework.getInstance(KosmosWorld.class);
+	}
+
+	@Module.TabName
+	public static String getTab() {
+		return "Kosmos World";
 	}
 }

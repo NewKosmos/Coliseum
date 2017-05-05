@@ -15,10 +15,8 @@ import flounder.framework.updater.*;
 import flounder.logger.*;
 import flounder.maths.*;
 import flounder.networking.*;
-import flounder.resources.*;
 import flounder.standards.*;
 import kosmos.network.packets.*;
-import org.lwjgl.glfw.*;
 
 public class KosmosServer extends Framework {
 	public static void main(String[] args) {
@@ -27,8 +25,8 @@ public class KosmosServer extends Framework {
 	}
 
 	public KosmosServer() {
-		super("Server", new UpdaterDefault(GLFW::glfwGetTime), 30, new ServerInterface());
-		FlounderDisplay.setup(256, 128, "New Kosmos Server", new MyFile[]{}, false, false, 0, false, true);
+		super("kosmos", new UpdaterDefault(null), 30, new Extension[]{new ServerInterface()}, new Module[]{});
+		//	FlounderDisplay.setup(256, 128, "New Kosmos Server", new MyFile[]{}, false, false, 0, false, true);
 	}
 
 	public static class ServerInterface extends Standard {
@@ -51,18 +49,18 @@ public class KosmosServer extends Framework {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				FlounderLogger.log(e);
+				FlounderLogger.get().log(e);
 			}
 
-			FlounderLogger.log("Server seed: " + serverSeed);
-			FlounderNetwork.startServer(serverPort);
+			FlounderLogger.get().log("Server seed: " + serverSeed);
+			FlounderNetwork.get().startServer(serverPort);
 		}
 
 		@Override
 		public void update() {
 			// Remind the clients the time, acts as a "are your there" ping as well.
 			if (timerWorld.isPassedTime()) {
-				new PacketWorld(serverSeed, Framework.getTimeSec()).writeData(FlounderNetwork.getSocketServer());
+				new PacketWorld(serverSeed, Framework.getTimeSec()).writeData(FlounderNetwork.get().getSocketServer());
 				timerWorld.resetStartTime();
 			}
 		}
@@ -74,7 +72,7 @@ public class KosmosServer extends Framework {
 
 		@Override
 		public void dispose() {
-			new PacketDisconnect("server").writeData(FlounderNetwork.getSocketServer());
+			new PacketDisconnect("server").writeData(FlounderNetwork.get().getSocketServer());
 			KosmosConfigs.saveAllConfigs();
 		}
 

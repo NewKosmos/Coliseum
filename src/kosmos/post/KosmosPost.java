@@ -5,9 +5,6 @@ import flounder.profiling.*;
 import kosmos.*;
 
 public class KosmosPost extends Module {
-	private static final KosmosPost INSTANCE = new KosmosPost();
-	public static final String PROFILE_TAB_NAME = "Kosmos Post";
-
 	private boolean effectsEnabled;
 
 	private boolean bloomEnabled;
@@ -18,10 +15,10 @@ public class KosmosPost extends Module {
 	private boolean grainEnabled;
 
 	public KosmosPost() {
-		super(ModuleUpdate.UPDATE_PRE, PROFILE_TAB_NAME);
+		super();
 	}
 
-	@Override
+	@Handler.Function(Handler.FLAG_INIT)
 	public void init() {
 		this.effectsEnabled = KosmosConfigs.POST_EFFECTS_ENABLED.getBoolean();
 
@@ -33,82 +30,87 @@ public class KosmosPost extends Module {
 		this.grainEnabled = KosmosConfigs.POST_GRAIN_ENABLED.getBoolean();
 	}
 
-	@Override
+	@Handler.Function(Handler.FLAG_UPDATE_PRE)
 	public void update() {
 	}
 
-	@Override
+	@Handler.Function(Handler.FLAG_PROFILE)
 	public void profile() {
-		FlounderProfiler.add(PROFILE_TAB_NAME, "Effects Enabled", effectsEnabled);
-		FlounderProfiler.add(PROFILE_TAB_NAME, "Bloom Enabled", bloomEnabled);
-		FlounderProfiler.add(PROFILE_TAB_NAME, "Motion Blur Enabled", motionBlurEnabled);
-		FlounderProfiler.add(PROFILE_TAB_NAME, "Lens Flare Enabled", lensFlareEnabled);
-		FlounderProfiler.add(PROFILE_TAB_NAME, "CRT Filter Enabled", crtEnabled);
-		FlounderProfiler.add(PROFILE_TAB_NAME, "Grain Filter Enabled", grainEnabled);
+		FlounderProfiler.get().add(getTab(), "Effects Enabled", effectsEnabled);
+		FlounderProfiler.get().add(getTab(), "Bloom Enabled", bloomEnabled);
+		FlounderProfiler.get().add(getTab(), "Motion Blur Enabled", motionBlurEnabled);
+		FlounderProfiler.get().add(getTab(), "Lens Flare Enabled", lensFlareEnabled);
+		FlounderProfiler.get().add(getTab(), "CRT Filter Enabled", crtEnabled);
+		FlounderProfiler.get().add(getTab(), "Grain Filter Enabled", grainEnabled);
 	}
 
-	public static boolean isEffectsEnabled() {
-		return INSTANCE.effectsEnabled;
+	public boolean isEffectsEnabled() {
+		return this.effectsEnabled;
 	}
 
-	public static void setEffectsEnabled(boolean effectsEnabled) {
-		INSTANCE.effectsEnabled = effectsEnabled;
+	public void setEffectsEnabled(boolean effectsEnabled) {
+		this.effectsEnabled = effectsEnabled;
 	}
 
-	public static boolean isBloomEnabled() {
-		return INSTANCE.bloomEnabled;
+	public boolean isBloomEnabled() {
+		return this.bloomEnabled;
 	}
 
-	public static void setBloomEnabled(boolean bloomEnabled) {
-		INSTANCE.bloomEnabled = bloomEnabled;
+	public void setBloomEnabled(boolean bloomEnabled) {
+		this.bloomEnabled = bloomEnabled;
 	}
 
-	public static boolean isMotionBlurEnabled() {
-		return INSTANCE.motionBlurEnabled;
+	public boolean isMotionBlurEnabled() {
+		return this.motionBlurEnabled;
 	}
 
-	public static void setMotionBlurEnabled(boolean motionBlurEnabled) {
-		INSTANCE.motionBlurEnabled = motionBlurEnabled;
+	public void setMotionBlurEnabled(boolean motionBlurEnabled) {
+		this.motionBlurEnabled = motionBlurEnabled;
 	}
 
-	public static boolean isTiltShiftEnabled() {
-		return INSTANCE.tiltShiftEnabled;
+	public boolean isTiltShiftEnabled() {
+		return this.tiltShiftEnabled;
 	}
 
-	public static void setTiltShiftEnabled(boolean tiltShiftEnabled) {
-		INSTANCE.tiltShiftEnabled = tiltShiftEnabled;
+	public void setTiltShiftEnabled(boolean tiltShiftEnabled) {
+		this.tiltShiftEnabled = tiltShiftEnabled;
 	}
 
-	public static boolean isLensFlareEnabled() {
-		return INSTANCE.lensFlareEnabled;
+	public boolean isLensFlareEnabled() {
+		return this.lensFlareEnabled;
 	}
 
-	public static void setLensFlareEnabled(boolean lensFlareEnabled) {
-		INSTANCE.lensFlareEnabled = lensFlareEnabled;
+	public void setLensFlareEnabled(boolean lensFlareEnabled) {
+		this.lensFlareEnabled = lensFlareEnabled;
 	}
 
-	public static boolean isCrtEnabled() {
-		return INSTANCE.crtEnabled;
+	public boolean isCrtEnabled() {
+		return this.crtEnabled;
 	}
 
-	public static void setCrtEnabled(boolean crtEnabled) {
-		INSTANCE.crtEnabled = crtEnabled;
+	public void setCrtEnabled(boolean crtEnabled) {
+		this.crtEnabled = crtEnabled;
 	}
 
-	public static boolean isGrainEnabled() {
-		return INSTANCE.grainEnabled;
+	public boolean isGrainEnabled() {
+		return this.grainEnabled;
 	}
 
-	public static void setGrainEnabled(boolean grainEnabled) {
-		INSTANCE.grainEnabled = grainEnabled;
+	public void setGrainEnabled(boolean grainEnabled) {
+		this.grainEnabled = grainEnabled;
 	}
 
-	@Override
-	public Module getInstance() {
-		return INSTANCE;
-	}
-
-	@Override
+	@Handler.Function(Handler.FLAG_DISPOSE)
 	public void dispose() {
+	}
+
+	@Module.Instance
+	public static KosmosPost get() {
+		return (KosmosPost) Framework.getInstance(KosmosPost.class);
+	}
+
+	@Module.TabName
+	public static String getTab() {
+		return "Kosmos Post";
 	}
 }
