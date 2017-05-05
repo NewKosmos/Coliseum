@@ -11,7 +11,9 @@ package kosmos;
 
 import flounder.framework.*;
 import flounder.framework.updater.*;
+import flounder.lwjgl3.*;
 import flounder.profiling.*;
+import flounder.resources.*;
 import kosmos.camera.*;
 
 public class NewKosmos extends Framework {
@@ -25,7 +27,7 @@ public class NewKosmos extends Framework {
 	public NewKosmos() {
 		super("kosmos", new UpdaterDefault(null), -1,
 				new Extension[]{new KosmosInterface(), new KosmosRenderer(), new KosmosCamera(), new KosmosPlayer(), new KosmosGuis()},
-				new Module[]{/*new PlatformLwjgl(
+				new Module[]{new PlatformLwjgl(
 						KosmosConfigs.DISPLAY_WIDTH.getInteger(),
 						KosmosConfigs.DISPLAY_HEIGHT.getInteger(),
 						"Kosmos", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
@@ -36,7 +38,7 @@ public class NewKosmos extends Framework {
 						false,
 						KosmosConfigs.WIREFRAME_ENABLED.getBoolean(),
 						KosmosConfigs.TEXTURES_ANISOTROPY_MAX.getFloat()
-				)*/});
+				)});
 		Framework.setFpsLimit(KosmosConfigs.FRAMEWORK_FPS_LIMIT.getInteger());
 		FlounderProfiler.get().toggle(KosmosConfigs.PROFILER_ENABLED.getBoolean());
 	}
