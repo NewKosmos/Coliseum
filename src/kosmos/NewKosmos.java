@@ -15,6 +15,7 @@ import flounder.lwjgl3.*;
 import flounder.profiling.*;
 import flounder.resources.*;
 import kosmos.camera.*;
+import org.lwjgl.glfw.*;
 
 public class NewKosmos extends Framework {
 	public static final String VERSION = "5.05";
@@ -25,7 +26,7 @@ public class NewKosmos extends Framework {
 	}
 
 	public NewKosmos() {
-		super("kosmos", new UpdaterDefault(null), -1,
+		super("kosmos", new UpdaterDefault(GLFW::glfwGetTime), -1,
 				new Extension[]{new KosmosInterface(), new KosmosRenderer(), new KosmosCamera(), new KosmosPlayer(), new KosmosGuis()},
 				new Module[]{new PlatformLwjgl(
 						KosmosConfigs.DISPLAY_WIDTH.getInteger(),
