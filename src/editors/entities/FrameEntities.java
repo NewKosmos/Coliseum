@@ -76,7 +76,7 @@ public class FrameEntities extends Standard {
 						"Are you sure to close this editor?", "Any unsaved work will be lost!",
 						JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-					Framework.requestClose();
+					Framework.requestClose(false);
 				} else {
 					frame.setVisible(true);
 				}
@@ -99,7 +99,7 @@ public class FrameEntities extends Standard {
 		menuFileQuit.addActionListener(new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Framework.requestClose();
+				Framework.requestClose(false);
 			}
 		});
 		menuFile.add(menuFileQuit);

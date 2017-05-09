@@ -103,7 +103,7 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public void onEvent() {
-				Framework.requestClose();
+				Framework.requestClose(false);
 			}
 		});
 	}

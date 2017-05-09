@@ -52,7 +52,7 @@ public class KosmosCamera extends Camera {
 	private static final float MAX_ZOOM_CHANGE = 0.5f;
 
 	private static final float CAMERA_AIM_OFFSET_FPS = 1.5f;
-	private static final float CAMERA_AIM_OFFSET = 2.0f;
+	private static final float CAMERA_AIM_OFFSET = 1.5f;
 
 	private static final float MAX_ANGLE_OF_ELEVATION_FPS = 45.0f;
 	private static final float MIN_ANGLE_OF_ELEVATION_FPS = -45.0f;

@@ -212,7 +212,7 @@ public interface ICommand {
 				FlounderLogger.get().log(log);
 				OverlayChat.addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
-				Framework.requestClose();
+				Framework.requestClose(false);
 			}
 		});
 
