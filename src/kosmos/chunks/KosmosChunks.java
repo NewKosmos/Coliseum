@@ -182,7 +182,7 @@ public class KosmosChunks extends Module {
 			}
 
 			// Goes though all chunks looking for changes.
-			for (Entity entity : FlounderEntities.get().getEntities().getAll()) {
+			for (Entity entity : new ArrayList<>(FlounderEntities.get().getEntities().getAll())) {
 				if (entity != null && entity instanceof Chunk) {
 					Chunk chunk = (Chunk) entity;
 
