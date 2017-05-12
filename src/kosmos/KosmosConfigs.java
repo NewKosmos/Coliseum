@@ -55,6 +55,7 @@ public class KosmosConfigs {
 	public static final ConfigData SHADOWMAP_PCF = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapPcf", 0, () -> FlounderShadows.get().getShadowPCF());
 	public static final ConfigData SHADOWMAP_BIAS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapBias", 0.001f, () -> FlounderShadows.get().getShadowBias());
 	public static final ConfigData SHADOWMAP_DARKNESS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapDarkness", 0.4f, () -> FlounderShadows.get().getShadowDarkness());
+	public static final ConfigData SHADOWMAP_UNLIMITED = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapUnlimited", true, () -> FlounderShadows.get().isRenderUnlimited());
 
 	public static final ConfigData POST_EFFECTS_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "effectsEnabled", true, () -> KosmosPost.get().isEffectsEnabled());
 	public static final ConfigData POST_BLOOM_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "bloomEnabled", true, () -> KosmosPost.get().isBloomEnabled());

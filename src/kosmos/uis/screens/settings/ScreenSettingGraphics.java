@@ -227,6 +227,21 @@ public class ScreenSettingGraphics extends ScreenObject {
 			}
 		});
 
+		// Toggle Shadowmaps Unlimited.
+		GuiButtonText toggleShadowsUnlimited = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.69f), "Shadows Unlimited: ", GuiAlign.CENTRE);
+		FlounderEvents.get().addEvent(new EventChange<Boolean>(() -> FlounderShadows.get().isRenderUnlimited()) {
+			@Override
+			public void onEvent(Boolean newValue) {
+				toggleShadowsUnlimited.setText("Shadows Unlimited: " + newValue);
+			}
+		});
+		toggleShadowsUnlimited.addLeftListener(new ScreenListener() {
+			@Override
+			public void eventOccurred() {
+				FlounderShadows.get().setRenderUnlimited(!FlounderShadows.get().isRenderUnlimited());
+			}
+		});
+
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);
 		back.addLeftListener(new ScreenListener() {

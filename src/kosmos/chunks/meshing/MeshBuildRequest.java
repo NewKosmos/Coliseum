@@ -87,68 +87,57 @@ public class MeshBuildRequest implements RequestResource {
 			// A constant radius ensures every chunk holds the same volume.
 			chunkMesh.maxRadius = Chunk.CHUNK_WORLD_SIZE; // Maths.maxValue(maxX, maxY, maxZ, Math.abs(minX), Math.abs(minY), Math.abs(minZ));
 
+			// Gets the resulting data stuff from the other stuff.
+			float[] resultVertices = new float[vertices.size() * 3];
+			float[] resultTextures = new float[vertices.size() * 2];
+			float[] resultNormals = new float[vertices.size() * 3];
+			float[] resultTangents = new float[vertices.size() * 3];
+			int[] resultIndices = new int[vertices.size()];
+
+			for (int i = 0; i < vertices.size(); i++) {
+				resultVertices[vertices.get(i).index * 3] = vertices.get(i).vertex0;
+				resultVertices[vertices.get(i).index * 3 + 1] = vertices.get(i).vertex1;
+				resultVertices[vertices.get(i).index * 3 + 2] = vertices.get(i).vertex2;
+
+				resultTextures[vertices.get(i).index * 2] = vertices.get(i).texture0;
+				resultTextures[vertices.get(i).index * 2 + 1] = vertices.get(i).texture1;
+
+				resultNormals[vertices.get(i).index * 3] = vertices.get(i).normal0;
+				resultNormals[vertices.get(i).index * 3 + 1] = vertices.get(i).normal1;
+				resultNormals[vertices.get(i).index * 3 + 2] = vertices.get(i).normal2;
+
+				resultTangents[vertices.get(i).index * 3] = vertices.get(i).tangent0;
+				resultTangents[vertices.get(i).index * 3 + 1] = vertices.get(i).tangent1;
+				resultTangents[vertices.get(i).index * 3 + 2] = vertices.get(i).tangent2;
+
+				resultIndices[i] = vertices.get(i).index;
+			}
+
 			// Then all model data is used to create a manual model loader, a hull is not generated and materials are baked into the textures. he model is then loaded into a object and OpenGL.
-			chunkMesh.chunkModel = ModelFactory.newBuilder().setManual(new ModelLoadManual("chunk" + chunkMesh.chunk.getPosition().x + "p" + chunkMesh.chunk.getPosition().z) {
+			chunkMesh.chunkModel = ModelFactory.newBuilder().setManual(new ModelLoadManual("chunk" + chunkMesh.chunk.getPosition().x + "u" + chunkMesh.chunk.getPosition().z) {
 				@Override
 				public float[] getVertices() {
-					float[] result = new float[vertices.size() * 3];
-
-					for (int i = 0; i < vertices.size(); i++) {
-						result[vertices.get(i).index * 3] = vertices.get(i).vertex0;
-						result[vertices.get(i).index * 3 + 1] = vertices.get(i).vertex1;
-						result[vertices.get(i).index * 3 + 2] = vertices.get(i).vertex2;
-					}
-
-					return result;
+					return resultVertices;
 				}
 
 				@Override
-				public float[] getTextureCoords() {
-					float[] result = new float[vertices.size() * 2];
-
-					for (int i = 0; i < vertices.size(); i++) {
-						result[vertices.get(i).index * 2] = vertices.get(i).texture0;
-						result[vertices.get(i).index * 2 + 1] = vertices.get(i).texture1;
-					}
-
-					return result;
+				public float[] getTextures() {
+					return resultTextures;
 				}
 
 				@Override
 				public float[] getNormals() {
-					float[] result = new float[vertices.size() * 3];
-
-					for (int i = 0; i < vertices.size(); i++) {
-						result[vertices.get(i).index * 3] = vertices.get(i).normal0;
-						result[vertices.get(i).index * 3 + 1] = vertices.get(i).normal1;
-						result[vertices.get(i).index * 3 + 2] = vertices.get(i).normal2;
-					}
-
-					return result;
+					return resultNormals;
 				}
 
 				@Override
 				public float[] getTangents() {
-					float[] result = new float[vertices.size() * 3];
-
-					for (int i = 0; i < vertices.size(); i++) {
-						result[vertices.get(i).index * 3] = vertices.get(i).tangent0;
-						result[vertices.get(i).index * 3 + 1] = vertices.get(i).tangent1;
-						result[vertices.get(i).index * 3 + 2] = vertices.get(i).tangent2;
-					}
-
-					return result;
+					return resultTangents;
 				}
 
 				@Override
 				public int[] getIndices() {
-					int[] result = new int[vertices.size()];
-
-					for (int i = 0; i < vertices.size(); i++) {
-						result[i] = vertices.get(i).index;
-					}
-
-					return result;
+					return resultIndices;
 				}
 
 				@Override

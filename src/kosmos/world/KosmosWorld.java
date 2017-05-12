@@ -93,6 +93,7 @@ public class KosmosWorld extends Module {
 		FlounderShadows.get().setShadowPCF(KosmosConfigs.SHADOWMAP_PCF.getInteger());
 		FlounderShadows.get().setShadowBias(KosmosConfigs.SHADOWMAP_BIAS.getFloat());
 		FlounderShadows.get().setShadowDarkness(KosmosConfigs.SHADOWMAP_DARKNESS.getFloat());
+		FlounderShadows.get().setRenderUnlimited(KosmosConfigs.SHADOWMAP_UNLIMITED.getBoolean());
 		FlounderSkybox.get().setCubemap(TextureFactory.newBuilder().setCubemap(SKYBOX_TEXTURE_FILES).create());
 	}
 
