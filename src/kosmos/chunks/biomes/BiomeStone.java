@@ -44,6 +44,12 @@ public class BiomeStone extends IBiome {
 				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 					return new InstanceGemRed(structure, position, rotation);
 				}
+			},
+			new EntitySpawn(1.0f, 0.42f) {
+				@Override
+				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
+					return new InstanceGrassTuft1(structure, position, rotation);
+				}
 			}
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "stone.png")).clampEdges().create();
