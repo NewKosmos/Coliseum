@@ -132,7 +132,7 @@ public class KosmosRenderer extends RendererMaster {
 					waterRenderer.getReflectionFBO().getColourTexture(1), // Normals
 					waterRenderer.getReflectionFBO().getColourTexture(2), // Extras
 					waterRenderer.getReflectionFBO().getDepthTexture(), // Depth
-					((KosmosRenderer) FlounderRenderer.get().getRendererMaster()).getShadowRenderer().getShadowMap() // Shadow Map
+					shadowRenderer.getShadowMap() // Shadow Map
 			);
 
 			//	if (KosmosPost.isBloomEnabled()) {
@@ -251,10 +251,6 @@ public class KosmosRenderer extends RendererMaster {
 
 	@Override
 	public void profile() {
-	}
-
-	public ShadowRenderer getShadowRenderer() {
-		return shadowRenderer;
 	}
 
 	@Override
