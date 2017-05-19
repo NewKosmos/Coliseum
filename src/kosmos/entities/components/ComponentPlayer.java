@@ -114,8 +114,10 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 		float worldHeight = Math.max(waterLevel - (float) Math.sqrt(2.0), chunkHeight) + KosmosPlayer.PLAYER_OFFSET_Y;
 
 		// If the player is below the world height then force the player back on the ground.
-		if (!noclip && getEntity().getPosition().y + dy < worldHeight) {
-			dy = worldHeight - getEntity().getPosition().getY();
+		float depth = (getEntity().getPosition().y + dy) - worldHeight;
+
+		if (!noclip && depth < 0.0f) {
+			dy = Math.min(-depth, (float) Math.sqrt(2.0)) * 10.0f * Framework.getDelta();
 			currentUpwardSpeed = 0.0f;
 		}
 
