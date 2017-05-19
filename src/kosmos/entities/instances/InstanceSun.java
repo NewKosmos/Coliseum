@@ -24,7 +24,7 @@ public class InstanceSun extends Entity {
 	public InstanceSun(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 		super(structure, position, rotation);
 		new ComponentCelestial(this, ComponentCelestial.LightType.SUN);
-		new ComponentModel(this, 16.0f, MODEL, TEXTURE, 1);
+		new ComponentModel(this, 8.0f, MODEL, TEXTURE, 1);
 		new ComponentGlow(this, TEXTURE_GLOW);
 		new ComponentSurface(this, 1.0f, 0.0f, true, true, false);
 		new ComponentLight(this, new Vector3f(0.0f, 0.0f, 0.0f), new Colour(KosmosWorld.SUN_COLOUR_DAY), new Attenuation(1.0f, 0.0f, 0.0f));

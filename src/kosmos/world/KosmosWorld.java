@@ -65,7 +65,9 @@ public class KosmosWorld extends Module {
 
 	private Entity entityPlayer;
 	private Entity entitySun;
-	private Entity entityMoon;
+	private Entity entityMoon1;
+	private Entity entityMoon2;
+	private Entity entityMoon3;
 
 	private LinearDriver dayDriver;
 	private float dayFactor;
@@ -80,7 +82,9 @@ public class KosmosWorld extends Module {
 
 		this.entityPlayer = null;
 		this.entitySun = new InstanceSun(FlounderEntities.get().getEntities(), new Vector3f(-250.0f, -250.0f, -250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
-		this.entityMoon = new InstanceMoon(FlounderEntities.get().getEntities(), new Vector3f(250.0f, 250.0f, 250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+		this.entityMoon1 = new InstanceMoon1(FlounderEntities.get().getEntities(), new Vector3f(200.0f, -250.0f, 220.0f), new Vector3f(0.0f, 0.0f, 0.0f)); // Red
+		this.entityMoon2 = new InstanceMoon2(FlounderEntities.get().getEntities(), new Vector3f(-190.0f, 250.0f, 250.0f), new Vector3f(0.0f, 0.0f, 0.0f)); // Ikea
+		this.entityMoon3 = new InstanceMoon3(FlounderEntities.get().getEntities(), new Vector3f(-200.0f, 200.0f, -250.0f), new Vector3f(0.0f, 0.0f, 0.0f)); // Green
 
 		this.playerQue = new HashMap<>();
 		this.players = new HashMap<>();
@@ -226,8 +230,16 @@ public class KosmosWorld extends Module {
 		return this.entitySun;
 	}
 
-	public Entity getEntityMoon() {
-		return this.entityMoon;
+	public Entity getEntityMoon1() {
+		return this.entityMoon1;
+	}
+
+	public Entity getEntityMoon2() {
+		return this.entityMoon2;
+	}
+
+	public Entity getEntityMoon3() {
+		return this.entityMoon3;
 	}
 
 	public float getDayFactor() {

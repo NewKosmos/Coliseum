@@ -11,11 +11,13 @@ package kosmos.chunks;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.helpers.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.particles.*;
 import flounder.particles.spawns.*;
 import flounder.physics.*;
+import flounder.physics.bounding.*;
 import flounder.space.*;
 import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;
@@ -102,7 +104,7 @@ public class Chunk extends Entity {
 	/**
 	 * Generates the 6 chunks around this one if they do not exist.
 	 */
-	protected void createChunksAround() {
+	protected void createChunksAround(Single<Integer> depth) {
 		childrenChunks.removeIf((Chunk child) -> child == null || !FlounderEntities.get().getEntities().contains(child));
 
 		if (childrenChunks.size() == 6) {
@@ -136,6 +138,12 @@ public class Chunk extends Entity {
 				childrenChunks.add(duplicate);
 			}
 		}
+
+		depth.setSingle(depth.getSingle() - 1);
+
+		if (depth.getSingle() > 0) {
+			childrenChunks.forEach((chunk -> chunk.createChunksAround(depth)));
+		}
 	}
 
 	@Override
@@ -147,7 +155,7 @@ public class Chunk extends Entity {
 		this.chunkMesh.update();
 
 		// Adds this mesh AABB to the bounding render pool.
-		// FlounderBounding.addShapeRender(getSphere());
+		FlounderBounding.get().addShapeRender(getSphere());
 	}
 
 	public static List<Vector3f> generate(Chunk chunk) {

@@ -20,6 +20,7 @@ public class ChunkMesh {
 	protected ModelObject chunkModel;
 
 	protected boolean built;
+	protected boolean sent;
 
 	protected float minX, minY, minZ;
 	protected float maxX, maxY, maxZ;
@@ -37,8 +38,9 @@ public class ChunkMesh {
 		}
 
 		// If not built, build.
-		if (!built) {
+		if (!sent && !built) {
 			FlounderProcessors.get().sendRequest(new MeshBuildRequest(this, KosmosChunks.get().getModelHexagon()));
+			sent = true;
 			built = true;
 		}
 
@@ -62,6 +64,7 @@ public class ChunkMesh {
 		if (chunkModel != null) {
 			chunkModel.delete();
 			chunkModel = null;
+			sent = false;
 			built = false;
 		}
 	}

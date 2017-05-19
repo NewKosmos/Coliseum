@@ -31,7 +31,7 @@ public class NewKosmos extends Framework {
 				new Module[]{new PlatformLwjgl(
 						KosmosConfigs.DISPLAY_WIDTH.getInteger(),
 						KosmosConfigs.DISPLAY_HEIGHT.getInteger(),
-						"Kosmos", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
+						"New Kosmos", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
 						KosmosConfigs.DISPLAY_VSYNC.getBoolean(),
 						KosmosConfigs.DISPLAY_ANTIALIAS.getBoolean(),
 						0,

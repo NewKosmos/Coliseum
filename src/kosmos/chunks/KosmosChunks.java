@@ -14,6 +14,7 @@ import flounder.entities.*;
 import flounder.events.*;
 import flounder.framework.*;
 import flounder.guis.*;
+import flounder.helpers.*;
 import flounder.inputs.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
@@ -74,7 +75,7 @@ public class KosmosChunks extends Module {
 					}
 				}
 			}
-		});*/
+		});
 
 		FlounderEvents.get().addEvent(new IEvent() {
 			private final int RECURSION_COUNT = 256;
@@ -166,7 +167,7 @@ public class KosmosChunks extends Module {
 					return false;
 				}
 			}
-		});
+		});*/
 	}
 
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)
@@ -226,8 +227,7 @@ public class KosmosChunks extends Module {
 	public void setCurrent(Chunk currentChunk) {
 		if (currentChunk != null && this.currentChunk != currentChunk) {
 			// Creates the children chunks for the new current chunk.
-			currentChunk.createChunksAround();
-			currentChunk.getChildrenChunks().forEach(Chunk::createChunksAround);
+			currentChunk.createChunksAround(new Single<>(2));
 
 			// Removes any old chunks that are out of range.
 			Iterator<Entity> it = FlounderEntities.get().getEntities().getAll().iterator();
