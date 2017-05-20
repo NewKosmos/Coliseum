@@ -27,6 +27,7 @@ public class KosmosGuis extends GuiMaster {
 
 	public static final float SLIDE_TIME = 0.5f;
 
+	private OverlayStartup overlayStartup;
 	private OverlayAlpha overlayAlpha;
 	private OverlayHUD overlayHUD;
 	private OverlayUsernames overlayUsernames;
@@ -40,6 +41,7 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public void init() {
+		this.overlayStartup = new OverlayStartup(FlounderGuis.get().getContainer());
 		this.overlayAlpha = new OverlayAlpha(FlounderGuis.get().getContainer());
 		this.overlayHUD = new OverlayHUD(FlounderGuis.get().getContainer());
 		this.overlayUsernames = new OverlayUsernames(FlounderGuis.get().getContainer());
@@ -47,12 +49,13 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayChat = new OverlayChat(FlounderGuis.get().getContainer());
 		this.overlaySlider = new OverlaySlider(FlounderGuis.get().getContainer());
 
-		this.overlayAlpha.setAlphaDriver(new ConstantDriver(1.0f));
+		this.overlayStartup.setAlphaDriver(new ConstantDriver(1.0f));
+		this.overlayAlpha.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayHUD.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayUsernames.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayDebug.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
-		this.overlaySlider.setAlphaDriver(new ConstantDriver(1.0f));
+		this.overlaySlider.setAlphaDriver(new ConstantDriver(0.0f));
 
 		FlounderGuis.get().getSelector().initJoysticks(0, 0, 1, 0, 1);
 
@@ -115,6 +118,15 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public void update() {
+		if (overlayStartup.getAlpha() == 0.0f && overlayStartup.isStarting()) {
+			// Enable other GUI things.
+			this.overlayAlpha.setAlphaDriver(new SlideDriver(overlayAlpha.getAlpha(), 1.0f, SLIDE_TIME));
+			this.overlaySlider.setAlphaDriver(new SlideDriver(overlaySlider.getAlpha(), 1.0f, SLIDE_TIME));
+
+			overlayStartup.setAlphaDriver(new ConstantDriver(0.0f));
+			overlayStartup.setStarting(false);
+		}
+
 		if (!isGamePaused() && FlounderMouse.get().isDisplaySelected() && FlounderDisplay.get().isFocused()) {
 			FlounderMouse.get().setCursorHidden(KosmosCamera.isMouseLocked());
 		} else {
@@ -128,7 +140,7 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public boolean isGamePaused() {
-		return overlaySlider.getAlpha() > 0.1f || overlayChat.getAlpha() >= 0.1f;
+		return overlayStartup.isStarting() || overlaySlider.getAlpha() > 0.1f || overlayChat.getAlpha() >= 0.1f;
 	}
 
 	@Override
