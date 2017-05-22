@@ -109,7 +109,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 		}
 
 		// Calculates the deltas to the moved distance, and rotations.
-		double theta = Math.toRadians(FlounderCamera.get().getCamera().getRotation().y);
+		double theta = Math.toRadians(getEntity().getRotation().y - 180.0f);
 		float dx = (float) -(currentSpeed * Math.sin(theta) + currentStrafeSpeed * Math.cos(theta)) * delta;
 		float dy = currentUpwardSpeed * delta;
 		float dz = (float) -(currentSpeed * Math.cos(theta) - currentStrafeSpeed * Math.sin(theta)) * delta;
