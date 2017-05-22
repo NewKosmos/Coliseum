@@ -58,7 +58,7 @@ public class KosmosWorld extends Module {
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, 0.0f, 0.5f); // The starting light direction.
 
-	private ClassicNoise noise;
+	private PerlinNoise noise;
 
 	private Map<String, Pair<Vector3f, Vector3f>> playerQue;
 	private Map<String, Entity> players;
@@ -76,7 +76,7 @@ public class KosmosWorld extends Module {
 
 	@Handler.Function(Handler.FLAG_INIT)
 	public void init() {
-		this.noise = new ClassicNoise(KosmosConfigs.SAVE_SEED.setReference(() -> noise.getSeed()).getInteger());
+		this.noise = new PerlinNoise(KosmosConfigs.SAVE_SEED.setReference(() -> noise.getSeed()).getInteger());
 
 		this.entityPlayer = null;
 		this.entitySun = new InstanceSun(FlounderEntities.get().getEntities(), new Vector3f(-250.0f, -250.0f, -250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
@@ -153,7 +153,7 @@ public class KosmosWorld extends Module {
 		FlounderProfiler.get().add(getTab(), "Seed", noise.getSeed());
 	}
 
-	public ClassicNoise getNoise() {
+	public PerlinNoise getNoise() {
 		return this.noise;
 	}
 
