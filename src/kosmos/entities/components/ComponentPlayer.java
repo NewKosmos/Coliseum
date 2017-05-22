@@ -82,12 +82,12 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 
 		// Gets movement and rotation data from player inputs.
 		if (!FlounderGuis.get().getGuiMaster().isGamePaused()) {
-			currentSpeed = KosmosPlayer.SPEED * Maths.deadband(0.05f, inputForward.getAmount());
-			currentStrafeSpeed = -KosmosPlayer.SPEED * Maths.deadband(0.05f, inputStrafe.getAmount());
+			currentSpeed = KosmosPlayer.RUN_SPEED * Maths.deadband(0.05f, inputForward.getAmount());
+			currentStrafeSpeed = -KosmosPlayer.STRAFE_SPEED * Maths.deadband(0.05f, inputStrafe.getAmount());
 
 			if (inputBoost.isDown()) {
 				currentSpeed *= KosmosPlayer.BOOST_MUL;
-				//	currentStrafeSpeed *= KosmosPlayer.BOOST_MUL;
+				currentStrafeSpeed *= KosmosPlayer.BOOST_MUL;
 			}
 
 			if (inputJump.wasDown() && Maths.deadband(0.05f, currentUpwardSpeed) == 0.0f) {

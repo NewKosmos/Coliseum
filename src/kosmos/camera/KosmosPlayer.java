@@ -20,7 +20,8 @@ import kosmos.world.*;
 public class KosmosPlayer extends Player {
 	public static final float PLAYER_OFFSET_Y = (float) (Math.sqrt(2.0) * 0.25);
 
-	public static final float SPEED = 6.0f;
+	public static final float RUN_SPEED = 6.0f;
+	public static final float STRAFE_SPEED = 4.0f;
 	public static final float BOOST_MUL = 2.0f;
 	public static final float JUMP_POWER = 5.0f;
 	public static final float FLY_SPEED = 8.0f;
