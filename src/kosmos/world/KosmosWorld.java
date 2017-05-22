@@ -32,7 +32,7 @@ import kosmos.water.*;
 import java.util.*;
 
 public class KosmosWorld extends Module {
-	public static final float GRAVITY = -11.0f;
+	public static final float GRAVITY = -32.0f;
 
 	private MyFile[] SKYBOX_TEXTURE_FILES = {
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsRight.png"),

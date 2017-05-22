@@ -97,7 +97,7 @@ public class KosmosCamera extends Camera {
 		this.rotation = new Vector3f(0.0f, 20.0f, 0.0f);
 
 		this.viewFrustum = new Frustum();
-		this.viewRay = new Ray(true, new Vector2f());
+		this.viewRay = new Ray(false, new Vector2f(0.0f, 0.0f));
 		this.viewMatrix = new Matrix4f();
 		this.projectionMatrix = new Matrix4f();
 
@@ -163,6 +163,11 @@ public class KosmosCamera extends Camera {
 		updatePitchAngle(delta);
 		calculateDistances();
 		calculatePosition();
+
+		updateViewMatrix();
+		viewFrustum.recalculateFrustum(getProjectionMatrix(), viewMatrix);
+		viewRay.recalculateRay(position);
+		updateProjectionMatrix();
 
 		firstPerson = Maths.deadband(0.1f, targetZoom) == 0.0f;
 
@@ -285,12 +290,7 @@ public class KosmosCamera extends Camera {
 		}
 
 		angleAroundPlayer += offset * delta * ROTATE_AGILITY;
-
-		if (angleAroundPlayer >= Maths.DEGREES_IN_HALF_CIRCLE) {
-			angleAroundPlayer -= Maths.DEGREES_IN_CIRCLE;
-		} else if (angleAroundPlayer <= -Maths.DEGREES_IN_HALF_CIRCLE) {
-			angleAroundPlayer += Maths.DEGREES_IN_CIRCLE;
-		}
+		angleAroundPlayer = Maths.normalizeAngle(angleAroundPlayer);
 	}
 
 	private void updatePitchAngle(float delta) {
@@ -305,22 +305,12 @@ public class KosmosCamera extends Camera {
 		}
 
 		angleOfElevation += offset * delta * PITCH_AGILITY;
-
-		if (angleOfElevation >= Maths.DEGREES_IN_HALF_CIRCLE) {
-			angleOfElevation -= Maths.DEGREES_IN_CIRCLE;
-		} else if (angleOfElevation <= -Maths.DEGREES_IN_HALF_CIRCLE) {
-			angleOfElevation += Maths.DEGREES_IN_CIRCLE;
-		}
+		angleOfElevation = Maths.normalizeAngle(angleOfElevation);
 	}
 
 	private void calculateDistances() {
-		if (!firstPerson) {
-			horizontalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.cos(Math.toRadians(angleOfElevation)));
-			verticalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.sin(Math.toRadians(angleOfElevation)));
-		} else {
-			horizontalDistanceFromFocus = 0.0f;
-			verticalDistanceFromFocus = 0.0f;
-		}
+		horizontalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.cos(Math.toRadians(angleOfElevation)));
+		verticalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.sin(Math.toRadians(angleOfElevation)));
 	}
 
 	private void calculatePosition() {
@@ -350,25 +340,21 @@ public class KosmosCamera extends Camera {
 
 	@Override
 	public Matrix4f getViewMatrix() {
-		updateViewMatrix();
 		return viewMatrix;
 	}
 
 	@Override
 	public Frustum getViewFrustum() {
-		viewFrustum.recalculateFrustum(getProjectionMatrix(), viewMatrix);
 		return viewFrustum;
 	}
 
 	@Override
 	public Ray getViewRay() {
-		viewRay.recalculateRay(position);
 		return viewRay;
 	}
 
 	@Override
 	public Matrix4f getProjectionMatrix() {
-		updateProjectionMatrix();
 		return projectionMatrix;
 	}
 

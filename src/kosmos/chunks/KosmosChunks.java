@@ -13,15 +13,23 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.events.*;
 import flounder.framework.*;
+import flounder.guis.*;
 import flounder.helpers.*;
+import flounder.inputs.*;
+import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
 import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.textures.*;
+import kosmos.entities.components.*;
+import kosmos.entities.instances.*;
+import kosmos.world.*;
 
 import java.util.*;
+
+import static flounder.platform.Constants.*;
 
 public class KosmosChunks extends Module {
 	public static final MyFile TERRAINS_FOLDER = new MyFile(MyFile.RES_FOLDER, "terrains");
@@ -46,22 +54,22 @@ public class KosmosChunks extends Module {
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
 		this.currentChunk = null;
 
-		/*FlounderEvents.addEvent(new IEvent() {
-			private MouseButton placeTree = new MouseButton(GLFW.GLFW_MOUSE_BUTTON_RIGHT);
+		FlounderEvents.get().addEvent(new IEvent() {
+			private MouseButton buttonRemove = new MouseButton(GLFW_MOUSE_BUTTON_RIGHT);
 
 			@Override
 			public boolean eventTriggered() {
-				return placeTree.wasDown() && !FlounderGuis.getGuiMaster().isGamePaused();
+				return buttonRemove.wasDown() && !FlounderGuis.get().getGuiMaster().isGamePaused();
 			}
 
 			@Override
 			public void onEvent() {
-				Ray cameraRay = FlounderCamera.getCamera().getViewRay();
+				Ray cameraRay = FlounderCamera.get().getCamera().getViewRay();
 
-				for (Entity entity : FlounderEntities.getEntities().getAll()) {
-					if (entity.getCollider() != null && entity.getComponent(ComponentPlayer.class) == null && entity.getComponent(ComponentMultiplayer.class) == null) {
+				for (Entity entity : FlounderEntities.get().getEntities().getAll()) {
+					if (entity.getCollider() != null && entity.getComponent(ComponentPlayer.class) == null && entity.getComponent(ComponentMultiplayer.class) == null && entity.getComponent(ComponentChunk.class) == null) {
 						IntersectData data = entity.getCollider().intersects(cameraRay);
-						float distance = Vector3f.getDistance(entity.getPosition(), KosmosWorld.getEntityPlayer().getPosition());
+						float distance = Vector3f.getDistance(entity.getPosition(), KosmosWorld.get().getEntityPlayer().getPosition());
 
 						if (data.isIntersection() && distance < 2.0f) {
 							entity.forceRemove();
@@ -74,13 +82,13 @@ public class KosmosChunks extends Module {
 
 		FlounderEvents.get().addEvent(new IEvent() {
 			private final int RECURSION_COUNT = 256;
-			private final float RAY_RANGE = 100.0f; // 10.0f;
+			private final float RAY_RANGE = 70.0f;
 
-			private MouseButton button = new MouseButton(GLFW_MOUSE_BUTTON_LEFT);
+			private MouseButton buttonPlace = new MouseButton(GLFW_MOUSE_BUTTON_LEFT);
 
 			@Override
 			public boolean eventTriggered() {
-				return button.wasDown() && !FlounderGuis.get().getGuiMaster().isGamePaused();
+				return buttonPlace.wasDown() && !FlounderGuis.get().getGuiMaster().isGamePaused();
 			}
 
 			@Override
@@ -97,10 +105,15 @@ public class KosmosChunks extends Module {
 							if (entity != null && entity instanceof Chunk) {
 								Chunk chunk = (Chunk) entity;
 
-								if (chunk.getCollider().contains(terrainPosition)) {
+								if (chunk.getCollider().contains(new Vector3f(terrainPosition.x, 0.0f, terrainPosition.z))) {
 									inChunk = chunk;
 								}
 							}
+						}
+
+						if (inChunk == null) {
+							FlounderLogger.get().error("Could not find chunk for terrain position: " + terrainPosition);
+							return;
 						}
 
 						Vector2f tilePosition = Chunk.convertWorldToTile(inChunk, terrainPosition);
@@ -109,7 +122,7 @@ public class KosmosChunks extends Module {
 						Vector3f roundedPosition = Chunk.convertTileToWorld(inChunk, tilePosition.x, tilePosition.y);
 						roundedPosition.y = Chunk.getWorldHeight(roundedPosition.x, roundedPosition.z);
 
-						new InstanceTreeBirchLarge(FlounderEntities.get().getEntities(),
+						new InstanceBush(FlounderEntities.get().getEntities(),
 								new Vector3f(
 										roundedPosition.x,
 										0.5f + roundedPosition.y * 0.5f,
@@ -162,7 +175,7 @@ public class KosmosChunks extends Module {
 					return false;
 				}
 			}
-		});*/
+		});
 	}
 
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)

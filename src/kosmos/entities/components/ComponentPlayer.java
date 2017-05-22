@@ -10,6 +10,7 @@
 package kosmos.entities.components;
 
 import flounder.camera.*;
+import flounder.devices.*;
 import flounder.entities.*;
 import flounder.framework.*;
 import flounder.guis.*;
@@ -87,7 +88,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 
 			if (inputBoost.isDown()) {
 				currentSpeed *= KosmosPlayer.BOOST_MUL;
-				currentStrafeSpeed *= KosmosPlayer.BOOST_MUL;
+			//	currentStrafeSpeed *= KosmosPlayer.BOOST_MUL;
 			}
 
 			if (inputJump.wasDown() && Maths.deadband(0.05f, currentUpwardSpeed) == 0.0f) {
@@ -109,10 +110,14 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 
 		// Calculates the deltas to the moved distance, and rotations.
 		double theta = Math.toRadians(FlounderCamera.get().getCamera().getRotation().y);
-		float dx = (float) -((currentSpeed * Math.sin(theta)) + (currentStrafeSpeed * Math.cos(theta))) * delta;
+		float dx = (float) -(currentSpeed * Math.sin(theta) + currentStrafeSpeed * Math.cos(theta)) * delta;
 		float dy = currentUpwardSpeed * delta;
-		float dz = (float) -((currentSpeed * Math.cos(theta)) - (currentStrafeSpeed * Math.sin(theta))) * delta;
-		float ry = (FlounderCamera.get().getCamera().getRotation().y + 180.0f) - getEntity().getRotation().y;
+		float dz = (float) -(currentSpeed * Math.cos(theta) - currentStrafeSpeed * Math.sin(theta)) * delta;
+		float ry = FlounderCamera.get().getCamera().getRotation().y - getEntity().getRotation().y + 180.0f;
+
+		if (FlounderKeyboard.get().getKey(GLFW_KEY_LEFT_ALT)) {
+			ry = 0.0f;
+		}
 
 		// Finds the water level at the next player xz pos.
 		float waterLevel = (KosmosWater.get().getWater() != null) ? KosmosWater.get().getWater().getPosition().y : 0.0f;
