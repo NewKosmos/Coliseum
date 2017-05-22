@@ -1,17 +1,12 @@
 package kosmos.entities.instances;
 
-import flounder.entities.Entity;
-import flounder.entities.FlounderEntities;
-import flounder.entities.components.ComponentModel;
-import flounder.entities.components.ComponentSurface;
-import flounder.entities.components.ComponentSway;
-import flounder.maths.vectors.Vector3f;
-import flounder.models.ModelFactory;
-import flounder.models.ModelObject;
-import flounder.resources.MyFile;
-import flounder.space.ISpatialStructure;
-import flounder.textures.TextureFactory;
-import flounder.textures.TextureObject;
+import flounder.entities.*;
+import flounder.entities.components.*;
+import flounder.maths.vectors.*;
+import flounder.models.*;
+import flounder.resources.*;
+import flounder.space.*;
+import flounder.textures.*;
 
 /// Automatically generated entity source
 /// Date generated: 30.3.2017 - 12:8

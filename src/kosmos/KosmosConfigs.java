@@ -69,7 +69,6 @@ public class KosmosConfigs {
 	public static final ConfigData CAMERA_SENSITIVITY = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraSensitivity", 1.0f); // Reference set in camera.
 	public static final ConfigData CAMERA_REANGLE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraReangle", GLFW_MOUSE_BUTTON_RIGHT); // Reference set in camera.
 	public static final ConfigData CAMERA_MOUSE_LOCKED = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraMouseLocked", true); // , FlounderMouse.get().isCursorDisabled
-	public static final ConfigData CAMERA_FIRST_PERSON = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraFirstPerson", false); // Reference set in camera.
 
 	public static final ConfigData CLIENT_USERNAME = CONFIG_MAIN.getData(ConfigSection.CLIENT, "username", "USERNAME" + ((int) (Math.random() * 10000)), () -> FlounderNetwork.get().getUsername());
 

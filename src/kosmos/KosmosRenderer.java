@@ -25,7 +25,6 @@ import flounder.post.piplines.*;
 import flounder.renderer.*;
 import flounder.shadows.*;
 import flounder.skybox.*;
-import kosmos.camera.*;
 import kosmos.post.*;
 import kosmos.water.*;
 import kosmos.world.*;
@@ -108,9 +107,6 @@ public class KosmosRenderer extends RendererMaster {
 	}
 
 	private void renderWater() {
-		// Sets the player model to render.
-		entitiesRenderer.setRenderPlayer(true);
-
 		// Water Reflection & Refraction
 		if (KosmosWater.get().reflectionsEnabled() && KosmosWater.get().getColourIntensity() != 1.0f && KosmosWater.get().getWater() != null) {
 			FlounderCamera.get().getCamera().reflect(KosmosWater.get().getWater().getPosition().y);
@@ -145,17 +141,11 @@ public class KosmosRenderer extends RendererMaster {
 	}
 
 	private void renderShadows() {
-		// Sets the player model to render.
-		entitiesRenderer.setRenderPlayer(true);
-
 		// Renders the shadows.
 		shadowRenderer.render(POSITIVE_INFINITY, FlounderCamera.get().getCamera());
 	}
 
 	private void renderScene(Vector4f clipPlane, boolean waterPass) {
-		// Sets the player model to render in first person view.
-		entitiesRenderer.setRenderPlayer(!KosmosCamera.isFirstPerson());
-
 		// Clears and renders.
 		Camera camera = FlounderCamera.get().getCamera();
 		FlounderOpenGL.get().prepareNewRenderParse(0.0f, 0.0f, 0.0f);

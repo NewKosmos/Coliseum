@@ -69,21 +69,6 @@ public class ScreenSettingControls extends ScreenObject {
 			}
 		});
 
-		// Toggle First Person.
-		GuiButtonText toggleFirstPerson = new GuiButtonText(this, new Vector2f(0.5f, 0.41f), "First Person: ", GuiAlign.CENTRE);
-		FlounderEvents.get().addEvent(new EventChange<Boolean>(KosmosCamera::isFirstPerson) {
-			@Override
-			public void onEvent(Boolean newValue) {
-				toggleFirstPerson.setText("First Person: " + newValue);
-			}
-		});
-		toggleFirstPerson.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				KosmosCamera.setFirstPerson(!KosmosCamera.isFirstPerson());
-			}
-		});
-
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);
 		back.addLeftListener(new ScreenListener() {

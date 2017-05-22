@@ -30,6 +30,8 @@ public class KosmosGuis extends GuiMaster {
 	private OverlayStartup overlayStartup;
 	private OverlayAlpha overlayAlpha;
 	private OverlayHUD overlayHUD;
+	private OverlayInventory overlayInventory;
+	private OverlayMap overlayMap;
 	private OverlayUsernames overlayUsernames;
 	private OverlayDebug overlayDebug;
 	private OverlayChat overlayChat;
@@ -44,6 +46,8 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayStartup = new OverlayStartup(FlounderGuis.get().getContainer());
 		this.overlayAlpha = new OverlayAlpha(FlounderGuis.get().getContainer());
 		this.overlayHUD = new OverlayHUD(FlounderGuis.get().getContainer());
+		this.overlayInventory = new OverlayInventory(FlounderGuis.get().getContainer());
+		this.overlayMap = new OverlayMap(FlounderGuis.get().getContainer());
 		this.overlayUsernames = new OverlayUsernames(FlounderGuis.get().getContainer());
 		this.overlayDebug = new OverlayDebug(FlounderGuis.get().getContainer());
 		this.overlayChat = new OverlayChat(FlounderGuis.get().getContainer());
@@ -52,6 +56,8 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayStartup.setAlphaDriver(new ConstantDriver(1.0f));
 		this.overlayAlpha.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayHUD.setAlphaDriver(new ConstantDriver(0.0f));
+		this.overlayInventory.setAlphaDriver(new ConstantDriver(0.0f));
+		this.overlayMap.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayUsernames.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayDebug.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
@@ -114,6 +120,20 @@ public class KosmosGuis extends GuiMaster {
 				toggleChat();
 			}
 		});
+
+		FlounderEvents.get().addEvent(new IEvent() {
+			private KeyButton toggleMap = new KeyButton(GLFW_KEY_G);
+
+			@Override
+			public boolean eventTriggered() {
+				return toggleMap.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				toggleMap();
+			}
+		});
 	}
 
 	@Override
@@ -140,7 +160,7 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public boolean isGamePaused() {
-		return overlayStartup.isStarting() || overlaySlider.getAlpha() > 0.1f || overlayChat.getAlpha() >= 0.1f;
+		return overlayStartup.isStarting() || overlaySlider.getAlpha() != 0.0f || overlayChat.getAlpha() != 0.0f;
 	}
 
 	@Override
@@ -180,6 +200,7 @@ public class KosmosGuis extends GuiMaster {
 				overlaySlider.setAlphaDriver(new SlideDriver(overlaySlider.getAlpha(), 0.0f, SLIDE_TIME));
 			} else {
 				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
+				overlayMap.setAlphaDriver(new SlideDriver(overlayMap.getAlpha(), 0.0f, SLIDE_TIME));
 				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 				overlayDebug.setAlphaDriver(new SlideDriver(overlayDebug.getAlpha(), 0.0f, SLIDE_TIME));
 				overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
@@ -189,7 +210,7 @@ public class KosmosGuis extends GuiMaster {
 	}
 
 	public void toggleDebug() {
-		if (overlayChat.getAlpha() != 1.0f && !isGamePaused()) {
+		if (!isGamePaused()) {
 			if (overlayDebug.getAlpha() < 0.5f) {
 				overlayDebug.setAlphaDriver(new SlideDriver(overlayDebug.getAlpha(), 1.0f, SLIDE_TIME));
 			} else {
@@ -199,13 +220,27 @@ public class KosmosGuis extends GuiMaster {
 	}
 
 	public void toggleHUD() {
-		if (overlayChat.getAlpha() != 1.0f && !isGamePaused()) {
+		if (!isGamePaused()) {
 			if (overlayHUD.getAlpha() < 0.5f) {
 				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
 				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
 			} else {
 				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
+			}
+		}
+	}
+
+	public void toggleMap() {
+		if (!isGamePaused()) {
+			if (overlayMap.getAlpha() != 1.0f) {
+				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
+				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
+				overlayMap.setAlphaDriver(new SlideDriver(overlayMap.getAlpha(), 1.0f, SLIDE_TIME));
+			} else {
+				overlayMap.setAlphaDriver(new SlideDriver(overlayMap.getAlpha(), 0.0f, SLIDE_TIME));
+				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
+				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
 			}
 		}
 	}

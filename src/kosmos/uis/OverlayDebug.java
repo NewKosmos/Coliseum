@@ -35,12 +35,12 @@ public class OverlayDebug extends ScreenObject {
 		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
 
-		fpsText = createStatus("FPS: 0", 0.01f);
-		upsText = createStatus("UPS: 0", 0.04f);
-		positionText = createStatus("POSITION: [0, 0, 0]", 0.07f);
-		timeText = createStatus("TIME: 0", 0.10f);
-		seedText = createStatus("SEED: 0", 0.13f);
-		biomeText = createStatus("BIOME: NULL", 0.16f);
+		this.fpsText = createStatus("FPS: 0", 0.01f);
+		this.upsText = createStatus("UPS: 0", 0.04f);
+		this.positionText = createStatus("POSITION: [0, 0, 0]", 0.07f);
+		this.timeText = createStatus("TIME: 0", 0.10f);
+		this.seedText = createStatus("SEED: 0", 0.13f);
+		this.biomeText = createStatus("BIOME: NULL", 0.16f);
 
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -62,6 +62,10 @@ public class OverlayDebug extends ScreenObject {
 
 	@Override
 	public void updateObject() {
+		if (!isVisible()) {
+			return;
+		}
+
 		if (updateText) {
 			fpsText.setText("FPS: " + Maths.roundToPlace(1.0f / Framework.getDeltaRender(), 1));
 			upsText.setText("UPS: " + Maths.roundToPlace(1.0f / Framework.getDelta(), 1));

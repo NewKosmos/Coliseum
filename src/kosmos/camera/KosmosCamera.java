@@ -11,7 +11,6 @@ package kosmos.camera;
 
 import flounder.camera.*;
 import flounder.devices.*;
-import flounder.events.*;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.inputs.*;
@@ -22,8 +21,6 @@ import flounder.physics.*;
 import flounder.profiling.*;
 import kosmos.*;
 
-import static flounder.platform.Constants.*;
-
 public class KosmosCamera extends Camera {
 	// Defines basic view frustum sizes.
 	private static final float NEAR_PLANE = 0.1f;
@@ -33,7 +30,7 @@ public class KosmosCamera extends Camera {
 	private static final float FIELD_OF_VIEW = 45.0f; // Focus view.
 
 	// Defines how snappy these camera functions will be.
-	private static final float ZOOM_AGILITY = 20.0f;
+	private static final float ZOOM_AGILITY = 30.0f;
 	private static final float ROTATE_AGILITY = 20.0f;
 	private static final float PITCH_AGILITY = 20.0f;
 
@@ -51,14 +48,13 @@ public class KosmosCamera extends Camera {
 	private static final float MAX_VERTICAL_CHANGE = 30.0f;
 	private static final float MAX_ZOOM_CHANGE = 0.5f;
 
-	private static final float CAMERA_AIM_OFFSET_FPS = 1.5f;
-	private static final float CAMERA_AIM_OFFSET = 1.5f;
+	private static final float CAMERA_AIM_OFFSET = 1.6f;
 
 	private static final float MAX_ANGLE_OF_ELEVATION_FPS = 45.0f;
 	private static final float MIN_ANGLE_OF_ELEVATION_FPS = -45.0f;
 	private static final float MAX_ANGLE_OF_ELEVATION = 45.0f;
 	private static final float MIN_ANGLE_OF_ELEVATION = 0.0f;
-	private static final float MINIMUM_ZOOM = 0.5f;
+	private static final float MINIMUM_ZOOM = 0.0f;
 	private static final float MAXIMUM_ZOOM = 28.0f;
 	private static final float NORMAL_ZOOM = 8.0f;
 
@@ -83,9 +79,9 @@ public class KosmosCamera extends Camera {
 	private float horizontalDistanceFromFocus;
 	private float verticalDistanceFromFocus;
 
-	private static boolean firstPerson;
 	private static float sensitivity;
 	private static boolean mouseLocked;
+	private static boolean firstPerson;
 	private int reangleButton;
 	private JoystickAxis joystickVertical;
 	private JoystickAxis joystickHorizontal;
@@ -118,27 +114,12 @@ public class KosmosCamera extends Camera {
 		this.horizontalDistanceFromFocus = 0.0f;
 		this.verticalDistanceFromFocus = 0.0f;
 
-		KosmosCamera.firstPerson = KosmosConfigs.CAMERA_FIRST_PERSON.setReference(() -> firstPerson).getBoolean();
 		KosmosCamera.sensitivity = KosmosConfigs.CAMERA_SENSITIVITY.setReference(() -> sensitivity).getFloat();
 		KosmosCamera.mouseLocked = KosmosConfigs.CAMERA_MOUSE_LOCKED.setReference(() -> mouseLocked).getBoolean();
 		this.reangleButton = KosmosConfigs.CAMERA_REANGLE.setReference(() -> reangleButton).getInteger();
 		this.joystickVertical = new JoystickAxis(0, 3);
 		this.joystickHorizontal = new JoystickAxis(0, 2);
 		this.joystickZoom = new JoystickButton(0, 9);
-
-		FlounderEvents.get().addEvent(new IEvent() {
-			private KeyButton fpsToggle = new KeyButton(GLFW_KEY_V);
-
-			@Override
-			public boolean eventTriggered() {
-				return fpsToggle.wasDown() && !FlounderGuis.get().getGuiMaster().isGamePaused();
-			}
-
-			@Override
-			public void onEvent() {
-				firstPerson = !firstPerson;
-			}
-		});
 
 		calculateDistances();
 	}
@@ -160,6 +141,8 @@ public class KosmosCamera extends Camera {
 
 	@Override
 	public void update(Player player) {
+		float delta = Math.min(1.0f / 60.0f, Framework.getDelta());
+
 		calculateHorizontalAngle();
 		calculateVerticalAngle();
 		calculateZoom();
@@ -167,7 +150,7 @@ public class KosmosCamera extends Camera {
 		if (player != null) {
 			//targetPosition.y = player.getPosition().y;
 			//float stepPower = 0.12f;
-			//float velocity = 10000.0f * Vector3f.subtract(targetPosition, player.getPosition(), targetPosition).lengthSquared() * Framework.getDelta();
+			//float velocity = 10000.0f * Vector3f.subtract(targetPosition, player.getPosition(), targetPosition).lengthSquared() * delta;
 			//float systemTime = Framework.getTimeSec();
 			//double yOffset = velocity * stepPower * (float) (Math.sin(0.5 * Math.PI * systemTime) - Math.sin(1.4 * Math.PI * systemTime) + Math.abs(Math.cos(1.0 * Math.PI * systemTime)));
 
@@ -175,11 +158,13 @@ public class KosmosCamera extends Camera {
 			//this.targetPosition.y += yOffset;
 		}
 
-		updateActualZoom();
-		updateHorizontalAngle();
-		updatePitchAngle();
+		updateActualZoom(delta);
+		updateHorizontalAngle(delta);
+		updatePitchAngle(delta);
 		calculateDistances();
 		calculatePosition();
+
+		firstPerson = Maths.deadband(0.1f, targetZoom) == 0.0f;
 
 		if (FlounderProfiler.get().isOpen()) {
 			FlounderProfiler.get().add(FlounderCamera.getTab(), "Camera Angle Of Elevation", angleOfElevation);
@@ -259,7 +244,7 @@ public class KosmosCamera extends Camera {
 	private void calculateZoom() {
 		float zoomChange = 0.0f;
 
-		if (FlounderGuis.get().getGuiMaster() != null && !FlounderGuis.get().getGuiMaster().isGamePaused() && !firstPerson) {
+		if (FlounderGuis.get().getGuiMaster() != null && !FlounderGuis.get().getGuiMaster().isGamePaused()) {
 			if (joystickZoom.isDown()) {
 				zoomChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_ZOOM * sensitivity;
 			} else if (Math.abs(FlounderMouse.get().getDeltaWheel()) > 0.1f) {
@@ -282,13 +267,13 @@ public class KosmosCamera extends Camera {
 		}
 	}
 
-	private void updateActualZoom() {
+	private void updateActualZoom(float delta) {
 		float offset = targetZoom - actualDistanceFromPoint;
-		float change = offset * Framework.getDelta() * ZOOM_AGILITY;
+		float change = offset * delta * ZOOM_AGILITY;
 		actualDistanceFromPoint += change;
 	}
 
-	private void updateHorizontalAngle() {
+	private void updateHorizontalAngle(float delta) {
 		float offset = targetRotationAngle - angleAroundPlayer;
 
 		if (Math.abs(offset) > Maths.DEGREES_IN_HALF_CIRCLE) {
@@ -299,7 +284,7 @@ public class KosmosCamera extends Camera {
 			}
 		}
 
-		angleAroundPlayer += offset * Framework.getDelta() * ROTATE_AGILITY;
+		angleAroundPlayer += offset * delta * ROTATE_AGILITY;
 
 		if (angleAroundPlayer >= Maths.DEGREES_IN_HALF_CIRCLE) {
 			angleAroundPlayer -= Maths.DEGREES_IN_CIRCLE;
@@ -308,7 +293,7 @@ public class KosmosCamera extends Camera {
 		}
 	}
 
-	private void updatePitchAngle() {
+	private void updatePitchAngle(float delta) {
 		float offset = targetElevation - angleOfElevation;
 
 		if (Math.abs(offset) > Maths.DEGREES_IN_HALF_CIRCLE) {
@@ -319,7 +304,7 @@ public class KosmosCamera extends Camera {
 			}
 		}
 
-		angleOfElevation += offset * Framework.getDelta() * PITCH_AGILITY;
+		angleOfElevation += offset * delta * PITCH_AGILITY;
 
 		if (angleOfElevation >= Maths.DEGREES_IN_HALF_CIRCLE) {
 			angleOfElevation -= Maths.DEGREES_IN_CIRCLE;
@@ -341,7 +326,7 @@ public class KosmosCamera extends Camera {
 	private void calculatePosition() {
 		double theta = Math.toRadians(targetRotation.y + angleAroundPlayer);
 		position.x = targetPosition.x - (float) (horizontalDistanceFromFocus * Math.sin(theta));
-		position.y = targetPosition.y + verticalDistanceFromFocus + (firstPerson ? CAMERA_AIM_OFFSET_FPS : CAMERA_AIM_OFFSET);
+		position.y = targetPosition.y + verticalDistanceFromFocus + CAMERA_AIM_OFFSET;
 		position.z = targetPosition.z - (float) (horizontalDistanceFromFocus * Math.cos(theta));
 
 		rotation.x = angleOfElevation;
@@ -411,10 +396,6 @@ public class KosmosCamera extends Camera {
 
 	public static boolean isFirstPerson() {
 		return firstPerson;
-	}
-
-	public static void setFirstPerson(boolean firstPerson) {
-		KosmosCamera.firstPerson = firstPerson;
 	}
 
 	public static float getSensitivity() {

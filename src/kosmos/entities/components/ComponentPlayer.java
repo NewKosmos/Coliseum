@@ -29,11 +29,11 @@ import static flounder.platform.Constants.*;
 
 public class ComponentPlayer extends IComponentEntity implements IComponentRender, IComponentEditor {
 	private float currentSpeed;
+	private float currentStrafeSpeed;
 	private float currentUpwardSpeed;
-	private float currentTurnSpeed;
 	private IAxis inputForward;
-	private IAxis inputTurn;
-	private IAxis inputFlyHeight;
+	private IAxis inputStrafe;
+	private IAxis inputNoclip;
 	private IButton inputBoost;
 	private IButton inputJump;
 
@@ -57,13 +57,13 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 		IButton jumpButtons = new KeyButton(GLFW_KEY_SPACE);
 
 		this.currentSpeed = 0.0f;
+		this.currentStrafeSpeed = 0.0f;
 		this.currentUpwardSpeed = 0.0f;
-		this.currentTurnSpeed = 0.0f;
 		this.inputForward = new CompoundAxis(new ButtonAxis(downKeyButtons, upKeyButtons), new JoystickAxis(0, 1));
-		this.inputTurn = new CompoundAxis(new ButtonAxis(leftKeyButtons, rightKeyButtons), new JoystickAxis(0, 0));
+		this.inputStrafe = new CompoundAxis(new ButtonAxis(leftKeyButtons, rightKeyButtons), new JoystickAxis(0, 0));
 		this.inputBoost = new CompoundButton(boostButtons, new JoystickButton(0, 1));
 		this.inputJump = new CompoundButton(jumpButtons, new JoystickButton(0, 0));
-		this.inputFlyHeight = new CompoundAxis(new ButtonAxis(crouchButtons, jumpButtons), new JoystickAxis(0, 0));
+		this.inputNoclip = new CompoundAxis(new ButtonAxis(crouchButtons, jumpButtons), new JoystickAxis(0, 0));
 
 		this.moveAmount = new Vector3f();
 		this.rotateAmount = new Vector3f();
@@ -75,34 +75,44 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 
 	@Override
 	public void update() {
+		float delta = Math.min(1.0f / 60.0f, Framework.getDelta());
+
 		// Gets if noclip is enabled.
 		boolean noclip = ((KosmosPlayer) FlounderCamera.get().getPlayer()).isNoclipEnabled();
 
 		// Gets movement and rotation data from player inputs.
 		if (!FlounderGuis.get().getGuiMaster().isGamePaused()) {
-			currentSpeed = (inputBoost.isDown() ? KosmosPlayer.BOOST_SPEED : KosmosPlayer.RUN_SPEED) * Maths.deadband(0.05f, inputForward.getAmount());
-			currentUpwardSpeed = (inputJump.wasDown() && Maths.deadband(0.05f, currentUpwardSpeed) == 0.0f) ? KosmosPlayer.JUMP_POWER : currentUpwardSpeed;
-			currentTurnSpeed = -KosmosPlayer.TURN_SPEED * Maths.deadband(0.05f, inputTurn.getAmount());
+			currentSpeed = KosmosPlayer.SPEED * Maths.deadband(0.05f, inputForward.getAmount());
+			currentStrafeSpeed = -KosmosPlayer.SPEED * Maths.deadband(0.05f, inputStrafe.getAmount());
+
+			if (inputBoost.isDown()) {
+				currentSpeed *= KosmosPlayer.BOOST_MUL;
+				//	currentStrafeSpeed *= KosmosPlayer.BOOST_MUL;
+			}
+
+			if (inputJump.wasDown() && Maths.deadband(0.05f, currentUpwardSpeed) == 0.0f) {
+				currentUpwardSpeed = KosmosPlayer.JUMP_POWER;
+			}
 		} else {
 			currentSpeed = 0.0f;
-			currentTurnSpeed = 0.0f;
+			currentStrafeSpeed = 0.0f;
 		}
 
 		// Applies gravity over time.
 		if (!noclip) {
-			currentUpwardSpeed += KosmosWorld.GRAVITY * Framework.getDelta();
+			currentUpwardSpeed += KosmosWorld.GRAVITY * delta;
 		} else if (!FlounderGuis.get().getGuiMaster().isGamePaused()) {
 			currentSpeed *= 0.5f * KosmosPlayer.FLY_SPEED;
-			currentUpwardSpeed = 2.0f * inputFlyHeight.getAmount() * KosmosPlayer.FLY_SPEED;
-			currentTurnSpeed *= 0.5f * KosmosPlayer.FLY_SPEED;
+			currentStrafeSpeed *= 0.5f * KosmosPlayer.FLY_SPEED;
+			currentUpwardSpeed = 2.0f * inputNoclip.getAmount() * KosmosPlayer.FLY_SPEED;
 		}
 
 		// Calculates the deltas to the moved distance, and rotations.
-		float distance = currentSpeed * Framework.getDelta();
-		float dx = (float) (distance * Math.sin(Math.toRadians(getEntity().getRotation().y)));
-		float dy = currentUpwardSpeed * Framework.getDelta();
-		float dz = (float) (distance * Math.cos(Math.toRadians(getEntity().getRotation().y)));
-		float ry = currentTurnSpeed * Framework.getDelta();
+		double theta = Math.toRadians(FlounderCamera.get().getCamera().getRotation().y);
+		float dx = (float) -((currentSpeed * Math.sin(theta)) + (currentStrafeSpeed * Math.cos(theta))) * delta;
+		float dy = currentUpwardSpeed * delta;
+		float dz = (float) -((currentSpeed * Math.cos(theta)) - (currentStrafeSpeed * Math.sin(theta))) * delta;
+		float ry = (FlounderCamera.get().getCamera().getRotation().y + 180.0f) - getEntity().getRotation().y;
 
 		// Finds the water level at the next player xz pos.
 		float waterLevel = (KosmosWater.get().getWater() != null) ? KosmosWater.get().getWater().getPosition().y : 0.0f;
@@ -117,19 +127,8 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 		float depth = (getEntity().getPosition().y + dy) - worldHeight;
 
 		if (!noclip && depth < 0.0f) {
-			dy = Math.min(-depth, (float) Math.sqrt(2.0)) * 10.0f * Framework.getDelta();
+			dy = Math.min(-depth, (float) Math.sqrt(2.0)) * 10.0f * delta;
 			currentUpwardSpeed = 0.0f;
-		}
-
-		// First person rotation.
-		if (KosmosCamera.isFirstPerson()) {
-			float x = currentSpeed * Framework.getDelta();
-			float y = ry * (KosmosPlayer.RUN_SPEED / KosmosPlayer.TURN_SPEED);
-			double theta = Math.toRadians(FlounderCamera.get().getCamera().getRotation().y);
-
-			dz = (float) -(x * Math.cos(theta) - y * Math.sin(theta));
-			dx = (float) -(x * Math.sin(theta) + y * Math.cos(theta));
-			ry = (FlounderCamera.get().getCamera().getRotation().y + 180.0f) - getEntity().getRotation().y;
 		}
 
 		// Moves and rotates the player.
