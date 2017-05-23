@@ -24,7 +24,7 @@ import kosmos.world.*;
  */
 public abstract class IBiome {
 	public enum Biomes {
-		GRASS(new BiomeGrass()), SNOW(new BiomeSnow()), STONE(new BiomeStone()), DESERT(new BiomeDesert()), RIVER(new BiomeRiver());
+		OCEAN(new BiomeOcean()), DESERT(new BiomeDesert()), GRASS(new BiomeGrass()), STONE(new BiomeStone()), SNOW(new BiomeSnow());
 
 		private IBiome biome;
 

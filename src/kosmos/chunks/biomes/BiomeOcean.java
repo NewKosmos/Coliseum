@@ -20,7 +20,7 @@ import kosmos.chunks.*;
 import kosmos.entities.instances.*;
 import kosmos.materials.*;
 
-public class BiomeRiver extends IBiome {
+public class BiomeOcean extends IBiome {
 	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{
 			new EntitySpawn(1.0f, 0.375f) {
 				@Override
@@ -33,7 +33,7 @@ public class BiomeRiver extends IBiome {
 	private static final Colour COLOUR = new Colour(0.0f, 0.0f, 1.0f);
 	private static final ParticleType PARTICLE = new ParticleType("rain", TextureFactory.newBuilder().setFile(new MyFile(FlounderParticles.PARTICLES_FOLDER, "rainParticle.png")).setNumberOfRows(4).create(), 4.75f, 0.15f);
 
-	public BiomeRiver() {
+	public BiomeOcean() {
 		super();
 	}
 

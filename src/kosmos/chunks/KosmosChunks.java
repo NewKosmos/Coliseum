@@ -235,7 +235,7 @@ public class KosmosChunks extends Module {
 	public void setCurrent(Chunk currentChunk) {
 		if (currentChunk != null && this.currentChunk != currentChunk) {
 			// Creates the children chunks for the new current chunk.
-			currentChunk.createChunksAround(new Single<>(4)); // TODO: Make work?
+			currentChunk.createChunksAround(new Single<>(2)); // TODO: Make work?
 
 			// Removes any old chunks that are out of range.
 			Iterator<Entity> it = FlounderEntities.get().getEntities().getAll().iterator();
