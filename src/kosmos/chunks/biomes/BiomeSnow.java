@@ -54,7 +54,7 @@ public class BiomeSnow extends IBiome {
 			}
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "snow.png")).clampEdges().create();
-	private static final Colour COLOUR = new Colour(1.0f, 1.0f, 1.0f);
+	private static final Colour COLOUR = new Colour(226.0f, 226.0f, 226.0f, true);
 	private static final ParticleType PARTICLE = new ParticleType("snow", TextureFactory.newBuilder().setFile(new MyFile(FlounderParticles.PARTICLES_FOLDER, "snowParticle.png")).setNumberOfRows(4).create(), 4.75f, 0.20f);
 
 	public BiomeSnow() {

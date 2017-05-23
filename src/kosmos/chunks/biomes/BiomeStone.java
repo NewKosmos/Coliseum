@@ -54,7 +54,7 @@ public class BiomeStone extends IBiome {
 			}
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "stone.png")).clampEdges().create();
-	private static final Colour COLOUR = new Colour(0.5f, 0.5f, 0.5f);
+	private static final Colour COLOUR = new Colour(218.0f, 148.0f, 77.0f, true);
 	private static final ParticleType PARTICLE = null;
 
 	public BiomeStone() {

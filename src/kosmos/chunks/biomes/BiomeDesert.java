@@ -48,7 +48,7 @@ public class BiomeDesert extends IBiome {
 			}
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "sand.png")).clampEdges().create();
-	private static final Colour COLOUR = new Colour(1.0f, 1.0f, 0.5f);
+	private static final Colour COLOUR = new Colour(250.0f, 222.0f, 153.0f, true);
 	private static final ParticleType PARTICLE = null;
 
 	public BiomeDesert() {

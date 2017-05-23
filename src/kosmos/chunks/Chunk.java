@@ -16,10 +16,8 @@ import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
-import flounder.noise.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
-import flounder.resources.*;
 import flounder.space.*;
 import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;
@@ -56,7 +54,6 @@ public class Chunk extends Entity {
 	public static final int MAP_SIZE = 1024;
 	private static final float MAP_NOISE_SCALE = 0.4f;
 	private static final float MAP_BIOME_OFFSET = 0.05f;
-	private static final float MAP_MAX_HEIGHT = 8.0f;
 	private static final float MAP_CUTOFF = 0.9f;
 	private static final float MAP_BLUR_FRACTION = (112.933f * (MAP_CUTOFF * MAP_CUTOFF)) - (182.726f * MAP_CUTOFF) + 76.14f;
 
