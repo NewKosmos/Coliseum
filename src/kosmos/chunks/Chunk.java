@@ -11,19 +11,23 @@ package kosmos.chunks;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
-import flounder.particles.*;
-import flounder.particles.spawns.*;
+import flounder.noise.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
+import flounder.resources.*;
 import flounder.space.*;
 import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;
 import kosmos.entities.components.*;
 import kosmos.world.*;
 
+import javax.imageio.*;
+import java.awt.image.*;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -47,12 +51,11 @@ public class Chunk extends Entity {
 	// The overall world radius footprint per chunk.
 	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * (CHUNK_RADIUS - 0.5f);
 
-	private ParticleSystem particleSystem;
-
 	private List<Chunk> childrenChunks;
 	private IBiome.Biomes biome;
 	private ChunkMesh chunkMesh;
 	private Sphere sphere;
+	private boolean loaded;
 
 	public Chunk(ISpatialStructure<Entity> structure, Vector3f position) {
 		super(structure, position, new Vector3f());
@@ -60,45 +63,13 @@ public class Chunk extends Entity {
 		this.childrenChunks = new ArrayList<>();
 		this.biome = getWorldBiome(position.x, position.z);
 		this.chunkMesh = new ChunkMesh(this);
-		this.sphere = new Sphere();
+		this.sphere = new Sphere(1.0f);
+		this.sphere.update(position, null, Chunk.CHUNK_WORLD_SIZE, sphere);
+		this.loaded = false;
 
 		new ComponentModel(this, 1.0f, chunkMesh.getModel(), biome.getBiome().getTexture(), 0);
 		new ComponentSurface(this, 1.0f, 0.0f, false, false, true);
 		new ComponentChunk(this);
-
-		// generateWeather();
-		// generateClouds();
-	}
-
-	private void generateWeather() {
-		if (biome.getBiome().getWeatherParticle() != null) {
-			List<ParticleType> templates = new ArrayList<>();
-			templates.add(biome.getBiome().getWeatherParticle());
-			particleSystem = new ParticleSystem(templates, new SpawnPoint(), 10, 0.3f, 0.3f);
-			// new SpawnCircle(40.0f, new Vector3f(0.0f, -1.0f, 0.0f))
-			particleSystem.setSystemCentre(new Vector3f(getPosition().x, 25.0f, getPosition().z));
-		}
-	}
-
-	private void generateClouds() {
-		for (int x = -1; x <= 1; x++) {
-			for (int y = -1; y <= 1; y++) {
-				float offsetX = KosmosWorld.get().getNoise().noise(x / 4.0f, y / 4.0f) * 20.0f;
-				float offsetZ = KosmosWorld.get().getNoise().noise(x / 9.0f, y / 9.0f) * 20.0f;
-				float height = Math.abs(KosmosWorld.get().getNoise().noise(x / 2.0f, y / 2.0f) * 2.0f) + 2.0f;
-				float rotationY = KosmosWorld.get().getNoise().noise((x - y) / 60.0f, 1.0f) * 3600.0f;
-				float rotationZ = KosmosWorld.get().getNoise().noise((x - y) / 20.0f, 1.0f) * 3600.0f;
-
-				/*Entity entity = new InstanceCloud(FlounderEntities.getEntities(), new Vector3f(
-						getPosition().x + (x * 11.0f) + offsetX,
-						getPosition().y + 7.0f * height,
-						getPosition().z + (y * 11.0f) + offsetZ),
-						new Vector3f(0.0f, rotationY, rotationZ),
-						Maths.randomInRange(1.0f, 2.25f)
-				);
-				new ComponentChild(entity, this);*/
-			}
-		}
 	}
 
 	/**
@@ -155,7 +126,7 @@ public class Chunk extends Entity {
 		this.chunkMesh.update();
 
 		// Adds this mesh AABB to the bounding render pool.
-		FlounderBounding.get().addShapeRender(getSphere());
+		FlounderBounding.get().addShapeRender(sphere);
 	}
 
 	public static List<Vector3f> generate(Chunk chunk) {
@@ -215,6 +186,47 @@ public class Chunk extends Entity {
 		chunk.biome.getBiome().generateEntity(chunk, worldPosition);
 	}
 
+	private static BufferedImage MAP_IMAGE = null;
+	private static final float MAP_MAX_HEIGHT = 8.0f;
+	private static final float MAP_MAX_PIXEL_COLOUR = 256.0f * 256.0f * 256.0f;
+
+	static {
+		try {
+			MAP_IMAGE = ImageIO.read(new MyFile(MyFile.RES_FOLDER, "map.png").getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		final int outputWidth = 512;
+		final int outputHeight = 512;
+		BufferedImage image = new BufferedImage(outputWidth, outputHeight, BufferedImage.TYPE_INT_RGB);
+
+		PerlinNoise simplexNoise = new PerlinNoise(420);
+
+		for (int y = 0; y < outputHeight; y++) {
+			for (int x = 0; x < outputWidth; x++) {
+				//float outside = (float) Math.sqrt(Math.pow(x - (outputWidth / 2.0f), 2) + Math.pow(y - (outputHeight / 2.0f), 2)) < ((outputWidth + outputHeight) / 4.0f) ? 1.0f : 0.0f;
+				//float islands = simplexNoise.tileableNoise(x / 180.0f, y / 180.0f, outputWidth, outputHeight);
+				//float surface = simplexNoise.tileableNoise(x / 30.0f, y / 30.0f, outputWidth, outputHeight) + 1.0f;
+				//float height = Maths.clamp(outside * islands * surface, 0.0f, 1.0f);
+				float height = Maths.clamp((int) (KosmosWorld.get().getNoise().noise(x / 30.0f, y / 30.0f) * 6.0f), 0.0f, 1.0f);
+
+				int rgb = (int) (255.0f * height);
+				rgb = (rgb << 8) + ((int) (255.0f * height));
+				rgb = (rgb << 8) + ((int) (255.0f * height));
+				image.setRGB(x, y, rgb);
+			}
+		}
+
+		File outputFile = new File(Framework.getRoamingFolder().getPath() + "/save0_map.png");
+
+		try {
+			ImageIO.write(image, "png", outputFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Gets the terrain height for a position in the world.
 	 *
@@ -226,6 +238,21 @@ public class Chunk extends Entity {
 	public static float getWorldHeight(float positionX, float positionZ) {
 		// Calculates the final height for the world position using perlin.
 		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.get().getNoise().noise(positionX / 30.0f, positionZ / 30.0f) * 12.0f);
+
+		if (MAP_IMAGE != null) {
+			int imageX = (int) positionX + (MAP_IMAGE.getWidth() / 2);
+			int imageY = (int) positionZ + (MAP_IMAGE.getHeight() / 2);
+
+			if (imageX < 0 || imageX >= MAP_IMAGE.getWidth() || imageY < 0 || imageY >= MAP_IMAGE.getHeight()) {
+				return Float.NEGATIVE_INFINITY;
+			}
+
+			height = MAP_IMAGE.getRGB(imageX, imageY);
+			height += MAP_MAX_PIXEL_COLOUR / 2.0f;
+			height /= MAP_MAX_PIXEL_COLOUR / 2.0f;
+			height *= MAP_MAX_HEIGHT;
+			height = (float) Math.sqrt(2.0) * (int) height;
+		}
 
 		// Ignore height that would be water/nothing.
 		if (height < 0.0f) {
@@ -289,7 +316,11 @@ public class Chunk extends Entity {
 	}
 
 	public boolean isLoaded() {
-		return chunkMesh.getModel() != null && chunkMesh.getModel().isLoaded();
+		return loaded; // chunkMesh.getModel() != null && chunkMesh.getModel().isLoaded()
+	}
+
+	public void setLoaded(boolean loaded) {
+		this.loaded = loaded;
 	}
 
 	@Override
@@ -299,12 +330,7 @@ public class Chunk extends Entity {
 
 	public void delete() {
 		chunkMesh.delete();
-
-		if (particleSystem != null) {
-			particleSystem.delete();
-			particleSystem = null;
-		}
-
+		loaded = false;
 		forceRemove();
 	}
 }

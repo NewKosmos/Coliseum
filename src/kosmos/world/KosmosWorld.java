@@ -226,6 +226,10 @@ public class KosmosWorld extends Module {
 		return this.entitySun;
 	}
 
+	public Entity getEntityMoon1() {
+		return entityMoon1;
+	}
+
 	public float getDayFactor() {
 		return this.dayFactor;
 	}

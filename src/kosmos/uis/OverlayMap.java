@@ -9,40 +9,45 @@
 
 package kosmos.uis;
 
-import flounder.camera.*;
-import flounder.fonts.*;
+import flounder.devices.*;
+import flounder.entities.*;
 import flounder.guis.*;
-import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import flounder.visual.*;
+import kosmos.world.*;
 
 public class OverlayMap extends ScreenObject {
+	private static final float VIEW_SIZE_X = 0.9f;
+	private static final float VIEW_SIZE_Y = 0.9f;
+	private static final float VIEW_POSITION_X = 0.5f;
+	private static final float VIEW_POSITION_Y = 0.5f;
+
 	private GuiObject textureView;
-	private TextObject positionText;
+	private GuiObject playerPosition;
 
 	public OverlayMap(ScreenObject parent) {
 		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
 
-		this.textureView = new GuiObject(this, new Vector2f(0.5f, 0.5f), new Vector2f(1.05f, 0.7f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "maptest.png")).create(), 1);
+		this.textureView = new GuiObject(this, new Vector2f(VIEW_POSITION_X, VIEW_POSITION_Y), new Vector2f(VIEW_SIZE_X, VIEW_SIZE_Y), TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "map.png")).create(), 1);
 		this.textureView.setInScreenCoords(true);
 
-		this.positionText = new TextObject(this, new Vector2f(0.31f, 0.38f), "POSITION: [0, 0, 0]", 0.75f, FlounderFonts.CANDARA, 0.5f, GuiAlign.LEFT);
-		positionText.setInScreenCoords(true);
-		positionText.setColour(new Colour(1.0f, 1.0f, 1.0f));
-		positionText.setBorderColour(new Colour(0.15f, 0.15f, 0.15f));
-		positionText.setBorder(new ConstantDriver(0.04f));
+		this.playerPosition = new GuiObject(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.04f, 0.04f), TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "pointer.png")).create(), 1);
+		this.playerPosition.setInScreenCoords(false);
 	}
 
 	@Override
 	public void updateObject() {
-		if (!isVisible()) {
-			return;
-		}
+		Entity player = KosmosWorld.get().getEntityPlayer();
 
-		positionText.setText("POSITION: [" + (FlounderCamera.get().getPlayer() == null ? "NULL" : Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().x, 1) + ", " + Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().y, 1) + ", " + Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().z, 1) + "]"));
+		if (player != null) {
+			float px = player.getPosition().x / 512.0f;
+			float pz = player.getPosition().z / 512.0f;
+			playerPosition.getPosition().set(((FlounderDisplay.get().getAspectRatio() * VIEW_POSITION_X) - (VIEW_SIZE_X * 0.5f)) + (VIEW_SIZE_X * px) + (VIEW_SIZE_X * 0.5f), (VIEW_POSITION_Y - (VIEW_SIZE_Y * 0.5f)) + (VIEW_SIZE_Y * pz) + (VIEW_SIZE_Y * 0.5f));
+			playerPosition.setRotationDriver(new ConstantDriver(-player.getRotation().y + 180.0f));
+		}
 	}
 
 	@Override

@@ -150,16 +150,14 @@ public class MeshBuildRequest implements RequestResource {
 					return null; // new AABB(new Vector3f(chunkMesh.minX, chunkMesh.minY, chunkMesh.minZ), new Vector3f(chunkMesh.maxX, chunkMesh.maxY, chunkMesh.maxZ));
 				}
 			}).create();
+			chunkMesh.chunk.setLoaded(true);
 		} else {
 			// No model if no data can be loaded.
 			chunkMesh.chunkModel = null;
+			chunkMesh.chunk.setLoaded(true);
 
 			// Normal chunk size.
 			chunkMesh.maxRadius = Chunk.CHUNK_WORLD_SIZE;
 		}
-
-		// Updates the chunks sphere.
-		chunkMesh.chunk.getSphere().setRadius(1.0f);
-		chunkMesh.chunk.getSphere().update(chunkMesh.chunk.getPosition(), null, chunkMesh.maxRadius, chunkMesh.chunk.getSphere());
 	}
 }
