@@ -147,7 +147,7 @@ public class KosmosGuis extends GuiMaster {
 			overlayStartup.setStarting(false);
 		}
 
-		if (!isGamePaused() && FlounderMouse.get().isDisplaySelected() && FlounderDisplay.get().isFocused()) {
+		if (!isGamePaused() && overlayMap.getAlpha() == 0.0f && FlounderMouse.get().isDisplaySelected() && FlounderDisplay.get().isFocused()) {
 			FlounderMouse.get().setCursorHidden(KosmosCamera.isMouseLocked());
 		} else {
 			FlounderMouse.get().setCursorHidden(false);
@@ -179,6 +179,11 @@ public class KosmosGuis extends GuiMaster {
 
 	public void togglePause(boolean force) {
 		if (overlaySlider.inStartMenu()) {
+			return;
+		}
+
+		if (overlayMap.getAlpha() != 0.0f) {
+			toggleMap();
 			return;
 		}
 
@@ -232,7 +237,7 @@ public class KosmosGuis extends GuiMaster {
 	}
 
 	public void toggleMap() {
-		if (!isGamePaused()) {
+		if (!overlayStartup.isStarting() && overlaySlider.getAlpha() == 0.0f) {
 			if (overlayMap.getAlpha() != 1.0f) {
 				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));

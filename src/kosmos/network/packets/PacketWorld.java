@@ -53,6 +53,7 @@ public class PacketWorld extends Packet {
 		if (KosmosWorld.get().getNoise().getSeed() != seed) {
 			KosmosWorld.get().getNoise().setSeed(seed);
 			KosmosChunks.get().clear(true);
+			KosmosChunks.get().generateMap();
 		}
 
 		if (offServerTime) {

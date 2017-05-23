@@ -18,7 +18,7 @@ import kosmos.camera.*;
 import org.lwjgl.glfw.*;
 
 public class NewKosmos extends Framework {
-	public static final String VERSION = "5.22";
+	public static final String VERSION = "5.23";
 
 	public static void main(String[] args) {
 		new NewKosmos().run();
@@ -37,7 +37,7 @@ public class NewKosmos extends Framework {
 						0,
 						KosmosConfigs.DISPLAY_FULLSCREEN.getBoolean(),
 						false,
-						KosmosConfigs.WIREFRAME_ENABLED.getBoolean(),
+						false, // KosmosConfigs.WIREFRAME_ENABLED.getBoolean(),
 						KosmosConfigs.TEXTURES_ANISOTROPY_MAX.getFloat()
 				)});
 		Framework.setFpsLimit(KosmosConfigs.FRAMEWORK_FPS_LIMIT.getInteger());

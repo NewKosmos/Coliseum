@@ -51,10 +51,10 @@ public class Chunk extends Entity {
 	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * (CHUNK_RADIUS - 0.5f);
 
 	// Island map generations.
-	public static final int MAP_SIZE = 1024;
-	private static final float MAP_NOISE_SCALE = 0.4f;
-	private static final float MAP_BIOME_OFFSET = 0.05f;
-	private static final float MAP_CUTOFF = 0.9f;
+	public static final int MAP_SIZE = 1536;
+	private static final float MAP_NOISE_SCALE = 0.6f;
+	private static final float MAP_BIOME_OFFSET = 0.015f;
+	private static final float MAP_CUTOFF = 0.85f;
 	private static final float MAP_BLUR_FRACTION = (112.933f * (MAP_CUTOFF * MAP_CUTOFF)) - (182.726f * MAP_CUTOFF) + 76.14f;
 
 	private List<Chunk> childrenChunks;
@@ -192,34 +192,6 @@ public class Chunk extends Entity {
 		chunk.biome.getBiome().generateEntity(chunk, worldPosition);
 	}
 
-	/**
-	 * Generates a map for the current seed.
-	 */
-	public static void generateMap() {
-		int seed = KosmosWorld.get().getNoise().getSeed();
-		FlounderLogger.get().log("Generating map for seed: " + seed);
-		BufferedImage image = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
-
-		for (int y = 0; y < MAP_SIZE; y++) {
-			for (int x = 0; x < MAP_SIZE; x++) {
-				Colour colour = new Colour(getWorldBiome(x, y).getBiome().getColour());
-
-				int rgb = (int) (255.0f * colour.r);
-				rgb = (rgb << 8) + ((int) (255.0f * colour.g));
-				rgb = (rgb << 8) + ((int) (255.0f * colour.b));
-				image.setRGB(x, y, rgb);
-			}
-		}
-
-		File outputFile = new File(Framework.getRoamingFolder().getPath() + "/saves/map_" + seed + ".png");
-
-		try {
-			ImageIO.write(image, "png", outputFile);
-		} catch (IOException e) {
-			FlounderLogger.get().error("Could not save map image to file: " + outputFile);
-			FlounderLogger.get().exception(e);
-		}
-	}
 
 	/**
 	 * Gets the terrain height for a position in the world.
@@ -279,7 +251,7 @@ public class Chunk extends Entity {
 		outside = Maths.clamp(outside, 0.0f, 1.0f);
 
 		// Calculates the biome id based off of the world position using perlin.
-		float biomeID = (float) Math.cbrt(KosmosWorld.get().getNoise().noise(positionX / (256.0f * MAP_NOISE_SCALE), positionZ / (256.0f * MAP_NOISE_SCALE))) + MAP_BIOME_OFFSET;
+		float biomeID = (float) Math.cbrt(KosmosWorld.get().getNoise().noise(positionX / (350.0f * MAP_NOISE_SCALE), positionZ / (350.0f * MAP_NOISE_SCALE))) + MAP_BIOME_OFFSET;
 		biomeID *= outside;
 
 		// Limits the search for biomes in the size provided.

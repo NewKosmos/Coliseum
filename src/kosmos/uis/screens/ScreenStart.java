@@ -17,6 +17,7 @@ import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.visual.*;
 import kosmos.*;
+import kosmos.chunks.*;
 import kosmos.network.packets.*;
 import kosmos.uis.*;
 import kosmos.world.*;
@@ -47,6 +48,7 @@ public class ScreenStart extends ScreenObject {
 
 				// Generates the player and the world.
 				KosmosWorld.get().generatePlayer();
+				KosmosChunks.get().generateMap();
 			}
 		});
 

@@ -11,12 +11,14 @@ package kosmos.chunks;
 
 import flounder.camera.*;
 import flounder.entities.*;
+import flounder.entities.components.*;
 import flounder.events.*;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
 import flounder.logger.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
@@ -27,6 +29,9 @@ import kosmos.entities.components.*;
 import kosmos.entities.instances.*;
 import kosmos.world.*;
 
+import javax.imageio.*;
+import java.awt.image.*;
+import java.io.*;
 import java.util.*;
 
 import static flounder.platform.Constants.*;
@@ -53,8 +58,6 @@ public class KosmosChunks extends Module {
 
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
 		this.currentChunk = null;
-
-		Chunk.generateMap();
 
 		FlounderEvents.get().addEvent(new IEvent() {
 			private MouseButton buttonRemove = new MouseButton(GLFW_MOUSE_BUTTON_RIGHT);
@@ -124,7 +127,7 @@ public class KosmosChunks extends Module {
 						Vector3f roundedPosition = Chunk.convertTileToWorld(inChunk, tilePosition.x, tilePosition.y);
 						roundedPosition.y = Chunk.getWorldHeight(roundedPosition.x, roundedPosition.z);
 
-						new InstanceBush(FlounderEntities.get().getEntities(),
+						Entity entity = new InstanceBush(FlounderEntities.get().getEntities(),
 								new Vector3f(
 										roundedPosition.x,
 										0.5f + roundedPosition.y * 0.5f,
@@ -132,6 +135,7 @@ public class KosmosChunks extends Module {
 								),
 								new Vector3f()
 						);
+						new ComponentChild(entity, inChunk);
 					}
 				}
 			}
@@ -229,6 +233,34 @@ public class KosmosChunks extends Module {
 		return this.currentChunk;
 	}
 
+	/**
+	 * Generates a map for the current seed.
+	 */
+	public void generateMap() {
+		int seed = KosmosWorld.get().getNoise().getSeed();
+		FlounderLogger.get().log("Generating map for seed: " + seed);
+		BufferedImage image = new BufferedImage(Chunk.MAP_SIZE, Chunk.MAP_SIZE, BufferedImage.TYPE_INT_RGB);
+
+		for (int y = 0; y < Chunk.MAP_SIZE; y++) {
+			for (int x = 0; x < Chunk.MAP_SIZE; x++) {
+				Colour colour = new Colour(Chunk.getWorldBiome(x, y).getBiome().getColour());
+
+				int rgb = (int) (255.0f * colour.r);
+				rgb = (rgb << 8) + ((int) (255.0f * colour.g));
+				rgb = (rgb << 8) + ((int) (255.0f * colour.b));
+				image.setRGB(x, y, rgb);
+			}
+		}
+
+		File outputFile = new File(Framework.getRoamingFolder().getPath() + "/saves/map_" + seed + ".png");
+
+		try {
+			ImageIO.write(image, "png", outputFile);
+		} catch (IOException e) {
+			FlounderLogger.get().error("Could not save map image to file: " + outputFile);
+			FlounderLogger.get().exception(e);
+		}
+	}
 	/**
 	 * Sets the current chunk that that player is contained in. This will generate surrounding chunks.
 	 *

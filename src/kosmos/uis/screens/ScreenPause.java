@@ -14,6 +14,7 @@ import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.visual.*;
 import kosmos.*;
+import kosmos.chunks.*;
 import kosmos.network.packets.*;
 import kosmos.uis.*;
 import kosmos.world.*;
