@@ -39,7 +39,7 @@ public class BiomeOcean extends IBiome {
 
 	@Override
 	public String getBiomeName() {
-		return "river";
+		return "ocean";
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class BiomeOcean extends IBiome {
 
 	@Override
 	public float getTempNight() {
-		return 19.0f;
+		return 7.0f;
 	}
 
 	@Override

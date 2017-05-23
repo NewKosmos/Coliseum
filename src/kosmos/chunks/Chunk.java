@@ -53,8 +53,8 @@ public class Chunk extends Entity {
 	// Island map generations.
 	public static final int MAP_SIZE = 1536;
 	private static final float MAP_NOISE_SCALE = 0.6f;
-	private static final float MAP_BIOME_OFFSET = 0.015f;
-	private static final float MAP_CUTOFF = 0.85f;
+	private static final float MAP_BIOME_OFFSET = 0.13f;
+	private static final float MAP_CUTOFF = 0.88f;
 	private static final float MAP_BLUR_FRACTION = (112.933f * (MAP_CUTOFF * MAP_CUTOFF)) - (182.726f * MAP_CUTOFF) + 76.14f;
 
 	private List<Chunk> childrenChunks;
@@ -202,13 +202,15 @@ public class Chunk extends Entity {
 	 * @return The found height at that world position.
 	 */
 	public static float getWorldHeight(float positionX, float positionZ) {
-		// Calculates the final height for the world position using perlin.
-		IBiome.Biomes biome = getWorldBiome(positionX, positionZ);
-		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.get().getNoise().noise(positionX / (30.0f * MAP_NOISE_SCALE), positionZ / (30.0f * MAP_NOISE_SCALE)) * 12.0f);
+		// Sets the base height to the biome id.
+		float height = getWorldBiomeID(positionX, positionZ);
 
 		// Ignore height that would be water/nothing.
-		if (height < 0.0f) {
+		if (height < 0.0f || getWorldBiome(positionX, positionZ) == IBiome.Biomes.OCEAN) {
 			height = Float.NEGATIVE_INFINITY;
+		} else {
+			// Calculates the final height for the world position using perlin.
+			height = (float) Math.sqrt(2.0) * (int) Math.abs(KosmosWorld.get().getNoise().noise(positionX / (80.0f * MAP_NOISE_SCALE), positionZ / (80.0f * MAP_NOISE_SCALE)) * 7.0f * (height - 1.0f));
 		}
 
 		// Returns the final height,
@@ -241,8 +243,17 @@ public class Chunk extends Entity {
 	 * @return The found biome at that world position.
 	 */
 	public static IBiome.Biomes getWorldBiome(float positionX, float positionZ) {
+		// Gets and limits the biome.
+		float biomeID = getWorldBiomeID(positionX, positionZ);
+		biomeID = Maths.clamp(biomeID, 0.0f, IBiome.Biomes.values().length - 1);
+
+		// Returns the biome at the generated ID.
+		return IBiome.Biomes.values()[(int) biomeID];
+	}
+
+	private static float getWorldBiomeID(float positionX, float positionZ) {
 		// Smooth around circle.
-		float outside = (float) Math.sqrt(Math.pow(positionX - (MAP_SIZE / 2.0f), 2) + Math.pow(positionZ - (MAP_SIZE / 2.0f), 2));
+		float outside = (float) Math.sqrt(Math.pow(positionX, 2) + Math.pow(positionZ, 2));
 
 		if (outside >= MAP_CUTOFF * MAP_SIZE / 2.0f) {
 			outside = 1.0f - (4.47f * MAP_BLUR_FRACTION * ((1.0f / MAP_SIZE) * ((2.0f * outside) - (MAP_SIZE * MAP_CUTOFF))));
@@ -250,16 +261,12 @@ public class Chunk extends Entity {
 
 		outside = Maths.clamp(outside, 0.0f, 1.0f);
 
-		// Calculates the biome id based off of the world position using perlin.
-		float biomeID = (float) Math.cbrt(KosmosWorld.get().getNoise().noise(positionX / (350.0f * MAP_NOISE_SCALE), positionZ / (350.0f * MAP_NOISE_SCALE))) + MAP_BIOME_OFFSET;
-		biomeID *= outside;
+		// Calculates the biome id based off of the world position using perlin. Then limits the search for biomes in the size provided.
+		float biomeID = (float) Math.pow(KosmosWorld.get().getNoise().noise(positionX / (350.0f * MAP_NOISE_SCALE), positionZ / (350.0f * MAP_NOISE_SCALE)), 0.5f) + MAP_BIOME_OFFSET;
+		biomeID *= outside * IBiome.Biomes.values().length;
 
-		// Limits the search for biomes in the size provided.
-		biomeID = biomeID * IBiome.Biomes.values().length;
-		biomeID = Maths.clamp((int) biomeID, 0.0f, IBiome.Biomes.values().length - 1);
-
-		// Returns the biome at the generated ID.
-		return IBiome.Biomes.values()[(int) biomeID];
+		// Returns a biome id.
+		return biomeID;
 	}
 
 	public List<Chunk> getChildrenChunks() {

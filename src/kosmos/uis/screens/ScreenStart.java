@@ -44,10 +44,10 @@ public class ScreenStart extends ScreenObject {
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
 				((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);
-				KosmosConfigs.saveAllConfigs();
+				// KosmosConfigs.saveAllConfigs();
 
 				// Generates the player and the world.
-				KosmosWorld.get().generatePlayer();
+				KosmosWorld.get().generatePlayer(KosmosConfigs.SAVE_SEED.getInteger());
 				KosmosChunks.get().generateMap();
 			}
 		});
@@ -59,7 +59,7 @@ public class ScreenStart extends ScreenObject {
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
 				((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);
-				KosmosConfigs.saveAllConfigs();
+				// KosmosConfigs.saveAllConfigs();
 
 				// Connects to the server.
 				String username = KosmosConfigs.CLIENT_USERNAME.getString();
@@ -70,7 +70,7 @@ public class ScreenStart extends ScreenObject {
 				loginPacket.writeData(FlounderNetwork.get().getSocketClient());
 
 				// Generates the player and the world.
-				KosmosWorld.get().generatePlayer();
+				KosmosWorld.get().generatePlayer(420);
 			}
 		});
 

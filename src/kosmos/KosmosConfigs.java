@@ -21,6 +21,7 @@ import flounder.shadows.*;
 import flounder.textures.*;
 import kosmos.post.*;
 import kosmos.water.*;
+import kosmos.world.*;
 
 import static flounder.platform.Constants.*;
 
@@ -84,7 +85,7 @@ public class KosmosConfigs {
 
 	// Save0 configs.
 	private static final Config CONFIG_SAVE0 = new Config(new MyFile(Framework.getRoamingFolder("kosmos"), "saves", "save0.conf"));
-	public static final ConfigData SAVE_SEED = CONFIG_SAVE0.getData(ConfigSection.WORLD, "saveSeed", (int) Maths.randomInRange(1.0, 10000.0)); // Reference set in world.
+	public static final ConfigData SAVE_SEED = CONFIG_SAVE0.getData(ConfigSection.WORLD, "saveSeed", (int) Maths.randomInRange(1.0, 10000.0), () -> KosmosWorld.get().getNoise().getSeed());
 	public static final ConfigData SAVE_PLAYER_X = CONFIG_SAVE0.getData(ConfigSection.WORLD, "playerX", 0.0f); // Reference set in world.
 	public static final ConfigData SAVE_PLAYER_Y = CONFIG_SAVE0.getData(ConfigSection.WORLD, "playerY", 0.0f); // Reference set in world.
 	public static final ConfigData SAVE_PLAYER_Z = CONFIG_SAVE0.getData(ConfigSection.WORLD, "playerZ", 0.0f); // Reference set in world.

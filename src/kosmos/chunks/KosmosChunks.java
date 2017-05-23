@@ -239,25 +239,34 @@ public class KosmosChunks extends Module {
 	public void generateMap() {
 		int seed = KosmosWorld.get().getNoise().getSeed();
 		FlounderLogger.get().log("Generating map for seed: " + seed);
-		BufferedImage image = new BufferedImage(Chunk.MAP_SIZE, Chunk.MAP_SIZE, BufferedImage.TYPE_INT_RGB);
+
+		BufferedImage imageMap = new BufferedImage(Chunk.MAP_SIZE, Chunk.MAP_SIZE, BufferedImage.TYPE_INT_RGB);
+		BufferedImage imageType = new BufferedImage(Chunk.MAP_SIZE, Chunk.MAP_SIZE, BufferedImage.TYPE_INT_RGB);
 
 		for (int y = 0; y < Chunk.MAP_SIZE; y++) {
 			for (int x = 0; x < Chunk.MAP_SIZE; x++) {
-				Colour colour = new Colour(Chunk.getWorldBiome(x, y).getBiome().getColour());
+				Colour mapColour = new Colour(Chunk.getWorldBiome(x - (Chunk.MAP_SIZE / 2.0f), y - (Chunk.MAP_SIZE / 2.0f)).getBiome().getColour());
+				int rgb_map = (int) (255.0f * mapColour.r);
+				rgb_map = (rgb_map << 8) + ((int) (255.0f * mapColour.g));
+				rgb_map = (rgb_map << 8) + ((int) (255.0f * mapColour.b));
+				imageMap.setRGB(x, y, rgb_map);
 
-				int rgb = (int) (255.0f * colour.r);
-				rgb = (rgb << 8) + ((int) (255.0f * colour.g));
-				rgb = (rgb << 8) + ((int) (255.0f * colour.b));
-				image.setRGB(x, y, rgb);
+				float typeHeight = 0.1f + Chunk.getWorldHeight(x - (Chunk.MAP_SIZE / 2.0f), y - (Chunk.MAP_SIZE / 2.0f)) / 10.0f;
+				int rgb_type = (int) (255.0f * typeHeight);
+				rgb_type = (rgb_type << 8) + ((int) (255.0f * typeHeight));
+				rgb_type = (rgb_type << 8) + ((int) (255.0f * typeHeight));
+				imageType.setRGB(x, y, rgb_type);
 			}
 		}
 
-		File outputFile = new File(Framework.getRoamingFolder().getPath() + "/saves/map_" + seed + ".png");
+		File outputMap = new File(Framework.getRoamingFolder().getPath() + "/saves/map_" + seed + ".png");
+		File outputType = new File(Framework.getRoamingFolder().getPath() + "/saves/type_" + seed + ".png");
 
 		try {
-			ImageIO.write(image, "png", outputFile);
+			ImageIO.write(imageMap, "png", outputMap);
+			ImageIO.write(imageType, "png", outputType);
 		} catch (IOException e) {
-			FlounderLogger.get().error("Could not save map image to file: " + outputFile);
+			FlounderLogger.get().error("Could not save map image to file: " + outputMap);
 			FlounderLogger.get().exception(e);
 		}
 	}

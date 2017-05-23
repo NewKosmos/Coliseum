@@ -76,7 +76,7 @@ public class KosmosWorld extends Module {
 
 	@Handler.Function(Handler.FLAG_INIT)
 	public void init() {
-		this.noise = new PerlinNoise(KosmosConfigs.SAVE_SEED.setReference(() -> noise.getSeed()).getInteger());
+		this.noise = new PerlinNoise(-1);
 
 		this.entityPlayer = null;
 		this.entitySun = new InstanceSun(FlounderEntities.get().getEntities(), new Vector3f(-250.0f, -250.0f, -250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
@@ -97,7 +97,8 @@ public class KosmosWorld extends Module {
 		FlounderSkybox.get().setCubemap(TextureFactory.newBuilder().setCubemap(SKYBOX_TEXTURE_FILES).create());
 	}
 
-	public void generatePlayer() {
+	public void generatePlayer(int seed) {
+		this.noise.setSeed(seed);
 		this.entityPlayer = new InstancePlayer(FlounderEntities.get().getEntities(),
 				new Vector3f(
 						KosmosConfigs.SAVE_PLAYER_X.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().x).getFloat(),
