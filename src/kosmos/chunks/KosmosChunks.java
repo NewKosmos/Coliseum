@@ -54,6 +54,8 @@ public class KosmosChunks extends Module {
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
 		this.currentChunk = null;
 
+		Chunk.generateMap();
+
 		FlounderEvents.get().addEvent(new IEvent() {
 			private MouseButton buttonRemove = new MouseButton(GLFW_MOUSE_BUTTON_RIGHT);
 

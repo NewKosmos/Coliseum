@@ -13,6 +13,7 @@ import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.framework.*;
 import flounder.helpers.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.noise.*;
@@ -50,6 +51,14 @@ public class Chunk extends Entity {
 
 	// The overall world radius footprint per chunk.
 	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * (CHUNK_RADIUS - 0.5f);
+
+	// Island map generations.
+	public static final int MAP_SIZE = 1024;
+	private static final float MAP_NOISE_SCALE = 0.4f;
+	private static final float MAP_BIOME_OFFSET = 0.05f;
+	private static final float MAP_MAX_HEIGHT = 8.0f;
+	private static final float MAP_CUTOFF = 0.9f;
+	private static final float MAP_BLUR_FRACTION = (112.933f * (MAP_CUTOFF * MAP_CUTOFF)) - (182.726f * MAP_CUTOFF) + 76.14f;
 
 	private List<Chunk> childrenChunks;
 	private IBiome.Biomes biome;
@@ -186,35 +195,17 @@ public class Chunk extends Entity {
 		chunk.biome.getBiome().generateEntity(chunk, worldPosition);
 	}
 
-	private static BufferedImage MAP_IMAGE = null;
-	private static final float MAP_MAX_HEIGHT = 8.0f;
-	private static final int MAP_SIZE = 512;
-	private static final float GENERATOR_SCALE = 0.25f;
-	private static final float MAP_CUTOFF = 0.9f;
-	private static final float MAP_BLUR_FRACTION = (112.933f * (MAP_CUTOFF * MAP_CUTOFF)) - (182.726f * MAP_CUTOFF) + 76.14f;
-	private static final float MAP_MAX_PIXEL_COLOUR = 256.0f * 256.0f * 256.0f;
-
-	static {
-		try {
-			MAP_IMAGE = ImageIO.read(new MyFile(MyFile.RES_FOLDER, "map.png").getInputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	/**
+	 * Generates a map for the current seed.
+	 */
+	public static void generateMap() {
+		int seed = KosmosWorld.get().getNoise().getSeed();
+		FlounderLogger.get().log("Generating map for seed: " + seed);
 		BufferedImage image = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
-
-		PerlinNoise simplexNoise = new PerlinNoise((int) (10000 * Math.random()));
 
 		for (int y = 0; y < MAP_SIZE; y++) {
 			for (int x = 0; x < MAP_SIZE; x++) {
-				IBiome.Biomes biome = getWorldBiome(x, y);
-				float islands = simplexNoise.tileableNoise(x / 180.0f, y / 180.0f, MAP_SIZE, MAP_SIZE);
-				float surface = simplexNoise.tileableNoise(x / 30.0f, y / 30.0f, MAP_SIZE, MAP_SIZE) + 1.0f;
-				//float height = Maths.clamp(outside * islands * surface, 0.0f, 1.0f);
-				float height = Maths.clamp((int) (KosmosWorld.get().getNoise().noise(x / 30.0f, y / 30.0f) * 6.0f), 0.0f, 1.0f);
-
-				Colour colour = new Colour(biome.getBiome().getColour());
-				// colour.scale(height);
+				Colour colour = new Colour(getWorldBiome(x, y).getBiome().getColour());
 
 				int rgb = (int) (255.0f * colour.r);
 				rgb = (rgb << 8) + ((int) (255.0f * colour.g));
@@ -223,12 +214,13 @@ public class Chunk extends Entity {
 			}
 		}
 
-		File outputFile = new File(Framework.getRoamingFolder().getPath() + "/save0_map.png");
+		File outputFile = new File(Framework.getRoamingFolder().getPath() + "/saves/map_" + seed + ".png");
 
 		try {
 			ImageIO.write(image, "png", outputFile);
 		} catch (IOException e) {
-			e.printStackTrace();
+			FlounderLogger.get().error("Could not save map image to file: " + outputFile);
+			FlounderLogger.get().exception(e);
 		}
 	}
 
@@ -242,22 +234,8 @@ public class Chunk extends Entity {
 	 */
 	public static float getWorldHeight(float positionX, float positionZ) {
 		// Calculates the final height for the world position using perlin.
-		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.get().getNoise().noise(positionX / (30.0f * GENERATOR_SCALE), positionZ / (30.0f * GENERATOR_SCALE)) * 12.0f);
-
-		if (MAP_IMAGE != null) {
-			int imageX = (int) positionX + (MAP_IMAGE.getWidth() / 2);
-			int imageY = (int) positionZ + (MAP_IMAGE.getHeight() / 2);
-
-			if (imageX < 0 || imageX >= MAP_IMAGE.getWidth() || imageY < 0 || imageY >= MAP_IMAGE.getHeight()) {
-				return Float.NEGATIVE_INFINITY;
-			}
-
-			height = MAP_IMAGE.getRGB(imageX, imageY);
-			height += MAP_MAX_PIXEL_COLOUR / 2.0f;
-			height /= MAP_MAX_PIXEL_COLOUR / 2.0f;
-			height *= MAP_MAX_HEIGHT;
-			height = (float) Math.sqrt(2.0) * (int) height;
-		}
+		IBiome.Biomes biome = getWorldBiome(positionX, positionZ);
+		float height = (float) Math.sqrt(2.0) * (int) (KosmosWorld.get().getNoise().noise(positionX / (30.0f * MAP_NOISE_SCALE), positionZ / (30.0f * MAP_NOISE_SCALE)) * 12.0f);
 
 		// Ignore height that would be water/nothing.
 		if (height < 0.0f) {
@@ -304,7 +282,7 @@ public class Chunk extends Entity {
 		outside = Maths.clamp(outside, 0.0f, 1.0f);
 
 		// Calculates the biome id based off of the world position using perlin.
-		float biomeID = (float) Math.cbrt(KosmosWorld.get().getNoise().noise(positionX / (256.0f * GENERATOR_SCALE), positionZ / (256.0f * GENERATOR_SCALE))) + 0.08f;
+		float biomeID = (float) Math.cbrt(KosmosWorld.get().getNoise().noise(positionX / (256.0f * MAP_NOISE_SCALE), positionZ / (256.0f * MAP_NOISE_SCALE))) + MAP_BIOME_OFFSET;
 		biomeID *= outside;
 
 		// Limits the search for biomes in the size provided.

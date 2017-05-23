@@ -11,11 +11,13 @@ package kosmos.uis;
 
 import flounder.devices.*;
 import flounder.entities.*;
+import flounder.framework.*;
 import flounder.guis.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import flounder.visual.*;
+import kosmos.chunks.*;
 import kosmos.world.*;
 
 public class OverlayMap extends ScreenObject {
@@ -31,10 +33,10 @@ public class OverlayMap extends ScreenObject {
 		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
 
-		this.textureView = new GuiObject(this, new Vector2f(VIEW_POSITION_X, VIEW_POSITION_Y), new Vector2f(VIEW_SIZE_X, VIEW_SIZE_Y), TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "map.png")).create(), 1);
+		this.textureView = new GuiObject(this, new Vector2f(VIEW_POSITION_X, VIEW_POSITION_Y), new Vector2f(VIEW_SIZE_X, VIEW_SIZE_Y), TextureFactory.newBuilder().setFile(new MyFile(Framework.getRoamingFolder(), "saves", "/map_" + KosmosWorld.get().getNoise().getSeed() + ".png")).create(), 1);
 		this.textureView.setInScreenCoords(true);
 
-		this.playerPosition = new GuiObject(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.04f, 0.04f), TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "pointer.png")).create(), 1);
+		this.playerPosition = new GuiObject(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.02f, 0.02f), TextureFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "pointer.png")).create(), 1);
 		this.playerPosition.setInScreenCoords(false);
 	}
 
@@ -43,8 +45,8 @@ public class OverlayMap extends ScreenObject {
 		Entity player = KosmosWorld.get().getEntityPlayer();
 
 		if (player != null) {
-			float px = player.getPosition().x / 512.0f;
-			float pz = player.getPosition().z / 512.0f;
+			float px = player.getPosition().x / Chunk.MAP_SIZE;
+			float pz = player.getPosition().z / Chunk.MAP_SIZE;
 			playerPosition.getPosition().set(((FlounderDisplay.get().getAspectRatio() * VIEW_POSITION_X) - (VIEW_SIZE_X * 0.5f)) + (VIEW_SIZE_X * px) + (VIEW_SIZE_X * 0.5f), (VIEW_POSITION_Y - (VIEW_SIZE_Y * 0.5f)) + (VIEW_SIZE_Y * pz) + (VIEW_SIZE_Y * 0.5f));
 			playerPosition.setRotationDriver(new ConstantDriver(-player.getRotation().y + 180.0f));
 		}
