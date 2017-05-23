@@ -10,6 +10,7 @@
 package kosmos.chunks.biomes;
 
 import flounder.entities.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.particles.*;
 import flounder.resources.*;
@@ -53,6 +54,7 @@ public class BiomeSnow extends IBiome {
 			}
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "snow.png")).clampEdges().create();
+	private static final Colour COLOUR = new Colour(1.0f, 1.0f, 1.0f);
 	private static final ParticleType PARTICLE = new ParticleType("snow", TextureFactory.newBuilder().setFile(new MyFile(FlounderParticles.PARTICLES_FOLDER, "snowParticle.png")).setNumberOfRows(4).create(), 4.75f, 0.20f);
 
 	public BiomeSnow() {
@@ -72,6 +74,11 @@ public class BiomeSnow extends IBiome {
 	@Override
 	public TextureObject getTexture() {
 		return TEXTURE;
+	}
+
+	@Override
+	public Colour getColour() {
+		return COLOUR;
 	}
 
 	@Override

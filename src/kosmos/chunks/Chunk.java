@@ -205,15 +205,19 @@ public class Chunk extends Entity {
 
 		for (int y = 0; y < outputHeight; y++) {
 			for (int x = 0; x < outputWidth; x++) {
+				IBiome.Biomes biome = getWorldBiome(x, y);
 				//float outside = (float) Math.sqrt(Math.pow(x - (outputWidth / 2.0f), 2) + Math.pow(y - (outputHeight / 2.0f), 2)) < ((outputWidth + outputHeight) / 4.0f) ? 1.0f : 0.0f;
 				//float islands = simplexNoise.tileableNoise(x / 180.0f, y / 180.0f, outputWidth, outputHeight);
 				//float surface = simplexNoise.tileableNoise(x / 30.0f, y / 30.0f, outputWidth, outputHeight) + 1.0f;
 				//float height = Maths.clamp(outside * islands * surface, 0.0f, 1.0f);
 				float height = Maths.clamp((int) (KosmosWorld.get().getNoise().noise(x / 30.0f, y / 30.0f) * 6.0f), 0.0f, 1.0f);
 
-				int rgb = (int) (255.0f * height);
-				rgb = (rgb << 8) + ((int) (255.0f * height));
-				rgb = (rgb << 8) + ((int) (255.0f * height));
+				Colour colour = new Colour(biome.getBiome().getColour());
+				colour.scale(height);
+
+				int rgb = (int) (255.0f * colour.r);
+				rgb = (rgb << 8) + ((int) (255.0f * colour.g));
+				rgb = (rgb << 8) + ((int) (255.0f * colour.b));
 				image.setRGB(x, y, rgb);
 			}
 		}

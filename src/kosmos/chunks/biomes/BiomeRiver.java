@@ -10,6 +10,7 @@
 package kosmos.chunks.biomes;
 
 import flounder.entities.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.particles.*;
 import flounder.resources.*;
@@ -29,6 +30,7 @@ public class BiomeRiver extends IBiome {
 			}
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "sand.png")).clampEdges().create();
+	private static final Colour COLOUR = new Colour(0.0f, 0.0f, 1.0f);
 	private static final ParticleType PARTICLE = new ParticleType("rain", TextureFactory.newBuilder().setFile(new MyFile(FlounderParticles.PARTICLES_FOLDER, "rainParticle.png")).setNumberOfRows(4).create(), 4.75f, 0.15f);
 
 	public BiomeRiver() {
@@ -48,6 +50,11 @@ public class BiomeRiver extends IBiome {
 	@Override
 	public TextureObject getTexture() {
 		return TEXTURE;
+	}
+
+	@Override
+	public Colour getColour() {
+		return COLOUR;
 	}
 
 	@Override

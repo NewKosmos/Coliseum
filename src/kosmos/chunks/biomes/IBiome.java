@@ -11,6 +11,7 @@ package kosmos.chunks.biomes;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.particles.*;
 import flounder.textures.*;
@@ -51,6 +52,8 @@ public abstract class IBiome {
 	 * @return The type of texture to use as the surface.
 	 */
 	public abstract TextureObject getTexture();
+
+	public abstract Colour getColour();
 
 	public Entity generateEntity(Chunk chunk, Vector3f tilePosition) {
 		if (tilePosition.y < 0.0f) {

@@ -10,6 +10,7 @@
 package kosmos.chunks.biomes;
 
 import flounder.entities.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.particles.*;
 import flounder.resources.*;
@@ -53,6 +54,7 @@ public class BiomeStone extends IBiome {
 			}
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "stone.png")).clampEdges().create();
+	private static final Colour COLOUR = new Colour(0.5f, 0.5f, 0.5f);
 	private static final ParticleType PARTICLE = null;
 
 	public BiomeStone() {
@@ -72,6 +74,11 @@ public class BiomeStone extends IBiome {
 	@Override
 	public TextureObject getTexture() {
 		return TEXTURE;
+	}
+
+	@Override
+	public Colour getColour() {
+		return COLOUR;
 	}
 
 	@Override
