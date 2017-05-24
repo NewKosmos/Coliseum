@@ -33,7 +33,7 @@ public class KosmosChunks extends Module {
 	public static final MyFile TERRAINS_FOLDER = new MyFile(MyFile.RES_FOLDER, "terrains");
 
 	// The size of the rendered map image.
-	private static final int MAP_SIZE = 512;
+	private static final int MAP_SIZE = 1024;
 
 	private Sphere chunkRange;
 

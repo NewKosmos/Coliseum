@@ -46,10 +46,10 @@ public class Chunk extends Entity {
 	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * (CHUNK_RADIUS - 0.5f);
 
 	// Island world generations.
-	public static final int WORLD_SIZE = 1536;
-	private static final float WORLD_NOISE_SCALE = 0.75f;
-	private static final float WORLD_BIOME_OFFSET = 0.2f;
-	private static final float WORLD_CUTOFF = 0.90f;
+	public static final int WORLD_SIZE = 2520;
+	private static final float WORLD_NOISE_SCALE = 3.000f;
+	private static final float WORLD_BIOME_OFFSET = 0.15f;
+	private static final float WORLD_CUTOFF = 0.94f;
 	private static final float WORLD_BLUR_FRACTION = (112.933f * (WORLD_CUTOFF * WORLD_CUTOFF)) - (182.726f * WORLD_CUTOFF) + 76.14f;
 
 	private List<Chunk> childrenChunks;
@@ -242,7 +242,7 @@ public class Chunk extends Entity {
 		float biomeID = getWorldBiomeID(positionX, positionZ);
 
 		// Returns the biome at the generated ID.
-		return IBiome.Biomes.get(biomeID);
+		return IBiome.Biomes.get(biomeID, positionX, positionZ);
 	}
 
 	private static float getWorldBiomeID(float positionX, float positionZ) {
@@ -256,7 +256,7 @@ public class Chunk extends Entity {
 		outside = Maths.clamp(outside, 0.0f, 1.0f);
 
 		// Calculates the biome id based off of the world position using perlin. Then limits the search for biomes in the size provided.
-		float biomeID = (float) Math.pow(KosmosWorld.get().getNoise().noise(positionX / (350.0f * WORLD_NOISE_SCALE), positionZ / (350.0f * WORLD_NOISE_SCALE)), 0.5f) + WORLD_BIOME_OFFSET;
+		float biomeID = (float) Math.pow(KosmosWorld.get().getNoise().noise(positionX / (100.0f * WORLD_NOISE_SCALE), positionZ / (100.0f * WORLD_NOISE_SCALE)), 0.5f) + WORLD_BIOME_OFFSET;
 		biomeID *= outside * (float) (IBiome.SPAWN_LEVELS + 1);
 		biomeID = Maths.clamp(biomeID, 0.0f, IBiome.SPAWN_LEVELS);
 

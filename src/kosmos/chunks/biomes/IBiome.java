@@ -42,22 +42,28 @@ public abstract class IBiome {
 			return biome;
 		}
 
-		public static Biomes get(float level) {
-			if (level >= 4.0f) {
-				return SNOW;
-			} else if (level >= 3.5f) {
-				return STONE;
-			} else if (level >= 3.0f) {
-				return DESERT;
-			} else if (level >= 2.5f) {
-				return EXOTIC;
-			} else if (level >= 2.0f) {
-				return GRASS;
-			} else if (level >= 1.0f) {
-				return BEACH;
-			} else {
+		public static Biomes get(float level, float positionX, float positionZ) {
+			if (level < 1.0f) {
 				return OCEAN;
 			}
+
+			float l = level; // + KosmosWorld.get().getNoise().noise(positionX / 75.0f, positionZ / 75.0f);
+
+			if (l >= 4.0f) {
+				return SNOW;
+			} else if (l >= 3.5f) {
+				return STONE;
+			} else if (l >= 3.0f) {
+				return DESERT;
+			} else if (l >= 2.5f) {
+				return EXOTIC;
+			} else if (l >= 2.0f) {
+				return GRASS;
+			} else if (l >= 1.0f) {
+				return BEACH;
+			}
+
+			return OCEAN;
 		}
 	}
 
