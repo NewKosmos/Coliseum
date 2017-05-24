@@ -47,8 +47,8 @@ public class Chunk extends Entity {
 
 	// Island world generations.
 	public static final int WORLD_SIZE = 2520;
-	private static final float WORLD_NOISE_SCALE = 3.000f;
-	private static final float WORLD_BIOME_OFFSET = 0.15f;
+	private static final float WORLD_NOISE_SCALE = 4.20f;
+	private static final float WORLD_BIOME_OFFSET = 0.2f;
 	private static final float WORLD_CUTOFF = 0.94f;
 	private static final float WORLD_BLUR_FRACTION = (112.933f * (WORLD_CUTOFF * WORLD_CUTOFF)) - (182.726f * WORLD_CUTOFF) + 76.14f;
 

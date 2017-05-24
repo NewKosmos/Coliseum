@@ -10,20 +10,45 @@
 package kosmos;
 
 import flounder.camera.*;
+import flounder.devices.*;
+import flounder.events.*;
+import flounder.fbos.*;
+import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.framework.updater.*;
+import flounder.guis.*;
+import flounder.inputs.*;
 import flounder.logger.*;
 import flounder.lwjgl3.*;
 import flounder.maths.*;
+import flounder.maths.Timer;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
+import flounder.particles.*;
 import flounder.physics.*;
+import flounder.physics.bounding.*;
+import flounder.post.piplines.*;
+import flounder.renderer.*;
 import flounder.resources.*;
+import flounder.shadows.*;
+import flounder.skybox.*;
 import flounder.standards.*;
+import flounder.textures.*;
+import flounder.visual.*;
+import kosmos.chunks.*;
 import kosmos.network.packets.*;
+import kosmos.water.*;
+import kosmos.world.*;
 import org.lwjgl.glfw.*;
 import sun.reflect.generics.reflectiveObjects.*;
+
+import javax.swing.*;
+
+import java.awt.*;
+import java.awt.event.*;
+
+import static flounder.platform.Constants.*;
 
 public class KosmosServer extends Framework {
 	public static void main(String[] args) {
@@ -32,11 +57,11 @@ public class KosmosServer extends Framework {
 	}
 
 	public KosmosServer() {
-		super("kosmos", new UpdaterDefault(GLFW::glfwGetTime), 30,
-				new Extension[]{new ServerInterface(), new EmptyCamera()},
+		super("kosmos", new UpdaterDefault(GLFW::glfwGetTime), 10,
+				new Extension[]{new ServerInterface(), new ServerRenderer(), new ServerCamera(), new ServerGuis()},
 				new Module[]{new PlatformLwjgl(
-						100,
-						100,
+						580,
+						650,
 						"New Kosmos Server", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
 						false,
 						false,
@@ -49,17 +74,76 @@ public class KosmosServer extends Framework {
 	}
 
 	public static class ServerInterface extends Standard {
+		private static JFrame frame;
+		private static JPanel mainPanel;
+		private static JPanel renderPanel;
+
 		public static int serverPort;
 		public static int serverSeed;
 
 		private Timer timerWorld;
 
 		public ServerInterface() {
-			super(FlounderNetwork.class);
+			super(FlounderDisplayJPanel.class, FlounderNetwork.class, KosmosWorld.class, KosmosChunks.class);
 		}
 
 		@Override
 		public void init() {
+			frame = new JFrame();
+			frame.setTitle(FlounderDisplay.get().getTitle());
+			frame.setSize(FlounderDisplay.get().getWidth(), FlounderDisplay.get().getHeight());
+			frame.setLayout(new BorderLayout());
+			frame.setResizable(true);
+
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+				ex.printStackTrace();
+			}
+
+			frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			frame.addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosing(WindowEvent windowEvent) {
+					if (JOptionPane.showConfirmDialog(frame,
+							"Are you sure to close this editor?", "Any unsaved work will be lost!",
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+						Framework.requestClose(false);
+					} else {
+						frame.setVisible(true);
+					}
+				}
+			});
+
+			mainPanel = new JPanel();
+
+			JButton buttonRandomSeed = new JButton("Random Seed");
+			buttonRandomSeed.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					KosmosWorld.get().getNoise().setSeed((int) Maths.randomInRange(1.0, 10000.0));
+					new PacketWorld(serverSeed, Framework.getTimeSec()).writeData(FlounderNetwork.get().getSocketServer());
+				}
+			});
+			mainPanel.add(buttonRandomSeed);
+
+			JButton buttonShutdown = new JButton("Shutdown");
+			buttonShutdown.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Framework.requestClose(false);
+				}
+			});
+			mainPanel.add(buttonShutdown);
+
+			frame.add(mainPanel, BorderLayout.SOUTH);
+
+			renderPanel = FlounderDisplayJPanel.get().createPanel();
+			frame.add(renderPanel, BorderLayout.CENTER);
+
+			frame.setLocationByPlatform(true);
+			frame.setVisible(true);
+			frame.toFront();
+
 			ServerInterface.serverPort = KosmosConfigs.HOST_PORT.setReference(() -> serverPort).getInteger();
 			ServerInterface.serverSeed = KosmosConfigs.HOST_SEED.setReference(() -> serverSeed).getInteger();
 
@@ -73,6 +157,7 @@ public class KosmosServer extends Framework {
 
 			FlounderLogger.get().log("Server seed: " + serverSeed);
 			FlounderNetwork.get().startServer(serverPort);
+			KosmosWorld.get().getNoise().setSeed(serverSeed);
 		}
 
 		@Override
@@ -101,14 +186,109 @@ public class KosmosServer extends Framework {
 		}
 	}
 
-	public static class EmptyCamera extends Camera {
+	public static class ServerGuis extends GuiMaster {
+		private ServerMap serverMap;
+
+		public ServerGuis() {
+			super();
+		}
+
+		@Override
+		public void init() {
+			this.serverMap = new ServerMap(FlounderGuis.get().getContainer());
+		}
+
+		@Override
+		public void update() {
+		}
+
+		@Override
+		public void profile() {
+
+		}
+
+		@Override
+		public boolean isGamePaused() {
+			return false;
+		}
+
+		@Override
+		public float getBlurFactor() {
+			return 0;
+		}
+
+		@Override
+		public Colour getPrimaryColour() {
+			return null;
+		}
+
+		@Override
+		public void dispose() {
+
+		}
+
+		@Override
+		public boolean isActive() {
+			return true;
+		}
+
+		public class ServerMap extends ScreenObject {
+			private static final float VIEW_SIZE_X = 1.0f;
+			private static final float VIEW_SIZE_Y = 1.0f;
+			private static final float VIEW_POSITION_X = 0.5f;
+			private static final float VIEW_POSITION_Y = 0.5f;
+
+			private GuiObject backgroundView;
+			private GuiObject mapViewTexture;
+			//private GuiObject playerPosition;
+
+			public ServerMap(ScreenObject parent) {
+				super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
+				super.setInScreenCoords(false);
+
+				this.backgroundView = new GuiObject(this, new Vector2f(VIEW_POSITION_X, VIEW_POSITION_Y), new Vector2f(VIEW_SIZE_X, VIEW_SIZE_Y), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "map.png")).create(), 1);
+				this.backgroundView.setAlphaDriver(new ConstantDriver(0.9f));
+				this.backgroundView.setInScreenCoords(true);
+
+				this.mapViewTexture = new GuiObject(this, new Vector2f(VIEW_POSITION_X, VIEW_POSITION_Y), new Vector2f(VIEW_SIZE_X, VIEW_SIZE_Y), null, 1);
+				this.mapViewTexture.setAlphaDriver(new ConstantDriver(0.8f));
+				this.mapViewTexture.setInScreenCoords(true);
+
+			//	this.playerPosition = new GuiObject(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.02f, 0.02f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "pointer.png")).create(), 1);
+			//	this.playerPosition.setInScreenCoords(false);
+			}
+
+			@Override
+			public void updateObject() {
+				mapViewTexture.setTexture(KosmosChunks.get().getMapTexture());
+
+			/*	Entity player = KosmosWorld.get().getEntityPlayer();
+
+				if (player != null) {
+					float px = player.getPosition().x / Chunk.WORLD_SIZE;
+					float pz = player.getPosition().z / Chunk.WORLD_SIZE;
+					playerPosition.getPosition().set(
+							(((mapViewTexture.isInScreenCoords() ? FlounderDisplay.get().getAspectRatio() : 1.0f) * VIEW_POSITION_X) - (VIEW_SIZE_X * 0.5f)) + (VIEW_SIZE_X * px) + (VIEW_SIZE_X * 0.5f),
+							(VIEW_POSITION_Y - (VIEW_SIZE_Y * 0.5f)) + (VIEW_SIZE_Y * pz) + (VIEW_SIZE_Y * 0.5f)
+					);
+					playerPosition.setRotationDriver(new ConstantDriver(-player.getRotation().y + 180.0f));
+				}*/
+			}
+
+			@Override
+			public void deleteObject() {
+			}
+		}
+	}
+
+	public static class ServerCamera extends Camera {
 		private Vector3f position;
 		private Vector3f rotation;
 		private Frustum viewFrustum;
 		private Matrix4f viewMatrix;
 		private Matrix4f projectionMatrix;
 
-		public EmptyCamera() {
+		public ServerCamera() {
 			this.position = new Vector3f();
 			this.rotation = new Vector3f();
 			this.viewFrustum = new Frustum();
@@ -179,6 +359,42 @@ public class KosmosServer extends Framework {
 		@Override
 		public void setRotation(Vector3f rotation) {
 			this.rotation.set(rotation);
+		}
+
+		@Override
+		public boolean isActive() {
+			return true;
+		}
+	}
+
+	public static class ServerRenderer extends RendererMaster {
+		private GuisRenderer guisRenderer;
+		private FontRenderer fontRenderer;
+
+		public ServerRenderer() {
+			super(FlounderDisplay.class);
+		}
+
+		@Override
+		public void init() {
+			this.guisRenderer = new GuisRenderer();
+			this.fontRenderer = new FontRenderer();
+		}
+
+		@Override
+		public void render() {
+			guisRenderer.render(null, null);
+			fontRenderer.render(null, null);
+		}
+
+		@Override
+		public void profile() {
+		}
+
+		@Override
+		public void dispose() {
+			guisRenderer.dispose();
+			fontRenderer.dispose();
 		}
 
 		@Override

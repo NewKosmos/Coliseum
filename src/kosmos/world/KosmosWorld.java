@@ -88,13 +88,18 @@ public class KosmosWorld extends Module {
 		this.dayDriver = new LinearDriver(0.0f, 100.0f, DAY_NIGHT_CYCLE);
 		this.dayFactor = 0.0f;
 
-		FlounderShadows.get().setBrightnessBoost(KosmosConfigs.BRIGHTNESS_BOOST.getFloat());
-		FlounderShadows.get().setShadowSize(KosmosConfigs.SHADOWMAP_SIZE.getInteger());
-		FlounderShadows.get().setShadowPCF(KosmosConfigs.SHADOWMAP_PCF.getInteger());
-		FlounderShadows.get().setShadowBias(KosmosConfigs.SHADOWMAP_BIAS.getFloat());
-		FlounderShadows.get().setShadowDarkness(KosmosConfigs.SHADOWMAP_DARKNESS.getFloat());
-		FlounderShadows.get().setRenderUnlimited(KosmosConfigs.SHADOWMAP_UNLIMITED.getBoolean());
-		FlounderSkybox.get().setCubemap(TextureFactory.newBuilder().setCubemap(SKYBOX_TEXTURE_FILES).create());
+		if (FlounderShadows.get() != null) {
+			FlounderShadows.get().setBrightnessBoost(KosmosConfigs.BRIGHTNESS_BOOST.getFloat());
+			FlounderShadows.get().setShadowSize(KosmosConfigs.SHADOWMAP_SIZE.getInteger());
+			FlounderShadows.get().setShadowPCF(KosmosConfigs.SHADOWMAP_PCF.getInteger());
+			FlounderShadows.get().setShadowBias(KosmosConfigs.SHADOWMAP_BIAS.getFloat());
+			FlounderShadows.get().setShadowDarkness(KosmosConfigs.SHADOWMAP_DARKNESS.getFloat());
+			FlounderShadows.get().setRenderUnlimited(KosmosConfigs.SHADOWMAP_UNLIMITED.getBoolean());
+		}
+
+		if (FlounderSkybox.get() != null) {
+			FlounderSkybox.get().setCubemap(TextureFactory.newBuilder().setCubemap(SKYBOX_TEXTURE_FILES).create());
+		}
 	}
 
 	public void generateWorld(int seed) {
@@ -147,15 +152,17 @@ public class KosmosWorld extends Module {
 			scaledSpeed = ((KosmosGuis) FlounderGuis.get().getGuiMaster()).getOverlaySlider().inStartMenu() ? 4.20f : 1.0f;
 		}
 
-		dayFactor = dayDriver.update(Framework.getDelta() * scaledSpeed) / 100.0f;
-		Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.get().getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.get().getLightPosition()).normalize();
-		Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.get().getFog().getFogColour());
-		Colour.interpolate(FlounderSkybox.get().getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.get().getFog().getFogColour());
-		FlounderSkybox.get().getFog().setFogDensity(0.023f + ((1.0f - getShadowFactor()) * 0.016f));
-		FlounderSkybox.get().getFog().setFogGradient(2.80f - ((1.0f - getShadowFactor()) * 0.5f));
-		FlounderSkybox.get().setBlendFactor(starIntensity());
-		FlounderShadows.get().setShadowBoxOffset(10.0f);
-		FlounderShadows.get().setShadowBoxDistance(35.0f);
+		if (FlounderSkybox.get() != null && FlounderShadows.get() != null) {
+			dayFactor = dayDriver.update(Framework.getDelta() * scaledSpeed) / 100.0f;
+			Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.get().getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.get().getLightPosition()).normalize();
+			Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.get().getFog().getFogColour());
+			Colour.interpolate(FlounderSkybox.get().getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.get().getFog().getFogColour());
+			FlounderSkybox.get().getFog().setFogDensity(0.023f + ((1.0f - getShadowFactor()) * 0.016f));
+			FlounderSkybox.get().getFog().setFogGradient(2.80f - ((1.0f - getShadowFactor()) * 0.5f));
+			FlounderSkybox.get().setBlendFactor(starIntensity());
+			FlounderShadows.get().setShadowBoxOffset(10.0f);
+			FlounderShadows.get().setShadowBoxDistance(35.0f);
+		}
 	}
 
 	@Handler.Function(Handler.FLAG_PROFILE)
