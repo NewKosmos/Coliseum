@@ -11,9 +11,7 @@ package kosmos.chunks;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.framework.*;
 import flounder.helpers.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
@@ -24,9 +22,6 @@ import kosmos.chunks.meshing.*;
 import kosmos.entities.components.*;
 import kosmos.world.*;
 
-import javax.imageio.*;
-import java.awt.image.*;
-import java.io.*;
 import java.util.*;
 
 /**
@@ -50,15 +45,16 @@ public class Chunk extends Entity {
 	// The overall world radius footprint per chunk.
 	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * (CHUNK_RADIUS - 0.5f);
 
-	// Island map generations.
-	public static final int MAP_SIZE = 1536;
-	private static final float MAP_NOISE_SCALE = 0.6f;
-	private static final float MAP_BIOME_OFFSET = 0.13f;
-	private static final float MAP_CUTOFF = 0.88f;
-	private static final float MAP_BLUR_FRACTION = (112.933f * (MAP_CUTOFF * MAP_CUTOFF)) - (182.726f * MAP_CUTOFF) + 76.14f;
+	// Island world generations.
+	public static final int WORLD_SIZE = 1536;
+	private static final float WORLD_NOISE_SCALE = 0.75f;
+	private static final float WORLD_BIOME_OFFSET = 0.2f;
+	private static final float WORLD_CUTOFF = 0.90f;
+	private static final float WORLD_BLUR_FRACTION = (112.933f * (WORLD_CUTOFF * WORLD_CUTOFF)) - (182.726f * WORLD_CUTOFF) + 76.14f;
 
 	private List<Chunk> childrenChunks;
 	private IBiome.Biomes biome;
+	private int seed;
 	private ChunkMesh chunkMesh;
 	private Sphere sphere;
 	private boolean loaded;
@@ -68,6 +64,7 @@ public class Chunk extends Entity {
 
 		this.childrenChunks = new ArrayList<>();
 		this.biome = getWorldBiome(position.x, position.z);
+		this.seed = KosmosWorld.get().getNoise().getSeed();
 		this.chunkMesh = new ChunkMesh(this);
 		this.sphere = new Sphere(1.0f);
 		this.sphere.update(position, null, Chunk.CHUNK_WORLD_SIZE, sphere);
@@ -127,6 +124,12 @@ public class Chunk extends Entity {
 	public void update() {
 		// Updates the entity super class.
 		super.update();
+
+		if (seed != KosmosWorld.get().getNoise().getSeed()) {
+			chunkMesh.delete(); // TODO: Reload chunk.
+			loaded = false;
+			seed = KosmosWorld.get().getNoise().getSeed();
+		}
 
 		// Updates the mesh.
 		this.chunkMesh.update();
@@ -206,11 +209,11 @@ public class Chunk extends Entity {
 		float height = getWorldBiomeID(positionX, positionZ);
 
 		// Ignore height that would be water/nothing.
-		if (height < 0.0f || getWorldBiome(positionX, positionZ) == IBiome.Biomes.OCEAN) {
+		if ((int) height <= 0.0f) {
 			height = Float.NEGATIVE_INFINITY;
 		} else {
 			// Calculates the final height for the world position using perlin.
-			height = (float) Math.sqrt(2.0) * (int) Math.abs(KosmosWorld.get().getNoise().noise(positionX / (80.0f * MAP_NOISE_SCALE), positionZ / (80.0f * MAP_NOISE_SCALE)) * 7.0f * (height - 1.0f));
+			height = (float) Math.sqrt(2.0) * (int) Math.abs(KosmosWorld.get().getNoise().noise(positionX / (90.0f * WORLD_NOISE_SCALE), positionZ / (90.0f * WORLD_NOISE_SCALE)) * 8.5f * (height - 1.0f));
 		}
 
 		// Returns the final height,
@@ -255,14 +258,14 @@ public class Chunk extends Entity {
 		// Smooth around circle.
 		float outside = (float) Math.sqrt(Math.pow(positionX, 2) + Math.pow(positionZ, 2));
 
-		if (outside >= MAP_CUTOFF * MAP_SIZE / 2.0f) {
-			outside = 1.0f - (4.47f * MAP_BLUR_FRACTION * ((1.0f / MAP_SIZE) * ((2.0f * outside) - (MAP_SIZE * MAP_CUTOFF))));
+		if (outside >= WORLD_CUTOFF * WORLD_SIZE / 2.0f) {
+			outside = 1.0f - (4.47f * WORLD_BLUR_FRACTION * ((1.0f / WORLD_SIZE) * ((2.0f * outside) - (WORLD_SIZE * WORLD_CUTOFF))));
 		}
 
 		outside = Maths.clamp(outside, 0.0f, 1.0f);
 
 		// Calculates the biome id based off of the world position using perlin. Then limits the search for biomes in the size provided.
-		float biomeID = (float) Math.pow(KosmosWorld.get().getNoise().noise(positionX / (350.0f * MAP_NOISE_SCALE), positionZ / (350.0f * MAP_NOISE_SCALE)), 0.5f) + MAP_BIOME_OFFSET;
+		float biomeID = (float) Math.pow(KosmosWorld.get().getNoise().noise(positionX / (350.0f * WORLD_NOISE_SCALE), positionZ / (350.0f * WORLD_NOISE_SCALE)), 0.5f) + WORLD_BIOME_OFFSET;
 		biomeID *= outside * IBiome.Biomes.values().length;
 
 		// Returns a biome id.

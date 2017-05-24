@@ -19,6 +19,7 @@ import flounder.helpers.*;
 import flounder.inputs.*;
 import flounder.logger.*;
 import flounder.maths.*;
+import flounder.maths.Timer;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
@@ -39,12 +40,18 @@ import static flounder.platform.Constants.*;
 public class KosmosChunks extends Module {
 	public static final MyFile TERRAINS_FOLDER = new MyFile(MyFile.RES_FOLDER, "terrains");
 
+	// The size of the rendered map image.
+	private static final int MAP_SIZE = 512;
+
 	private Sphere chunkRange;
 
 	private ModelObject modelHexagon;
 
 	private Vector3f lastPlayerPos;
 	private Chunk currentChunk;
+
+	private TextureObject mapTexture;
+	private Timer mapUpdate;
 
 	public KosmosChunks() {
 		super(FlounderEvents.class, FlounderEntities.class, FlounderModels.class, FlounderTextures.class);
@@ -58,6 +65,9 @@ public class KosmosChunks extends Module {
 
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
 		this.currentChunk = null;
+
+		this.mapTexture = null;
+		this.mapUpdate = new Timer(2.0f);
 
 		FlounderEvents.get().addEvent(new IEvent() {
 			private MouseButton buttonRemove = new MouseButton(GLFW_MOUSE_BUTTON_RIGHT);
@@ -229,47 +239,55 @@ public class KosmosChunks extends Module {
 		FlounderProfiler.get().add(getTab(), "Chunks Current", currentChunk);
 	}
 
+	/**
+	 * Generates a map for the current seed.
+	 */
+	private void generateMap() {
+		int seed = KosmosWorld.get().getNoise().getSeed();
+		BufferedImage imageOutput = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
+
+		FlounderLogger.get().log("Generating map for seed: " + seed);
+
+		for (int y = 0; y < MAP_SIZE; y++) {
+			for (int x = 0; x < MAP_SIZE; x++) {
+				Colour mapColour = Chunk.getWorldBiome((x / ((float) MAP_SIZE / (float) Chunk.WORLD_SIZE)) - ((float) Chunk.WORLD_SIZE / 2.0f), (y / ((float) MAP_SIZE / (float) Chunk.WORLD_SIZE)) - ((float) Chunk.WORLD_SIZE / 2.0f)).getBiome().getColour();
+				// float typeHeight = 0.1f + Chunk.getWorldHeight(x - (Chunk.WORLD_SIZE / 2.0f), y - (Chunk.WORLD_SIZE / 2.0f)) / 10.0f;
+
+				int rgb = (int) (255.0f * mapColour.r);
+				rgb = (rgb << 8) + ((int) (255.0f * mapColour.g));
+				rgb = (rgb << 8) + ((int) (255.0f * mapColour.b));
+				imageOutput.setRGB(x, y, rgb);
+			}
+		}
+
+		File fileOutput = new File(Framework.getRoamingFolder().getPath() + "/saves/map-" + seed + ".png");
+		MyFile fileSeed = new MyFile(Framework.getRoamingFolder(), "saves", "map-" + seed + ".png");
+
+		try {
+			// Save the map texture..
+			ImageIO.write(imageOutput, "png", fileOutput);
+
+			// Load the map texture.
+			mapTexture = TextureFactory.newBuilder().setFile(fileSeed).create();
+		} catch (IOException e) {
+			FlounderLogger.get().error("Could not save map image to file: " + fileOutput);
+			FlounderLogger.get().exception(e);
+		}
+	}
+
+	/**
+	 * Gets the default hexagon model.
+	 *
+	 * @return The hexagon model.
+	 */
+	public ModelObject getModelHexagon() {
+		return this.modelHexagon;
+	}
+
 	public Chunk getCurrent() {
 		return this.currentChunk;
 	}
 
-	/**
-	 * Generates a map for the current seed.
-	 */
-	public void generateMap() {
-		int seed = KosmosWorld.get().getNoise().getSeed();
-		FlounderLogger.get().log("Generating map for seed: " + seed);
-
-		BufferedImage imageMap = new BufferedImage(Chunk.MAP_SIZE, Chunk.MAP_SIZE, BufferedImage.TYPE_INT_RGB);
-		BufferedImage imageType = new BufferedImage(Chunk.MAP_SIZE, Chunk.MAP_SIZE, BufferedImage.TYPE_INT_RGB);
-
-		for (int y = 0; y < Chunk.MAP_SIZE; y++) {
-			for (int x = 0; x < Chunk.MAP_SIZE; x++) {
-				Colour mapColour = new Colour(Chunk.getWorldBiome(x - (Chunk.MAP_SIZE / 2.0f), y - (Chunk.MAP_SIZE / 2.0f)).getBiome().getColour());
-				int rgb_map = (int) (255.0f * mapColour.r);
-				rgb_map = (rgb_map << 8) + ((int) (255.0f * mapColour.g));
-				rgb_map = (rgb_map << 8) + ((int) (255.0f * mapColour.b));
-				imageMap.setRGB(x, y, rgb_map);
-
-				float typeHeight = 0.1f + Chunk.getWorldHeight(x - (Chunk.MAP_SIZE / 2.0f), y - (Chunk.MAP_SIZE / 2.0f)) / 10.0f;
-				int rgb_type = (int) (255.0f * typeHeight);
-				rgb_type = (rgb_type << 8) + ((int) (255.0f * typeHeight));
-				rgb_type = (rgb_type << 8) + ((int) (255.0f * typeHeight));
-				imageType.setRGB(x, y, rgb_type);
-			}
-		}
-
-		File outputMap = new File(Framework.getRoamingFolder().getPath() + "/saves/map_" + seed + ".png");
-		File outputType = new File(Framework.getRoamingFolder().getPath() + "/saves/type_" + seed + ".png");
-
-		try {
-			ImageIO.write(imageMap, "png", outputMap);
-			ImageIO.write(imageType, "png", outputType);
-		} catch (IOException e) {
-			FlounderLogger.get().error("Could not save map image to file: " + outputMap);
-			FlounderLogger.get().exception(e);
-		}
-	}
 	/**
 	 * Sets the current chunk that that player is contained in. This will generate surrounding chunks.
 	 *
@@ -323,18 +341,28 @@ public class KosmosChunks extends Module {
 		}
 
 		// Sets up the new root chunk.
-		if (loadCurrent && getCurrent() != null) {
-			setCurrent(new Chunk(FlounderEntities.get().getEntities(), getCurrent().getPosition()));
+		if (loadCurrent && currentChunk != null) {
+			setCurrent(new Chunk(FlounderEntities.get().getEntities(), currentChunk.getPosition()));
 		}
 	}
 
-	/**
-	 * Gets the default hexagon model.
-	 *
-	 * @return The hexagon model.
-	 */
-	public ModelObject getModelHexagon() {
-		return this.modelHexagon;
+	public TextureObject getMapTexture() {
+		if (mapUpdate.isPassedTime() && KosmosWorld.get().getNoise().getSeed() != -1) {
+			if (mapTexture == null) {
+				generateMap();
+			} else if (mapTexture.getFile() != null) {
+				String textureSeed = mapTexture.getFile().getName().replace(".png", "").replace("map-", "").trim();
+				int lastSeed = Integer.parseInt(textureSeed);
+
+				if (lastSeed != KosmosWorld.get().getNoise().getSeed()) {
+					generateMap();
+				}
+			}
+
+			mapUpdate.resetStartTime();
+		}
+
+		return mapTexture;
 	}
 
 	@Handler.Function(Handler.FLAG_DISPOSE)

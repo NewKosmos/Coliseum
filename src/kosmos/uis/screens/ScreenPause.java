@@ -14,7 +14,6 @@ import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.visual.*;
 import kosmos.*;
-import kosmos.chunks.*;
 import kosmos.network.packets.*;
 import kosmos.uis.*;
 import kosmos.world.*;
@@ -71,8 +70,7 @@ public class ScreenPause extends ScreenObject {
 				}
 
 				KosmosConfigs.saveAllConfigs();
-				KosmosWorld.get().removeAllPlayers();
-				KosmosWorld.get().deletePlayer();
+				KosmosWorld.get().deleteWorld();
 			}
 		});
 	}

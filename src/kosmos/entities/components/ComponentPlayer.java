@@ -88,7 +88,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 
 			if (inputBoost.isDown()) {
 				currentSpeed *= KosmosPlayer.BOOST_MUL;
-			//	currentStrafeSpeed *= KosmosPlayer.BOOST_MUL;
+				//	currentStrafeSpeed *= KosmosPlayer.BOOST_MUL;
 			}
 
 			if (inputJump.wasDown() && Maths.deadband(0.05f, currentUpwardSpeed) == 0.0f) {

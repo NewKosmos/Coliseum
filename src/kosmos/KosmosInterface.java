@@ -15,6 +15,7 @@ import flounder.framework.*;
 import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
+import flounder.maths.*;
 import flounder.networking.*;
 import flounder.particles.*;
 import flounder.resources.*;
@@ -50,6 +51,20 @@ public class KosmosInterface extends Standard {
 		if (KosmosConfigs.MUSIC_ENABLED.setReference(() -> !FlounderSound.get().getMusicPlayer().isPaused()).getBoolean()) {
 			FlounderSound.get().getMusicPlayer().unpauseTrack();
 		}
+
+		FlounderEvents.get().addEvent(new IEvent() { // TODO: Remove!
+			KeyButton seedRandom = new KeyButton(GLFW_KEY_F6);
+
+			@Override
+			public boolean eventTriggered() {
+				return seedRandom.wasDown();
+			}
+
+			@Override
+			public void onEvent() {
+				KosmosWorld.get().getNoise().setSeed((int) Maths.randomInRange(1.0, 10000.0));
+			}
+		});
 
 		FlounderEvents.get().addEvent(new IEvent() {
 			KeyButton screenshot = new KeyButton(GLFW_KEY_F2);

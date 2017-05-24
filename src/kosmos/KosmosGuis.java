@@ -258,12 +258,24 @@ public class KosmosGuis extends GuiMaster {
 		}
 	}
 
+	public OverlayStartup getOverlayStartup() {
+		return overlayStartup;
+	}
+
 	public OverlayAlpha getOverlayAlpha() {
 		return overlayAlpha;
 	}
 
 	public OverlayHUD getOverlayHUD() {
 		return overlayHUD;
+	}
+
+	public OverlayInventory getOverlayInventory() {
+		return overlayInventory;
+	}
+
+	public OverlayMap getOverlayMap() {
+		return overlayMap;
 	}
 
 	public OverlayUsernames getOverlayUsernames() {

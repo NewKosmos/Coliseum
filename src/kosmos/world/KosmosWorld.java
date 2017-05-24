@@ -97,8 +97,11 @@ public class KosmosWorld extends Module {
 		FlounderSkybox.get().setCubemap(TextureFactory.newBuilder().setCubemap(SKYBOX_TEXTURE_FILES).create());
 	}
 
-	public void generatePlayer(int seed) {
+	public void generateWorld(int seed) {
+		// Sets the seed.
 		this.noise.setSeed(seed);
+
+		// Creates the player.
 		this.entityPlayer = new InstancePlayer(FlounderEntities.get().getEntities(),
 				new Vector3f(
 						KosmosConfigs.SAVE_PLAYER_X.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().x).getFloat(),
@@ -106,18 +109,24 @@ public class KosmosWorld extends Module {
 						KosmosConfigs.SAVE_PLAYER_Z.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().z).getFloat()),
 				new Vector3f()
 		);
+
+		// Creates the current chunk.
 		KosmosChunks.get().setCurrent(new Chunk(FlounderEntities.get().getEntities(), new Vector3f(
 				KosmosConfigs.SAVE_CHUNK_X.setReference(() -> KosmosChunks.get().getCurrent().getPosition().x).getFloat(),
 				0.0f,
 				KosmosConfigs.SAVE_CHUNK_Z.setReference(() -> KosmosChunks.get().getCurrent().getPosition().z).getFloat()
-		))); // The root chunk.
+		)));
+
+		// Creates the water.
 		KosmosWater.get().generateWater();
 	}
 
-	public void deletePlayer() {
+	public void deleteWorld() {
+		removeAllPlayers();
 		KosmosWater.get().deleteWater();
 		KosmosChunks.get().clear(false);
 		this.entityPlayer.forceRemove();
+		this.noise.setSeed(-1);
 	}
 
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)

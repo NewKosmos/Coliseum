@@ -43,12 +43,13 @@ public class ScreenStart extends ScreenObject {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
-				((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);
-				// KosmosConfigs.saveAllConfigs();
+			//	KosmosConfigs.saveAllConfigs();
 
-				// Generates the player and the world.
-				KosmosWorld.get().generatePlayer(KosmosConfigs.SAVE_SEED.getInteger());
-				KosmosChunks.get().generateMap();
+				// Forces slider to close after loading the save.
+				((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);
+
+				// Generates the world.
+				KosmosWorld.get().generateWorld(KosmosConfigs.SAVE_SEED.getInteger());
 			}
 		});
 
@@ -58,8 +59,10 @@ public class ScreenStart extends ScreenObject {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
+			//	KosmosConfigs.saveAllConfigs();
+
+				// Forces slider to close after connecting.
 				((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);
-				// KosmosConfigs.saveAllConfigs();
 
 				// Connects to the server.
 				String username = KosmosConfigs.CLIENT_USERNAME.getString();
@@ -69,8 +72,8 @@ public class ScreenStart extends ScreenObject {
 				PacketConnect loginPacket = new PacketConnect(username);
 				loginPacket.writeData(FlounderNetwork.get().getSocketClient());
 
-				// Generates the player and the world.
-				KosmosWorld.get().generatePlayer(420);
+				// Generates the world with a random seed, will be sent to the client later.
+				KosmosWorld.get().generateWorld(-1);
 			}
 		});
 
@@ -101,6 +104,7 @@ public class ScreenStart extends ScreenObject {
 		exitGame.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
+				KosmosConfigs.saveAllConfigs();
 				Framework.requestClose(false);
 			}
 		});

@@ -75,11 +75,11 @@ public class PacketConnect extends Packet {
 		new PacketWorld(KosmosServer.ServerInterface.serverSeed, Framework.getTimeSec()).writeData(server);
 
 		// If new client connects tell them the connected clients.
-		for (ClientInfo info : FlounderNetwork.get().getSocketServer().getConnected()) {
-			if (!info.getUsername().equals(username)) {
-				server.sendData(new PacketConnect(info.getUsername()).getData(), address, port);
-			}
-		}
+		//	for (ClientInfo info : FlounderNetwork.get().getSocketServer().getConnected()) {
+		//		if (!info.getUsername().equals(username)) {
+		//			server.sendData(new PacketConnect(info.getUsername()).getData(), address, port);
+		//		}
+		//	}
 	}
 
 	@Override
