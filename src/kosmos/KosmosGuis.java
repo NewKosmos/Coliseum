@@ -23,12 +23,11 @@ import static flounder.platform.Constants.*;
 public class KosmosGuis extends GuiMaster {
 	// private static final Colour COLOUR_PRIMARY = new Colour(0.90196078431f, 0.08235294117f, 0.08235294117f); // Charger Red.
 	// private static final Colour COLOUR_PRIMARY = new Colour(0.1f, 0.8f, 0.2f); // Neon Green.
-	private static final Colour COLOUR_PRIMARY = new Colour(0.0824f, 0.396f, 0.753f); // Water Blue.
+	// private static final Colour COLOUR_PRIMARY = new Colour(0.0824f, 0.396f, 0.753f); // Water Blue.
+	private static final Colour COLOUR_PRIMARY = new Colour(0.2f, 0.2f, 1.0f); // Some Blue.
 
 	public static final float SLIDE_TIME = 0.5f;
 
-	private OverlayStartup overlayStartup;
-	private OverlayAlpha overlayAlpha;
 	private OverlayHUD overlayHUD;
 	private OverlayInventory overlayInventory;
 	private OverlayMap overlayMap;
@@ -36,6 +35,8 @@ public class KosmosGuis extends GuiMaster {
 	private OverlayDebug overlayDebug;
 	private OverlayChat overlayChat;
 	private OverlaySlider overlaySlider;
+	private OverlayStartup overlayStartup;
+	private OverlayAlpha overlayAlpha;
 
 	public KosmosGuis() {
 		super();
@@ -43,8 +44,6 @@ public class KosmosGuis extends GuiMaster {
 
 	@Override
 	public void init() {
-		this.overlayStartup = new OverlayStartup(FlounderGuis.get().getContainer());
-		this.overlayAlpha = new OverlayAlpha(FlounderGuis.get().getContainer());
 		this.overlayHUD = new OverlayHUD(FlounderGuis.get().getContainer());
 		this.overlayInventory = new OverlayInventory(FlounderGuis.get().getContainer());
 		this.overlayMap = new OverlayMap(FlounderGuis.get().getContainer());
@@ -52,9 +51,9 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayDebug = new OverlayDebug(FlounderGuis.get().getContainer());
 		this.overlayChat = new OverlayChat(FlounderGuis.get().getContainer());
 		this.overlaySlider = new OverlaySlider(FlounderGuis.get().getContainer());
+		this.overlayStartup = new OverlayStartup(FlounderGuis.get().getContainer());
+		this.overlayAlpha = new OverlayAlpha(FlounderGuis.get().getContainer());
 
-		this.overlayStartup.setAlphaDriver(new ConstantDriver(1.0f));
-		this.overlayAlpha.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayHUD.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayInventory.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayMap.setAlphaDriver(new ConstantDriver(0.0f));
@@ -62,6 +61,8 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayDebug.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlaySlider.setAlphaDriver(new ConstantDriver(0.0f));
+		this.overlayStartup.setAlphaDriver(new ConstantDriver(1.0f));
+		this.overlayAlpha.setAlphaDriver(new ConstantDriver(0.0f));
 
 		FlounderGuis.get().getSelector().initJoysticks(0, 0, 1, 0, 1);
 
@@ -257,15 +258,6 @@ public class KosmosGuis extends GuiMaster {
 			overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 		}
 	}
-
-	public OverlayStartup getOverlayStartup() {
-		return overlayStartup;
-	}
-
-	public OverlayAlpha getOverlayAlpha() {
-		return overlayAlpha;
-	}
-
 	public OverlayHUD getOverlayHUD() {
 		return overlayHUD;
 	}
@@ -292,6 +284,15 @@ public class KosmosGuis extends GuiMaster {
 
 	public OverlaySlider getOverlaySlider() {
 		return overlaySlider;
+	}
+
+
+	public OverlayStartup getOverlayStartup() {
+		return overlayStartup;
+	}
+
+	public OverlayAlpha getOverlayAlpha() {
+		return overlayAlpha;
 	}
 
 	@Override

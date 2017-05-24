@@ -23,6 +23,8 @@ import kosmos.chunks.*;
 import kosmos.world.*;
 
 public class OverlayHUD extends ScreenObject {
+	private static final float MAP_SIZE = 0.22f;
+
 	private static int crosshairSelected;
 	private GuiObject crossHair;
 
@@ -51,14 +53,14 @@ public class OverlayHUD extends ScreenObject {
 		this.statusThirst = new HudStatus(this, hudTexture, hudProgress, 3, 0.1f, new Colour(0.2f, 0.2f, 1.0f));
 		this.statusHunger = new HudStatus(this, hudTexture, hudProgress, 4, 0.2f, new Colour(1.0f, 0.4f, 0.0f));
 
-		this.mapBackgroundTexture = new GuiObject(this, new Vector2f(0.2f, 0.2f), new Vector2f(0.402f, 0.402f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "hudMapBackground.png")).create(), 1);
+		this.mapBackgroundTexture = new GuiObject(this, new Vector2f(), new Vector2f(MAP_SIZE, MAP_SIZE), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "hudMapBackground.png")).create(), 1);
 		this.mapBackgroundTexture.setInScreenCoords(false);
 
-		this.mapViewTexture = new GuiObject(this, new Vector2f(0.2f, 0.2f), new Vector2f(0.4f, 0.4f), null, 1);
+		this.mapViewTexture = new GuiObject(this, new Vector2f(), new Vector2f(MAP_SIZE, MAP_SIZE), null, 1);
 		this.mapViewTexture.setInScreenCoords(false);
-		this.mapViewTexture.setScaleDriver(new ConstantDriver(3.0f));
+		this.mapViewTexture.setScaleDriver(new ConstantDriver(2.56f));
 
-		this.mapOverlayTexture = new GuiObject(this, new Vector2f(0.2f, 0.2f), new Vector2f(0.402f, 0.402f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "hudMap.png")).create(), 1);
+		this.mapOverlayTexture = new GuiObject(this, new Vector2f(), new Vector2f(MAP_SIZE, MAP_SIZE), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "hudMap.png")).create(), 1);
 		this.mapOverlayTexture.setInScreenCoords(false);
 	}
 
@@ -75,20 +77,25 @@ public class OverlayHUD extends ScreenObject {
 		Entity player = KosmosWorld.get().getEntityPlayer();
 
 		if (player != null) {
-			float scaleX = (0.2f * FlounderDisplay.get().getAspectRatio()) * mapViewTexture.getScale();
-			float scaleY = (0.2f) * mapViewTexture.getScale();
+			this.mapViewTexture.setTexture(KosmosChunks.get().getMapTexture());
+
 			float px = player.getPosition().x / Chunk.WORLD_SIZE;
 			float pz = player.getPosition().z / Chunk.WORLD_SIZE;
+
+			this.mapBackgroundTexture.getPosition().set(FlounderDisplay.get().getAspectRatio() - (MAP_SIZE / 2.0f), MAP_SIZE / 2.0f);
+			this.mapViewTexture.getPosition().set(FlounderDisplay.get().getAspectRatio() - (MAP_SIZE / 2.0f), MAP_SIZE / 2.0f);
+			this.mapOverlayTexture.getPosition().set(FlounderDisplay.get().getAspectRatio() - (MAP_SIZE / 2.0f), MAP_SIZE / 2.0f);
+
 			this.mapViewTexture.getPosition().set(
-					0.2f - (scaleX * px),
-					0.2f - (scaleY * pz)
+					mapViewTexture.getPosition().x - (px),
+					mapViewTexture.getPosition().y - (pz)
 			);
-			this.mapViewTexture.setTexture(KosmosChunks.get().getMapTexture());
-		//	this.mapViewTexture.setRotationDriver(new ConstantDriver(-player.getRotation().y + 180.0f));
 			this.mapViewTexture.getScissor().set(
-					0.0f * FlounderDisplay.get().getWidth(), 0.6f * FlounderDisplay.get().getHeight(),
-					0.4f / FlounderDisplay.get().getAspectRatio() * FlounderDisplay.get().getWidth(), 0.4f * FlounderDisplay.get().getHeight()
+					(1.0f - (MAP_SIZE / FlounderDisplay.get().getAspectRatio())) * FlounderDisplay.get().getWidth(), (1.0f - MAP_SIZE) * FlounderDisplay.get().getHeight(),
+					(MAP_SIZE / FlounderDisplay.get().getAspectRatio()) * FlounderDisplay.get().getWidth(), MAP_SIZE * FlounderDisplay.get().getHeight()
 			);
+
+			this.mapOverlayTexture.setRotationDriver(new ConstantDriver(-player.getRotation().y + 180.0f));
 		}
 	}
 

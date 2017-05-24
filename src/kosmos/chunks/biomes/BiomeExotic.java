@@ -34,11 +34,6 @@ public class BiomeExotic extends IBiome {
 	}
 
 	@Override
-	public int spawnLevel() {
-		return 2;
-	}
-
-	@Override
 	public EntitySpawn[] getEntitySpawns() {
 		return SPAWNS;
 	}

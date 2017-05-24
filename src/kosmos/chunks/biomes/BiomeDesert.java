@@ -55,11 +55,6 @@ public class BiomeDesert extends IBiome {
 	}
 
 	@Override
-	public int spawnLevel() {
-		return 3;
-	}
-
-	@Override
 	public EntitySpawn[] getEntitySpawns() {
 		return SPAWNS;
 	}

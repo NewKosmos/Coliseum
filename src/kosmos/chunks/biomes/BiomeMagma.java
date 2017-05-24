@@ -9,37 +9,28 @@
 
 package kosmos.chunks.biomes;
 
-import flounder.entities.*;
 import flounder.maths.*;
-import flounder.maths.vectors.*;
 import flounder.particles.*;
 import flounder.resources.*;
-import flounder.space.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.entities.instances.*;
 import kosmos.materials.*;
 
-public class BiomeBeach extends IBiome {
+public class BiomeMagma extends IBiome {
 	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{
-			new EntitySpawn(1.0f, 0.375f) {
-				@Override
-				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
-					return new InstanceCattail(structure, position, rotation);
-				}
-			}
+
 	};
-	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "beach.png")).clampEdges().create();
-	private static final Colour COLOUR = new Colour(250.0f, 222.0f, 153.0f, true);
+	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "magma.png")).clampEdges().create();
+	private static final Colour COLOUR = new Colour(255.0f, 0.0f, 133.0f, true);
 	private static final ParticleType PARTICLE = null;
 
-	public BiomeBeach() {
+	public BiomeMagma() {
 		super();
 	}
 
 	@Override
 	public String getBiomeName() {
-		return "beach";
+		return "magma";
 	}
 
 	@Override
@@ -64,26 +55,26 @@ public class BiomeBeach extends IBiome {
 
 	@Override
 	public IMaterial getMaterial() {
-		return IMaterial.Materials.SAND.getMaterial();
+		return IMaterial.Materials.GRASS.getMaterial();
 	}
 
 	@Override
 	public float getTempDay() {
-		return 23.0f;
+		return 20.9f;
 	}
 
 	@Override
 	public float getTempNight() {
-		return 14.0f;
+		return 12.4f;
 	}
 
 	@Override
 	public float getHumidity() {
-		return 89.0f;
+		return 61.0f;
 	}
 
 	@Override
 	public float getWindSpeed() {
-		return 0.3f;
+		return 0.17f;
 	}
 }

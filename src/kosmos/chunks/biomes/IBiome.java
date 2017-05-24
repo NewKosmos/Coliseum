@@ -23,14 +23,9 @@ import kosmos.world.*;
  * A interface used to define biome types.
  */
 public abstract class IBiome {
-	public static final int SPAWN_LEVELS = 4;
-
 	public enum Biomes {
-		OCEAN(new BiomeOcean()), // 0
-		BEACH(new BiomeBeach()), // 1
-		GRASS(new BiomeGrass()), EXOTIC(new BiomeExotic()), // 2
-		DESERT(new BiomeDesert()), STONE(new BiomeStone()), // 3
-		SNOW(new BiomeSnow()); // 4
+		OCEAN(new BiomeOcean()), BEACH(new BiomeBeach()), // Ocean and beach handle the basic shapes of the world, the other biomes go where ever.
+		GRASS(new BiomeGrass()), EXOTIC(new BiomeExotic()), MAGMA(new BiomeMagma()), DESERT(new BiomeDesert()), STONE(new BiomeStone()), SNOW(new BiomeSnow());
 
 		private IBiome biome;
 
@@ -41,30 +36,6 @@ public abstract class IBiome {
 		public IBiome getBiome() {
 			return biome;
 		}
-
-		public static Biomes get(float level, float positionX, float positionZ) {
-			if (level < 1.0f) {
-				return OCEAN;
-			}
-
-			float l = level; // + KosmosWorld.get().getNoise().noise(positionX / 75.0f, positionZ / 75.0f);
-
-			if (l >= 4.0f) {
-				return SNOW;
-			} else if (l >= 3.5f) {
-				return STONE;
-			} else if (l >= 3.0f) {
-				return DESERT;
-			} else if (l >= 2.5f) {
-				return EXOTIC;
-			} else if (l >= 2.0f) {
-				return GRASS;
-			} else if (l >= 1.0f) {
-				return BEACH;
-			}
-
-			return OCEAN;
-		}
 	}
 
 	/**
@@ -73,8 +44,6 @@ public abstract class IBiome {
 	 * @return The biome name.
 	 */
 	public abstract String getBiomeName();
-
-	public abstract int spawnLevel();
 
 	public abstract EntitySpawn[] getEntitySpawns();
 

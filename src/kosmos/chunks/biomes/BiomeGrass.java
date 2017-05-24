@@ -103,11 +103,6 @@ public class BiomeGrass extends IBiome {
 	}
 
 	@Override
-	public int spawnLevel() {
-		return 2;
-	}
-
-	@Override
 	public EntitySpawn[] getEntitySpawns() {
 		return SPAWNS;
 	}

@@ -43,11 +43,6 @@ public class BiomeOcean extends IBiome {
 	}
 
 	@Override
-	public int spawnLevel() {
-		return 0;
-	}
-
-	@Override
 	public EntitySpawn[] getEntitySpawns() {
 		return SPAWNS;
 	}

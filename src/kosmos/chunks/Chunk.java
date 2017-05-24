@@ -46,10 +46,10 @@ public class Chunk extends Entity {
 	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * (CHUNK_RADIUS - 0.5f);
 
 	// Island world generations.
-	public static final int WORLD_SIZE = 2520;
-	private static final float WORLD_NOISE_SCALE = 4.20f;
-	private static final float WORLD_BIOME_OFFSET = 0.2f;
-	private static final float WORLD_CUTOFF = 0.94f;
+	public static final int WORLD_SIZE = 2560;
+	private static final float WORLD_NOISE_SCALE = 420.00f;
+	private static final float WORLD_BIOME_OFFSET = 0.20f;
+	private static final float WORLD_CUTOFF = 0.85f;
 	private static final float WORLD_BLUR_FRACTION = (112.933f * (WORLD_CUTOFF * WORLD_CUTOFF)) - (182.726f * WORLD_CUTOFF) + 76.14f;
 
 	private List<Chunk> childrenChunks;
@@ -242,23 +242,34 @@ public class Chunk extends Entity {
 		float biomeID = getWorldBiomeID(positionX, positionZ);
 
 		// Returns the biome at the generated ID.
-		return IBiome.Biomes.get(biomeID, positionX, positionZ);
+		return IBiome.Biomes.values()[(int) biomeID];
 	}
 
 	private static float getWorldBiomeID(float positionX, float positionZ) {
 		// Smooth around circle.
 		float outside = (float) Math.sqrt(Math.pow(positionX, 2) + Math.pow(positionZ, 2));
 
-		if (outside >= WORLD_CUTOFF * WORLD_SIZE / 2.0f) {
+		// Fixed maths at (0, 0). Uses a function to interpolate from 1 to 0 while the radius approaches the map edge.
+		if (positionX == 0.0f && positionZ == 0.0f) {
+			outside = 1.0f;
+		} else if (outside >= WORLD_CUTOFF * WORLD_SIZE / 2.0f) {
 			outside = 1.0f - (4.47f * WORLD_BLUR_FRACTION * ((1.0f / WORLD_SIZE) * ((2.0f * outside) - (WORLD_SIZE * WORLD_CUTOFF))));
 		}
 
-		outside = Maths.clamp(outside, 0.0f, 1.0f);
-
 		// Calculates the biome id based off of the world position using perlin. Then limits the search for biomes in the size provided.
-		float biomeID = (float) Math.pow(KosmosWorld.get().getNoise().noise(positionX / (100.0f * WORLD_NOISE_SCALE), positionZ / (100.0f * WORLD_NOISE_SCALE)), 0.5f) + WORLD_BIOME_OFFSET;
-		biomeID *= outside * (float) (IBiome.SPAWN_LEVELS + 1);
-		biomeID = Maths.clamp(biomeID, 0.0f, IBiome.SPAWN_LEVELS);
+		float biomeID = KosmosWorld.get().getNoise().noise(
+				positionX / WORLD_NOISE_SCALE,
+				positionZ / WORLD_NOISE_SCALE
+		) + WORLD_BIOME_OFFSET;
+
+		// Scale the biome id by the smoothing world circle.
+		biomeID *= Maths.clamp(outside, 0.0f, 1.0f);
+
+		// Added 1 to allow for max biome id to be created.
+		biomeID *= IBiome.Biomes.values().length + 1;
+
+		// Limit the biome to the known ids.
+		biomeID = Maths.clamp(biomeID, 0.0f, IBiome.Biomes.values().length - 1);
 
 		// Returns a biome id.
 		return biomeID;
