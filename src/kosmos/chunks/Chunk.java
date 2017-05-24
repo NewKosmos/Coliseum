@@ -129,6 +129,14 @@ public class Chunk extends Entity {
 			chunkMesh.delete(); // TODO: Reload chunk.
 			loaded = false;
 			seed = KosmosWorld.get().getNoise().getSeed();
+
+			for (Entity e : FlounderEntities.get().getEntities().getAll()) {
+				ComponentChild componentChild = (ComponentChild) e.getComponent(ComponentChild.class);
+
+				if (componentChild != null && componentChild.getParent() == this) {
+					e.remove();
+				}
+			}
 		}
 
 		// Updates the mesh.
@@ -296,10 +304,10 @@ public class Chunk extends Entity {
 		this.loaded = loaded;
 	}
 
-	@Override
-	public Collider getCollider() {
-		return sphere;
-	}
+	//@Override // Call getSphere instead, this is not used any more so chunks can be culled.
+	//public Collider getCollider() {
+	//	return sphere;
+	//}
 
 	public void delete() {
 		chunkMesh.delete();

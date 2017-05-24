@@ -147,7 +147,7 @@ public class MeshBuildRequest implements RequestResource {
 
 				@Override
 				public AABB getAABB() {
-					return null; // new AABB(new Vector3f(chunkMesh.minX, chunkMesh.minY, chunkMesh.minZ), new Vector3f(chunkMesh.maxX, chunkMesh.maxY, chunkMesh.maxZ));
+					return new AABB(new Vector3f(chunkMesh.minX, chunkMesh.minY, chunkMesh.minZ), new Vector3f(chunkMesh.maxX, chunkMesh.maxY + 50, chunkMesh.maxZ));
 				}
 			}).create();
 			chunkMesh.chunk.setLoaded(true);

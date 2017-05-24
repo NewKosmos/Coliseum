@@ -120,7 +120,7 @@ public class KosmosChunks extends Module {
 							if (entity != null && entity instanceof Chunk) {
 								Chunk chunk = (Chunk) entity;
 
-								if (chunk.getCollider().contains(new Vector3f(terrainPosition.x, 0.0f, terrainPosition.z))) {
+								if (chunk.getSphere().contains(new Vector3f(terrainPosition.x, 0.0f, terrainPosition.z))) {
 									inChunk = chunk;
 								}
 							}
@@ -212,7 +212,7 @@ public class KosmosChunks extends Module {
 					Chunk chunk = (Chunk) entity;
 
 					// Checks if the player position is in this chunk.
-					if (chunk.isLoaded() && chunk.getCollider() != null && chunk.getCollider().contains(playerPos)) {
+					if (chunk.isLoaded() && chunk.getSphere() != null && chunk.getSphere().contains(playerPos)) {
 						// This chunk is now the chunk with the player in it.
 						playerChunk = chunk;
 					}
@@ -308,7 +308,7 @@ public class KosmosChunks extends Module {
 					Chunk chunk = (Chunk) entity;
 
 					if (chunk != currentChunk && chunk.isLoaded()) {
-						if (!chunk.getCollider().intersects(this.chunkRange).isIntersection() && !this.chunkRange.contains(chunk.getCollider())) {
+						if (!chunk.getSphere().intersects(this.chunkRange).isIntersection() && !this.chunkRange.contains(chunk.getSphere())) {
 							chunk.delete();
 							it.remove();
 						}
