@@ -51,7 +51,6 @@ public class KosmosChunks extends Module {
 	private Chunk currentChunk;
 
 	private TextureObject mapTexture;
-	private Timer mapUpdate;
 
 	public KosmosChunks() {
 		super(FlounderEvents.class, FlounderEntities.class, FlounderModels.class, FlounderTextures.class);
@@ -67,7 +66,24 @@ public class KosmosChunks extends Module {
 		this.currentChunk = null;
 
 		this.mapTexture = null;
-		this.mapUpdate = new Timer(2.0f);
+
+		FlounderEvents.get().addEvent(new IEvent() {
+			private int seed = KosmosWorld.get().getNoise().getSeed();
+
+			@Override
+			public boolean eventTriggered() {
+				int currentSeed = KosmosWorld.get().getNoise().getSeed();
+				boolean changed = seed != currentSeed;
+				seed = currentSeed;
+				return changed;
+			}
+
+			@Override
+			public void onEvent() {
+				KosmosChunks.get().clear(true);
+				KosmosChunks.get().generateMap();
+			}
+		});
 
 		FlounderEvents.get().addEvent(new IEvent() {
 			private MouseButton buttonRemove = new MouseButton(GLFW_MOUSE_BUTTON_RIGHT);
@@ -267,6 +283,11 @@ public class KosmosChunks extends Module {
 			// Save the map texture..
 			ImageIO.write(imageOutput, "png", fileOutput);
 
+			// Remove old map texture.
+			if (mapTexture != null && mapTexture.isLoaded()) {
+				mapTexture.delete();
+			}
+
 			// Load the map texture.
 			mapTexture = TextureFactory.newBuilder().setFile(fileSeed).create();
 		} catch (IOException e) {
@@ -347,21 +368,6 @@ public class KosmosChunks extends Module {
 	}
 
 	public TextureObject getMapTexture() {
-		if (mapUpdate.isPassedTime() && KosmosWorld.get().getNoise().getSeed() != -1) {
-			if (mapTexture == null) {
-				generateMap();
-			} else if (mapTexture.getFile() != null) {
-				String textureSeed = mapTexture.getFile().getName().replace(".png", "").replace("map-", "").trim();
-				int lastSeed = Integer.parseInt(textureSeed);
-
-				if (lastSeed != KosmosWorld.get().getNoise().getSeed()) {
-					generateMap();
-				}
-			}
-
-			mapUpdate.resetStartTime();
-		}
-
 		return mapTexture;
 	}
 

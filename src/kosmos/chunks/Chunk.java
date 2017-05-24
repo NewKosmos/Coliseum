@@ -54,7 +54,6 @@ public class Chunk extends Entity {
 
 	private List<Chunk> childrenChunks;
 	private IBiome.Biomes biome;
-	private int seed;
 	private ChunkMesh chunkMesh;
 	private Sphere sphere;
 	private boolean loaded;
@@ -64,7 +63,6 @@ public class Chunk extends Entity {
 
 		this.childrenChunks = new ArrayList<>();
 		this.biome = getWorldBiome(position.x, position.z);
-		this.seed = KosmosWorld.get().getNoise().getSeed();
 		this.chunkMesh = new ChunkMesh(this);
 		this.sphere = new Sphere(1.0f);
 		this.sphere.update(position, null, Chunk.CHUNK_WORLD_SIZE, sphere);
@@ -124,20 +122,6 @@ public class Chunk extends Entity {
 	public void update() {
 		// Updates the entity super class.
 		super.update();
-
-		if (seed != KosmosWorld.get().getNoise().getSeed()) {
-			chunkMesh.delete(); // TODO: Reload chunk.
-			loaded = false;
-			seed = KosmosWorld.get().getNoise().getSeed();
-
-			for (Entity e : FlounderEntities.get().getEntities().getAll()) {
-				ComponentChild componentChild = (ComponentChild) e.getComponent(ComponentChild.class);
-
-				if (componentChild != null && componentChild.getParent() == this) {
-					e.remove();
-				}
-			}
-		}
 
 		// Updates the mesh.
 		this.chunkMesh.update();

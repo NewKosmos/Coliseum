@@ -43,17 +43,6 @@ public class ChunkMesh {
 			sent = true;
 			built = true;
 		}
-
-		if (chunkModel != null) {
-			// The chunks model component is also updated.
-			ComponentModel componentModel = (ComponentModel) chunk.getComponent(ComponentModel.class);
-
-			if (componentModel != null) {
-				componentModel.setModel(chunkModel);
-			} else {
-				FlounderLogger.get().error(chunk + " does not have a model component! Model cannot be set.");
-			}
-		}
 	}
 
 	public ModelObject getModel() {

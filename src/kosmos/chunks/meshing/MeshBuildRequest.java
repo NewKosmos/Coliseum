@@ -9,6 +9,8 @@
 
 package kosmos.chunks.meshing;
 
+import flounder.entities.components.*;
+import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
@@ -158,6 +160,17 @@ public class MeshBuildRequest implements RequestResource {
 
 			// Normal chunk size.
 			chunkMesh.maxRadius = Chunk.CHUNK_WORLD_SIZE;
+		}
+
+		if (chunkMesh.chunkModel != null) {
+			// The chunks model component is also updated.
+			ComponentModel componentModel = (ComponentModel) chunkMesh.chunk.getComponent(ComponentModel.class);
+
+			if (componentModel != null) {
+				componentModel.setModel(chunkMesh.chunkModel);
+			} else {
+				FlounderLogger.get().error(chunkMesh.chunk + " does not have a model component! Model cannot be set.");
+			}
 		}
 	}
 }
