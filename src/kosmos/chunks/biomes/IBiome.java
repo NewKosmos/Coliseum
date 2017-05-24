@@ -23,12 +23,14 @@ import kosmos.world.*;
  * A interface used to define biome types.
  */
 public abstract class IBiome {
+	public static final int SPAWN_LEVELS = 4;
+
 	public enum Biomes {
-		OCEAN(new BiomeOcean()),
-		BEACH(new BiomeBeach()),
-		GRASS(new BiomeGrass()), EXOTIC(new BiomeExotic()),
-		DESERT(new BiomeDesert()), STONE(new BiomeStone()),
-		SNOW(new BiomeSnow());
+		OCEAN(new BiomeOcean()), // 0
+		BEACH(new BiomeBeach()), // 1
+		GRASS(new BiomeGrass()), EXOTIC(new BiomeExotic()), // 2
+		DESERT(new BiomeDesert()), STONE(new BiomeStone()), // 3
+		SNOW(new BiomeSnow()); // 4
 
 		private IBiome biome;
 
@@ -38,6 +40,24 @@ public abstract class IBiome {
 
 		public IBiome getBiome() {
 			return biome;
+		}
+
+		public static Biomes get(float level) {
+			if (level >= 4.0f) {
+				return SNOW;
+			} else if (level >= 3.5f) {
+				return STONE;
+			} else if (level >= 3.0f) {
+				return DESERT;
+			} else if (level >= 2.5f) {
+				return EXOTIC;
+			} else if (level >= 2.0f) {
+				return GRASS;
+			} else if (level >= 1.0f) {
+				return BEACH;
+			} else {
+				return OCEAN;
+			}
 		}
 	}
 

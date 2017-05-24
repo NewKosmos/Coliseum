@@ -240,10 +240,9 @@ public class Chunk extends Entity {
 	public static IBiome.Biomes getWorldBiome(float positionX, float positionZ) {
 		// Gets and limits the biome.
 		float biomeID = getWorldBiomeID(positionX, positionZ);
-		biomeID = Maths.clamp(biomeID, 0.0f, IBiome.Biomes.values().length - 1);
 
 		// Returns the biome at the generated ID.
-		return IBiome.Biomes.values()[(int) biomeID];
+		return IBiome.Biomes.get(biomeID);
 	}
 
 	private static float getWorldBiomeID(float positionX, float positionZ) {
@@ -258,7 +257,8 @@ public class Chunk extends Entity {
 
 		// Calculates the biome id based off of the world position using perlin. Then limits the search for biomes in the size provided.
 		float biomeID = (float) Math.pow(KosmosWorld.get().getNoise().noise(positionX / (350.0f * WORLD_NOISE_SCALE), positionZ / (350.0f * WORLD_NOISE_SCALE)), 0.5f) + WORLD_BIOME_OFFSET;
-		biomeID *= outside * IBiome.Biomes.values().length;
+		biomeID *= outside * (float) (IBiome.SPAWN_LEVELS + 1);
+		biomeID = Maths.clamp(biomeID, 0.0f, IBiome.SPAWN_LEVELS);
 
 		// Returns a biome id.
 		return biomeID;
