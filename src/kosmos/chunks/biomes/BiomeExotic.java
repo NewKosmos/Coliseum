@@ -9,42 +9,33 @@
 
 package kosmos.chunks.biomes;
 
-import flounder.entities.*;
 import flounder.maths.*;
-import flounder.maths.vectors.*;
 import flounder.particles.*;
 import flounder.resources.*;
-import flounder.space.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.entities.instances.*;
 import kosmos.materials.*;
 
-public class BiomeOcean extends IBiome {
+public class BiomeExotic extends IBiome {
 	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{
-			new EntitySpawn(1.0f, 0.375f) {
-				@Override
-				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
-					return new InstanceCattail(structure, position, rotation);
-				}
-			}
-	};
-	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "beach.png")).clampEdges().create();
-	private static final Colour COLOUR = new Colour(0.0824f, 0.396f, 0.753f);
-	private static final ParticleType PARTICLE = new ParticleType("rain", TextureFactory.newBuilder().setFile(new MyFile(FlounderParticles.PARTICLES_FOLDER, "rainParticle.png")).setNumberOfRows(4).create(), 4.75f, 0.15f);
 
-	public BiomeOcean() {
+	};
+	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "exotic.png")).clampEdges().create();
+	private static final Colour COLOUR = new Colour(117.0f, 7.0f, 121.0f, true);
+	private static final ParticleType PARTICLE = null;
+
+	public BiomeExotic() {
 		super();
 	}
 
 	@Override
 	public String getBiomeName() {
-		return "ocean";
+		return "exotic";
 	}
 
 	@Override
 	public int spawnLevel() {
-		return 0;
+		return 2;
 	}
 
 	@Override
@@ -69,26 +60,26 @@ public class BiomeOcean extends IBiome {
 
 	@Override
 	public IMaterial getMaterial() {
-		return IMaterial.Materials.WATER.getMaterial();
+		return IMaterial.Materials.GRASS.getMaterial();
 	}
 
 	@Override
 	public float getTempDay() {
-		return 21.0f;
+		return 20.9f;
 	}
 
 	@Override
 	public float getTempNight() {
-		return 7.0f;
+		return 12.4f;
 	}
 
 	@Override
 	public float getHumidity() {
-		return 94.0f;
+		return 61.0f;
 	}
 
 	@Override
 	public float getWindSpeed() {
-		return 0.2f;
+		return 0.17f;
 	}
 }

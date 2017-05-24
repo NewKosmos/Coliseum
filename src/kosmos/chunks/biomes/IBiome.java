@@ -24,7 +24,11 @@ import kosmos.world.*;
  */
 public abstract class IBiome {
 	public enum Biomes {
-		OCEAN(new BiomeOcean()), DESERT(new BiomeDesert()), GRASS(new BiomeGrass()), STONE(new BiomeStone()), SNOW(new BiomeSnow());
+		OCEAN(new BiomeOcean()),
+		BEACH(new BiomeBeach()),
+		GRASS(new BiomeGrass()), EXOTIC(new BiomeExotic()),
+		DESERT(new BiomeDesert()), STONE(new BiomeStone()),
+		SNOW(new BiomeSnow());
 
 		private IBiome biome;
 
@@ -43,6 +47,8 @@ public abstract class IBiome {
 	 * @return The biome name.
 	 */
 	public abstract String getBiomeName();
+
+	public abstract int spawnLevel();
 
 	public abstract EntitySpawn[] getEntitySpawns();
 

@@ -205,7 +205,7 @@ public class Chunk extends Entity {
 			height = Float.NEGATIVE_INFINITY;
 		} else {
 			// Calculates the final height for the world position using perlin.
-			height = (float) Math.sqrt(2.0) * (int) Math.abs(KosmosWorld.get().getNoise().noise(positionX / (90.0f * WORLD_NOISE_SCALE), positionZ / (90.0f * WORLD_NOISE_SCALE)) * 8.5f * (height - 1.0f));
+			height = (float) Math.sqrt(2.0) * (int) Math.abs(KosmosWorld.get().getNoise().noise(positionX / (90.0f * WORLD_NOISE_SCALE), positionZ / (90.0f * WORLD_NOISE_SCALE)) * 8.0f * (height - 1.0f));
 		}
 
 		// Returns the final height,

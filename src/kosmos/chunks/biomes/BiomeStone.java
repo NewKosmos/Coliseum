@@ -67,6 +67,11 @@ public class BiomeStone extends IBiome {
 	}
 
 	@Override
+	public int spawnLevel() {
+		return 3;
+	}
+
+	@Override
 	public EntitySpawn[] getEntitySpawns() {
 		return SPAWNS;
 	}

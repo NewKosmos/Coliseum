@@ -57,7 +57,7 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public boolean eventTriggered() {
-				return seedRandom.wasDown();
+				return seedRandom.wasDown() && FlounderNetwork.get().getSocketClient() == null;
 			}
 
 			@Override

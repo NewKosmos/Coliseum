@@ -67,6 +67,11 @@ public class BiomeSnow extends IBiome {
 	}
 
 	@Override
+	public int spawnLevel() {
+		return 4;
+	}
+
+	@Override
 	public EntitySpawn[] getEntitySpawns() {
 		return SPAWNS;
 	}

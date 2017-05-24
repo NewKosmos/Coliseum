@@ -39,16 +39,10 @@ public class BiomeDesert extends IBiome {
 				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
 					return new InstanceTreePalm(structure, position, rotation);
 				}
-			},
-			new EntitySpawn(1.0f, 0.375f) {
-				@Override
-				public Entity create(ISpatialStructure<Entity> structure, Vector3f position, Vector3f rotation) {
-					return new InstanceCattail(structure, position, rotation);
-				}
 			}
 	};
-	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "sand.png")).clampEdges().create();
-	private static final Colour COLOUR = new Colour(250.0f, 222.0f, 153.0f, true);
+	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "desert.png")).clampEdges().create();
+	private static final Colour COLOUR = new Colour(255.0f, 170.0f, 110.0f, true);
 	private static final ParticleType PARTICLE = null;
 
 	public BiomeDesert() {
@@ -58,6 +52,11 @@ public class BiomeDesert extends IBiome {
 	@Override
 	public String getBiomeName() {
 		return "desert";
+	}
+
+	@Override
+	public int spawnLevel() {
+		return 3;
 	}
 
 	@Override
