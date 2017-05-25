@@ -125,7 +125,7 @@ public class KosmosPlayer extends Player {
 						tilePosition.x = Math.round(tilePosition.x);
 						tilePosition.y = Math.round(tilePosition.y);
 						Vector3f roundedPosition = Chunk.convertTileToWorld(inChunk, tilePosition.x, tilePosition.y);
-						roundedPosition.y = Chunk.getHeight(roundedPosition.x, roundedPosition.z);
+						roundedPosition.y = Chunk.getWorldHeight(roundedPosition.x, roundedPosition.z);
 
 						Entity entity = new InstanceBush(FlounderEntities.get().getEntities(),
 								new Vector3f(
@@ -173,7 +173,7 @@ public class KosmosPlayer extends Player {
 			}
 
 			private boolean isUnderGround(Vector3f testPoint) {
-				float height = Chunk.getHeight(testPoint.getX(), testPoint.getZ());
+				float height = Chunk.getWorldHeight(testPoint.getX(), testPoint.getZ());
 
 				if (height < 0.0f || testPoint.y < height) {
 					return true;

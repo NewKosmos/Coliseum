@@ -63,7 +63,7 @@ public class Chunk extends Entity {
 		super(structure, position, new Vector3f());
 
 		this.childrenChunks = new ArrayList<>();
-		this.biome = getWorldBiome(position.x, position.z);
+		this.biome = getBiomeMap(position.x, position.z);
 		this.chunkMesh = new ChunkMesh(this);
 		this.sphere = new Sphere(1.0f);
 		this.sphere.update(position, null, Chunk.CHUNK_WORLD_SIZE, sphere);
@@ -178,7 +178,7 @@ public class Chunk extends Entity {
 		Vector3f chunkPosition = convertTileToChunk(x, z);
 		Vector3f worldPosition = convertTileToWorld(chunk, x, z);
 
-		worldPosition.y = getHeight(worldPosition.x, worldPosition.z);
+		worldPosition.y = getWorldHeight(worldPosition.x, worldPosition.z);
 		chunkPosition.y = worldPosition.y;
 
 		if (worldPosition.y >= 0.0f) {
@@ -196,7 +196,7 @@ public class Chunk extends Entity {
 	 *
 	 * @return The island factor at that world position.
 	 */
-	public static float getIslandFactor(float positionX, float positionZ) {
+	protected static float getIslandMap(float positionX, float positionZ) {
 		float circular = (float) Math.sqrt(Math.pow(positionX, 2) + Math.pow(positionZ, 2)); // The current radius (circular map).
 		float rectangular = Math.max(Math.abs(positionX), Math.abs(positionZ)); // The current radius (rectangular map).
 		float reading = ((1.0f - WORLD_ISLAND_PARAMETER) * circular) + (WORLD_ISLAND_PARAMETER * rectangular);
@@ -224,19 +224,34 @@ public class Chunk extends Entity {
 	 *
 	 * @return The found height at that world position.
 	 */
-	public static float getHeight(float positionX, float positionZ) {
+	protected static float getHeightMap(float positionX, float positionZ) {
 		// Gets the height from a perlin noise map and from the island factor.
-		float island = getIslandFactor(positionX, positionZ);
+		float island = getIslandMap(positionX, positionZ);
 		float height = island * (KosmosWorld.get().getNoise().turbulence(positionX / 256.0f, positionZ / 256.0f, 32.0f) + 0.2f);
-		height = Maths.clamp(height, 0.0f, 1.0f) * WORLD_NOISE_HEIGHT;
+		height = Maths.clamp(height, 0.0f, 1.0f);
 
 		// Ignore height that would be water/nothing.
-		if ((int) height <= 0.0f) {
+		if (height <= 0.125f) {
 			return Float.NEGATIVE_INFINITY;
 		}
 
 		// Returns the final height,
-		return ((float) Math.sqrt(2.0) * (int) height) - 1.0f;
+		return height;
+	}
+
+	/**
+	 * Gets the world terrain height for a position in the world.
+	 *
+	 * @param positionX The worlds X position.
+	 * @param positionZ The worlds Z position.
+	 *
+	 * @return The found height at that world position.
+	 */
+	public static float getWorldHeight(float positionX, float positionZ) {
+		float height = getHeightMap(positionX, positionZ) * WORLD_NOISE_HEIGHT;
+
+		// Returns the final height,
+		return ((float) Math.sqrt(2.0) * (int) height) - 4.0f;
 	}
 
 	/**
@@ -253,7 +268,7 @@ public class Chunk extends Entity {
 		tilePosition.x = Math.round(tilePosition.x);
 		tilePosition.y = Math.round(tilePosition.y);
 		Vector3f roundedPosition = convertTileToWorld(chunk, tilePosition.x, tilePosition.y);
-		return getHeight(roundedPosition.x, roundedPosition.z);
+		return getWorldHeight(roundedPosition.x, roundedPosition.z);
 	}
 
 	/**
@@ -264,8 +279,8 @@ public class Chunk extends Entity {
 	 *
 	 * @return The moisture at that world position.
 	 */
-	public static float getMoisture(float positionX, float positionZ) {
-		float height = getHeight(positionX, positionZ) / ((float) Math.sqrt(2.0) * Chunk.WORLD_NOISE_HEIGHT);
+	protected static float getMoistureMap(float positionX, float positionZ) {
+		float height = getHeightMap(positionX, positionZ);
 		float moisture = 1.0f - height;
 		moisture += KosmosWorld.get().getNoise().turbulence(positionX / 128.0f, positionZ / 128.0f, 16.0f);
 		return Maths.clamp(moisture, 0.0f, 1.0f);
@@ -279,9 +294,9 @@ public class Chunk extends Entity {
 	 *
 	 * @return The biome at that world position.
 	 */
-	public static IBiome.Biomes getWorldBiome(float positionX, float positionZ) {
+	protected static IBiome.Biomes getBiomeMap(float positionX, float positionZ) {
 		// Smooth around circle.
-		float outside = getIslandFactor(positionX, positionZ);
+		float outside = getIslandMap(positionX, positionZ);
 
 		// Calculates the biome id based off of the world position using perlin. Then limits the search for biomes in the size provided.
 		float biomeID = KosmosWorld.get().getNoise().noise(
