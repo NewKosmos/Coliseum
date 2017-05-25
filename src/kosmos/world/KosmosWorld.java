@@ -16,8 +16,6 @@ import flounder.helpers.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
-import flounder.noise.*;
-import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.shadows.*;
 import flounder.skybox.*;
@@ -113,12 +111,15 @@ public class KosmosWorld extends Module {
 	}
 
 	public void deleteWorld() {
+		KosmosConfigs.saveAllConfigs();
 		KosmosConfigs.SAVE_SEED.setReference(null);
 		KosmosChunks.get().getNoise().setSeed(-1);
-		this.entityPlayer.forceRemove();
-		removeAllPlayers();
-		KosmosWater.get().deleteWater();
+
 		KosmosChunks.get().clear(false);
+		KosmosWater.get().deleteWater();
+
+		entityPlayer.forceRemove();
+		removeAllPlayers();
 	}
 
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)

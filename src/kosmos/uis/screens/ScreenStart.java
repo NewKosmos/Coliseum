@@ -43,10 +43,7 @@ public class ScreenStart extends ScreenObject {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
-				//	KosmosConfigs.saveAllConfigs();
-
-				// Forces slider to close after loading the save.
-				((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);
+				KosmosConfigs.saveAllConfigs();
 
 				// Generates the world.
 				KosmosWorld.get().generateWorld(
@@ -61,6 +58,9 @@ public class ScreenStart extends ScreenObject {
 								KosmosConfigs.SAVE_CHUNK_Z.setReference(() -> KosmosChunks.get().getCurrent().getPosition().z).getFloat()
 						)
 				);
+
+				// Forces slider to close after loading the save.
+				((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);
 			}
 		});
 
@@ -70,10 +70,7 @@ public class ScreenStart extends ScreenObject {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
-				//	KosmosConfigs.saveAllConfigs();
-
-				// Forces slider to close after connecting.
-				((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);
+				KosmosConfigs.saveAllConfigs();
 
 				// Connects to the server.
 				String username = KosmosConfigs.CLIENT_USERNAME.getString();
@@ -86,6 +83,9 @@ public class ScreenStart extends ScreenObject {
 				// Generates the world with a random seed, will be sent to the client later.
 				KosmosConfigs.SAVE_SEED.setReference(null);
 				KosmosWorld.get().generateWorld(-1, new Vector3f(), new Vector3f()); // TODO: Get position from server.
+
+				// Forces slider to close after connecting.
+				((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);
 			}
 		});
 
@@ -116,7 +116,6 @@ public class ScreenStart extends ScreenObject {
 		exitGame.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				KosmosConfigs.saveAllConfigs();
 				Framework.requestClose(false);
 			}
 		});

@@ -69,7 +69,6 @@ public class ScreenPause extends ScreenObject {
 					FlounderNetwork.get().closeClient();
 				}
 
-				KosmosConfigs.saveAllConfigs();
 				KosmosWorld.get().deleteWorld();
 			}
 		});

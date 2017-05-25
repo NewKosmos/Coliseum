@@ -23,7 +23,6 @@ import flounder.physics.*;
 import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.textures.*;
-import kosmos.world.*;
 
 import javax.imageio.*;
 import java.awt.image.*;

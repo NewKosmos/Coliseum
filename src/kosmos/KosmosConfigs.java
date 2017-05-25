@@ -19,10 +19,8 @@ import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.shadows.*;
 import flounder.textures.*;
-import kosmos.chunks.*;
 import kosmos.post.*;
 import kosmos.water.*;
-import kosmos.world.*;
 
 import static flounder.platform.Constants.*;
 

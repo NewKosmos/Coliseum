@@ -20,7 +20,6 @@ import flounder.space.*;
 import kosmos.chunks.biomes.*;
 import kosmos.chunks.meshing.*;
 import kosmos.entities.components.*;
-import kosmos.world.*;
 
 import java.util.*;
 

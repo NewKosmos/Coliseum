@@ -57,21 +57,28 @@ public class PacketDisconnect extends Packet {
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
 		if (username.equals("server")) {
 			FlounderLogger.get().log("The server is closing!");
+			OverlayChat.addText("The server is closing!", new Colour(0.7f, 0.1f, 0.1f));
 
 			if (FlounderNetwork.get().getSocketClient() != null) {
 				new PacketDisconnect(FlounderNetwork.get().getUsername()).writeData(FlounderNetwork.get().getSocketClient());
 				FlounderNetwork.get().closeClient();
 			}
 
-			KosmosConfigs.saveAllConfigs();
+			// Deletes the clients world.
 			KosmosWorld.get().deleteWorld();
+
+			// Closes all huds and opens the start screen.
 			((KosmosGuis) FlounderGuis.get().getGuiMaster()).forceCloseHUDs();
 			((KosmosGuis) FlounderGuis.get().getGuiMaster()).getOverlaySlider().sliderStartMenu(true);
 		} else {
 			FlounderLogger.get().log("[" + address.getHostAddress() + ":" + port + "] " + username + " has quit the game.");
 			OverlayChat.addText(username + " has quit the game.", new Colour(0.7f, 0.1f, 0.1f));
-			((KosmosGuis) FlounderGuis.get().getGuiMaster()).getOverlayUsernames().removeMultiplayer(username);
+
+			// Removes the username from the player list.
 			KosmosWorld.get().removePlayer(username);
+
+			// Removes the username from the username overlay.
+			((KosmosGuis) FlounderGuis.get().getGuiMaster()).getOverlayUsernames().removeMultiplayer(username);
 		}
 	}
 

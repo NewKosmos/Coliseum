@@ -17,7 +17,6 @@ import flounder.particles.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
 import kosmos.materials.*;
-import kosmos.world.*;
 
 /**
  * A interface used to define biome types.
