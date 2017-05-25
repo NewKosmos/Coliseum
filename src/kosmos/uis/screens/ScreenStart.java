@@ -17,6 +17,7 @@ import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.visual.*;
 import kosmos.*;
+import kosmos.chunks.*;
 import kosmos.network.packets.*;
 import kosmos.uis.*;
 import kosmos.world.*;
@@ -48,7 +49,18 @@ public class ScreenStart extends ScreenObject {
 				((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);
 
 				// Generates the world.
-				KosmosWorld.get().generateWorld(KosmosConfigs.SAVE_SEED.getInteger());
+				KosmosWorld.get().generateWorld(
+						KosmosConfigs.SAVE_SEED.setReference(() -> KosmosChunks.get().getNoise().getSeed()).getInteger(),
+						new Vector3f(
+								KosmosConfigs.SAVE_PLAYER_X.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().x).getFloat(),
+								KosmosConfigs.SAVE_PLAYER_Y.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().y).getFloat(),
+								KosmosConfigs.SAVE_PLAYER_Z.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().z).getFloat()),
+						new Vector3f(
+								KosmosConfigs.SAVE_CHUNK_X.setReference(() -> KosmosChunks.get().getCurrent().getPosition().x).getFloat(),
+								0.0f,
+								KosmosConfigs.SAVE_CHUNK_Z.setReference(() -> KosmosChunks.get().getCurrent().getPosition().z).getFloat()
+						)
+				);
 			}
 		});
 
@@ -72,7 +84,8 @@ public class ScreenStart extends ScreenObject {
 				loginPacket.writeData(FlounderNetwork.get().getSocketClient());
 
 				// Generates the world with a random seed, will be sent to the client later.
-				KosmosWorld.get().generateWorld(-1);
+				KosmosConfigs.SAVE_SEED.setReference(null);
+				KosmosWorld.get().generateWorld(-1, new Vector3f(), new Vector3f()); // TODO: Get position from server.
 			}
 		});
 

@@ -18,6 +18,7 @@ import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
+import flounder.noise.*;
 import flounder.physics.*;
 import flounder.profiling.*;
 import flounder.resources.*;
@@ -35,8 +36,8 @@ public class KosmosChunks extends Module {
 	// The size of the rendered map image.
 	private static final int MAP_SIZE = 1024;
 
+	private PerlinNoise noise;
 	private Sphere chunkRange;
-
 	private ModelObject modelHexagon;
 
 	private Vector3f lastPlayerPos;
@@ -50,8 +51,8 @@ public class KosmosChunks extends Module {
 
 	@Handler.Function(Handler.FLAG_INIT)
 	public void init() {
+		this.noise = new PerlinNoise(-1);
 		this.chunkRange = new Sphere(40.0f); // 3.0f * Chunk.CHUNK_WORLD_SIZE
-
 		this.modelHexagon = ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "hexagon.obj")).create();
 
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
@@ -60,12 +61,12 @@ public class KosmosChunks extends Module {
 		this.mapTexture = null;
 
 		FlounderEvents.get().addEvent(new IEvent() {
-			private int seed = KosmosWorld.get().getNoise().getSeed();
+			private int seed = noise.getSeed();
 
 			@Override
 			public boolean eventTriggered() {
-				int currentSeed = KosmosWorld.get().getNoise().getSeed();
-				boolean changed = seed != currentSeed && currentSeed != -1;
+				int currentSeed = noise.getSeed();
+				boolean changed = seed != currentSeed;
 				seed = currentSeed;
 				return changed;
 			}
@@ -121,19 +122,30 @@ public class KosmosChunks extends Module {
 	public void profile() {
 		//	FlounderProfiler.get().add(getTab(), "Chunks Size", chunks.getSize());
 		FlounderProfiler.get().add(getTab(), "Chunks Current", currentChunk);
+		FlounderProfiler.get().add(getTab(), "Seed", noise.getSeed());
 	}
 
 	/**
 	 * Generates a map for the current seed.
 	 */
 	private void generateMap() {
-		int seed = KosmosWorld.get().getNoise().getSeed();
+		int seed = noise.getSeed();
+
+		// Account for the null seed.
+		if (seed == -1) {
+			if (mapTexture != null && mapTexture.isLoaded()) {
+				mapTexture.delete();
+			}
+
+			return;
+		}
+
+		FlounderLogger.get().log("Generating map for seed: " + seed);
+
 		BufferedImage imageIsland = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
 		BufferedImage imageHeight = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
 		BufferedImage imageMoisture = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
 		BufferedImage imageBiome = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
-
-		FlounderLogger.get().log("Generating map for seed: " + seed);
 
 		for (int y = 0; y < MAP_SIZE; y++) {
 			for (int x = 0; x < MAP_SIZE; x++) {
@@ -200,10 +212,23 @@ public class KosmosChunks extends Module {
 			}
 		}
 
-		File outputIsland = new File(Framework.getRoamingFolder().getPath() + "/saves/" + seed + "-island.png");
-		File outputHeight = new File(Framework.getRoamingFolder().getPath() + "/saves/" + seed + "-height.png");
-		File outputMoisture = new File(Framework.getRoamingFolder().getPath() + "/saves/" + seed + "-moisture.png");
-		File outputBiome = new File(Framework.getRoamingFolder().getPath() + "/saves/" + seed + "-biome.png");
+		File directorySave = new File(Framework.getRoamingFolder().getPath() + "/saves/");
+
+		if (!directorySave.exists()) {
+			System.out.println("Creating directory: " + directorySave);
+
+			try {
+				directorySave.mkdir();
+			} catch (SecurityException e) {
+				System.out.println("Filed to create directory: " + directorySave.getPath() + ".");
+				e.printStackTrace();
+			}
+		}
+
+		File outputIsland = new File(directorySave.getPath() + "/" + seed + "-island.png");
+		File outputHeight = new File(directorySave.getPath() + "/" + seed + "-height.png");
+		File outputMoisture = new File(directorySave.getPath() + "/" + seed + "-moisture.png");
+		File outputBiome = new File(directorySave.getPath() + "/" + seed + "-biome.png");
 
 		try {
 			// Save the map texture.
@@ -223,6 +248,10 @@ public class KosmosChunks extends Module {
 			FlounderLogger.get().error("Could not save map image to file: " + outputBiome);
 			FlounderLogger.get().exception(e);
 		}
+	}
+
+	public PerlinNoise getNoise() {
+		return this.noise;
 	}
 
 	/**
@@ -293,7 +322,9 @@ public class KosmosChunks extends Module {
 		// Sets up the new root chunk.
 		if (loadCurrent && currentChunk != null) {
 			setCurrent(new Chunk(FlounderEntities.get().getEntities(), currentChunk.getPosition()));
-		}
+		}// else {
+		//	currentChunk = null;
+		//}
 	}
 
 	public TextureObject getMapTexture() {

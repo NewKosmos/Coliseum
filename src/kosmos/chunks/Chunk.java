@@ -47,7 +47,7 @@ public class Chunk extends Entity {
 
 	// Island world generations.
 	public static final int WORLD_SIZE = 1536;
-	public static final float WORLD_NOISE_HEIGHT = 25.0f;
+	public static final float WORLD_NOISE_HEIGHT = 20.0f;
 	public static final float WORLD_BIOME_OFFSET = 0.20f;
 	public static final float WORLD_ISLAND_INSIDE = 0.70f; // The inside radius of the island shape.
 	public static final float WORLD_ISLAND_OUTSIDE = 1.0f; // The outside radius of the island shape.
@@ -227,7 +227,7 @@ public class Chunk extends Entity {
 	protected static float getHeightMap(float positionX, float positionZ) {
 		// Gets the height from a perlin noise map and from the island factor.
 		float island = getIslandMap(positionX, positionZ);
-		float height = island * 1.70f * KosmosWorld.get().getNoise().turbulence(positionX / 300.0f, positionZ / 300.0f, 40.0f);
+		float height = island * 1.70f * KosmosChunks.get().getNoise().turbulence(positionX / 300.0f, positionZ / 300.0f, 40.0f);
 		height = Maths.clamp(height, 0.0f, 1.0f);
 
 		// Ignore height that would be water/nothing.
@@ -249,9 +249,14 @@ public class Chunk extends Entity {
 	 */
 	public static float getWorldHeight(float positionX, float positionZ) {
 		float height = getHeightMap(positionX, positionZ) * WORLD_NOISE_HEIGHT;
+		height = ((float) Math.sqrt(2.0) * (int) height) - 4.2f;
+
+		if (height <= 0.0f) {
+			return Float.NEGATIVE_INFINITY;
+		}
 
 		// Returns the final height,
-		return ((float) Math.sqrt(2.0) * (int) height) - 4.0f;
+		return height;
 	}
 
 	/**
@@ -282,7 +287,7 @@ public class Chunk extends Entity {
 	protected static float getMoistureMap(float positionX, float positionZ) {
 		float height = getHeightMap(positionX, positionZ);
 		float moisture = 1.0f - height;
-		moisture += KosmosWorld.get().getNoise().turbulence(positionX / 128.0f, positionZ / 128.0f, 16.0f);
+		moisture += KosmosChunks.get().getNoise().turbulence(positionX / 128.0f, positionZ / 128.0f, 16.0f);
 		return Maths.clamp(moisture, 0.0f, 1.0f);
 	}
 
@@ -299,7 +304,7 @@ public class Chunk extends Entity {
 		float outside = getIslandMap(positionX, positionZ);
 
 		// Calculates the biome id based off of the world position using perlin. Then limits the search for biomes in the size provided.
-		float biomeID = KosmosWorld.get().getNoise().noise(
+		float biomeID = KosmosChunks.get().getNoise().noise(
 				positionX / 420.0f,
 				positionZ / 420.0f
 		) + WORLD_BIOME_OFFSET;

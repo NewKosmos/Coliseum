@@ -58,8 +58,6 @@ public class KosmosWorld extends Module {
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, 0.0f, 0.5f); // The starting light direction.
 
-	private PerlinNoise noise;
-
 	private Map<String, Pair<Vector3f, Vector3f>> playerQue;
 	private Map<String, Entity> players;
 
@@ -76,8 +74,6 @@ public class KosmosWorld extends Module {
 
 	@Handler.Function(Handler.FLAG_INIT)
 	public void init() {
-		this.noise = new PerlinNoise(-1);
-
 		this.entityPlayer = null;
 		this.entitySun = new InstanceSun(FlounderEntities.get().getEntities(), new Vector3f(-250.0f, -250.0f, -250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 		this.entityMoon1 = new InstanceMoon1(FlounderEntities.get().getEntities(), new Vector3f(200.0f, 250.0f, 220.0f), new Vector3f(0.0f, 0.0f, 0.0f)); // Red
@@ -102,36 +98,27 @@ public class KosmosWorld extends Module {
 		}
 	}
 
-	public void generateWorld(int seed) {
+	public void generateWorld(int seed, Vector3f positionPlayer, Vector3f positionChunk) {
 		// Sets the seed.
-		this.noise.setSeed(seed);
+		KosmosChunks.get().getNoise().setSeed(seed);
 
 		// Creates the player.
-		this.entityPlayer = new InstancePlayer(FlounderEntities.get().getEntities(),
-				new Vector3f(
-						KosmosConfigs.SAVE_PLAYER_X.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().x).getFloat(),
-						KosmosConfigs.SAVE_PLAYER_Y.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().y).getFloat(),
-						KosmosConfigs.SAVE_PLAYER_Z.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().z).getFloat()),
-				new Vector3f()
-		);
+		this.entityPlayer = new InstancePlayer(FlounderEntities.get().getEntities(), positionPlayer, new Vector3f());
 
 		// Creates the current chunk.
-		KosmosChunks.get().setCurrent(new Chunk(FlounderEntities.get().getEntities(), new Vector3f(
-				KosmosConfigs.SAVE_CHUNK_X.setReference(() -> KosmosChunks.get().getCurrent().getPosition().x).getFloat(),
-				0.0f,
-				KosmosConfigs.SAVE_CHUNK_Z.setReference(() -> KosmosChunks.get().getCurrent().getPosition().z).getFloat()
-		)));
+		KosmosChunks.get().setCurrent(new Chunk(FlounderEntities.get().getEntities(), positionChunk));
 
 		// Creates the water.
 		KosmosWater.get().generateWater();
 	}
 
 	public void deleteWorld() {
+		KosmosConfigs.SAVE_SEED.setReference(null);
+		KosmosChunks.get().getNoise().setSeed(-1);
+		this.entityPlayer.forceRemove();
 		removeAllPlayers();
 		KosmosWater.get().deleteWater();
 		KosmosChunks.get().clear(false);
-		this.entityPlayer.forceRemove();
-		this.noise.setSeed(-1);
 	}
 
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)
@@ -167,11 +154,6 @@ public class KosmosWorld extends Module {
 
 	@Handler.Function(Handler.FLAG_PROFILE)
 	public void profile() {
-		FlounderProfiler.get().add(getTab(), "Seed", noise.getSeed());
-	}
-
-	public PerlinNoise getNoise() {
-		return this.noise;
 	}
 
 	public Entity getPlayer(String username) {

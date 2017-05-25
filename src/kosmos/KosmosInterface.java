@@ -62,7 +62,7 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public void onEvent() {
-				KosmosWorld.get().getNoise().setSeed((int) Maths.randomInRange(1.0, 10000.0));
+				KosmosChunks.get().getNoise().setSeed((int) Maths.randomInRange(1.0, 1000000.0));
 			}
 		});
 

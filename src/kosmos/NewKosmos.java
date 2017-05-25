@@ -18,7 +18,7 @@ import kosmos.camera.*;
 import org.lwjgl.glfw.*;
 
 public class NewKosmos extends Framework {
-	public static final String VERSION = "5.24";
+	public static final String VERSION = "5.25";
 
 	public static void main(String[] args) {
 		new NewKosmos().run();

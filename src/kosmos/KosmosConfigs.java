@@ -19,6 +19,7 @@ import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.shadows.*;
 import flounder.textures.*;
+import kosmos.chunks.*;
 import kosmos.post.*;
 import kosmos.water.*;
 import kosmos.world.*;
@@ -73,11 +74,6 @@ public class KosmosConfigs {
 
 	public static final ConfigData CLIENT_USERNAME = CONFIG_MAIN.getData(ConfigSection.CLIENT, "username", "USERNAME" + ((int) (Math.random() * 10000)), () -> FlounderNetwork.get().getUsername());
 
-	// Host server configs.
-	private static final Config CONFIG_HOST = new Config(new MyFile(Framework.getRoamingFolder("kosmos"), "configs", "host.conf"));
-	public static final ConfigData HOST_PORT = CONFIG_HOST.getData(ConfigSection.SEVER, "hostPort", FlounderNetwork.DEFAULT_PORT, () -> FlounderNetwork.get().getPort()); // Reference set in server interface.
-	public static final ConfigData HOST_SEED = CONFIG_HOST.getData(ConfigSection.WORLD, "hostSeed", (int) Maths.randomInRange(1.0, 10000.0)); // Reference set in server interface.
-
 	// Server0 configs.
 	private static final Config CONFIG_SERVER0 = new Config(new MyFile(Framework.getRoamingFolder("kosmos"), "servers", "server0.conf"));
 	public static final ConfigData SERVER_PORT = CONFIG_SERVER0.getData(ConfigSection.SEVER, "serverPort", FlounderNetwork.DEFAULT_PORT); // Reference set in client interface.
@@ -85,7 +81,7 @@ public class KosmosConfigs {
 
 	// Save0 configs.
 	private static final Config CONFIG_SAVE0 = new Config(new MyFile(Framework.getRoamingFolder("kosmos"), "saves", "save0.conf"));
-	public static final ConfigData SAVE_SEED = CONFIG_SAVE0.getData(ConfigSection.WORLD, "saveSeed", (int) Maths.randomInRange(1.0, 10000.0), () -> KosmosWorld.get().getNoise().getSeed());
+	public static final ConfigData SAVE_SEED = CONFIG_SAVE0.getData(ConfigSection.WORLD, "saveSeed", (int) Maths.randomInRange(1.0, 1000000.0)); // , () -> KosmosChunks.get().getNoise().getSeed()
 	public static final ConfigData SAVE_PLAYER_X = CONFIG_SAVE0.getData(ConfigSection.WORLD, "playerX", 0.0f); // Reference set in world.
 	public static final ConfigData SAVE_PLAYER_Y = CONFIG_SAVE0.getData(ConfigSection.WORLD, "playerY", 0.0f); // Reference set in world.
 	public static final ConfigData SAVE_PLAYER_Z = CONFIG_SAVE0.getData(ConfigSection.WORLD, "playerZ", 0.0f); // Reference set in world.
@@ -97,7 +93,6 @@ public class KosmosConfigs {
 	 */
 	public static void saveAllConfigs() {
 		CONFIG_MAIN.save();
-		CONFIG_HOST.save();
 		CONFIG_SERVER0.save();
 		CONFIG_SAVE0.save();
 	}

@@ -22,15 +22,18 @@ import flounder.maths.Timer;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
+import flounder.parsing.*;
 import flounder.physics.*;
 import flounder.renderer.*;
 import flounder.resources.*;
+import flounder.shadows.*;
 import flounder.standards.*;
 import flounder.textures.*;
 import flounder.visual.*;
 import kosmos.chunks.*;
 import kosmos.network.packets.*;
-import kosmos.world.*;
+import kosmos.post.*;
+import kosmos.water.*;
 import org.lwjgl.glfw.*;
 import sun.reflect.generics.reflectiveObjects.*;
 
@@ -61,18 +64,31 @@ public class KosmosServer extends Framework {
 				)});
 	}
 
+	public static class ServerConfigs {
+		// Host server configs.
+		private static final Config CONFIG_HOST = new Config(new MyFile(Framework.getRoamingFolder("kosmos"), "configs", "host.conf"));
+		public static final ConfigData HOST_PORT = CONFIG_HOST.getData(ConfigSection.SEVER, "hostPort", FlounderNetwork.DEFAULT_PORT, () -> FlounderNetwork.get().getPort()); // Reference set in server interface.
+		public static final ConfigData HOST_SEED = CONFIG_HOST.getData(ConfigSection.WORLD, "hostSeed", (int) Maths.randomInRange(1.0, 1000000.0)); // Reference set in server interface.
+
+		/**
+		 * Saves the configs when closing the game.
+		 */
+		public static void saveAllConfigs() {
+			CONFIG_HOST.save();
+		}
+	}
+
 	public static class ServerInterface extends Standard {
 		private static JFrame frame;
 		private static JPanel mainPanel;
 		private static JPanel renderPanel;
 
 		public static int serverPort;
-		public static int serverSeed;
 
 		private Timer timerWorld;
 
 		public ServerInterface() {
-			super(FlounderDisplayJPanel.class, FlounderNetwork.class, KosmosWorld.class, KosmosChunks.class);
+			super(FlounderDisplayJPanel.class, FlounderNetwork.class, KosmosChunks.class);
 		}
 
 		@Override
@@ -109,8 +125,8 @@ public class KosmosServer extends Framework {
 			JButton buttonRandomSeed = new JButton("Random Seed");
 			buttonRandomSeed.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					KosmosWorld.get().getNoise().setSeed((int) Maths.randomInRange(1.0, 10000.0));
-					new PacketWorld(serverSeed, Framework.getTimeSec()).writeData(FlounderNetwork.get().getSocketServer());
+					KosmosChunks.get().getNoise().setSeed((int) Maths.randomInRange(1.0, 1000000.0));
+					new PacketWorld(KosmosChunks.get().getNoise().getSeed(), Framework.getTimeSec()).writeData(FlounderNetwork.get().getSocketServer());
 				}
 			});
 			mainPanel.add(buttonRandomSeed);
@@ -118,6 +134,7 @@ public class KosmosServer extends Framework {
 			JButton buttonShutdown = new JButton("Shutdown");
 			buttonShutdown.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					new PacketDisconnect("server").writeData(FlounderNetwork.get().getSocketServer());
 					Framework.requestClose(false);
 				}
 			});
@@ -132,8 +149,8 @@ public class KosmosServer extends Framework {
 			frame.setVisible(true);
 			frame.toFront();
 
-			ServerInterface.serverPort = KosmosConfigs.HOST_PORT.setReference(() -> serverPort).getInteger();
-			ServerInterface.serverSeed = KosmosConfigs.HOST_SEED.setReference(() -> serverSeed).getInteger();
+			ServerInterface.serverPort = ServerConfigs.HOST_PORT.setReference(() -> serverPort).getInteger();
+			//ServerInterface.serverSeed = ServerConfigs.HOST_SEED.setReference(() -> serverSeed).getInteger();
 
 			this.timerWorld = new Timer(15.0f);
 
@@ -143,16 +160,15 @@ public class KosmosServer extends Framework {
 				FlounderLogger.get().log(e);
 			}
 
-			FlounderLogger.get().log("Server seed: " + serverSeed);
 			FlounderNetwork.get().startServer(serverPort);
-			KosmosWorld.get().getNoise().setSeed(serverSeed);
+			KosmosChunks.get().getNoise().setSeed(ServerConfigs.HOST_SEED.setReference(() -> KosmosChunks.get().getNoise().getSeed()).getInteger());
 		}
 
 		@Override
 		public void update() {
 			// Remind the clients the time, acts as a "are your there" ping as well.
 			if (timerWorld.isPassedTime()) {
-				new PacketWorld(serverSeed, Framework.getTimeSec()).writeData(FlounderNetwork.get().getSocketServer());
+				new PacketWorld(KosmosChunks.get().getNoise().getSeed(), Framework.getTimeSec()).writeData(FlounderNetwork.get().getSocketServer());
 				timerWorld.resetStartTime();
 			}
 		}
@@ -164,8 +180,12 @@ public class KosmosServer extends Framework {
 
 		@Override
 		public void dispose() {
-			new PacketDisconnect("server").writeData(FlounderNetwork.get().getSocketServer());
-			KosmosConfigs.saveAllConfigs();
+			if (FlounderNetwork.get().getSocketServer() != null) {
+				new PacketDisconnect("server").writeData(FlounderNetwork.get().getSocketServer());
+				FlounderNetwork.get().closeServer();
+			}
+
+			ServerConfigs.saveAllConfigs();
 		}
 
 		@Override

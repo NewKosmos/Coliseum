@@ -215,6 +215,16 @@ public class KosmosGuis extends GuiMaster {
 		}
 	}
 
+	public void forceCloseHUDs() {
+		this.overlayHUD.setAlphaDriver(new ConstantDriver(0.0f));
+		this.overlayInventory.setAlphaDriver(new ConstantDriver(0.0f));
+		this.overlayMap.setAlphaDriver(new ConstantDriver(0.0f));
+		this.overlayUsernames.setAlphaDriver(new ConstantDriver(0.0f));
+		this.overlayDebug.setAlphaDriver(new ConstantDriver(0.0f));
+		this.overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
+	//	this.overlaySlider.setAlphaDriver(new ConstantDriver(0.0f));
+	}
+
 	public void toggleDebug() {
 		if (!isGamePaused()) {
 			if (overlayDebug.getAlpha() < 0.5f) {

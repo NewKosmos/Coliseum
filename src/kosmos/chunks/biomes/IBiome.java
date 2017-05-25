@@ -61,12 +61,12 @@ public abstract class IBiome {
 			return null;
 		}
 
-		if (Math.abs(KosmosWorld.get().getNoise().noise(tilePosition.z * (float) Math.sin(tilePosition.x), tilePosition.x * (float) Math.sin(tilePosition.z))) <= 0.3f) {
+		if (Math.abs(KosmosChunks.get().getNoise().noise(tilePosition.z * (float) Math.sin(tilePosition.x), tilePosition.x * (float) Math.sin(tilePosition.z))) <= 0.3f) {
 			return null;
 		}
 
-		float spawn = KosmosWorld.get().getNoise().noise((tilePosition.z - tilePosition.x) * (float) Math.sin(tilePosition.x + tilePosition.z), 1.0f) * 23.0f * getEntitySpawns().length;
-		float rotation = KosmosWorld.get().getNoise().noise(tilePosition.x - tilePosition.z, 1.0f) * 3600.0f;
+		float spawn = KosmosChunks.get().getNoise().noise((tilePosition.z - tilePosition.x) * (float) Math.sin(tilePosition.x + tilePosition.z), 1.0f) * 23.0f * getEntitySpawns().length;
+		float rotation = KosmosChunks.get().getNoise().noise(tilePosition.x - tilePosition.z, 1.0f) * 3600.0f;
 
 		if (getEntitySpawns().length > 0 && (int) spawn >= 0.0f && (int) spawn < getEntitySpawns().length) {
 			EntitySpawn entitySpawn = getEntitySpawns()[(int) spawn];
