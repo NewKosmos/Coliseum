@@ -265,7 +265,7 @@ public class KosmosServer extends Framework {
 
 			@Override
 			public void updateObject() {
-				mapViewTexture.setTexture(KosmosChunks.get().getMapTexture());
+				mapViewTexture.setTexture(KosmosChunks.get().getMapGenerator().getMapTexture());
 
 			/*	Entity player = KosmosWorld.get().getEntityPlayer();
 

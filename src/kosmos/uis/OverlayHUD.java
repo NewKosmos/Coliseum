@@ -77,7 +77,7 @@ public class OverlayHUD extends ScreenObject {
 		Entity player = KosmosWorld.get().getEntityPlayer();
 
 		if (player != null) {
-			this.mapViewTexture.setTexture(KosmosChunks.get().getMapTexture());
+			this.mapViewTexture.setTexture(KosmosChunks.get().getMapGenerator().getMapTexture());
 
 			float px = player.getPosition().x / Chunk.WORLD_SIZE;
 			float pz = player.getPosition().z / Chunk.WORLD_SIZE;

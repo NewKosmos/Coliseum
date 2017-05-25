@@ -195,7 +195,11 @@ public class Chunk extends Entity {
 	 *
 	 * @return The island factor at that world position.
 	 */
-	protected static float getIslandMap(float positionX, float positionZ) {
+	public static float getIslandMap(float positionX, float positionZ) {
+		if (KosmosChunks.get().getNoise().getSeed() == -1) {
+			return 0.0f;
+		}
+
 		float circular = (float) Math.sqrt(Math.pow(positionX, 2) + Math.pow(positionZ, 2)); // The current radius (circular map).
 		float rectangular = Math.max(Math.abs(positionX), Math.abs(positionZ)); // The current radius (rectangular map).
 		float reading = ((1.0f - WORLD_ISLAND_PARAMETER) * circular) + (WORLD_ISLAND_PARAMETER * rectangular);
@@ -223,7 +227,7 @@ public class Chunk extends Entity {
 	 *
 	 * @return The found height at that world position.
 	 */
-	protected static float getHeightMap(float positionX, float positionZ) {
+	public static float getHeightMap(float positionX, float positionZ) {
 		// Gets the height from a perlin noise map and from the island factor.
 		float island = getIslandMap(positionX, positionZ);
 		float height = island * 1.70f * KosmosChunks.get().getNoise().turbulence(positionX / 300.0f, positionZ / 300.0f, 40.0f);
@@ -283,7 +287,7 @@ public class Chunk extends Entity {
 	 *
 	 * @return The moisture at that world position.
 	 */
-	protected static float getMoistureMap(float positionX, float positionZ) {
+	public static float getMoistureMap(float positionX, float positionZ) {
 		float height = getHeightMap(positionX, positionZ);
 		float moisture = 1.0f - height;
 		moisture += KosmosChunks.get().getNoise().turbulence(positionX / 128.0f, positionZ / 128.0f, 16.0f);

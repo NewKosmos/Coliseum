@@ -19,8 +19,10 @@ import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.shadows.*;
 import flounder.textures.*;
+import kosmos.chunks.*;
 import kosmos.post.*;
 import kosmos.water.*;
+import kosmos.world.*;
 
 import static flounder.platform.Constants.*;
 
@@ -93,5 +95,20 @@ public class KosmosConfigs {
 		CONFIG_MAIN.save();
 		CONFIG_SERVER0.save();
 		CONFIG_SAVE0.save();
+	}
+
+	public static void fixConfigRefs() {
+		if (KosmosChunks.get().getNoise().getSeed() == -1) {
+			KosmosConfigs.SAVE_SEED.setReference(null);
+		}
+		if (KosmosWorld.get().getEntityPlayer() == null) {
+			KosmosConfigs.SAVE_PLAYER_X.setReference(null);
+			KosmosConfigs.SAVE_PLAYER_Y.setReference(null);
+			KosmosConfigs.SAVE_PLAYER_Z.setReference(null);
+		}
+		if (KosmosChunks.get().getCurrent() == null) {
+			KosmosConfigs.SAVE_CHUNK_X.setReference(null);
+			KosmosConfigs.SAVE_CHUNK_Z.setReference(null);
+		}
 	}
 }

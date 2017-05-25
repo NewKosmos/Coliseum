@@ -47,7 +47,7 @@ public class OverlayMap extends ScreenObject {
 
 	@Override
 	public void updateObject() {
-		mapViewTexture.setTexture(KosmosChunks.get().getMapTexture());
+		mapViewTexture.setTexture(KosmosChunks.get().getMapGenerator().getMapTexture());
 
 		Entity player = KosmosWorld.get().getEntityPlayer();
 
