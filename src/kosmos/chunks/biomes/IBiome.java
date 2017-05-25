@@ -25,7 +25,7 @@ import kosmos.world.*;
 public abstract class IBiome {
 	public enum Biomes {
 		OCEAN(new BiomeOcean()), BEACH(new BiomeBeach()), // Ocean and beach handle the basic shapes of the world, the other biomes go where ever.
-		GRASS(new BiomeGrass()), EXOTIC(new BiomeExotic()), MAGMA(new BiomeMagma()), DESERT(new BiomeDesert()), STONE(new BiomeStone()), SNOW(new BiomeSnow());
+		GRASS(new BiomeGrass()), DESERT(new BiomeDesert()), STONE(new BiomeStone()), SNOW(new BiomeSnow());
 
 		private IBiome biome;
 
