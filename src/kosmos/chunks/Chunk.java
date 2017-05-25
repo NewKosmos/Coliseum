@@ -46,10 +46,10 @@ public class Chunk extends Entity {
 	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * (CHUNK_RADIUS - 0.5f);
 
 	// Island world generations.
-	public static final int WORLD_SIZE = 1024;
-	public static final float WORLD_NOISE_HEIGHT = 25.00f;
+	public static final int WORLD_SIZE = 1536;
+	public static final float WORLD_NOISE_HEIGHT = 25.0f;
 	public static final float WORLD_BIOME_OFFSET = 0.20f;
-	public static final float WORLD_ISLAND_INSIDE = 0.80f; // The inside radius of the island shape.
+	public static final float WORLD_ISLAND_INSIDE = 0.70f; // The inside radius of the island shape.
 	public static final float WORLD_ISLAND_OUTSIDE = 1.0f; // The outside radius of the island shape.
 	public static final float WORLD_ISLAND_PARAMETER = 0.5f; // The shape parameter (0=circular, 1=rectangular).
 
@@ -227,11 +227,11 @@ public class Chunk extends Entity {
 	protected static float getHeightMap(float positionX, float positionZ) {
 		// Gets the height from a perlin noise map and from the island factor.
 		float island = getIslandMap(positionX, positionZ);
-		float height = island * (KosmosWorld.get().getNoise().turbulence(positionX / 256.0f, positionZ / 256.0f, 32.0f) + 0.2f);
+		float height = island * 1.70f * KosmosWorld.get().getNoise().turbulence(positionX / 300.0f, positionZ / 300.0f, 40.0f);
 		height = Maths.clamp(height, 0.0f, 1.0f);
 
 		// Ignore height that would be water/nothing.
-		if (height <= 0.125f) {
+		if (height <= 0.1f) {
 			return Float.NEGATIVE_INFINITY;
 		}
 

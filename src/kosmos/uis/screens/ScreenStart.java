@@ -17,7 +17,6 @@ import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.visual.*;
 import kosmos.*;
-import kosmos.chunks.*;
 import kosmos.network.packets.*;
 import kosmos.uis.*;
 import kosmos.world.*;
@@ -43,7 +42,7 @@ public class ScreenStart extends ScreenObject {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
-			//	KosmosConfigs.saveAllConfigs();
+				//	KosmosConfigs.saveAllConfigs();
 
 				// Forces slider to close after loading the save.
 				((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);
@@ -59,7 +58,7 @@ public class ScreenStart extends ScreenObject {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
-			//	KosmosConfigs.saveAllConfigs();
+				//	KosmosConfigs.saveAllConfigs();
 
 				// Forces slider to close after connecting.
 				((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);

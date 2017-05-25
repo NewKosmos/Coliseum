@@ -258,6 +258,7 @@ public class KosmosGuis extends GuiMaster {
 			overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 		}
 	}
+
 	public OverlayHUD getOverlayHUD() {
 		return overlayHUD;
 	}

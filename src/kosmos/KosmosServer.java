@@ -11,13 +11,10 @@ package kosmos;
 
 import flounder.camera.*;
 import flounder.devices.*;
-import flounder.events.*;
-import flounder.fbos.*;
 import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.framework.updater.*;
 import flounder.guis.*;
-import flounder.inputs.*;
 import flounder.logger.*;
 import flounder.lwjgl3.*;
 import flounder.maths.*;
@@ -25,30 +22,21 @@ import flounder.maths.Timer;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
-import flounder.particles.*;
 import flounder.physics.*;
-import flounder.physics.bounding.*;
-import flounder.post.piplines.*;
 import flounder.renderer.*;
 import flounder.resources.*;
-import flounder.shadows.*;
-import flounder.skybox.*;
 import flounder.standards.*;
 import flounder.textures.*;
 import flounder.visual.*;
 import kosmos.chunks.*;
 import kosmos.network.packets.*;
-import kosmos.water.*;
 import kosmos.world.*;
 import org.lwjgl.glfw.*;
 import sun.reflect.generics.reflectiveObjects.*;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.*;
-
-import static flounder.platform.Constants.*;
 
 public class KosmosServer extends Framework {
 	public static void main(String[] args) {
@@ -60,8 +48,8 @@ public class KosmosServer extends Framework {
 		super("kosmos", new UpdaterDefault(GLFW::glfwGetTime), 10,
 				new Extension[]{new ServerInterface(), new ServerRenderer(), new ServerCamera(), new ServerGuis()},
 				new Module[]{new PlatformLwjgl(
-						580,
-						650,
+						870,
+						940,
 						"New Kosmos Server", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
 						false,
 						false,
@@ -254,8 +242,8 @@ public class KosmosServer extends Framework {
 				this.mapViewTexture.setAlphaDriver(new ConstantDriver(0.8f));
 				this.mapViewTexture.setInScreenCoords(true);
 
-			//	this.playerPosition = new GuiObject(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.02f, 0.02f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "pointer.png")).create(), 1);
-			//	this.playerPosition.setInScreenCoords(false);
+				//	this.playerPosition = new GuiObject(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.02f, 0.02f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "pointer.png")).create(), 1);
+				//	this.playerPosition.setInScreenCoords(false);
 			}
 
 			@Override
