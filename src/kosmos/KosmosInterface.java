@@ -118,6 +118,11 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public void onEvent() {
+				if (FlounderNetwork.get().getSocketClient() != null) {
+					new PacketDisconnect(FlounderNetwork.get().getUsername()).writeData(FlounderNetwork.get().getSocketClient());
+					FlounderNetwork.get().closeClient();
+				}
+
 				Framework.requestClose(false);
 			}
 		});

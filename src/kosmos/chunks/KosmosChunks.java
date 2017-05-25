@@ -141,9 +141,9 @@ public class KosmosChunks extends Module {
 
 		FlounderLogger.get().log("Generating map for seed: " + seed);
 
-		BufferedImage imageIsland = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
-		BufferedImage imageHeight = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
-		BufferedImage imageMoisture = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
+	//	BufferedImage imageIsland = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
+	//	BufferedImage imageHeight = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
+	//	BufferedImage imageMoisture = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
 		BufferedImage imageBiome = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
 
 		for (int y = 0; y < MAP_SIZE; y++) {
@@ -152,14 +152,14 @@ public class KosmosChunks extends Module {
 				float worldZ = ((float) y / ((float) MAP_SIZE / (float) Chunk.WORLD_SIZE)) - ((float) Chunk.WORLD_SIZE / 2.0f);
 
 				float factorIsland = Chunk.getIslandMap(worldX, worldZ);
-				imageIsland.setRGB(x, y, (((int) (255.0f * factorIsland) << 8) + ((int) (255.0f * factorIsland)) << 8) + ((int) (255.0f * factorIsland)));
+			//	imageIsland.setRGB(x, y, (((int) (255.0f * factorIsland) << 8) + ((int) (255.0f * factorIsland)) << 8) + ((int) (255.0f * factorIsland)));
 
 				float factorHeight = Chunk.getHeightMap(worldX, worldZ);
-				imageHeight.setRGB(x, y, (((int) (255.0f * factorHeight) << 8) + ((int) (255.0f * factorHeight)) << 8) + ((int) (255.0f * factorHeight)));
+			//	imageHeight.setRGB(x, y, (((int) (255.0f * factorHeight) << 8) + ((int) (255.0f * factorHeight)) << 8) + ((int) (255.0f * factorHeight)));
 
 				float factorMoisture = Chunk.getMoistureMap(worldX, worldZ);
-				Colour colourMoisture = Colour.interpolate(new Colour(1.0f, 0.0f, 0.0f), new Colour(0.0f, 0.0f, 1.0f), factorMoisture, null);
-				imageMoisture.setRGB(x, y, (((int) (255.0f * colourMoisture.r) << 8) + ((int) (255.0f * colourMoisture.g)) << 8) + ((int) (255.0f * colourMoisture.b)));
+			//	Colour colourMoisture = Colour.interpolate(new Colour(1.0f, 0.0f, 0.0f), new Colour(0.0f, 0.0f, 1.0f), factorMoisture, null);
+			///	imageMoisture.setRGB(x, y, (((int) (255.0f * colourMoisture.r) << 8) + ((int) (255.0f * colourMoisture.g)) << 8) + ((int) (255.0f * colourMoisture.b)));
 
 				Colour colourBiome = new Colour(0.0f, 0.0f, 0.0f);
 				if (factorHeight <= 0.125f) {
@@ -224,16 +224,16 @@ public class KosmosChunks extends Module {
 			}
 		}
 
-		File outputIsland = new File(directorySave.getPath() + "/" + seed + "-island.png");
-		File outputHeight = new File(directorySave.getPath() + "/" + seed + "-height.png");
-		File outputMoisture = new File(directorySave.getPath() + "/" + seed + "-moisture.png");
+		//File outputIsland = new File(directorySave.getPath() + "/" + seed + "-island.png");
+		//File outputHeight = new File(directorySave.getPath() + "/" + seed + "-height.png");
+		//File outputMoisture = new File(directorySave.getPath() + "/" + seed + "-moisture.png");
 		File outputBiome = new File(directorySave.getPath() + "/" + seed + "-biome.png");
 
 		try {
 			// Save the map texture.
-			ImageIO.write(imageIsland, "png", outputIsland);
-			ImageIO.write(imageHeight, "png", outputHeight);
-			ImageIO.write(imageMoisture, "png", outputMoisture);
+		//	ImageIO.write(imageIsland, "png", outputIsland);
+		//	ImageIO.write(imageHeight, "png", outputHeight);
+		//	ImageIO.write(imageMoisture, "png", outputMoisture);
 			ImageIO.write(imageBiome, "png", outputBiome);
 
 			// Remove old map texture.
@@ -241,8 +241,16 @@ public class KosmosChunks extends Module {
 				mapTexture.delete();
 			}
 
-			// Load the map texture.
-			mapTexture = TextureFactory.newBuilder().setFile(new MyFile(Framework.getRoamingFolder(), "saves", seed + "-biome.png")).create();
+			// Load the map texture after a few seconds.
+			new java.util.Timer().schedule(
+					new java.util.TimerTask() {
+						@Override
+						public void run() {
+							mapTexture = TextureFactory.newBuilder().setFile(new MyFile(Framework.getRoamingFolder(), "saves", seed + "-biome.png")).create();
+						}
+					},
+					1000
+			);
 		} catch (IOException e) {
 			FlounderLogger.get().error("Could not save map image to file: " + outputBiome);
 			FlounderLogger.get().exception(e);
@@ -321,9 +329,10 @@ public class KosmosChunks extends Module {
 		// Sets up the new root chunk.
 		if (loadCurrent && currentChunk != null) {
 			setCurrent(new Chunk(FlounderEntities.get().getEntities(), currentChunk.getPosition()));
-		}// else {
-		//	currentChunk = null;
-		//}
+		} else {
+			currentChunk = null;
+			lastPlayerPos.set(0.0f, 0.0f, 0.0f);
+		}
 	}
 
 	public TextureObject getMapTexture() {

@@ -149,7 +149,7 @@ public class KosmosServer extends Framework {
 			ServerInterface.serverPort = ServerConfigs.HOST_PORT.setReference(() -> serverPort).getInteger();
 			//ServerInterface.serverSeed = ServerConfigs.HOST_SEED.setReference(() -> serverSeed).getInteger();
 
-			this.timerWorld = new Timer(15.0f);
+			this.timerWorld = new Timer(10.0f);
 
 			try {
 				Thread.sleep(1000);

@@ -113,13 +113,18 @@ public class KosmosWorld extends Module {
 	public void deleteWorld() {
 		KosmosConfigs.saveAllConfigs();
 		KosmosConfigs.SAVE_SEED.setReference(null);
+		KosmosConfigs.SAVE_CHUNK_X.setReference(null);
+		KosmosConfigs.SAVE_CHUNK_Z.setReference(null);
+		KosmosConfigs.SAVE_PLAYER_X.setReference(null);
+		KosmosConfigs.SAVE_PLAYER_Y.setReference(null);
+		KosmosConfigs.SAVE_PLAYER_Z.setReference(null);
 		KosmosChunks.get().getNoise().setSeed(-1);
-
-		KosmosChunks.get().clear(false);
-		KosmosWater.get().deleteWater();
 
 		entityPlayer.forceRemove();
 		removeAllPlayers();
+
+		KosmosChunks.get().clear(false);
+		KosmosWater.get().deleteWater();
 	}
 
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)

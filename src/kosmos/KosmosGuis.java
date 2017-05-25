@@ -222,7 +222,7 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayUsernames.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayDebug.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
-		//	this.overlaySlider.setAlphaDriver(new ConstantDriver(0.0f));
+		this.overlaySlider.setAlphaDriver(new ConstantDriver(1.0f));
 	}
 
 	public void toggleDebug() {
