@@ -47,7 +47,7 @@ public class Chunk extends Entity {
 
 	// Island world generations.
 	public static final int WORLD_SIZE = 1024;
-	public static final float WORLD_NOISE_HEIGHT = 8.00f;
+	public static final float WORLD_NOISE_HEIGHT = 25.00f;
 	public static final float WORLD_BIOME_OFFSET = 0.20f;
 	public static final float WORLD_ISLAND_INSIDE = 0.80f; // The inside radius of the island shape.
 	public static final float WORLD_ISLAND_OUTSIDE = 1.0f; // The outside radius of the island shape.
@@ -236,7 +236,7 @@ public class Chunk extends Entity {
 		}
 
 		// Returns the final height,
-		return (float) Math.sqrt(2.0) * (int) height;
+		return ((float) Math.sqrt(2.0) * (int) height) - 1.0f;
 	}
 
 	/**
