@@ -63,6 +63,7 @@ public class KosmosWorld extends Module {
 	private Entity entitySun;
 	private Entity entityMoon1;
 
+	private LinearDriver dayDriver;
 	private float dayFactor;
 
 	public KosmosWorld() {
@@ -78,6 +79,7 @@ public class KosmosWorld extends Module {
 		this.playerQue = new HashMap<>();
 		this.players = new HashMap<>();
 
+		this.dayDriver = new LinearDriver(0.0f, 100.0f, DAY_NIGHT_CYCLE);
 		this.dayFactor = 0.0f;
 
 		if (FlounderShadows.get() != null) {
@@ -140,7 +142,7 @@ public class KosmosWorld extends Module {
 		}
 
 		if (FlounderSkybox.get() != null && FlounderShadows.get() != null) {
-			dayFactor = ((float) Math.cos((Framework.getTimeSec() / (DAY_NIGHT_CYCLE / 100.0f)) * scaledSpeed) + 1.0f) * 0.5f; // TODO: Dear god.
+			dayFactor = dayDriver.update(Framework.getDelta() * scaledSpeed) / 100.0f;
 			Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.get().getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.get().getLightPosition()).normalize();
 			Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.get().getFog().getFogColour());
 			Colour.interpolate(FlounderSkybox.get().getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.get().getFog().getFogColour());

@@ -80,6 +80,7 @@ public class PacketConnect extends Packet {
 
 		// Sends current world data to the new client.
 		new PacketWorld(KosmosChunks.get().getNoise().getSeed(), Framework.getTimeSec()).writeData(server);
+		new PacketLoad(username, new Vector3f(), 0.0f, 0.0f).writeData(server);
 
 		// Tells the connected clients of the newly connected player.
 		this.writeData(server);
