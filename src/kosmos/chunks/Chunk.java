@@ -316,6 +316,8 @@ public class Chunk extends Entity {
 			moisture += KosmosChunks.get().getNoise().turbulence(positionX / 150.0f, positionZ / 150.0f, 16.0f);
 		}
 
+		// TODO: Move inverse at coast into the biome code, not here, have it moist at the shore.
+
 		return Maths.clamp(moisture, 0.0f, 1.0f);
 	}
 

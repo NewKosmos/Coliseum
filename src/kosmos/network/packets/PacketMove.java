@@ -9,8 +9,10 @@
 
 package kosmos.network.packets;
 
+import flounder.framework.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
+import kosmos.chunks.*;
 import kosmos.world.*;
 
 import java.net.*;
@@ -21,6 +23,7 @@ public class PacketMove extends Packet {
 	private float y;
 	private float z;
 	private float w;
+	private int seed;
 	private float chunkX;
 	private float chunkZ;
 
@@ -31,16 +34,18 @@ public class PacketMove extends Packet {
 		this.y = Float.parseFloat(d[2].trim());
 		this.z = Float.parseFloat(d[3].trim());
 		this.w = Float.parseFloat(d[4].trim());
-		this.chunkX = Float.parseFloat(d[5].trim());
-		this.chunkZ = Float.parseFloat(d[6].trim());
+		this.seed = Integer.parseInt(d[5].trim());
+		this.chunkX = Float.parseFloat(d[6].trim());
+		this.chunkZ = Float.parseFloat(d[7].trim());
 	}
 
-	public PacketMove(String username, Vector3f position, Vector3f rotation, float chunkX, float chunkZ) {
+	public PacketMove(String username, Vector3f position, Vector3f rotation, int seed, float chunkX, float chunkZ) {
 		this.username = username;
 		this.x = position.x;
 		this.y = position.y;
 		this.z = position.z;
 		this.w = rotation.y;
+		this.seed = seed;
 		this.chunkX = chunkX;
 		this.chunkZ = chunkZ;
 	}
@@ -57,19 +62,25 @@ public class PacketMove extends Packet {
 
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
-		//	FlounderLogger.log("[" + client + "]: moved to: " + x + "," + y + "," + z + " : " + w + ", chunk[" + chunkX + "," + chunkZ + "]");
+		//	FlounderLogger.log("[" + client + "]: moved to: " + x + "," + y + "," + z + " : " + w + "," + seed + ", chunk[" + chunkX + "," + chunkZ + "]");
 		KosmosWorld.get().movePlayer(username, x, y, z, w, chunkX, chunkZ);
 	}
 
 	@Override
 	public void serverHandlePacket(Server server, InetAddress address, int port) {
-		//	FlounderLogger.log("[" + username + "]: moved to: " + x + "," + y + "," + z + " : " + w + ", chunk[" + chunkX + "," + chunkZ + "]");
+		//	FlounderLogger.log("[" + username + "]: moved to: " + x + "," + y + "," + z + " : " + w + "," + seed + ", chunk[" + chunkX + "," + chunkZ + "]");
 		this.writeData(server);
+
+		if (seed != KosmosChunks.get().getNoise().getSeed()) {
+			ClientInfo ci = FlounderNetwork.get().getSocketServer().getPlayerMP(username);
+			PacketWorld pw = new PacketWorld(KosmosChunks.get().getNoise().getSeed(), Framework.getTimeSec());
+			server.sendData(pw.getData(), ci.getIpAddress(), ci.getPort());
+		}
 	}
 
 	@Override
 	public byte[] getData() {
-		return (getDataPrefix() + username + "," + x + "," + y + "," + z + "," + w + "," + chunkX + "," + chunkZ).getBytes();
+		return (getDataPrefix() + username + "," + x + "," + y + "," + z + "," + w + "," + seed + "," + chunkX + "," + chunkZ).getBytes();
 	}
 
 	/**
@@ -95,6 +106,10 @@ public class PacketMove extends Packet {
 
 	public float getW() {
 		return w;
+	}
+
+	public int getSeed() {
+		return seed;
 	}
 
 	public float getChunkX() {
