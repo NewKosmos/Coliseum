@@ -221,7 +221,7 @@ public class KosmosPlayer extends Player {
 	 */
 	private void sendData() {
 		if (FlounderNetwork.get().getUsername() != null && FlounderNetwork.get().getSocketClient() != null && KosmosChunks.get().getCurrent() != null) {
-			new PacketMove(FlounderNetwork.get().getUsername(), position, rotation, KosmosChunks.get().getNoise().getSeed(), KosmosChunks.get().getCurrent().getPosition().x, KosmosChunks.get().getCurrent().getPosition().z).writeData(FlounderNetwork.get().getSocketClient());
+			new PacketMove(FlounderNetwork.get().getUsername(), position, rotation, KosmosChunks.get().getCurrent().getPosition().x, KosmosChunks.get().getCurrent().getPosition().z).writeData(FlounderNetwork.get().getSocketClient());
 			needSendData = false;
 			timer.resetStartTime();
 		}
