@@ -37,8 +37,23 @@ public class ScreenSettingControls extends ScreenObject {
 			}
 		});
 
+		// Slider Camera Field Of View.
+		GuiSliderText sliderFieldOfView = new GuiSliderText(this, new Vector2f(0.5f, 0.27f), "FOV: ", 30.0f, 120.0f, KosmosCamera.getFieldOfView(), GuiAlign.CENTRE);
+		FlounderEvents.get().addEvent(new EventChange<Float>(KosmosCamera::getFieldOfView) {
+			@Override
+			public void onEvent(Float newValue) {
+				sliderFieldOfView.setText("FOV: " + Maths.roundToPlace(newValue, 1));
+			}
+		});
+		sliderFieldOfView.addChangeListener(new ScreenListener() {
+			@Override
+			public void eventOccurred() {
+				KosmosCamera.setFieldOfView(sliderFieldOfView.getProgress());
+			}
+		});
+
 		// Slider Camera Sensitivity.
-		GuiSliderText sliderSensitivity = new GuiSliderText(this, new Vector2f(0.5f, 0.27f), "Sensitivity: ", 0.1f, 7.0f, KosmosCamera.getSensitivity(), GuiAlign.CENTRE);
+		GuiSliderText sliderSensitivity = new GuiSliderText(this, new Vector2f(0.5f, 0.34f), "Sensitivity: ", 0.1f, 7.0f, KosmosCamera.getSensitivity(), GuiAlign.CENTRE);
 		FlounderEvents.get().addEvent(new EventChange<Float>(KosmosCamera::getSensitivity) {
 			@Override
 			public void onEvent(Float newValue) {
@@ -55,7 +70,7 @@ public class ScreenSettingControls extends ScreenObject {
 		// Key Select Mouse Reangle.
 
 		// Toggle Mouse Lock.
-		GuiButtonText toggleMouseLock = new GuiButtonText(this, new Vector2f(0.5f, 0.34f), "Mouse Locked: ", GuiAlign.CENTRE);
+		GuiButtonText toggleMouseLock = new GuiButtonText(this, new Vector2f(0.5f, 0.41f), "Mouse Locked: ", GuiAlign.CENTRE);
 		FlounderEvents.get().addEvent(new EventChange<Boolean>(KosmosCamera::isMouseLocked) {
 			@Override
 			public void onEvent(Boolean newValue) {

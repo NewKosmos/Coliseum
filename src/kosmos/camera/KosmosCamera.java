@@ -25,7 +25,6 @@ public class KosmosCamera extends Camera {
 	// Defines basic view frustum sizes.
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 500.0f;
-	private static final float FIELD_OF_VIEW = 45.0f;
 
 	// Defines how snappy these camera functions will be.
 	private static final float ZOOM_AGILITY = 30.0f;
@@ -77,6 +76,7 @@ public class KosmosCamera extends Camera {
 	private float horizontalDistanceFromFocus;
 	private float verticalDistanceFromFocus;
 
+	private static float fieldOfView;
 	private static float sensitivity;
 	private static boolean mouseLocked;
 	private static boolean firstPerson;
@@ -112,6 +112,7 @@ public class KosmosCamera extends Camera {
 		this.horizontalDistanceFromFocus = 0.0f;
 		this.verticalDistanceFromFocus = 0.0f;
 
+		KosmosCamera.fieldOfView = KosmosConfigs.CAMERA_FOV.setReference(() -> fieldOfView).getFloat();
 		KosmosCamera.sensitivity = KosmosConfigs.CAMERA_SENSITIVITY.setReference(() -> sensitivity).getFloat();
 		KosmosCamera.mouseLocked = KosmosConfigs.CAMERA_MOUSE_LOCKED.setReference(() -> mouseLocked).getBoolean();
 		this.reangleButton = KosmosConfigs.CAMERA_REANGLE.setReference(() -> reangleButton).getInteger();
@@ -134,7 +135,7 @@ public class KosmosCamera extends Camera {
 
 	@Override
 	public float getFOV() {
-		return FIELD_OF_VIEW;
+		return fieldOfView;
 	}
 
 	@Override
@@ -380,6 +381,14 @@ public class KosmosCamera extends Camera {
 
 	public static boolean isFirstPerson() {
 		return firstPerson;
+	}
+
+	public static float getFieldOfView() {
+		return fieldOfView;
+	}
+
+	public static void setFieldOfView(float fieldOfView) {
+		KosmosCamera.fieldOfView = fieldOfView;
 	}
 
 	public static float getSensitivity() {
