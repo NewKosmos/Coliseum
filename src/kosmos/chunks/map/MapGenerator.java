@@ -57,9 +57,9 @@ public class MapGenerator extends Thread {
 
 		FlounderLogger.get().log("Generating map for seed: " + seed);
 
-		//	BufferedImage imageIsland = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
-		//	BufferedImage imageHeight = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
-		//	BufferedImage imageMoisture = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
+		//BufferedImage imageIsland = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
+		//BufferedImage imageHeight = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
+		//BufferedImage imageMoisture = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
 		BufferedImage imageBiome = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
 
 		for (int y = 0; y < MAP_SIZE; y++) {
@@ -68,23 +68,19 @@ public class MapGenerator extends Thread {
 				float worldZ = ((float) y / ((float) MAP_SIZE / (float) Chunk.WORLD_SIZE)) - ((float) Chunk.WORLD_SIZE / 2.0f);
 
 				float factorIsland = Chunk.getIslandMap(worldX, worldZ);
-				//	imageIsland.setRGB(x, y, (((int) (255.0f * factorIsland) << 8) + ((int) (255.0f * factorIsland)) << 8) + ((int) (255.0f * factorIsland)));
+				//imageIsland.setRGB(x, y, (((int) (255.0f * factorIsland) << 8) + ((int) (255.0f * factorIsland)) << 8) + ((int) (255.0f * factorIsland)));
 
 				float factorHeight = Chunk.getHeightMap(worldX, worldZ);
-				//	imageHeight.setRGB(x, y, (((int) (255.0f * factorHeight) << 8) + ((int) (255.0f * factorHeight)) << 8) + ((int) (255.0f * factorHeight)));
+				//imageHeight.setRGB(x, y, (((int) (255.0f * factorHeight) << 8) + ((int) (255.0f * factorHeight)) << 8) + ((int) (255.0f * factorHeight)));
 
 				float factorMoisture = Chunk.getMoistureMap(worldX, worldZ);
-				//	Colour colourMoisture = Colour.interpolate(new Colour(1.0f, 0.0f, 0.0f), new Colour(0.0f, 0.0f, 1.0f), factorMoisture, null);
-				///	imageMoisture.setRGB(x, y, (((int) (255.0f * colourMoisture.r) << 8) + ((int) (255.0f * colourMoisture.g)) << 8) + ((int) (255.0f * colourMoisture.b)));
+				//Colour colourMoisture = Colour.interpolate(new Colour(1.0f, 0.0f, 0.0f), new Colour(0.0f, 0.0f, 1.0f), factorMoisture, null);
+				//imageMoisture.setRGB(x, y, (((int) (255.0f * colourMoisture.r) << 8) + ((int) (255.0f * colourMoisture.g)) << 8) + ((int) (255.0f * colourMoisture.b)));
 
 				Colour colourBiome = new Colour(0.0f, 0.0f, 0.0f);
 				if (factorHeight <= 0.125f) {
 					colourBiome.set(0.0824f, 0.396f, 0.753f); // Ocean.
-				} /* else {
-					colourBiome.r = 161.200853168913f + (30.1885001433901f * factorHeight) + (8.20691138514417f * factorMoisture);
-					colourBiome.g = 201.866038141669f - (0.0741611700597815f * factorHeight) + (11.6816030972177f * factorMoisture);
-					colourBiome.b = 161.200853168913f + (30.1885001433901f * factorHeight) + (8.20691138514417f * factorMoisture);
-				}*/ else if (factorHeight <= 0.25f) {
+				} else if (factorHeight <= 0.25f) {
 					if (factorMoisture <= 0.16f) {
 						colourBiome.set(233, 221, 199, true); // Subtropical Desert.
 					} else if (factorMoisture <= 0.33f) {
@@ -147,9 +143,9 @@ public class MapGenerator extends Thread {
 
 		try {
 			// Save the map texture.
-			//	ImageIO.write(imageIsland, "png", outputIsland);
-			//	ImageIO.write(imageHeight, "png", outputHeight);
-			//	ImageIO.write(imageMoisture, "png", outputMoisture);
+		//	ImageIO.write(imageIsland, "png", outputIsland);
+		//	ImageIO.write(imageHeight, "png", outputHeight);
+		//	ImageIO.write(imageMoisture, "png", outputMoisture);
 			ImageIO.write(imageBiome, "png", outputBiome);
 
 			// Remove old map texture.

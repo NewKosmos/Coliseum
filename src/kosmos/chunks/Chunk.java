@@ -45,9 +45,8 @@ public class Chunk extends Entity {
 	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * (CHUNK_RADIUS - 0.5f);
 
 	// Island world generations.
-	public static final int WORLD_SIZE = 1536;
-	public static final float WORLD_NOISE_HEIGHT = 20.0f;
-	public static final float WORLD_BIOME_OFFSET = 0.20f;
+	public static final int WORLD_SIZE = 1536; // The width and height of the world, in tile size.
+	public static final float WORLD_NOISE_HEIGHT = 24.0f; // The height multiplier, max world height.
 	public static final float WORLD_ISLAND_INSIDE = 0.70f; // The inside radius of the island shape.
 	public static final float WORLD_ISLAND_OUTSIDE = 1.0f; // The outside radius of the island shape.
 	public static final float WORLD_ISLAND_PARAMETER = 0.5f; // The shape parameter (0=circular, 1=rectangular).
@@ -306,8 +305,17 @@ public class Chunk extends Entity {
 	 */
 	public static float getMoistureMap(float positionX, float positionZ) {
 		float height = getHeightMap(positionX, positionZ);
-		float moisture = 1.0f - height;
-		moisture += KosmosChunks.get().getNoise().turbulence(positionX / 128.0f, positionZ / 128.0f, 16.0f);
+
+		// Calculate the moisture as a inverse of height with added noise.
+		float moisture = height;
+
+		// Set to 100% moisture in the ocean/lakes/rivers.
+		if (height <= 0.0f) {
+			moisture = 1.0f;
+		} else {
+			moisture += KosmosChunks.get().getNoise().turbulence(positionX / 150.0f, positionZ / 150.0f, 16.0f);
+		}
+
 		return Maths.clamp(moisture, 0.0f, 1.0f);
 	}
 
@@ -327,7 +335,7 @@ public class Chunk extends Entity {
 		float biomeID = KosmosChunks.get().getNoise().noise(
 				positionX / 420.0f,
 				positionZ / 420.0f
-		) + WORLD_BIOME_OFFSET;
+		) + 0.20f;
 
 		// Scale the biome id by the smoothing world circle.
 		biomeID *= Maths.clamp(outside, 0.0f, 1.0f);
