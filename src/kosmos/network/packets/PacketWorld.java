@@ -45,10 +45,10 @@ public class PacketWorld extends Packet {
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
 		boolean offServerTime = Math.abs(timeSec - Framework.getTimeSec()) > 0.866f;
 
-			FlounderLogger.get().log("[" + address.getHostAddress() + ":" + port + "]: world seed=" + seed + ", off server time=" + offServerTime +
-					", server time=" + timeSec + ", client time: " + Framework.getTimeSec() + ", client offset: " + Framework.getTimeOffset() +
-					", client original time: " + (Framework.getTimeSec() - Framework.getTimeOffset())
-			);
+		//	FlounderLogger.get().log("[" + address.getHostAddress() + ":" + port + "]: world seed=" + seed + ", off server time=" + offServerTime +
+		//			", server time=" + timeSec + ", client time: " + Framework.getTimeSec() + ", client offset: " + Framework.getTimeOffset() +
+		//			", client original time: " + (Framework.getTimeSec() - Framework.getTimeOffset())
+		//	);
 
 		if (KosmosChunks.get().getNoise().getSeed() != seed) {
 			KosmosChunks.get().getNoise().setSeed(seed);

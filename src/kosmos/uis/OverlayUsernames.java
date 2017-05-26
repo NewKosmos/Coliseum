@@ -15,6 +15,7 @@ import flounder.entities.*;
 import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.helpers.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
@@ -27,113 +28,102 @@ import kosmos.world.*;
 import java.util.*;
 
 public class OverlayUsernames extends ScreenObject {
-	public static final List<String> newUsernames = new ArrayList<>();
-
-	private Vector3f screenPosition;
-
-	// private Pair<TextObject, GuiObject> playerUsername;
-	private List<Pair<TextObject, GuiObject>> multiplayerNames;
+	private Map<String, UsernameTag> tags;
 
 	public OverlayUsernames(ScreenObject parent) {
 		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
 
-		this.screenPosition = new Vector3f();
-
-		// this.playerUsername = generate(FlounderNetwork.getUsername());
-		this.multiplayerNames = new ArrayList<>();
+		this.tags = new HashMap<>();
 	}
 
 	@Override
 	public void updateObject() {
-		// updateUsername(playerUsername, KosmosWorld.getEntityPlayer());
+		KosmosWorld.get().getPlayers().keySet().forEach(s -> tags.putIfAbsent(s, new UsernameTag(this, s)));
 
-		if (!newUsernames.isEmpty()) {
-			for (String m : newUsernames) {
-				multiplayerNames.add(generate(m));
-			}
+		Iterator<String> it = tags.keySet().iterator();
 
-			newUsernames.clear();
-		}
+		while (it.hasNext()) {
+			String s = it.next();
+			Entity e = KosmosWorld.get().getPlayers().get(s);
 
-		for (Pair<TextObject, GuiObject> object : multiplayerNames) {
-			updateUsername(object, KosmosWorld.get().getPlayer(object.getFirst().getTextString()));
-		}
-	}
-
-	public static void addMultiplayer(String username) {
-		newUsernames.add(username);
-	}
-
-	public void removeMultiplayer(String username) {
-		Iterator<Pair<TextObject, GuiObject>> iterator = multiplayerNames.iterator();
-
-		while (iterator.hasNext()) {
-			Pair<TextObject, GuiObject> object = iterator.next();
-
-			if (object.getFirst().getTextString().equals(username)) {
-				object.getFirst().getParent().removeChild(object.getFirst());
-				object.getSecond().getParent().removeChild(object.getSecond());
-				//	object.getSingle().delete();
-				//	object.getSecond().delete();
-				iterator.remove();
-				return;
+			if (e == null) {
+				tags.get(s).deleteObject();
+				it.remove();
+			} else {
+				tags.get(s).compute(e);
 			}
 		}
-	}
-
-	private Pair<TextObject, GuiObject> generate(String username) {
-		TextObject text = new TextObject(this, new Vector2f(0.5f, 0.5f), username, 1.0f, FlounderFonts.CANDARA, 0.2f, GuiAlign.CENTRE);
-		text.setInScreenCoords(false);
-		text.setColour(new Colour(1.0f, 1.0f, 1.0f, 1.0f));
-		text.setBorderColour(new Colour(0.0f, 0.0f, 0.0f));
-		text.setBorder(new ConstantDriver(0.175f));
-		text.setAlphaDriver(new ConstantDriver(0.75f));
-
-		GuiObject gui = new GuiObject(this, this.getPosition(), new Vector2f(), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "username.png")).create(), 1);
-		gui.setInScreenCoords(false);
-		gui.setColourOffset(new Colour());
-
-		return new Pair<>(text, gui);
-	}
-
-	private void updateUsername(Pair<TextObject, GuiObject> pair, Entity entity) {
-		if (entity == null) {
-			return;
-		}
-
-		// Get 2D label space.
-		screenPosition.set(entity.getPosition());
-		screenPosition.y += KosmosPlayer.PLAYER_OFFSET_Y;
-		float distance = Vector3f.getDistance(screenPosition, FlounderCamera.get().getCamera().getPosition());
-		boolean shouldRender = distance < 30.0f;
-		Maths.worldToScreenSpace(screenPosition, FlounderCamera.get().getCamera().getViewMatrix(), FlounderCamera.get().getCamera().getProjectionMatrix(), this.screenPosition);
-		// FlounderLogger.log(screenPosition.x + ", " + screenPosition.y);
-
-		// Updates the alpha, hides if far away.
-		if (pair.getFirst().getColour().a == 1.0f && !shouldRender) {
-			pair.getFirst().setAlphaDriver(new SlideDriver(pair.getFirst().getAlpha(), 0.0f, KosmosGuis.SLIDE_TIME));
-			pair.getSecond().setAlphaDriver(new SlideDriver(pair.getFirst().getAlpha(), 0.0f, KosmosGuis.SLIDE_TIME));
-			pair.getFirst().getColour().a = 0.0f;
-		} else if (pair.getFirst().getColour().a == 0.0f && shouldRender) {
-			pair.getFirst().setAlphaDriver(new SlideDriver(pair.getFirst().getAlpha(), 1.0f, KosmosGuis.SLIDE_TIME));
-			pair.getSecond().setAlphaDriver(new SlideDriver(pair.getFirst().getAlpha(), 1.0f, KosmosGuis.SLIDE_TIME));
-			pair.getFirst().getColour().a = 1.0f;
-		}
-
-		// Updates the text positioning.
-		pair.getFirst().getPosition().set(screenPosition.x + (FlounderDisplay.get().getAspectRatio() / 2.0f), -screenPosition.y);
-
-		// Update background size.
-		pair.getSecond().getDimensions().set(pair.getFirst().getMeshSize());
-		pair.getSecond().getDimensions().y = 0.5f * (float) pair.getFirst().getFont().getMaxSizeY();
-		Vector2f.multiply(pair.getFirst().getDimensions(), pair.getSecond().getDimensions(), pair.getSecond().getDimensions());
-		pair.getSecond().getDimensions().scale(2.0f * pair.getFirst().getScale());
-		pair.getSecond().getPositionOffsets().set(pair.getFirst().getPositionOffsets());
-		pair.getSecond().getPosition().set(pair.getFirst().getPosition());
 	}
 
 	@Override
 	public void deleteObject() {
+	}
+
+	public static class UsernameTag extends ScreenObject {
+		private Vector3f screenspace;
+
+		private TextObject text;
+		private GuiObject gui;
+
+		public UsernameTag(ScreenObject parent, String username) {
+			super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
+			super.setInScreenCoords(false);
+
+			this.screenspace = new Vector3f();
+
+			this.text = new TextObject(this, new Vector2f(0.5f, 0.5f), username, 1.0f, FlounderFonts.CANDARA, 0.2f, GuiAlign.CENTRE);
+			this.text.setInScreenCoords(false);
+			this.text.setColour(new Colour(1.0f, 1.0f, 1.0f, 1.0f));
+			this.text.setBorderColour(new Colour(0.0f, 0.0f, 0.0f));
+			this.text.setBorder(new ConstantDriver(0.175f));
+			this.text.setAlphaDriver(new ConstantDriver(0.75f));
+
+			this.gui = new GuiObject(this, this.getPosition(), new Vector2f(), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "username.png")).create(), 1);
+			this.gui.setInScreenCoords(false);
+			this.gui.setColourOffset(new Colour());
+		}
+
+		public void compute(Entity entity) {
+			// Get 2D label space.
+			screenspace.set(entity.getPosition());
+			screenspace.y += KosmosPlayer.PLAYER_OFFSET_Y;
+			float distance = Vector3f.getDistance(screenspace, FlounderCamera.get().getCamera().getPosition());
+			boolean shouldRender = distance < 30.0f;
+			Maths.worldToScreenSpace(screenspace, FlounderCamera.get().getCamera().getViewMatrix(), FlounderCamera.get().getCamera().getProjectionMatrix(), this.screenspace);
+			// FlounderLogger.log(screenPosition.x + ", " + screenPosition.y);
+
+			// Updates the alpha, hides if far away.
+			if (text.getColour().a == 1.0f && !shouldRender) {
+				text.setAlphaDriver(new SlideDriver(text.getAlpha(), 0.0f, KosmosGuis.SLIDE_TIME));
+				gui.setAlphaDriver(new SlideDriver(text.getAlpha(), 0.0f, KosmosGuis.SLIDE_TIME));
+				text.getColour().a = 0.0f;
+			} else if (text.getColour().a == 0.0f && shouldRender) {
+				text.setAlphaDriver(new SlideDriver(text.getAlpha(), 1.0f, KosmosGuis.SLIDE_TIME));
+				gui.setAlphaDriver(new SlideDriver(text.getAlpha(), 1.0f, KosmosGuis.SLIDE_TIME));
+				text.getColour().a = 1.0f;
+			}
+
+			// Updates the text positioning.
+			text.getPosition().set(screenspace.x + (FlounderDisplay.get().getAspectRatio() / 2.0f), -screenspace.y);
+
+			// Update background size.
+			gui.getDimensions().set(text.getMeshSize());
+			gui.getDimensions().y = 0.5f * (float) text.getFont().getMaxSizeY();
+			Vector2f.multiply(text.getDimensions(), gui.getDimensions(), gui.getDimensions());
+			gui.getDimensions().scale(2.0f * text.getScale());
+			gui.getPositionOffsets().set(text.getPositionOffsets());
+			gui.getPosition().set(text.getPosition());
+		}
+
+		@Override
+		public void updateObject() {
+
+		}
+
+		@Override
+		public void deleteObject() {
+
+		}
 	}
 }

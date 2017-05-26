@@ -76,9 +76,6 @@ public class PacketDisconnect extends Packet {
 
 			// Removes the username from the player list.
 			KosmosWorld.get().removePlayer(username);
-
-			// Removes the username from the username overlay.
-			((KosmosGuis) FlounderGuis.get().getGuiMaster()).getOverlayUsernames().removeMultiplayer(username);
 		}
 	}
 

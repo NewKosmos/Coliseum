@@ -63,9 +63,6 @@ public class PacketConnect extends Packet {
 		// Ques the player to the clients list.
 		KosmosWorld.get().quePlayer(username, new Vector3f(), new Vector3f());
 
-		// Adds the username to the username overlay.
-		OverlayUsernames.addMultiplayer(username);
-
 		// Forces the client to send a update packet to the server.
 		KosmosPlayer.askSendData();
 	}

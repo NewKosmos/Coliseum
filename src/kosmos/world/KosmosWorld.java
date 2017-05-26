@@ -146,14 +146,8 @@ public class KosmosWorld extends Module {
 		}
 
 		// Update the sky colours and sun position.
-		float scaledSpeed = 1.0f;
-
-		if (FlounderGuis.get().getGuiMaster() instanceof KosmosGuis) {
-			scaledSpeed = ((KosmosGuis) FlounderGuis.get().getGuiMaster()).getOverlaySlider().inStartMenu() ? 4.20f : 1.0f;
-		}
-
 		if (FlounderSkybox.get() != null && FlounderShadows.get() != null) {
-			dayFactor = dayDriver.update(Framework.getDelta() * scaledSpeed) / 100.0f;
+			dayFactor = dayDriver.update(Framework.getDelta()) / 100.0f;
 			Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.get().getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.get().getLightPosition()).normalize();
 			Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.get().getFog().getFogColour());
 			Colour.interpolate(FlounderSkybox.get().getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.get().getFog().getFogColour());
