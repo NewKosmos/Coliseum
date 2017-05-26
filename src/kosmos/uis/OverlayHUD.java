@@ -23,7 +23,7 @@ import kosmos.chunks.*;
 import kosmos.world.*;
 
 public class OverlayHUD extends ScreenObject {
-	private static final float MAP_SIZE = 0.22f;
+	private static final float MAP_SIZE = 0.28f;
 
 	private static int crosshairSelected;
 	private GuiObject crossHair;
@@ -37,6 +37,7 @@ public class OverlayHUD extends ScreenObject {
 	private GuiObject mapBackgroundTexture;
 	private GuiObject mapViewTexture;
 	private GuiObject mapOverlayTexture;
+	private float mapZoomAmount;
 
 	public OverlayHUD(ScreenObject parent) {
 		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
@@ -57,11 +58,14 @@ public class OverlayHUD extends ScreenObject {
 		this.mapBackgroundTexture.setInScreenCoords(false);
 
 		this.mapViewTexture = new GuiObject(this, new Vector2f(), new Vector2f(MAP_SIZE, MAP_SIZE), null, 1);
+		this.mapViewTexture.setScaleDriver(new VarianceDriver(1.0f));
 		this.mapViewTexture.setInScreenCoords(false);
-		this.mapViewTexture.setScaleDriver(new ConstantDriver(2.56f));
 
 		this.mapOverlayTexture = new GuiObject(this, new Vector2f(), new Vector2f(MAP_SIZE, MAP_SIZE), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "hudMap.png")).create(), 1);
+		this.mapOverlayTexture.setRotationDriver(new VarianceDriver(0.0f));
 		this.mapOverlayTexture.setInScreenCoords(false);
+
+		this.mapZoomAmount = 3.20f;
 	}
 
 	@Override
@@ -74,11 +78,12 @@ public class OverlayHUD extends ScreenObject {
 		this.statusThirst.persentage = KosmosWorld.get().getShadowFactor();
 		this.statusHunger.persentage = KosmosWorld.get().getSunriseFactor();
 
+		this.mapViewTexture.setTexture(KosmosChunks.get().getMapGenerator().getMapTexture());
+		VarianceDriver.set(mapViewTexture.getScaleDriver(), mapZoomAmount);
+
 		Entity player = KosmosWorld.get().getEntityPlayer();
 
 		if (player != null) {
-			this.mapViewTexture.setTexture(KosmosChunks.get().getMapGenerator().getMapTexture());
-
 			float px = player.getPosition().x / Chunk.WORLD_SIZE;
 			float pz = player.getPosition().z / Chunk.WORLD_SIZE;
 
@@ -87,15 +92,15 @@ public class OverlayHUD extends ScreenObject {
 			this.mapOverlayTexture.getPosition().set(FlounderDisplay.get().getAspectRatio() - (MAP_SIZE / 2.0f), MAP_SIZE / 2.0f);
 
 			this.mapViewTexture.getPosition().set(
-					mapViewTexture.getPosition().x - (px),
-					mapViewTexture.getPosition().y - (pz)
+					(((mapViewTexture.isInScreenCoords() ? FlounderDisplay.get().getAspectRatio() : 1.0f) * mapViewTexture.getPosition().x) + (MAP_SIZE * 0.5f)) - (MAP_SIZE * mapZoomAmount * px) - (MAP_SIZE * 0.5f),
+					(mapViewTexture.getPosition().y + (MAP_SIZE * 0.5f)) - (MAP_SIZE * mapZoomAmount * pz) - (MAP_SIZE * 0.5f)
 			);
 			this.mapViewTexture.getScissor().set(
 					(1.0f - (MAP_SIZE / FlounderDisplay.get().getAspectRatio())) * FlounderDisplay.get().getWidth(), (1.0f - MAP_SIZE) * FlounderDisplay.get().getHeight(),
-					(MAP_SIZE / FlounderDisplay.get().getAspectRatio()) * FlounderDisplay.get().getWidth(), MAP_SIZE * FlounderDisplay.get().getHeight()
+					MAP_SIZE * FlounderDisplay.get().getWidth(), MAP_SIZE * FlounderDisplay.get().getHeight()
 			);
 
-			this.mapOverlayTexture.setRotationDriver(new ConstantDriver(-player.getRotation().y + 180.0f));
+			VarianceDriver.set(mapOverlayTexture.getRotationDriver(), -player.getRotation().y + 180.0f);
 		}
 	}
 

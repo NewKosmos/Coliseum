@@ -25,9 +25,7 @@ public class KosmosCamera extends Camera {
 	// Defines basic view frustum sizes.
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 500.0f;
-
-	private static final float FIELD_OF_VIEW_FPS = 60.0f; // First person.
-	private static final float FIELD_OF_VIEW = 45.0f; // Focus view.
+	private static final float FIELD_OF_VIEW = 45.0f;
 
 	// Defines how snappy these camera functions will be.
 	private static final float ZOOM_AGILITY = 30.0f;
@@ -50,13 +48,13 @@ public class KosmosCamera extends Camera {
 
 	private static final float CAMERA_AIM_OFFSET = 1.6f;
 
-	private static final float MAX_ANGLE_OF_ELEVATION_FPS = 45.0f;
+	private static final float MAX_ANGLE_OF_ELEVATION_FPS = 70.0f;
 	private static final float MIN_ANGLE_OF_ELEVATION_FPS = -45.0f;
-	private static final float MAX_ANGLE_OF_ELEVATION = 45.0f;
+	private static final float MAX_ANGLE_OF_ELEVATION = 70.0f;
 	private static final float MIN_ANGLE_OF_ELEVATION = 0.0f;
 	private static final float MINIMUM_ZOOM = 0.0f;
-	private static final float MAXIMUM_ZOOM = 28.0f;
-	private static final float NORMAL_ZOOM = 8.0f;
+	private static final float MAXIMUM_ZOOM = 14.0f;
+	private static final float NORMAL_ZOOM = 7.0f;
 
 	private Vector3f position;
 	private Vector3f rotation;
@@ -136,7 +134,7 @@ public class KosmosCamera extends Camera {
 
 	@Override
 	public float getFOV() {
-		return firstPerson ? FIELD_OF_VIEW_FPS : FIELD_OF_VIEW;
+		return FIELD_OF_VIEW;
 	}
 
 	@Override

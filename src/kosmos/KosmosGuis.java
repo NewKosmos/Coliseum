@@ -248,7 +248,7 @@ public class KosmosGuis extends GuiMaster {
 	}
 
 	public void toggleMap() {
-		if (!overlayStartup.isStarting() && overlaySlider.getAlpha() == 0.0f) {
+		if (overlayChat.getAlpha() < 0.5f && !overlayStartup.isStarting() && overlaySlider.getAlpha() == 0.0f) {
 			if (overlayMap.getAlpha() != 1.0f) {
 				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));

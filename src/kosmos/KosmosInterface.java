@@ -123,6 +123,7 @@ public class KosmosInterface extends Standard {
 					FlounderNetwork.get().closeClient();
 				}
 
+				KosmosConfigs.saveAllConfigs();
 				Framework.requestClose(false);
 			}
 		});
@@ -144,6 +145,7 @@ public class KosmosInterface extends Standard {
 			FlounderNetwork.get().closeClient();
 		}
 
+		KosmosConfigs.fixConfigRefs();
 		KosmosConfigs.saveAllConfigs();
 	}
 
