@@ -39,7 +39,11 @@ public class OverlayUsernames extends ScreenObject {
 
 	@Override
 	public void updateObject() {
-		KosmosWorld.get().getPlayers().keySet().forEach(s -> tags.putIfAbsent(s, new UsernameTag(this, s)));
+		KosmosWorld.get().getPlayers().keySet().forEach(s -> {
+			if (!tags.containsKey(s)) {
+				tags.put(s, new UsernameTag(this, s));
+			}
+		});
 
 		Iterator<String> it = tags.keySet().iterator();
 
@@ -49,7 +53,7 @@ public class OverlayUsernames extends ScreenObject {
 
 			if (e == null) {
 				tags.get(s).deleteObject();
-				it.remove();
+				tags.remove(s);
 			} else {
 				tags.get(s).compute(e);
 			}
@@ -73,25 +77,25 @@ public class OverlayUsernames extends ScreenObject {
 			this.screenspace = new Vector3f();
 
 			this.text = new TextObject(this, new Vector2f(0.5f, 0.5f), username, 1.0f, FlounderFonts.CANDARA, 0.2f, GuiAlign.CENTRE);
-			this.text.setInScreenCoords(false);
+			this.text.setScaleDriver(new VarianceDriver(1.0f));
 			this.text.setColour(new Colour(1.0f, 1.0f, 1.0f, 1.0f));
 			this.text.setBorderColour(new Colour(0.0f, 0.0f, 0.0f));
 			this.text.setBorder(new ConstantDriver(0.175f));
 			this.text.setAlphaDriver(new ConstantDriver(0.75f));
+			this.text.setInScreenCoords(true);
 
 			this.gui = new GuiObject(this, this.getPosition(), new Vector2f(), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "username.png")).create(), 1);
-			this.gui.setInScreenCoords(false);
+			this.gui.setScaleDriver(new VarianceDriver(1.0f));
 			this.gui.setColourOffset(new Colour());
+			this.gui.setInScreenCoords(true);
 		}
 
 		public void compute(Entity entity) {
 			// Get 2D label space.
 			screenspace.set(entity.getPosition());
-			screenspace.y += KosmosPlayer.PLAYER_OFFSET_Y;
-			float distance = Vector3f.getDistance(screenspace, FlounderCamera.get().getCamera().getPosition());
-			boolean shouldRender = distance < 30.0f;
+			screenspace.y += KosmosPlayer.PLAYER_TAG_Y;
+			boolean shouldRender = Vector3f.getDistanceSquared(screenspace, FlounderCamera.get().getCamera().getPosition()) < 1200.0f;
 			Maths.worldToScreenSpace(screenspace, FlounderCamera.get().getCamera().getViewMatrix(), FlounderCamera.get().getCamera().getProjectionMatrix(), this.screenspace);
-			// FlounderLogger.log(screenPosition.x + ", " + screenPosition.y);
 
 			// Updates the alpha, hides if far away.
 			if (text.getColour().a == 1.0f && !shouldRender) {
@@ -104,8 +108,11 @@ public class OverlayUsernames extends ScreenObject {
 				text.getColour().a = 1.0f;
 			}
 
+			VarianceDriver.set(text.getScaleDriver(), Math.min(10.0f / Math.abs(screenspace.z), 1.0f));
+			VarianceDriver.set(gui.getScaleDriver(), Math.min(10.0f / Math.abs(screenspace.z), 1.0f));
+
 			// Updates the text positioning.
-			text.getPosition().set(screenspace.x + (FlounderDisplay.get().getAspectRatio() / 2.0f), -screenspace.y);
+			text.getPosition().set((screenspace.x + 1.0f) / 2.0f, (-screenspace.y + 1.0f) / 2.0f);
 
 			// Update background size.
 			gui.getDimensions().set(text.getMeshSize());
@@ -123,7 +130,10 @@ public class OverlayUsernames extends ScreenObject {
 
 		@Override
 		public void deleteObject() {
-
+			text.setAlphaDriver(new ConstantDriver(0.0f));
+			gui.setAlphaDriver(new ConstantDriver(0.0f));
+			text.deleteObject();
+			gui.deleteObject();
 		}
 	}
 }
