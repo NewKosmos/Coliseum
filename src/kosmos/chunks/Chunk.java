@@ -58,6 +58,8 @@ public class Chunk extends Entity {
 	private Sphere sphere;
 	private boolean loaded;
 
+	private int createDepth;
+
 	public Chunk(ISpatialStructure<Entity> structure, Vector3f position) {
 		super(structure, position, new Vector3f());
 
@@ -68,60 +70,53 @@ public class Chunk extends Entity {
 		this.sphere.update(position, null, Chunk.CHUNK_WORLD_SIZE, sphere);
 		this.loaded = false;
 
+		this.createDepth = 0;
+
 		new ComponentModel(this, 1.0f, chunkMesh.getModel(), biome.getBiome().getTexture(), 0);
 		new ComponentSurface(this, 1.0f, 0.0f, false, false, true);
 		new ComponentChunk(this);
-	}
-
-	/**
-	 * Generates the 6 chunks around this one if they do not exist.
-	 */
-	protected void createChunksAround(Single<Integer> depth) {
-		childrenChunks.removeIf((Chunk child) -> child == null || !FlounderEntities.get().getEntities().contains(child));
-
-		if (childrenChunks.size() == 6) {
-			if (childrenChunks.size() == 6) {
-				return;
-			}
-		}
-
-		for (int i = 0; i < 6; i++) {
-			// These three variables find the positioning for chunks around the parent.
-			float x = this.getPosition().x + (float) ((Math.sqrt(3.0) / 2.0) * DELTA_CHUNK[i][0]);
-			float z = this.getPosition().z + (float) ((3.0 / 4.0) * DELTA_CHUNK[i][1]);
-			Vector3f p = new Vector3f(x, 0.0f, z);
-			Chunk duplicate = null;
-
-			for (Entity entity : FlounderEntities.get().getEntities().getAll()) {
-				if (entity != null && entity instanceof Chunk) {
-					Chunk chunk = (Chunk) entity;
-
-					if (p.equals(chunk.getPosition())) {
-						duplicate = chunk;
-					}
-				}
-			}
-
-			if (duplicate == null) {
-				Chunk chunk = new Chunk(FlounderEntities.get().getEntities(), p);
-				childrenChunks.add(chunk);
-				//	FlounderEntities.getEntities().add(chunk);
-			} else {
-				childrenChunks.add(duplicate);
-			}
-		}
-
-		depth.setSingle(depth.getSingle() - 1);
-
-		if (depth.getSingle() > 0) {
-			childrenChunks.forEach((chunk -> chunk.createChunksAround(depth)));
-		}
 	}
 
 	@Override
 	public void update() {
 		// Updates the entity super class.
 		super.update();
+
+		// Creates the children for this chunk if signaled to.
+		if (createDepth != 0) {
+			// Creates children if it can.
+			if (childrenChunks.size() != 6) {
+				for (int i = 0; i < 6; i++) {
+					// These three variables find the positioning for chunks around the parent.
+					float x = this.getPosition().x + (float) ((Math.sqrt(3.0) / 2.0) * DELTA_CHUNK[i][0]);
+					float z = this.getPosition().z + (float) ((3.0 / 4.0) * DELTA_CHUNK[i][1]);
+					Vector3f p = new Vector3f(x, 0.0f, z);
+					Chunk duplicate = null;
+
+					for (Entity entity : FlounderEntities.get().getEntities().getAll()) {
+						if (entity != null && entity instanceof Chunk) {
+							Chunk chunk = (Chunk) entity;
+
+							if (p.equals(chunk.getPosition())) {
+								duplicate = chunk;
+							}
+						}
+					}
+
+					if (duplicate == null) {
+						childrenChunks.add(new Chunk(FlounderEntities.get().getEntities(), p));
+					} else {
+						childrenChunks.add(duplicate);
+					}
+				}
+			}
+
+			// Tells the children this last create depth - 1.
+			childrenChunks.forEach((chunk -> chunk.createChunksAround(createDepth - 1)));
+
+			// Clears this depth.
+			createDepth = 0;
+		}
 
 		// Updates the mesh.
 		this.chunkMesh.update();
@@ -130,14 +125,36 @@ public class Chunk extends Entity {
 		FlounderBounding.get().addShapeRender(sphere);
 	}
 
-	public static List<Vector3f> generate(Chunk chunk) {
+	/**
+	 * Generates the 6 chunks around this one if they do not exist.
+	 *
+	 * @param depth The radius of chunks to create from this chunk, large radii can cause lag.
+	 */
+	protected void createChunksAround(int depth) {
+		// If beyond the depth, don't create children.
+		if (depth <= 0) {
+			return;
+		}
+
+		// Removes children if they do not exist any more!
+		childrenChunks.removeIf((Chunk child) -> child == null || !FlounderEntities.get().getEntities().contains(child));
+		// Sets the create depth to the provided depth.
+		createDepth = depth;
+	}
+
+	/**
+	 * Generates a array of positions for tiles.
+	 *
+	 * @return The new array of tiles.
+	 */
+	public List<Vector3f> generate() {
 		List<Vector3f> tiles = new ArrayList<>();
 
 		for (int i = 0; i < CHUNK_RADIUS; i++) {
 			int shapesOnEdge = i;
 			double x = 0.0;
 			double z = i;
-			generateTile(chunk, tiles, x, z);
+			generateTile(this, tiles, x, z);
 
 			for (int j = 0; j < 6; j++) {
 				if (j == 5) {
@@ -147,7 +164,7 @@ public class Chunk extends Entity {
 				for (int w = 0; w < shapesOnEdge; w++) {
 					x += DELTA_TILES[j][0];
 					z += DELTA_TILES[j][1];
-					generateTile(chunk, tiles, x, z);
+					generateTile(this, tiles, x, z);
 				}
 			}
 		}

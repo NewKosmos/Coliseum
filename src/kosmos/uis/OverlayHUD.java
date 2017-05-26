@@ -89,16 +89,18 @@ public class OverlayHUD extends ScreenObject {
 
 			this.mapBackgroundTexture.getPosition().set(FlounderDisplay.get().getAspectRatio() - (MAP_SIZE / 2.0f), MAP_SIZE / 2.0f);
 			this.mapViewTexture.getPosition().set(FlounderDisplay.get().getAspectRatio() - (MAP_SIZE / 2.0f), MAP_SIZE / 2.0f);
-			this.mapOverlayTexture.getPosition().set(FlounderDisplay.get().getAspectRatio() - (MAP_SIZE / 2.0f), MAP_SIZE / 2.0f);
-
 			this.mapViewTexture.getPosition().set(
 					(((mapViewTexture.isInScreenCoords() ? FlounderDisplay.get().getAspectRatio() : 1.0f) * mapViewTexture.getPosition().x) + (MAP_SIZE * 0.5f)) - (MAP_SIZE * mapZoomAmount * px) - (MAP_SIZE * 0.5f),
 					(mapViewTexture.getPosition().y + (MAP_SIZE * 0.5f)) - (MAP_SIZE * mapZoomAmount * pz) - (MAP_SIZE * 0.5f)
 			);
+			this.mapOverlayTexture.getPosition().set(FlounderDisplay.get().getAspectRatio() - (MAP_SIZE / 2.0f), MAP_SIZE / 2.0f);
+
 			this.mapViewTexture.getScissor().set(
 					(1.0f - (MAP_SIZE / FlounderDisplay.get().getAspectRatio())) * FlounderDisplay.get().getWidth(), (1.0f - MAP_SIZE) * FlounderDisplay.get().getHeight(),
 					MAP_SIZE * FlounderDisplay.get().getWidth(), MAP_SIZE * FlounderDisplay.get().getHeight()
 			);
+			this.mapBackgroundTexture.getScissor().set(this.mapViewTexture.getScissor());
+			this.mapOverlayTexture.getScissor().set(this.mapViewTexture.getScissor());
 
 			VarianceDriver.set(mapOverlayTexture.getRotationDriver(), -player.getRotation().y + 180.0f);
 		}

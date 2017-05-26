@@ -21,6 +21,7 @@ import flounder.physics.*;
 import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.textures.*;
+import kosmos.*;
 import kosmos.chunks.map.*;
 
 import java.util.*;
@@ -36,6 +37,8 @@ public class KosmosChunks extends Module {
 	private Vector3f lastPlayerPos;
 	private Chunk currentChunk;
 
+	private int chunkDistance;
+
 	public KosmosChunks() {
 		super(FlounderEvents.class, FlounderEntities.class, FlounderModels.class, FlounderTextures.class);
 	}
@@ -49,6 +52,8 @@ public class KosmosChunks extends Module {
 
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
 		this.currentChunk = null;
+
+		this.chunkDistance = KosmosConfigs.CHUNK_DISTANCE.getInteger();
 	}
 
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)
@@ -125,9 +130,6 @@ public class KosmosChunks extends Module {
 	 */
 	public void setCurrent(Chunk currentChunk) {
 		if (currentChunk != null && this.currentChunk != currentChunk) {
-			// Creates the children chunks for the new current chunk.
-			currentChunk.createChunksAround(new Single<>(2)); // TODO: Make work?
-
 			// Removes any old chunks that are out of range.
 			Iterator<Entity> it = FlounderEntities.get().getEntities().getAll().iterator();
 
@@ -148,6 +150,9 @@ public class KosmosChunks extends Module {
 
 			// The current instance chunk is what was calculated for in this function.
 			this.currentChunk = currentChunk;
+
+			// Creates chunks around the new current chunk for a range, does not include the current chunk.
+			currentChunk.createChunksAround(chunkDistance);
 		}
 	}
 
@@ -177,6 +182,14 @@ public class KosmosChunks extends Module {
 			currentChunk = null;
 			lastPlayerPos.set(0.0f, 0.0f, 0.0f);
 		}
+	}
+
+	public int getChunkDistance() {
+		return chunkDistance;
+	}
+
+	public void setChunkDistance(int chunkDistance) {
+		this.chunkDistance = chunkDistance;
 	}
 
 	@Handler.Function(Handler.FLAG_DISPOSE)

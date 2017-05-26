@@ -65,6 +65,7 @@ public class OverlayMap extends ScreenObject {
 					(int) (VIEW_POSITION_X - (VIEW_SIZE_X / FlounderDisplay.get().getAspectRatio() / 2.0f)) * FlounderDisplay.get().getWidth(), (VIEW_POSITION_Y - (VIEW_SIZE_X / 2.0f)) * FlounderDisplay.get().getHeight(),
 					VIEW_SIZE_X * FlounderDisplay.get().getWidth(), VIEW_SIZE_Y * FlounderDisplay.get().getHeight()
 			);
+			this.backgroundView.getScissor().set(this.mapViewTexture.getScissor());
 
 			this.playerPosition.getPosition().set(
 					(((mapViewTexture.isInScreenCoords() ? FlounderDisplay.get().getAspectRatio() : 1.0f) * VIEW_POSITION_X) - (VIEW_SIZE_X * 0.5f)) + (VIEW_SIZE_X * px) + (VIEW_SIZE_X * 0.5f),

@@ -38,7 +38,7 @@ public class MeshBuildRequest implements RequestResource {
 		this.modelBase = modelBase;
 
 		// Generates all tile positions for this chunk. Needs to be run on main for some reason...
-		this.positions = Chunk.generate(chunkMesh.chunk);
+		this.positions = chunkMesh.chunk.generate();
 	}
 
 	@Override
