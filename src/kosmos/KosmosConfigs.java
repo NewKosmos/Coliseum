@@ -11,7 +11,6 @@ package kosmos;
 
 import flounder.devices.*;
 import flounder.framework.*;
-import flounder.helpers.*;
 import flounder.maths.*;
 import flounder.networking.*;
 import flounder.parsing.*;
@@ -33,7 +32,6 @@ public class KosmosConfigs {
 	// Main configs.
 	private static final Config CONFIG_MAIN = new Config(new MyFile(Framework.getRoamingFolder("kosmos"), "configs", "settings.conf"));
 	public static final ConfigData PROFILER_ENABLED = CONFIG_MAIN.getData(ConfigSection.DEBUG, "profilerEnabled", false, () -> FlounderProfiler.get().isOpen());
-	public static final ConfigData WIREFRAME_ENABLED = CONFIG_MAIN.getData(ConfigSection.DEBUG, "wireframeEnabled", false, () -> FlounderOpenGL.get().isInWireframe());
 
 	public static final ConfigData MUSIC_ENABLED = CONFIG_MAIN.getData(ConfigSection.AUDIO, "musicEnabled", true);
 	public static final ConfigData MUSIC_VOLUME = CONFIG_MAIN.getData(ConfigSection.AUDIO, "musicVolume", 0.5f);
@@ -59,7 +57,7 @@ public class KosmosConfigs {
 	public static final ConfigData SHADOWMAP_DARKNESS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapDarkness", 0.4f, () -> FlounderShadows.get().getShadowDarkness());
 	public static final ConfigData SHADOWMAP_UNLIMITED = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapUnlimited", true, () -> FlounderShadows.get().isRenderUnlimited());
 
-	public static final ConfigData CHUNK_DISTANCE = CONFIG_MAIN.getData(ConfigSection.GENERAL, "chunkDistance", 3, () -> KosmosChunks.get().getChunkDistance());
+	public static final ConfigData CHUNK_DISTANCE = CONFIG_MAIN.getData(ConfigSection.GENERAL, "chunkDistance", 4, () -> KosmosChunks.get().getChunkDistance());
 
 	public static final ConfigData POST_EFFECTS_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "effectsEnabled", true, () -> KosmosPost.get().isEffectsEnabled());
 	public static final ConfigData POST_BLOOM_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "bloomEnabled", true, () -> KosmosPost.get().isBloomEnabled());

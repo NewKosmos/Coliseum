@@ -13,11 +13,11 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.events.*;
 import flounder.framework.*;
-import flounder.helpers.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.noise.*;
 import flounder.physics.*;
+import flounder.physics.bounding.*;
 import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.textures.*;
@@ -47,7 +47,7 @@ public class KosmosChunks extends Module {
 	public void init() {
 		this.noise = new PerlinNoise(-1);
 		this.mapGenerator = new MapGenerator();
-		this.chunkRange = new Sphere(40.0f); // 3.0f * Chunk.CHUNK_WORLD_SIZE
+		this.chunkRange = new Sphere(40.0f);
 		this.modelHexagon = ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "hexagon.obj")).create();
 
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
@@ -65,6 +65,7 @@ public class KosmosChunks extends Module {
 			Chunk playerChunk = null;
 
 			if (!playerPos.equals(lastPlayerPos)) {
+				chunkRange.setRadius(10.0f + ((1 + chunkDistance) * Chunk.CHUNK_WORLD_SIZE));
 				chunkRange.update(playerPos, null, 1.0f, chunkRange);
 			}
 
@@ -92,7 +93,7 @@ public class KosmosChunks extends Module {
 		}
 
 		// Renders the chunks range.
-		// FlounderBounding.addShapeRender(chunkRange);
+		FlounderBounding.get().addShapeRender(chunkRange);
 	}
 
 	@Handler.Function(Handler.FLAG_PROFILE)

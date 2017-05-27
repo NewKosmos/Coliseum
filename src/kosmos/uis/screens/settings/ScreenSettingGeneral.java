@@ -22,7 +22,7 @@ public class ScreenSettingGeneral extends ScreenObject {
 		super.setInScreenCoords(false);
 
 		// Slider Chunk Distance.
-		GuiSliderText sliderChunkDistance = new GuiSliderText(this, new Vector2f(0.5f, 0.20f), "Chunk Distance: ", 1.0f, 9.0f, KosmosChunks.get().getChunkDistance(), GuiAlign.CENTRE);
+		GuiSliderText sliderChunkDistance = new GuiSliderText(this, new Vector2f(0.5f, 0.20f), "Chunk Distance: ", 1.0f, 16.0f, KosmosChunks.get().getChunkDistance(), GuiAlign.CENTRE);
 		FlounderEvents.get().addEvent(new EventChange<Integer>(KosmosChunks.get()::getChunkDistance) {
 			@Override
 			public void onEvent(Integer newValue) {

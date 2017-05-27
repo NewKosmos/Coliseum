@@ -11,7 +11,6 @@ package kosmos.chunks;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.helpers.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
@@ -120,8 +119,10 @@ public class Chunk extends Entity {
 		// Updates the mesh.
 		this.chunkMesh.update();
 
-		// Adds this mesh AABB to the bounding render pool.
-		FlounderBounding.get().addShapeRender(sphere);
+		// Adds this mesh to the bounding render pool.
+		if (chunkMesh.getModel() != null && chunkMesh.getModel().isLoaded()) {
+			FlounderBounding.get().addShapeRender(sphere);
+		}
 	}
 
 	/**

@@ -16,7 +16,6 @@ import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
-import flounder.profiling.*;
 import kosmos.camera.*;
 import kosmos.chunks.*;
 import kosmos.entities.components.*;
@@ -33,7 +32,7 @@ public interface ICommand {
 		H(new ICommand() {
 			@Override
 			public String commandPrefix() {
-				return "h";
+				return "help";
 			}
 
 			@Override
@@ -118,7 +117,7 @@ public interface ICommand {
 
 			@Override
 			public String commandDescription() {
-				return "Changes the time offset of the framework (seconds).";
+				return "Adds to the time offset of the framework (seconds).";
 			}
 
 			@Override
@@ -126,52 +125,20 @@ public interface ICommand {
 				// Removes /time from the string.
 				String string = fullCommand.substring(5, fullCommand.length()).trim();
 
-				if (FlounderNetwork.get().getSocketClient() == null || string.isEmpty()) {
+				if (FlounderNetwork.get().getSocketClient() != null || string.isEmpty()) {
 					String log = "Could not change the time offset of the framework.";
 					FlounderLogger.get().log(log);
 					OverlayChat.addText(log, new Colour(0.8f, 0.1f, 0.0f));
 					return;
 				}
 
-				float timeOffset = Float.parseFloat(string);
+				float timeOffset = Math.abs(Float.parseFloat(string));
 
-				String log = "Changing the time offset of the framework to: " + timeOffset;
+				String log = "Adding " + timeOffset + " to the time offset of the framework.";
 				FlounderLogger.get().log(log);
 				OverlayChat.addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
-				Framework.setTimeOffset(timeOffset);
-			}
-		}),
-		PROFILER(new ICommand() {
-			@Override
-			public String commandPrefix() {
-				return "profiler";
-			}
-
-			@Override
-			public String commandDescription() {
-				return "Opens or closes the developer profiler.";
-			}
-
-			@Override
-			public void runCommand(String fullCommand) {
-				// Removes /profiler from the string.
-				String string = fullCommand.substring(9, fullCommand.length()).trim();
-
-				if (string.isEmpty()) {
-					String log = "Could not open/close the developer profiler.";
-					FlounderLogger.get().log(log);
-					OverlayChat.addText(log, new Colour(0.8f, 0.1f, 0.0f));
-					return;
-				}
-
-				boolean profilerOpen = Boolean.parseBoolean(string);
-
-				String log = "Changing the developer profiler to: " + profilerOpen;
-				FlounderLogger.get().log(log);
-				OverlayChat.addText(log, new Colour(0.1f, 0.8f, 0.0f));
-
-				FlounderProfiler.get().toggle(profilerOpen);
+				Framework.setTimeOffset(Framework.getTimeOffset() + timeOffset);
 			}
 		}),
 		NOCLIP(new ICommand() {

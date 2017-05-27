@@ -10,7 +10,6 @@
 package kosmos.network.packets;
 
 import flounder.framework.*;
-import flounder.logger.*;
 import flounder.networking.*;
 import kosmos.chunks.*;
 

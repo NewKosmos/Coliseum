@@ -9,10 +9,8 @@
 
 package kosmos.network.packets;
 
-import flounder.framework.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
-import kosmos.chunks.*;
 import kosmos.world.*;
 
 import java.net.*;

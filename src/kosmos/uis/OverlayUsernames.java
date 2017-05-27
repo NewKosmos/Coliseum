@@ -10,12 +10,9 @@
 package kosmos.uis;
 
 import flounder.camera.*;
-import flounder.devices.*;
 import flounder.entities.*;
 import flounder.fonts.*;
 import flounder.guis.*;
-import flounder.helpers.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;

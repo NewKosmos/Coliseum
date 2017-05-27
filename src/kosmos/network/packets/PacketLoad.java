@@ -9,10 +9,8 @@
 
 package kosmos.network.packets;
 
-import flounder.entities.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
-import kosmos.chunks.*;
 import kosmos.world.*;
 
 import java.net.*;
@@ -60,9 +58,9 @@ public class PacketLoad extends Packet {
 
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
-	//	KosmosWorld.get().getEntityPlayer().getPosition().set(x, y, z);
-	//	KosmosChunks.get().clear(false);
-	//	KosmosChunks.get().setCurrent(new Chunk(FlounderEntities.get().getEntities(), new Vector3f(chunkX, 0.0f, chunkZ)));
+		//	KosmosWorld.get().getEntityPlayer().getPosition().set(x, y, z);
+		//	KosmosChunks.get().clear(false);
+		//	KosmosChunks.get().setCurrent(new Chunk(FlounderEntities.get().getEntities(), new Vector3f(chunkX, 0.0f, chunkZ)));
 		KosmosWorld.get().generateWorld(seed, new Vector3f(x, y, z), new Vector3f(chunkX, 0.0f, chunkZ));
 	}
 

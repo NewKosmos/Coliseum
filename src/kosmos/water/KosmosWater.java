@@ -17,7 +17,6 @@ import kosmos.*;
 
 public class KosmosWater extends Module {
 	private Water water;
-	private float waveTime;
 
 	private float colourIntensity; // 0 being 100% reflective, 1 disables reflections.
 	private boolean enableReflections;
@@ -30,8 +29,6 @@ public class KosmosWater extends Module {
 
 	@Handler.Function(Handler.FLAG_INIT)
 	public void init() {
-		this.waveTime = 0.0f;
-
 		this.colourIntensity = KosmosConfigs.WATER_COLOUR_INTENSITY.getFloat();
 		this.enableReflections = KosmosConfigs.WATER_REFLECTION_ENABLED.getBoolean();
 		this.reflectionQuality = KosmosConfigs.WATER_REFLECTION_QUALITY.getFloat();
@@ -45,9 +42,6 @@ public class KosmosWater extends Module {
 		}
 
 		water.update();
-		waveTime += Framework.getDelta();
-		waveTime %= Water.WAVE_SPEED;
-		FlounderBounding.get().addShapeRender(water.getAABB());
 	}
 
 	public void generateWater() {
@@ -65,10 +59,6 @@ public class KosmosWater extends Module {
 
 	public Water getWater() {
 		return this.water;
-	}
-
-	public float getWaveTime() {
-		return this.waveTime;
 	}
 
 	public float getColourIntensity() {

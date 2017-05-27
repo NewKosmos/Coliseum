@@ -143,9 +143,9 @@ public class MapGenerator extends Thread {
 
 		try {
 			// Save the map texture.
-		//	ImageIO.write(imageIsland, "png", outputIsland);
-		//	ImageIO.write(imageHeight, "png", outputHeight);
-		//	ImageIO.write(imageMoisture, "png", outputMoisture);
+			//	ImageIO.write(imageIsland, "png", outputIsland);
+			//	ImageIO.write(imageHeight, "png", outputHeight);
+			//	ImageIO.write(imageMoisture, "png", outputMoisture);
 			ImageIO.write(imageBiome, "png", outputBiome);
 
 			// Remove old map texture.

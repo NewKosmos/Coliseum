@@ -168,6 +168,7 @@ public class MeshBuildRequest implements RequestResource {
 
 			if (componentModel != null) {
 				componentModel.setModel(chunkMesh.chunkModel);
+				componentModel.setRenderCollider(false);
 			} else {
 				FlounderLogger.get().error(chunkMesh.chunk + " does not have a model component! Model cannot be set.");
 			}

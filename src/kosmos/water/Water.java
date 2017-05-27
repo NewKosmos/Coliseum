@@ -9,6 +9,7 @@
 
 package kosmos.water;
 
+import flounder.framework.*;
 import flounder.loaders.*;
 import flounder.maths.*;
 import flounder.maths.matrices.*;
@@ -23,15 +24,17 @@ import java.util.*;
  * Represents the physical mesh for all the water at a certain height in the scene.
  */
 public class Water {
-	protected static final float WAVE_SPEED = 15.0f;
-	protected static final float WAVE_LENGTH = 5.0f;
-	protected static final float AMPLITUDE = 0.200f;
+	public static final float WAVE_SPEED = 15.0f;
+	public static final float WAVE_LENGTH = 5.0f;
+	public static final float AMPLITUDE = 0.200f;
 
-	protected static final double SQUARE_SIZE = Math.sqrt(3.0);
-	protected static final int VERTEX_COUNT = 132;
+	public static final Colour WATER_COLOUR = new Colour(0.0824f, 0.396f, 0.753f);
 
-	protected static final float SHINE_DAMPER = 1.0f;
-	protected static final float REFLECTIVITY = 0.0f;
+	public static final double SQUARE_SIZE = Math.sqrt(3.0);
+	public static final int VERTEX_COUNT = 142;
+
+	public static final float SHINE_DAMPER = 1.0f;
+	public static final float REFLECTIVITY = 0.0f;
 
 	private int vao;
 	private int vertexCount;
@@ -59,7 +62,7 @@ public class Water {
 		this.loaded = false;
 
 		this.aabb = new AABB(new Vector3f(0.0f, -1.0f, 0.0f), new Vector3f(0.0f, 1.0f, 0.0f));
-		this.colour = new Colour(0.0824f, 0.396f, 0.753f);
+		this.colour = new Colour(WATER_COLOUR);
 
 		this.position = position;
 		this.rotation = rotation;
@@ -205,7 +208,7 @@ public class Water {
 	}
 
 	public float getHeight(float x, float z) {
-		float waveTime = KosmosWater.get().getWaveTime() / WAVE_SPEED;
+		float waveTime = Framework.getTimeSec() / WAVE_SPEED;
 
 		final double val1 = 0.1;
 		final double val2 = 0.3;

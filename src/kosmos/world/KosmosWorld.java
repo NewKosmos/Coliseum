@@ -151,8 +151,8 @@ public class KosmosWorld extends Module {
 			Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.get().getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.get().getLightPosition()).normalize();
 			Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.get().getFog().getFogColour());
 			Colour.interpolate(FlounderSkybox.get().getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.get().getFog().getFogColour());
-			FlounderSkybox.get().getFog().setFogDensity(0.023f + ((1.0f - getShadowFactor()) * 0.016f));
-			FlounderSkybox.get().getFog().setFogGradient(2.80f - ((1.0f - getShadowFactor()) * 0.5f));
+			FlounderSkybox.get().getFog().setFogDensity(0.006f + ((16 - KosmosChunks.get().getChunkDistance()) * 0.001f) + ((1.0f - getShadowFactor()) * 0.006f));
+			FlounderSkybox.get().getFog().setFogGradient(2.80f - ((1.0f - getShadowFactor()) * 0.4f));
 			FlounderSkybox.get().setBlendFactor(starIntensity());
 			FlounderShadows.get().setShadowBoxOffset(10.0f);
 			FlounderShadows.get().setShadowBoxDistance(35.0f);
