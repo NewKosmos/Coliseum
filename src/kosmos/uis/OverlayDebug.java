@@ -28,6 +28,7 @@ public class OverlayDebug extends ScreenObject {
 	private TextObject positionText;
 	private TextObject timeText;
 	private TextObject seedText;
+	private TextObject moistureText;
 	private TextObject biomeText;
 	private boolean updateText;
 
@@ -40,7 +41,8 @@ public class OverlayDebug extends ScreenObject {
 		this.positionText = createStatus("POSITION: [0, 0, 0]", 0.07f);
 		this.timeText = createStatus("TIME: 0", 0.10f);
 		this.seedText = createStatus("SEED: 0", 0.13f);
-		this.biomeText = createStatus("BIOME: NULL", 0.16f);
+		this.moistureText = createStatus("MOISTURE: 1", 0.16f);
+		this.biomeText = createStatus("BIOME: NULL", 0.19f);
 
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -72,6 +74,7 @@ public class OverlayDebug extends ScreenObject {
 			positionText.setText("POSITION: [" + (FlounderCamera.get().getPlayer() == null ? "NULL" : Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().x, 1) + ", " + Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().y, 1) + ", " + Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().z, 1) + "]"));
 			timeText.setText("TIME: " + Maths.roundToPlace(KosmosWorld.get().getDayFactor(), 3));
 			seedText.setText("SEED: " + KosmosChunks.get().getNoise().getSeed());
+			moistureText.setText("MOISTURE: " + (FlounderCamera.get().getPlayer() == null ? "1" : Maths.roundToPlace(Chunk.getMoistureMap(FlounderCamera.get().getPlayer().getPosition().x, FlounderCamera.get().getPlayer().getPosition().z), 2)));
 			biomeText.setText("BIOME: " + (KosmosChunks.get().getCurrent() == null ? "NULL" : KosmosChunks.get().getCurrent().getBiome().name()));
 			updateText = false;
 		}

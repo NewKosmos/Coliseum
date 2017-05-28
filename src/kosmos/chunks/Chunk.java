@@ -340,52 +340,52 @@ public class Chunk extends Entity {
 		} else if (height <= 0.25f) {
 			if (moisture <= 0.16f) {
 				// Subtropical Desert.
-				return IBiome.Biomes.DESERT;
+				return IBiome.Biomes.SUBTROPICAL_DESERT;
 			} else if (moisture <= 0.33f) {
 				// Grassland.
-				return IBiome.Biomes.GRASS;
+				return IBiome.Biomes.GRASSLAND;
 			} else if (moisture <= 0.66f) {
 				// Tropical Seasonal Forest.
-				return IBiome.Biomes.GRASS;
+				return IBiome.Biomes.TROPICAL_SEASONAL_FOREST;
 			} else if (moisture <= 1.0f) {
 				// Temperate Rain Forest.
-				return IBiome.Biomes.GRASS;
+				return IBiome.Biomes.TEMPERATE_RAIN_FOREST;
 			}
 		} else if (height <= 0.5f) {
 			if (moisture <= 0.16f) {
 				// Temperate Desert.
-				return IBiome.Biomes.DESERT;
+				return IBiome.Biomes.TEMPERATE_DESERT;
 			} else if (moisture <= 0.5f) {
 				// Grassland.
-				return IBiome.Biomes.GRASS;
+				return IBiome.Biomes.GRASSLAND;
 			} else if (moisture <= 0.83f) {
 				// Temperate Deciduous Forest.
-				return IBiome.Biomes.GRASS;
+				return IBiome.Biomes.TEMPERATE_DECIDUOUS_FOREST;
 			} else if (moisture <= 1.0f) {
 				// Temperate Rain Forest.
-				return IBiome.Biomes.GRASS;
+				return IBiome.Biomes.TEMPERATE_RAIN_FOREST;
 			}
 		} else if (height <= 0.75f) {
 			if (moisture <= 0.33f) {
 				// Temperate Desert.
-				return IBiome.Biomes.DESERT;
+				return IBiome.Biomes.TEMPERATE_DESERT;
 			} else if (moisture <= 0.66f) {
 				// Shrubland.
-				return IBiome.Biomes.GRASS;
+				return IBiome.Biomes.SHRUBLAND;
 			} else if (moisture <= 1.0f) {
 				// Taiga.
-				return IBiome.Biomes.SNOW;
+				return IBiome.Biomes.TAIGA;
 			}
 		} else if (height <= 1.0f) {
 			if (moisture <= 0.16f) {
 				// Scorched.
-				return IBiome.Biomes.STONE;
+				return IBiome.Biomes.SCORCHED;
 			} else if (moisture <= 0.33f) {
 				// Bare.
-				return IBiome.Biomes.STONE;
+				return IBiome.Biomes.BARE;
 			} else if (moisture <= 0.5f) {
 				// Tundra.
-				return IBiome.Biomes.SNOW;
+				return IBiome.Biomes.TUNDRA;
 			} else if (moisture <= 1.0f) {
 				// Snow.
 				return IBiome.Biomes.SNOW;

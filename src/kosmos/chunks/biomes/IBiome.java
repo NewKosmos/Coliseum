@@ -24,7 +24,19 @@ import kosmos.materials.*;
 public abstract class IBiome {
 	public enum Biomes {
 		OCEAN(new BiomeOcean()),
-		GRASS(new BiomeGrass()), DESERT(new BiomeDesert()), STONE(new BiomeStone()), SNOW(new BiomeSnow());
+		BARE(new BiomeBare()),
+		GRASSLAND(new BiomeGrassland()),
+		SCORCHED(new BiomeScorched()),
+		SHRUBLAND(new BiomeShrubland()),
+		SNOW(new BiomeSnow()),
+		SUBTROPICAL_DESERT(new BiomeSubtropicalDesert()),
+		TAIGA(new BiomeTaiga()),
+		TEMPERATE_DECIDUOUS_FOREST(new BiomeTemperateDeciduousForest()),
+		TEMPERATE_DESERT(new BiomeTemperateDesert()),
+		TEMPERATE_RAIN_FOREST(new BiomeTemperateRainForest()),
+		TROPICAL_RAIN_FOREST(new BiomeTropicalRainForest()),
+		TROPICAL_SEASONAL_FOREST(new BiomeTropicalSeasonalForest()),
+		TUNDRA(new BiomeTundra());
 
 		private IBiome biome;
 
@@ -71,7 +83,7 @@ public abstract class IBiome {
 			EntitySpawn entitySpawn = getEntitySpawns()[(int) spawn];
 
 			if (entitySpawn != null && spawn - (int) spawn <= entitySpawn.spawnChance) {
-				Entity entity = entitySpawn.create(FlounderEntities.get().getEntities(), new Vector3f(tilePosition.x, entitySpawn.heightOffset + tilePosition.y * 0.5f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
+				Entity entity = entitySpawn.create.create(FlounderEntities.get().getEntities(), new Vector3f(tilePosition.x, entitySpawn.heightOffset + tilePosition.y * 0.5f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
 
 				if (entity != null) {
 					new ComponentChild(entity, chunk);
@@ -92,32 +104,4 @@ public abstract class IBiome {
 	public abstract ParticleType getWeatherParticle();
 
 	public abstract IMaterial getMaterial();
-
-	/**
-	 * Gets the average day temp (celsius).
-	 *
-	 * @return The average night day.
-	 */
-	public abstract float getTempDay();
-
-	/**
-	 * Gets the average night temp (celsius).
-	 *
-	 * @return The average night temp.
-	 */
-	public abstract float getTempNight();
-
-	/**
-	 * Gets the average humidity %.
-	 *
-	 * @return The average humidity.
-	 */
-	public abstract float getHumidity();
-
-	/**
-	 * Gets the wind speed % (0-1).
-	 *
-	 * @return The average wind speed.
-	 */
-	public abstract float getWindSpeed();
 }
