@@ -22,7 +22,7 @@ public class BiomeShrubland extends IBiome {
 			new EntitySpawn(InstanceBush::new, 1.0f, 0.625f),
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "shrubland.png")).clampEdges().create();
-	private static final Colour COLOUR = new Colour(13.0f, 120.0f, 7.0f, true);
+	private static final Colour COLOUR = new Colour(0.7686f, 0.8000f, 0.7333f);
 	private static final ParticleType PARTICLE = new ParticleType("rain", TextureFactory.newBuilder().setFile(new MyFile(FlounderParticles.PARTICLES_FOLDER, "rainParticle.png")).setNumberOfRows(4).create(), 4.75f, 0.15f);
 
 	public BiomeShrubland() {

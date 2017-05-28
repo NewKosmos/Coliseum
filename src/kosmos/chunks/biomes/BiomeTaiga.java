@@ -24,7 +24,7 @@ public class BiomeTaiga extends IBiome {
 			new EntitySpawn(InstanceTreeDeadSnow::new, 0.4f, 0.375f),
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "taiga.png")).clampEdges().create();
-	private static final Colour COLOUR = new Colour(13.0f, 120.0f, 7.0f, true);
+	private static final Colour COLOUR = new Colour(0.8000f, 0.8314f, 0.7333f);
 	private static final ParticleType PARTICLE = new ParticleType("snow", TextureFactory.newBuilder().setFile(new MyFile(FlounderParticles.PARTICLES_FOLDER, "snowParticle.png")).setNumberOfRows(4).create(), 4.75f, 0.15f);
 
 	public BiomeTaiga() {

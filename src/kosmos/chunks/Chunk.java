@@ -348,8 +348,8 @@ public class Chunk extends Entity {
 				// Tropical Seasonal Forest.
 				return IBiome.Biomes.TROPICAL_SEASONAL_FOREST;
 			} else if (moisture <= 1.0f) {
-				// Temperate Rain Forest.
-				return IBiome.Biomes.TEMPERATE_RAIN_FOREST;
+				// Tropical Rain Forest.
+				return IBiome.Biomes.TROPICAL_RAIN_FOREST;
 			}
 		} else if (height <= 0.5f) {
 			if (moisture <= 0.16f) {
@@ -393,73 +393,6 @@ public class Chunk extends Entity {
 		}
 
 		return IBiome.Biomes.OCEAN;
-	}
-
-	public static Colour getBiomeColour(float positionX, float positionZ) {
-		float height = getHeightMap(positionX, positionZ);
-		float moisture = getMoistureMap(positionX, positionZ);
-
-		Colour colour = new Colour(0.0f, 0.0f, 0.0f);
-
-		if (height <= 0.125f) {
-			// Ocean.
-			colour.set(0.0824f, 0.3960f, 0.7530f);
-		} else if (height <= 0.25f) {
-			if (moisture <= 0.16f) {
-				// Subtropical Desert.
-				colour.set(0.914f, 0.8275f, 0.7804f);
-			} else if (moisture <= 0.33f) {
-				// Grassland.
-				colour.set(0.7686f, 0.8314f, 0.6666f);
-			} else if (moisture <= 0.66f) {
-				// Tropical Seasonal Forest.
-				colour.set(0.6627f, 0.8000f, 0.6431f);
-			} else if (moisture <= 1.0f) {
-				// Temperate Rain Forest.
-				colour.set(0.6431f, 0.7686f, 0.6588f);
-			}
-		} else if (height <= 0.5f) {
-			if (moisture <= 0.16f) {
-				// Temperate Desert.
-				colour.set(0.8941f, 0.9098f, 0.7922f);
-			} else if (moisture <= 0.5f) {
-				// Grassland.
-				colour.set(0.7686f, 0.8314f, 0.6666f);
-			} else if (moisture <= 0.83f) {
-				// Temperate Deciduous Forest.
-				colour.set(0.7059f, 0.7882f, 0.6627f);
-			} else if (moisture <= 1.0f) {
-				// Temperate Rain Forest.
-				colour.set(0.6431f, 0.7686f, 0.6588f);
-			}
-		} else if (height <= 0.75f) {
-			if (moisture <= 0.33f) {
-				// Temperate Desert.
-				colour.set(0.8941f, 0.9098f, 0.7922f);
-			} else if (moisture <= 0.66f) {
-				// Shrubland.
-				colour.set(0.7686f, 0.8000f, 0.7333f);
-			} else if (moisture <= 1.0f) {
-				// Taiga.
-				colour.set(0.8000f, 0.8314f, 0.7333f);
-			}
-		} else if (height <= 1.0f) {
-			if (moisture <= 0.16f) {
-				// Scorched.
-				colour.set(0.6000f, 0.6000f, 0.6000f);
-			} else if (moisture <= 0.33f) {
-				// Bare.
-				colour.set(0.7333f, 0.7333f, 0.7333f);
-			} else if (moisture <= 0.5f) {
-				// Tundra.
-				colour.set(0.8666f, 0.8666f, 0.7333f);
-			} else if (moisture <= 1.0f) {
-				// Snow.
-				colour.set(1.0000f, 1.0000f, 1.0000f);
-			}
-		}
-
-		return colour;
 	}
 
 	public List<Chunk> getChildrenChunks() {

@@ -22,7 +22,7 @@ public class BiomeScorched extends IBiome {
 			new EntitySpawn(InstanceGrassTuft1::new, 1.0f, 0.42f),
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "scorched.png")).clampEdges().create();
-	private static final Colour COLOUR = new Colour(218.0f, 148.0f, 77.0f, true);
+	private static final Colour COLOUR = new Colour(0.6000f, 0.6000f, 0.6000f);
 	private static final ParticleType PARTICLE = null;
 
 	public BiomeScorched() {

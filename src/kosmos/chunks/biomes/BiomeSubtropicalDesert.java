@@ -24,7 +24,7 @@ public class BiomeSubtropicalDesert extends IBiome {
 			new EntitySpawn(InstanceTreePalm::new, 1.0f, 0.4375f),
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "subtropicalDesert.png")).clampEdges().create();
-	private static final Colour COLOUR = new Colour(255.0f, 170.0f, 110.0f, true);
+	private static final Colour COLOUR = new Colour(0.914f, 0.8275f, 0.7804f);
 	private static final ParticleType PARTICLE = null;
 
 	public BiomeSubtropicalDesert() {

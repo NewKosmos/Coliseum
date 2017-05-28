@@ -77,7 +77,7 @@ public class MapGenerator extends Thread {
 				//Colour colourMoisture = Colour.interpolate(new Colour(1.0f, 0.0f, 0.0f), new Colour(0.0f, 0.0f, 1.0f), factorMoisture, null);
 				//imageMoisture.setRGB(x, y, (((int) (255.0f * colourMoisture.r) << 8) + ((int) (255.0f * colourMoisture.g)) << 8) + ((int) (255.0f * colourMoisture.b)));
 
-				Colour colourBiome = Chunk.getBiomeColour(worldX, worldZ);
+				Colour colourBiome = Chunk.getBiomeMap(worldX, worldZ).getBiome().getColour();
 				imageBiome.setRGB(x, y, (((int) (255.0f * colourBiome.r) << 8) + ((int) (255.0f * colourBiome.g)) << 8) + ((int) (255.0f * colourBiome.b)));
 			}
 		}
