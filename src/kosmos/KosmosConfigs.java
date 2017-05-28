@@ -71,7 +71,7 @@ public class KosmosConfigs {
 	public static final ConfigData CAMERA_FOV = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraFOV", 45.0f); // Reference set in camera.
 	public static final ConfigData CAMERA_SENSITIVITY = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraSensitivity", 1.0f); // Reference set in camera.
 	public static final ConfigData CAMERA_REANGLE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraReangle", GLFW_MOUSE_BUTTON_RIGHT); // Reference set in camera.
-	public static final ConfigData CAMERA_MOUSE_LOCKED = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraMouseLocked", true); // , FlounderMouse.get().isCursorDisabled
+	public static final ConfigData CAMERA_MOUSE_LOCKED = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraMouseLocked", true); // Reference set in camera.
 
 	public static final ConfigData CLIENT_USERNAME = CONFIG_MAIN.getData(ConfigSection.CLIENT, "username", "USERNAME" + ((int) (Math.random() * 10000)), () -> FlounderNetwork.get().getUsername());
 
@@ -82,7 +82,7 @@ public class KosmosConfigs {
 
 	// Save0 configs.
 	private static final Config CONFIG_SAVE0 = new Config(new MyFile(Framework.getRoamingFolder("kosmos"), "saves", "save0.conf"));
-	public static final ConfigData SAVE_SEED = CONFIG_SAVE0.getData(ConfigSection.WORLD, "saveSeed", (int) Maths.randomInRange(1.0, 1000000.0)); // , () -> KosmosChunks.get().getNoise().getSeed()
+	public static final ConfigData SAVE_SEED = CONFIG_SAVE0.getData(ConfigSection.WORLD, "saveSeed", (int) Maths.randomInRange(1.0, 1000000.0)); // Reference set by client/server.
 	public static final ConfigData SAVE_PLAYER_X = CONFIG_SAVE0.getData(ConfigSection.WORLD, "playerX", 0.0f); // Reference set in world.
 	public static final ConfigData SAVE_PLAYER_Y = CONFIG_SAVE0.getData(ConfigSection.WORLD, "playerY", 0.0f); // Reference set in world.
 	public static final ConfigData SAVE_PLAYER_Z = CONFIG_SAVE0.getData(ConfigSection.WORLD, "playerZ", 0.0f); // Reference set in world.
