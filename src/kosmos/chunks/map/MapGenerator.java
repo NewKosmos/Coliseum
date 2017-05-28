@@ -77,48 +77,7 @@ public class MapGenerator extends Thread {
 				//Colour colourMoisture = Colour.interpolate(new Colour(1.0f, 0.0f, 0.0f), new Colour(0.0f, 0.0f, 1.0f), factorMoisture, null);
 				//imageMoisture.setRGB(x, y, (((int) (255.0f * colourMoisture.r) << 8) + ((int) (255.0f * colourMoisture.g)) << 8) + ((int) (255.0f * colourMoisture.b)));
 
-				Colour colourBiome = new Colour(0.0f, 0.0f, 0.0f);
-				if (factorHeight <= 0.125f) {
-					colourBiome.set(0.0824f, 0.3960f, 0.7530f); // Ocean.
-				} else if (factorHeight <= 0.25f) {
-					if (factorMoisture <= 0.16f) {
-						colourBiome.set(0.914f, 0.8275f, 0.7804f); // Subtropical Desert.
-					} else if (factorMoisture <= 0.33f) {
-						colourBiome.set(0.7686f, 0.8314f, 0.6666f); // Grassland.
-					} else if (factorMoisture <= 0.66f) {
-						colourBiome.set(0.6627f, 0.8000f, 0.6431f); // Tropical Seasonal Forest.
-					} else if (factorMoisture <= 1.0f) {
-						colourBiome.set(0.6431f, 0.7686f, 0.6588f); // Temperate Rain Forest.
-					}
-				} else if (factorHeight <= 0.5f) {
-					if (factorMoisture <= 0.16f) {
-						colourBiome.set(0.8941f, 0.9098f, 0.7922f); // Temperate Desert.
-					} else if (factorMoisture <= 0.5f) {
-						colourBiome.set(0.7686f, 0.8314f, 0.6666f); // Grassland.
-					} else if (factorMoisture <= 0.83f) {
-						colourBiome.set(0.7059f, 0.7882f, 0.6627f); // Temperate Deciduous Forest.
-					} else if (factorMoisture <= 1.0f) {
-						colourBiome.set(0.6431f, 0.7686f, 0.6588f); // Temperate Rain Forest.
-					}
-				} else if (factorHeight <= 0.75f) {
-					if (factorMoisture <= 0.33f) {
-						colourBiome.set(0.8941f, 0.9098f, 0.7922f); // Temperate Desert.
-					} else if (factorMoisture <= 0.66f) {
-						colourBiome.set(0.7686f, 0.8000f, 0.7333f); // Shrubland.
-					} else if (factorMoisture <= 1.0f) {
-						colourBiome.set(0.8000f, 0.8314f, 0.7333f); // Taiga.
-					}
-				} else if (factorHeight <= 1.0f) {
-					if (factorMoisture <= 0.16f) {
-						colourBiome.set(0.6000f, 0.6000f, 0.6000f); // Scorched.
-					} else if (factorMoisture <= 0.33f) {
-						colourBiome.set(0.7333f, 0.7333f, 0.7333f); // Bare.
-					} else if (factorMoisture <= 0.5f) {
-						colourBiome.set(0.8666f, 0.8666f, 0.7333f); // Tundra.
-					} else if (factorMoisture <= 1.0f) {
-						colourBiome.set(1.0000f, 1.0000f, 1.0000f); // Snow.
-					}
-				}
+				Colour colourBiome = Chunk.getBiomeColour(worldX, worldZ);
 				imageBiome.setRGB(x, y, (((int) (255.0f * colourBiome.r) << 8) + ((int) (255.0f * colourBiome.g)) << 8) + ((int) (255.0f * colourBiome.b)));
 			}
 		}

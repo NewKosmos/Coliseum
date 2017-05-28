@@ -330,27 +330,136 @@ public class Chunk extends Entity {
 	 *
 	 * @return The biome at that world position.
 	 */
-	protected static IBiome.Biomes getBiomeMap(float positionX, float positionZ) {
-		// Smooth around circle.
-		float outside = getIslandMap(positionX, positionZ);
+	public static IBiome.Biomes getBiomeMap(float positionX, float positionZ) {
+		float height = getHeightMap(positionX, positionZ);
+		float moisture = getMoistureMap(positionX, positionZ);
 
-		// Calculates the biome id based off of the world position using perlin. Then limits the search for biomes in the size provided.
-		float biomeID = KosmosChunks.get().getNoise().noise(
-				positionX / 420.0f,
-				positionZ / 420.0f
-		) + 0.20f;
+		if (height <= 0.125f) {
+			// Ocean.
+			return IBiome.Biomes.OCEAN;
+		} else if (height <= 0.25f) {
+			if (moisture <= 0.16f) {
+				// Subtropical Desert.
+				return IBiome.Biomes.DESERT;
+			} else if (moisture <= 0.33f) {
+				// Grassland.
+				return IBiome.Biomes.GRASS;
+			} else if (moisture <= 0.66f) {
+				// Tropical Seasonal Forest.
+				return IBiome.Biomes.GRASS;
+			} else if (moisture <= 1.0f) {
+				// Temperate Rain Forest.
+				return IBiome.Biomes.GRASS;
+			}
+		} else if (height <= 0.5f) {
+			if (moisture <= 0.16f) {
+				// Temperate Desert.
+				return IBiome.Biomes.DESERT;
+			} else if (moisture <= 0.5f) {
+				// Grassland.
+				return IBiome.Biomes.GRASS;
+			} else if (moisture <= 0.83f) {
+				// Temperate Deciduous Forest.
+				return IBiome.Biomes.GRASS;
+			} else if (moisture <= 1.0f) {
+				// Temperate Rain Forest.
+				return IBiome.Biomes.GRASS;
+			}
+		} else if (height <= 0.75f) {
+			if (moisture <= 0.33f) {
+				// Temperate Desert.
+				return IBiome.Biomes.DESERT;
+			} else if (moisture <= 0.66f) {
+				// Shrubland.
+				return IBiome.Biomes.GRASS;
+			} else if (moisture <= 1.0f) {
+				// Taiga.
+				return IBiome.Biomes.SNOW;
+			}
+		} else if (height <= 1.0f) {
+			if (moisture <= 0.16f) {
+				// Scorched.
+				return IBiome.Biomes.STONE;
+			} else if (moisture <= 0.33f) {
+				// Bare.
+				return IBiome.Biomes.STONE;
+			} else if (moisture <= 0.5f) {
+				// Tundra.
+				return IBiome.Biomes.SNOW;
+			} else if (moisture <= 1.0f) {
+				// Snow.
+				return IBiome.Biomes.SNOW;
+			}
+		}
 
-		// Scale the biome id by the smoothing world circle.
-		biomeID *= Maths.clamp(outside, 0.0f, 1.0f);
+		return IBiome.Biomes.OCEAN;
+	}
 
-		// Added 1 to allow for max biome id to be created.
-		biomeID *= IBiome.Biomes.values().length + 1;
+	public static Colour getBiomeColour(float positionX, float positionZ) {
+		float height = getHeightMap(positionX, positionZ);
+		float moisture = getMoistureMap(positionX, positionZ);
 
-		// Limit the biome to the known ids.
-		biomeID = Maths.clamp(biomeID, 0.0f, IBiome.Biomes.values().length - 1);
+		Colour colour = new Colour(0.0f, 0.0f, 0.0f);
 
-		// Returns the biome at the generated ID.
-		return IBiome.Biomes.values()[(int) biomeID];
+		if (height <= 0.125f) {
+			// Ocean.
+			colour.set(0.0824f, 0.3960f, 0.7530f);
+		} else if (height <= 0.25f) {
+			if (moisture <= 0.16f) {
+				// Subtropical Desert.
+				colour.set(0.914f, 0.8275f, 0.7804f);
+			} else if (moisture <= 0.33f) {
+				// Grassland.
+				colour.set(0.7686f, 0.8314f, 0.6666f);
+			} else if (moisture <= 0.66f) {
+				// Tropical Seasonal Forest.
+				colour.set(0.6627f, 0.8000f, 0.6431f);
+			} else if (moisture <= 1.0f) {
+				// Temperate Rain Forest.
+				colour.set(0.6431f, 0.7686f, 0.6588f);
+			}
+		} else if (height <= 0.5f) {
+			if (moisture <= 0.16f) {
+				// Temperate Desert.
+				colour.set(0.8941f, 0.9098f, 0.7922f);
+			} else if (moisture <= 0.5f) {
+				// Grassland.
+				colour.set(0.7686f, 0.8314f, 0.6666f);
+			} else if (moisture <= 0.83f) {
+				// Temperate Deciduous Forest.
+				colour.set(0.7059f, 0.7882f, 0.6627f);
+			} else if (moisture <= 1.0f) {
+				// Temperate Rain Forest.
+				colour.set(0.6431f, 0.7686f, 0.6588f);
+			}
+		} else if (height <= 0.75f) {
+			if (moisture <= 0.33f) {
+				// Temperate Desert.
+				colour.set(0.8941f, 0.9098f, 0.7922f);
+			} else if (moisture <= 0.66f) {
+				// Shrubland.
+				colour.set(0.7686f, 0.8000f, 0.7333f);
+			} else if (moisture <= 1.0f) {
+				// Taiga.
+				colour.set(0.8000f, 0.8314f, 0.7333f);
+			}
+		} else if (height <= 1.0f) {
+			if (moisture <= 0.16f) {
+				// Scorched.
+				colour.set(0.6000f, 0.6000f, 0.6000f);
+			} else if (moisture <= 0.33f) {
+				// Bare.
+				colour.set(0.7333f, 0.7333f, 0.7333f);
+			} else if (moisture <= 0.5f) {
+				// Tundra.
+				colour.set(0.8666f, 0.8666f, 0.7333f);
+			} else if (moisture <= 1.0f) {
+				// Snow.
+				colour.set(1.0000f, 1.0000f, 1.0000f);
+			}
+		}
+
+		return colour;
 	}
 
 	public List<Chunk> getChildrenChunks() {
