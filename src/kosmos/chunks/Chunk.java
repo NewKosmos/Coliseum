@@ -47,7 +47,7 @@ public class Chunk extends Entity {
 
 	// Island world generations.
 	public static final int WORLD_SIZE = 1536; // The width and height of the world, in tile size.
-	public static final float WORLD_NOISE_HEIGHT = 24.0f; // The height multiplier, max world height.
+	public static final float WORLD_NOISE_HEIGHT = 30.0f; // The height multiplier, max world height.
 	public static final float WORLD_ISLAND_INSIDE = 0.70f; // The inside radius of the island shape.
 	public static final float WORLD_ISLAND_OUTSIDE = 1.0f; // The outside radius of the island shape.
 	public static final float WORLD_ISLAND_PARAMETER = 0.5f; // The shape parameter (0=circular, 1=rectangular).
@@ -156,7 +156,7 @@ public class Chunk extends Entity {
 			int shapesOnEdge = i;
 			double x = 0.0;
 			double z = i;
-			generateTile(this, tiles, x, z);
+			generateTile(this, tiles, x, 0.0f, z, true);
 
 			for (int j = 0; j < 6; j++) {
 				if (j == 5) {
@@ -166,7 +166,7 @@ public class Chunk extends Entity {
 				for (int w = 0; w < shapesOnEdge; w++) {
 					x += DELTA_TILES[j][0];
 					z += DELTA_TILES[j][1];
-					generateTile(this, tiles, x, z);
+					generateTile(this, tiles, x, 0.0f, z, true);
 				}
 			}
 		}
@@ -192,26 +192,60 @@ public class Chunk extends Entity {
 		return new Vector2f((float) tx, (float) tz);
 	}
 
-	private static void generateTile(Chunk chunk, Map<Vector3f, List<ModelObject>> tiles, double x, double z) {
-		Vector3f chunkPosition = convertTileToChunk(x, z);
+	private static void generateTile(Chunk chunk, Map<Vector3f, List<ModelObject>> tiles, double x, float yOffset, double z, boolean spawnEntity) {
 		Vector3f worldPosition = convertTileToWorld(chunk, x, z);
-
-		worldPosition.y = getWorldHeight(worldPosition.x, worldPosition.z);
+		Vector3f chunkPosition = convertTileToChunk(x, z);
+		worldPosition.y = getWorldHeight(worldPosition.x, worldPosition.z) + yOffset;
 		chunkPosition.y = worldPosition.y;
+
+		// TODO: Get heights of other tiles around this tile.
+		float height0 = getWorldHeight(worldPosition.x, worldPosition.z);
+		float height1 = getWorldHeight(worldPosition.x, worldPosition.z);
+		float height2 = getWorldHeight(worldPosition.x, worldPosition.z);
+		float height3 = getWorldHeight(worldPosition.x, worldPosition.z);
+		float height4 = getWorldHeight(worldPosition.x, worldPosition.z);
+		float height5 = getWorldHeight(worldPosition.x, worldPosition.z);
+
+		if (worldPosition.y - Maths.minValue(height0, height1, height2, height3, height4, height5) > Math.sqrt(2.0f)) {
+			generateTile(chunk, tiles, x, yOffset - (float) Math.sqrt(2.0f), z, false);
+		}
 
 		if (worldPosition.y >= 0.0f) {
 			List<ModelObject> objects = new ArrayList<>();
+
 			objects.add(KosmosChunks.get().getHexagons()[0]);
-			objects.add(KosmosChunks.get().getHexagons()[2]);
-			objects.add(KosmosChunks.get().getHexagons()[3]);
-			objects.add(KosmosChunks.get().getHexagons()[4]);
-			objects.add(KosmosChunks.get().getHexagons()[5]);
-			objects.add(KosmosChunks.get().getHexagons()[6]);
-			objects.add(KosmosChunks.get().getHexagons()[7]);
+
+			if (height0 < worldPosition.y) {
+				objects.add(KosmosChunks.get().getHexagons()[2]);
+			}
+
+			if (height1 < worldPosition.y) {
+				objects.add(KosmosChunks.get().getHexagons()[3]);
+			}
+
+			if (height2 < worldPosition.y) {
+				objects.add(KosmosChunks.get().getHexagons()[4]);
+			}
+
+			if (height3 < worldPosition.y) {
+				objects.add(KosmosChunks.get().getHexagons()[5]);
+			}
+
+			if (height4 < worldPosition.y) {
+				objects.add(KosmosChunks.get().getHexagons()[6]);
+			}
+
+			if (height5 < worldPosition.y) {
+				objects.add(KosmosChunks.get().getHexagons()[7]);
+			}
+
+			// Stores the tile position and models.
 			tiles.put(chunkPosition, objects);
 		}
 
-		chunk.biome.getBiome().generateEntity(chunk, worldPosition);
+		if (spawnEntity) {
+			chunk.biome.getBiome().generateEntity(chunk, worldPosition);
+		}
 	}
 
 	/**

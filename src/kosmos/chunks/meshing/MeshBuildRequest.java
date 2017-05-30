@@ -50,7 +50,7 @@ public class MeshBuildRequest implements RequestResource {
 
 		// Only create the model if there is stuff to build from.
 		if (!chunkData.isEmpty()) {
-			int indexTotal = 0;
+			int offset = 0;
 
 			// Loads all tiles into a tile mesh with all positional instances within the chunk.
 			for (Vector3f tile : chunkData.keySet()) {
@@ -60,7 +60,7 @@ public class MeshBuildRequest implements RequestResource {
 					for (int i = 0; i < model.getIndices().length; i++) {
 						int pointer = model.getIndices()[i];
 
-						int index = pointer + indexTotal;
+						int index = pointer + offset;
 						float vertex0 = model.getVertices()[pointer * 3] + (tile.x / 2.0f);
 						float vertex1 = model.getVertices()[pointer * 3 + 1] + (tile.y / 2.0f);
 						float vertex2 = model.getVertices()[pointer * 3 + 2] + (tile.z / 2.0f);
@@ -84,7 +84,7 @@ public class MeshBuildRequest implements RequestResource {
 						vertices.add(vertex);
 					}
 
-					indexTotal += model.getIndices().length;
+					offset += model.getIndices().length;
 				}
 			}
 
@@ -99,6 +99,8 @@ public class MeshBuildRequest implements RequestResource {
 			int[] resultIndices = new int[vertices.size()];
 
 			for (int i = 0; i < vertices.size(); i++) {
+				resultIndices[i] = vertices.get(i).index;
+
 				resultVertices[vertices.get(i).index * 3] = vertices.get(i).vertex0;
 				resultVertices[vertices.get(i).index * 3 + 1] = vertices.get(i).vertex1;
 				resultVertices[vertices.get(i).index * 3 + 2] = vertices.get(i).vertex2;
@@ -113,8 +115,6 @@ public class MeshBuildRequest implements RequestResource {
 				resultTangents[vertices.get(i).index * 3] = vertices.get(i).tangent0;
 				resultTangents[vertices.get(i).index * 3 + 1] = vertices.get(i).tangent1;
 				resultTangents[vertices.get(i).index * 3 + 2] = vertices.get(i).tangent2;
-
-				resultIndices[i] = vertices.get(i).index;
 			}
 
 			// Then all model data is used to create a manual model loader, a hull is not generated and materials are baked into the textures. he model is then loaded into a object and OpenGL.
