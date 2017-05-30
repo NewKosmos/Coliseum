@@ -24,21 +24,17 @@ import java.util.*;
  */
 public class MeshBuildRequest implements RequestResource {
 	private ChunkMesh chunkMesh;
-	private ModelObject modelBase;
-	private List<Vector3f> positions;
+	private Map<Vector3f, List<ModelObject>> chunkData;
 
 	/**
 	 * Loads chunk mesh data.
 	 *
 	 * @param chunkMesh The chunk mesh to load to.
-	 * @param modelBase The model to be used as each tile in the mesh.
+	 * @param chunkData The chunk position and hexagon model map.
 	 */
-	public MeshBuildRequest(ChunkMesh chunkMesh, ModelObject modelBase) {
+	public MeshBuildRequest(ChunkMesh chunkMesh, Map<Vector3f, List<ModelObject>> chunkData) {
 		this.chunkMesh = chunkMesh;
-		this.modelBase = modelBase;
-
-		// Generates all tile positions for this chunk. Needs to be run on main for some reason...
-		this.positions = chunkMesh.chunk.generate();
+		this.chunkData = chunkData;
 	}
 
 	@Override
@@ -53,36 +49,42 @@ public class MeshBuildRequest implements RequestResource {
 		List<TileVertex> vertices = new ArrayList<>();
 
 		// Only create the model if there is stuff to build from.
-		if (!positions.isEmpty()) {
-			// TODO: Break model into face objects and transform those, remove matching faces from world (never seen), take all faces left and mesh into the model.
+		if (!chunkData.isEmpty()) {
+			int indexTotal = 0;
 
 			// Loads all tiles into a tile mesh with all positional instances within the chunk.
-			for (int p = 0; p < positions.size(); p++) {
-				for (int i = 0; i < modelBase.getIndices().length; i++) {
-					int pointer = modelBase.getIndices()[i];
+			for (Vector3f tile : chunkData.keySet()) {
+				List<ModelObject> models = chunkData.get(tile);
 
-					int index = pointer + (modelBase.getIndices().length * p);
-					float vertex0 = modelBase.getVertices()[pointer * 3] + (positions.get(p).x / 2.0f);
-					float vertex1 = modelBase.getVertices()[pointer * 3 + 1] + (positions.get(p).y / 2.0f);
-					float vertex2 = modelBase.getVertices()[pointer * 3 + 2] + (positions.get(p).z / 2.0f);
-					float texture0 = modelBase.getTextures()[pointer * 2];
-					float texture1 = modelBase.getTextures()[pointer * 2 + 1];
-					float normal0 = modelBase.getNormals()[pointer * 3];
-					float normal1 = modelBase.getNormals()[pointer * 3 + 1];
-					float normal2 = modelBase.getNormals()[pointer * 3 + 2];
-					float tangent0 = modelBase.getTangents()[pointer * 3];
-					float tangent1 = modelBase.getTangents()[pointer * 3 + 1];
-					float tangent2 = modelBase.getTangents()[pointer * 3 + 2];
+				for (ModelObject model : models) {
+					for (int i = 0; i < model.getIndices().length; i++) {
+						int pointer = model.getIndices()[i];
 
-					chunkMesh.minX = (vertex0 < chunkMesh.minX) ? vertex0 : chunkMesh.minX;
-					chunkMesh.minY = (vertex1 < chunkMesh.minY) ? vertex1 : chunkMesh.minY;
-					chunkMesh.minZ = (vertex2 < chunkMesh.minZ) ? vertex2 : chunkMesh.minZ;
-					chunkMesh.maxX = (vertex0 > chunkMesh.maxX) ? vertex0 : chunkMesh.maxX;
-					chunkMesh.maxY = (vertex1 > chunkMesh.maxY) ? vertex1 : chunkMesh.maxY;
-					chunkMesh.maxZ = (vertex2 > chunkMesh.maxZ) ? vertex2 : chunkMesh.maxZ;
+						int index = pointer + indexTotal;
+						float vertex0 = model.getVertices()[pointer * 3] + (tile.x / 2.0f);
+						float vertex1 = model.getVertices()[pointer * 3 + 1] + (tile.y / 2.0f);
+						float vertex2 = model.getVertices()[pointer * 3 + 2] + (tile.z / 2.0f);
+						float texture0 = model.getTextures()[pointer * 2];
+						float texture1 = model.getTextures()[pointer * 2 + 1];
+						float normal0 = model.getNormals()[pointer * 3];
+						float normal1 = model.getNormals()[pointer * 3 + 1];
+						float normal2 = model.getNormals()[pointer * 3 + 2];
+						float tangent0 = model.getTangents()[pointer * 3];
+						float tangent1 = model.getTangents()[pointer * 3 + 1];
+						float tangent2 = model.getTangents()[pointer * 3 + 2];
 
-					TileVertex vertex = new TileVertex(index, vertex0, vertex1, vertex2, texture0, texture1, normal0, normal1, normal2, tangent0, tangent1, tangent2);
-					vertices.add(vertex);
+						chunkMesh.minX = (vertex0 < chunkMesh.minX) ? vertex0 : chunkMesh.minX;
+						chunkMesh.minY = (vertex1 < chunkMesh.minY) ? vertex1 : chunkMesh.minY;
+						chunkMesh.minZ = (vertex2 < chunkMesh.minZ) ? vertex2 : chunkMesh.minZ;
+						chunkMesh.maxX = (vertex0 > chunkMesh.maxX) ? vertex0 : chunkMesh.maxX;
+						chunkMesh.maxY = (vertex1 > chunkMesh.maxY) ? vertex1 : chunkMesh.maxY;
+						chunkMesh.maxZ = (vertex2 > chunkMesh.maxZ) ? vertex2 : chunkMesh.maxZ;
+
+						TileVertex vertex = new TileVertex(index, vertex0, vertex1, vertex2, texture0, texture1, normal0, normal1, normal2, tangent0, tangent1, tangent2);
+						vertices.add(vertex);
+					}
+
+					indexTotal += model.getIndices().length;
 				}
 			}
 

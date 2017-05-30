@@ -32,7 +32,7 @@ public class KosmosChunks extends Module {
 	private PerlinNoise noise;
 	private MapGenerator mapGenerator;
 	private Sphere chunkRange;
-	private ModelObject modelHexagon;
+	private ModelObject[] hexagons;
 
 	private Vector3f lastPlayerPos;
 	private Chunk currentChunk;
@@ -48,7 +48,16 @@ public class KosmosChunks extends Module {
 		this.noise = new PerlinNoise(-1);
 		this.mapGenerator = new MapGenerator();
 		this.chunkRange = new Sphere(40.0f);
-		this.modelHexagon = ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "hexagon.obj")).create();
+		this.hexagons = new ModelObject[]{
+				ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "models", "hexagon_u.obj")).create(), // 0
+				ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "models", "hexagon_l.obj")).create(), // 1
+				ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "models", "hexagon_0.obj")).create(), // 2
+				ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "models", "hexagon_1.obj")).create(), // 3
+				ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "models", "hexagon_2.obj")).create(), // 4
+				ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "models", "hexagon_3.obj")).create(), // 5
+				ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "models", "hexagon_4.obj")).create(), // 6
+				ModelFactory.newBuilder().setFile(new MyFile(MyFile.RES_FOLDER, "terrains", "models", "hexagon_5.obj")).create(), // 7
+		};
 
 		this.lastPlayerPos = new Vector3f(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
 		this.currentChunk = null;
@@ -112,12 +121,22 @@ public class KosmosChunks extends Module {
 	}
 
 	/**
-	 * Gets the default hexagon model.
+	 * Gets the hexagon models.
 	 *
-	 * @return The hexagon model.
+	 * @return The hexagon models.
 	 */
-	public ModelObject getModelHexagon() {
-		return this.modelHexagon;
+	public ModelObject[] getHexagons() {
+		return this.hexagons;
+	}
+
+	public boolean getHexagonsLoaded() {
+		for (ModelObject model : hexagons) {
+			if (model == null || !model.isLoaded()) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	public Chunk getCurrent() {

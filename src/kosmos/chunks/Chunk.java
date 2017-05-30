@@ -11,8 +11,10 @@ package kosmos.chunks;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.helpers.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
+import flounder.models.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
 import flounder.space.*;
@@ -147,8 +149,8 @@ public class Chunk extends Entity {
 	 *
 	 * @return The new array of tiles.
 	 */
-	public List<Vector3f> generate() {
-		List<Vector3f> tiles = new ArrayList<>();
+	public Map<Vector3f, List<ModelObject>> generate() {
+		Map<Vector3f, List<ModelObject>> tiles = new HashMap<>();
 
 		for (int i = 0; i < CHUNK_RADIUS; i++) {
 			int shapesOnEdge = i;
@@ -190,7 +192,7 @@ public class Chunk extends Entity {
 		return new Vector2f((float) tx, (float) tz);
 	}
 
-	private static void generateTile(Chunk chunk, List<Vector3f> tiles, double x, double z) {
+	private static void generateTile(Chunk chunk, Map<Vector3f, List<ModelObject>> tiles, double x, double z) {
 		Vector3f chunkPosition = convertTileToChunk(x, z);
 		Vector3f worldPosition = convertTileToWorld(chunk, x, z);
 
@@ -198,7 +200,15 @@ public class Chunk extends Entity {
 		chunkPosition.y = worldPosition.y;
 
 		if (worldPosition.y >= 0.0f) {
-			tiles.add(chunkPosition);
+			List<ModelObject> objects = new ArrayList<>();
+			objects.add(KosmosChunks.get().getHexagons()[0]);
+			objects.add(KosmosChunks.get().getHexagons()[2]);
+			objects.add(KosmosChunks.get().getHexagons()[3]);
+			objects.add(KosmosChunks.get().getHexagons()[4]);
+			objects.add(KosmosChunks.get().getHexagons()[5]);
+			objects.add(KosmosChunks.get().getHexagons()[6]);
+			objects.add(KosmosChunks.get().getHexagons()[7]);
+			tiles.put(chunkPosition, objects);
 		}
 
 		chunk.biome.getBiome().generateEntity(chunk, worldPosition);

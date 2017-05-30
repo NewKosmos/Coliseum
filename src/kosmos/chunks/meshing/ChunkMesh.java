@@ -31,13 +31,13 @@ public class ChunkMesh {
 
 	public void update() {
 		// Makes sure all chunk, model, and biome info is good.
-		if (chunk == null || chunk.getBiome() == null || KosmosChunks.get().getModelHexagon() == null || !KosmosChunks.get().getModelHexagon().isLoaded()) {
+		if (chunk == null || chunk.getBiome() == null || KosmosChunks.get().getHexagons() == null || !KosmosChunks.get().getHexagonsLoaded()) {
 			return;
 		}
 
 		// If not built, build.
 		if (!sent && !built) {
-			FlounderProcessors.get().sendRequest(new MeshBuildRequest(this, KosmosChunks.get().getModelHexagon()));
+			FlounderProcessors.get().sendRequest(new MeshBuildRequest(this, chunk.generate()));
 			sent = true;
 			built = true;
 		}
