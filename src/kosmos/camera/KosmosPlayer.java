@@ -122,10 +122,10 @@ public class KosmosPlayer extends Player {
 							return;
 						}
 
-						Vector2f tilePosition = Chunk.convertWorldToTile(inChunk, terrainPosition);
+						Vector2f tilePosition = Chunk.convertWorldToTile(inChunk, terrainPosition, null);
 						tilePosition.x = Math.round(tilePosition.x);
 						tilePosition.y = Math.round(tilePosition.y);
-						Vector3f roundedPosition = Chunk.convertTileToWorld(inChunk, tilePosition.x, tilePosition.y);
+						Vector3f roundedPosition = Chunk.convertTileToWorld(inChunk, tilePosition.x, tilePosition.y, null);
 						roundedPosition.y = Chunk.getWorldHeight(roundedPosition.x, roundedPosition.z);
 
 						Entity entity = new InstanceBush(FlounderEntities.get().getEntities(),

@@ -174,41 +174,61 @@ public class Chunk extends Entity {
 		return tiles;
 	}
 
-	public static Vector3f convertTileToChunk(double x, double z) {
+	public static Vector3f convertTileToChunk(double x, double z, Vector3f destination) {
+		if (destination == null) {
+			destination = new Vector3f();
+		}
+
 		double cz = (3.0 / 2.0) * HEXAGON_SIDE_LENGTH * z;
 		double cx = Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH * ((z / 2.0) + x);
-		return new Vector3f((float) cx, 0.0f, (float) cz);
+		return destination.set((float) cx, 0.0f, (float) cz);
 	}
 
-	public static Vector3f convertTileToWorld(Chunk chunk, double x, double z) {
+	public static Vector3f convertTileToWorld(Chunk chunk, double x, double z, Vector3f destination) {
+		if (destination == null) {
+			destination = new Vector3f();
+		}
+
 		double wz = (3.0 / 4.0) * HEXAGON_SIDE_LENGTH * z;
 		double wx = (Math.sqrt(3.0) / 2.0) * HEXAGON_SIDE_LENGTH * ((z / 2.0) + x);
-		return new Vector3f((float) wx + chunk.getPosition().x, 0.0f, (float) wz + chunk.getPosition().z);
+		return destination.set((float) wx + chunk.getPosition().x, 0.0f, (float) wz + chunk.getPosition().z);
 	}
 
-	public static Vector2f convertWorldToTile(Chunk chunk, Vector3f worldPosition) {
+	public static Vector2f convertWorldToTile(Chunk chunk, Vector3f worldPosition, Vector2f destination) {
+		if (destination == null) {
+			destination = new Vector2f();
+		}
+
 		double tz = (4.0 * (worldPosition.z - chunk.getPosition().z)) / (3.0 * HEXAGON_SIDE_LENGTH);
 		double tx = ((2.0 * (worldPosition.x - chunk.getPosition().x)) / (Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH)) - (tz / 2.0);
-		return new Vector2f((float) tx, (float) tz);
+		return destination.set((float) tx, (float) tz);
 	}
 
 	private static void generateTile(Chunk chunk, Map<Vector3f, List<ModelObject>> tiles, double x, float yOffset, double z, boolean spawnEntity) {
-		Vector3f worldPosition = convertTileToWorld(chunk, x, z);
-		Vector3f chunkPosition = convertTileToChunk(x, z);
+		Vector3f worldPosition = convertTileToWorld(chunk, x, z, null);
+		Vector3f chunkPosition = convertTileToChunk(x, z, null);
 		worldPosition.y = getWorldHeight(worldPosition.x, worldPosition.z) + yOffset;
 		chunkPosition.y = worldPosition.y;
 
-		// TODO: Get heights of other tiles around this tile.
-		float height0 = getWorldHeight(worldPosition.x, worldPosition.z);
-		float height1 = getWorldHeight(worldPosition.x, worldPosition.z);
-		float height2 = getWorldHeight(worldPosition.x, worldPosition.z);
-		float height3 = getWorldHeight(worldPosition.x, worldPosition.z);
-		float height4 = getWorldHeight(worldPosition.x, worldPosition.z);
-		float height5 = getWorldHeight(worldPosition.x, worldPosition.z);
+		// DELTA_TILES = new double[][]{{1.0, -1.0}, {0.0, -1.0}, {-1.0, 0.0}, {-1.0, 1.0}, {0.0, 1.0}, {1.0, 0.0}};
+		Vector3f samplePosition = new Vector3f();
+		convertTileToWorld(chunk, x + DELTA_TILES[4][0], z + DELTA_TILES[4][1], samplePosition); // WTF
+		float height0 = getWorldHeight(samplePosition.x, samplePosition.z);
+		convertTileToWorld(chunk, x + DELTA_TILES[0][0], z + DELTA_TILES[0][1], samplePosition);
+		float height1 = getWorldHeight(samplePosition.x, samplePosition.z);
+		convertTileToWorld(chunk, x + DELTA_TILES[1][0], z + DELTA_TILES[1][1], samplePosition);
+		float height2 = getWorldHeight(samplePosition.x, samplePosition.z);
+		convertTileToWorld(chunk, x + DELTA_TILES[2][0], z + DELTA_TILES[2][1], samplePosition);
+		float height3 = getWorldHeight(samplePosition.x, samplePosition.z);
+		convertTileToWorld(chunk, x + DELTA_TILES[3][0], z + DELTA_TILES[3][1], samplePosition);
+		float height4 = getWorldHeight(samplePosition.x, samplePosition.z);
+		convertTileToWorld(chunk, x + DELTA_TILES[5][0], z + DELTA_TILES[5][1], samplePosition);
+		float height5 = getWorldHeight(samplePosition.x, samplePosition.z);
 
-		if (worldPosition.y - Maths.minValue(height0, height1, height2, height3, height4, height5) > Math.sqrt(2.0f)) {
-			generateTile(chunk, tiles, x, yOffset - (float) Math.sqrt(2.0f), z, false);
-		}
+		// TODO
+		//if (worldPosition.y - Maths.minValue(height0, height1, height2, height3, height4, height5) > Math.sqrt(2.0f)) {
+		//	generateTile(chunk, tiles, x, yOffset - (float) Math.sqrt(2.0f), z, false);
+		//}
 
 		if (worldPosition.y >= 0.0f) {
 			List<ModelObject> objects = new ArrayList<>();
@@ -291,7 +311,7 @@ public class Chunk extends Entity {
 	public static float getHeightMap(float positionX, float positionZ) {
 		// Gets the height from a perlin noise map and from the island factor.
 		float island = getIslandMap(positionX, positionZ);
-		float height = island * 1.70f * KosmosChunks.get().getNoise().turbulence(positionX / 300.0f, positionZ / 300.0f, 40.0f);
+		float height = island * 1.70f * KosmosChunks.get().getNoise().turbulence((positionX + WORLD_SIZE) / 300.0f, (positionZ + WORLD_SIZE) / 300.0f, 40.0f);
 		height = Maths.clamp(height, 0.0f, 1.0f);
 
 		// Ignore height that would be water/nothing.
@@ -333,10 +353,10 @@ public class Chunk extends Entity {
 	 * @return The found height at that world position.
 	 */
 	public static float roundedHeight(Chunk chunk, Vector3f worldPosition) {
-		Vector2f tilePosition = convertWorldToTile(chunk, worldPosition);
+		Vector2f tilePosition = convertWorldToTile(chunk, worldPosition, null);
 		tilePosition.x = Math.round(tilePosition.x);
 		tilePosition.y = Math.round(tilePosition.y);
-		Vector3f roundedPosition = convertTileToWorld(chunk, tilePosition.x, tilePosition.y);
+		Vector3f roundedPosition = convertTileToWorld(chunk, tilePosition.x, tilePosition.y, null);
 		return getWorldHeight(roundedPosition.x, roundedPosition.z);
 	}
 
@@ -360,8 +380,6 @@ public class Chunk extends Entity {
 		} else {
 			moisture += KosmosChunks.get().getNoise().turbulence(positionX / 150.0f, positionZ / 150.0f, 16.0f);
 		}
-
-		// TODO: Move inverse at coast into the biome code, not here, have it moist at the shore.
 
 		return Maths.clamp(moisture, 0.0f, 1.0f);
 	}
