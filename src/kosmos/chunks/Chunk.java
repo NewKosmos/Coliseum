@@ -212,7 +212,7 @@ public class Chunk extends Entity {
 
 		// DELTA_TILES = new double[][]{{1.0, -1.0}, {0.0, -1.0}, {-1.0, 0.0}, {-1.0, 1.0}, {0.0, 1.0}, {1.0, 0.0}};
 		Vector3f samplePosition = new Vector3f();
-		convertTileToWorld(chunk, x + DELTA_TILES[4][0], z + DELTA_TILES[4][1], samplePosition); // WTF
+		convertTileToWorld(chunk, x + DELTA_TILES[5][0], z + DELTA_TILES[5][1], samplePosition);
 		float height0 = getWorldHeight(samplePosition.x, samplePosition.z);
 		convertTileToWorld(chunk, x + DELTA_TILES[0][0], z + DELTA_TILES[0][1], samplePosition);
 		float height1 = getWorldHeight(samplePosition.x, samplePosition.z);
@@ -222,18 +222,20 @@ public class Chunk extends Entity {
 		float height3 = getWorldHeight(samplePosition.x, samplePosition.z);
 		convertTileToWorld(chunk, x + DELTA_TILES[3][0], z + DELTA_TILES[3][1], samplePosition);
 		float height4 = getWorldHeight(samplePosition.x, samplePosition.z);
-		convertTileToWorld(chunk, x + DELTA_TILES[5][0], z + DELTA_TILES[5][1], samplePosition);
+		convertTileToWorld(chunk, x + DELTA_TILES[4][0], z + DELTA_TILES[4][1], samplePosition);
 		float height5 = getWorldHeight(samplePosition.x, samplePosition.z);
 
-		// TODO
-		//if (worldPosition.y - Maths.minValue(height0, height1, height2, height3, height4, height5) > Math.sqrt(2.0f)) {
-		//	generateTile(chunk, tiles, x, yOffset - (float) Math.sqrt(2.0f), z, false);
-		//}
+		// TODO: Improve for higher heights.
+		if (yOffset == 0.0f && worldPosition.y - Maths.minValue(height0, height1, height2, height3, height4, height5) > 2.0f * Math.sqrt(2.0f)) {
+			generateTile(chunk, tiles, x, yOffset - (float) Math.sqrt(2.0f), z, false);
+		}
 
 		if (worldPosition.y >= 0.0f) {
 			List<ModelObject> objects = new ArrayList<>();
 
-			objects.add(KosmosChunks.get().getHexagons()[0]);
+			if (yOffset == 0.0f) {
+				objects.add(KosmosChunks.get().getHexagons()[0]);
+			}
 
 			if (height0 < worldPosition.y) {
 				objects.add(KosmosChunks.get().getHexagons()[2]);
