@@ -46,9 +46,9 @@ public class Chunk extends Entity {
 	// Island world generations.
 	public static final int WORLD_SIZE = 1536; // The width and height of the world, in tile size.
 	public static final float WORLD_NOISE_HEIGHT = 48.0f; // The height multiplier, max world height.
-	public static final float WORLD_ISLAND_INSIDE = 0.70f; // The inside radius of the island shape.
+	public static final float WORLD_ISLAND_INSIDE = 0.80f; // The inside radius of the island shape.
 	public static final float WORLD_ISLAND_OUTSIDE = 1.0f; // The outside radius of the island shape.
-	public static final float WORLD_ISLAND_PARAMETER = 0.5f; // The shape parameter (0=circular, 1=rectangular).
+	public static final float WORLD_ISLAND_PARAMETER = 0.4f; // The shape parameter (0=circular, 1=rectangular).
 
 	private List<Chunk> childrenChunks;
 	private IBiome.Biomes biome;
@@ -154,7 +154,7 @@ public class Chunk extends Entity {
 			int shapesOnEdge = i;
 			double x = 0.0;
 			double z = i;
-			generateTile(this, tiles, x, 0.0f, z, true);
+			generateTile(this, tiles, x, z, false, 0.0f, true);
 
 			for (int j = 0; j < 6; j++) {
 				if (j == 5) {
@@ -164,12 +164,65 @@ public class Chunk extends Entity {
 				for (int w = 0; w < shapesOnEdge; w++) {
 					x += DELTA_TILES[j][0];
 					z += DELTA_TILES[j][1];
-					generateTile(this, tiles, x, 0.0f, z, true);
+					generateTile(this, tiles, x, z, false, 0.0f, true);
 				}
 			}
 		}
 
 		return tiles;
+	}
+
+	private static void generateTile(Chunk chunk, Map<Vector3f, Boolean[]> tiles, double x, double z, boolean floating, float yOffset, boolean spawnEntity) {
+		// Calculate the position and height.
+		Vector3f worldPosition = convertTileToWorld(chunk, x, z, null);
+		worldPosition.y = getWorldHeight(worldPosition.x, worldPosition.z) + yOffset;
+		Vector3f tilePosition = convertTileToChunk(x, z, null);
+		tilePosition.y = worldPosition.y;
+
+		// Ignore tile if below world.
+		if (tilePosition.y < 0.0f) {
+			return;
+		}
+
+		// Samples the 6 tiles around this tile.
+		Vector3f samplePosition = new Vector3f();
+		convertTileToWorld(chunk, x + DELTA_TILES[0][0], z + DELTA_TILES[0][1], samplePosition);
+		float height0 = getWorldHeight(samplePosition.x, samplePosition.z);
+		convertTileToWorld(chunk, x + DELTA_TILES[1][0], z + DELTA_TILES[1][1], samplePosition);
+		float height1 = getWorldHeight(samplePosition.x, samplePosition.z);
+		convertTileToWorld(chunk, x + DELTA_TILES[2][0], z + DELTA_TILES[2][1], samplePosition);
+		float height2 = getWorldHeight(samplePosition.x, samplePosition.z);
+		convertTileToWorld(chunk, x + DELTA_TILES[3][0], z + DELTA_TILES[3][1], samplePosition);
+		float height3 = getWorldHeight(samplePosition.x, samplePosition.z);
+		convertTileToWorld(chunk, x + DELTA_TILES[4][0], z + DELTA_TILES[4][1], samplePosition);
+		float height4 = getWorldHeight(samplePosition.x, samplePosition.z);
+		convertTileToWorld(chunk, x + DELTA_TILES[5][0], z + DELTA_TILES[5][1], samplePosition);
+		float height5 = getWorldHeight(samplePosition.x, samplePosition.z);
+
+		// The smallest height from the samples.
+		float heightMin = Maths.minValue(height0, height1, height2, height3, height4, height5);
+
+		// Sets and stores the model object states and tile position.
+		Boolean[] objects = new Boolean[KosmosChunks.get().getHexagons().length];
+		objects[0] = yOffset == 0.0f;
+		objects[1] = floating;
+		objects[2] = height0 < tilePosition.y;
+		objects[3] = height1 < tilePosition.y;
+		objects[4] = height2 < tilePosition.y;
+		objects[5] = height3 < tilePosition.y;
+		objects[6] = height4 < tilePosition.y;
+		objects[7] = height5 < tilePosition.y;
+		tiles.put(tilePosition, objects);
+
+		// Generates tiles below if there is a terrain drop, for cliff faces. This could be more efficient but is not.
+		if (tilePosition.y - heightMin > Math.sqrt(2.0f) && tilePosition.y - (float) Math.sqrt(2.0f) > heightMin) {
+			generateTile(chunk, tiles, x, z, false, yOffset - (float) Math.sqrt(2.0f), false);
+		}
+
+		// Spawns entities if this is the top tile.
+		if (spawnEntity) {
+			chunk.biome.getBiome().generateEntity(chunk, worldPosition);
+		}
 	}
 
 	public static Vector3f convertTileToChunk(double x, double z, Vector3f destination) {
@@ -200,53 +253,6 @@ public class Chunk extends Entity {
 		double tz = (4.0 * (worldPosition.z - chunk.getPosition().z)) / (3.0 * HEXAGON_SIDE_LENGTH);
 		double tx = ((2.0 * (worldPosition.x - chunk.getPosition().x)) / (Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH)) - (tz / 2.0);
 		return destination.set((float) tx, (float) tz);
-	}
-
-	private static void generateTile(Chunk chunk, Map<Vector3f, Boolean[]> tiles, double x, float yOffset, double z, boolean spawnEntity) {
-		Vector3f worldPosition = convertTileToWorld(chunk, x, z, null);
-		Vector3f chunkPosition = convertTileToChunk(x, z, null);
-		worldPosition.y = getWorldHeight(worldPosition.x, worldPosition.z) + yOffset;
-		chunkPosition.y = worldPosition.y;
-
-		// DELTA_TILES = new double[][]{{1.0, -1.0}, {0.0, -1.0}, {-1.0, 0.0}, {-1.0, 1.0}, {0.0, 1.0}, {1.0, 0.0}};
-		Vector3f samplePosition = new Vector3f();
-		convertTileToWorld(chunk, x + DELTA_TILES[5][0], z + DELTA_TILES[5][1], samplePosition);
-		float height0 = getWorldHeight(samplePosition.x, samplePosition.z);
-		convertTileToWorld(chunk, x + DELTA_TILES[0][0], z + DELTA_TILES[0][1], samplePosition);
-		float height1 = getWorldHeight(samplePosition.x, samplePosition.z);
-		convertTileToWorld(chunk, x + DELTA_TILES[1][0], z + DELTA_TILES[1][1], samplePosition);
-		float height2 = getWorldHeight(samplePosition.x, samplePosition.z);
-		convertTileToWorld(chunk, x + DELTA_TILES[2][0], z + DELTA_TILES[2][1], samplePosition);
-		float height3 = getWorldHeight(samplePosition.x, samplePosition.z);
-		convertTileToWorld(chunk, x + DELTA_TILES[3][0], z + DELTA_TILES[3][1], samplePosition);
-		float height4 = getWorldHeight(samplePosition.x, samplePosition.z);
-		convertTileToWorld(chunk, x + DELTA_TILES[4][0], z + DELTA_TILES[4][1], samplePosition);
-		float height5 = getWorldHeight(samplePosition.x, samplePosition.z);
-
-		// TODO: Improve for higher heights.
-		if (yOffset == 0.0f && worldPosition.y - Maths.minValue(height0, height1, height2, height3, height4, height5) > 2.0f * Math.sqrt(2.0f)) {
-			generateTile(chunk, tiles, x, yOffset - (float) Math.sqrt(2.0f), z, false);
-		}
-
-		if (worldPosition.y >= 0.0f) {
-			// Sets the model object states.
-			Boolean[] objects = new Boolean[KosmosChunks.get().getHexagons().length];
-			objects[0] = yOffset == 0.0f;
-			objects[1] = false;
-			objects[2] = height0 < worldPosition.y;
-			objects[3] = height1 < worldPosition.y;
-			objects[4] = height2 < worldPosition.y;
-			objects[5] = height3 < worldPosition.y;
-			objects[6] = height4 < worldPosition.y;
-			objects[7] = height5 < worldPosition.y;
-
-			// Stores the tile position and models.
-			tiles.put(chunkPosition, objects);
-		}
-
-		if (spawnEntity) {
-			chunk.biome.getBiome().generateEntity(chunk, worldPosition);
-		}
 	}
 
 	/**
@@ -314,9 +320,10 @@ public class Chunk extends Entity {
 	 */
 	public static float getWorldHeight(float positionX, float positionZ) {
 		float height = getHeightMap(positionX, positionZ) * WORLD_NOISE_HEIGHT;
-		height = ((float) Math.sqrt(2.0) * (int) height) - 4.2f;
+		height = (float) Math.sqrt(2.0) * (int) height;
+		height -= 5.37f;
 
-		if (height <= 0.0f) {
+		if (height < 0.0f) {
 			return Float.NEGATIVE_INFINITY;
 		}
 

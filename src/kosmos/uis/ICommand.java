@@ -133,6 +133,7 @@ public interface ICommand {
 				}
 
 				float timeOffset = Math.abs(Float.parseFloat(string));
+				timeOffset = Maths.clamp(timeOffset, 0.0f, 14449.0f);
 
 				String log = "Adding " + timeOffset + " to the time offset of the framework.";
 				FlounderLogger.get().log(log);
