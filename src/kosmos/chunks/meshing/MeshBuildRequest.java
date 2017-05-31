@@ -24,7 +24,7 @@ import java.util.*;
  */
 public class MeshBuildRequest implements RequestResource {
 	private ChunkMesh chunkMesh;
-	private Map<Vector3f, List<ModelObject>> chunkData;
+	private Map<Vector3f, Boolean[]> chunkData;
 
 	/**
 	 * Loads chunk mesh data.
@@ -32,7 +32,7 @@ public class MeshBuildRequest implements RequestResource {
 	 * @param chunkMesh The chunk mesh to load to.
 	 * @param chunkData The chunk position and hexagon model map.
 	 */
-	public MeshBuildRequest(ChunkMesh chunkMesh, Map<Vector3f, List<ModelObject>> chunkData) {
+	public MeshBuildRequest(ChunkMesh chunkMesh, Map<Vector3f, Boolean[]> chunkData) {
 		this.chunkMesh = chunkMesh;
 		this.chunkData = chunkData;
 	}
@@ -54,37 +54,41 @@ public class MeshBuildRequest implements RequestResource {
 
 			// Loads all tiles into a tile mesh with all positional instances within the chunk.
 			for (Vector3f tile : chunkData.keySet()) {
-				List<ModelObject> models = chunkData.get(tile);
+				Boolean[] models = chunkData.get(tile);
 
-				for (ModelObject model : models) {
-					for (int i = 0; i < model.getIndices().length; i++) {
-						int pointer = model.getIndices()[i];
+				for (int m = 0; m < models.length; m++) {
+					if (models[m]) {
+						ModelObject model = KosmosChunks.get().getHexagons()[m];
 
-						int index = pointer + offset;
-						float vertex0 = model.getVertices()[pointer * 3] + (tile.x / 2.0f);
-						float vertex1 = model.getVertices()[pointer * 3 + 1] + (tile.y / 2.0f);
-						float vertex2 = model.getVertices()[pointer * 3 + 2] + (tile.z / 2.0f);
-						float texture0 = model.getTextures()[pointer * 2];
-						float texture1 = model.getTextures()[pointer * 2 + 1];
-						float normal0 = model.getNormals()[pointer * 3];
-						float normal1 = model.getNormals()[pointer * 3 + 1];
-						float normal2 = model.getNormals()[pointer * 3 + 2];
-						float tangent0 = model.getTangents()[pointer * 3];
-						float tangent1 = model.getTangents()[pointer * 3 + 1];
-						float tangent2 = model.getTangents()[pointer * 3 + 2];
+						for (int i = 0; i < model.getIndices().length; i++) {
+							int pointer = model.getIndices()[i];
 
-						chunkMesh.minX = (vertex0 < chunkMesh.minX) ? vertex0 : chunkMesh.minX;
-						chunkMesh.minY = (vertex1 < chunkMesh.minY) ? vertex1 : chunkMesh.minY;
-						chunkMesh.minZ = (vertex2 < chunkMesh.minZ) ? vertex2 : chunkMesh.minZ;
-						chunkMesh.maxX = (vertex0 > chunkMesh.maxX) ? vertex0 : chunkMesh.maxX;
-						chunkMesh.maxY = (vertex1 > chunkMesh.maxY) ? vertex1 : chunkMesh.maxY;
-						chunkMesh.maxZ = (vertex2 > chunkMesh.maxZ) ? vertex2 : chunkMesh.maxZ;
+							int index = pointer + offset;
+							float vertex0 = model.getVertices()[pointer * 3] + (tile.x / 2.0f);
+							float vertex1 = model.getVertices()[pointer * 3 + 1] + (tile.y / 2.0f);
+							float vertex2 = model.getVertices()[pointer * 3 + 2] + (tile.z / 2.0f);
+							float texture0 = model.getTextures()[pointer * 2];
+							float texture1 = model.getTextures()[pointer * 2 + 1];
+							float normal0 = model.getNormals()[pointer * 3];
+							float normal1 = model.getNormals()[pointer * 3 + 1];
+							float normal2 = model.getNormals()[pointer * 3 + 2];
+							float tangent0 = model.getTangents()[pointer * 3];
+							float tangent1 = model.getTangents()[pointer * 3 + 1];
+							float tangent2 = model.getTangents()[pointer * 3 + 2];
 
-						TileVertex vertex = new TileVertex(index, vertex0, vertex1, vertex2, texture0, texture1, normal0, normal1, normal2, tangent0, tangent1, tangent2);
-						vertices.add(vertex);
+							chunkMesh.minX = (vertex0 < chunkMesh.minX) ? vertex0 : chunkMesh.minX;
+							chunkMesh.minY = (vertex1 < chunkMesh.minY) ? vertex1 : chunkMesh.minY;
+							chunkMesh.minZ = (vertex2 < chunkMesh.minZ) ? vertex2 : chunkMesh.minZ;
+							chunkMesh.maxX = (vertex0 > chunkMesh.maxX) ? vertex0 : chunkMesh.maxX;
+							chunkMesh.maxY = (vertex1 > chunkMesh.maxY) ? vertex1 : chunkMesh.maxY;
+							chunkMesh.maxZ = (vertex2 > chunkMesh.maxZ) ? vertex2 : chunkMesh.maxZ;
+
+							TileVertex vertex = new TileVertex(index, vertex0, vertex1, vertex2, texture0, texture1, normal0, normal1, normal2, tangent0, tangent1, tangent2);
+							vertices.add(vertex);
+						}
+
+						offset += model.getIndices().length;
 					}
-
-					offset += model.getIndices().length;
 				}
 			}
 

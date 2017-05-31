@@ -11,10 +11,8 @@ package kosmos.chunks;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
-import flounder.helpers.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
-import flounder.models.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
 import flounder.space.*;
@@ -47,7 +45,7 @@ public class Chunk extends Entity {
 
 	// Island world generations.
 	public static final int WORLD_SIZE = 1536; // The width and height of the world, in tile size.
-	public static final float WORLD_NOISE_HEIGHT = 30.0f; // The height multiplier, max world height.
+	public static final float WORLD_NOISE_HEIGHT = 48.0f; // The height multiplier, max world height.
 	public static final float WORLD_ISLAND_INSIDE = 0.70f; // The inside radius of the island shape.
 	public static final float WORLD_ISLAND_OUTSIDE = 1.0f; // The outside radius of the island shape.
 	public static final float WORLD_ISLAND_PARAMETER = 0.5f; // The shape parameter (0=circular, 1=rectangular).
@@ -149,8 +147,8 @@ public class Chunk extends Entity {
 	 *
 	 * @return The new array of tiles.
 	 */
-	public Map<Vector3f, List<ModelObject>> generate() {
-		Map<Vector3f, List<ModelObject>> tiles = new HashMap<>();
+	public Map<Vector3f, Boolean[]> generate() {
+		Map<Vector3f, Boolean[]> tiles = new HashMap<>();
 
 		for (int i = 0; i < CHUNK_RADIUS; i++) {
 			int shapesOnEdge = i;
@@ -204,7 +202,7 @@ public class Chunk extends Entity {
 		return destination.set((float) tx, (float) tz);
 	}
 
-	private static void generateTile(Chunk chunk, Map<Vector3f, List<ModelObject>> tiles, double x, float yOffset, double z, boolean spawnEntity) {
+	private static void generateTile(Chunk chunk, Map<Vector3f, Boolean[]> tiles, double x, float yOffset, double z, boolean spawnEntity) {
 		Vector3f worldPosition = convertTileToWorld(chunk, x, z, null);
 		Vector3f chunkPosition = convertTileToChunk(x, z, null);
 		worldPosition.y = getWorldHeight(worldPosition.x, worldPosition.z) + yOffset;
@@ -231,35 +229,16 @@ public class Chunk extends Entity {
 		}
 
 		if (worldPosition.y >= 0.0f) {
-			List<ModelObject> objects = new ArrayList<>();
-
-			if (yOffset == 0.0f) {
-				objects.add(KosmosChunks.get().getHexagons()[0]);
-			}
-
-			if (height0 < worldPosition.y) {
-				objects.add(KosmosChunks.get().getHexagons()[2]);
-			}
-
-			if (height1 < worldPosition.y) {
-				objects.add(KosmosChunks.get().getHexagons()[3]);
-			}
-
-			if (height2 < worldPosition.y) {
-				objects.add(KosmosChunks.get().getHexagons()[4]);
-			}
-
-			if (height3 < worldPosition.y) {
-				objects.add(KosmosChunks.get().getHexagons()[5]);
-			}
-
-			if (height4 < worldPosition.y) {
-				objects.add(KosmosChunks.get().getHexagons()[6]);
-			}
-
-			if (height5 < worldPosition.y) {
-				objects.add(KosmosChunks.get().getHexagons()[7]);
-			}
+			// Sets the model object states.
+			Boolean[] objects = new Boolean[KosmosChunks.get().getHexagons().length];
+			objects[0] = yOffset == 0.0f;
+			objects[1] = false;
+			objects[2] = height0 < worldPosition.y;
+			objects[3] = height1 < worldPosition.y;
+			objects[4] = height2 < worldPosition.y;
+			objects[5] = height3 < worldPosition.y;
+			objects[6] = height4 < worldPosition.y;
+			objects[7] = height5 < worldPosition.y;
 
 			// Stores the tile position and models.
 			tiles.put(chunkPosition, objects);

@@ -14,7 +14,6 @@ import flounder.particles.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.entities.instances.*;
 import kosmos.materials.*;
 
 public class BiomeBare extends IBiome {
