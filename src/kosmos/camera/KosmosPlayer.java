@@ -72,14 +72,16 @@ public class KosmosPlayer extends Player {
 			public void onEvent() {
 				Ray cameraRay = FlounderCamera.get().getCamera().getViewRay();
 
-				for (Entity entity : FlounderEntities.get().getEntities().getAll()) {
-					if (entity.getCollider() != null && entity.getComponent(ComponentPlayer.class) == null && entity.getComponent(ComponentMultiplayer.class) == null && entity.getComponent(ComponentChunk.class) == null) {
-						IntersectData data = entity.getCollider().intersects(cameraRay);
-						float distance = Vector3f.getDistance(entity.getPosition(), KosmosWorld.get().getEntityPlayer().getPosition());
+				if (KosmosWorld.get().getEntityPlayer() != null) {
+					for (Entity entity : FlounderEntities.get().getEntities().getAll()) {
+						if (entity.getCollider() != null && entity.getComponent(ComponentPlayer.class) == null && entity.getComponent(ComponentMultiplayer.class) == null && entity.getComponent(ComponentChunk.class) == null) {
+							IntersectData data = entity.getCollider().intersects(cameraRay);
+							float distance = Vector3f.getDistance(entity.getPosition(), KosmosWorld.get().getEntityPlayer().getPosition());
 
-						if (data.isIntersection() && distance < 2.0f) {
-							entity.forceRemove();
-							return;
+							if (data.isIntersection() && distance < 2.0f) {
+								entity.forceRemove();
+								return;
+							}
 						}
 					}
 				}
