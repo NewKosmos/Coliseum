@@ -24,25 +24,23 @@ public class MapGenerator extends Thread {
 		super.setName("maps");
 		this.mapTexture = null;
 
-		if (!FlounderPlatform.get().getPlatform().equals(Platform.MACOS)) {
-			FlounderEvents.get().addEvent(seedChange = new IEvent() {
-				private int seed = KosmosChunks.get().getNoise().getSeed();
+		FlounderEvents.get().addEvent(seedChange = new IEvent() {
+			private int seed = KosmosChunks.get().getNoise().getSeed();
 
-				@Override
-				public boolean eventTriggered() {
-					int currentSeed = KosmosChunks.get().getNoise().getSeed();
-					boolean changed = seed != currentSeed;
-					seed = currentSeed;
-					return changed;
-				}
+			@Override
+			public boolean eventTriggered() {
+				int currentSeed = KosmosChunks.get().getNoise().getSeed();
+				boolean changed = seed != currentSeed;
+				seed = currentSeed;
+				return changed;
+			}
 
-				@Override
-				public void onEvent() {
-					KosmosChunks.get().clear(true);
-					generateMap(seed);
-				}
-			});
-		}
+			@Override
+			public void onEvent() {
+				KosmosChunks.get().clear(true);
+				generateMap(seed);
+			}
+		});
 	}
 
 	/**

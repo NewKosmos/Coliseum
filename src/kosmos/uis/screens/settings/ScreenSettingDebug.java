@@ -13,6 +13,7 @@ import flounder.events.*;
 import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.maths.vectors.*;
+import flounder.platform.*;
 import flounder.profiling.*;
 import kosmos.uis.*;
 import kosmos.uis.screens.*;
@@ -33,7 +34,9 @@ public class ScreenSettingDebug extends ScreenObject {
 		toggleProfiler.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				FlounderProfiler.get().toggle(!FlounderProfiler.get().isOpen());
+				if (!FlounderPlatform.get().getPlatform().equals(Platform.MACOS)) { // TODO: MACOS
+					FlounderProfiler.get().toggle(!FlounderProfiler.get().isOpen());
+				}
 			}
 		});
 
