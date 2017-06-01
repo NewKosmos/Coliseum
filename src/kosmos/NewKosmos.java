@@ -12,7 +12,6 @@ package kosmos;
 import flounder.framework.*;
 import flounder.framework.updater.*;
 import flounder.lwjgl3.*;
-import flounder.profiling.*;
 import flounder.resources.*;
 import kosmos.camera.*;
 import org.lwjgl.glfw.*;
@@ -37,10 +36,9 @@ public class NewKosmos extends Framework {
 						0,
 						KosmosConfigs.DISPLAY_FULLSCREEN.getBoolean(),
 						false,
-						false, // KosmosConfigs.WIREFRAME_ENABLED.getBoolean(),
+						false,
 						KosmosConfigs.TEXTURES_ANISOTROPY_MAX.getFloat()
 				)});
 		Framework.setFpsLimit(KosmosConfigs.FRAMEWORK_FPS_LIMIT.getInteger());
-		FlounderProfiler.get().toggle(KosmosConfigs.PROFILER_ENABLED.getBoolean());
 	}
 }

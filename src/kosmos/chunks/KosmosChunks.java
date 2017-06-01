@@ -18,8 +18,8 @@ import flounder.models.*;
 import flounder.noise.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
-import flounder.profiling.*;
 import flounder.resources.*;
+import flounder.tasks.*;
 import flounder.textures.*;
 import kosmos.*;
 import kosmos.chunks.map.*;
@@ -40,7 +40,7 @@ public class KosmosChunks extends Module {
 	private int chunkDistance;
 
 	public KosmosChunks() {
-		super(FlounderEvents.class, FlounderEntities.class, FlounderModels.class, FlounderTextures.class);
+		super(FlounderEvents.class, FlounderTasks.class, FlounderEntities.class, FlounderModels.class, FlounderTextures.class);
 	}
 
 	@Handler.Function(Handler.FLAG_INIT)
@@ -103,13 +103,6 @@ public class KosmosChunks extends Module {
 
 		// Renders the chunks range.
 		FlounderBounding.get().addShapeRender(chunkRange);
-	}
-
-	@Handler.Function(Handler.FLAG_PROFILE)
-	public void profile() {
-		//	FlounderProfiler.get().add(getTab(), "Chunks Size", chunks.getSize());
-		FlounderProfiler.get().add(getTab(), "Chunks Current", currentChunk);
-		FlounderProfiler.get().add(getTab(), "Seed", noise.getSeed());
 	}
 
 	public PerlinNoise getNoise() {

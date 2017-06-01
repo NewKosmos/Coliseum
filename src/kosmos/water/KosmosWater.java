@@ -53,10 +53,6 @@ public class KosmosWater extends Module {
 		this.water = null;
 	}
 
-	@Handler.Function(Handler.FLAG_PROFILE)
-	public void profile() {
-	}
-
 	public Water getWater() {
 		return this.water;
 	}

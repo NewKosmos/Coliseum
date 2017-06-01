@@ -12,13 +12,13 @@ package kosmos.uis;
 import flounder.devices.*;
 import flounder.fonts.*;
 import flounder.guis.*;
-import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.Timer;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.resources.*;
+import flounder.tasks.*;
 import flounder.textures.*;
 import flounder.visual.*;
 import kosmos.*;
@@ -117,7 +117,9 @@ public class OverlayChat extends ScreenObject {
 	}
 
 	public static void addText(String string, Colour colour) {
-		ChatMessages.newMessages.add(new Pair<>(string, colour));
+		FlounderTasks.get().addTask(() -> {
+			((KosmosGuis) FlounderGuis.get().getGuiMaster()).getOverlayChat().chatMessages.generateObject(string, colour);
+		});
 	}
 
 	@Override
@@ -156,8 +158,6 @@ public class OverlayChat extends ScreenObject {
 	}
 
 	private static class ChatMessages extends ScreenObject {
-		public static final List<Pair<String, Colour>> newMessages = new ArrayList<>();
-
 		private OverlayChat overlayChat;
 
 		private List<TextObject> chatMessages;
@@ -175,16 +175,6 @@ public class OverlayChat extends ScreenObject {
 
 		@Override
 		public void updateObject() {
-			// Add new chat messages.
-			if (!newMessages.isEmpty()) {
-				for (Pair<String, Colour> message : new ArrayList<>(newMessages)) { // TODO: Optimise.
-					generateObject(message.getFirst(), message.getSecond());
-					newMessages.remove(message); //
-				}
-
-				//newMessages.clear();
-			}
-
 			if (!chatMessages.isEmpty()) {
 				for (TextObject m : chatMessages) {
 					if (!m.getParent().equals(overlayChat) && m.getAlpha() == 0.0f) {

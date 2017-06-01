@@ -16,7 +16,6 @@ import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.maths.vectors.*;
 import flounder.post.filters.*;
-import flounder.profiling.*;
 import flounder.renderer.*;
 import flounder.resources.*;
 import flounder.shaders.*;
@@ -39,7 +38,7 @@ public class WaterRenderer extends Renderer {
 	}
 
 	@Override
-	public void renderObjects(Vector4f clipPlane, Camera camera) {
+	public void render(Vector4f clipPlane, Camera camera) {
 		if (!shader.isLoaded() || KosmosWater.get().getWater() == null || !KosmosWater.get().getWater().isLoaded()) {
 			return;
 		}
@@ -121,11 +120,6 @@ public class WaterRenderer extends Renderer {
 
 	public FilterMRT getPipelineMRT() {
 		return pipelineMRT;
-	}
-
-	@Override
-	public void profile() {
-		FlounderProfiler.get().add(KosmosWater.getTab(), "Render Time", super.getRenderTime());
 	}
 
 	@Override

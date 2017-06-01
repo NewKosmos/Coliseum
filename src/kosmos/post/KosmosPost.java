@@ -1,7 +1,6 @@
 package kosmos.post;
 
 import flounder.framework.*;
-import flounder.profiling.*;
 import kosmos.*;
 
 public class KosmosPost extends Module {
@@ -32,16 +31,6 @@ public class KosmosPost extends Module {
 
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)
 	public void update() {
-	}
-
-	@Handler.Function(Handler.FLAG_PROFILE)
-	public void profile() {
-		FlounderProfiler.get().add(getTab(), "Effects Enabled", effectsEnabled);
-		FlounderProfiler.get().add(getTab(), "Bloom Enabled", bloomEnabled);
-		FlounderProfiler.get().add(getTab(), "Motion Blur Enabled", motionBlurEnabled);
-		FlounderProfiler.get().add(getTab(), "Lens Flare Enabled", lensFlareEnabled);
-		FlounderProfiler.get().add(getTab(), "CRT Filter Enabled", crtEnabled);
-		FlounderProfiler.get().add(getTab(), "Grain Filter Enabled", grainEnabled);
 	}
 
 	public boolean isEffectsEnabled() {

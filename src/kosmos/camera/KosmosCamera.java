@@ -18,7 +18,6 @@ import flounder.maths.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
-import flounder.profiling.*;
 import kosmos.*;
 
 public class KosmosCamera extends Camera {
@@ -169,16 +168,6 @@ public class KosmosCamera extends Camera {
 		updateProjectionMatrix();
 
 		firstPerson = Maths.deadband(0.1f, targetZoom) == 0.0f;
-
-		if (FlounderProfiler.get().isOpen()) {
-			FlounderProfiler.get().add(FlounderCamera.getTab(), "Camera Angle Of Elevation", angleOfElevation);
-			FlounderProfiler.get().add(FlounderCamera.getTab(), "Camera Rotation", rotation);
-			FlounderProfiler.get().add(FlounderCamera.getTab(), "Camera Angle Around MainPlayer", angleAroundPlayer);
-			FlounderProfiler.get().add(FlounderCamera.getTab(), "Camera Actual Distance From Point", actualDistanceFromPoint);
-			FlounderProfiler.get().add(FlounderCamera.getTab(), "Camera Target Zoom", targetZoom);
-			FlounderProfiler.get().add(FlounderCamera.getTab(), "Camera Target Elevation", targetElevation);
-			FlounderProfiler.get().add(FlounderCamera.getTab(), "Camera Target Rotation Angle", targetRotationAngle);
-		}
 	}
 
 	private void calculateHorizontalAngle() {

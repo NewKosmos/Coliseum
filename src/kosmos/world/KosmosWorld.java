@@ -12,13 +12,13 @@ package kosmos.world;
 import flounder.entities.*;
 import flounder.framework.*;
 import flounder.guis.*;
-import flounder.helpers.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.resources.*;
 import flounder.shadows.*;
 import flounder.skybox.*;
+import flounder.tasks.*;
 import flounder.textures.*;
 import flounder.visual.*;
 import kosmos.*;
@@ -56,7 +56,6 @@ public class KosmosWorld extends Module {
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, 0.0f, 0.5f); // The starting light direction.
 
-	private Map<String, Pair<Vector3f, Vector3f>> playerQue;
 	private Map<String, Entity> players;
 
 	private WorldSetup worldSetup;
@@ -78,7 +77,6 @@ public class KosmosWorld extends Module {
 		this.entitySun = new InstanceSun(FlounderEntities.get().getEntities(), new Vector3f(-250.0f, -250.0f, -250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 		this.entityMoon1 = new InstanceMoon1(FlounderEntities.get().getEntities(), new Vector3f(200.0f, 250.0f, 220.0f), new Vector3f(0.0f, 0.0f, 0.0f)); // Red
 
-		this.playerQue = new HashMap<>();
 		this.players = new HashMap<>();
 
 		this.worldSetup = null;
@@ -136,18 +134,10 @@ public class KosmosWorld extends Module {
 			worldSetup = null;
 		}
 
-		// Move qued players to the world.
-		if (!playerQue.isEmpty()) {
-			for (String name : new HashMap<>(playerQue).keySet()) {
-				Pair<Vector3f, Vector3f> data = playerQue.get(name);
-				players.put(name, new InstanceMuliplayer(FlounderEntities.get().getEntities(), data.getFirst(), data.getSecond(), name));
-				playerQue.remove(name);
-			}
-		}
-
 		// Update the sky colours and sun position.
 		if (FlounderSkybox.get() != null && FlounderShadows.get() != null) {
 			dayFactor = dayDriver.update(Framework.getDelta()) / 100.0f;
+			// TODO: Increase day length and decrease night length.
 			Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.get().getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.get().getLightPosition()).normalize();
 			Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.get().getFog().getFogColour());
 			Colour.interpolate(FlounderSkybox.get().getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.get().getFog().getFogColour());
@@ -159,10 +149,6 @@ public class KosmosWorld extends Module {
 		}
 	}
 
-	@Handler.Function(Handler.FLAG_PROFILE)
-	public void profile() {
-	}
-
 	public Entity getPlayer(String username) {
 		return this.players.get(username);
 	}
@@ -172,7 +158,9 @@ public class KosmosWorld extends Module {
 	}
 
 	public synchronized void quePlayer(String username, Vector3f position, Vector3f rotation) {
-		this.playerQue.put(username, new Pair<>(position, rotation));
+		FlounderTasks.get().addTask(() -> {
+			players.put(username, new InstanceMuliplayer(FlounderEntities.get().getEntities(), position, rotation, username));
+		});
 	}
 
 	public synchronized void movePlayer(String username, float x, float y, float z, float w, float chunkX, float chunkZ) {
@@ -181,13 +169,6 @@ public class KosmosWorld extends Module {
 		}
 
 		if (!this.players.containsKey(username)) {
-			if (!this.playerQue.containsKey(username)) {
-				this.playerQue.put(username, new Pair<>(new Vector3f(x, y, z), new Vector3f(0.0f, w, 0.0f)));
-			} else {
-				this.playerQue.get(username).getFirst().set(x, y, z);
-				this.playerQue.get(username).getSecond().set(0.0f, w, 0.0f);
-			}
-
 			return;
 		}
 
@@ -195,10 +176,6 @@ public class KosmosWorld extends Module {
 	}
 
 	public synchronized void removePlayer(String username) {
-		if (this.playerQue.containsKey(username)) {
-			this.playerQue.remove(username);
-		}
-
 		if (this.players.containsKey(username)) {
 			Entity otherPlayer = this.players.get(username);
 			otherPlayer.forceRemove();
@@ -212,7 +189,6 @@ public class KosmosWorld extends Module {
 			otherPlayer.forceRemove();
 		}
 
-		this.playerQue.clear();
 		this.players.clear();
 	}
 

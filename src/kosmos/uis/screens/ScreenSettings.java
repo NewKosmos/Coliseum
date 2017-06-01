@@ -35,21 +35,10 @@ public class ScreenSettings extends ScreenObject {
 			}
 		});
 
-		// Screen Debug.
-		ScreenSettingDebug screenDebug = new ScreenSettingDebug(slider, this);
-		screenDebug.setAlphaDriver(new ConstantDriver(0.0f));
-		GuiButtonText debug = new GuiButtonText(paneLeft, new Vector2f(0.25f, 0.27f), "Debug", GuiAlign.CENTRE);
-		debug.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenDebug);
-			}
-		});
-
 		// Screen Client.
 		ScreenSettingClient screenClient = new ScreenSettingClient(slider, this);
 		screenClient.setAlphaDriver(new ConstantDriver(0.0f));
-		GuiButtonText client = new GuiButtonText(paneLeft, new Vector2f(0.25f, 0.34f), "Client", GuiAlign.CENTRE);
+		GuiButtonText client = new GuiButtonText(paneLeft, new Vector2f(0.25f, 0.27f), "Client", GuiAlign.CENTRE);
 		client.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
@@ -60,7 +49,7 @@ public class ScreenSettings extends ScreenObject {
 		// Screen Controls.
 		ScreenSettingControls screenControls = new ScreenSettingControls(slider, this);
 		screenControls.setAlphaDriver(new ConstantDriver(0.0f));
-		GuiButtonText controls = new GuiButtonText(paneLeft, new Vector2f(0.25f, 0.41f), "Controls", GuiAlign.CENTRE);
+		GuiButtonText controls = new GuiButtonText(paneLeft, new Vector2f(0.25f, 0.34f), "Controls", GuiAlign.CENTRE);
 		controls.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {

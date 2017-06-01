@@ -14,7 +14,6 @@ import flounder.framework.*;
 import flounder.maths.*;
 import flounder.networking.*;
 import flounder.parsing.*;
-import flounder.profiling.*;
 import flounder.resources.*;
 import flounder.shadows.*;
 import flounder.textures.*;
@@ -31,7 +30,6 @@ import static flounder.platform.Constants.*;
 public class KosmosConfigs {
 	// Main configs.
 	private static final Config CONFIG_MAIN = new Config(new MyFile(Framework.getRoamingFolder("kosmos"), "configs", "settings.conf"));
-	public static final ConfigData PROFILER_ENABLED = CONFIG_MAIN.getData(ConfigSection.DEBUG, "profilerEnabled", false, () -> FlounderProfiler.get().isOpen());
 
 	public static final ConfigData MUSIC_ENABLED = CONFIG_MAIN.getData(ConfigSection.AUDIO, "musicEnabled", true);
 	public static final ConfigData MUSIC_VOLUME = CONFIG_MAIN.getData(ConfigSection.AUDIO, "musicVolume", 0.5f);
