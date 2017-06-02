@@ -215,7 +215,7 @@ public class Chunk extends Entity {
 		tiles.put(tilePosition, objects);
 
 		// Generates tiles below if there is a terrain drop, for cliff faces. This could be more efficient but is not.
-		if (tilePosition.y - heightMin > Math.sqrt(2.0f) && tilePosition.y - (float) Math.sqrt(2.0f) > heightMin) {
+		if (tilePosition.y - heightMin > Math.sqrt(2.0f) && tilePosition.y - (float) Math.sqrt(2.0f) > heightMin) { // TODO: Improve.
 			generateTile(chunk, tiles, x, z, false, yOffset - (float) Math.sqrt(2.0f), false);
 		}
 

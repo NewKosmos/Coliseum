@@ -118,6 +118,7 @@ public class OverlayChat extends ScreenObject {
 
 	public static void addText(String string, Colour colour) {
 		FlounderTasks.get().addTask(() -> {
+			FlounderLogger.get().log("Memes");
 			((KosmosGuis) FlounderGuis.get().getGuiMaster()).getOverlayChat().chatMessages.generateObject(string, colour);
 		});
 	}

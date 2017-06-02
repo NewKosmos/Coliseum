@@ -113,6 +113,8 @@ public class KosmosWorld extends Module {
 		KosmosWater.get().deleteWater();
 
 		KosmosConfigs.fixConfigRefs();
+
+		System.gc();
 	}
 
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)

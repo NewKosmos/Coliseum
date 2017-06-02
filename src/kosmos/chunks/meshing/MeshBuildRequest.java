@@ -50,7 +50,7 @@ public class MeshBuildRequest implements RequestResource {
 
 		// Only create the model if there is stuff to build from.
 		if (!chunkData.isEmpty()) {
-			int offset = 0;
+			int indexOffset = 0;
 
 			// Loads all tiles into a tile mesh with all positional instances within the chunk.
 			for (Vector3f tile : chunkData.keySet()) {
@@ -61,33 +61,42 @@ public class MeshBuildRequest implements RequestResource {
 						ModelObject model = KosmosChunks.get().getHexagons()[m];
 
 						for (int i = 0; i < model.getIndices().length; i++) {
-							int pointer = model.getIndices()[i];
+							int index = model.getIndices()[i];
+							float vertex0 = model.getVertices()[index * 3] + (tile.x / 2.0f);
+							float vertex1 = model.getVertices()[index * 3 + 1] + (tile.y / 2.0f);
+							float vertex2 = model.getVertices()[index * 3 + 2] + (tile.z / 2.0f);
+							float texture0 = model.getTextures()[index * 2];
+							float texture1 = model.getTextures()[index * 2 + 1];
+							float normal0 = model.getNormals()[index * 3];
+							float normal1 = model.getNormals()[index * 3 + 1];
+							float normal2 = model.getNormals()[index * 3 + 2];
+							float tangent0 = model.getTangents()[index * 3];
+							float tangent1 = model.getTangents()[index * 3 + 1];
+							float tangent2 = model.getTangents()[index * 3 + 2];
 
-							int index = pointer + offset;
-							float vertex0 = model.getVertices()[pointer * 3] + (tile.x / 2.0f);
-							float vertex1 = model.getVertices()[pointer * 3 + 1] + (tile.y / 2.0f);
-							float vertex2 = model.getVertices()[pointer * 3 + 2] + (tile.z / 2.0f);
-							float texture0 = model.getTextures()[pointer * 2];
-							float texture1 = model.getTextures()[pointer * 2 + 1];
-							float normal0 = model.getNormals()[pointer * 3];
-							float normal1 = model.getNormals()[pointer * 3 + 1];
-							float normal2 = model.getNormals()[pointer * 3 + 2];
-							float tangent0 = model.getTangents()[pointer * 3];
-							float tangent1 = model.getTangents()[pointer * 3 + 1];
-							float tangent2 = model.getTangents()[pointer * 3 + 2];
+							TileVertex vertex = new TileVertex(indexOffset, vertex0, vertex1, vertex2, texture0, texture1, normal0, normal1, normal2, tangent0, tangent1, tangent2, null);
 
+							for (TileVertex v : vertices) {
+								if (v.equals(vertex) && v.duplicate == null) {
+									vertex.duplicate = v;
+								}
+							}
+
+							vertices.add(vertex);
+
+							// Offset the running non duplicate index total.
+							if (vertex.duplicate == null) {
+								indexOffset++;
+							}
+
+							// Update the mesh bounds.
 							chunkMesh.minX = (vertex0 < chunkMesh.minX) ? vertex0 : chunkMesh.minX;
 							chunkMesh.minY = (vertex1 < chunkMesh.minY) ? vertex1 : chunkMesh.minY;
 							chunkMesh.minZ = (vertex2 < chunkMesh.minZ) ? vertex2 : chunkMesh.minZ;
 							chunkMesh.maxX = (vertex0 > chunkMesh.maxX) ? vertex0 : chunkMesh.maxX;
 							chunkMesh.maxY = (vertex1 > chunkMesh.maxY) ? vertex1 : chunkMesh.maxY;
 							chunkMesh.maxZ = (vertex2 > chunkMesh.maxZ) ? vertex2 : chunkMesh.maxZ;
-
-							TileVertex vertex = new TileVertex(index, vertex0, vertex1, vertex2, texture0, texture1, normal0, normal1, normal2, tangent0, tangent1, tangent2);
-							vertices.add(vertex);
 						}
-
-						offset += model.getIndices().length;
 					}
 				}
 			}
@@ -96,30 +105,37 @@ public class MeshBuildRequest implements RequestResource {
 			chunkMesh.maxRadius = Chunk.CHUNK_WORLD_SIZE; // Maths.maxValue(maxX, maxY, maxZ, Math.abs(minX), Math.abs(minY), Math.abs(minZ));
 
 			// Gets the resulting data stuff from the other stuff.
-			float[] resultVertices = new float[vertices.size() * 3];
-			float[] resultTextures = new float[vertices.size() * 2];
-			float[] resultNormals = new float[vertices.size() * 3];
-			float[] resultTangents = new float[vertices.size() * 3];
+			float[] resultVertices = new float[indexOffset * 3];
+			float[] resultTextures = new float[indexOffset * 2];
+			float[] resultNormals = new float[indexOffset * 3];
+			float[] resultTangents = new float[indexOffset * 3];
 			int[] resultIndices = new int[vertices.size()];
 
 			for (int i = 0; i < vertices.size(); i++) {
-				resultIndices[i] = vertices.get(i).index;
+				if (vertices.get(i).duplicate == null) {
+					resultIndices[i] = vertices.get(i).index;
 
-				resultVertices[vertices.get(i).index * 3] = vertices.get(i).vertex0;
-				resultVertices[vertices.get(i).index * 3 + 1] = vertices.get(i).vertex1;
-				resultVertices[vertices.get(i).index * 3 + 2] = vertices.get(i).vertex2;
+					resultVertices[vertices.get(i).index * 3] = vertices.get(i).vertex0;
+					resultVertices[vertices.get(i).index * 3 + 1] = vertices.get(i).vertex1;
+					resultVertices[vertices.get(i).index * 3 + 2] = vertices.get(i).vertex2;
 
-				resultTextures[vertices.get(i).index * 2] = vertices.get(i).texture0;
-				resultTextures[vertices.get(i).index * 2 + 1] = vertices.get(i).texture1;
+					resultTextures[vertices.get(i).index * 2] = vertices.get(i).texture0;
+					resultTextures[vertices.get(i).index * 2 + 1] = vertices.get(i).texture1;
 
-				resultNormals[vertices.get(i).index * 3] = vertices.get(i).normal0;
-				resultNormals[vertices.get(i).index * 3 + 1] = vertices.get(i).normal1;
-				resultNormals[vertices.get(i).index * 3 + 2] = vertices.get(i).normal2;
+					resultNormals[vertices.get(i).index * 3] = vertices.get(i).normal0;
+					resultNormals[vertices.get(i).index * 3 + 1] = vertices.get(i).normal1;
+					resultNormals[vertices.get(i).index * 3 + 2] = vertices.get(i).normal2;
 
-				resultTangents[vertices.get(i).index * 3] = vertices.get(i).tangent0;
-				resultTangents[vertices.get(i).index * 3 + 1] = vertices.get(i).tangent1;
-				resultTangents[vertices.get(i).index * 3 + 2] = vertices.get(i).tangent2;
+					resultTangents[vertices.get(i).index * 3] = vertices.get(i).tangent0;
+					resultTangents[vertices.get(i).index * 3 + 1] = vertices.get(i).tangent1;
+					resultTangents[vertices.get(i).index * 3 + 2] = vertices.get(i).tangent2;
+				} else {
+					resultIndices[i] = vertices.get(i).duplicate.index;
+				}
 			}
+
+			// Delete crap.
+			vertices.clear();
 
 			// Then all model data is used to create a manual model loader, a hull is not generated and materials are baked into the textures. he model is then loaded into a object and OpenGL.
 			chunkMesh.chunkModel = ModelFactory.newBuilder().setManual(new ModelLoadManual("chunk" + chunkMesh.chunk.getPosition().x + "u" + chunkMesh.chunk.getPosition().z) {

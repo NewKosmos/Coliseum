@@ -29,7 +29,7 @@ public interface ICommand {
 	void runCommand(String fullCommand);
 
 	public enum ConsoleCommands {
-		H(new ICommand() {
+		HELP(new ICommand() {
 			@Override
 			public String commandPrefix() {
 				return "help";

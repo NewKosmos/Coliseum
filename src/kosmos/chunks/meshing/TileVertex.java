@@ -22,8 +22,9 @@ public class TileVertex {
 	protected float tangent0;
 	protected float tangent1;
 	protected float tangent2;
+	protected TileVertex duplicate;
 
-	protected TileVertex(int index, float vertex0, float vertex1, float vertex2, float texture0, float texture1, float normal0, float normal1, float normal2, float tangent0, float tangent1, float tangent2) {
+	protected TileVertex(int index, float vertex0, float vertex1, float vertex2, float texture0, float texture1, float normal0, float normal1, float normal2, float tangent0, float tangent1, float tangent2, TileVertex duplicate) {
 		this.index = index;
 		this.vertex0 = vertex0;
 		this.vertex1 = vertex1;
@@ -36,6 +37,7 @@ public class TileVertex {
 		this.tangent0 = tangent0;
 		this.tangent1 = tangent1;
 		this.tangent2 = tangent2;
+		this.duplicate = duplicate;
 	}
 
 	@Override
@@ -82,6 +84,7 @@ public class TileVertex {
 				"], tangent=[" + tangent0 +
 				", " + tangent1 +
 				", " + tangent2 +
+				", duplicate" + duplicate +
 				"]}";
 	}
 }
