@@ -79,7 +79,7 @@ public class KosmosChunks extends Module {
 			}
 
 			// Goes though all chunks looking for changes.
-			for (Entity entity : new ArrayList<>(FlounderEntities.get().getEntities().getAll())) {
+			for (Entity entity : FlounderEntities.get().getEntities().getAll(null)) {
 				if (entity != null && entity instanceof Chunk) {
 					Chunk chunk = (Chunk) entity;
 
@@ -144,7 +144,7 @@ public class KosmosChunks extends Module {
 	public void setCurrent(Chunk currentChunk) {
 		if (currentChunk != null && this.currentChunk != currentChunk) {
 			// Removes any old chunks that are out of range.
-			Iterator<Entity> it = FlounderEntities.get().getEntities().getAll().iterator();
+			Iterator<Entity> it = FlounderEntities.get().getEntities().iterator();
 
 			while (it.hasNext()) {
 				Entity entity = it.next();
@@ -176,7 +176,7 @@ public class KosmosChunks extends Module {
 	 */
 	public void clear(boolean loadCurrent) {
 		// Removes any chunks in the entity list.
-		Iterator<Entity> it = FlounderEntities.get().getEntities().getAll().iterator();
+		Iterator<Entity> it = FlounderEntities.get().getEntities().iterator();
 
 		while (it.hasNext()) {
 			Entity entity = it.next();

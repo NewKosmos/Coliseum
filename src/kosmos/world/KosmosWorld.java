@@ -52,7 +52,7 @@ public class KosmosWorld extends Module {
 	public static final Colour MOON_COLOUR_NIGHT = new Colour(0.2f, 0.2f, 0.3f);
 	public static final Colour MOON_COLOUR_DAY = new Colour(0.0f, 0.0f, 0.0f);
 
-	public static final float DAY_NIGHT_CYCLE = 420.0f; // The day/night length (sec).
+	public static final float DAY_NIGHT_CYCLE = 300.0f; // The day/night length (sec).
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, 0.0f, 0.5f); // The starting light direction.
 
@@ -139,7 +139,7 @@ public class KosmosWorld extends Module {
 		// Update the sky colours and sun position.
 		if (FlounderSkybox.get() != null && FlounderShadows.get() != null) {
 			dayFactor = dayDriver.update(Framework.getDelta()) / 100.0f;
-			// TODO: Increase day length and decrease night length.
+			// TODO: Day night factor.
 			Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.get().getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.get().getLightPosition()).normalize();
 			Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.get().getFog().getFogColour());
 			Colour.interpolate(FlounderSkybox.get().getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.get().getFog().getFogColour());

@@ -162,15 +162,16 @@ public class KosmosRenderer extends RendererMaster {
 	}
 
 	private void renderPost(boolean isPaused, float blurFactor) {
+		FBO output = rendererFBO;
 		pipelineMRT.setShadowFactor(KosmosWorld.get().getShadowFactor());
 		pipelineMRT.renderPipeline(
-				rendererFBO.getColourTexture(0), // Colours
-				rendererFBO.getColourTexture(1), // Normals
-				rendererFBO.getColourTexture(2), // Extras
-				rendererFBO.getDepthTexture(), // Depth
+				output.getColourTexture(0), // Colours
+				output.getColourTexture(1), // Normals
+				output.getColourTexture(2), // Extras
+				output.getDepthTexture(), // Depth
 				shadowRenderer.getShadowMap() // Shadow Map
 		);
-		FBO output = pipelineMRT.getOutput();
+		output = pipelineMRT.getOutput();
 
 		// Render post effects if enabled.
 		if (KosmosPost.get().isEffectsEnabled()) {

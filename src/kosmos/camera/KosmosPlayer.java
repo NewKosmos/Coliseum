@@ -73,7 +73,7 @@ public class KosmosPlayer extends Player {
 				Ray cameraRay = FlounderCamera.get().getCamera().getViewRay();
 
 				if (KosmosWorld.get().getEntityPlayer() != null) {
-					for (Entity entity : FlounderEntities.get().getEntities().getAll()) {
+					for (Entity entity : FlounderEntities.get().getEntities().getAll(null)) {
 						if (entity.getCollider() != null && entity.getComponent(ComponentPlayer.class) == null && entity.getComponent(ComponentMultiplayer.class) == null && entity.getComponent(ComponentChunk.class) == null) {
 							IntersectData data = entity.getCollider().intersects(cameraRay);
 							float distance = Vector3f.getDistance(entity.getPosition(), KosmosWorld.get().getEntityPlayer().getPosition());
@@ -109,7 +109,7 @@ public class KosmosPlayer extends Player {
 					if (terrainPosition.getY() >= 0.0f) {
 						Chunk inChunk = null;
 
-						for (Entity entity : FlounderEntities.get().getEntities().getAll()) {
+						for (Entity entity : FlounderEntities.get().getEntities().getAll(null)) {
 							if (entity != null && entity instanceof Chunk) {
 								Chunk chunk = (Chunk) entity;
 
