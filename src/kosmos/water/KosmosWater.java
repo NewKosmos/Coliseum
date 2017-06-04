@@ -98,7 +98,7 @@ public class KosmosWater extends Module {
 
 	@Module.Instance
 	public static KosmosWater get() {
-		return (KosmosWater) Framework.getInstance(KosmosWater.class);
+		return (KosmosWater) Framework.get().getInstance(KosmosWater.class);
 	}
 
 	@Module.TabName

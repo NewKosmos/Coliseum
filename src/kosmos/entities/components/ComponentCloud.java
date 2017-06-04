@@ -43,7 +43,7 @@ public class ComponentCloud extends IComponentEntity implements IComponentEditor
 	@Override
 	public void update() {
 		//Vector3f.rotate(startPosition, new Vector3f(0.0f, KosmosWorld.getSkyCycle().getDayFactor() * 180.0f, 0.0f), getEntity().getPosition());
-		float height = driverHeight.update(Framework.getDelta());
+		float height = driverHeight.update(Framework.get().getDelta());
 		getEntity().getPosition().y = startPosition.y + height;
 		getEntity().setMoved();
 	}

@@ -76,7 +76,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 
 	@Override
 	public void update() {
-		float delta = Math.min(1.0f / 60.0f, Framework.getDelta());
+		float delta = Math.min(1.0f / 60.0f, Framework.get().getDelta());
 
 		// Gets if noclip is enabled.
 		boolean noclip = ((KosmosPlayer) FlounderCamera.get().getPlayer()).isNoclipEnabled();

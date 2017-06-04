@@ -82,7 +82,7 @@ public class MapGenerator extends Thread {
 			}
 		}
 
-		File directorySave = new File(Framework.getRoamingFolder().getPath() + "/saves/");
+		File directorySave = new File(Framework.get().getRoamingFolder().getPath() + "/saves/");
 
 		if (!directorySave.exists()) {
 			System.out.println("Creating directory: " + directorySave);
@@ -117,7 +117,7 @@ public class MapGenerator extends Thread {
 					new java.util.TimerTask() {
 						@Override
 						public void run() {
-							mapTexture = TextureFactory.newBuilder().setFile(new MyFile(Framework.getRoamingFolder(), "saves", seed + "-biome.png")).create();
+							mapTexture = TextureFactory.newBuilder().setFile(new MyFile(Framework.get().getRoamingFolder(), "saves", seed + "-biome.png")).create();
 						}
 					},
 					1000

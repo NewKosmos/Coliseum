@@ -42,7 +42,7 @@ public class PacketWorld extends Packet {
 
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
-		boolean offServerTime = Math.abs(timeSec - Framework.getTimeSec()) > 0.866f;
+		boolean offServerTime = Math.abs(timeSec - Framework.get().getTimeSec()) > 0.866f;
 
 		//	FlounderLogger.get().log("[" + address.getHostAddress() + ":" + port + "]: world seed=" + seed + ", off server time=" + offServerTime +
 		//			", server time=" + timeSec + ", client time: " + Framework.getTimeSec() + ", client offset: " + Framework.getTimeOffset() +
@@ -55,7 +55,7 @@ public class PacketWorld extends Packet {
 		}
 
 		if (offServerTime) {
-			Framework.setTimeOffset(timeSec - Framework.getTimeSec() - Framework.getTimeOffset());
+			Framework.get().setTimeOffset(timeSec - Framework.get().getTimeSec() - Framework.get().getTimeOffset());
 		}
 	}
 

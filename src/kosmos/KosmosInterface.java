@@ -18,7 +18,6 @@ import flounder.inputs.*;
 import flounder.maths.*;
 import flounder.networking.*;
 import flounder.particles.*;
-import flounder.resources.*;
 import flounder.shadows.*;
 import flounder.skybox.*;
 import flounder.sounds.*;
@@ -45,7 +44,7 @@ public class KosmosInterface extends Standard {
 		FlounderSound.get().getSourcePool().setSystemVolume(KosmosConfigs.SOUND_VOLUME.setReference(() -> FlounderSound.get().getSourcePool().getSystemVolume()).getFloat());
 
 		gamePlaylist = new Playlist();
-		gamePlaylist.addMusic(Sound.loadSoundInBackground(new MyFile(MyFile.RES_FOLDER, "music", "09-hitori-bocchi-1b.wav"), 0.80f, 1.0f));
+		// gamePlaylist.addMusic(Sound.loadSoundInBackground(new MyFile(MyFile.RES_FOLDER, "music", "09-hitori-bocchi-1b.wav"), 0.80f, 1.0f));
 		FlounderSound.get().getMusicPlayer().playMusicPlaylist(gamePlaylist, true, 4.0f, 10.0f);
 
 		if (KosmosConfigs.MUSIC_ENABLED.setReference(() -> !FlounderSound.get().getMusicPlayer().isPaused()).getBoolean()) {
@@ -124,7 +123,7 @@ public class KosmosInterface extends Standard {
 				}
 
 				KosmosConfigs.saveAllConfigs();
-				Framework.requestClose(false);
+				Framework.get().requestClose(false);
 			}
 		});
 	}

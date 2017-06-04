@@ -14,10 +14,9 @@ import flounder.framework.updater.*;
 import flounder.lwjgl3.*;
 import flounder.resources.*;
 import kosmos.camera.*;
-import org.lwjgl.glfw.*;
 
 public class NewKosmos extends Framework {
-	public static final String VERSION = "6.01";
+	public static final String VERSION = "6.04";
 
 	public static void main(String[] args) {
 		new NewKosmos().run();
@@ -25,20 +24,22 @@ public class NewKosmos extends Framework {
 	}
 
 	public NewKosmos() {
-		super("kosmos", new UpdaterDefault(GLFW::glfwGetTime), -1,
-				new Extension[]{new KosmosInterface(), new KosmosRenderer(), new KosmosCamera(), new KosmosPlayer(), new KosmosGuis()},
-				new Module[]{new PlatformLwjgl(
-						KosmosConfigs.DISPLAY_WIDTH.getInteger(),
-						KosmosConfigs.DISPLAY_HEIGHT.getInteger(),
-						"New Kosmos", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
-						KosmosConfigs.DISPLAY_VSYNC.getBoolean(),
-						KosmosConfigs.DISPLAY_ANTIALIAS.getBoolean(),
-						0,
-						KosmosConfigs.DISPLAY_FULLSCREEN.getBoolean(),
-						false,
-						false,
-						KosmosConfigs.TEXTURES_ANISOTROPY_MAX.getFloat()
-				)});
-		Framework.setFpsLimit(KosmosConfigs.FRAMEWORK_FPS_LIMIT.getInteger());
+		super(
+				"kosmos", new UpdaterDefault(null), -1,
+				new Extension[]{new KosmosInterface(), new KosmosRenderer(), new KosmosCamera(), new KosmosPlayer(), new KosmosGuis()}
+		);
+		Framework.get().addOverrides(new PlatformLwjgl(
+				KosmosConfigs.DISPLAY_WIDTH.getInteger(),
+				KosmosConfigs.DISPLAY_HEIGHT.getInteger(),
+				"New Kosmos", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
+				KosmosConfigs.DISPLAY_VSYNC.getBoolean(),
+				KosmosConfigs.DISPLAY_ANTIALIAS.getBoolean(),
+				0,
+				KosmosConfigs.DISPLAY_FULLSCREEN.getBoolean(),
+				false,
+				false,
+				KosmosConfigs.TEXTURES_ANISOTROPY_MAX.getFloat()
+		));
+		Framework.get().setFpsLimit(KosmosConfigs.FRAMEWORK_FPS_LIMIT.getInteger());
 	}
 }

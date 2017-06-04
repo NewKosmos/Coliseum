@@ -116,7 +116,7 @@ public class ScreenStart extends ScreenObject {
 		exitGame.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				Framework.requestClose(false);
+				Framework.get().requestClose(false);
 			}
 		});
 	}

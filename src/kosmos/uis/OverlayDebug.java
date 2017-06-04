@@ -69,8 +69,8 @@ public class OverlayDebug extends ScreenObject {
 		}
 
 		if (updateText) {
-			fpsText.setText("FPS: " + Maths.roundToPlace(1.0f / Framework.getDeltaRender(), 1));
-			upsText.setText("UPS: " + Maths.roundToPlace(1.0f / Framework.getDelta(), 1));
+			fpsText.setText("FPS: " + Maths.roundToPlace(1.0f / Framework.get().getDeltaRender(), 1));
+			upsText.setText("UPS: " + Maths.roundToPlace(1.0f / Framework.get().getDelta(), 1));
 			positionText.setText("POSITION: [" + (FlounderCamera.get().getPlayer() == null ? "NULL" : Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().x, 1) + ", " + Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().y, 1) + ", " + Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().z, 1) + "]"));
 			timeText.setText("TIME: " + Maths.roundToPlace(KosmosWorld.get().getDayFactor(), 3));
 			seedText.setText("SEED: " + KosmosChunks.get().getNoise().getSeed());

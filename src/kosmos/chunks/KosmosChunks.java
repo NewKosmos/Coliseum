@@ -213,7 +213,7 @@ public class KosmosChunks extends Module {
 
 	@Module.Instance
 	public static KosmosChunks get() {
-		return (KosmosChunks) Framework.getInstance(KosmosChunks.class);
+		return (KosmosChunks) Framework.get().getInstance(KosmosChunks.class);
 	}
 
 	@Module.TabName

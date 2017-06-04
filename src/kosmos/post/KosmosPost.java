@@ -95,7 +95,7 @@ public class KosmosPost extends Module {
 
 	@Module.Instance
 	public static KosmosPost get() {
-		return (KosmosPost) Framework.getInstance(KosmosPost.class);
+		return (KosmosPost) Framework.get().getInstance(KosmosPost.class);
 	}
 
 	@Module.TabName

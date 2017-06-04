@@ -13,7 +13,7 @@ import flounder.devices.*;
 import flounder.framework.*;
 import flounder.maths.*;
 import flounder.networking.*;
-import flounder.parsing.*;
+import flounder.parsing.config.*;
 import flounder.resources.*;
 import flounder.shadows.*;
 import flounder.textures.*;
@@ -40,7 +40,7 @@ public class KosmosConfigs {
 	public static final ConfigData DISPLAY_VSYNC = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "displayVSync", false, () -> FlounderDisplay.get().isVSync());
 	public static final ConfigData DISPLAY_ANTIALIAS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "displayAntialias", true, () -> FlounderDisplay.get().isAntialiasing());
 	public static final ConfigData DISPLAY_FULLSCREEN = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "displayFullscreen", false, () -> FlounderDisplay.get().isFullscreen());
-	public static final ConfigData FRAMEWORK_FPS_LIMIT = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "frameworkFpsLimit", 144, () -> Framework.getFpsLimit());
+	public static final ConfigData FRAMEWORK_FPS_LIMIT = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "frameworkFpsLimit", 144, () -> Framework.get().getFpsLimit());
 	public static final ConfigData TEXTURES_ANISOTROPY_MAX = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "texturesAnisotropyMax", 8.0f, () -> FlounderTextures.get().getAnisotropyLevel());
 
 	public static final ConfigData WATER_COLOUR_INTENSITY = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "waterColourIntensity", 0.7f, () -> KosmosWater.get().getColourIntensity());

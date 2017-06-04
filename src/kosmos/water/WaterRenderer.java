@@ -93,7 +93,7 @@ public class WaterRenderer extends Renderer {
 
 		shader.getUniformVec4("diffuseColour").loadVec4(water.getColour());
 
-		shader.getUniformFloat("waveTime").loadFloat(Framework.getTimeSec() / Water.WAVE_SPEED);
+		shader.getUniformFloat("waveTime").loadFloat(Framework.get().getTimeSec() / Water.WAVE_SPEED);
 		shader.getUniformFloat("waveLength").loadFloat(Water.WAVE_LENGTH);
 		shader.getUniformFloat("amplitude").loadFloat(Water.AMPLITUDE);
 		shader.getUniformFloat("squareSize").loadFloat((float) Water.SQUARE_SIZE);

@@ -138,7 +138,7 @@ public class KosmosWorld extends Module {
 
 		// Update the sky colours and sun position.
 		if (FlounderSkybox.get() != null && FlounderShadows.get() != null) {
-			dayFactor = dayDriver.update(Framework.getDelta()) / 100.0f;
+			dayFactor = dayDriver.update(Framework.get().getDelta()) / 100.0f;
 			// TODO: Day night factor.
 			Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.get().getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.get().getLightPosition()).normalize();
 			Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.get().getFog().getFogColour());
@@ -257,7 +257,7 @@ public class KosmosWorld extends Module {
 
 	@Module.Instance
 	public static KosmosWorld get() {
-		return (KosmosWorld) Framework.getInstance(KosmosWorld.class);
+		return (KosmosWorld) Framework.get().getInstance(KosmosWorld.class);
 	}
 
 	@Module.TabName

@@ -22,7 +22,7 @@ import flounder.maths.Timer;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
-import flounder.parsing.*;
+import flounder.parsing.config.*;
 import flounder.physics.*;
 import flounder.renderer.*;
 import flounder.resources.*;
@@ -31,7 +31,6 @@ import flounder.textures.*;
 import flounder.visual.*;
 import kosmos.chunks.*;
 import kosmos.network.packets.*;
-import org.lwjgl.glfw.*;
 import sun.reflect.generics.reflectiveObjects.*;
 
 import javax.swing.*;
@@ -45,25 +44,27 @@ public class KosmosServer extends Framework {
 	}
 
 	public KosmosServer() {
-		super("kosmos", new UpdaterDefault(GLFW::glfwGetTime), 10,
-				new Extension[]{new ServerInterface(), new ServerRenderer(), new ServerCamera(), new ServerGuis()},
-				new Module[]{new PlatformLwjgl(
-						870,
-						940,
-						"New Kosmos Server", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
-						false,
-						false,
-						0,
-						false,
-						true,
-						false,
-						1
-				)});
+		super(
+				"kosmos", new UpdaterDefault(null), 10,
+				new Extension[]{new ServerInterface(), new ServerRenderer(), new ServerCamera(), new ServerGuis()}
+		);
+		new PlatformLwjgl(
+				870,
+				940,
+				"New Kosmos Server", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
+				false,
+				false,
+				0,
+				false,
+				true,
+				false,
+				1
+		);
 	}
 
 	public static class ServerConfigs {
 		// Host server configs.
-		private static final Config CONFIG_HOST = new Config(new MyFile(Framework.getRoamingFolder("kosmos"), "configs", "host.conf"));
+		private static final Config CONFIG_HOST = new Config(new MyFile(Framework.get().getRoamingFolder("kosmos"), "configs", "host.conf"));
 		public static final ConfigData HOST_PORT = CONFIG_HOST.getData(ConfigSection.SEVER, "hostPort", FlounderNetwork.DEFAULT_PORT, () -> FlounderNetwork.get().getPort()); // Reference set in server interface.
 		public static final ConfigData HOST_SEED = CONFIG_HOST.getData(ConfigSection.WORLD, "hostSeed", (int) Maths.randomInRange(1.0, 1000000.0)); // Reference set in server interface.
 
@@ -110,7 +111,7 @@ public class KosmosServer extends Framework {
 							"Are you sure to close this editor?", "Any unsaved work will be lost!",
 							JOptionPane.YES_NO_OPTION,
 							JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-						Framework.requestClose(false);
+						Framework.get().requestClose(false);
 					} else {
 						frame.setVisible(true);
 					}
@@ -123,7 +124,7 @@ public class KosmosServer extends Framework {
 			buttonRandomSeed.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					KosmosChunks.get().getNoise().setSeed((int) Maths.randomInRange(1.0, 1000000.0));
-					new PacketWorld(KosmosChunks.get().getNoise().getSeed(), Framework.getTimeSec()).writeData(FlounderNetwork.get().getSocketServer());
+					new PacketWorld(KosmosChunks.get().getNoise().getSeed(), Framework.get().getTimeSec()).writeData(FlounderNetwork.get().getSocketServer());
 				}
 			});
 			mainPanel.add(buttonRandomSeed);
@@ -132,7 +133,7 @@ public class KosmosServer extends Framework {
 			buttonShutdown.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					new PacketDisconnect("server").writeData(FlounderNetwork.get().getSocketServer());
-					Framework.requestClose(false);
+					Framework.get().requestClose(false);
 				}
 			});
 			mainPanel.add(buttonShutdown);
@@ -165,7 +166,7 @@ public class KosmosServer extends Framework {
 		public void update() {
 			// Remind the clients the time, acts as a "are your there" ping as well.
 			if (timerWorld.isPassedTime()) {
-				new PacketWorld(KosmosChunks.get().getNoise().getSeed(), Framework.getTimeSec()).writeData(FlounderNetwork.get().getSocketServer());
+				new PacketWorld(KosmosChunks.get().getNoise().getSeed(), Framework.get().getTimeSec()).writeData(FlounderNetwork.get().getSocketServer());
 				timerWorld.resetStartTime();
 			}
 		}

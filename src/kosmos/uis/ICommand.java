@@ -139,7 +139,7 @@ public interface ICommand {
 				FlounderLogger.get().log(log);
 				OverlayChat.addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
-				Framework.setTimeOffset(Framework.getTimeOffset() + timeOffset);
+				Framework.get().setTimeOffset(Framework.get().getTimeOffset() + timeOffset);
 			}
 		}),
 		NOCLIP(new ICommand() {
@@ -180,7 +180,7 @@ public interface ICommand {
 				FlounderLogger.get().log(log);
 				OverlayChat.addText(log, new Colour(0.1f, 0.8f, 0.0f));
 
-				Framework.requestClose(false);
+				Framework.get().requestClose(false);
 			}
 		});
 

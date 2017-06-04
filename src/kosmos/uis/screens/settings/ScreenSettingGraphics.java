@@ -78,8 +78,8 @@ public class ScreenSettingGraphics extends ScreenObject {
 		});
 
 		// Slider Limit FPS.
-		GuiSliderText sliderLimitFPS = new GuiSliderText(paneLeft, new Vector2f(0.25f, 0.41f), "FPS Limit: ", 20.0f, 1100.0f, Framework.getFpsLimit(), GuiAlign.CENTRE);
-		FlounderEvents.get().addEvent(new EventChange<Integer>(() -> Framework.getFpsLimit()) {
+		GuiSliderText sliderLimitFPS = new GuiSliderText(paneLeft, new Vector2f(0.25f, 0.41f), "FPS Limit: ", 20.0f, 1100.0f, Framework.get().getFpsLimit(), GuiAlign.CENTRE);
+		FlounderEvents.get().addEvent(new EventChange<Integer>(() -> Framework.get().getFpsLimit()) {
 			@Override
 			public void onEvent(Integer newValue) {
 				sliderLimitFPS.setText("FPS Limit: " + (newValue > 1000.0f ? "infinite" : newValue));
@@ -88,7 +88,7 @@ public class ScreenSettingGraphics extends ScreenObject {
 		sliderLimitFPS.addChangeListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
-				Framework.setFpsLimit((int) sliderLimitFPS.getProgress());
+				Framework.get().setFpsLimit((int) sliderLimitFPS.getProgress());
 			}
 		});
 

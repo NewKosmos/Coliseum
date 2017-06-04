@@ -208,7 +208,7 @@ public class Water {
 	}
 
 	public float getHeight(float x, float z) {
-		float waveTime = Framework.getTimeSec() / WAVE_SPEED;
+		float waveTime = Framework.get().getTimeSec() / WAVE_SPEED;
 
 		final double val1 = 0.1;
 		final double val2 = 0.3;
