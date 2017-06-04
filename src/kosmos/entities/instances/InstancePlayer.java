@@ -2,6 +2,8 @@ package kosmos.entities.instances;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.lights.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.space.*;
@@ -21,7 +23,7 @@ public class InstancePlayer extends Entity {
 		new ComponentPlayer(this);
 		new ComponentAnimation(this, 0.2f, COLLADA, TEXTURE, 1);
 		new ComponentSurface(this, 1.0f, 0.0f, false, false, true);
-		//	new flounder.entities.components.ComponentLight(this, new Vector3f(0.0f, 2.0f, 0.0f), new Colour(1.0f, 1.0f, 1.0f), new Attenuation(1.0f, 0.02f, 0.5f));
+		new ComponentLight(this, new Vector3f(0.0f, 2.0f, 0.0f), new Colour(1.0f, 1.0f, 1.0f), new Attenuation(1.0f, 0.02f, 0.5f));
 		new ComponentCollision(this);
 		new ComponentCollider(this);
 	}

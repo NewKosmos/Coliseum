@@ -45,7 +45,7 @@ public class KosmosServer extends Framework {
 
 	public KosmosServer() {
 		super(
-				"kosmos", new UpdaterDefault(null), 10,
+				"kosmos", new UpdaterDefault(null), 2,
 				new Extension[]{new ServerInterface(), new ServerRenderer(), new ServerCamera(), new ServerGuis()}
 		);
 		Framework.get().addOverrides(new PlatformLwjgl(
@@ -64,7 +64,7 @@ public class KosmosServer extends Framework {
 
 	public static class ServerConfigs {
 		// Host server configs.
-		private static final Config CONFIG_HOST = new Config(new MyFile(Framework.get().getRoamingFolder("kosmos"), "configs", "host.conf"));
+		private static final Config CONFIG_HOST = new Config(new MyFile(Framework.getRoamingFolder("kosmos"), "configs", "host.conf"));
 		public static final ConfigData HOST_PORT = CONFIG_HOST.getData(ConfigSection.SEVER, "hostPort", FlounderNetwork.DEFAULT_PORT, () -> FlounderNetwork.get().getPort()); // Reference set in server interface.
 		public static final ConfigData HOST_SEED = CONFIG_HOST.getData(ConfigSection.WORLD, "hostSeed", (int) Maths.randomInRange(1.0, 1000000.0)); // Reference set in server interface.
 

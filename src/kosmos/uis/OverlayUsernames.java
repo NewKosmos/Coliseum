@@ -94,6 +94,9 @@ public class OverlayUsernames extends ScreenObject {
 			boolean shouldRender = Vector3f.getDistanceSquared(screenspace, FlounderCamera.get().getCamera().getPosition()) < 1200.0f;
 			Maths.worldToScreenSpace(screenspace, FlounderCamera.get().getCamera().getViewMatrix(), FlounderCamera.get().getCamera().getProjectionMatrix(), this.screenspace);
 
+			text.setVisible(screenspace.z >= 0.0f);
+			gui.setVisible(screenspace.z >= 0.0f);
+
 			// Updates the alpha, hides if far away.
 			if (text.getColour().a == 1.0f && !shouldRender) {
 				text.setAlphaDriver(new SlideDriver(text.getAlpha(), 0.0f, KosmosGuis.SLIDE_TIME));
