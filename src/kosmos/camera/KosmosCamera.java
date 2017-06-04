@@ -33,7 +33,7 @@ public class KosmosCamera extends Camera {
 	// Defines the strength of motion from the joysick.
 	private static final float INFLUENCE_OF_JOYSTICK_DY = 4.5f;
 	private static final float INFLUENCE_OF_JOYSTICK_DX = 4.5f;
-	private static final float INFLUENCE_OF_JOYSTICK_ZOOM = 10.0f;
+	private static final float INFLUENCE_OF_JOYSTICK_ZOOM = 0.3f;
 
 	// Defines the strength of motion from the mouse.
 	private static final float INFLUENCE_OF_MOUSE_DY = 10000.0f;
