@@ -260,11 +260,6 @@ public class KosmosWorld extends Module {
 		return (KosmosWorld) Framework.get().getInstance(KosmosWorld.class);
 	}
 
-	@Module.TabName
-	public static String getTab() {
-		return "Kosmos World";
-	}
-
 	public static class WorldSetup {
 		protected final int seed;
 		protected final Vector3f positionPlayer;

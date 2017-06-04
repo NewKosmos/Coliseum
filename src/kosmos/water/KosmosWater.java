@@ -100,9 +100,4 @@ public class KosmosWater extends Module {
 	public static KosmosWater get() {
 		return (KosmosWater) Framework.get().getInstance(KosmosWater.class);
 	}
-
-	@Module.TabName
-	public static String getTab() {
-		return "Kosmos Water";
-	}
 }

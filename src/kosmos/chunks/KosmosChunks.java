@@ -215,9 +215,4 @@ public class KosmosChunks extends Module {
 	public static KosmosChunks get() {
 		return (KosmosChunks) Framework.get().getInstance(KosmosChunks.class);
 	}
-
-	@Module.TabName
-	public static String getTab() {
-		return "Kosmos Chunks";
-	}
 }
