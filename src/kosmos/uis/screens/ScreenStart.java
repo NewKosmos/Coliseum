@@ -12,6 +12,7 @@ package kosmos.uis.screens;
 import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.guis.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
@@ -43,6 +44,7 @@ public class ScreenStart extends ScreenObject {
 			@Override
 			public void eventOccurred() {
 				slider.sliderStartMenu(false);
+				FlounderLogger.get().log("Loading game!");
 				KosmosConfigs.saveAllConfigs();
 
 				// Generates the world.
@@ -69,6 +71,7 @@ public class ScreenStart extends ScreenObject {
 		multiplayer.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
+				FlounderLogger.get().log("Connecting to server!");
 				slider.sliderStartMenu(false);
 				KosmosConfigs.saveAllConfigs();
 
@@ -116,6 +119,7 @@ public class ScreenStart extends ScreenObject {
 		exitGame.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
+				FlounderLogger.get().log("Exiting to desktop!");
 				Framework.get().requestClose(false);
 			}
 		});

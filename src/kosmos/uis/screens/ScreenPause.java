@@ -10,6 +10,7 @@
 package kosmos.uis.screens;
 
 import flounder.guis.*;
+import flounder.logger.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.visual.*;
@@ -31,6 +32,7 @@ public class ScreenPause extends ScreenObject {
 		saveGame.addLeftListener(new ScreenListener() {
 			@Override
 			public void eventOccurred() {
+				FlounderLogger.get().log("Saving game!");
 				KosmosConfigs.saveAllConfigs();
 			}
 		});
@@ -69,6 +71,7 @@ public class ScreenPause extends ScreenObject {
 					FlounderNetwork.get().closeClient();
 				}
 
+				FlounderLogger.get().log("Leaving world!");
 				KosmosWorld.get().deleteWorld();
 			}
 		});
