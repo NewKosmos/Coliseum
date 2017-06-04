@@ -48,7 +48,7 @@ public class KosmosServer extends Framework {
 				"kosmos", new UpdaterDefault(null), 10,
 				new Extension[]{new ServerInterface(), new ServerRenderer(), new ServerCamera(), new ServerGuis()}
 		);
-		new PlatformLwjgl(
+		Framework.get().addOverrides(new PlatformLwjgl(
 				870,
 				940,
 				"New Kosmos Server", new MyFile[]{new MyFile(MyFile.RES_FOLDER, "icon", "icon.png")},
@@ -59,7 +59,7 @@ public class KosmosServer extends Framework {
 				true,
 				false,
 				1
-		);
+		));
 	}
 
 	public static class ServerConfigs {

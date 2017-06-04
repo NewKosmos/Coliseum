@@ -196,6 +196,7 @@ public class KosmosRenderer extends RendererMaster {
 			// Render Lens Flare Filter.
 			if (KosmosPost.get().isLensFlareEnabled() && KosmosWorld.get().getEntitySun() != null) {
 				filterLensFlare.setSunPosition(KosmosWorld.get().getEntitySun().getPosition());
+				filterLensFlare.setWorldHeight(KosmosWorld.get().getSunHeight());
 				filterLensFlare.applyFilter(output.getColourTexture(0));
 				output = filterLensFlare.fbo;
 			}

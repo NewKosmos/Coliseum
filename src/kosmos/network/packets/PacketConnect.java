@@ -75,6 +75,13 @@ public class PacketConnect extends Packet {
 		ClientInfo player = new ClientInfo(username, address, port);
 		server.addConnection(player);
 
+		// Send data to the new client about the connected players.
+		for (ClientInfo c : FlounderNetwork.get().getSocketServer().getConnected()) {
+			if (!address.equals(c.getIpAddress()) && port != c.getPort()) {
+				FlounderNetwork.get().getSocketServer().sendData(new PacketConnect(c.getUsername()).getData(), address, port);
+			}
+		}
+
 		// Sends current world data to the new client.
 		new PacketWorld(KosmosChunks.get().getNoise().getSeed(), Framework.get().getTimeSec()).writeData(server);
 		new PacketLoad(username, new Vector3f(), KosmosChunks.get().getNoise().getSeed(), 0.0f, 0.0f).writeData(server);
