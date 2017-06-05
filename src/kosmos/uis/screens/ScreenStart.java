@@ -85,7 +85,6 @@ public class ScreenStart extends ScreenObject {
 
 				// Generates the world with a random seed, will be sent to the client later.
 				KosmosConfigs.SAVE_SEED.setReference(null);
-				//	KosmosWorld.get().generateWorld(-1, new Vector3f(), new Vector3f()); // TODO: Get position from server.
 
 				// Forces slider to close after connecting.
 				((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);

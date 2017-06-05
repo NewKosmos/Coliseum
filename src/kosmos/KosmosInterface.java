@@ -51,7 +51,7 @@ public class KosmosInterface extends Standard {
 			FlounderSound.get().getMusicPlayer().unpauseTrack();
 		}
 
-		FlounderEvents.get().addEvent(new IEvent() { // TODO: Remove!
+		FlounderEvents.get().addEvent(new IEvent() {
 			KeyButton seedRandom = new KeyButton(GLFW_KEY_F6);
 
 			@Override

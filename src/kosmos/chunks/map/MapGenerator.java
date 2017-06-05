@@ -1,3 +1,12 @@
+/*
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ *
+ * This source file is part of New Kosmos
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 package kosmos.chunks.map;
 
 import flounder.events.*;
@@ -67,13 +76,13 @@ public class MapGenerator extends Thread {
 				float worldX = ((float) x / ((float) MAP_SIZE / (float) Chunk.WORLD_SIZE)) - ((float) Chunk.WORLD_SIZE / 2.0f);
 				float worldZ = ((float) y / ((float) MAP_SIZE / (float) Chunk.WORLD_SIZE)) - ((float) Chunk.WORLD_SIZE / 2.0f);
 
-				float factorIsland = Chunk.getIslandMap(worldX, worldZ);
+				//float factorIsland = Chunk.getIslandMap(worldX, worldZ);
 				//imageIsland.setRGB(x, y, (((int) (255.0f * factorIsland) << 8) + ((int) (255.0f * factorIsland)) << 8) + ((int) (255.0f * factorIsland)));
 
-				float factorHeight = Chunk.getHeightMap(worldX, worldZ);
+				//float factorHeight = Chunk.getHeightMap(worldX, worldZ);
 				//imageHeight.setRGB(x, y, (((int) (255.0f * factorHeight) << 8) + ((int) (255.0f * factorHeight)) << 8) + ((int) (255.0f * factorHeight)));
 
-				float factorMoisture = Chunk.getMoistureMap(worldX, worldZ);
+				//float factorMoisture = Chunk.getMoistureMap(worldX, worldZ);
 				//Colour colourMoisture = Colour.interpolate(new Colour(1.0f, 0.0f, 0.0f), new Colour(0.0f, 0.0f, 1.0f), factorMoisture, null);
 				//imageMoisture.setRGB(x, y, (((int) (255.0f * colourMoisture.r) << 8) + ((int) (255.0f * colourMoisture.g)) << 8) + ((int) (255.0f * colourMoisture.b)));
 

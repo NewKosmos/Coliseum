@@ -215,7 +215,7 @@ public class Chunk extends Entity {
 		tiles.put(tilePosition, objects);
 
 		// Generates tiles below if there is a terrain drop, for cliff faces. This could be more efficient but is not.
-		if (tilePosition.y - heightMin > Math.sqrt(2.0f) && tilePosition.y - (float) Math.sqrt(2.0f) > heightMin) { // TODO: Improve.
+		if (tilePosition.y - heightMin > Math.sqrt(2.0f) && tilePosition.y - (float) Math.sqrt(2.0f) > heightMin) {
 			generateTile(chunk, tiles, x, z, false, yOffset - (float) Math.sqrt(2.0f), false);
 		}
 
@@ -368,6 +368,8 @@ public class Chunk extends Entity {
 		} else {
 			moisture += KosmosChunks.get().getNoise().turbulence(positionX / 150.0f, positionZ / 150.0f, 16.0f);
 		}
+
+		moisture = Maths.clamp(moisture, 0.0f, 1.0f);
 
 		return Maths.clamp(moisture, 0.0f, 1.0f);
 	}

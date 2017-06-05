@@ -31,7 +31,6 @@ public class KosmosGuis extends GuiMaster {
 	private OverlayHUD overlayHUD;
 	private OverlayInventory overlayInventory;
 	private OverlayMap overlayMap;
-	private OverlayUsernames overlayUsernames;
 	private OverlayDebug overlayDebug;
 	private OverlayChat overlayChat;
 	private OverlaySlider overlaySlider;
@@ -47,7 +46,6 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayHUD = new OverlayHUD(FlounderGuis.get().getContainer());
 		this.overlayInventory = new OverlayInventory(FlounderGuis.get().getContainer());
 		this.overlayMap = new OverlayMap(FlounderGuis.get().getContainer());
-		this.overlayUsernames = new OverlayUsernames(FlounderGuis.get().getContainer());
 		this.overlayDebug = new OverlayDebug(FlounderGuis.get().getContainer());
 		this.overlayChat = new OverlayChat(FlounderGuis.get().getContainer());
 		this.overlaySlider = new OverlaySlider(FlounderGuis.get().getContainer());
@@ -57,7 +55,6 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayHUD.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayInventory.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayMap.setAlphaDriver(new ConstantDriver(0.0f));
-		this.overlayUsernames.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayDebug.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlaySlider.setAlphaDriver(new ConstantDriver(0.0f));
@@ -190,24 +187,20 @@ public class KosmosGuis extends GuiMaster {
 
 		if (force) {
 			overlayHUD.setAlphaDriver(new ConstantDriver(1.0f));
-			overlayUsernames.setAlphaDriver(new ConstantDriver(1.0f));
 			overlayDebug.setAlphaDriver(new ConstantDriver(0.0f));
 			overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
 			overlaySlider.setAlphaDriver(new ConstantDriver(0.0f));
 		} else {
 			if (overlayChat.getAlpha() == 1.0f) {
 				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
-				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
 				overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
 			} else if (isGamePaused()) {
 				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
-				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
 				overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
 				overlaySlider.setAlphaDriver(new SlideDriver(overlaySlider.getAlpha(), 0.0f, SLIDE_TIME));
 			} else {
 				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 				overlayMap.setAlphaDriver(new SlideDriver(overlayMap.getAlpha(), 0.0f, SLIDE_TIME));
-				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 				overlayDebug.setAlphaDriver(new SlideDriver(overlayDebug.getAlpha(), 0.0f, SLIDE_TIME));
 				overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 0.0f, SLIDE_TIME));
 				overlaySlider.setAlphaDriver(new SlideDriver(overlaySlider.getAlpha(), 1.0f, SLIDE_TIME));
@@ -219,7 +212,6 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayHUD.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayInventory.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayMap.setAlphaDriver(new ConstantDriver(0.0f));
-		this.overlayUsernames.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayDebug.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlayChat.setAlphaDriver(new ConstantDriver(0.0f));
 		this.overlaySlider.setAlphaDriver(new ConstantDriver(1.0f));
@@ -239,10 +231,8 @@ public class KosmosGuis extends GuiMaster {
 		if (!isGamePaused()) {
 			if (overlayHUD.getAlpha() < 0.5f) {
 				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
-				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
 			} else {
 				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
-				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 			}
 		}
 	}
@@ -251,12 +241,10 @@ public class KosmosGuis extends GuiMaster {
 		if (overlayChat.getAlpha() < 0.5f && !overlayStartup.isStarting() && overlaySlider.getAlpha() == 0.0f) {
 			if (overlayMap.getAlpha() != 1.0f) {
 				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
-				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 				overlayMap.setAlphaDriver(new SlideDriver(overlayMap.getAlpha(), 1.0f, SLIDE_TIME));
 			} else {
 				overlayMap.setAlphaDriver(new SlideDriver(overlayMap.getAlpha(), 0.0f, SLIDE_TIME));
 				overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
-				overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 1.0f, SLIDE_TIME));
 			}
 		}
 	}
@@ -265,7 +253,6 @@ public class KosmosGuis extends GuiMaster {
 		if (overlayChat.getAlpha() < 0.5f && !isGamePaused()) {
 			overlayChat.setAlphaDriver(new SlideDriver(overlayChat.getAlpha(), 1.0f, SLIDE_TIME));
 			overlayHUD.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
-			overlayUsernames.setAlphaDriver(new SlideDriver(overlayHUD.getAlpha(), 0.0f, SLIDE_TIME));
 		}
 	}
 
@@ -279,10 +266,6 @@ public class KosmosGuis extends GuiMaster {
 
 	public OverlayMap getOverlayMap() {
 		return overlayMap;
-	}
-
-	public OverlayUsernames getOverlayUsernames() {
-		return overlayUsernames;
 	}
 
 	public OverlayDebug getOverlayDebug() {

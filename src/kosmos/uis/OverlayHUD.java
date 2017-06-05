@@ -9,8 +9,10 @@
 
 package kosmos.uis;
 
+import flounder.camera.*;
 import flounder.devices.*;
 import flounder.entities.*;
+import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
@@ -21,6 +23,8 @@ import kosmos.*;
 import kosmos.camera.*;
 import kosmos.chunks.*;
 import kosmos.world.*;
+
+import java.util.*;
 
 public class OverlayHUD extends ScreenObject {
 	private static final float MAP_SIZE = 0.28f;
@@ -33,6 +37,8 @@ public class OverlayHUD extends ScreenObject {
 	private HudStatus statusHealth;
 	private HudStatus statusThirst;
 	private HudStatus statusHunger;
+
+	private Map<String, UsernameTag> tags;
 
 	private GuiObject mapBackgroundTexture;
 	private GuiObject mapViewTexture;
@@ -54,6 +60,8 @@ public class OverlayHUD extends ScreenObject {
 		this.statusThirst = new HudStatus(this, hudTexture, hudProgress, 3, 0.1f, new Colour(0.2f, 0.2f, 1.0f));
 		this.statusHunger = new HudStatus(this, hudTexture, hudProgress, 4, 0.2f, new Colour(1.0f, 0.4f, 0.0f));
 
+		this.tags = new HashMap<>();
+
 		this.mapBackgroundTexture = new GuiObject(this, new Vector2f(), new Vector2f(MAP_SIZE, MAP_SIZE), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "hudMapBackground.png")).create(), 1);
 		this.mapBackgroundTexture.setInScreenCoords(false);
 
@@ -70,14 +78,38 @@ public class OverlayHUD extends ScreenObject {
 
 	@Override
 	public void updateObject() {
+		// Update crosshair.
 		this.crossHair.setColourOffset(FlounderGuis.get().getGuiMaster().getPrimaryColour());
 		this.crossHair.setSelectedRow(crosshairSelected);
 		this.crossHair.setVisible(KosmosCamera.isFirstPerson());
 
+		// Update statuses.
 		this.statusHealth.persentage = KosmosWorld.get().getDayFactor();
 		this.statusThirst.persentage = KosmosWorld.get().getShadowFactor();
 		this.statusHunger.persentage = KosmosWorld.get().getSunriseFactor();
 
+		// Update username tags.
+		KosmosWorld.get().getPlayers().keySet().forEach(s -> {
+			if (!tags.containsKey(s)) {
+				tags.put(s, new UsernameTag(this, s));
+			}
+		});
+
+		Iterator<String> it = tags.keySet().iterator();
+
+		while (it.hasNext()) {
+			String s = it.next();
+			Entity e = KosmosWorld.get().getPlayers().get(s);
+
+			if (e == null) {
+				tags.get(s).deleteObject();
+				tags.remove(s);
+			} else {
+				tags.get(s).compute(e);
+			}
+		}
+
+		// Update map view.
 		this.mapViewTexture.setTexture(KosmosChunks.get().getMapGenerator().getMapTexture());
 		VarianceDriver.set(mapViewTexture.getScaleDriver(), mapZoomAmount);
 
@@ -151,6 +183,82 @@ public class OverlayHUD extends ScreenObject {
 
 		@Override
 		public void deleteObject() {
+		}
+	}
+
+	public static class UsernameTag extends ScreenObject {
+		private Vector3f screenspace;
+
+		private TextObject text;
+		private GuiObject gui;
+
+		public UsernameTag(ScreenObject parent, String username) {
+			super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
+			super.setInScreenCoords(false);
+
+			this.screenspace = new Vector3f();
+
+			this.text = new TextObject(this, new Vector2f(0.5f, 0.5f), username, 1.0f, FlounderFonts.CANDARA, 0.2f, GuiAlign.CENTRE);
+			this.text.setScaleDriver(new VarianceDriver(1.0f));
+			this.text.setColour(new Colour(1.0f, 1.0f, 1.0f, 1.0f));
+			this.text.setBorderColour(new Colour(0.0f, 0.0f, 0.0f));
+			this.text.setBorder(new ConstantDriver(0.175f));
+			this.text.setAlphaDriver(new ConstantDriver(0.75f));
+			this.text.setInScreenCoords(true);
+
+			this.gui = new GuiObject(this, this.getPosition(), new Vector2f(), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "username.png")).create(), 1);
+			this.gui.setScaleDriver(new VarianceDriver(1.0f));
+			this.gui.setColourOffset(new Colour());
+			this.gui.setInScreenCoords(true);
+		}
+
+		public void compute(Entity entity) {
+			// Get 2D label space.
+			screenspace.set(entity.getPosition());
+			screenspace.y += KosmosPlayer.PLAYER_TAG_Y;
+			boolean shouldRender = Vector3f.getDistanceSquared(screenspace, FlounderCamera.get().getCamera().getPosition()) < 1200.0f;
+			Maths.worldToScreenSpace(screenspace, FlounderCamera.get().getCamera().getViewMatrix(), FlounderCamera.get().getCamera().getProjectionMatrix(), this.screenspace);
+
+			text.setVisible(screenspace.z >= 0.0f);
+			gui.setVisible(screenspace.z >= 0.0f);
+
+			// Updates the alpha, hides if far away.
+			if (text.getColour().a == 1.0f && !shouldRender) {
+				text.setAlphaDriver(new SlideDriver(text.getAlpha(), 0.0f, KosmosGuis.SLIDE_TIME));
+				gui.setAlphaDriver(new SlideDriver(text.getAlpha(), 0.0f, KosmosGuis.SLIDE_TIME));
+				text.getColour().a = 0.0f;
+			} else if (text.getColour().a == 0.0f && shouldRender) {
+				text.setAlphaDriver(new SlideDriver(text.getAlpha(), 1.0f, KosmosGuis.SLIDE_TIME));
+				gui.setAlphaDriver(new SlideDriver(text.getAlpha(), 1.0f, KosmosGuis.SLIDE_TIME));
+				text.getColour().a = 1.0f;
+			}
+
+			VarianceDriver.set(text.getScaleDriver(), Math.min(10.0f / Math.abs(screenspace.z), 1.0f));
+			VarianceDriver.set(gui.getScaleDriver(), Math.min(10.0f / Math.abs(screenspace.z), 1.0f));
+
+			// Updates the text positioning.
+			text.getPosition().set((screenspace.x + 1.0f) / 2.0f, (-screenspace.y + 1.0f) / 2.0f);
+
+			// Update background size.
+			gui.getDimensions().set(text.getMeshSize());
+			gui.getDimensions().y = 0.5f * (float) text.getFont().getMaxSizeY();
+			Vector2f.multiply(text.getDimensions(), gui.getDimensions(), gui.getDimensions());
+			gui.getDimensions().scale(2.0f * text.getScale());
+			gui.getPositionOffsets().set(text.getPositionOffsets());
+			gui.getPosition().set(text.getPosition());
+		}
+
+		@Override
+		public void updateObject() {
+
+		}
+
+		@Override
+		public void deleteObject() {
+			text.setAlphaDriver(new ConstantDriver(0.0f));
+			gui.setAlphaDriver(new ConstantDriver(0.0f));
+			text.deleteObject();
+			gui.deleteObject();
 		}
 	}
 }
