@@ -11,6 +11,7 @@ package kosmos.chunks.meshing;
 
 import flounder.entities.components.*;
 import flounder.logger.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
@@ -59,12 +60,25 @@ public class MeshBuildRequest implements RequestResource {
 				for (int m = 0; m < models.length; m++) {
 					if (models[m]) {
 						ModelObject model = KosmosChunks.get().getHexagons()[m];
+						float rotation = Math.abs(KosmosChunks.get().getNoise().noise(tile.x - tile.z + chunkMesh.chunk.getPosition().lengthSquared(), 1.0f)) * 20.0f;
+						rotation = ((int) rotation) * 60.0f;
+						rotation = Maths.normalizeAngle(rotation);
 
 						for (int i = 0; i < model.getIndices().length; i++) {
 							int index = model.getIndices()[i];
-							float vertex0 = model.getVertices()[index * 3] + (tile.x / 2.0f);
-							float vertex1 = model.getVertices()[index * 3 + 1] + (tile.y / 2.0f);
-							float vertex2 = model.getVertices()[index * 3 + 2] + (tile.z / 2.0f);
+							float vertex0 = model.getVertices()[index * 3];
+							float vertex1 = model.getVertices()[index * 3 + 1];
+							float vertex2 = model.getVertices()[index * 3 + 2];
+							if (m == 0) {
+								Vector2f v = new Vector2f(vertex0, vertex2);
+								Vector2f.rotate(v, rotation, v);
+								vertex0 = v.x;
+								vertex2 = v.y;
+							}
+							vertex0 += (tile.x / 2.0f);
+							vertex1 += (tile.y / 2.0f);
+							vertex2 += (tile.z / 2.0f);
+
 							float texture0 = model.getTextures()[index * 2];
 							float texture1 = model.getTextures()[index * 2 + 1];
 							float normal0 = model.getNormals()[index * 3];

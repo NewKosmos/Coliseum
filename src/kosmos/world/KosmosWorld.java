@@ -49,10 +49,10 @@ public class KosmosWorld extends Module {
 	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.9f, 0.3f, 0.3f);
 	public static final Colour SUN_COLOUR_DAY = new Colour(1.0f, 1.0f, 1.0f);
 
-	public static final Colour MOON_COLOUR_NIGHT = new Colour(0.2f, 0.2f, 0.3f);
+	public static final Colour MOON_COLOUR_NIGHT = new Colour(0.4f, 0.4f, 0.6f);
 	public static final Colour MOON_COLOUR_DAY = new Colour(0.0f, 0.0f, 0.0f);
 
-	public static final float DAY_NIGHT_CYCLE = 300.0f; // The day/night length (sec).
+	public static final float DAY_NIGHT_CYCLE = 600.0f; // The day/night length (sec).
 
 	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, 0.0f, 0.5f); // The starting light direction.
 
