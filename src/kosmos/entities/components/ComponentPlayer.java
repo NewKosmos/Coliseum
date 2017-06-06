@@ -123,7 +123,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 		float waterLevel = (KosmosWater.get().getWater() != null) ? KosmosWater.get().getWater().getPosition().y : 0.0f;
 
 		// Finds the chunk height at the next player xz pos.
-		float chunkHeight = Chunk.roundedHeight(KosmosChunks.get().getCurrent(), getEntity().getPosition()) * 0.5f;
+		float chunkHeight = KosmosChunks.roundedHeight(KosmosChunks.get().getCurrent(), getEntity().getPosition()) * 0.5f;
 
 		// Does collision with the highest world object.
 		float worldHeight = Math.max(waterLevel - (float) Math.sqrt(2.0), chunkHeight) + KosmosPlayer.PLAYER_OFFSET_Y;

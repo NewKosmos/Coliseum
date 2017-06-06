@@ -73,20 +73,20 @@ public class MapGenerator extends Thread {
 
 		for (int y = 0; y < MAP_SIZE; y++) {
 			for (int x = 0; x < MAP_SIZE; x++) {
-				float worldX = ((float) x / ((float) MAP_SIZE / (float) Chunk.WORLD_SIZE)) - ((float) Chunk.WORLD_SIZE / 2.0f);
-				float worldZ = ((float) y / ((float) MAP_SIZE / (float) Chunk.WORLD_SIZE)) - ((float) Chunk.WORLD_SIZE / 2.0f);
+				float worldX = ((float) x / ((float) MAP_SIZE / (float) KosmosChunks.WORLD_SIZE)) - ((float) KosmosChunks.WORLD_SIZE / 2.0f);
+				float worldZ = ((float) y / ((float) MAP_SIZE / (float) KosmosChunks.WORLD_SIZE)) - ((float) KosmosChunks.WORLD_SIZE / 2.0f);
 
-				//float factorIsland = Chunk.getIslandMap(worldX, worldZ);
+				//float factorIsland = KosmosChunks.getIslandMap(worldX, worldZ);
 				//imageIsland.setRGB(x, y, (((int) (255.0f * factorIsland) << 8) + ((int) (255.0f * factorIsland)) << 8) + ((int) (255.0f * factorIsland)));
 
-				//float factorHeight = Chunk.getHeightMap(worldX, worldZ);
+				//float factorHeight = KosmosChunks.getHeightMap(worldX, worldZ);
 				//imageHeight.setRGB(x, y, (((int) (255.0f * factorHeight) << 8) + ((int) (255.0f * factorHeight)) << 8) + ((int) (255.0f * factorHeight)));
 
-				//float factorMoisture = Chunk.getMoistureMap(worldX, worldZ);
+				//float factorMoisture = KosmosChunks.getMoistureMap(worldX, worldZ);
 				//Colour colourMoisture = Colour.interpolate(new Colour(1.0f, 0.0f, 0.0f), new Colour(0.0f, 0.0f, 1.0f), factorMoisture, null);
 				//imageMoisture.setRGB(x, y, (((int) (255.0f * colourMoisture.r) << 8) + ((int) (255.0f * colourMoisture.g)) << 8) + ((int) (255.0f * colourMoisture.b)));
 
-				Colour colourBiome = Chunk.getBiomeMap(worldX, worldZ).getBiome().getColour();
+				Colour colourBiome = KosmosChunks.getBiomeMap(worldX, worldZ).getBiome().getColour();
 				imageBiome.setRGB(x, y, (((int) (255.0f * colourBiome.r) << 8) + ((int) (255.0f * colourBiome.g)) << 8) + ((int) (255.0f * colourBiome.b)));
 			}
 		}

@@ -116,8 +116,8 @@ public class OverlayHUD extends ScreenObject {
 		Entity player = KosmosWorld.get().getEntityPlayer();
 
 		if (player != null) {
-			float px = player.getPosition().x / Chunk.WORLD_SIZE;
-			float pz = player.getPosition().z / Chunk.WORLD_SIZE;
+			float px = player.getPosition().x / KosmosChunks.WORLD_SIZE;
+			float pz = player.getPosition().z / KosmosChunks.WORLD_SIZE;
 
 			this.mapBackgroundTexture.getPosition().set(FlounderDisplay.get().getAspectRatio() - (MAP_SIZE / 2.0f), MAP_SIZE / 2.0f);
 			this.mapViewTexture.getPosition().set(FlounderDisplay.get().getAspectRatio() - (MAP_SIZE / 2.0f), MAP_SIZE / 2.0f);

@@ -155,7 +155,7 @@ public class KosmosRenderer extends RendererMaster {
 
 		if (!waterPass) {
 			waterRenderer.render(clipPlane, camera);
-		//	boundingRenderer.render(clipPlane, camera);
+			//	boundingRenderer.render(clipPlane, camera);
 		}
 
 		particleRenderer.render(clipPlane, camera);

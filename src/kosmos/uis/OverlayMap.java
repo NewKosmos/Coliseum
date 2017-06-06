@@ -58,8 +58,8 @@ public class OverlayMap extends ScreenObject {
 		Entity player = KosmosWorld.get().getEntityPlayer();
 
 		if (player != null) {
-			float px = player.getPosition().x / Chunk.WORLD_SIZE;
-			float pz = player.getPosition().z / Chunk.WORLD_SIZE;
+			float px = player.getPosition().x / KosmosChunks.WORLD_SIZE;
+			float pz = player.getPosition().z / KosmosChunks.WORLD_SIZE;
 
 			this.mapViewTexture.getScissor().set(
 					(int) (VIEW_POSITION_X - (VIEW_SIZE_X / FlounderDisplay.get().getAspectRatio() / 2.0f)) * FlounderDisplay.get().getWidth(), (VIEW_POSITION_Y - (VIEW_SIZE_X / 2.0f)) * FlounderDisplay.get().getHeight(),

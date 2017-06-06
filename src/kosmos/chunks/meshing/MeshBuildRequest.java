@@ -63,18 +63,22 @@ public class MeshBuildRequest implements RequestResource {
 						float rotation = Math.abs(KosmosChunks.get().getNoise().noise(tile.x - tile.z + chunkMesh.chunk.getPosition().lengthSquared(), 1.0f)) * 20.0f;
 						rotation = ((int) rotation) * 60.0f;
 						rotation = Maths.normalizeAngle(rotation);
+						Vector2f r = new Vector2f();
 
 						for (int i = 0; i < model.getIndices().length; i++) {
 							int index = model.getIndices()[i];
 							float vertex0 = model.getVertices()[index * 3];
 							float vertex1 = model.getVertices()[index * 3 + 1];
 							float vertex2 = model.getVertices()[index * 3 + 2];
+
 							if (m == 0) {
-								Vector2f v = new Vector2f(vertex0, vertex2);
-								Vector2f.rotate(v, rotation, v);
-								vertex0 = v.x;
-								vertex2 = v.y;
+								r.set(vertex0, vertex2);
+								Vector2f.rotate(r, rotation, r);
+								vertex0 = r.x;
+								vertex2 = r.y;
+								r.set(0.0f, 0.0f);
 							}
+
 							vertex0 += (tile.x / 2.0f);
 							vertex1 += (tile.y / 2.0f);
 							vertex2 += (tile.z / 2.0f);
@@ -116,7 +120,7 @@ public class MeshBuildRequest implements RequestResource {
 			}
 
 			// A constant radius ensures every chunk holds the same volume.
-			chunkMesh.maxRadius = Chunk.CHUNK_WORLD_SIZE; // Maths.maxValue(maxX, maxY, maxZ, Math.abs(minX), Math.abs(minY), Math.abs(minZ));
+			chunkMesh.maxRadius = KosmosChunks.CHUNK_WORLD_SIZE; // Maths.maxValue(maxX, maxY, maxZ, Math.abs(minX), Math.abs(minY), Math.abs(minZ));
 
 			// Gets the resulting data stuff from the other stuff.
 			float[] resultVertices = new float[indexOffset * 3];
@@ -195,7 +199,7 @@ public class MeshBuildRequest implements RequestResource {
 			chunkMesh.chunk.setLoaded(true);
 
 			// Normal chunk size.
-			chunkMesh.maxRadius = Chunk.CHUNK_WORLD_SIZE;
+			chunkMesh.maxRadius = KosmosChunks.CHUNK_WORLD_SIZE;
 		}
 
 		if (chunkMesh.chunkModel != null) {
