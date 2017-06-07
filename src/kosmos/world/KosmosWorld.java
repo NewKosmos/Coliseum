@@ -58,8 +58,6 @@ public class KosmosWorld extends Module {
 
 	private Map<String, Entity> players;
 
-	private WorldSetup worldSetup;
-
 	private Entity entityPlayer;
 	private Entity entitySun;
 	private Entity entityMoon1;
@@ -79,8 +77,6 @@ public class KosmosWorld extends Module {
 
 		this.players = new HashMap<>();
 
-		this.worldSetup = null;
-
 		this.dayDriver = new LinearDriver(0.0f, 100.0f, DAY_NIGHT_CYCLE);
 		this.dayFactor = 0.0f;
 
@@ -99,7 +95,22 @@ public class KosmosWorld extends Module {
 	}
 
 	public void generateWorld(int seed, Vector3f positionPlayer, Vector3f positionChunk) {
-		this.worldSetup = new WorldSetup(seed, positionPlayer, positionChunk);
+		FlounderTasks.get().addTask(new ITask() {
+			@Override
+			public void execute() {
+				// Sets the seed.
+				KosmosChunks.get().getNoise().setSeed(seed);
+
+				// Creates the player.
+				entityPlayer = new InstancePlayer(FlounderEntities.get().getEntities(), positionPlayer, new Vector3f());
+
+				// Creates the current chunk.
+				KosmosChunks.get().setCurrent(new Chunk(FlounderEntities.get().getEntities(), positionChunk));
+
+				// Creates the water.
+				KosmosWater.get().generateWater();
+			}
+		});
 	}
 
 	public void deleteWorld() {
@@ -119,23 +130,6 @@ public class KosmosWorld extends Module {
 
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)
 	public void update() {
-		// Create the world if a world setup exists.
-		if (worldSetup != null) {
-			// Sets the seed.
-			KosmosChunks.get().getNoise().setSeed(worldSetup.seed);
-
-			// Creates the player.
-			this.entityPlayer = new InstancePlayer(FlounderEntities.get().getEntities(), worldSetup.positionPlayer, new Vector3f());
-
-			// Creates the current chunk.
-			KosmosChunks.get().setCurrent(new Chunk(FlounderEntities.get().getEntities(), worldSetup.positionChunk));
-
-			// Creates the water.
-			KosmosWater.get().generateWater();
-
-			worldSetup = null;
-		}
-
 		// Update the sky colours and sun position.
 		if (FlounderSkybox.get() != null && FlounderShadows.get() != null) {
 			dayFactor = dayDriver.update(Framework.get().getDelta()) / 100.0f;
@@ -258,17 +252,5 @@ public class KosmosWorld extends Module {
 	@Module.Instance
 	public static KosmosWorld get() {
 		return (KosmosWorld) Framework.get().getInstance(KosmosWorld.class);
-	}
-
-	public static class WorldSetup {
-		protected final int seed;
-		protected final Vector3f positionPlayer;
-		protected final Vector3f positionChunk;
-
-		public WorldSetup(int seed, Vector3f positionPlayer, Vector3f positionChunk) {
-			this.seed = seed;
-			this.positionPlayer = positionPlayer;
-			this.positionChunk = positionChunk;
-		}
 	}
 }

@@ -1,12 +1,10 @@
-package kosmos.chunks.saves;
+package kosmos.world.saves;
 
 import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
-import flounder.noise.*;
 import kosmos.*;
-import kosmos.chunks.map.*;
 
 import java.io.*;
 import java.util.*;

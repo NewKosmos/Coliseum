@@ -1,4 +1,4 @@
-package kosmos.chunks.saves;
+package kosmos.world.saves;
 
 import flounder.entities.*;
 import flounder.maths.vectors.*;
