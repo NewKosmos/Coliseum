@@ -117,7 +117,10 @@ public class KosmosWorld extends Module {
 		KosmosConfigs.saveAllConfigs();
 		KosmosChunks.get().getNoise().setSeed(-1);
 
-		entityPlayer.forceRemove();
+		if (entityPlayer != null) {
+			entityPlayer.forceRemove();
+		}
+
 		removeAllPlayers();
 
 		KosmosChunks.get().clear(false);
