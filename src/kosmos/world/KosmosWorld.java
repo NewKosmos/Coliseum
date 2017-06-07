@@ -60,7 +60,7 @@ public class KosmosWorld extends Module {
 
 	private Entity entityPlayer;
 	private Entity entitySun;
-	private Entity entityMoon1;
+	private Entity entityMoon;
 
 	private LinearDriver dayDriver;
 	private float dayFactor;
@@ -73,7 +73,7 @@ public class KosmosWorld extends Module {
 	public void init() {
 		this.entityPlayer = null;
 		this.entitySun = new InstanceSun(FlounderEntities.get().getEntities(), new Vector3f(-250.0f, -250.0f, -250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
-		this.entityMoon1 = new InstanceMoon1(FlounderEntities.get().getEntities(), new Vector3f(200.0f, 250.0f, 220.0f), new Vector3f(0.0f, 0.0f, 0.0f)); // Red
+		this.entityMoon = new InstanceMoon(FlounderEntities.get().getEntities(), new Vector3f(200.0f, 250.0f, 220.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 
 		this.players = new HashMap<>();
 
@@ -207,8 +207,8 @@ public class KosmosWorld extends Module {
 		return this.entitySun;
 	}
 
-	public Entity getEntityMoon1() {
-		return entityMoon1;
+	public Entity getEntityMoon() {
+		return entityMoon;
 	}
 
 	public float getDayFactor() {

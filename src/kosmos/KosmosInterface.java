@@ -20,7 +20,6 @@ import flounder.networking.*;
 import flounder.particles.*;
 import flounder.shadows.*;
 import flounder.skybox.*;
-import flounder.sounds.*;
 import flounder.standards.*;
 import flounder.steam.*;
 import kosmos.chunks.*;
@@ -32,8 +31,6 @@ import kosmos.world.*;
 import static flounder.platform.Constants.*;
 
 public class KosmosInterface extends Standard {
-	private Playlist gamePlaylist;
-
 	public KosmosInterface() {
 		super(FlounderEvents.class, FlounderNetwork.class, FlounderSteam.class, FlounderShadows.class, FlounderParticles.class, FlounderSkybox.class, KosmosWater.class, KosmosPost.class, KosmosWorld.class, KosmosChunks.class);
 	}
@@ -42,10 +39,6 @@ public class KosmosInterface extends Standard {
 	public void init() {
 		FlounderSound.get().getMusicPlayer().setVolume(KosmosConfigs.MUSIC_VOLUME.setReference(() -> FlounderSound.get().getMusicPlayer().getVolume()).getFloat());
 		FlounderSound.get().getSourcePool().setSystemVolume(KosmosConfigs.SOUND_VOLUME.setReference(() -> FlounderSound.get().getSourcePool().getSystemVolume()).getFloat());
-
-		gamePlaylist = new Playlist();
-		// gamePlaylist.addMusic(Sound.loadSoundInBackground(new MyFile(MyFile.RES_FOLDER, "music", "09-hitori-bocchi-1b.wav"), 0.80f, 1.0f));
-		FlounderSound.get().getMusicPlayer().playMusicPlaylist(gamePlaylist, true, 4.0f, 10.0f);
 
 		if (KosmosConfigs.MUSIC_ENABLED.setReference(() -> !FlounderSound.get().getMusicPlayer().isPaused()).getBoolean()) {
 			FlounderSound.get().getMusicPlayer().unpauseTrack();

@@ -78,10 +78,10 @@ public class MeshBuildRequest implements RequestResource {
 								vertex2 = r.y;
 								r.set(0.0f, 0.0f);
 
-							//	vertex1 += KosmosChunks.getWorldHeight(
-							//			tile.x + chunkMesh.chunk.getPosition().x,
-							//			tile.z + chunkMesh.chunk.getPosition().z
-							//	) - (tile.y / 2.0f);
+								//	vertex1 += KosmosChunks.getWorldHeight(
+								//			tile.x + chunkMesh.chunk.getPosition().x,
+								//			tile.z + chunkMesh.chunk.getPosition().z
+								//	) - (tile.y / 2.0f);
 							}
 
 							vertex0 += (tile.x / 2.0f);

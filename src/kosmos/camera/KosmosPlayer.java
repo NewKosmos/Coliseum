@@ -10,23 +10,12 @@
 package kosmos.camera;
 
 import flounder.camera.*;
-import flounder.entities.*;
-import flounder.entities.components.*;
-import flounder.events.*;
-import flounder.guis.*;
-import flounder.inputs.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
-import flounder.physics.*;
 import kosmos.chunks.*;
-import kosmos.entities.components.*;
-import kosmos.entities.instances.*;
 import kosmos.network.packets.*;
 import kosmos.world.*;
-
-import static flounder.platform.Constants.*;
 
 public class KosmosPlayer extends Player {
 	public static final float PLAYER_OFFSET_Y = (float) (Math.sqrt(2.0) * 0.25);
@@ -60,7 +49,7 @@ public class KosmosPlayer extends Player {
 		this.timer = new Timer(1.0 / 14.3); // 14.3 ticks per second.
 		KosmosPlayer.needSendData = true;
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		/*FlounderEvents.get().addEvent(new IEvent() {
 			private MouseButton buttonRemove = new MouseButton(GLFW_MOUSE_BUTTON_RIGHT);
 
 			@Override
@@ -86,9 +75,9 @@ public class KosmosPlayer extends Player {
 					}
 				}
 			}
-		});
+		});*/
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		/*FlounderEvents.get().addEvent(new IEvent() {
 			private final int RECURSION_COUNT = 256;
 			private final float RAY_RANGE = 70.0f;
 
@@ -184,7 +173,7 @@ public class KosmosPlayer extends Player {
 					return false;
 				}
 			}
-		});
+		});*/
 	}
 
 	@Override

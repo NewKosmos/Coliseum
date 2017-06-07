@@ -54,7 +54,7 @@ public class ChunkData {
 	}
 
 	protected String getSaveData() {
-		String result = "[" + position.x + "," + position.y + ","+ position.z + "]: {";
+		String result = "[" + position.x + "," + position.y + "," + position.z + "]: {";
 
 		for (Vector3f r : removed) {
 			result += r.x + "," + r.y + "," + r.z + ",";

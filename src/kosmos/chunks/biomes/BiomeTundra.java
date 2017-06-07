@@ -10,20 +10,15 @@
 package kosmos.chunks.biomes;
 
 import flounder.maths.*;
-import flounder.particles.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.entities.instances.*;
-import kosmos.materials.*;
 
 public class BiomeTundra extends IBiome {
 	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{
-			new EntitySpawn(InstanceTreePine::new, 1.0f, 0.375f),
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "tundra.png")).clampEdges().create();
 	private static final Colour COLOUR = new Colour(0.8666f, 0.8666f, 0.7333f);
-	private static final ParticleType PARTICLE = new ParticleType("snow", TextureFactory.newBuilder().setFile(new MyFile(FlounderParticles.PARTICLES_FOLDER, "snowParticle.png")).setNumberOfRows(4).create(), 4.75f, 0.15f);
 
 	public BiomeTundra() {
 		super();
@@ -47,15 +42,5 @@ public class BiomeTundra extends IBiome {
 	@Override
 	public Colour getColour() {
 		return COLOUR;
-	}
-
-	@Override
-	public ParticleType getWeatherParticle() {
-		return PARTICLE;
-	}
-
-	@Override
-	public IMaterial getMaterial() {
-		return IMaterial.Materials.SNOW.getMaterial();
 	}
 }

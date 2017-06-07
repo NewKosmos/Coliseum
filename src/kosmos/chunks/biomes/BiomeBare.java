@@ -10,18 +10,15 @@
 package kosmos.chunks.biomes;
 
 import flounder.maths.*;
-import flounder.particles.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.materials.*;
 
 public class BiomeBare extends IBiome {
 	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "bare.png")).clampEdges().create();
 	private static final Colour COLOUR = new Colour(0.7333f, 0.7333f, 0.7333f);
-	private static final ParticleType PARTICLE = null;
 
 	public BiomeBare() {
 		super();
@@ -45,15 +42,5 @@ public class BiomeBare extends IBiome {
 	@Override
 	public Colour getColour() {
 		return COLOUR;
-	}
-
-	@Override
-	public ParticleType getWeatherParticle() {
-		return PARTICLE;
-	}
-
-	@Override
-	public IMaterial getMaterial() {
-		return IMaterial.Materials.STONE.getMaterial();
 	}
 }

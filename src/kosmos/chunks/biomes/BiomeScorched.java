@@ -10,20 +10,15 @@
 package kosmos.chunks.biomes;
 
 import flounder.maths.*;
-import flounder.particles.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.entities.instances.*;
-import kosmos.materials.*;
 
 public class BiomeScorched extends IBiome {
 	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{
-			new EntitySpawn(InstanceGrassTuft1::new, 1.0f, 0.42f),
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "scorched.png")).clampEdges().create();
 	private static final Colour COLOUR = new Colour(0.6000f, 0.6000f, 0.6000f);
-	private static final ParticleType PARTICLE = null;
 
 	public BiomeScorched() {
 		super();
@@ -47,15 +42,5 @@ public class BiomeScorched extends IBiome {
 	@Override
 	public Colour getColour() {
 		return COLOUR;
-	}
-
-	@Override
-	public ParticleType getWeatherParticle() {
-		return PARTICLE;
-	}
-
-	@Override
-	public IMaterial getMaterial() {
-		return IMaterial.Materials.STONE.getMaterial();
 	}
 }

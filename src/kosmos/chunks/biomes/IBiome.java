@@ -13,10 +13,8 @@ import flounder.entities.*;
 import flounder.entities.components.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
-import flounder.particles.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
-import kosmos.materials.*;
 
 /**
  * A interface used to define biome types.
@@ -95,13 +93,4 @@ public abstract class IBiome {
 
 		return null;
 	}
-
-	/**
-	 * Gets the type of weather particle to spawn when weather is active.
-	 *
-	 * @return The type of weather particle.
-	 */
-	public abstract ParticleType getWeatherParticle();
-
-	public abstract IMaterial getMaterial();
 }
