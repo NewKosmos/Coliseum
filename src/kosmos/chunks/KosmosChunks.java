@@ -227,8 +227,10 @@ public class KosmosChunks extends Module {
 		height = Maths.clamp(height, 0.0f, 1.0f);
 
 		// Ignore height that would be water/nothing.
-		if (height <= 0.1f) {
-			return Float.NEGATIVE_INFINITY;
+		if (NewKosmos.TERRAIN != 2) {
+			if (height <= 0.1f) {
+				return Float.NEGATIVE_INFINITY;
+			}
 		}
 
 		// Returns the final height,
@@ -245,11 +247,17 @@ public class KosmosChunks extends Module {
 	 */
 	public static float getWorldHeight(float positionX, float positionZ) {
 		float height = getHeightMap(positionX, positionZ) * WORLD_NOISE_HEIGHT;
-		height = (float) Math.sqrt(2.0) * (int) height;
-		height -= 5.6f;
+		if (NewKosmos.TERRAIN != 2) {
+			height = (int) height;
+		}
+		height = (float) Math.sqrt(2.0) * height;
 
-		if (height < 0.0f) {
-			return Float.NEGATIVE_INFINITY;
+		if (NewKosmos.TERRAIN != 2) {
+			height -= 5.6f;
+
+			if (height < 0.0f) {
+				return Float.NEGATIVE_INFINITY;
+			}
 		}
 
 		// Returns the final height,

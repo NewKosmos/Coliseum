@@ -17,6 +17,7 @@ import kosmos.camera.*;
 
 public class NewKosmos extends Framework {
 	public static final String VERSION = "6.07";
+	public static final int TERRAIN = 0; // 0,1,2
 
 	public static void main(String[] args) {
 		new NewKosmos().run();

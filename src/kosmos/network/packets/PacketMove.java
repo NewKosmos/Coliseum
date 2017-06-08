@@ -58,7 +58,7 @@ public class PacketMove extends Packet {
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
 		//	FlounderLogger.log("[" + client + "]: moved to: " + x + "," + y + "," + z + " : " + w + "," + seed + ", chunk[" + chunkX + "," + chunkZ + "]");
-		KosmosWorld.get().movePlayer(username, x, y, z, w, chunkX, chunkZ);
+		KosmosWorld.get().updatePlayer(username, x, y, z, w, chunkX, chunkZ);
 	}
 
 	@Override

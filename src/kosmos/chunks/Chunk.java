@@ -94,7 +94,7 @@ public class Chunk extends Entity {
 			}
 
 			// Tells the children this last create depth - 1.
-			childrenChunks.forEach((chunk -> chunk.createChunksAround(createDepth - 1)));
+			childrenChunks.forEach(((chunk) -> chunk.createChunksAround(createDepth - 1)));
 
 			// Clears this depth.
 			createDepth = 0;

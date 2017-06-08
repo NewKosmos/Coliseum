@@ -68,10 +68,6 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 
 		this.moveAmount = new Vector3f();
 		this.rotateAmount = new Vector3f();
-
-		//	PlayRequest request = PlayRequest.new3dSoundPlayRequest(IMaterial.Materials.GRASS.getMaterial().getSoundWalk(), 1.0f, 1.0f, getEntity().getPosition(), 0.0f, 10.0f);
-		//	request.setLooping(true);
-		//	FlounderSound.playSystemSound(IMaterial.Materials.GRASS.getMaterial().getSoundWalk());
 	}
 
 	@Override

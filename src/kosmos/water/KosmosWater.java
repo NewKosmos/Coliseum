@@ -45,7 +45,7 @@ public class KosmosWater extends Module {
 	}
 
 	public void generateWater() {
-		this.water = new Water(new Vector3f(0.0f, -0.1f, 0.0f), new Vector3f(), 1.0f);
+		this.water = new Water(new Vector3f(0.0f, NewKosmos.TERRAIN != 2 ? -0.1f : 0.5f, 0.0f), new Vector3f(), 1.0f);
 	}
 
 	public void deleteWater() {

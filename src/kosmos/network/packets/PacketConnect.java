@@ -14,7 +14,6 @@ import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
-import kosmos.camera.*;
 import kosmos.chunks.*;
 import kosmos.uis.*;
 import kosmos.world.*;
@@ -61,10 +60,10 @@ public class PacketConnect extends Packet {
 		OverlayChat.addText(username + " has joined the game.", new Colour(0.1f, 0.7f, 0.1f));
 
 		// Ques the player to the clients list.
-		KosmosWorld.get().quePlayer(username, new Vector3f(), new Vector3f());
+		KosmosWorld.get().addPlayer(username, new Vector3f(), new Vector3f());
 
 		// Forces the client to send a update packet to the server.
-		KosmosPlayer.askSendData();
+		KosmosWorld.get().askSendData();
 	}
 
 	@Override

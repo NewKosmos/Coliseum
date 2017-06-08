@@ -27,7 +27,6 @@ public enum ComponentsList {
 
 	// New Kosmos.
 	CELESTIAL(new ComponentCelestial(null)),
-	CLOUD(new ComponentCloud(null)),
 	MULTIPLAYER(new ComponentMultiplayer(null)),
 	PLAYER(new ComponentPlayer(null)),
 	WATER_BOB(new ComponentWaterBob(null));
