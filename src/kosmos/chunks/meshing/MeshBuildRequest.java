@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.chunks.meshing;
@@ -16,7 +16,6 @@ import flounder.maths.vectors.*;
 import flounder.models.*;
 import flounder.physics.*;
 import flounder.processing.resource.*;
-import kosmos.*;
 import kosmos.chunks.*;
 
 import java.util.*;
@@ -78,18 +77,6 @@ public class MeshBuildRequest implements RequestResource {
 								vertex0 = r.x;
 								vertex2 = r.y;
 								r.set(0.0f, 0.0f);
-							}
-
-							// This enables a smoothing effect and disables edges.
-							if (NewKosmos.TERRAIN != 0) {
-								if (m == 0) {
-									vertex1 += 0.5f * KosmosChunks.getWorldHeight(
-											(tile.x / 2.0f) + vertex0 + chunkMesh.chunk.getPosition().x,
-											(tile.z / 2.0f) + vertex2 + chunkMesh.chunk.getPosition().z
-									) - (tile.y / 2.0f);
-								} else {
-									continue;
-								}
 							}
 
 							vertex0 += (tile.x / 2.0f);

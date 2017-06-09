@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.water;
@@ -45,7 +45,7 @@ public class KosmosWater extends Module {
 	}
 
 	public void generateWater() {
-		this.water = new Water(new Vector3f(0.0f, NewKosmos.TERRAIN != 2 ? -0.1f : 0.5f, 0.0f), new Vector3f(), 1.0f);
+		this.water = new Water(new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f(), 1.0f);
 	}
 
 	public void deleteWater() {

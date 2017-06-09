@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.chunks;
@@ -227,10 +227,8 @@ public class KosmosChunks extends Module {
 		height = Maths.clamp(height, 0.0f, 1.0f);
 
 		// Ignore height that would be water/nothing.
-		if (NewKosmos.TERRAIN != 2) {
-			if (height <= 0.1f) {
-				return Float.NEGATIVE_INFINITY;
-			}
+		if (height <= 0.1f) {
+			return Float.NEGATIVE_INFINITY;
 		}
 
 		// Returns the final height,
@@ -247,17 +245,11 @@ public class KosmosChunks extends Module {
 	 */
 	public static float getWorldHeight(float positionX, float positionZ) {
 		float height = getHeightMap(positionX, positionZ) * WORLD_NOISE_HEIGHT;
-		if (NewKosmos.TERRAIN != 2) {
-			height = (int) height;
-		}
-		height = (float) Math.sqrt(2.0) * height;
+		height = (float) Math.sqrt(2.0) * (int) height;
+		height -= 5.6f;
 
-		if (NewKosmos.TERRAIN != 2) {
-			height -= 5.6f;
-
-			if (height < 0.0f) {
-				return Float.NEGATIVE_INFINITY;
-			}
+		if (height < 0.0f) {
+			return Float.NEGATIVE_INFINITY;
 		}
 
 		// Returns the final height,
