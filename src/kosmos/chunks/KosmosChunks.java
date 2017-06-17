@@ -25,6 +25,7 @@ import flounder.textures.*;
 import kosmos.*;
 import kosmos.chunks.biomes.*;
 import kosmos.chunks.map.*;
+import kosmos.world.*;
 
 import java.util.*;
 
@@ -39,13 +40,6 @@ public class KosmosChunks extends Module {
 
 	// The overall world radius footprint per chunk.
 	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * (CHUNK_RADIUS - 0.5f);
-
-	// Island world generations.
-	public static final int WORLD_SIZE = 1536; // The width and height of the world, in tile size.
-	public static final float WORLD_NOISE_HEIGHT = 43.0f; // The height multiplier, max world height.
-	public static final float WORLD_ISLAND_INSIDE = 0.80f; // The inside radius of the island shape.
-	public static final float WORLD_ISLAND_OUTSIDE = 1.0f; // The outside radius of the island shape.
-	public static final float WORLD_ISLAND_PARAMETER = 0.4f; // The shape parameter (0=circular, 1=rectangular).
 
 	private PerlinNoise noise;
 	private MapGenerator mapGenerator;
@@ -195,10 +189,10 @@ public class KosmosChunks extends Module {
 
 		float circular = (float) Math.sqrt(Math.pow(positionX, 2) + Math.pow(positionZ, 2)); // The current radius (circular map).
 		float rectangular = Math.max(Math.abs(positionX), Math.abs(positionZ)); // The current radius (rectangular map).
-		float reading = ((1.0f - WORLD_ISLAND_PARAMETER) * circular) + (WORLD_ISLAND_PARAMETER * rectangular);
+		float reading = ((1.0f - KosmosWorld.get().getWorldSave().getWorldIslandParameter()) * circular) + (KosmosWorld.get().getWorldSave().getWorldIslandParameter() * rectangular);
 
-		float radius1 = WORLD_ISLAND_INSIDE * (WORLD_SIZE / 2.0f); // The inside radius to the blur.
-		float radius2 = WORLD_ISLAND_OUTSIDE * (WORLD_SIZE / 2.0f); // The outside radius to the blur.
+		float radius1 = KosmosWorld.get().getWorldSave().getWorldIslandInside() * (KosmosWorld.get().getWorldSave().getWorldSize() / 2.0f); // The inside radius to the blur.
+		float radius2 = KosmosWorld.get().getWorldSave().getWorldIslandOutside() * (KosmosWorld.get().getWorldSave().getWorldSize() / 2.0f); // The outside radius to the blur.
 
 		if (positionX == 0.0f && positionZ == 0.0f) { // The special case where the reading is undefined.
 			return 1.0f;
@@ -223,7 +217,11 @@ public class KosmosChunks extends Module {
 	public static float getHeightMap(float positionX, float positionZ) {
 		// Gets the height from a perlin noise map and from the island factor.
 		float island = getIslandMap(positionX, positionZ);
-		float height = island * 1.70f * KosmosChunks.get().getNoise().turbulence((positionX + WORLD_SIZE) / 400.0f, (positionZ + WORLD_SIZE) / 400.0f, 40.0f);
+		float height = island * 1.70f * KosmosChunks.get().getNoise().turbulence(
+				(positionX + KosmosWorld.get().getWorldSave().getWorldSize()) / KosmosWorld.get().getWorldSave().getWorldNoiseSpread(),
+				(positionZ + KosmosWorld.get().getWorldSave().getWorldSize()) / KosmosWorld.get().getWorldSave().getWorldNoiseSpread(),
+				KosmosWorld.get().getWorldSave().getWorldNoiseFrequency()
+		);
 		height = Maths.clamp(height, 0.0f, 1.0f);
 
 		// Ignore height that would be water/nothing.
@@ -244,7 +242,7 @@ public class KosmosChunks extends Module {
 	 * @return The found height at that world position.
 	 */
 	public static float getWorldHeight(float positionX, float positionZ) {
-		float height = getHeightMap(positionX, positionZ) * WORLD_NOISE_HEIGHT;
+		float height = getHeightMap(positionX, positionZ) * KosmosWorld.get().getWorldSave().getWorldNoiseHeight();
 		height = (float) Math.sqrt(2.0) * (int) height;
 		height -= 5.6f;
 

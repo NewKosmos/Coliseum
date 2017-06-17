@@ -16,6 +16,7 @@ import flounder.maths.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.chunks.*;
+import kosmos.world.*;
 
 import javax.imageio.*;
 import java.awt.image.*;
@@ -23,7 +24,7 @@ import java.io.*;
 
 public class MapGenerator extends Thread {
 	// The size of the rendered map image.
-	private static final int MAP_SIZE = 1024;
+	private static final int MAP_IMAGE_SIZE = 1000;
 
 	private IEvent seedChange;
 	private TextureObject mapTexture;
@@ -66,15 +67,15 @@ public class MapGenerator extends Thread {
 
 		FlounderLogger.get().log("Generating map for seed: " + seed);
 
-		//BufferedImage imageIsland = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
-		//BufferedImage imageHeight = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
-		//BufferedImage imageMoisture = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
-		BufferedImage imageBiome = new BufferedImage(MAP_SIZE, MAP_SIZE, BufferedImage.TYPE_INT_RGB);
+		//BufferedImage imageIsland = new BufferedImage(MAP_IMAGE_SIZE, MAP_IMAGE_SIZE, BufferedImage.TYPE_INT_RGB);
+		//BufferedImage imageHeight = new BufferedImage(MAP_IMAGE_SIZE, MAP_IMAGE_SIZE, BufferedImage.TYPE_INT_RGB);
+		//BufferedImage imageMoisture = new BufferedImage(MAP_IMAGE_SIZE, MAP_IMAGE_SIZE, BufferedImage.TYPE_INT_RGB);
+		BufferedImage imageBiome = new BufferedImage(MAP_IMAGE_SIZE, MAP_IMAGE_SIZE, BufferedImage.TYPE_INT_RGB);
 
-		for (int y = 0; y < MAP_SIZE; y++) {
-			for (int x = 0; x < MAP_SIZE; x++) {
-				float worldX = ((float) x / ((float) MAP_SIZE / (float) KosmosChunks.WORLD_SIZE)) - ((float) KosmosChunks.WORLD_SIZE / 2.0f);
-				float worldZ = ((float) y / ((float) MAP_SIZE / (float) KosmosChunks.WORLD_SIZE)) - ((float) KosmosChunks.WORLD_SIZE / 2.0f);
+		for (int y = 0; y < MAP_IMAGE_SIZE; y++) {
+			for (int x = 0; x < MAP_IMAGE_SIZE; x++) {
+				float worldX = ((float) x / ((float) MAP_IMAGE_SIZE / (float) KosmosWorld.get().getWorldSave().getWorldSize())) - ((float) KosmosWorld.get().getWorldSave().getWorldSize() / 2.0f);
+				float worldZ = ((float) y / ((float) MAP_IMAGE_SIZE / (float) KosmosWorld.get().getWorldSave().getWorldSize())) - ((float) KosmosWorld.get().getWorldSave().getWorldSize() / 2.0f);
 
 				//float factorIsland = KosmosChunks.getIslandMap(worldX, worldZ);
 				//imageIsland.setRGB(x, y, (((int) (255.0f * factorIsland) << 8) + ((int) (255.0f * factorIsland)) << 8) + ((int) (255.0f * factorIsland)));

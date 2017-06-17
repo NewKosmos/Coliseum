@@ -32,8 +32,6 @@ import kosmos.water.*;
 import java.util.*;
 
 public class KosmosWorld extends Module {
-	public static final float GRAVITY = -32.0f;
-
 	private MyFile[] SKYBOX_TEXTURE_FILES = {
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsRight.png"),
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsLeft.png"),
@@ -42,6 +40,10 @@ public class KosmosWorld extends Module {
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsBack.png"),
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsFront.png")
 	};
+
+	public static final float GRAVITY = -32.0f;
+
+	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, 0.0f, 0.5f); // The starting light direction.
 
 	public static final Colour SKY_COLOUR_NIGHT = new Colour(0.05f, 0.05f, 0.1f);
 	public static final Colour SKY_COLOUR_SUNRISE = new Colour(0.9f, 0.3f, 0.3f);
@@ -54,9 +56,7 @@ public class KosmosWorld extends Module {
 	public static final Colour MOON_COLOUR_NIGHT = new Colour(0.4f, 0.4f, 0.6f);
 	public static final Colour MOON_COLOUR_DAY = new Colour(0.0f, 0.0f, 0.0f);
 
-	public static final float DAY_NIGHT_CYCLE = 600.0f; // The day/night length (sec).
-
-	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, 0.0f, 0.5f); // The starting light direction.
+	private WorldSave worldSave;
 
 	private Map<String, Entity> players;
 
@@ -73,13 +73,15 @@ public class KosmosWorld extends Module {
 
 	@Handler.Function(Handler.FLAG_INIT)
 	public void init() {
+		this.worldSave = new WorldSave(420, 1536, 300.0f, 50.0f, 43.0f, 0.8f, 1.0f, 0.4f, 600.0f, 0.7f);
+
 		this.players = new HashMap<>();
 
 		this.entityPlayer = null;
 		this.entitySun = new InstanceSun(FlounderEntities.get().getEntities(), new Vector3f(-250.0f, -250.0f, -250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 		this.entityMoon = new InstanceMoon(FlounderEntities.get().getEntities(), new Vector3f(200.0f, 250.0f, 220.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 
-		this.dayDriver = new LinearDriver(0.0f, 100.0f, DAY_NIGHT_CYCLE);
+		this.dayDriver = new LinearDriver(0.0f, 100.0f, worldSave.getDayNightCycle());
 		this.dayFactor = 0.0f;
 
 		if (FlounderShadows.get() != null) {
@@ -138,7 +140,7 @@ public class KosmosWorld extends Module {
 		// Update the sky colours and sun position.
 		if (FlounderSkybox.get() != null && FlounderShadows.get() != null) {
 			dayFactor = dayDriver.update(Framework.get().getDelta()) / 100.0f;
-			// TODO: Improve day night factor to have longer days.
+			// TODO: Use 'worldSave.getDayNightRatio()'!
 			Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.get().getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.get().getLightPosition()).normalize();
 			Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.get().getFog().getFogColour());
 			Colour.interpolate(FlounderSkybox.get().getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.get().getFog().getFogColour());
@@ -148,6 +150,10 @@ public class KosmosWorld extends Module {
 			FlounderShadows.get().setShadowBoxOffset(10.0f);
 			FlounderShadows.get().setShadowBoxDistance(35.0f);
 		}
+	}
+
+	public WorldSave getWorldSave() {
+		return worldSave;
 	}
 
 	public Map<String, Entity> getPlayers() {
@@ -162,13 +168,13 @@ public class KosmosWorld extends Module {
 		return this.players.get(username);
 	}
 
-	public synchronized void addPlayer(String username, Vector3f position, Vector3f rotation) {
+	public void addPlayer(String username, Vector3f position, Vector3f rotation) {
 		FlounderTasks.get().addTask(() -> {
 			players.put(username, new InstanceMuliplayer(FlounderEntities.get().getEntities(), position, rotation, username));
 		});
 	}
 
-	public synchronized void updatePlayer(String username, float x, float y, float z, float w, float chunkX, float chunkZ) {
+	public void updatePlayer(String username, float x, float y, float z, float w, float chunkX, float chunkZ) {
 		if (FlounderNetwork.get().getUsername().equals(username)) {
 			return;
 		}
@@ -180,7 +186,7 @@ public class KosmosWorld extends Module {
 		((ComponentMultiplayer) this.players.get(username).getComponent(ComponentMultiplayer.class)).move(x, y, z, w, chunkX, chunkZ);
 	}
 
-	public synchronized void removePlayer(String username) {
+	public void removePlayer(String username) {
 		if (this.players.containsKey(username)) {
 			Entity otherPlayer = this.players.get(username);
 			otherPlayer.forceRemove();
@@ -188,7 +194,7 @@ public class KosmosWorld extends Module {
 		}
 	}
 
-	public synchronized void clearPlayers() {
+	public void clearPlayers() {
 		for (String username : this.players.keySet()) {
 			Entity otherPlayer = this.players.get(username);
 			otherPlayer.forceRemove();
