@@ -14,7 +14,6 @@ import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
-import kosmos.chunks.*;
 import kosmos.uis.*;
 import kosmos.world.*;
 
@@ -82,8 +81,8 @@ public class PacketConnect extends Packet {
 		}
 
 		// Sends current world data to the new client.
-		new PacketWorld(KosmosChunks.get().getNoise().getSeed(), Framework.get().getTimeSec()).writeData(server);
-		new PacketLoad(username, new Vector3f(), KosmosChunks.get().getNoise().getSeed(), 0.0f, 0.0f).writeData(server);
+		server.sendData(new PacketWorld(Framework.get().getTimeSec(), KosmosWorld.get().getWorld()).getData(), address, port);
+		new PacketLoad(username, new Vector3f(), 0.0f, 0.0f).writeData(server);
 
 		// Tells the connected clients of the newly connected player.
 		this.writeData(server);

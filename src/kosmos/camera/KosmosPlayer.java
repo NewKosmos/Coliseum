@@ -13,9 +13,9 @@ import flounder.camera.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
-import kosmos.chunks.*;
 import kosmos.network.packets.*;
 import kosmos.world.*;
+import kosmos.world.chunks.*;
 
 public class KosmosPlayer extends Player {
 	public static final float PLAYER_OFFSET_Y = (float) (Math.sqrt(2.0) * 0.25);

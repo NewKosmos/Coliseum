@@ -16,8 +16,8 @@ import flounder.guis.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;
-import kosmos.chunks.*;
 import kosmos.world.*;
+import kosmos.world.chunks.*;
 
 import java.util.Timer;
 import java.util.*;
@@ -73,7 +73,7 @@ public class OverlayDebug extends ScreenObject {
 			upsText.setText("UPS: " + Maths.roundToPlace(1.0f / Framework.get().getDelta(), 1));
 			positionText.setText("POSITION: [" + (FlounderCamera.get().getPlayer() == null ? "NULL" : Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().x, 1) + ", " + Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().y, 1) + ", " + Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().z, 1) + "]"));
 			timeText.setText("TIME: " + Maths.roundToPlace(KosmosWorld.get().getDayFactor(), 3));
-			seedText.setText("SEED: " + KosmosChunks.get().getNoise().getSeed());
+			seedText.setText("SEED: " + KosmosWorld.get().getWorld().getSeed());
 			moistureText.setText("MOISTURE: " + (FlounderCamera.get().getPlayer() == null ? "1" : Maths.roundToPlace(KosmosChunks.getMoistureMap(FlounderCamera.get().getPlayer().getPosition().x, FlounderCamera.get().getPlayer().getPosition().z), 2)));
 			biomeText.setText("BIOME: " + (KosmosChunks.get().getCurrent() == null ? "NULL" : KosmosChunks.get().getCurrent().getBiome().name()));
 			updateText = false;

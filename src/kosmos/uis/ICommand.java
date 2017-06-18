@@ -17,9 +17,9 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import kosmos.camera.*;
-import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.world.*;
+import kosmos.world.chunks.*;
 
 public interface ICommand {
 	String commandPrefix();

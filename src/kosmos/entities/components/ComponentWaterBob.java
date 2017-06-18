@@ -11,7 +11,7 @@ package kosmos.entities.components;
 
 import flounder.entities.*;
 import flounder.helpers.*;
-import kosmos.water.*;
+import kosmos.world.water.*;
 
 import javax.swing.*;
 

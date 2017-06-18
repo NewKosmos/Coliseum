@@ -16,7 +16,6 @@ import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import flounder.visual.*;
-import kosmos.chunks.*;
 import kosmos.world.*;
 
 public class OverlayMap extends ScreenObject {
@@ -52,14 +51,14 @@ public class OverlayMap extends ScreenObject {
 
 	@Override
 	public void updateObject() {
-		this.mapViewTexture.setTexture(KosmosChunks.get().getMapGenerator().getMapTexture());
+		this.mapViewTexture.setTexture(KosmosWorld.get().getMapTexture());
 		// VarianceDriver.set(mapViewTexture.getScaleDriver(), zoomAmount);
 
 		Entity player = KosmosWorld.get().getEntityPlayer();
 
 		if (player != null) {
-			float px = player.getPosition().x / KosmosWorld.get().getWorldSave().getWorldSize();
-			float pz = player.getPosition().z / KosmosWorld.get().getWorldSave().getWorldSize();
+			float px = player.getPosition().x / KosmosWorld.get().getWorld().getWorldSize();
+			float pz = player.getPosition().z / KosmosWorld.get().getWorld().getWorldSize();
 
 			this.mapViewTexture.getScissor().set(
 					(int) (VIEW_POSITION_X - (VIEW_SIZE_X / FlounderDisplay.get().getAspectRatio() / 2.0f)) * FlounderDisplay.get().getWidth(), (VIEW_POSITION_Y - (VIEW_SIZE_X / 2.0f)) * FlounderDisplay.get().getHeight(),

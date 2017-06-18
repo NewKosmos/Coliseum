@@ -20,7 +20,6 @@ public class PacketLoad extends Packet {
 	private float x;
 	private float y;
 	private float z;
-	private int seed;
 	private float chunkX;
 	private float chunkZ;
 
@@ -30,17 +29,15 @@ public class PacketLoad extends Packet {
 		this.x = Float.parseFloat(d[1].trim());
 		this.y = Float.parseFloat(d[2].trim());
 		this.z = Float.parseFloat(d[3].trim());
-		this.seed = Integer.parseInt(d[4].trim());
-		this.chunkX = Float.parseFloat(d[5].trim());
-		this.chunkZ = Float.parseFloat(d[6].trim());
+		this.chunkX = Float.parseFloat(d[4].trim());
+		this.chunkZ = Float.parseFloat(d[5].trim());
 	}
 
-	public PacketLoad(String username, Vector3f position, int seed, float chunkX, float chunkZ) {
+	public PacketLoad(String username, Vector3f position, float chunkX, float chunkZ) {
 		this.username = username;
 		this.x = position.x;
 		this.y = position.y;
 		this.z = position.z;
-		this.seed = seed;
 		this.chunkX = chunkX;
 		this.chunkZ = chunkZ;
 	}
@@ -58,10 +55,7 @@ public class PacketLoad extends Packet {
 
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
-		//	KosmosWorld.get().getEntityPlayer().getPosition().set(x, y, z);
-		//	KosmosChunks.get().clear(false);
-		//	KosmosChunks.get().setCurrent(new Chunk(FlounderEntities.get().getEntities(), new Vector3f(chunkX, 0.0f, chunkZ)));
-		KosmosWorld.get().generateWorld(seed, new Vector3f(x, y, z), new Vector3f(chunkX, 0.0f, chunkZ));
+		KosmosWorld.get().generateWorld(null, new Vector3f(x, y, z), new Vector3f(chunkX, 0.0f, chunkZ));
 	}
 
 	@Override
@@ -71,7 +65,7 @@ public class PacketLoad extends Packet {
 
 	@Override
 	public byte[] getData() {
-		return (getDataPrefix() + username + "," + x + "," + y + "," + z + "," + seed + "," + chunkX + "," + chunkZ).getBytes();
+		return (getDataPrefix() + username + "," + x + "," + y + "," + z + "," + chunkX + "," + chunkZ).getBytes();
 	}
 
 	/**
@@ -93,10 +87,6 @@ public class PacketLoad extends Packet {
 
 	public float getZ() {
 		return z;
-	}
-
-	public int getSeed() {
-		return seed;
 	}
 
 	public float getChunkX() {

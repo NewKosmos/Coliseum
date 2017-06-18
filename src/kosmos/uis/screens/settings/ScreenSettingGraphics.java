@@ -21,7 +21,7 @@ import flounder.shadows.*;
 import flounder.textures.*;
 import kosmos.uis.*;
 import kosmos.uis.screens.*;
-import kosmos.water.*;
+import kosmos.world.water.*;
 
 public class ScreenSettingGraphics extends ScreenObject {
 	public ScreenSettingGraphics(OverlaySlider slider, ScreenSettings settings) {

@@ -29,8 +29,8 @@ import flounder.resources.*;
 import flounder.standards.*;
 import flounder.textures.*;
 import flounder.visual.*;
-import kosmos.chunks.*;
 import kosmos.network.packets.*;
+import kosmos.world.*;
 import sun.reflect.generics.reflectiveObjects.*;
 
 import javax.swing.*;
@@ -45,7 +45,7 @@ public class KosmosServer extends Framework {
 
 	public KosmosServer() {
 		super(
-				"kosmos", new UpdaterDefault(null), 2,
+				"kosmos", new UpdaterDefault(null), 5,
 				new Extension[]{new ServerInterface(), new ServerRenderer(), new ServerCamera(), new ServerGuis()}
 		);
 		Framework.get().addOverrides(new PlatformLwjgl(
@@ -86,11 +86,18 @@ public class KosmosServer extends Framework {
 		private Timer timerWorld;
 
 		public ServerInterface() {
-			super(FlounderDisplayJPanel.class, FlounderNetwork.class, KosmosChunks.class);
+			super(FlounderDisplayJPanel.class, FlounderNetwork.class, KosmosWorld.class);
 		}
 
 		@Override
 		public void init() {
+			// Generates the world.
+			KosmosWorld.get().generateWorld(
+					new WorldDefinition(123456789, 1000, 300.0f, 30.0f, 20.0f, 0.8f, 1.0f, 0.4f, 600.0f, 0.7f),
+					new Vector3f(),
+					new Vector3f()
+			);
+
 			frame = new JFrame();
 			frame.setTitle(FlounderDisplay.get().getTitle());
 			frame.setSize(FlounderDisplay.get().getWidth(), FlounderDisplay.get().getHeight());
@@ -123,8 +130,9 @@ public class KosmosServer extends Framework {
 			JButton buttonRandomSeed = new JButton("Random Seed");
 			buttonRandomSeed.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					KosmosChunks.get().getNoise().setSeed((int) Maths.randomInRange(1.0, 1000000.0));
-					new PacketWorld(KosmosChunks.get().getNoise().getSeed(), Framework.get().getTimeSec()).writeData(FlounderNetwork.get().getSocketServer());
+					WorldDefinition d = KosmosWorld.get().getWorld();
+					KosmosWorld.get().setWorld(new WorldDefinition((int) Maths.randomInRange(1.0, 1000000.0), d.getWorldSize(), d.getWorldNoiseSpread(), d.getWorldNoiseFrequency(), d.getWorldNoiseHeight(), d.getWorldIslandInside(), d.getWorldIslandOutside(), d.getWorldIslandParameter(), d.getDayNightCycle(), d.getDayNightRatio()));
+					new PacketWorld(Framework.get().getTimeSec(), KosmosWorld.get().getWorld()).writeData(FlounderNetwork.get().getSocketServer());
 				}
 			});
 			mainPanel.add(buttonRandomSeed);
@@ -159,14 +167,14 @@ public class KosmosServer extends Framework {
 			}
 
 			FlounderNetwork.get().startServer(serverPort);
-			KosmosChunks.get().getNoise().setSeed(ServerConfigs.HOST_SEED.setReference(() -> KosmosChunks.get().getNoise().getSeed()).getInteger());
+			//	KosmosWorld.get().getWorld().getNoise().setSeed(ServerConfigs.HOST_SEED.setReference(() -> KosmosWorld.get().getWorld().getNoise().getSeed()).getInteger());
 		}
 
 		@Override
 		public void update() {
 			// Remind the clients the time, acts as a "are your there" ping as well.
 			if (timerWorld.isPassedTime()) {
-				new PacketWorld(KosmosChunks.get().getNoise().getSeed(), Framework.get().getTimeSec()).writeData(FlounderNetwork.get().getSocketServer());
+				new PacketWorld(Framework.get().getTimeSec(), KosmosWorld.get().getWorld()).writeData(FlounderNetwork.get().getSocketServer());
 				timerWorld.resetStartTime();
 			}
 		}
@@ -266,7 +274,7 @@ public class KosmosServer extends Framework {
 
 			@Override
 			public void updateObject() {
-				mapViewTexture.setTexture(KosmosChunks.get().getMapGenerator().getMapTexture());
+				mapViewTexture.setTexture(KosmosWorld.get().getMapTexture());
 
 			/*	Entity player = KosmosWorld.get().getEntityPlayer();
 

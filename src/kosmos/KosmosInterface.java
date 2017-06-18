@@ -22,17 +22,15 @@ import flounder.shadows.*;
 import flounder.skybox.*;
 import flounder.standards.*;
 import flounder.steam.*;
-import kosmos.chunks.*;
 import kosmos.network.packets.*;
 import kosmos.post.*;
-import kosmos.water.*;
 import kosmos.world.*;
 
 import static flounder.platform.Constants.*;
 
 public class KosmosInterface extends Standard {
 	public KosmosInterface() {
-		super(FlounderEvents.class, FlounderNetwork.class, FlounderSteam.class, FlounderShadows.class, FlounderParticles.class, FlounderSkybox.class, KosmosWater.class, KosmosPost.class, KosmosWorld.class, KosmosChunks.class);
+		super(FlounderEvents.class, FlounderNetwork.class, FlounderSteam.class, FlounderShadows.class, FlounderParticles.class, FlounderSkybox.class, KosmosPost.class, KosmosWorld.class);
 	}
 
 	@Override
@@ -54,7 +52,8 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public void onEvent() {
-				KosmosChunks.get().getNoise().setSeed((int) Maths.randomInRange(1.0, 1000000.0));
+				//	KosmosWorld.get().getWorld().getNoise().setSeed((int) Maths.randomInRange(1.0, 1000000.0));
+				KosmosWorld.get().setWorld(new WorldDefinition((int) Maths.randomInRange(1.0, 1000000.0), 1536, 400.0f, 40.0f, 40.0f, 0.8f, 1.0f, 0.4f, 600.0f, 0.7f));
 			}
 		});
 

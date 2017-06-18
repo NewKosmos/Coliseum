@@ -16,7 +16,7 @@ import flounder.resources.*;
 import kosmos.camera.*;
 
 public class NewKosmos extends Framework {
-	public static final String VERSION = "6.09";
+	public static final String VERSION = "6.17";
 
 	public static void main(String[] args) {
 		new NewKosmos().run();

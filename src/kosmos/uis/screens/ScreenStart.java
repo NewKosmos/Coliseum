@@ -18,10 +18,10 @@ import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.visual.*;
 import kosmos.*;
-import kosmos.chunks.*;
 import kosmos.network.packets.*;
 import kosmos.uis.*;
 import kosmos.world.*;
+import kosmos.world.chunks.*;
 
 public class ScreenStart extends ScreenObject {
 	public ScreenStart(OverlaySlider slider) {
@@ -49,7 +49,7 @@ public class ScreenStart extends ScreenObject {
 
 				// Generates the world.
 				KosmosWorld.get().generateWorld(
-						KosmosConfigs.SAVE_SEED.setReference(() -> KosmosChunks.get().getNoise().getSeed()).getInteger(),
+						new WorldDefinition(420, 1536, 400.0f, 40.0f, 40.0f, 0.8f, 1.0f, 0.4f, 600.0f, 0.7f), // KosmosConfigs.SAVE_SEED.setReference(() -> KosmosWorld.get().getWorld().getSeed()).getInteger(),
 						new Vector3f(
 								KosmosConfigs.SAVE_PLAYER_X.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().x).getFloat(),
 								KosmosConfigs.SAVE_PLAYER_Y.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().y).getFloat(),

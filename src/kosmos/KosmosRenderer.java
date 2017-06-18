@@ -26,8 +26,8 @@ import flounder.renderer.*;
 import flounder.shadows.*;
 import flounder.skybox.*;
 import kosmos.post.*;
-import kosmos.water.*;
 import kosmos.world.*;
+import kosmos.world.water.*;
 
 import static flounder.platform.Constants.*;
 

@@ -20,9 +20,9 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.shaders.*;
 import kosmos.camera.*;
-import kosmos.chunks.*;
-import kosmos.water.*;
 import kosmos.world.*;
+import kosmos.world.chunks.*;
+import kosmos.world.water.*;
 
 import javax.swing.*;
 
@@ -72,6 +72,10 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 
 	@Override
 	public void update() {
+		if (FlounderCamera.get().getPlayer() == null || !KosmosPlayer.class.isInstance(FlounderCamera.get().getPlayer())) {
+			return;
+		}
+
 		float delta = Math.min(1.0f / 60.0f, Framework.get().getDelta());
 
 		// Gets if noclip is enabled.

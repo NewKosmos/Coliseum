@@ -24,10 +24,10 @@ import flounder.textures.*;
 import flounder.visual.*;
 import kosmos.*;
 import kosmos.camera.*;
-import kosmos.chunks.*;
 import kosmos.entities.components.*;
 import kosmos.entities.instances.*;
-import kosmos.water.*;
+import kosmos.world.chunks.*;
+import kosmos.world.water.*;
 
 import java.util.*;
 
@@ -56,7 +56,7 @@ public class KosmosWorld extends Module {
 	public static final Colour MOON_COLOUR_NIGHT = new Colour(0.4f, 0.4f, 0.6f);
 	public static final Colour MOON_COLOUR_DAY = new Colour(0.0f, 0.0f, 0.0f);
 
-	private WorldSave worldSave;
+	private WorldDefinition worldDefinition;
 
 	private Map<String, Entity> players;
 
@@ -68,12 +68,12 @@ public class KosmosWorld extends Module {
 	private float dayFactor;
 
 	public KosmosWorld() {
-		super(FlounderEntities.class);
+		super(FlounderEntities.class, KosmosChunks.class, KosmosWater.class);
 	}
 
 	@Handler.Function(Handler.FLAG_INIT)
 	public void init() {
-		this.worldSave = new WorldSave(420, 1536, 300.0f, 50.0f, 43.0f, 0.8f, 1.0f, 0.4f, 600.0f, 0.7f);
+		this.worldDefinition = null;
 
 		this.players = new HashMap<>();
 
@@ -81,7 +81,7 @@ public class KosmosWorld extends Module {
 		this.entitySun = new InstanceSun(FlounderEntities.get().getEntities(), new Vector3f(-250.0f, -250.0f, -250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 		this.entityMoon = new InstanceMoon(FlounderEntities.get().getEntities(), new Vector3f(200.0f, 250.0f, 220.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 
-		this.dayDriver = new LinearDriver(0.0f, 100.0f, worldSave.getDayNightCycle());
+		this.dayDriver = new LinearDriver(0.0f, 100.0f, 100.0f);
 		this.dayFactor = 0.0f;
 
 		if (FlounderShadows.get() != null) {
@@ -98,12 +98,14 @@ public class KosmosWorld extends Module {
 		}
 	}
 
-	public void generateWorld(int seed, Vector3f positionPlayer, Vector3f positionChunk) {
+	public void generateWorld(WorldDefinition world, Vector3f positionPlayer, Vector3f positionChunk) {
 		FlounderTasks.get().addTask(new ITask() {
 			@Override
 			public void execute() {
 				// Sets the seed.
-				KosmosChunks.get().getNoise().setSeed(seed);
+				if (world != null) {
+					setWorld(world);
+				}
 
 				// Creates the player.
 				entityPlayer = new InstancePlayer(FlounderEntities.get().getEntities(), positionPlayer, new Vector3f());
@@ -119,7 +121,10 @@ public class KosmosWorld extends Module {
 
 	public void deleteWorld() {
 		KosmosConfigs.saveAllConfigs();
-		KosmosChunks.get().getNoise().setSeed(-1);
+
+		if (this.worldDefinition != null) {
+			this.worldDefinition.delete();
+		}
 
 		if (entityPlayer != null) {
 			entityPlayer.forceRemove();
@@ -140,7 +145,7 @@ public class KosmosWorld extends Module {
 		// Update the sky colours and sun position.
 		if (FlounderSkybox.get() != null && FlounderShadows.get() != null) {
 			dayFactor = dayDriver.update(Framework.get().getDelta()) / 100.0f;
-			// TODO: Use 'worldSave.getDayNightRatio()'!
+			// TODO: Use 'worldDefinition.getDayNightRatio()'!
 			Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.get().getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.get().getLightPosition()).normalize();
 			Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.get().getFog().getFogColour());
 			Colour.interpolate(FlounderSkybox.get().getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.get().getFog().getFogColour());
@@ -152,8 +157,31 @@ public class KosmosWorld extends Module {
 		}
 	}
 
-	public WorldSave getWorldSave() {
-		return worldSave;
+	public WorldDefinition getWorld() {
+		return worldDefinition;
+	}
+
+	public void setWorld(WorldDefinition world) {
+		if (this.worldDefinition != null) {
+			this.worldDefinition.delete();
+		}
+
+		this.worldDefinition = world;
+
+		if (worldDefinition != null) {
+			this.dayDriver = new LinearDriver(0.0f, 100.0f, worldDefinition.getDayNightCycle());
+			this.worldDefinition.generateMap();
+		}
+
+		KosmosChunks.get().clear(true);
+	}
+
+	public TextureObject getMapTexture() {
+		if (worldDefinition == null) {
+			return null;
+		}
+
+		return worldDefinition.getMapTexture();
 	}
 
 	public Map<String, Entity> getPlayers() {
@@ -220,7 +248,7 @@ public class KosmosWorld extends Module {
 	}
 
 	public float getDayFactor() {
-		return this.dayFactor;
+		return dayFactor;
 	}
 
 	public float getSunriseFactor() {

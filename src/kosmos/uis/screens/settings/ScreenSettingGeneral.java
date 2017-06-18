@@ -12,9 +12,9 @@ package kosmos.uis.screens.settings;
 import flounder.events.*;
 import flounder.guis.*;
 import flounder.maths.vectors.*;
-import kosmos.chunks.*;
 import kosmos.uis.*;
 import kosmos.uis.screens.*;
+import kosmos.world.chunks.*;
 
 public class ScreenSettingGeneral extends ScreenObject {
 	public ScreenSettingGeneral(OverlaySlider slider, ScreenSettings settings) {
