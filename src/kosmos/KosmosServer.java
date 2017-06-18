@@ -128,21 +128,17 @@ public class KosmosServer extends Framework {
 			mainPanel = new JPanel();
 
 			JButton buttonRandomSeed = new JButton("Random Seed");
-			buttonRandomSeed.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					WorldDefinition d = KosmosWorld.get().getWorld();
-					KosmosWorld.get().setWorld(new WorldDefinition((int) Maths.randomInRange(1.0, 1000000.0), d.getWorldSize(), d.getWorldNoiseSpread(), d.getWorldNoiseFrequency(), d.getWorldNoiseHeight(), d.getWorldIslandInside(), d.getWorldIslandOutside(), d.getWorldIslandParameter(), d.getDayNightCycle(), d.getDayNightRatio()));
-					new PacketWorld(Framework.get().getTimeSec(), KosmosWorld.get().getWorld()).writeData(FlounderNetwork.get().getSocketServer());
-				}
+			buttonRandomSeed.addActionListener(e -> {
+				WorldDefinition d = KosmosWorld.get().getWorld();
+				KosmosWorld.get().setWorld(new WorldDefinition((int) Maths.randomInRange(1.0, 1000000.0), d.getWorldSize(), d.getWorldNoiseSpread(), d.getWorldNoiseFrequency(), d.getWorldNoiseHeight(), d.getWorldIslandInside(), d.getWorldIslandOutside(), d.getWorldIslandParameter(), d.getDayNightCycle(), d.getDayNightRatio()));
+				new PacketWorld(Framework.get().getTimeSec(), KosmosWorld.get().getWorld()).writeData(FlounderNetwork.get().getSocketServer());
 			});
 			mainPanel.add(buttonRandomSeed);
 
 			JButton buttonShutdown = new JButton("Shutdown");
-			buttonShutdown.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					new PacketDisconnect("server").writeData(FlounderNetwork.get().getSocketServer());
-					Framework.get().requestClose(false);
-				}
+			buttonShutdown.addActionListener(e -> {
+				new PacketDisconnect("server").writeData(FlounderNetwork.get().getSocketServer());
+				Framework.get().requestClose(false);
 			});
 			mainPanel.add(buttonShutdown);
 

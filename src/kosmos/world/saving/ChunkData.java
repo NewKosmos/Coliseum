@@ -37,7 +37,7 @@ public class ChunkData {
 
 		String[] r = loaded.split("}")[0].replace("{", "").trim().split(",");
 
-		String[] a = loaded.split("{")[2].replace("}", "").trim().split(",");
+		String[] a = loaded.split("\\{")[2].replace("}", "").trim().split(",");
 
 	}
 
@@ -63,21 +63,21 @@ public class ChunkData {
 	}
 
 	protected String getSaveData() {
-		String result = "[" + position.x + "," + position.y + "," + position.z + "]: {";
+		StringBuilder result = new StringBuilder("[" + position.x + "," + position.y + "," + position.z + "]: {");
 
 		for (Vector3f r : removed) {
-			result += r.x + "," + r.y + "," + r.z + ",";
+			result.append(r.x).append(",").append(r.y).append(",").append(r.z).append(",");
 		}
 
-		result += "}: {";
+		result.append("}: {");
 
 		for (Entity a : added) {
-			result += "\'" + a.getClass().getName() + "\', " + a.getPosition().x + "," + a.getPosition().y + "," + a.getPosition().z + ",";
-			result += a.getRotation().x + "," + a.getRotation().y + "," + a.getRotation().z + ",";
+			result.append("\'").append(a.getClass().getName()).append("\', ").append(a.getPosition().x).append(",").append(a.getPosition().y).append(",").append(a.getPosition().z).append(",");
+			result.append(a.getRotation().x).append(",").append(a.getRotation().y).append(",").append(a.getRotation().z).append(",");
 		}
 
-		result += "}";
+		result.append("}");
 
-		return result;
+		return result.toString();
 	}
 }

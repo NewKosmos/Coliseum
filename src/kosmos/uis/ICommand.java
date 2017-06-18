@@ -28,7 +28,7 @@ public interface ICommand {
 
 	void runCommand(String fullCommand);
 
-	public enum ConsoleCommands {
+	enum ConsoleCommands {
 		HELP(new ICommand() {
 			@Override
 			public String commandPrefix() {

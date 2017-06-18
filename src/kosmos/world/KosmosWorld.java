@@ -99,23 +99,20 @@ public class KosmosWorld extends Module {
 	}
 
 	public void generateWorld(WorldDefinition world, Vector3f positionPlayer, Vector3f positionChunk) {
-		FlounderTasks.get().addTask(new ITask() {
-			@Override
-			public void execute() {
-				// Sets the seed.
-				if (world != null) {
-					setWorld(world);
-				}
-
-				// Creates the player.
-				entityPlayer = new InstancePlayer(FlounderEntities.get().getEntities(), positionPlayer, new Vector3f());
-
-				// Creates the current chunk.
-				KosmosChunks.get().setCurrent(new Chunk(FlounderEntities.get().getEntities(), positionChunk));
-
-				// Creates the water.
-				KosmosWater.get().generateWater();
+		FlounderTasks.get().addTask(() -> {
+			// Sets the seed.
+			if (world != null) {
+				setWorld(world);
 			}
+
+			// Creates the player.
+			entityPlayer = new InstancePlayer(FlounderEntities.get().getEntities(), positionPlayer, new Vector3f());
+
+			// Creates the current chunk.
+			KosmosChunks.get().setCurrent(new Chunk(FlounderEntities.get().getEntities(), positionChunk));
+
+			// Creates the water.
+			KosmosWater.get().generateWater();
 		});
 	}
 
@@ -197,9 +194,7 @@ public class KosmosWorld extends Module {
 	}
 
 	public void addPlayer(String username, Vector3f position, Vector3f rotation) {
-		FlounderTasks.get().addTask(() -> {
-			players.put(username, new InstanceMuliplayer(FlounderEntities.get().getEntities(), position, rotation, username));
-		});
+		FlounderTasks.get().addTask(() -> players.put(username, new InstanceMuliplayer(FlounderEntities.get().getEntities(), position, rotation, username)));
 	}
 
 	public void updatePlayer(String username, float x, float y, float z, float w, float chunkX, float chunkZ) {

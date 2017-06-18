@@ -29,12 +29,7 @@ public class ScreenSettingPost extends ScreenObject {
 				toggleEffects.setText("Post Enabled: " + newValue);
 			}
 		});
-		toggleEffects.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				KosmosPost.get().setEffectsEnabled(!KosmosPost.get().isEffectsEnabled());
-			}
-		});
+		toggleEffects.addLeftListener(() -> KosmosPost.get().setEffectsEnabled(!KosmosPost.get().isEffectsEnabled()));
 
 		// Toggle Bloom.
 		GuiButtonText toggleBloom = new GuiButtonText(this, new Vector2f(0.5f, 0.27f), "Bloom Enabled: ", GuiAlign.CENTRE);
@@ -44,12 +39,7 @@ public class ScreenSettingPost extends ScreenObject {
 				toggleBloom.setText("Bloom Enabled: " + newValue);
 			}
 		});
-		toggleBloom.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				KosmosPost.get().setBloomEnabled(!KosmosPost.get().isBloomEnabled());
-			}
-		});
+		toggleBloom.addLeftListener(() -> KosmosPost.get().setBloomEnabled(!KosmosPost.get().isBloomEnabled()));
 
 		// Toggle Motion Blur.
 		GuiButtonText toggleMotionBlur = new GuiButtonText(this, new Vector2f(0.5f, 0.34f), "Motion Blur Enabled: ", GuiAlign.CENTRE);
@@ -59,12 +49,7 @@ public class ScreenSettingPost extends ScreenObject {
 				toggleMotionBlur.setText("Motion Blur Enabled: " + newValue);
 			}
 		});
-		toggleMotionBlur.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				KosmosPost.get().setMotionBlurEnabled(!KosmosPost.get().isMotionBlurEnabled());
-			}
-		});
+		toggleMotionBlur.addLeftListener(() -> KosmosPost.get().setMotionBlurEnabled(!KosmosPost.get().isMotionBlurEnabled()));
 
 		// Toggle Tilt Shift.
 		GuiButtonText toggleTiltShift = new GuiButtonText(this, new Vector2f(0.5f, 0.41f), "Tilt Shift Enabled: ", GuiAlign.CENTRE);
@@ -74,12 +59,7 @@ public class ScreenSettingPost extends ScreenObject {
 				toggleTiltShift.setText("Tilt Shift Enabled: " + newValue);
 			}
 		});
-		toggleTiltShift.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				KosmosPost.get().setTiltShiftEnabled(!KosmosPost.get().isTiltShiftEnabled());
-			}
-		});
+		toggleTiltShift.addLeftListener(() -> KosmosPost.get().setTiltShiftEnabled(!KosmosPost.get().isTiltShiftEnabled()));
 
 		// Toggle Lens Flare.
 		GuiButtonText toggleLensFlare = new GuiButtonText(this, new Vector2f(0.5f, 0.48f), "Lens Flare Enabled: ", GuiAlign.CENTRE);
@@ -89,12 +69,7 @@ public class ScreenSettingPost extends ScreenObject {
 				toggleLensFlare.setText("Lens Flare Enabled: " + newValue);
 			}
 		});
-		toggleLensFlare.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				KosmosPost.get().setLensFlareEnabled(!KosmosPost.get().isLensFlareEnabled());
-			}
-		});
+		toggleLensFlare.addLeftListener(() -> KosmosPost.get().setLensFlareEnabled(!KosmosPost.get().isLensFlareEnabled()));
 
 		// Toggle Effect CRT.
 		GuiButtonText toggleEffectCRT = new GuiButtonText(this, new Vector2f(0.5f, 0.55f), "Effect CRT Enabled: ", GuiAlign.CENTRE);
@@ -104,12 +79,7 @@ public class ScreenSettingPost extends ScreenObject {
 				toggleEffectCRT.setText("Effect CRT Enabled: " + newValue);
 			}
 		});
-		toggleEffectCRT.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				KosmosPost.get().setCrtEnabled(!KosmosPost.get().isCrtEnabled());
-			}
-		});
+		toggleEffectCRT.addLeftListener(() -> KosmosPost.get().setCrtEnabled(!KosmosPost.get().isCrtEnabled()));
 
 		// Toggle Effect Grain.
 		GuiButtonText toggleGrain = new GuiButtonText(this, new Vector2f(0.5f, 0.62f), "Grain Enabled: ", GuiAlign.CENTRE);
@@ -119,21 +89,11 @@ public class ScreenSettingPost extends ScreenObject {
 				toggleGrain.setText("Grain Enabled: " + newValue);
 			}
 		});
-		toggleGrain.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				KosmosPost.get().setGrainEnabled(!KosmosPost.get().isGrainEnabled());
-			}
-		});
+		toggleGrain.addLeftListener(() -> KosmosPost.get().setGrainEnabled(!KosmosPost.get().isGrainEnabled()));
 
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);
-		back.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.setNewSecondaryScreen(settings);
-			}
-		});
+		back.addLeftListener(() -> slider.setNewSecondaryScreen(settings));
 	}
 
 	@Override

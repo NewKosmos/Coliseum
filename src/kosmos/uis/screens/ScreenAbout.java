@@ -32,12 +32,7 @@ public class ScreenAbout extends ScreenObject {
 
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);
-		back.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.closeSecondaryScreen();
-			}
-		});
+		back.addLeftListener(slider::closeSecondaryScreen);
 	}
 
 	@Override

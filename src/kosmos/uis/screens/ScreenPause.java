@@ -29,51 +29,35 @@ public class ScreenPause extends ScreenObject {
 
 		// Save Game.
 		GuiButtonText saveGame = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "Save Game", GuiAlign.CENTRE);
-		saveGame.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				FlounderLogger.get().log("Saving game!");
-				KosmosConfigs.saveAllConfigs();
-			}
+		saveGame.addLeftListener(() -> {
+			FlounderLogger.get().log("Saving game!");
+			KosmosConfigs.saveAllConfigs();
 		});
 
 		// Settings.
 		ScreenSettings screenSettings = new ScreenSettings(slider);
 		screenSettings.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText settings = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "Settings", GuiAlign.CENTRE);
-		settings.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenSettings);
-			}
-		});
+		settings.addLeftListener(() -> slider.setNewSecondaryScreen(screenSettings));
 
 		// About.
 		ScreenAbout screenAbout = new ScreenAbout(slider);
 		screenAbout.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText about = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "About", GuiAlign.CENTRE);
-		about.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenAbout);
-			}
-		});
+		about.addLeftListener(() -> slider.setNewSecondaryScreen(screenAbout));
 
 		// Exit.
 		GuiButtonText exitToMenu = new GuiButtonText(this, new Vector2f(0.5f, yPosition += 1.2f * ySpacing), "Exit To Menu", GuiAlign.CENTRE);
-		exitToMenu.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.sliderStartMenu(true);
+		exitToMenu.addLeftListener(() -> {
+			slider.sliderStartMenu(true);
 
-				if (FlounderNetwork.get().getSocketClient() != null) {
-					new PacketDisconnect(FlounderNetwork.get().getUsername()).writeData(FlounderNetwork.get().getSocketClient());
-					FlounderNetwork.get().closeClient();
-				}
-
-				FlounderLogger.get().log("Leaving world!");
-				KosmosWorld.get().deleteWorld();
+			if (FlounderNetwork.get().getSocketClient() != null) {
+				new PacketDisconnect(FlounderNetwork.get().getUsername()).writeData(FlounderNetwork.get().getSocketClient());
+				FlounderNetwork.get().closeClient();
 			}
+
+			FlounderLogger.get().log("Leaving world!");
+			KosmosWorld.get().deleteWorld();
 		});
 	}
 

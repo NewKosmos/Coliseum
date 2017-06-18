@@ -281,6 +281,7 @@ public class WorldDefinition {
 		if (Float.compare(that.worldIslandOutside, worldIslandOutside) != 0) return false;
 		if (Float.compare(that.worldIslandParameter, worldIslandParameter) != 0) return false;
 		if (Float.compare(that.dayNightCycle, dayNightCycle) != 0) return false;
-		return Float.compare(that.dayNightRatio, dayNightRatio) == 0;
+		if (Float.compare(that.dayNightRatio, dayNightRatio) != 0) return false;
+		return true;
 	}
 }

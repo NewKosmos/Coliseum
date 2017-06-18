@@ -30,14 +30,11 @@ public class ScreenSettingAudio extends ScreenObject {
 				toggleMusic.setText("Music Enabled: " + !newValue);
 			}
 		});
-		toggleMusic.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				if (!FlounderSound.get().getMusicPlayer().isPaused()) {
-					FlounderSound.get().getMusicPlayer().pauseTrack();
-				} else {
-					FlounderSound.get().getMusicPlayer().unpauseTrack();
-				}
+		toggleMusic.addLeftListener(() -> {
+			if (!FlounderSound.get().getMusicPlayer().isPaused()) {
+				FlounderSound.get().getMusicPlayer().pauseTrack();
+			} else {
+				FlounderSound.get().getMusicPlayer().unpauseTrack();
 			}
 		});
 
@@ -49,12 +46,7 @@ public class ScreenSettingAudio extends ScreenObject {
 				sliderMusicVolume.setText("Music Volume: " + Maths.roundToPlace(newValue, 3));
 			}
 		});
-		sliderMusicVolume.addChangeListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				FlounderSound.get().getMusicPlayer().setVolume(sliderMusicVolume.getProgress());
-			}
-		});
+		sliderMusicVolume.addChangeListener(() -> FlounderSound.get().getMusicPlayer().setVolume(sliderMusicVolume.getProgress()));
 
 		// Slider Sound Volume.
 		GuiSliderText sliderSoundVolume = new GuiSliderText(this, new Vector2f(0.5f, 0.34f), "Sound Volume: ", 0.0f, 1.0f, FlounderSound.get().getSourcePool().getSystemVolume(), GuiAlign.CENTRE);
@@ -64,21 +56,11 @@ public class ScreenSettingAudio extends ScreenObject {
 				sliderSoundVolume.setText("Sound Volume: " + Maths.roundToPlace(newValue, 3));
 			}
 		});
-		sliderSoundVolume.addChangeListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				FlounderSound.get().getSourcePool().setSystemVolume(sliderSoundVolume.getProgress());
-			}
-		});
+		sliderSoundVolume.addChangeListener(() -> FlounderSound.get().getSourcePool().setSystemVolume(sliderSoundVolume.getProgress()));
 
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);
-		back.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.setNewSecondaryScreen(settings);
-			}
-		});
+		back.addLeftListener(() -> slider.setNewSecondaryScreen(settings));
 	}
 
 	@Override

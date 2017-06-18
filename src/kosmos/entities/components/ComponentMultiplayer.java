@@ -32,7 +32,7 @@ public class ComponentMultiplayer extends IComponentEntity implements IComponent
 	 * Creates a new ComponentMultiplayer.
 	 *
 	 * @param entity The entity this component is attached to.
-	 * @param username
+	 * @param username The username of this player.
 	 */
 	public ComponentMultiplayer(Entity entity, String username) {
 		super(entity);

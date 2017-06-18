@@ -79,7 +79,7 @@ public class KosmosCamera extends Camera {
 	private static float sensitivity;
 	private static boolean mouseLocked;
 	private static boolean firstPerson;
-	private int reangleButton;
+	private int angleButton;
 	private JoystickAxis joystickVertical;
 	private JoystickAxis joystickHorizontal;
 	private JoystickButton joystickZoom;
@@ -114,7 +114,7 @@ public class KosmosCamera extends Camera {
 		KosmosCamera.fieldOfView = KosmosConfigs.CAMERA_FOV.setReference(() -> fieldOfView).getFloat();
 		KosmosCamera.sensitivity = KosmosConfigs.CAMERA_SENSITIVITY.setReference(() -> sensitivity).getFloat();
 		KosmosCamera.mouseLocked = KosmosConfigs.CAMERA_MOUSE_LOCKED.setReference(() -> mouseLocked).getBoolean();
-		this.reangleButton = KosmosConfigs.CAMERA_REANGLE.setReference(() -> reangleButton).getInteger();
+		this.angleButton = KosmosConfigs.CAMERA_ANGLE.setReference(() -> angleButton).getInteger();
 		this.joystickVertical = new JoystickAxis(0, 3);
 		this.joystickHorizontal = new JoystickAxis(0, 2);
 		this.joystickZoom = new JoystickButton(0, 9);
@@ -177,7 +177,7 @@ public class KosmosCamera extends Camera {
 			if (Maths.deadband(0.05f, joystickHorizontal.getAmount()) != 0.0f && !joystickZoom.isDown()) {
 				angleChange = joystickHorizontal.getAmount() * INFLUENCE_OF_JOYSTICK_DX * sensitivity;
 			} else {
-				if (FlounderMouse.get().isCursorDisabled() || FlounderMouse.get().getMouse(reangleButton)) {
+				if (FlounderMouse.get().isCursorDisabled() || FlounderMouse.get().getMouse(angleButton)) {
 					angleChange = -FlounderMouse.get().getDeltaX() * INFLUENCE_OF_MOUSE_DX * sensitivity;
 				}
 			}
@@ -205,7 +205,7 @@ public class KosmosCamera extends Camera {
 			if (Maths.deadband(0.05f, joystickVertical.getAmount()) != 0.0f && !joystickZoom.isDown()) {
 				angleChange = joystickVertical.getAmount() * INFLUENCE_OF_JOYSTICK_DY * sensitivity;
 			} else {
-				if (FlounderMouse.get().isCursorDisabled() || FlounderMouse.get().getMouse(reangleButton)) {
+				if (FlounderMouse.get().isCursorDisabled() || FlounderMouse.get().getMouse(angleButton)) {
 					angleChange = FlounderMouse.get().getDeltaY() * INFLUENCE_OF_MOUSE_DY * sensitivity;
 				}
 			}

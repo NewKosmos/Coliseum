@@ -65,10 +65,10 @@ public class KosmosConfigs {
 	public static final ConfigData POST_CRT_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "crtEnabled", false, () -> KosmosPost.get().isCrtEnabled());
 	public static final ConfigData POST_GRAIN_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "grainEnabled", true, () -> KosmosPost.get().isGrainEnabled());
 
-	public static final ConfigData HUD_COSSHAIR_TYPE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "hudCrosshairType", 1); // Reference set in master overlay.
+	public static final ConfigData HUD_CROSSHAIR_TYPE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "hudCrosshairType", 1); // Reference set in master overlay.
 	public static final ConfigData CAMERA_FOV = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraFOV", 45.0f); // Reference set in camera.
 	public static final ConfigData CAMERA_SENSITIVITY = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraSensitivity", 1.0f); // Reference set in camera.
-	public static final ConfigData CAMERA_REANGLE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraReangle", GLFW_MOUSE_BUTTON_RIGHT); // Reference set in camera.
+	public static final ConfigData CAMERA_ANGLE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraAngle", GLFW_MOUSE_BUTTON_RIGHT); // Reference set in camera.
 	public static final ConfigData CAMERA_MOUSE_LOCKED = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraMouseLocked", true); // Reference set in camera.
 
 	public static final ConfigData CLIENT_USERNAME = CONFIG_MAIN.getData(ConfigSection.CLIENT, "username", "USERNAME" + ((int) (Math.random() * 10000)), () -> FlounderNetwork.get().getUsername());

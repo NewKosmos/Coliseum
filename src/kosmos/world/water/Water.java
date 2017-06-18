@@ -219,7 +219,7 @@ public class Water {
 	}
 
 	/**
-	 * @return The VAO's ID.
+	 * @return The VAOs ID.
 	 */
 	protected int getVao() {
 		return vao;

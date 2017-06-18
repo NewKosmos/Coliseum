@@ -29,24 +29,16 @@ public class ScreenSettingGeneral extends ScreenObject {
 				sliderChunkDistance.setText("Chunk Distance: " + newValue);
 			}
 		});
-		sliderChunkDistance.addChangeListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				if (KosmosChunks.get().getChunkDistance() != (int) sliderChunkDistance.getProgress()) {
-					KosmosChunks.get().setChunkDistance((int) sliderChunkDistance.getProgress());
-					KosmosChunks.get().clear(true);
-				}
+		sliderChunkDistance.addChangeListener(() -> {
+			if (KosmosChunks.get().getChunkDistance() != (int) sliderChunkDistance.getProgress()) {
+				KosmosChunks.get().setChunkDistance((int) sliderChunkDistance.getProgress());
+				KosmosChunks.get().clear(true);
 			}
 		});
 
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);
-		back.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.setNewSecondaryScreen(settings);
-			}
-		});
+		back.addLeftListener(() -> slider.setNewSecondaryScreen(settings));
 	}
 
 	@Override
