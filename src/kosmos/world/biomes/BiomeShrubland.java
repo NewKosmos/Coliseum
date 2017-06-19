@@ -12,10 +12,12 @@ package kosmos.world.biomes;
 import flounder.maths.*;
 import flounder.resources.*;
 import flounder.textures.*;
+import kosmos.entities.instances.*;
 import kosmos.world.chunks.*;
 
 public class BiomeShrubland extends IBiome {
 	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{
+			new EntitySpawn(InstanceBush::new, 1.0f, 0.625f),
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "shrubland.png")).clampEdges().create();
 	private static final Colour COLOUR = new Colour(0.7686f, 0.8000f, 0.7333f);

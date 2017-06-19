@@ -20,7 +20,7 @@ uniform float squareSize;
 uniform float waterHeight;
 
 //---------OUT------------
-flat out vec3 pass_surfaceNormal;
+out vec3 pass_surfaceNormal;
 out vec4 pass_clipSpace;
 
 //---------DECODE------------
@@ -69,6 +69,6 @@ void main(void) {
     vec3 bitangent = otherVertex2.xyz - thisVertex.xyz;
     vec3 normal = -cross(tangent, bitangent);
 
-	pass_surfaceNormal = normal.xyz;
+	pass_surfaceNormal = normalize(normal);
     pass_clipSpace = projectionMatrix * viewMatrix * worldPosition;
 }
