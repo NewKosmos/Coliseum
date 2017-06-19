@@ -7,7 +7,7 @@
  * Proprietary and confidential.
  */
 
-package kosmos.world.chunks.biomes;
+package kosmos.world.biomes;
 
 import flounder.maths.*;
 import flounder.resources.*;

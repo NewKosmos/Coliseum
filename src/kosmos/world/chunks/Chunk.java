@@ -17,7 +17,7 @@ import flounder.physics.*;
 import flounder.physics.bounding.*;
 import flounder.space.*;
 import kosmos.entities.components.*;
-import kosmos.world.chunks.biomes.*;
+import kosmos.world.biomes.*;
 import kosmos.world.chunks.meshing.*;
 
 import java.util.*;

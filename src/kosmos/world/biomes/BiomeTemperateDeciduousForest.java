@@ -7,26 +7,26 @@
  * Proprietary and confidential.
  */
 
-package kosmos.world.chunks.biomes;
+package kosmos.world.biomes;
 
 import flounder.maths.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.world.chunks.*;
 
-public class BiomeTaiga extends IBiome {
+public class BiomeTemperateDeciduousForest extends IBiome {
 	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{
 	};
-	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "taiga.png")).clampEdges().create();
-	private static final Colour COLOUR = new Colour(0.8000f, 0.8314f, 0.7333f);
+	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "temperateDeciduousForest.png")).clampEdges().create();
+	private static final Colour COLOUR = new Colour(0.7059f, 0.7882f, 0.6627f);
 
-	public BiomeTaiga() {
+	public BiomeTemperateDeciduousForest() {
 		super();
 	}
 
 	@Override
 	public String getBiomeName() {
-		return "taiga";
+		return "temperateDeciduousForest";
 	}
 
 	@Override

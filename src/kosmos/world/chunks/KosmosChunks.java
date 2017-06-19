@@ -23,7 +23,7 @@ import flounder.tasks.*;
 import flounder.textures.*;
 import kosmos.*;
 import kosmos.world.*;
-import kosmos.world.chunks.biomes.*;
+import kosmos.world.biomes.*;
 
 import java.util.*;
 

@@ -7,26 +7,26 @@
  * Proprietary and confidential.
  */
 
-package kosmos.world.chunks.biomes;
+package kosmos.world.biomes;
 
 import flounder.maths.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import kosmos.world.chunks.*;
 
-public class BiomeTropicalSeasonalForest extends IBiome {
+public class BiomeTemperateRainForest extends IBiome {
 	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{
 	};
-	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "tropicalSeasonalForest.png")).clampEdges().create();
-	private static final Colour COLOUR = new Colour(0.6627f, 0.8000f, 0.6431f);
+	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "temperateRainForest.png")).clampEdges().create();
+	private static final Colour COLOUR = new Colour(0.6431f, 0.7686f, 0.6588f);
 
-	public BiomeTropicalSeasonalForest() {
+	public BiomeTemperateRainForest() {
 		super();
 	}
 
 	@Override
 	public String getBiomeName() {
-		return "tropicalSeasonalForest";
+		return "temperateRainForest";
 	}
 
 	@Override

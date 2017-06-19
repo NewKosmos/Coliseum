@@ -7,26 +7,28 @@
  * Proprietary and confidential.
  */
 
-package kosmos.world.chunks.biomes;
+package kosmos.world.biomes;
 
 import flounder.maths.*;
 import flounder.resources.*;
 import flounder.textures.*;
+import kosmos.entities.instances.*;
 import kosmos.world.chunks.*;
 
-public class BiomeBare extends IBiome {
+public class BiomeSubtropicalDesert extends IBiome {
 	private static final EntitySpawn[] SPAWNS = new EntitySpawn[]{
+			new EntitySpawn(InstanceBarrel::new, 1.0f, 1.0f),
 	};
-	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "bare.png")).clampEdges().create();
-	private static final Colour COLOUR = new Colour(0.7333f, 0.7333f, 0.7333f);
+	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "subtropicalDesert.png")).clampEdges().create();
+	private static final Colour COLOUR = new Colour(0.914f, 0.8275f, 0.7804f);
 
-	public BiomeBare() {
+	public BiomeSubtropicalDesert() {
 		super();
 	}
 
 	@Override
 	public String getBiomeName() {
-		return "bare";
+		return "subtropicalDesert";
 	}
 
 	@Override
