@@ -45,7 +45,7 @@ public class KosmosServer extends Framework {
 
 	public KosmosServer() {
 		super(
-				"kosmos", new UpdaterDefault(null), 5,
+				"kosmos", new UpdaterDefault(), 5,
 				new Extension[]{new ServerInterface(), new ServerRenderer(), new ServerCamera(), new ServerGuis()}
 		);
 		Framework.get().addOverrides(new PlatformLwjgl(

@@ -25,7 +25,7 @@ public class NewKosmos extends Framework {
 
 	public NewKosmos() {
 		super(
-				"kosmos", new UpdaterDefault(null), -1,
+				"kosmos", new UpdaterDefault(), -1,
 				new Extension[]{new KosmosInterface(), new KosmosRenderer(), new KosmosCamera(), new KosmosPlayer(), new KosmosGuis()}
 		);
 		Framework.get().addOverrides(new PlatformLwjgl(
