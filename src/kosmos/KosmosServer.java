@@ -36,6 +36,7 @@ import sun.reflect.generics.reflectiveObjects.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 
 public class KosmosServer extends Framework {
 	public static void main(String[] args) {
@@ -93,7 +94,7 @@ public class KosmosServer extends Framework {
 		public void init() {
 			// Generates the world.
 			KosmosWorld.get().generateWorld(
-					new WorldDefinition(123456789, 1000, 300.0f, 30.0f, 20.0f, 0.8f, 1.0f, 0.4f, 600.0f, 0.7f),
+					new WorldDefinition("HelloServer", 123456789, 1000, 300.0f, 30.0f, 20.0f, 0.8f, 1.0f, 0.4f, 600.0f, 0.7f, new HashMap<>(), new ArrayList<>()),
 					new Vector3f(),
 					new Vector3f()
 			);
@@ -130,7 +131,7 @@ public class KosmosServer extends Framework {
 			JButton buttonRandomSeed = new JButton("Random Seed");
 			buttonRandomSeed.addActionListener(e -> {
 				WorldDefinition d = KosmosWorld.get().getWorld();
-				KosmosWorld.get().setWorld(new WorldDefinition((int) Maths.randomInRange(1.0, 1000000.0), d.getWorldSize(), d.getWorldNoiseSpread(), d.getWorldNoiseFrequency(), d.getWorldNoiseHeight(), d.getWorldIslandInside(), d.getWorldIslandOutside(), d.getWorldIslandParameter(), d.getDayNightCycle(), d.getDayNightRatio()));
+				KosmosWorld.get().setWorld(new WorldDefinition(d.getName(), (int) Maths.randomInRange(1.0, 1000000.0), d.getWorldSize(), d.getWorldNoiseSpread(), d.getWorldNoiseFrequency(), d.getWorldNoiseHeight(), d.getWorldIslandInside(), d.getWorldIslandOutside(), d.getWorldIslandParameter(), d.getDayNightCycle(), d.getDayNightRatio(), d.getPlayers(), d.getChunkData()));
 				new PacketWorld(Framework.get().getTimeSec(), KosmosWorld.get().getWorld()).writeData(FlounderNetwork.get().getSocketServer());
 			});
 			mainPanel.add(buttonRandomSeed);

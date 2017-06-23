@@ -16,6 +16,7 @@ import kosmos.uis.*;
 import kosmos.world.*;
 
 import java.net.*;
+import java.util.*;
 
 public class PacketWorld extends Packet {
 	private float timeSec;
@@ -36,7 +37,7 @@ public class PacketWorld extends Packet {
 		float worldIslandParameter = Float.parseFloat(d[8].trim());
 		float dayNightCycle = Float.parseFloat(d[9].trim());
 		float dayNightRatio = Float.parseFloat(d[10].trim());
-		this.world = new WorldDefinition(seed, worldSize, worldNoiseSpread, worldNoiseFrequency, worldNoiseHeight, worldIslandInside, worldIslandOutside, worldIslandParameter, dayNightCycle, dayNightRatio);
+		this.world = new WorldDefinition("server", seed, worldSize, worldNoiseSpread, worldNoiseFrequency, worldNoiseHeight, worldIslandInside, worldIslandOutside, worldIslandParameter, dayNightCycle, dayNightRatio, new HashMap<>(), new ArrayList<>());
 	}
 
 	public PacketWorld(float timeSec, WorldDefinition world) {

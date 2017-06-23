@@ -72,11 +72,13 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 
 	@Override
 	public void update() {
-		if (FlounderCamera.get().getPlayer() == null || !KosmosPlayer.class.isInstance(FlounderCamera.get().getPlayer())) {
+		if (FlounderCamera.get().getPlayer() == null || !KosmosPlayer.class.isInstance(FlounderCamera.get().getPlayer()) || KosmosWorld.get().getWorld() == null) {
 			return;
 		}
 
-		float delta = Math.min(1.0f / 60.0f, Framework.get().getDelta());
+		// Gets the delta and limits the lowest UPS to 20 (any less and the game is unplayable).
+		float delta = Framework.get().getDelta();
+		delta = Math.min(delta, 1.0f / 20.0f);
 
 		// Gets if noclip is enabled.
 		boolean noclip = ((KosmosPlayer) FlounderCamera.get().getPlayer()).isNoclipEnabled();

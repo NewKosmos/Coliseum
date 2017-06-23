@@ -63,7 +63,7 @@ public class KosmosGuis extends GuiMaster {
 
 		FlounderGuis.get().getSelector().initJoysticks(0, 0, 1, 0, 1);
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			private CompoundButton escape = new CompoundButton(new KeyButton(GLFW_KEY_ESCAPE), new JoystickButton(0, 7));
 
 			@Override
@@ -77,7 +77,7 @@ public class KosmosGuis extends GuiMaster {
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			private KeyButton toggleDebug = new KeyButton(GLFW_KEY_F3);
 
 			@Override
@@ -91,7 +91,7 @@ public class KosmosGuis extends GuiMaster {
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			private KeyButton toggleHUD = new KeyButton(GLFW_KEY_F4);
 
 			@Override
@@ -105,7 +105,7 @@ public class KosmosGuis extends GuiMaster {
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			private KeyButton toggleChat = new KeyButton(GLFW_KEY_ENTER);
 
 			@Override
@@ -119,7 +119,7 @@ public class KosmosGuis extends GuiMaster {
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			private KeyButton toggleMap = new KeyButton(GLFW_KEY_G);
 
 			@Override

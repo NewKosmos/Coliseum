@@ -9,6 +9,7 @@
 
 package kosmos.uis.screens;
 
+import flounder.events.*;
 import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.guis.*;
@@ -22,6 +23,8 @@ import kosmos.network.packets.*;
 import kosmos.uis.*;
 import kosmos.world.*;
 import kosmos.world.chunks.*;
+
+import java.util.*;
 
 public class ScreenStart extends ScreenObject {
 	public ScreenStart(OverlaySlider slider) {
@@ -47,7 +50,7 @@ public class ScreenStart extends ScreenObject {
 
 			// Generates the world.
 			KosmosWorld.get().generateWorld(
-					new WorldDefinition(420, 1536, 400.0f, 40.0f, 40.0f, 0.8f, 1.0f, 0.4f, 600.0f, 0.7f), // KosmosConfigs.SAVE_SEED.setReference(() -> KosmosWorld.get().getWorld().getSeed()).getInteger(),
+					new WorldDefinition("HelloWorld", 420, 1536, 400.0f, 40.0f, 40.0f, 0.8f, 1.0f, 0.4f, 600.0f, 0.7f, new HashMap<>(), new ArrayList<>()), // KosmosConfigs.SAVE_SEED.setReference(() -> KosmosWorld.get().getWorld().getSeed()).getInteger(),
 					new Vector3f(
 							KosmosConfigs.SAVE_PLAYER_X.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().x).getFloat(),
 							KosmosConfigs.SAVE_PLAYER_Y.setReference(() -> KosmosWorld.get().getEntityPlayer().getPosition().y).getFloat(),

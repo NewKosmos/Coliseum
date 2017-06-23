@@ -27,6 +27,7 @@ public class ScreenSettingGeneral extends ScreenObject {
 			@Override
 			public void onEvent(Integer newValue) {
 				sliderChunkDistance.setText("Chunk Distance: " + newValue);
+				sliderChunkDistance.setProgress(newValue);
 			}
 		});
 		sliderChunkDistance.addChangeListener(() -> {

@@ -28,6 +28,7 @@ public class ScreenSettingControls extends ScreenObject {
 			@Override
 			public void onEvent(Integer newValue) {
 				sliderCrosshairHUD.setText("Crosshair HUD: " + newValue);
+				sliderCrosshairHUD.setProgress(newValue);
 			}
 		});
 		sliderCrosshairHUD.addChangeListener(() -> OverlayHUD.setCrosshairSelected((int) sliderCrosshairHUD.getProgress()));
@@ -38,6 +39,7 @@ public class ScreenSettingControls extends ScreenObject {
 			@Override
 			public void onEvent(Float newValue) {
 				sliderFieldOfView.setText("FOV: " + Maths.roundToPlace(newValue, 1));
+				sliderFieldOfView.setProgress(newValue);
 			}
 		});
 		sliderFieldOfView.addChangeListener(() -> KosmosCamera.setFieldOfView(sliderFieldOfView.getProgress()));
@@ -48,6 +50,7 @@ public class ScreenSettingControls extends ScreenObject {
 			@Override
 			public void onEvent(Float newValue) {
 				sliderSensitivity.setText("Sensitivity: " + Maths.roundToPlace(newValue, 2));
+				sliderSensitivity.setProgress(newValue);
 			}
 		});
 		sliderSensitivity.addChangeListener(() -> KosmosCamera.setSensitivity(sliderSensitivity.getProgress()));
@@ -60,6 +63,7 @@ public class ScreenSettingControls extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleMouseLock.setText("Mouse Locked: " + newValue);
+			//	toggleMouseLock.setProgress(newValue);
 			}
 		});
 		toggleMouseLock.addLeftListener(() -> KosmosCamera.setMouseLocked(!KosmosCamera.isMouseLocked()));

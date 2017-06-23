@@ -26,6 +26,8 @@ import kosmos.network.packets.*;
 import kosmos.post.*;
 import kosmos.world.*;
 
+import java.util.*;
+
 import static flounder.platform.Constants.*;
 
 public class KosmosInterface extends Standard {
@@ -42,7 +44,7 @@ public class KosmosInterface extends Standard {
 			FlounderSound.get().getMusicPlayer().unpauseTrack();
 		}
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			KeyButton seedRandom = new KeyButton(GLFW_KEY_F6);
 
 			@Override
@@ -53,11 +55,11 @@ public class KosmosInterface extends Standard {
 			@Override
 			public void onEvent() {
 				//	KosmosWorld.get().getWorld().getNoise().setSeed((int) Maths.randomInRange(1.0, 1000000.0));
-				KosmosWorld.get().setWorld(new WorldDefinition((int) Maths.randomInRange(1.0, 1000000.0), 1536, 400.0f, 40.0f, 40.0f, 0.8f, 1.0f, 0.4f, 600.0f, 0.7f));
+				KosmosWorld.get().setWorld(new WorldDefinition("HelloWorld", (int) Maths.randomInRange(1.0, 1000000.0), 1536, 400.0f, 40.0f, 40.0f, 0.8f, 1.0f, 0.4f, 600.0f, 0.7f, new HashMap<>(), new ArrayList<>()));
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			KeyButton screenshot = new KeyButton(GLFW_KEY_F2);
 
 			@Override
@@ -71,7 +73,7 @@ public class KosmosInterface extends Standard {
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			KeyButton fullscreen = new KeyButton(GLFW_KEY_F11);
 
 			@Override
@@ -85,7 +87,7 @@ public class KosmosInterface extends Standard {
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			KeyButton wireframe = new KeyButton(GLFW_KEY_P);
 
 			@Override
@@ -99,7 +101,7 @@ public class KosmosInterface extends Standard {
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			KeyButton closeWindow = new KeyButton(GLFW_KEY_DELETE);
 
 			@Override

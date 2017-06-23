@@ -7,7 +7,7 @@
  * Proprietary and confidential.
  */
 
-package kosmos.world.saving;
+package kosmos.world.chunks;
 
 import flounder.entities.*;
 import flounder.maths.vectors.*;
@@ -62,7 +62,7 @@ public class ChunkData {
 		added.add(entity);
 	}
 
-	protected String getSaveData() {
+	public String getSaveData() {
 		StringBuilder result = new StringBuilder("[" + position.x + "," + position.y + "," + position.z + "]: {");
 
 		for (Vector3f r : removed) {
