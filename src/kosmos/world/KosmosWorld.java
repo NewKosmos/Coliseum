@@ -120,7 +120,8 @@ public class KosmosWorld extends Module {
 		KosmosConfigs.saveAllConfigs();
 
 		if (this.worldDefinition != null) {
-			this.worldDefinition.delete();
+			this.worldDefinition.save();
+			this.worldDefinition.dispose();
 		}
 
 		if (entityPlayer != null) {
@@ -160,7 +161,8 @@ public class KosmosWorld extends Module {
 
 	public void setWorld(WorldDefinition world) {
 		if (this.worldDefinition != null) {
-			this.worldDefinition.delete();
+			this.worldDefinition.save();
+			this.worldDefinition.dispose();
 		}
 
 		this.worldDefinition = world;
@@ -281,6 +283,10 @@ public class KosmosWorld extends Module {
 
 	@Handler.Function(Handler.FLAG_DISPOSE)
 	public void dispose() {
+		if (worldDefinition != null) {
+			worldDefinition.save();
+			worldDefinition.dispose();
+		}
 	}
 
 	@Module.Instance

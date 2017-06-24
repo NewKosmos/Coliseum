@@ -9,6 +9,7 @@
 
 package kosmos.world;
 
+import flounder.entities.*;
 import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.logger.*;
@@ -315,6 +316,13 @@ public class WorldDefinition {
 	}
 
 	public void save() {
+		if (FlounderNetwork.get().getSocketClient() != null) {
+			FlounderLogger.get().log("Cannot save multiplayer world on a client!");
+			return;
+		}
+
+		FlounderLogger.get().log("Saving world: " + name);
+
 		try {
 			// The save file and the writers.
 			File saveFile = new File(Framework.get().getRoamingFolder().getPath() + "/saves/" + name + ".save");
@@ -330,22 +338,29 @@ public class WorldDefinition {
 			fileWriterHelper.beginNewSegment("save");
 			{
 				fileWriterHelper.writeSegmentData("version = " + NewKosmos.VERSION + ";", true);
-				fileWriterHelper.writeSegmentData("seed = " + seed + ";");
-				fileWriterHelper.writeSegmentData("worldSize = " + worldSize + ";");
-				fileWriterHelper.writeSegmentData("worldNoiseSpread = " + worldNoiseSpread + ";");
-				fileWriterHelper.writeSegmentData("worldNoiseFrequency = " + worldNoiseFrequency + ";");
-				fileWriterHelper.writeSegmentData("worldNoiseHeight = " + worldNoiseHeight + ";");
-				fileWriterHelper.writeSegmentData("worldIslandInside = " + worldIslandInside+ ";");
-				fileWriterHelper.writeSegmentData("worldIslandOutside = " + worldIslandOutside + ";");
-				fileWriterHelper.writeSegmentData("worldIslandParameter = " + worldIslandParameter + ";");
-				fileWriterHelper.writeSegmentData("dayNightCycle = " + dayNightCycle + ";");
-				fileWriterHelper.writeSegmentData("dayNightRatio = " + dayNightRatio + ";");
+				fileWriterHelper.writeSegmentData("seed = " + seed + ";", true);
+				fileWriterHelper.writeSegmentData("worldSize = " + worldSize + ";", true);
+				fileWriterHelper.writeSegmentData("worldNoiseSpread = " + worldNoiseSpread + ";", true);
+				fileWriterHelper.writeSegmentData("worldNoiseFrequency = " + worldNoiseFrequency + ";", true);
+				fileWriterHelper.writeSegmentData("worldNoiseHeight = " + worldNoiseHeight + ";", true);
+				fileWriterHelper.writeSegmentData("worldIslandInside = " + worldIslandInside+ ";", true);
+				fileWriterHelper.writeSegmentData("worldIslandOutside = " + worldIslandOutside + ";", true);
+				fileWriterHelper.writeSegmentData("worldIslandParameter = " + worldIslandParameter + ";", true);
+				fileWriterHelper.writeSegmentData("dayNightCycle = " + dayNightCycle + ";", true);
+				fileWriterHelper.writeSegmentData("dayNightRatio = " + dayNightRatio + ";", false);
 			}
 			fileWriterHelper.endSegment(false);
 
 			// Player data.
 			fileWriterHelper.beginNewSegment("players");
 			{
+				Entity thisPlayer = KosmosWorld.get().getEntityPlayer();
+				Chunk thisChunk = KosmosChunks.get().getCurrent();
+				if (thisPlayer != null && thisChunk != null) {
+					fileWriterHelper.writeSegmentData("\'this\', " + thisPlayer.getPosition().x + ", " + thisPlayer.getPosition().y + ", " + thisPlayer.getPosition().z + ", ");
+					fileWriterHelper.writeSegmentData(thisChunk.getPosition().x + ", " + thisChunk.getPosition().y + ", " + thisChunk.getPosition().z + ";", true);
+				}
+
 				for (String username : players.keySet()) {
 					Pair<Vector3f, Vector3f> data = players.get(username);
 					fileWriterHelper.writeSegmentData("\'" + username + "\', " + data.getFirst().x + ", " + data.getFirst().y + ", " + data.getFirst().z + ", ");
@@ -370,7 +385,7 @@ public class WorldDefinition {
 		}
 	}
 
-	public void delete() {
+	public void dispose() {
 		if (mapTexture != null) {
 			mapTexture.delete();
 		}

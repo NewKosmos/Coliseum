@@ -30,7 +30,10 @@ public class ScreenPause extends ScreenObject {
 		// Save Game.
 		GuiButtonText saveGame = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "Save Game", GuiAlign.CENTRE);
 		saveGame.addLeftListener(() -> {
-			FlounderLogger.get().log("Saving game!");
+			if (KosmosWorld.get().getWorld() != null) {
+				KosmosWorld.get().getWorld().save();
+			}
+
 			KosmosConfigs.saveAllConfigs();
 		});
 
