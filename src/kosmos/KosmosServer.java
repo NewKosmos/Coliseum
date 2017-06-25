@@ -92,9 +92,15 @@ public class KosmosServer extends Framework {
 
 		@Override
 		public void init() {
+			WorldDefinition world = WorldDefinition.load("Server1");
+
+			if (world == null) {
+				world = new WorldDefinition("Server1", 123456789, 2048, 350.0f, 40.0f, 20.0f, 0.8f, 1.0f, 0.2f, 500.0f, 0.5f, new HashMap<>(), new HashMap<>());
+			}
+
 			// Generates the world.
 			KosmosWorld.get().generateWorld(
-					new WorldDefinition("Server1", 123456789, 2048, 350.0f, 40.0f, 20.0f, 0.8f, 1.0f, 0.2f, 500.0f, 0.5f, new HashMap<>(), new HashMap<>()),
+					world,
 					new Vector3f(),
 					new Vector3f()
 			);

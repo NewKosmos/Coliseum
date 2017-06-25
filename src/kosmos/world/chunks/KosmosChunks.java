@@ -424,6 +424,10 @@ public class KosmosChunks extends Module {
 	}
 
 	public void prepareSave() {
+		if (FlounderNetwork.get().getSocketServer() != null) {
+			return;
+		}
+
 		// Goes though all chunks looking for saving chunks.
 		for (Entity entity : FlounderEntities.get().getEntities().getAll(null)) {
 			if (entity != null && entity instanceof Chunk) {

@@ -56,9 +56,18 @@ public class PacketEntityRemove extends Packet {
 
 				if (chunk.getPosition().equals(chunkPosition)) {
 					chunk.entityRemove(entityPosition);
+					return;
 				}
 			}
 		}
+
+		String chunkKey = WorldDefinition.vectorToString(chunkPosition);
+
+		if (!KosmosWorld.get().getWorld().getChunkData().containsKey(chunkKey)) {
+			KosmosWorld.get().getWorld().getChunkData().put(chunkKey, new Pair<>(new ArrayList<>(), new ArrayList<>()));
+		}
+
+		KosmosWorld.get().getWorld().getChunkData().get(chunkKey).getFirst().add(entityPosition);
 	}
 
 	@Override

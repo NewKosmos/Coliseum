@@ -471,7 +471,7 @@ public class WorldDefinition {
 					if (!username.equals("this")) {
 						Pair<Vector3f, Vector3f> data = players.get(username);
 						fileWriterHelper.writeSegmentData(username + ", " + data.getFirst().x + ", " + data.getFirst().y + ", " + data.getFirst().z + ", ");
-						fileWriterHelper.writeSegmentData(data.getSecond().x + ", " + data.getSecond().z, true);
+						fileWriterHelper.writeSegmentData(data.getSecond().x + ", " + data.getSecond().z + ";", true);
 					}
 				}
 			}
