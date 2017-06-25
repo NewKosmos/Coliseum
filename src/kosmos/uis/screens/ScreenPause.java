@@ -60,13 +60,15 @@ public class ScreenPause extends ScreenObject {
 				}
 			});
 
+			FlounderLogger.get().log("Leaving world!");
+
 			if (FlounderNetwork.get().getSocketClient() != null) {
 				new PacketDisconnect(FlounderNetwork.get().getUsername()).writeData(FlounderNetwork.get().getSocketClient());
 				FlounderNetwork.get().closeClient();
+				KosmosWorld.get().deleteWorld(false);
+			} else {
+				KosmosWorld.get().deleteWorld(true);
 			}
-
-			FlounderLogger.get().log("Leaving world!");
-			KosmosWorld.get().deleteWorld();
 		});
 	}
 

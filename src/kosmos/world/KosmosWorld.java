@@ -129,8 +129,8 @@ public class KosmosWorld extends Module {
 		});
 	}
 
-	public void deleteWorld() {
-		if (worldDefinition != null) {
+	public void deleteWorld(boolean save) {
+		if (save && worldDefinition != null) {
 			worldDefinition.save();
 		}
 

@@ -10,6 +10,7 @@
 package kosmos.network.packets;
 
 import flounder.framework.*;
+import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
@@ -82,7 +83,13 @@ public class PacketConnect extends Packet {
 
 		// Sends current world data to the new client.
 		server.sendData(new PacketWorld(Framework.get().getTimeSec(), KosmosWorld.get().getWorld()).getData(), address, port);
-		new PacketLoad(username, new Vector3f(), 0.0f, 0.0f).writeData(server);
+		Pair<Vector3f, Vector3f> worldData = KosmosWorld.get().getWorld().getPlayers().get(username);
+		if (worldData == null) {
+			new PacketLoad(username, new Vector3f(), 0.0f, 0.0f).writeData(server);
+		} else {
+			new PacketLoad(username, new Vector3f(worldData.getFirst()), worldData.getSecond().x, worldData.getSecond().z).writeData(server);
+		}
+		// todo: send deleted and added entity data.
 
 		// Tells the connected clients of the newly connected player.
 		this.writeData(server);

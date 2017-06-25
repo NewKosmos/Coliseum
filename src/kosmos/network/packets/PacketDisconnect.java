@@ -65,7 +65,7 @@ public class PacketDisconnect extends Packet {
 			}
 
 			// Deletes the clients world.
-			KosmosWorld.get().deleteWorld();
+			KosmosWorld.get().deleteWorld(false);
 
 			// Closes all huds and opens the start screen.
 			((KosmosGuis) FlounderGuis.get().getGuiMaster()).forceCloseHUDs();

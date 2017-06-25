@@ -111,7 +111,7 @@ public class OverlayHUD extends ScreenObject {
 
 		Entity player = KosmosWorld.get().getEntityPlayer();
 
-		if (player != null) {
+		if (player != null && KosmosWorld.get().getWorld() != null) {
 			float px = player.getPosition().x / KosmosWorld.get().getWorld().getWorldSize();
 			float pz = player.getPosition().z / KosmosWorld.get().getWorld().getWorldSize();
 

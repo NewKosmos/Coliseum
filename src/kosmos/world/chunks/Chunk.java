@@ -271,7 +271,19 @@ public class Chunk extends Entity {
 		}
 	}
 
+	public void entityRemove(Vector3f entity) {
+		if (isRemoved()) {
+			return;
+		}
+		FlounderLogger.get().log("Removing entity: " + entity);
+		entitiesRemoved.add(entity);
+	}
+
 	public void prepareSave() {
+		if (KosmosWorld.get().getWorld() == null) {
+			return;
+		}
+
 		String chunkKey = WorldDefinition.vectorToString(getPosition());
 
 		if (!KosmosWorld.get().getWorld().getChunkData().containsKey(chunkKey)) {

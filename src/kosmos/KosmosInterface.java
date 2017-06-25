@@ -118,7 +118,7 @@ public class KosmosInterface extends Standard {
 					FlounderNetwork.get().closeClient();
 				}
 
-				KosmosWorld.get().deleteWorld();
+				KosmosWorld.get().deleteWorld(true);
 
 				FlounderEvents.get().addEvent(new EventTime(0.6f, false) {
 					@Override

@@ -11,6 +11,7 @@ package kosmos.camera;
 
 import flounder.camera.*;
 import flounder.entities.*;
+import flounder.entities.components.*;
 import flounder.events.*;
 import flounder.guis.*;
 import flounder.inputs.*;
@@ -76,6 +77,10 @@ public class KosmosPlayer extends Player {
 							float distance = Vector3f.getDistance(entity.getPosition(), KosmosWorld.get().getEntityPlayer().getPosition());
 
 							if (data.isIntersection() && distance < 2.0f) {
+								ComponentChild child = ((ComponentChild) entity.getComponent(ComponentChild.class));
+								if (child != null && FlounderNetwork.get().getSocketClient() != null) {
+									new PacketEntityRemove(FlounderNetwork.get().getUsername(), child.getParent().getPosition(), entity.getPosition()).writeData(FlounderNetwork.get().getSocketClient());
+								}
 								entity.forceRemove();
 								return;
 							}

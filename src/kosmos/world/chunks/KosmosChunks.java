@@ -424,7 +424,7 @@ public class KosmosChunks extends Module {
 	}
 
 	public void prepareSave() {
-		// Goes though all chunks looking for changes.
+		// Goes though all chunks looking for saving chunks.
 		for (Entity entity : FlounderEntities.get().getEntities().getAll(null)) {
 			if (entity != null && entity instanceof Chunk) {
 				Chunk chunk = (Chunk) entity;
