@@ -94,7 +94,7 @@ public class KosmosServer extends Framework {
 		public void init() {
 			// Generates the world.
 			KosmosWorld.get().generateWorld(
-					new WorldDefinition("HelloServer", 123456789, 1000, 300.0f, 30.0f, 20.0f, 0.8f, 1.0f, 0.4f, 600.0f, 0.7f, new HashMap<>(), new ArrayList<>()),
+					new WorldDefinition("Server1", 123456789, 2048, 350.0f, 40.0f, 20.0f, 0.8f, 1.0f, 0.2f, 500.0f, 0.5f, new HashMap<>(), new HashMap<>()),
 					new Vector3f(),
 					new Vector3f()
 			);
@@ -135,6 +135,16 @@ public class KosmosServer extends Framework {
 				new PacketWorld(Framework.get().getTimeSec(), KosmosWorld.get().getWorld()).writeData(FlounderNetwork.get().getSocketServer());
 			});
 			mainPanel.add(buttonRandomSeed);
+
+			JButton buttonSave = new JButton("Save");
+			buttonSave.addActionListener(e -> {
+				if (KosmosWorld.get().getWorld() != null) {
+					KosmosWorld.get().getWorld().save();
+				}
+
+				ServerConfigs.saveAllConfigs();
+			});
+			mainPanel.add(buttonSave);
 
 			JButton buttonShutdown = new JButton("Shutdown");
 			buttonShutdown.addActionListener(e -> {

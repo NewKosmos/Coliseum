@@ -10,6 +10,7 @@
 package kosmos.world;
 
 import flounder.entities.*;
+import flounder.events.*;
 import flounder.framework.*;
 import flounder.helpers.*;
 import flounder.logger.*;
@@ -31,9 +32,6 @@ import java.util.*;
  * A object that defines a worlds generation parameters.
  */
 public class WorldDefinition {
-	// The size of the rendered map image.
-	private static final int MAP_IMAGE_SIZE = 1000;
-
 	private final String name;
 	private final int seed;
 	private final int worldSize;
@@ -51,7 +49,7 @@ public class WorldDefinition {
 	private TextureObject mapTexture;
 
 	private Map<String, Pair<Vector3f, Vector3f>> players;
-	private List<ChunkData> chunkData;
+	private Map<Vector3f, Pair<List<Vector3f>, List<Entity>>> chunkData;
 
 	/**
 	 * Creates a new world save definition.
@@ -71,7 +69,7 @@ public class WorldDefinition {
 	 * @param chunkData The data about all modified chunks in the save.
 	 */
 	public WorldDefinition(String name, int seed, int worldSize, float worldNoiseSpread, float worldNoiseFrequency, float worldNoiseHeight, float worldIslandInside, float worldIslandOutside, float worldIslandParameter, float dayNightCycle, float dayNightRatio,
-	                       Map<String, Pair<Vector3f, Vector3f>> players, List<ChunkData> chunkData) {
+	                       Map<String, Pair<Vector3f, Vector3f>> players, Map<Vector3f, Pair<List<Vector3f>, List<Entity>>> chunkData) {
 		this.name = name;
 		this.seed = seed;
 		this.worldSize = worldSize;
@@ -92,6 +90,100 @@ public class WorldDefinition {
 		this.chunkData = chunkData;
 	}
 
+	public static WorldDefinition load(String name) {
+		File saveFile = new File(Framework.get().getRoamingFolder().getPath() + "/saves/" + name + ".save");
+
+		if (!saveFile.exists()) {
+			return null;
+		}
+
+		try (BufferedReader br = new BufferedReader(new FileReader(saveFile))) {
+			String line;
+
+			String readVersion = "";
+			String readName = "";
+			int readSeed = 0;
+			int readWorldSize = 0;
+			float readWorldNoiseSpread = 0.0f;
+			float readWorldNoiseFrequency = 0.0f;
+			float readWorldNoiseHeight = 0.0f;
+			float readWorldIslandInside = 0.0f;
+			float readWorldIslandOutside = 0.0f;
+			float readWorldIslandParameter = 0.0f;
+
+			float readDayNightCycle = 0.0f;
+			float readDayNightRatio = 0.0f;
+
+			Map<String, Pair<Vector3f, Vector3f>> readPlayers = new HashMap<>();
+			Map<Vector3f, Pair<List<Vector3f>, List<Entity>>> readChunkData = new HashMap<>();
+
+			String section = "null";
+
+			while ((line = br.readLine()) != null) {
+				line = line.trim();
+
+				if (line.contains("{")) {
+					section = line.replace("{", "").trim();
+				} else if (section.equals("save")) {
+					if (line.startsWith("version")) {
+						readVersion = line.split("=")[1].replace(";", "").trim();
+					} else if (line.startsWith("name")) {
+						readName = line.split("=")[1].replace(";", "").trim();
+					} else if (line.startsWith("seed")) {
+						readSeed = Integer.parseInt(line.split("=")[1].replace(";", "").trim());
+					} else if (line.startsWith("worldSize")) {
+						readWorldSize = Integer.parseInt(line.split("=")[1].replace(";", "").trim());
+					} else if (line.startsWith("worldNoiseSpread")) {
+						readWorldNoiseSpread = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+					} else if (line.startsWith("worldNoiseFrequency")) {
+						readWorldNoiseFrequency = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+					} else if (line.startsWith("worldNoiseHeight")) {
+						readWorldNoiseHeight = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+					} else if (line.startsWith("worldIslandInside")) {
+						readWorldIslandInside = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+					} else if (line.startsWith("worldIslandOutside")) {
+						readWorldIslandOutside = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+					} else if (line.startsWith("worldIslandParameter")) {
+						readWorldIslandParameter = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+					} else if (line.startsWith("dayNightCycle")) {
+						readDayNightCycle = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+					} else if (line.startsWith("dayNightRatio")) {
+						readDayNightRatio = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+					}
+				} else if (section.equals("players")) {
+					if (line.contains(";")) {
+						String[] d = line.replace(";", "").split(",");
+
+						readPlayers.put(d[0], new Pair<>(
+								new Vector3f(Float.parseFloat(d[1]), Float.parseFloat(d[2]), Float.parseFloat(d[3])),
+								new Vector3f(Float.parseFloat(d[4]), 0.0f, Float.parseFloat(d[5]))
+						));
+					}
+				} else if (section.equals("chunks")) {
+					if (line.contains(";")) {
+						String[] p = line.split("]")[0].replace("[", "").trim().split(",");
+
+						//	String[] r = line.split("}")[0].replace("{", "").trim().split(",");
+
+						//	String[] a = line.split("\\{")[2].replace("}", "").trim().split(",");
+
+						Vector3f position = new Vector3f(Float.parseFloat(p[0]), 0.0f, Float.parseFloat(p[1]));
+						List<Vector3f> entitiesRemoved = new ArrayList<>();
+						List<Entity> entitiesAdded = new ArrayList<>();
+						readChunkData.put(position, new Pair<>(entitiesRemoved, entitiesAdded));
+					}
+				}
+			}
+
+			FlounderLogger.get().log("Loaded world from New Kosmos v" + readVersion);
+			return new WorldDefinition(readName, readSeed, readWorldSize, readWorldNoiseSpread, readWorldNoiseFrequency, readWorldNoiseHeight, readWorldIslandInside, readWorldIslandOutside, readWorldIslandParameter, readDayNightCycle, readDayNightRatio, readPlayers, readChunkData);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
 	/**
 	 * Generates a map for the current seed.
 	 */
@@ -107,25 +199,12 @@ public class WorldDefinition {
 
 		FlounderLogger.get().log("Generating map for seed: " + seed);
 
-		//BufferedImage imageIsland = new BufferedImage(MAP_IMAGE_SIZE, MAP_IMAGE_SIZE, BufferedImage.TYPE_INT_RGB);
-		//BufferedImage imageHeight = new BufferedImage(MAP_IMAGE_SIZE, MAP_IMAGE_SIZE, BufferedImage.TYPE_INT_RGB);
-		//BufferedImage imageMoisture = new BufferedImage(MAP_IMAGE_SIZE, MAP_IMAGE_SIZE, BufferedImage.TYPE_INT_RGB);
-		BufferedImage imageBiome = new BufferedImage(MAP_IMAGE_SIZE, MAP_IMAGE_SIZE, BufferedImage.TYPE_INT_RGB);
+		BufferedImage imageBiome = new BufferedImage(worldSize, worldSize, BufferedImage.TYPE_INT_RGB);
 
-		for (int y = 0; y < MAP_IMAGE_SIZE; y++) {
-			for (int x = 0; x < MAP_IMAGE_SIZE; x++) {
-				float worldX = ((float) x / ((float) MAP_IMAGE_SIZE / (float) worldSize)) - ((float) worldSize / 2.0f);
-				float worldZ = ((float) y / ((float) MAP_IMAGE_SIZE / (float) worldSize)) - ((float) worldSize / 2.0f);
-
-				//float factorIsland = KosmosChunks.getIslandMap(worldX, worldZ);
-				//imageIsland.setRGB(x, y, (((int) (255.0f * factorIsland) << 8) + ((int) (255.0f * factorIsland)) << 8) + ((int) (255.0f * factorIsland)));
-
-				//float factorHeight = KosmosChunks.getHeightMap(worldX, worldZ);
-				//imageHeight.setRGB(x, y, (((int) (255.0f * factorHeight) << 8) + ((int) (255.0f * factorHeight)) << 8) + ((int) (255.0f * factorHeight)));
-
-				//float factorMoisture = KosmosChunks.getMoistureMap(worldX, worldZ);
-				//Colour colourMoisture = Colour.interpolate(new Colour(1.0f, 0.0f, 0.0f), new Colour(0.0f, 0.0f, 1.0f), factorMoisture, null);
-				//imageMoisture.setRGB(x, y, (((int) (255.0f * colourMoisture.r) << 8) + ((int) (255.0f * colourMoisture.g)) << 8) + ((int) (255.0f * colourMoisture.b)));
+		for (int y = 0; y < worldSize; y++) {
+			for (int x = 0; x < worldSize; x++) {
+				float worldX = (float) x - ((float) worldSize / 2.0f);
+				float worldZ = (float) y - ((float) worldSize / 2.0f);
 
 				Colour colourBiome = KosmosChunks.getBiomeMap(worldX, worldZ).getBiome().getColour();
 				imageBiome.setRGB(x, y, (((int) (255.0f * colourBiome.r) << 8) + ((int) (255.0f * colourBiome.g)) << 8) + ((int) (255.0f * colourBiome.b)));
@@ -146,16 +225,10 @@ public class WorldDefinition {
 		}
 
 		String clientServer = FlounderNetwork.get().getSocketServer() != null ? "server" : "client";
-		//File outputIsland = new File(directorySave.getPath() + "/" + seed + "-island-" + clientServer + ".png");
-		//File outputHeight = new File(directorySave.getPath() + "/" + seed + "-height-" + clientServer + ".png");
-		//File outputMoisture = new File(directorySave.getPath() + "/" + seed + "-moisture-" + clientServer + ".png");
 		File outputBiome = new File(directorySave.getPath() + "/" + seed + "-biome-" + clientServer + ".png");
 
 		try {
 			// Save the map texture.
-			//ImageIO.write(imageIsland, "png", outputIsland);
-			//ImageIO.write(imageHeight, "png", outputHeight);
-			//ImageIO.write(imageMoisture, "png", outputMoisture);
 			ImageIO.write(imageBiome, "png", outputBiome);
 
 			// Remove old map texture.
@@ -164,21 +237,23 @@ public class WorldDefinition {
 			}
 
 			// Load the map texture after a few seconds.
-			new java.util.Timer().schedule(
-					new java.util.TimerTask() {
-						@Override
-						public void run() {
-							mapTexture = TextureFactory.newBuilder().setFile(new MyFile(Framework.get().getRoamingFolder(), "saves", seed + "-biome-" + clientServer + ".png")).create();
-						}
-					},
-					1000
-			);
+			FlounderEvents.get().addEvent(new EventTime(2.5f, false) {
+				@Override
+				public void onEvent() {
+					mapTexture = TextureFactory.newBuilder().setFile(new MyFile(Framework.get().getRoamingFolder(), "saves", seed + "-biome-" + clientServer + ".png")).create();
+				}
+			});
 		} catch (IOException e) {
 			FlounderLogger.get().error("Could not save map image to file: " + outputBiome);
 			FlounderLogger.get().exception(e);
 		}
 	}
 
+	/**
+	 * The name of this world/save.
+	 *
+	 * @return The world/save name.
+	 */
 	public String getName() {
 		return name;
 	}
@@ -301,18 +376,28 @@ public class WorldDefinition {
 		return players.get(username).getSecond();
 	}
 
-	public List<ChunkData> getChunkData() {
+	public Map<Vector3f, Pair<List<Vector3f>, List<Entity>>> getChunkData() {
 		return chunkData;
 	}
 
-	public ChunkData getChunk(Vector3f position) {
-		for (ChunkData data : chunkData) {
-			if (data.getPosition().equals(position)) {
-				return data;
-			}
+	public List<Vector3f> getChunkRemoved(Vector3f position) {
+		Pair<List<Vector3f>, List<Entity>> found = chunkData.get(position);
+
+		if (found != null) {
+			return found.getFirst();
 		}
 
-		return null;
+		return new ArrayList<>();
+	}
+
+	public List<Entity> getChunkAdded(Vector3f position) {
+		Pair<List<Vector3f>, List<Entity>> found = chunkData.get(position);
+
+		if (found != null) {
+			return found.getSecond();
+		}
+
+		return new ArrayList<>();
 	}
 
 	public void save() {
@@ -322,6 +407,9 @@ public class WorldDefinition {
 		}
 
 		FlounderLogger.get().log("Saving world: " + name);
+
+		// Prepares changes in chunks for saving.
+		KosmosChunks.get().prepareSave();
 
 		try {
 			// The save file and the writers.
@@ -338,6 +426,7 @@ public class WorldDefinition {
 			fileWriterHelper.beginNewSegment("save");
 			{
 				fileWriterHelper.writeSegmentData("version = " + NewKosmos.VERSION + ";", true);
+				fileWriterHelper.writeSegmentData("name = " + name + ";", true);
 				fileWriterHelper.writeSegmentData("seed = " + seed + ";", true);
 				fileWriterHelper.writeSegmentData("worldSize = " + worldSize + ";", true);
 				fileWriterHelper.writeSegmentData("worldNoiseSpread = " + worldNoiseSpread + ";", true);
@@ -356,15 +445,18 @@ public class WorldDefinition {
 			{
 				Entity thisPlayer = KosmosWorld.get().getEntityPlayer();
 				Chunk thisChunk = KosmosChunks.get().getCurrent();
+
 				if (thisPlayer != null && thisChunk != null) {
-					fileWriterHelper.writeSegmentData("\'this\', " + thisPlayer.getPosition().x + ", " + thisPlayer.getPosition().y + ", " + thisPlayer.getPosition().z + ", ");
-					fileWriterHelper.writeSegmentData(thisChunk.getPosition().x + ", " + thisChunk.getPosition().y + ", " + thisChunk.getPosition().z + ";", true);
+					fileWriterHelper.writeSegmentData("this, " + thisPlayer.getPosition().x + ", " + thisPlayer.getPosition().y + ", " + thisPlayer.getPosition().z + ", ");
+					fileWriterHelper.writeSegmentData(thisChunk.getPosition().x + ", " + thisChunk.getPosition().z + ";", true);
 				}
 
 				for (String username : players.keySet()) {
-					Pair<Vector3f, Vector3f> data = players.get(username);
-					fileWriterHelper.writeSegmentData("\'" + username + "\', " + data.getFirst().x + ", " + data.getFirst().y + ", " + data.getFirst().z + ", ");
-					fileWriterHelper.writeSegmentData(data.getSecond().x + ", " + data.getSecond().y + ", " + data.getSecond().z, true);
+					if (!username.equals("this")) {
+						Pair<Vector3f, Vector3f> data = players.get(username);
+						fileWriterHelper.writeSegmentData(username + ", " + data.getFirst().x + ", " + data.getFirst().y + ", " + data.getFirst().z + ", ");
+						fileWriterHelper.writeSegmentData(data.getSecond().x + ", " + data.getSecond().z, true);
+					}
 				}
 			}
 			fileWriterHelper.endSegment(false);
@@ -372,8 +464,27 @@ public class WorldDefinition {
 			// Chunk data.
 			fileWriterHelper.beginNewSegment("chunks");
 			{
-				for (ChunkData c : chunkData) {
-					fileWriterHelper.writeSegmentData(c.getSaveData(), true);
+				for (Vector3f position : chunkData.keySet()) {
+					List<Vector3f> entitiesRemoved = chunkData.get(position).getFirst();
+					List<Entity> entitiesAdded = chunkData.get(position).getSecond();
+
+					if (!entitiesRemoved.isEmpty() || !entitiesAdded.isEmpty()) {
+						StringBuilder result = new StringBuilder("[" + position.x + "," + position.z + "], {");
+
+						for (Vector3f r : entitiesRemoved) {
+							result.append(r.x).append(",").append(r.y).append(",").append(r.z).append(",");
+						}
+
+						result.append("}, {");
+
+						for (Entity a : entitiesAdded) {
+							result.append("\'").append(a.getClass().getName()).append("\', ").append(a.getPosition().x).append(",").append(a.getPosition().y).append(",").append(a.getPosition().z).append(",");
+							result.append(a.getRotation().x).append(",").append(a.getRotation().y).append(",").append(a.getRotation().z).append(",");
+						}
+
+						result.append("};");
+						fileWriterHelper.writeSegmentData(result.toString(), true);
+					}
 				}
 			}
 			fileWriterHelper.endSegment(true);
@@ -409,5 +520,26 @@ public class WorldDefinition {
 		if (Float.compare(that.dayNightCycle, dayNightCycle) != 0) return false;
 		if (Float.compare(that.dayNightRatio, dayNightRatio) != 0) return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "WorldDefinition{" +
+				"name='" + name + '\'' +
+				", seed=" + seed +
+				", worldSize=" + worldSize +
+				", worldNoiseSpread=" + worldNoiseSpread +
+				", worldNoiseFrequency=" + worldNoiseFrequency +
+				", worldNoiseHeight=" + worldNoiseHeight +
+				", worldIslandInside=" + worldIslandInside +
+				", worldIslandOutside=" + worldIslandOutside +
+				", worldIslandParameter=" + worldIslandParameter +
+				", dayNightCycle=" + dayNightCycle +
+				", dayNightRatio=" + dayNightRatio +
+				", noise=" + noise +
+				", mapTexture=" + mapTexture +
+				", players=" + players +
+				", chunkData=" + chunkData +
+				'}';
 	}
 }

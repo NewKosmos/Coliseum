@@ -78,36 +78,11 @@ public class KosmosConfigs {
 	public static final ConfigData SERVER_PORT = CONFIG_SERVER0.getData(ConfigSection.SEVER, "serverPort", FlounderNetwork.DEFAULT_PORT); // Reference set in client interface.
 	public static final ConfigData SERVER_IP = CONFIG_SERVER0.getData(ConfigSection.SEVER, "serverIP", "localhost"); // Reference set in client interface.
 
-	// Save0 configs.
-	private static final Config CONFIG_SAVE0 = new Config(new MyFile(Framework.getRoamingFolder("kosmos"), "saves", "save0.conf"));
-	public static final ConfigData SAVE_SEED = CONFIG_SAVE0.getData(ConfigSection.WORLD, "saveSeed", (int) Maths.randomInRange(1.0, 1000000.0)); // Reference set by client/server.
-	public static final ConfigData SAVE_PLAYER_X = CONFIG_SAVE0.getData(ConfigSection.WORLD, "playerX", 0.0f); // Reference set in world.
-	public static final ConfigData SAVE_PLAYER_Y = CONFIG_SAVE0.getData(ConfigSection.WORLD, "playerY", 0.0f); // Reference set in world.
-	public static final ConfigData SAVE_PLAYER_Z = CONFIG_SAVE0.getData(ConfigSection.WORLD, "playerZ", 0.0f); // Reference set in world.
-	public static final ConfigData SAVE_CHUNK_X = CONFIG_SAVE0.getData(ConfigSection.WORLD, "chunkX", 0.0f); // Reference set in chunks.
-	public static final ConfigData SAVE_CHUNK_Z = CONFIG_SAVE0.getData(ConfigSection.WORLD, "chunkZ", 0.0f); // Reference set in chunks.
-
 	/**
 	 * Saves the configs when closing the game.
 	 */
 	public static void saveAllConfigs() {
 		CONFIG_MAIN.save();
 		CONFIG_SERVER0.save();
-		CONFIG_SAVE0.save();
-	}
-
-	public static void fixConfigRefs() {
-		if (KosmosWorld.get().getWorld() == null) {
-			KosmosConfigs.SAVE_SEED.setReference(null);
-		}
-		if (KosmosWorld.get().getEntityPlayer() == null) {
-			KosmosConfigs.SAVE_PLAYER_X.setReference(null);
-			KosmosConfigs.SAVE_PLAYER_Y.setReference(null);
-			KosmosConfigs.SAVE_PLAYER_Z.setReference(null);
-		}
-		if (KosmosChunks.get().getCurrent() == null) {
-			KosmosConfigs.SAVE_CHUNK_X.setReference(null);
-			KosmosConfigs.SAVE_CHUNK_Z.setReference(null);
-		}
 	}
 }

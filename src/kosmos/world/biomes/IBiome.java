@@ -85,7 +85,7 @@ public abstract class IBiome {
 				Entity entity = entitySpawn.create.create(FlounderEntities.get().getEntities(), new Vector3f(tilePosition.x, entitySpawn.heightOffset + tilePosition.y * 0.5f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
 
 				if (entity != null) {
-					new ComponentChild(entity, chunk);
+					new ComponentChild(entity, chunk, () -> chunk.entityRemove(entity));
 				}
 
 				return entity;

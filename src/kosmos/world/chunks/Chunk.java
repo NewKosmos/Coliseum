@@ -11,12 +11,15 @@ package kosmos.world.chunks;
 
 import flounder.entities.*;
 import flounder.entities.components.*;
+import flounder.helpers.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
 import flounder.space.*;
 import kosmos.entities.components.*;
+import kosmos.world.*;
 import kosmos.world.biomes.*;
 import kosmos.world.chunks.meshing.*;
 
@@ -42,6 +45,9 @@ public class Chunk extends Entity {
 
 	private int createDepth;
 
+	private List<Vector3f> entitiesRemoved;
+	private List<Entity> entitiesAdded;
+
 	public Chunk(ISpatialStructure<Entity> structure, Vector3f position) {
 		super(structure, position, new Vector3f());
 
@@ -53,6 +59,9 @@ public class Chunk extends Entity {
 		this.loaded = false;
 
 		this.createDepth = 0;
+
+		this.entitiesRemoved = KosmosWorld.get().getWorld().getChunkRemoved(position);
+		this.entitiesAdded = KosmosWorld.get().getWorld().getChunkAdded(position);
 
 		new ComponentModel(this, 1.0f, chunkMesh.getModel(), biome.getBiome().getTexture(), 0);
 		new ComponentSurface(this, 1.0f, 0.0f, false, false, true);
@@ -195,8 +204,8 @@ public class Chunk extends Entity {
 			generateTile(chunk, tiles, x, z, false, yOffset - (float) Math.sqrt(2.0f), false);
 		}
 
-		// Spawns entities if this is the top tile.
-		if (spawnEntity) {
+		// Spawns entities if this is the top tile, and if it was not removed.
+		if (spawnEntity && !chunk.entitiesRemoved.contains(worldPosition)) {
 			chunk.biome.getBiome().generateEntity(chunk, worldPosition);
 		}
 	}
@@ -234,6 +243,42 @@ public class Chunk extends Entity {
 		this.loaded = loaded;
 	}
 
+	public List<Vector3f> getEntitiesRemoved() {
+		return entitiesRemoved;
+	}
+
+	public List<Entity> getEntitiesAdded() {
+		return entitiesAdded;
+	}
+
+	public void entityAdd(Entity entity) {
+		entitiesAdded.add(entity);
+	}
+
+	public void entityRemove(Entity entity) {
+		if (isRemoved()) {
+			return;
+		}
+		FlounderLogger.get().log("Removing entity: " + entity);
+		if (entitiesAdded.contains(entity)) {
+			entitiesAdded.remove(entity);
+		} else {
+			entitiesRemoved.add(entity.getPosition());
+		}
+	}
+
+	public void prepareSave() {
+		if (!KosmosWorld.get().getWorld().getChunkData().containsKey(getPosition())) {
+			KosmosWorld.get().getWorld().getChunkData().put(getPosition(), new Pair<>(new ArrayList<>(), new ArrayList<>()));
+		}
+
+		Pair<List<Vector3f>, List<Entity>> data = KosmosWorld.get().getWorld().getChunkData().get(getPosition());
+		data.getFirst().clear();
+		data.getFirst().addAll(entitiesRemoved);
+		data.getSecond().clear();
+		data.getSecond().addAll(entitiesAdded);
+	}
+
 	//@Override // Call getSphere instead, this is not used any more so chunks can be culled.
 	//public Collider getCollider() {
 	//	return sphere;
@@ -243,5 +288,6 @@ public class Chunk extends Entity {
 		chunkMesh.delete();
 		loaded = false;
 		forceRemove();
+		prepareSave();
 	}
 }

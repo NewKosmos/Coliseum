@@ -15,6 +15,7 @@ import flounder.framework.*;
 import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.networking.*;
 import flounder.particles.*;
@@ -54,8 +55,9 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public void onEvent() {
-				//	KosmosWorld.get().getWorld().getNoise().setSeed((int) Maths.randomInRange(1.0, 1000000.0));
-				KosmosWorld.get().setWorld(new WorldDefinition("HelloWorld", (int) Maths.randomInRange(1.0, 1000000.0), 1536, 400.0f, 40.0f, 40.0f, 0.8f, 1.0f, 0.4f, 600.0f, 0.7f, new HashMap<>(), new ArrayList<>()));
+				WorldDefinition d = KosmosWorld.get().getWorld();
+				WorldDefinition newWorld = new WorldDefinition(d.getName(), (int) Maths.randomInRange(1.0, 1000000.0), d.getWorldSize(), d.getWorldNoiseSpread(), d.getWorldNoiseFrequency(), d.getWorldNoiseHeight(), d.getWorldIslandInside(), d.getWorldIslandOutside(), d.getWorldIslandParameter(), d.getDayNightCycle(), d.getDayNightRatio(), new HashMap<>(), new HashMap<>());
+				KosmosWorld.get().setWorld(newWorld);
 			}
 		});
 
@@ -138,7 +140,6 @@ public class KosmosInterface extends Standard {
 			FlounderNetwork.get().closeClient();
 		}
 
-		KosmosConfigs.fixConfigRefs();
 		KosmosConfigs.saveAllConfigs();
 	}
 

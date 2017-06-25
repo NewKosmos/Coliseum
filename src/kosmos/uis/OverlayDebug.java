@@ -10,6 +10,7 @@
 package kosmos.uis;
 
 import flounder.camera.*;
+import flounder.events.*;
 import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.guis.*;
@@ -44,13 +45,12 @@ public class OverlayDebug extends ScreenObject {
 		this.moistureText = createStatus("MOISTURE: 1", 0.16f);
 		this.biomeText = createStatus("BIOME: NULL", 0.19f);
 
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
+		FlounderEvents.get().addEvent(new EventTime(1.0f, true) {
 			@Override
-			public void run() {
+			public void onEvent() {
 				updateText = true;
 			}
-		}, 0, 100);
+		});
 	}
 
 	private TextObject createStatus(String content, float yPos) {

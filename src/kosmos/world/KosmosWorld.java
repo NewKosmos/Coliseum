@@ -11,6 +11,7 @@ package kosmos.world;
 
 import flounder.camera.*;
 import flounder.entities.*;
+import flounder.events.*;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.maths.*;
@@ -96,6 +97,16 @@ public class KosmosWorld extends Module {
 		if (FlounderSkybox.get() != null) {
 			FlounderSkybox.get().setCubemap(TextureFactory.newBuilder().setCubemap(SKYBOX_TEXTURE_FILES).create());
 		}
+
+		// Quickly save the world every so often.
+		FlounderEvents.get().addEvent(new EventTime(200.0f, true) {
+			@Override
+			public void onEvent() {
+				if (worldDefinition != null) {
+					worldDefinition.save();
+				}
+			}
+		});
 	}
 
 	public void generateWorld(WorldDefinition world, Vector3f positionPlayer, Vector3f positionChunk) {
@@ -105,11 +116,13 @@ public class KosmosWorld extends Module {
 				setWorld(world);
 			}
 
-			// Creates the player.
-			entityPlayer = new InstancePlayer(FlounderEntities.get().getEntities(), positionPlayer, new Vector3f());
+			if (FlounderNetwork.get().getSocketServer() == null) {
+				// Creates the player.
+				entityPlayer = new InstancePlayer(FlounderEntities.get().getEntities(), positionPlayer, new Vector3f());
 
-			// Creates the current chunk.
-			KosmosChunks.get().setCurrent(new Chunk(FlounderEntities.get().getEntities(), positionChunk));
+				// Creates the current chunk.
+				KosmosChunks.get().setCurrent(new Chunk(FlounderEntities.get().getEntities(), positionChunk));
+			}
 
 			// Creates the water.
 			KosmosWater.get().generateWater();
@@ -132,8 +145,6 @@ public class KosmosWorld extends Module {
 
 		KosmosChunks.get().clear(false);
 		KosmosWater.get().deleteWater();
-
-		KosmosConfigs.fixConfigRefs();
 
 		System.gc();
 	}

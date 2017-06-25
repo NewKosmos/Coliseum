@@ -16,6 +16,7 @@ import flounder.framework.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
+import flounder.networking.*;
 import flounder.physics.*;
 import flounder.physics.bounding.*;
 import flounder.resources.*;
@@ -73,6 +74,10 @@ public class KosmosChunks extends Module {
 
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)
 	public void update() {
+		if (FlounderNetwork.get().getSocketServer() != null) {
+			return;
+		}
+
 		if (FlounderCamera.get().getPlayer() != null) {
 			Vector3f playerPos = new Vector3f(FlounderCamera.get().getPlayer().getPosition());
 			playerPos.y = 0.0f;
@@ -415,6 +420,17 @@ public class KosmosChunks extends Module {
 
 			// Creates chunks around the new current chunk for a range, does not include the current chunk.
 			currentChunk.createChunksAround(chunkDistance);
+		}
+	}
+
+	public void prepareSave() {
+		// Goes though all chunks looking for changes.
+		for (Entity entity : FlounderEntities.get().getEntities().getAll(null)) {
+			if (entity != null && entity instanceof Chunk) {
+				Chunk chunk = (Chunk) entity;
+
+				chunk.prepareSave();
+			}
 		}
 	}
 

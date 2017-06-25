@@ -37,7 +37,7 @@ public class PacketWorld extends Packet {
 		float worldIslandParameter = Float.parseFloat(d[8].trim());
 		float dayNightCycle = Float.parseFloat(d[9].trim());
 		float dayNightRatio = Float.parseFloat(d[10].trim());
-		this.world = new WorldDefinition("server", seed, worldSize, worldNoiseSpread, worldNoiseFrequency, worldNoiseHeight, worldIslandInside, worldIslandOutside, worldIslandParameter, dayNightCycle, dayNightRatio, new HashMap<>(), new ArrayList<>());
+		this.world = new WorldDefinition("server", seed, worldSize, worldNoiseSpread, worldNoiseFrequency, worldNoiseHeight, worldIslandInside, worldIslandOutside, worldIslandParameter, dayNightCycle, dayNightRatio, new HashMap<>(), new HashMap<>());
 	}
 
 	public PacketWorld(float timeSec, WorldDefinition world) {
