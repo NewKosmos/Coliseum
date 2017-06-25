@@ -118,8 +118,14 @@ public class KosmosInterface extends Standard {
 					FlounderNetwork.get().closeClient();
 				}
 
-				KosmosConfigs.saveAllConfigs();
-				Framework.get().requestClose(false);
+				KosmosWorld.get().deleteWorld();
+
+				FlounderEvents.get().addEvent(new EventTime(0.6f, false) {
+					@Override
+					public void onEvent() {
+						Framework.get().requestClose(false);
+					}
+				});
 			}
 		});
 	}

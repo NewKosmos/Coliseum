@@ -205,8 +205,12 @@ public class Chunk extends Entity {
 		}
 
 		// Spawns entities if this is the top tile, and if it was not removed.
-		if (spawnEntity && !chunk.entitiesRemoved.contains(worldPosition)) {
-			chunk.biome.getBiome().generateEntity(chunk, worldPosition);
+		if (spawnEntity) {
+			Entity entity = chunk.biome.getBiome().generateEntity(chunk, worldPosition);
+
+			if (entity != null && chunk.entitiesRemoved.contains(entity.getPosition())) {
+				FlounderEntities.get().getEntities().remove(entity);
+			}
 		}
 	}
 
@@ -268,11 +272,13 @@ public class Chunk extends Entity {
 	}
 
 	public void prepareSave() {
-		if (!KosmosWorld.get().getWorld().getChunkData().containsKey(getPosition())) {
-			KosmosWorld.get().getWorld().getChunkData().put(getPosition(), new Pair<>(new ArrayList<>(), new ArrayList<>()));
+		String chunkKey = WorldDefinition.vectorToString(getPosition());
+
+		if (!KosmosWorld.get().getWorld().getChunkData().containsKey(chunkKey)) {
+			KosmosWorld.get().getWorld().getChunkData().put(chunkKey, new Pair<>(new ArrayList<>(), new ArrayList<>()));
 		}
 
-		Pair<List<Vector3f>, List<Entity>> data = KosmosWorld.get().getWorld().getChunkData().get(getPosition());
+		Pair<List<Vector3f>, List<Entity>> data = KosmosWorld.get().getWorld().getChunkData().get(chunkKey);
 		data.getFirst().clear();
 		data.getFirst().addAll(entitiesRemoved);
 		data.getSecond().clear();

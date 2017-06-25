@@ -49,7 +49,7 @@ public class WorldDefinition {
 	private TextureObject mapTexture;
 
 	private Map<String, Pair<Vector3f, Vector3f>> players;
-	private Map<Vector3f, Pair<List<Vector3f>, List<Entity>>> chunkData;
+	private Map<String, Pair<List<Vector3f>, List<Entity>>> chunkData;
 
 	/**
 	 * Creates a new world save definition.
@@ -69,7 +69,7 @@ public class WorldDefinition {
 	 * @param chunkData The data about all modified chunks in the save.
 	 */
 	public WorldDefinition(String name, int seed, int worldSize, float worldNoiseSpread, float worldNoiseFrequency, float worldNoiseHeight, float worldIslandInside, float worldIslandOutside, float worldIslandParameter, float dayNightCycle, float dayNightRatio,
-	                       Map<String, Pair<Vector3f, Vector3f>> players, Map<Vector3f, Pair<List<Vector3f>, List<Entity>>> chunkData) {
+	                       Map<String, Pair<Vector3f, Vector3f>> players, Map<String, Pair<List<Vector3f>, List<Entity>>> chunkData) {
 		this.name = name;
 		this.seed = seed;
 		this.worldSize = worldSize;
@@ -115,7 +115,7 @@ public class WorldDefinition {
 			float readDayNightRatio = 0.0f;
 
 			Map<String, Pair<Vector3f, Vector3f>> readPlayers = new HashMap<>();
-			Map<Vector3f, Pair<List<Vector3f>, List<Entity>>> readChunkData = new HashMap<>();
+			Map<String, Pair<List<Vector3f>, List<Entity>>> readChunkData = new HashMap<>();
 
 			String section = "null";
 
@@ -125,34 +125,37 @@ public class WorldDefinition {
 				if (line.contains("{")) {
 					section = line.replace("{", "").trim();
 				} else if (section.equals("save")) {
+					line = line.replace(";", "");
+
 					if (line.startsWith("version")) {
-						readVersion = line.split("=")[1].replace(";", "").trim();
+						readVersion = line.split("=")[1].trim();
 					} else if (line.startsWith("name")) {
-						readName = line.split("=")[1].replace(";", "").trim();
+						readName = line.split("=")[1].trim();
 					} else if (line.startsWith("seed")) {
-						readSeed = Integer.parseInt(line.split("=")[1].replace(";", "").trim());
+						readSeed = Integer.parseInt(line.split("=")[1].trim());
 					} else if (line.startsWith("worldSize")) {
-						readWorldSize = Integer.parseInt(line.split("=")[1].replace(";", "").trim());
+						readWorldSize = Integer.parseInt(line.split("=")[1].trim());
 					} else if (line.startsWith("worldNoiseSpread")) {
-						readWorldNoiseSpread = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+						readWorldNoiseSpread = Float.parseFloat(line.split("=")[1].trim());
 					} else if (line.startsWith("worldNoiseFrequency")) {
-						readWorldNoiseFrequency = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+						readWorldNoiseFrequency = Float.parseFloat(line.split("=")[1].trim());
 					} else if (line.startsWith("worldNoiseHeight")) {
-						readWorldNoiseHeight = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+						readWorldNoiseHeight = Float.parseFloat(line.split("=")[1].trim());
 					} else if (line.startsWith("worldIslandInside")) {
-						readWorldIslandInside = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+						readWorldIslandInside = Float.parseFloat(line.split("=")[1].trim());
 					} else if (line.startsWith("worldIslandOutside")) {
-						readWorldIslandOutside = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+						readWorldIslandOutside = Float.parseFloat(line.split("=")[1].trim());
 					} else if (line.startsWith("worldIslandParameter")) {
-						readWorldIslandParameter = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+						readWorldIslandParameter = Float.parseFloat(line.split("=")[1].trim());
 					} else if (line.startsWith("dayNightCycle")) {
-						readDayNightCycle = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+						readDayNightCycle = Float.parseFloat(line.split("=")[1].trim());
 					} else if (line.startsWith("dayNightRatio")) {
-						readDayNightRatio = Float.parseFloat(line.split("=")[1].replace(";", "").trim());
+						readDayNightRatio = Float.parseFloat(line.split("=")[1].trim());
 					}
 				} else if (section.equals("players")) {
 					if (line.contains(";")) {
-						String[] d = line.replace(";", "").split(",");
+						line = line.replace(";", "");
+						String[] d = line.split(",");
 
 						readPlayers.put(d[0], new Pair<>(
 								new Vector3f(Float.parseFloat(d[1]), Float.parseFloat(d[2]), Float.parseFloat(d[3])),
@@ -161,18 +164,31 @@ public class WorldDefinition {
 					}
 				} else if (section.equals("chunks")) {
 					if (line.contains(";")) {
-						String[] p = line.split("]")[0].replace("[", "").trim().split(",");
+						line = line.replace(";", "");
+						String[] p = line.split("\\]")[0].replace("[", "").replace("]", "").trim().split(",");
+						Vector3f position = new Vector3f(Float.parseFloat(p[0]), Float.parseFloat(p[1]), Float.parseFloat(p[2]));
 
-						//	String[] r = line.split("}")[0].replace("{", "").trim().split(",");
-
-						//	String[] a = line.split("\\{")[2].replace("}", "").trim().split(",");
-
-						Vector3f position = new Vector3f(Float.parseFloat(p[0]), 0.0f, Float.parseFloat(p[1]));
+						String[] r = line.split("\\]")[1].split("\\[")[1].replace("[", "").replace("]", "").trim().split(",");
 						List<Vector3f> entitiesRemoved = new ArrayList<>();
+
+						for (int i = 0; i < r.length; i += 3) {
+							Vector3f v = new Vector3f(Float.parseFloat(r[i].trim()), Float.parseFloat(r[i + 1].trim()), Float.parseFloat(r[i + 2].trim()));
+							entitiesRemoved.add(v);
+						}
+
+					//	String[] a = line.split("\\[")[2].split("\\[")[2].replace("[", "").replace("]", "").trim().split(",");
 						List<Entity> entitiesAdded = new ArrayList<>();
-						readChunkData.put(position, new Pair<>(entitiesRemoved, entitiesAdded));
+
+						if (!readChunkData.containsKey(position)) {
+							readChunkData.put(vectorToString(position), new Pair<>(entitiesRemoved, entitiesAdded));
+						}
 					}
 				}
+			}
+
+			if (readSeed == 0) {
+				FlounderLogger.get().log("Failed to load world: " + name);
+				return null;
 			}
 
 			FlounderLogger.get().log("Loaded world from New Kosmos v" + readVersion);
@@ -376,12 +392,12 @@ public class WorldDefinition {
 		return players.get(username).getSecond();
 	}
 
-	public Map<Vector3f, Pair<List<Vector3f>, List<Entity>>> getChunkData() {
+	public Map<String, Pair<List<Vector3f>, List<Entity>>> getChunkData() {
 		return chunkData;
 	}
 
 	public List<Vector3f> getChunkRemoved(Vector3f position) {
-		Pair<List<Vector3f>, List<Entity>> found = chunkData.get(position);
+		Pair<List<Vector3f>, List<Entity>> found = chunkData.get(vectorToString(position));
 
 		if (found != null) {
 			return found.getFirst();
@@ -391,7 +407,7 @@ public class WorldDefinition {
 	}
 
 	public List<Entity> getChunkAdded(Vector3f position) {
-		Pair<List<Vector3f>, List<Entity>> found = chunkData.get(position);
+		Pair<List<Vector3f>, List<Entity>> found = chunkData.get(vectorToString(position));
 
 		if (found != null) {
 			return found.getSecond();
@@ -464,25 +480,33 @@ public class WorldDefinition {
 			// Chunk data.
 			fileWriterHelper.beginNewSegment("chunks");
 			{
-				for (Vector3f position : chunkData.keySet()) {
+				for (String position : chunkData.keySet()) {
 					List<Vector3f> entitiesRemoved = chunkData.get(position).getFirst();
 					List<Entity> entitiesAdded = chunkData.get(position).getSecond();
 
 					if (!entitiesRemoved.isEmpty() || !entitiesAdded.isEmpty()) {
-						StringBuilder result = new StringBuilder("[" + position.x + "," + position.z + "], {");
+						StringBuilder result = new StringBuilder("[" + position + "], [");
 
 						for (Vector3f r : entitiesRemoved) {
 							result.append(r.x).append(",").append(r.y).append(",").append(r.z).append(",");
 						}
 
-						result.append("}, {");
+						if (!entitiesRemoved.isEmpty()) {
+							result.deleteCharAt(result.length() - 1);
+						}
+
+						result.append("], [");
 
 						for (Entity a : entitiesAdded) {
 							result.append("\'").append(a.getClass().getName()).append("\', ").append(a.getPosition().x).append(",").append(a.getPosition().y).append(",").append(a.getPosition().z).append(",");
 							result.append(a.getRotation().x).append(",").append(a.getRotation().y).append(",").append(a.getRotation().z).append(",");
 						}
 
-						result.append("};");
+						if (!entitiesAdded.isEmpty()) {
+							result.deleteCharAt(result.length() - 1);
+						}
+
+						result.append("];");
 						fileWriterHelper.writeSegmentData(result.toString(), true);
 					}
 				}
@@ -500,6 +524,10 @@ public class WorldDefinition {
 		if (mapTexture != null) {
 			mapTexture.delete();
 		}
+	}
+
+	public static String vectorToString(Vector3f vector) {
+		return vector.x + "," + vector.y + "," + vector.z;
 	}
 
 	@Override

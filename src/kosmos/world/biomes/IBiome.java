@@ -66,23 +66,23 @@ public abstract class IBiome {
 
 	public abstract Colour getColour();
 
-	public Entity generateEntity(Chunk chunk, Vector3f tilePosition) {
-		if (tilePosition.y < 0.0f) {
+	public Entity generateEntity(Chunk chunk, Vector3f worldPosition) {
+		if (worldPosition.y < 0.0f) {
 			return null;
 		}
 
-		if (Math.abs(KosmosWorld.get().getWorld().getNoise().noise(tilePosition.z * (float) Math.sin(tilePosition.x), tilePosition.x * (float) Math.sin(tilePosition.z))) <= 0.3f) {
+		if (Math.abs(KosmosWorld.get().getWorld().getNoise().noise(worldPosition.z * (float) Math.sin(worldPosition.x), worldPosition.x * (float) Math.sin(worldPosition.z))) <= 0.3f) {
 			return null;
 		}
 
-		float spawn = KosmosWorld.get().getWorld().getNoise().noise((tilePosition.z - tilePosition.x) * (float) Math.sin(tilePosition.x + tilePosition.z), 1.0f) * 23.0f * getEntitySpawns().length;
-		float rotation = KosmosWorld.get().getWorld().getNoise().noise(tilePosition.x - tilePosition.z, 1.0f) * 3600.0f;
+		float spawn = KosmosWorld.get().getWorld().getNoise().noise((worldPosition.z - worldPosition.x) * (float) Math.sin(worldPosition.x + worldPosition.z), 1.0f) * 23.0f * getEntitySpawns().length;
+		float rotation = KosmosWorld.get().getWorld().getNoise().noise(worldPosition.x - worldPosition.z, 1.0f) * 3600.0f;
 
 		if (getEntitySpawns().length > 0 && (int) spawn >= 0.0f && (int) spawn < getEntitySpawns().length) {
 			EntitySpawn entitySpawn = getEntitySpawns()[(int) spawn];
 
 			if (entitySpawn != null && spawn - (int) spawn <= entitySpawn.spawnChance) {
-				Entity entity = entitySpawn.create.create(FlounderEntities.get().getEntities(), new Vector3f(tilePosition.x, entitySpawn.heightOffset + tilePosition.y * 0.5f, tilePosition.z), new Vector3f(0.0f, rotation, 0.0f));
+				Entity entity = entitySpawn.create.create(FlounderEntities.get().getEntities(), new Vector3f(worldPosition.x, entitySpawn.heightOffset + worldPosition.y * 0.5f, worldPosition.z), new Vector3f(0.0f, rotation, 0.0f));
 
 				if (entity != null) {
 					new ComponentChild(entity, chunk, () -> chunk.entityRemove(entity));

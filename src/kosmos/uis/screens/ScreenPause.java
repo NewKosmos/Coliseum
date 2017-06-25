@@ -9,6 +9,7 @@
 
 package kosmos.uis.screens;
 
+import flounder.events.*;
 import flounder.guis.*;
 import flounder.logger.*;
 import flounder.maths.vectors.*;
@@ -52,7 +53,12 @@ public class ScreenPause extends ScreenObject {
 		// Exit.
 		GuiButtonText exitToMenu = new GuiButtonText(this, new Vector2f(0.5f, yPosition += 1.2f * ySpacing), "Exit To Menu", GuiAlign.CENTRE);
 		exitToMenu.addLeftListener(() -> {
-			slider.sliderStartMenu(true);
+			FlounderEvents.get().addEvent(new EventTime(0.4f, false) {
+				@Override
+				public void onEvent() {
+					slider.sliderStartMenu(true);
+				}
+			});
 
 			if (FlounderNetwork.get().getSocketClient() != null) {
 				new PacketDisconnect(FlounderNetwork.get().getUsername()).writeData(FlounderNetwork.get().getSocketClient());

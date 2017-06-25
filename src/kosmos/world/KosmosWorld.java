@@ -130,23 +130,32 @@ public class KosmosWorld extends Module {
 	}
 
 	public void deleteWorld() {
+		if (worldDefinition != null) {
+			worldDefinition.save();
+		}
+
 		KosmosConfigs.saveAllConfigs();
 
-		if (this.worldDefinition != null) {
-			this.worldDefinition.save();
-			this.worldDefinition.dispose();
-		}
+		FlounderEvents.get().addEvent(new EventTime(0.4f, false) {
+			@Override
+			public void onEvent() {
+				if (worldDefinition != null) {
+					worldDefinition.dispose();
+					worldDefinition = null;
+				}
 
-		if (entityPlayer != null) {
-			entityPlayer.forceRemove();
-		}
+				if (entityPlayer != null) {
+					entityPlayer.forceRemove();
+				}
 
-		clearPlayers();
+				clearPlayers();
 
-		KosmosChunks.get().clear(false);
-		KosmosWater.get().deleteWater();
+				KosmosChunks.get().clear(false);
+				KosmosWater.get().deleteWater();
 
-		System.gc();
+				System.gc();
+			}
+		});
 	}
 
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)
