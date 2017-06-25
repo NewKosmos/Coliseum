@@ -15,7 +15,6 @@ import flounder.framework.*;
 import flounder.guis.*;
 import flounder.helpers.*;
 import flounder.inputs.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.networking.*;
 import flounder.particles.*;
@@ -116,9 +115,10 @@ public class KosmosInterface extends Standard {
 				if (FlounderNetwork.get().getSocketClient() != null) {
 					new PacketDisconnect(FlounderNetwork.get().getUsername()).writeData(FlounderNetwork.get().getSocketClient());
 					FlounderNetwork.get().closeClient();
+					KosmosWorld.get().deleteWorld(false);
+				} else {
+					KosmosWorld.get().deleteWorld(true);
 				}
-
-				KosmosWorld.get().deleteWorld(true);
 
 				FlounderEvents.get().addEvent(new EventTime(0.6f, false) {
 					@Override

@@ -63,7 +63,7 @@ public class ScreenSettingControls extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleMouseLock.setText("Mouse Locked: " + newValue);
-			//	toggleMouseLock.setProgress(newValue);
+				//	toggleMouseLock.setProgress(newValue);
 			}
 		});
 		toggleMouseLock.addLeftListener(() -> KosmosCamera.setMouseLocked(!KosmosCamera.isMouseLocked()));

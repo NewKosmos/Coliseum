@@ -20,9 +20,6 @@ import flounder.visual.*;
 import kosmos.world.*;
 import kosmos.world.chunks.*;
 
-import java.util.Timer;
-import java.util.*;
-
 public class OverlayDebug extends ScreenObject {
 	private TextObject fpsText;
 	private TextObject upsText;

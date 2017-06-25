@@ -90,6 +90,7 @@ public class PacketConnect extends Packet {
 			new PacketLoad(username, new Vector3f(worldData.getFirst()), worldData.getSecond().x, worldData.getSecond().z).writeData(server);
 		}
 
+		// Sends all removed entity data to the new client.
 		for (String chunk : KosmosWorld.get().getWorld().getChunkData().keySet()) {
 			String[] d = chunk.split(",");
 			Vector3f position = new Vector3f(Float.parseFloat(d[0].trim()), Float.parseFloat(d[1].trim()), Float.parseFloat(d[2].trim()));

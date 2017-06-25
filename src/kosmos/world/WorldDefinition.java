@@ -165,10 +165,10 @@ public class WorldDefinition {
 				} else if (section.equals("chunks")) {
 					if (line.contains(";")) {
 						line = line.replace(";", "");
-						String[] p = line.split("\\]")[0].replace("[", "").replace("]", "").trim().split(",");
+						String[] p = line.split("]")[0].replace("[", "").replace("]", "").trim().split(",");
 						Vector3f position = new Vector3f(Float.parseFloat(p[0]), Float.parseFloat(p[1]), Float.parseFloat(p[2]));
 
-						String[] r = line.split("\\]")[1].split("\\[")[1].replace("[", "").replace("]", "").trim().split(",");
+						String[] r = line.split("]")[1].split("\\[")[1].replace("[", "").replace("]", "").trim().split(",");
 						List<Vector3f> entitiesRemoved = new ArrayList<>();
 
 						for (int i = 0; i < r.length; i += 3) {
@@ -176,10 +176,10 @@ public class WorldDefinition {
 							entitiesRemoved.add(v);
 						}
 
-					//	String[] a = line.split("\\[")[2].split("\\[")[2].replace("[", "").replace("]", "").trim().split(",");
+					//	String[] a = line.split("]")[2].split("\\[")[2].replace("[", "").replace("]", "").trim().split(",");
 						List<Entity> entitiesAdded = new ArrayList<>();
 
-						if (!readChunkData.containsKey(position)) {
+						if (!readChunkData.containsKey(vectorToString(position))) {
 							readChunkData.put(vectorToString(position), new Pair<>(entitiesRemoved, entitiesAdded));
 						}
 					}
@@ -448,7 +448,7 @@ public class WorldDefinition {
 				fileWriterHelper.writeSegmentData("worldNoiseSpread = " + worldNoiseSpread + ";", true);
 				fileWriterHelper.writeSegmentData("worldNoiseFrequency = " + worldNoiseFrequency + ";", true);
 				fileWriterHelper.writeSegmentData("worldNoiseHeight = " + worldNoiseHeight + ";", true);
-				fileWriterHelper.writeSegmentData("worldIslandInside = " + worldIslandInside+ ";", true);
+				fileWriterHelper.writeSegmentData("worldIslandInside = " + worldIslandInside + ";", true);
 				fileWriterHelper.writeSegmentData("worldIslandOutside = " + worldIslandOutside + ";", true);
 				fileWriterHelper.writeSegmentData("worldIslandParameter = " + worldIslandParameter + ";", true);
 				fileWriterHelper.writeSegmentData("dayNightCycle = " + dayNightCycle + ";", true);

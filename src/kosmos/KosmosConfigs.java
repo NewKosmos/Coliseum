@@ -11,14 +11,12 @@ package kosmos;
 
 import flounder.devices.*;
 import flounder.framework.*;
-import flounder.maths.*;
 import flounder.networking.*;
 import flounder.parsing.config.*;
 import flounder.resources.*;
 import flounder.shadows.*;
 import flounder.textures.*;
 import kosmos.post.*;
-import kosmos.world.*;
 import kosmos.world.chunks.*;
 import kosmos.world.water.*;
 

@@ -12,7 +12,6 @@ package kosmos.world.biomes;
 import flounder.maths.*;
 import flounder.resources.*;
 import flounder.textures.*;
-import kosmos.entities.instances.*;
 import kosmos.world.chunks.*;
 
 public class BiomeBare extends IBiome {

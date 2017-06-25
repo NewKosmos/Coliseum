@@ -38,7 +38,7 @@ public class ScreenSettingGraphics extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleAntialiasing.setText("Is Antialiasing: " + newValue);
-			//	toggleAntialiasing.setProgress(newValue);
+				//	toggleAntialiasing.setProgress(newValue);
 			}
 		});
 		toggleAntialiasing.addLeftListener(() -> FlounderDisplay.get().setAntialiasing(!FlounderDisplay.get().isAntialiasing()));
@@ -49,7 +49,7 @@ public class ScreenSettingGraphics extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleFullscreen.setText("Is Fullscreen: " + newValue);
-			//	toggleFullscreen.setProgress(newValue);
+				//	toggleFullscreen.setProgress(newValue);
 			}
 		});
 		toggleFullscreen.addLeftListener(() -> FlounderDisplay.get().setFullscreen(!FlounderDisplay.get().isFullscreen()));
@@ -60,7 +60,7 @@ public class ScreenSettingGraphics extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleVsync.setText("VSync Enabled: " + newValue);
-			//	toggleVsync.setProgress(newValue);
+				//	toggleVsync.setProgress(newValue);
 			}
 		});
 		toggleVsync.addLeftListener(() -> FlounderDisplay.get().setVSync(!FlounderDisplay.get().isVSync()));
@@ -115,7 +115,7 @@ public class ScreenSettingGraphics extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleWaterReflections.setText("Water Reflections: " + newValue);
-			//	toggleWaterReflections.setProgress(newValue);
+				//	toggleWaterReflections.setProgress(newValue);
 			}
 		});
 		toggleWaterReflections.addLeftListener(() -> KosmosWater.get().setReflectionsEnabled(!KosmosWater.get().reflectionsEnabled()));
@@ -137,7 +137,7 @@ public class ScreenSettingGraphics extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleWaterReflectionShadows.setText("Water Reflection Shadows: " + newValue);
-			//	toggleWaterReflectionShadows.setProgress(newValue);
+				//	toggleWaterReflectionShadows.setProgress(newValue);
 			}
 		});
 		toggleWaterReflectionShadows.addLeftListener(() -> KosmosWater.get().setReflectionShadows(!KosmosWater.get().reflectionShadows()));
@@ -181,7 +181,7 @@ public class ScreenSettingGraphics extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleShadowsUnlimited.setText("Shadows Unlimited: " + newValue);
-			//	toggleShadowsUnlimited.setProgress(newValue);
+				//	toggleShadowsUnlimited.setProgress(newValue);
 			}
 		});
 		toggleShadowsUnlimited.addLeftListener(() -> FlounderShadows.get().setRenderUnlimited(!FlounderShadows.get().isRenderUnlimited()));

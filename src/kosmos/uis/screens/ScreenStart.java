@@ -9,7 +9,6 @@
 
 package kosmos.uis.screens;
 
-import flounder.events.*;
 import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.guis.*;
@@ -21,10 +20,6 @@ import flounder.visual.*;
 import kosmos.*;
 import kosmos.network.packets.*;
 import kosmos.uis.*;
-import kosmos.world.*;
-import kosmos.world.chunks.*;
-
-import java.util.*;
 
 public class ScreenStart extends ScreenObject {
 	public ScreenStart(OverlaySlider slider) {
