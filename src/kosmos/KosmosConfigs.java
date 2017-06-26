@@ -11,6 +11,7 @@ package kosmos;
 
 import flounder.devices.*;
 import flounder.framework.*;
+import flounder.guis.*;
 import flounder.networking.*;
 import flounder.parsing.config.*;
 import flounder.resources.*;
@@ -70,6 +71,8 @@ public class KosmosConfigs {
 	public static final ConfigData CAMERA_SENSITIVITY = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraSensitivity", 1.0f); // Reference set in camera.
 	public static final ConfigData CAMERA_ANGLE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraAngle", GLFW_MOUSE_BUTTON_RIGHT); // Reference set in camera.
 	public static final ConfigData CAMERA_MOUSE_LOCKED = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraMouseLocked", true); // Reference set in camera.
+
+	public static final ConfigData GUI_SCALE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "guiScale", 1.0f, () -> FlounderGuis.get().getGuiScale());
 
 	public static final ConfigData CLIENT_USERNAME = CONFIG_MAIN.getData(ConfigSection.CLIENT, "username", "USERNAME" + ((int) (Math.random() * 10000)), () -> FlounderNetwork.get().getUsername());
 

@@ -62,6 +62,7 @@ public class KosmosGuis extends GuiMaster {
 		this.overlayStartup.setAlphaDriver(new ConstantDriver(1.0f));
 		this.overlayAlpha.setAlphaDriver(new ConstantDriver(0.0f));
 
+		FlounderGuis.get().setGuiScale(KosmosConfigs.GUI_SCALE.getFloat());
 		FlounderGuis.get().getSelector().initJoysticks(0, 0, 1, 0, 1);
 
 		FlounderEvents.get().addEvent(new EventStandard() {

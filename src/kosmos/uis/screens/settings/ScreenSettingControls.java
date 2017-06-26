@@ -10,9 +10,11 @@
 package kosmos.uis.screens.settings;
 
 import flounder.events.*;
+import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
+import flounder.visual.*;
 import kosmos.camera.*;
 import kosmos.uis.*;
 import kosmos.uis.screens.*;
@@ -21,6 +23,13 @@ public class ScreenSettingControls extends ScreenObject {
 	public ScreenSettingControls(OverlaySlider slider, ScreenSettings settings) {
 		super(slider, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
+
+		// Title.
+		TextObject title = new TextObject(this, new Vector2f(0.5f, 0.1f), "Control Settings", 3.0f, FlounderFonts.CANDARA, 1.0f, GuiAlign.CENTRE);
+		title.setInScreenCoords(true);
+		title.setColour(new Colour(1.0f, 1.0f, 1.0f, 1.0f));
+		title.setBorderColour(new Colour(0.0f, 0.0f, 0.0f));
+		title.setBorder(new ConstantDriver(0.022f));
 
 		// Slider Crosshair HUD.
 		GuiSliderText sliderCrosshairHUD = new GuiSliderText(this, new Vector2f(0.5f, 0.20f), "Crosshair HUD: ", 1.0f, 9.0f, OverlayHUD.getCrosshairSelected(), GuiAlign.CENTRE);
@@ -67,6 +76,17 @@ public class ScreenSettingControls extends ScreenObject {
 			}
 		});
 		toggleMouseLock.addLeftListener(() -> KosmosCamera.setMouseLocked(!KosmosCamera.isMouseLocked()));
+
+		// Slider Camera Sensitivity.
+		GuiSliderText sliderGuiScale = new GuiSliderText(this, new Vector2f(0.5f, 0.48f), "GUI Scale: ", 0.5f, 2.0f, FlounderGuis.get().getGuiScale(), GuiAlign.CENTRE);
+		FlounderEvents.get().addEvent(new EventChange<Float>(FlounderGuis.get()::getGuiScale) {
+			@Override
+			public void onEvent(Float newValue) {
+				sliderGuiScale.setText("GUI Scale: " + Maths.roundToPlace(newValue, 2));
+				sliderGuiScale.setProgress(newValue);
+			}
+		});
+		sliderGuiScale.addChangeListener(() -> FlounderGuis.get().setGuiScale(sliderGuiScale.getProgress()));
 
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);

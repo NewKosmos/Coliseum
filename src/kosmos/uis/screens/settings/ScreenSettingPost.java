@@ -10,8 +10,11 @@
 package kosmos.uis.screens.settings;
 
 import flounder.events.*;
+import flounder.fonts.*;
 import flounder.guis.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
+import flounder.visual.*;
 import kosmos.post.*;
 import kosmos.uis.*;
 import kosmos.uis.screens.*;
@@ -20,6 +23,13 @@ public class ScreenSettingPost extends ScreenObject {
 	public ScreenSettingPost(OverlaySlider slider, ScreenSettings settings) {
 		super(slider, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
+
+		// Title.
+		TextObject title = new TextObject(this, new Vector2f(0.5f, 0.1f), "Post-Effect Settings", 3.0f, FlounderFonts.CANDARA, 1.0f, GuiAlign.CENTRE);
+		title.setInScreenCoords(true);
+		title.setColour(new Colour(1.0f, 1.0f, 1.0f, 1.0f));
+		title.setBorderColour(new Colour(0.0f, 0.0f, 0.0f));
+		title.setBorder(new ConstantDriver(0.022f));
 
 		// Toggle Effects.
 		GuiButtonText toggleEffects = new GuiButtonText(this, new Vector2f(0.5f, 0.20f), "Post Enabled: ", GuiAlign.CENTRE);

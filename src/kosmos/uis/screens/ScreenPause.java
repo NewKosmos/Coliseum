@@ -10,8 +10,10 @@
 package kosmos.uis.screens;
 
 import flounder.events.*;
+import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.logger.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.visual.*;
@@ -24,6 +26,15 @@ public class ScreenPause extends ScreenObject {
 	public ScreenPause(OverlaySlider slider) {
 		super(slider, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
+
+		// Title.
+		TextObject title = new TextObject(this, new Vector2f(0.5f, 0.1f), "Game Paused", 4.0f, FlounderFonts.CANDARA, 1.0f, GuiAlign.CENTRE);
+		title.setInScreenCoords(true);
+		title.setColour(new Colour(1.0f, 1.0f, 1.0f, 1.0f));
+		title.setBorderColour(new Colour(0.0f, 0.0f, 0.0f));
+		title.setBorder(new ConstantDriver(0.022f));
+		title.setScaleDriver(new SinWaveDriver(2.0f, 4.0f, 2.0f));
+		title.setRotationDriver(new SinWaveDriver(-20.0f, 20.0f, 3.0f));
 
 		float yPosition = 0.30f;
 		float ySpacing = 0.07f;

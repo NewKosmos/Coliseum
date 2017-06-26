@@ -9,7 +9,9 @@
 
 package kosmos.uis.screens;
 
+import flounder.fonts.*;
 import flounder.guis.*;
+import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;
 import kosmos.uis.*;
@@ -23,6 +25,13 @@ public class ScreenSettings extends ScreenObject {
 		// Left and right Panes.
 		ScreenObject paneLeft = new ScreenObjectEmpty(this, new Vector2f(0.25f, 0.5f), new Vector2f(0.5f, 1.0f), true);
 		ScreenObject paneRight = new ScreenObjectEmpty(this, new Vector2f(0.75f, 0.5f), new Vector2f(0.5f, 1.0f), true);
+
+		// Title.
+		TextObject title = new TextObject(this, new Vector2f(0.5f, 0.1f), "Settings", 3.0f, FlounderFonts.CANDARA, 1.0f, GuiAlign.CENTRE);
+		title.setInScreenCoords(true);
+		title.setColour(new Colour(1.0f, 1.0f, 1.0f, 1.0f));
+		title.setBorderColour(new Colour(0.0f, 0.0f, 0.0f));
+		title.setBorder(new ConstantDriver(0.022f));
 
 		// Screen General.
 		ScreenSettingGeneral screenGeneral = new ScreenSettingGeneral(slider, this);

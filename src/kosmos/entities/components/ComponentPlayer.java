@@ -134,7 +134,8 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 		float depth = (getEntity().getPosition().y + dy) - worldHeight;
 
 		if (!noclip && depth < 0.0f) {
-			dy = Math.min(-depth, (float) Math.sqrt(2.0)) * 16.0f * delta;
+			dy = Math.min(-depth, (float) Math.sqrt(2.0)) * 10.0f * delta;
+			dy = Maths.deadband(0.05f, dy);
 			currentUpwardSpeed = 0.0f;
 		}
 

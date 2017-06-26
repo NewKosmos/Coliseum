@@ -15,10 +15,7 @@ import flounder.guis.*;
 import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
-import flounder.networking.*;
 import flounder.visual.*;
-import kosmos.*;
-import kosmos.network.packets.*;
 import kosmos.uis.*;
 
 public class ScreenStart extends ScreenObject {
@@ -43,23 +40,10 @@ public class ScreenStart extends ScreenObject {
 		buttonSingleplayer.addLeftListener(() -> slider.setNewSecondaryScreen(screenSingleplayer));
 
 		// Multiplayer.
+		ScreenMultiplayer screenMultiplayer = new ScreenMultiplayer(slider);
+		screenMultiplayer.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText buttonMultiplayer = new GuiButtonText(this, new Vector2f(0.5f, yPosition += ySpacing), "Multiplayer", GuiAlign.CENTRE);
-		buttonMultiplayer.addLeftListener(() -> {
-			FlounderLogger.get().log("Connecting to server!");
-			slider.sliderStartMenu(false);
-			KosmosConfigs.saveAllConfigs();
-
-			// Connects to the server.
-			String username = KosmosConfigs.CLIENT_USERNAME.getString();
-			String serverIP = KosmosConfigs.SERVER_IP.setReference(() -> FlounderNetwork.get().getSocketClient() == null ? null : FlounderNetwork.get().getSocketClient().getIpAddress()).getString();
-			int serverPort = KosmosConfigs.SERVER_PORT.setReference(() -> FlounderNetwork.get().getSocketClient() == null ? null : FlounderNetwork.get().getSocketClient().getServerPort()).getInteger();
-			FlounderNetwork.get().startClient(username, serverIP, serverPort);
-			PacketConnect loginPacket = new PacketConnect(username);
-			loginPacket.writeData(FlounderNetwork.get().getSocketClient());
-
-			// Forces slider to close after connecting.
-			((KosmosGuis) FlounderGuis.get().getGuiMaster()).togglePause(true);
-		});
+		buttonMultiplayer.addLeftListener(() -> slider.setNewSecondaryScreen(screenMultiplayer));
 
 		// Settings.
 		ScreenSettings screenSettings = new ScreenSettings(slider);

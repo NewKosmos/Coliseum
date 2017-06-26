@@ -90,6 +90,13 @@ public class WorldDefinition {
 		this.chunkData = chunkData;
 	}
 
+	/**
+	 * Loads a world from a save file, if it does not exist or is unreadable a null world will be returned.
+	 *
+	 * @param name The world name to load.
+	 *
+	 * @return The loaded world.
+	 */
 	public static WorldDefinition load(String name) {
 		File saveFile = new File(Framework.get().getRoamingFolder().getPath() + "/saves/" + name + ".save");
 
@@ -176,7 +183,7 @@ public class WorldDefinition {
 							entitiesRemoved.add(v);
 						}
 
-					//	String[] a = line.split("]")[2].split("\\[")[2].replace("[", "").replace("]", "").trim().split(",");
+						//	String[] a = line.split("]")[2].split("\\[")[2].replace("[", "").replace("]", "").trim().split(",");
 						List<Entity> entitiesAdded = new ArrayList<>();
 
 						if (!readChunkData.containsKey(vectorToString(position))) {
@@ -215,18 +222,7 @@ public class WorldDefinition {
 
 		FlounderLogger.get().log("Generating map for seed: " + seed);
 
-		BufferedImage imageBiome = new BufferedImage(worldSize, worldSize, BufferedImage.TYPE_INT_RGB);
-
-		for (int y = 0; y < worldSize; y++) {
-			for (int x = 0; x < worldSize; x++) {
-				float worldX = (float) x - ((float) worldSize / 2.0f);
-				float worldZ = (float) y - ((float) worldSize / 2.0f);
-
-				Colour colourBiome = KosmosChunks.getBiomeMap(worldX, worldZ).getBiome().getColour();
-				imageBiome.setRGB(x, y, (((int) (255.0f * colourBiome.r) << 8) + ((int) (255.0f * colourBiome.g)) << 8) + ((int) (255.0f * colourBiome.b)));
-			}
-		}
-
+		// Create the save folder.
 		File directorySave = new File(Framework.get().getRoamingFolder().getPath() + "/saves/");
 
 		if (!directorySave.exists()) {
@@ -240,29 +236,49 @@ public class WorldDefinition {
 			}
 		}
 
+		// Load a buffered image of the map.
+		BufferedImage imageBiome = new BufferedImage(worldSize, worldSize, BufferedImage.TYPE_INT_RGB);
+
+		for (int y = 0; y < worldSize; y++) {
+			for (int x = 0; x < worldSize; x++) {
+				float worldX = (float) x - ((float) worldSize / 2.0f);
+				float worldZ = (float) y - ((float) worldSize / 2.0f);
+
+				Colour colourBiome = KosmosChunks.getBiomeMap(worldX, worldZ).getBiome().getColour();
+				imageBiome.setRGB(x, y, (((int) (255.0f * colourBiome.r) << 8) + ((int) (255.0f * colourBiome.g)) << 8) + ((int) (255.0f * colourBiome.b)));
+			}
+		}
+
+		// Create a output file name and location.
 		String clientServer = FlounderNetwork.get().getSocketServer() != null ? "server" : "client";
 		File outputBiome = new File(directorySave.getPath() + "/" + seed + "-biome-" + clientServer + ".png");
 
+		// Removes the old file.
+		if (outputBiome.exists()) {
+			outputBiome.delete();
+		}
+
+		// Save the map texture to a output file.
 		try {
-			// Save the map texture.
 			ImageIO.write(imageBiome, "png", outputBiome);
-
-			// Remove old map texture.
-			if (mapTexture != null && mapTexture.isLoaded()) {
-				mapTexture.delete();
-			}
-
-			// Load the map texture after a few seconds.
-			FlounderEvents.get().addEvent(new EventTime(2.5f, false) {
-				@Override
-				public void onEvent() {
-					mapTexture = TextureFactory.newBuilder().setFile(new MyFile(Framework.get().getRoamingFolder(), "saves", seed + "-biome-" + clientServer + ".png")).create();
-				}
-			});
 		} catch (IOException e) {
 			FlounderLogger.get().error("Could not save map image to file: " + outputBiome);
 			FlounderLogger.get().exception(e);
 		}
+
+		// Load the map texture after a few seconds.
+		FlounderEvents.get().addEvent(new EventTime(2.0f, false) {
+			@Override
+			public void onEvent() {
+				// Remove old map texture.
+				if (mapTexture != null && mapTexture.isLoaded()) {
+					mapTexture.delete();
+				}
+
+				// Load the new map image.
+				mapTexture = TextureFactory.newBuilder().setFile(new MyFile(Framework.get().getRoamingFolder(), "saves", seed + "-biome-" + clientServer + ".png")).create();
+			}
+		});
 	}
 
 	/**
@@ -364,10 +380,20 @@ public class WorldDefinition {
 		return dayNightRatio;
 	}
 
+	/**
+	 * The perlin noise for this world.
+	 *
+	 * @return The perlin noise.
+	 */
 	public PerlinNoise getNoise() {
 		return noise;
 	}
 
+	/**
+	 * The generated map for this world.
+	 *
+	 * @return The world map.
+	 */
 	public TextureObject getMapTexture() {
 		return mapTexture;
 	}
@@ -416,6 +442,9 @@ public class WorldDefinition {
 		return new ArrayList<>();
 	}
 
+	/**
+	 * Saves the world into a world file by the name defined in the constructor.
+	 */
 	public void save() {
 		if (FlounderNetwork.get().getSocketClient() != null) {
 			FlounderLogger.get().log("Cannot save multiplayer world on a client!");
