@@ -20,6 +20,7 @@ public class BiomeSnow extends IBiome {
 			new EntitySpawn(InstanceTreePine::new, 1.0f, 0.375f),
 			new EntitySpawn(InstanceTreeMaple::new, 1.0f, 0.53f),
 			new EntitySpawn(InstanceTreeYellow::new, 1.0f, 0.5f),
+			new EntitySpawn(InstanceTreeDeadSnow::new, 0.4f, 0.7f),
 	};
 	private static final TextureObject TEXTURE = TextureFactory.newBuilder().setFile(new MyFile(KosmosChunks.TERRAINS_FOLDER, "snow.png")).clampEdges().create();
 	private static final Colour COLOUR = new Colour(1.0000f, 1.0000f, 1.0000f);
