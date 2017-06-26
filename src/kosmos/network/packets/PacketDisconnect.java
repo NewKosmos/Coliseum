@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.network.packets;
@@ -65,7 +65,7 @@ public class PacketDisconnect extends Packet {
 			}
 
 			// Deletes the clients world.
-			KosmosWorld.get().deleteWorld();
+			KosmosWorld.get().deleteWorld(false);
 
 			// Closes all huds and opens the start screen.
 			((KosmosGuis) FlounderGuis.get().getGuiMaster()).forceCloseHUDs();

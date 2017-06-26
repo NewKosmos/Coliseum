@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.entities.components;
@@ -39,7 +39,7 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 	 * Creates a new ComponentCelestial.
 	 *
 	 * @param entity The entity this component is attached to.
-	 * @param lightType
+	 * @param lightType The type of celestial light.
 	 */
 	public ComponentCelestial(Entity entity, LightType lightType) {
 		super(entity);
@@ -108,7 +108,7 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 	public void dispose() {
 	}
 
-	public static enum LightType {
+	public enum LightType {
 		SUN, MOON, NONE
 	}
 }

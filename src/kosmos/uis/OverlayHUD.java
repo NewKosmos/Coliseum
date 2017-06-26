@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.uis;
@@ -21,7 +21,6 @@ import flounder.textures.*;
 import flounder.visual.*;
 import kosmos.*;
 import kosmos.camera.*;
-import kosmos.chunks.*;
 import kosmos.world.*;
 
 import java.util.*;
@@ -49,7 +48,7 @@ public class OverlayHUD extends ScreenObject {
 		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
 
-		OverlayHUD.crosshairSelected = KosmosConfigs.HUD_COSSHAIR_TYPE.setReference(OverlayHUD::getCrosshairSelected).getInteger();
+		OverlayHUD.crosshairSelected = KosmosConfigs.HUD_CROSSHAIR_TYPE.setReference(OverlayHUD::getCrosshairSelected).getInteger();
 		this.crossHair = new GuiObject(this, new Vector2f(0.5f, 0.5f), new Vector2f(0.04f, 0.04f), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "crosshair.png")).setNumberOfRows(4).create(), crosshairSelected);
 		this.crossHair.setInScreenCoords(true);
 		this.crossHair.setColourOffset(new Colour(FlounderGuis.get().getGuiMaster().getPrimaryColour()));
@@ -84,9 +83,9 @@ public class OverlayHUD extends ScreenObject {
 		this.crossHair.setVisible(KosmosCamera.isFirstPerson());
 
 		// Update statuses.
-		this.statusHealth.persentage = KosmosWorld.get().getDayFactor();
-		this.statusThirst.persentage = KosmosWorld.get().getShadowFactor();
-		this.statusHunger.persentage = KosmosWorld.get().getSunriseFactor();
+		this.statusHealth.percentage = KosmosWorld.get().getDayFactor();
+		this.statusThirst.percentage = KosmosWorld.get().getShadowFactor();
+		this.statusHunger.percentage = KosmosWorld.get().getSunriseFactor();
 
 		// Update username tags.
 		KosmosWorld.get().getPlayers().keySet().forEach(s -> {
@@ -95,10 +94,7 @@ public class OverlayHUD extends ScreenObject {
 			}
 		});
 
-		Iterator<String> it = tags.keySet().iterator();
-
-		while (it.hasNext()) {
-			String s = it.next();
+		for (String s : tags.keySet()) {
 			Entity e = KosmosWorld.get().getPlayers().get(s);
 
 			if (e == null) {
@@ -110,14 +106,14 @@ public class OverlayHUD extends ScreenObject {
 		}
 
 		// Update map view.
-		this.mapViewTexture.setTexture(KosmosChunks.get().getMapGenerator().getMapTexture());
+		this.mapViewTexture.setTexture(KosmosWorld.get().getMapTexture());
 		VarianceDriver.set(mapViewTexture.getScaleDriver(), mapZoomAmount);
 
 		Entity player = KosmosWorld.get().getEntityPlayer();
 
-		if (player != null) {
-			float px = player.getPosition().x / KosmosChunks.WORLD_SIZE;
-			float pz = player.getPosition().z / KosmosChunks.WORLD_SIZE;
+		if (player != null && KosmosWorld.get().getWorld() != null) {
+			float px = player.getPosition().x / KosmosWorld.get().getWorld().getWorldSize();
+			float pz = player.getPosition().z / KosmosWorld.get().getWorld().getWorldSize();
 
 			this.mapBackgroundTexture.getPosition().set(FlounderDisplay.get().getAspectRatio() - (MAP_SIZE / 2.0f), MAP_SIZE / 2.0f);
 			this.mapViewTexture.getPosition().set(FlounderDisplay.get().getAspectRatio() - (MAP_SIZE / 2.0f), MAP_SIZE / 2.0f);
@@ -155,7 +151,7 @@ public class OverlayHUD extends ScreenObject {
 		private GuiObject foreground;
 		private GuiObject progress;
 		private GuiObject mainIcon;
-		private float persentage;
+		private float percentage;
 
 		private HudStatus(ScreenObject parent, TextureObject hudTexture, TextureObject hudProgress, int main, float offset, Colour colour) {
 			super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
@@ -173,12 +169,12 @@ public class OverlayHUD extends ScreenObject {
 			this.mainIcon = new GuiObject(this, new Vector2f(0.06f + offset, 0.94f), new Vector2f(0.06f, 0.06f), hudTexture, main);
 			this.mainIcon.setInScreenCoords(false);
 
-			this.persentage = 0.0f;
+			this.percentage = 0.0f;
 		}
 
 		@Override
 		public void updateObject() {
-			progress.setSelectedRow((int) Math.floor(persentage * Math.pow(progress.getTexture().getNumberOfRows(), 2)));
+			progress.setSelectedRow((int) Math.floor(percentage * Math.pow(progress.getTexture().getNumberOfRows(), 2)));
 		}
 
 		@Override

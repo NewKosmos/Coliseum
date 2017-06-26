@@ -1,14 +1,15 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.network.packets;
 
+import flounder.helpers.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import kosmos.world.*;
@@ -57,13 +58,19 @@ public class PacketMove extends Packet {
 
 	@Override
 	public void clientHandlePacket(Client client, InetAddress address, int port) {
-		//	FlounderLogger.log("[" + client + "]: moved to: " + x + "," + y + "," + z + " : " + w + "," + seed + ", chunk[" + chunkX + "," + chunkZ + "]");
-		KosmosWorld.get().movePlayer(username, x, y, z, w, chunkX, chunkZ);
+		//	FlounderLogger.log("[" + client + "]: moved to: " + x + "," + y + "," + z + " : " + w + ", chunk[" + chunkX + "," + chunkZ + "]");
+		KosmosWorld.get().updatePlayer(username, x, y, z, w, chunkX, chunkZ);
 	}
 
 	@Override
 	public void serverHandlePacket(Server server, InetAddress address, int port) {
 		//	FlounderLogger.log("[" + username + "]: moved to: " + x + "," + y + "," + z + " : " + w + "," + seed + ", chunk[" + chunkX + "," + chunkZ + "]");
+		if (!KosmosWorld.get().getWorld().getPlayers().containsKey(username)) {
+			KosmosWorld.get().getWorld().getPlayers().put(username, new Pair<>(new Vector3f(), new Vector3f()));
+		}
+
+		KosmosWorld.get().getWorld().getPlayers().get(username).getFirst().set(x, y, z);
+		KosmosWorld.get().getWorld().getPlayers().get(username).getSecond().set(chunkX, 0.0f, chunkZ);
 		this.writeData(server);
 	}
 

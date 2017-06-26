@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos;
@@ -20,22 +20,19 @@ import flounder.networking.*;
 import flounder.particles.*;
 import flounder.shadows.*;
 import flounder.skybox.*;
-import flounder.sounds.*;
 import flounder.standards.*;
 import flounder.steam.*;
-import kosmos.chunks.*;
 import kosmos.network.packets.*;
 import kosmos.post.*;
-import kosmos.water.*;
 import kosmos.world.*;
+
+import java.util.*;
 
 import static flounder.platform.Constants.*;
 
 public class KosmosInterface extends Standard {
-	private Playlist gamePlaylist;
-
 	public KosmosInterface() {
-		super(FlounderEvents.class, FlounderNetwork.class, FlounderSteam.class, FlounderShadows.class, FlounderParticles.class, FlounderSkybox.class, KosmosWater.class, KosmosPost.class, KosmosWorld.class, KosmosChunks.class);
+		super(FlounderEvents.class, FlounderNetwork.class, FlounderSteam.class, FlounderShadows.class, FlounderParticles.class, FlounderSkybox.class, KosmosPost.class, KosmosWorld.class);
 	}
 
 	@Override
@@ -43,15 +40,11 @@ public class KosmosInterface extends Standard {
 		FlounderSound.get().getMusicPlayer().setVolume(KosmosConfigs.MUSIC_VOLUME.setReference(() -> FlounderSound.get().getMusicPlayer().getVolume()).getFloat());
 		FlounderSound.get().getSourcePool().setSystemVolume(KosmosConfigs.SOUND_VOLUME.setReference(() -> FlounderSound.get().getSourcePool().getSystemVolume()).getFloat());
 
-		gamePlaylist = new Playlist();
-		// gamePlaylist.addMusic(Sound.loadSoundInBackground(new MyFile(MyFile.RES_FOLDER, "music", "09-hitori-bocchi-1b.wav"), 0.80f, 1.0f));
-		FlounderSound.get().getMusicPlayer().playMusicPlaylist(gamePlaylist, true, 4.0f, 10.0f);
-
 		if (KosmosConfigs.MUSIC_ENABLED.setReference(() -> !FlounderSound.get().getMusicPlayer().isPaused()).getBoolean()) {
 			FlounderSound.get().getMusicPlayer().unpauseTrack();
 		}
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			KeyButton seedRandom = new KeyButton(GLFW_KEY_F6);
 
 			@Override
@@ -61,11 +54,13 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public void onEvent() {
-				KosmosChunks.get().getNoise().setSeed((int) Maths.randomInRange(1.0, 1000000.0));
+				WorldDefinition d = KosmosWorld.get().getWorld();
+				WorldDefinition newWorld = new WorldDefinition(d.getName(), (int) Maths.randomInRange(1.0, 1000000.0), d.getWorldSize(), d.getWorldNoiseSpread(), d.getWorldNoiseFrequency(), d.getWorldNoiseHeight(), d.getWorldIslandInside(), d.getWorldIslandOutside(), d.getWorldIslandParameter(), d.getDayNightCycle(), d.getDayNightRatio(), new HashMap<>(), new HashMap<>());
+				KosmosWorld.get().setWorld(newWorld);
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			KeyButton screenshot = new KeyButton(GLFW_KEY_F2);
 
 			@Override
@@ -79,7 +74,7 @@ public class KosmosInterface extends Standard {
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			KeyButton fullscreen = new KeyButton(GLFW_KEY_F11);
 
 			@Override
@@ -93,7 +88,7 @@ public class KosmosInterface extends Standard {
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			KeyButton wireframe = new KeyButton(GLFW_KEY_P);
 
 			@Override
@@ -107,7 +102,7 @@ public class KosmosInterface extends Standard {
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			KeyButton closeWindow = new KeyButton(GLFW_KEY_DELETE);
 
 			@Override
@@ -120,10 +115,17 @@ public class KosmosInterface extends Standard {
 				if (FlounderNetwork.get().getSocketClient() != null) {
 					new PacketDisconnect(FlounderNetwork.get().getUsername()).writeData(FlounderNetwork.get().getSocketClient());
 					FlounderNetwork.get().closeClient();
+					KosmosWorld.get().deleteWorld(false);
+				} else {
+					KosmosWorld.get().deleteWorld(true);
 				}
 
-				KosmosConfigs.saveAllConfigs();
-				Framework.get().requestClose(false);
+				FlounderEvents.get().addEvent(new EventTime(0.6f, false) {
+					@Override
+					public void onEvent() {
+						Framework.get().requestClose(false);
+					}
+				});
 			}
 		});
 	}
@@ -144,7 +146,6 @@ public class KosmosInterface extends Standard {
 			FlounderNetwork.get().closeClient();
 		}
 
-		KosmosConfigs.fixConfigRefs();
 		KosmosConfigs.saveAllConfigs();
 	}
 

@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos;
@@ -16,6 +16,7 @@ import flounder.inputs.*;
 import flounder.maths.*;
 import flounder.visual.*;
 import kosmos.camera.*;
+import kosmos.post.*;
 import kosmos.uis.*;
 
 import static flounder.platform.Constants.*;
@@ -63,7 +64,7 @@ public class KosmosGuis extends GuiMaster {
 
 		FlounderGuis.get().getSelector().initJoysticks(0, 0, 1, 0, 1);
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			private CompoundButton escape = new CompoundButton(new KeyButton(GLFW_KEY_ESCAPE), new JoystickButton(0, 7));
 
 			@Override
@@ -77,7 +78,7 @@ public class KosmosGuis extends GuiMaster {
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			private KeyButton toggleDebug = new KeyButton(GLFW_KEY_F3);
 
 			@Override
@@ -91,7 +92,7 @@ public class KosmosGuis extends GuiMaster {
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			private KeyButton toggleHUD = new KeyButton(GLFW_KEY_F4);
 
 			@Override
@@ -105,7 +106,7 @@ public class KosmosGuis extends GuiMaster {
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			private KeyButton toggleChat = new KeyButton(GLFW_KEY_ENTER);
 
 			@Override
@@ -119,7 +120,7 @@ public class KosmosGuis extends GuiMaster {
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			private KeyButton toggleMap = new KeyButton(GLFW_KEY_G);
 
 			@Override
@@ -138,11 +139,17 @@ public class KosmosGuis extends GuiMaster {
 	public void update() {
 		if (overlayStartup.getAlpha() == 0.0f && overlayStartup.isStarting()) {
 			// Enable other GUI things.
-			this.overlayAlpha.setAlphaDriver(new SlideDriver(overlayAlpha.getAlpha(), 1.0f, SLIDE_TIME));
+			this.overlayAlpha.setAlphaDriver(new SlideDriver(overlayAlpha.getAlpha(), KosmosPost.get().isBrandingEnabled() ? 0.0f : 1.0f, SLIDE_TIME));
 			this.overlaySlider.setAlphaDriver(new SlideDriver(overlaySlider.getAlpha(), 1.0f, SLIDE_TIME));
 
 			overlayStartup.setAlphaDriver(new ConstantDriver(0.0f));
 			overlayStartup.setStarting(false);
+		}
+
+		if (!KosmosPost.get().isBrandingEnabled() && overlayAlpha.getAlpha() == 0.0f) {
+			overlayAlpha.setAlphaDriver(new SlideDriver(overlayAlpha.getAlpha(), 1.0f, SLIDE_TIME));
+		} else if (KosmosPost.get().isBrandingEnabled() && overlayAlpha.getAlpha() == 1.0f) {
+			overlayAlpha.setAlphaDriver(new SlideDriver(overlayAlpha.getAlpha(), 0.0f, SLIDE_TIME));
 		}
 
 		if (!isGamePaused() && overlayMap.getAlpha() == 0.0f && FlounderMouse.get().isDisplaySelected() && FlounderDisplay.get().isFocused()) {

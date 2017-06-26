@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.entities.components;
@@ -20,9 +20,9 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.shaders.*;
 import kosmos.camera.*;
-import kosmos.chunks.*;
-import kosmos.water.*;
 import kosmos.world.*;
+import kosmos.world.chunks.*;
+import kosmos.world.water.*;
 
 import javax.swing.*;
 
@@ -68,15 +68,17 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 
 		this.moveAmount = new Vector3f();
 		this.rotateAmount = new Vector3f();
-
-		//	PlayRequest request = PlayRequest.new3dSoundPlayRequest(IMaterial.Materials.GRASS.getMaterial().getSoundWalk(), 1.0f, 1.0f, getEntity().getPosition(), 0.0f, 10.0f);
-		//	request.setLooping(true);
-		//	FlounderSound.playSystemSound(IMaterial.Materials.GRASS.getMaterial().getSoundWalk());
 	}
 
 	@Override
 	public void update() {
-		float delta = Math.min(1.0f / 60.0f, Framework.get().getDelta());
+		if (FlounderCamera.get().getPlayer() == null || !KosmosPlayer.class.isInstance(FlounderCamera.get().getPlayer()) || KosmosWorld.get().getWorld() == null) {
+			return;
+		}
+
+		// Gets the delta and limits the lowest UPS to 20 (any less and the game is unplayable).
+		float delta = Framework.get().getDelta();
+		delta = Math.min(delta, 1.0f / 20.0f);
 
 		// Gets if noclip is enabled.
 		boolean noclip = ((KosmosPlayer) FlounderCamera.get().getPlayer()).isNoclipEnabled();

@@ -1,21 +1,20 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.network.packets;
 
 import flounder.framework.*;
+import flounder.helpers.*;
 import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
-import kosmos.camera.*;
-import kosmos.chunks.*;
 import kosmos.uis.*;
 import kosmos.world.*;
 
@@ -61,10 +60,10 @@ public class PacketConnect extends Packet {
 		OverlayChat.addText(username + " has joined the game.", new Colour(0.1f, 0.7f, 0.1f));
 
 		// Ques the player to the clients list.
-		KosmosWorld.get().quePlayer(username, new Vector3f(), new Vector3f());
+		KosmosWorld.get().addPlayer(username, new Vector3f(), new Vector3f());
 
 		// Forces the client to send a update packet to the server.
-		KosmosPlayer.askSendData();
+		KosmosWorld.get().askSendData();
 	}
 
 	@Override
@@ -83,8 +82,25 @@ public class PacketConnect extends Packet {
 		}
 
 		// Sends current world data to the new client.
-		new PacketWorld(KosmosChunks.get().getNoise().getSeed(), Framework.get().getTimeSec()).writeData(server);
-		new PacketLoad(username, new Vector3f(), KosmosChunks.get().getNoise().getSeed(), 0.0f, 0.0f).writeData(server);
+		server.sendData(new PacketWorld(Framework.get().getTimeSec(), KosmosWorld.get().getWorld()).getData(), address, port);
+		Pair<Vector3f, Vector3f> worldData = KosmosWorld.get().getWorld().getPlayers().get(username);
+		if (worldData == null) {
+			new PacketLoad(username, new Vector3f(), 0.0f, 0.0f).writeData(server);
+		} else {
+			new PacketLoad(username, new Vector3f(worldData.getFirst()), worldData.getSecond().x, worldData.getSecond().z).writeData(server);
+		}
+
+		// Sends all removed entity data to the new client.
+		for (String chunk : KosmosWorld.get().getWorld().getChunkData().keySet()) {
+			String[] d = chunk.split(",");
+			Vector3f position = new Vector3f(Float.parseFloat(d[0].trim()), Float.parseFloat(d[1].trim()), Float.parseFloat(d[2].trim()));
+
+			for (Vector3f removed : KosmosWorld.get().getWorld().getChunkData().get(chunk).getFirst()) {
+				ClientInfo ci = FlounderNetwork.get().getSocketServer().getPlayerMP(username);
+				byte[] data = new PacketEntityRemove("server", position, removed).getData();
+				FlounderNetwork.get().getSocketServer().sendData(data, ci.getIpAddress(), ci.getPort());
+			}
+		}
 
 		// Tells the connected clients of the newly connected player.
 		this.writeData(server);

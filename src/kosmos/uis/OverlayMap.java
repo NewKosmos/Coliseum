@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.uis;
@@ -16,7 +16,6 @@ import flounder.maths.vectors.*;
 import flounder.resources.*;
 import flounder.textures.*;
 import flounder.visual.*;
-import kosmos.chunks.*;
 import kosmos.world.*;
 
 public class OverlayMap extends ScreenObject {
@@ -52,14 +51,14 @@ public class OverlayMap extends ScreenObject {
 
 	@Override
 	public void updateObject() {
-		this.mapViewTexture.setTexture(KosmosChunks.get().getMapGenerator().getMapTexture());
+		this.mapViewTexture.setTexture(KosmosWorld.get().getMapTexture());
 		// VarianceDriver.set(mapViewTexture.getScaleDriver(), zoomAmount);
 
 		Entity player = KosmosWorld.get().getEntityPlayer();
 
 		if (player != null) {
-			float px = player.getPosition().x / KosmosChunks.WORLD_SIZE;
-			float pz = player.getPosition().z / KosmosChunks.WORLD_SIZE;
+			float px = player.getPosition().x / KosmosWorld.get().getWorld().getWorldSize();
+			float pz = player.getPosition().z / KosmosWorld.get().getWorld().getWorldSize();
 
 			this.mapViewTexture.getScissor().set(
 					(int) (VIEW_POSITION_X - (VIEW_SIZE_X / FlounderDisplay.get().getAspectRatio() / 2.0f)) * FlounderDisplay.get().getWidth(), (VIEW_POSITION_Y - (VIEW_SIZE_X / 2.0f)) * FlounderDisplay.get().getHeight(),

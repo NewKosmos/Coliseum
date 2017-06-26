@@ -1,26 +1,24 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos;
 
 import flounder.devices.*;
 import flounder.framework.*;
-import flounder.maths.*;
 import flounder.networking.*;
 import flounder.parsing.config.*;
 import flounder.resources.*;
 import flounder.shadows.*;
 import flounder.textures.*;
-import kosmos.chunks.*;
 import kosmos.post.*;
-import kosmos.water.*;
-import kosmos.world.*;
+import kosmos.world.chunks.*;
+import kosmos.world.water.*;
 
 import static flounder.platform.Constants.*;
 
@@ -52,7 +50,7 @@ public class KosmosConfigs {
 	public static final ConfigData SHADOWMAP_SIZE = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapSize", 8192, () -> FlounderShadows.get().getShadowSize());
 	public static final ConfigData SHADOWMAP_PCF = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapPcf", 0, () -> FlounderShadows.get().getShadowPCF());
 	public static final ConfigData SHADOWMAP_BIAS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapBias", 0.001f, () -> FlounderShadows.get().getShadowBias());
-	public static final ConfigData SHADOWMAP_DARKNESS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapDarkness", 0.4f, () -> FlounderShadows.get().getShadowDarkness());
+	public static final ConfigData SHADOWMAP_DARKNESS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapDarkness", 0.7f, () -> FlounderShadows.get().getShadowDarkness());
 	public static final ConfigData SHADOWMAP_UNLIMITED = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapUnlimited", true, () -> FlounderShadows.get().isRenderUnlimited());
 
 	public static final ConfigData CHUNK_DISTANCE = CONFIG_MAIN.getData(ConfigSection.GENERAL, "chunkDistance", 4, () -> KosmosChunks.get().getChunkDistance());
@@ -63,12 +61,14 @@ public class KosmosConfigs {
 	public static final ConfigData POST_TILTSHIFT_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "tiltShiftEnabled", true, () -> KosmosPost.get().isTiltShiftEnabled());
 	public static final ConfigData POST_LENSFLARE_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "lensFlareEnabled", true, () -> KosmosPost.get().isLensFlareEnabled());
 	public static final ConfigData POST_CRT_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "crtEnabled", false, () -> KosmosPost.get().isCrtEnabled());
-	public static final ConfigData POST_GRAIN_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "grainEnabled", true, () -> KosmosPost.get().isGrainEnabled());
+	public static final ConfigData POST_GRAIN_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "grainEnabled", false, () -> KosmosPost.get().isGrainEnabled());
 
-	public static final ConfigData HUD_COSSHAIR_TYPE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "hudCrosshairType", 1); // Reference set in master overlay.
+	public static final ConfigData BRANDING_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "brandingEnabled", true, () -> KosmosPost.get().isBrandingEnabled());
+
+	public static final ConfigData HUD_CROSSHAIR_TYPE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "hudCrosshairType", 1); // Reference set in master overlay.
 	public static final ConfigData CAMERA_FOV = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraFOV", 45.0f); // Reference set in camera.
 	public static final ConfigData CAMERA_SENSITIVITY = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraSensitivity", 1.0f); // Reference set in camera.
-	public static final ConfigData CAMERA_REANGLE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraReangle", GLFW_MOUSE_BUTTON_RIGHT); // Reference set in camera.
+	public static final ConfigData CAMERA_ANGLE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraAngle", GLFW_MOUSE_BUTTON_RIGHT); // Reference set in camera.
 	public static final ConfigData CAMERA_MOUSE_LOCKED = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraMouseLocked", true); // Reference set in camera.
 
 	public static final ConfigData CLIENT_USERNAME = CONFIG_MAIN.getData(ConfigSection.CLIENT, "username", "USERNAME" + ((int) (Math.random() * 10000)), () -> FlounderNetwork.get().getUsername());
@@ -78,36 +78,11 @@ public class KosmosConfigs {
 	public static final ConfigData SERVER_PORT = CONFIG_SERVER0.getData(ConfigSection.SEVER, "serverPort", FlounderNetwork.DEFAULT_PORT); // Reference set in client interface.
 	public static final ConfigData SERVER_IP = CONFIG_SERVER0.getData(ConfigSection.SEVER, "serverIP", "localhost"); // Reference set in client interface.
 
-	// Save0 configs.
-	private static final Config CONFIG_SAVE0 = new Config(new MyFile(Framework.getRoamingFolder("kosmos"), "saves", "save0.conf"));
-	public static final ConfigData SAVE_SEED = CONFIG_SAVE0.getData(ConfigSection.WORLD, "saveSeed", (int) Maths.randomInRange(1.0, 1000000.0)); // Reference set by client/server.
-	public static final ConfigData SAVE_PLAYER_X = CONFIG_SAVE0.getData(ConfigSection.WORLD, "playerX", 0.0f); // Reference set in world.
-	public static final ConfigData SAVE_PLAYER_Y = CONFIG_SAVE0.getData(ConfigSection.WORLD, "playerY", 0.0f); // Reference set in world.
-	public static final ConfigData SAVE_PLAYER_Z = CONFIG_SAVE0.getData(ConfigSection.WORLD, "playerZ", 0.0f); // Reference set in world.
-	public static final ConfigData SAVE_CHUNK_X = CONFIG_SAVE0.getData(ConfigSection.WORLD, "chunkX", 0.0f); // Reference set in chunks.
-	public static final ConfigData SAVE_CHUNK_Z = CONFIG_SAVE0.getData(ConfigSection.WORLD, "chunkZ", 0.0f); // Reference set in chunks.
-
 	/**
 	 * Saves the configs when closing the game.
 	 */
 	public static void saveAllConfigs() {
 		CONFIG_MAIN.save();
 		CONFIG_SERVER0.save();
-		CONFIG_SAVE0.save();
-	}
-
-	public static void fixConfigRefs() {
-		if (KosmosChunks.get().getNoise().getSeed() == -1) {
-			KosmosConfigs.SAVE_SEED.setReference(null);
-		}
-		if (KosmosWorld.get().getEntityPlayer() == null) {
-			KosmosConfigs.SAVE_PLAYER_X.setReference(null);
-			KosmosConfigs.SAVE_PLAYER_Y.setReference(null);
-			KosmosConfigs.SAVE_PLAYER_Z.setReference(null);
-		}
-		if (KosmosChunks.get().getCurrent() == null) {
-			KosmosConfigs.SAVE_CHUNK_X.setReference(null);
-			KosmosConfigs.SAVE_CHUNK_Z.setReference(null);
-		}
 	}
 }

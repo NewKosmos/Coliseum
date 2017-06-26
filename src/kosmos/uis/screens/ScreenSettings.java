@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.uis.screens;
@@ -28,76 +28,41 @@ public class ScreenSettings extends ScreenObject {
 		ScreenSettingGeneral screenGeneral = new ScreenSettingGeneral(slider, this);
 		screenGeneral.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText general = new GuiButtonText(paneLeft, new Vector2f(0.25f, 0.2f), "General", GuiAlign.CENTRE);
-		general.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenGeneral);
-			}
-		});
+		general.addLeftListener(() -> slider.setNewSecondaryScreen(screenGeneral));
 
 		// Screen Client.
 		ScreenSettingClient screenClient = new ScreenSettingClient(slider, this);
 		screenClient.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText client = new GuiButtonText(paneLeft, new Vector2f(0.25f, 0.27f), "Client", GuiAlign.CENTRE);
-		client.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenClient);
-			}
-		});
+		client.addLeftListener(() -> slider.setNewSecondaryScreen(screenClient));
 
 		// Screen Controls.
 		ScreenSettingControls screenControls = new ScreenSettingControls(slider, this);
 		screenControls.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText controls = new GuiButtonText(paneLeft, new Vector2f(0.25f, 0.34f), "Controls", GuiAlign.CENTRE);
-		controls.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenControls);
-			}
-		});
+		controls.addLeftListener(() -> slider.setNewSecondaryScreen(screenControls));
 
 		// Screen Audio.
 		ScreenSettingAudio screenAudio = new ScreenSettingAudio(slider, this);
 		screenAudio.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText audio = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.20f), "Audio", GuiAlign.CENTRE);
-		audio.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenAudio);
-			}
-		});
+		audio.addLeftListener(() -> slider.setNewSecondaryScreen(screenAudio));
 
 		// Screen Graphics.
 		ScreenSettingGraphics screenGraphics = new ScreenSettingGraphics(slider, this);
 		screenGraphics.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText graphics = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.27f), "Graphics", GuiAlign.CENTRE);
-		graphics.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.setNewSecondaryScreen(screenGraphics);
-			}
-		});
+		graphics.addLeftListener(() -> slider.setNewSecondaryScreen(screenGraphics));
 
 		// Screen Post.
 		ScreenSettingPost settingPost = new ScreenSettingPost(slider, this);
 		settingPost.setAlphaDriver(new ConstantDriver(0.0f));
 		GuiButtonText post = new GuiButtonText(paneRight, new Vector2f(0.75f, 0.34f), "Post Effects", GuiAlign.CENTRE);
-		post.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.setNewSecondaryScreen(settingPost);
-			}
-		});
+		post.addLeftListener(() -> slider.setNewSecondaryScreen(settingPost));
 
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);
-		back.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.closeSecondaryScreen();
-			}
-		});
+		back.addLeftListener(slider::closeSecondaryScreen);
 	}
 
 	@Override

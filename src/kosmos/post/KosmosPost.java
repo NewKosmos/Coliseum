@@ -1,3 +1,12 @@
+/*
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
+ *
+ * This source file is part of New Kosmos.
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
+ */
+
 package kosmos.post;
 
 import flounder.framework.*;
@@ -13,6 +22,8 @@ public class KosmosPost extends Module {
 	private boolean crtEnabled;
 	private boolean grainEnabled;
 
+	private boolean brandingEnabled;
+
 	public KosmosPost() {
 		super();
 	}
@@ -27,6 +38,8 @@ public class KosmosPost extends Module {
 		this.lensFlareEnabled = KosmosConfigs.POST_LENSFLARE_ENABLED.getBoolean();
 		this.crtEnabled = KosmosConfigs.POST_CRT_ENABLED.getBoolean();
 		this.grainEnabled = KosmosConfigs.POST_GRAIN_ENABLED.getBoolean();
+
+		this.brandingEnabled = KosmosConfigs.BRANDING_ENABLED.getBoolean();
 	}
 
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)
@@ -87,6 +100,14 @@ public class KosmosPost extends Module {
 
 	public void setGrainEnabled(boolean grainEnabled) {
 		this.grainEnabled = grainEnabled;
+	}
+
+	public boolean isBrandingEnabled() {
+		return brandingEnabled;
+	}
+
+	public void setBrandingEnabled(boolean brandingEnabled) {
+		this.brandingEnabled = brandingEnabled;
 	}
 
 	@Handler.Function(Handler.FLAG_DISPOSE)

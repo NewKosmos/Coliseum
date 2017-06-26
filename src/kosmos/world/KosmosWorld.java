@@ -1,15 +1,17 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.world;
 
+import flounder.camera.*;
 import flounder.entities.*;
+import flounder.events.*;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.maths.*;
@@ -22,16 +24,15 @@ import flounder.tasks.*;
 import flounder.textures.*;
 import flounder.visual.*;
 import kosmos.*;
-import kosmos.chunks.*;
+import kosmos.camera.*;
 import kosmos.entities.components.*;
 import kosmos.entities.instances.*;
-import kosmos.water.*;
+import kosmos.world.chunks.*;
+import kosmos.world.water.*;
 
 import java.util.*;
 
 public class KosmosWorld extends Module {
-	public static final float GRAVITY = -32.0f;
-
 	private MyFile[] SKYBOX_TEXTURE_FILES = {
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsRight.png"),
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsLeft.png"),
@@ -40,6 +41,10 @@ public class KosmosWorld extends Module {
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsBack.png"),
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsFront.png")
 	};
+
+	public static final float GRAVITY = -32.0f;
+
+	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, 0.0f, 0.5f); // The starting light direction.
 
 	public static final Colour SKY_COLOUR_NIGHT = new Colour(0.05f, 0.05f, 0.1f);
 	public static final Colour SKY_COLOUR_SUNRISE = new Colour(0.9f, 0.3f, 0.3f);
@@ -52,32 +57,32 @@ public class KosmosWorld extends Module {
 	public static final Colour MOON_COLOUR_NIGHT = new Colour(0.4f, 0.4f, 0.6f);
 	public static final Colour MOON_COLOUR_DAY = new Colour(0.0f, 0.0f, 0.0f);
 
-	public static final float DAY_NIGHT_CYCLE = 600.0f; // The day/night length (sec).
-
-	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, 0.0f, 0.5f); // The starting light direction.
+	private WorldDefinition worldDefinition;
 
 	private Map<String, Entity> players;
 
 	private Entity entityPlayer;
 	private Entity entitySun;
-	private Entity entityMoon1;
+	private Entity entityMoon;
 
 	private LinearDriver dayDriver;
 	private float dayFactor;
 
 	public KosmosWorld() {
-		super(FlounderEntities.class);
+		super(FlounderEntities.class, KosmosChunks.class, KosmosWater.class);
 	}
 
 	@Handler.Function(Handler.FLAG_INIT)
 	public void init() {
-		this.entityPlayer = null;
-		this.entitySun = new InstanceSun(FlounderEntities.get().getEntities(), new Vector3f(-250.0f, -250.0f, -250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
-		this.entityMoon1 = new InstanceMoon1(FlounderEntities.get().getEntities(), new Vector3f(200.0f, 250.0f, 220.0f), new Vector3f(0.0f, 0.0f, 0.0f)); // Red
+		this.worldDefinition = null;
 
 		this.players = new HashMap<>();
 
-		this.dayDriver = new LinearDriver(0.0f, 100.0f, DAY_NIGHT_CYCLE);
+		this.entityPlayer = null;
+		this.entitySun = new InstanceSun(FlounderEntities.get().getEntities(), new Vector3f(-250.0f, -250.0f, -250.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+		this.entityMoon = new InstanceMoon(FlounderEntities.get().getEntities(), new Vector3f(200.0f, 250.0f, 220.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+
+		this.dayDriver = new LinearDriver(0.0f, 100.0f, 100.0f);
 		this.dayFactor = 0.0f;
 
 		if (FlounderShadows.get() != null) {
@@ -92,40 +97,65 @@ public class KosmosWorld extends Module {
 		if (FlounderSkybox.get() != null) {
 			FlounderSkybox.get().setCubemap(TextureFactory.newBuilder().setCubemap(SKYBOX_TEXTURE_FILES).create());
 		}
+
+		// Quickly save the world every so often.
+		FlounderEvents.get().addEvent(new EventTime(200.0f, true) {
+			@Override
+			public void onEvent() {
+				if (worldDefinition != null) {
+					worldDefinition.save();
+				}
+			}
+		});
 	}
 
-	public void generateWorld(int seed, Vector3f positionPlayer, Vector3f positionChunk) {
-		FlounderTasks.get().addTask(new ITask() {
-			@Override
-			public void execute() {
-				// Sets the seed.
-				KosmosChunks.get().getNoise().setSeed(seed);
+	public void generateWorld(WorldDefinition world, Vector3f positionPlayer, Vector3f positionChunk) {
+		FlounderTasks.get().addTask(() -> {
+			// Sets the seed.
+			if (world != null) {
+				setWorld(world);
+			}
 
+			if (FlounderNetwork.get().getSocketServer() == null) {
 				// Creates the player.
 				entityPlayer = new InstancePlayer(FlounderEntities.get().getEntities(), positionPlayer, new Vector3f());
 
 				// Creates the current chunk.
 				KosmosChunks.get().setCurrent(new Chunk(FlounderEntities.get().getEntities(), positionChunk));
-
-				// Creates the water.
-				KosmosWater.get().generateWater();
 			}
+
+			// Creates the water.
+			KosmosWater.get().generateWater();
 		});
 	}
 
-	public void deleteWorld() {
+	public void deleteWorld(boolean save) {
+		if (save && worldDefinition != null) {
+			worldDefinition.save();
+		}
+
 		KosmosConfigs.saveAllConfigs();
-		KosmosChunks.get().getNoise().setSeed(-1);
 
-		entityPlayer.forceRemove();
-		removeAllPlayers();
+		FlounderEvents.get().addEvent(new EventTime(0.4f, false) {
+			@Override
+			public void onEvent() {
+				if (worldDefinition != null) {
+					worldDefinition.dispose();
+					worldDefinition = null;
+				}
 
-		KosmosChunks.get().clear(false);
-		KosmosWater.get().deleteWater();
+				if (entityPlayer != null) {
+					entityPlayer.forceRemove();
+				}
 
-		KosmosConfigs.fixConfigRefs();
+				clearPlayers();
 
-		System.gc();
+				KosmosChunks.get().clear(false);
+				KosmosWater.get().deleteWater();
+
+				System.gc();
+			}
+		});
 	}
 
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)
@@ -133,7 +163,7 @@ public class KosmosWorld extends Module {
 		// Update the sky colours and sun position.
 		if (FlounderSkybox.get() != null && FlounderShadows.get() != null) {
 			dayFactor = dayDriver.update(Framework.get().getDelta()) / 100.0f;
-			// TODO: Day night factor.
+			// TODO: Use 'worldDefinition.getDayNightRatio()'!
 			Vector3f.rotate(LIGHT_DIRECTION, FlounderSkybox.get().getRotation().set(dayFactor * 360.0f, 0.0f, 0.0f), FlounderShadows.get().getLightPosition()).normalize();
 			Colour.interpolate(SKY_COLOUR_SUNRISE, SKY_COLOUR_NIGHT, getSunriseFactor(), FlounderSkybox.get().getFog().getFogColour());
 			Colour.interpolate(FlounderSkybox.get().getFog().getFogColour(), SKY_COLOUR_DAY, getShadowFactor(), FlounderSkybox.get().getFog().getFogColour());
@@ -145,21 +175,51 @@ public class KosmosWorld extends Module {
 		}
 	}
 
-	public Entity getPlayer(String username) {
-		return this.players.get(username);
+	public WorldDefinition getWorld() {
+		return worldDefinition;
+	}
+
+	public void setWorld(WorldDefinition world) {
+		if (this.worldDefinition != null) {
+			this.worldDefinition.save();
+			this.worldDefinition.dispose();
+		}
+
+		this.worldDefinition = world;
+
+		if (worldDefinition != null) {
+			this.dayDriver = new LinearDriver(0.0f, 100.0f, worldDefinition.getDayNightCycle());
+			this.worldDefinition.generateMap();
+		}
+
+		KosmosChunks.get().clear(true);
+	}
+
+	public TextureObject getMapTexture() {
+		if (worldDefinition == null) {
+			return null;
+		}
+
+		return worldDefinition.getMapTexture();
+	}
+
+	public Map<String, Entity> getPlayers() {
+		return this.players;
 	}
 
 	public boolean containsPlayer(String username) {
 		return this.players.containsKey(username);
 	}
 
-	public synchronized void quePlayer(String username, Vector3f position, Vector3f rotation) {
-		FlounderTasks.get().addTask(() -> {
-			players.put(username, new InstanceMuliplayer(FlounderEntities.get().getEntities(), position, rotation, username));
-		});
+	public Entity getPlayer(String username) {
+		return this.players.get(username);
 	}
 
-	public synchronized void movePlayer(String username, float x, float y, float z, float w, float chunkX, float chunkZ) {
+	public void addPlayer(String username, Vector3f position, Vector3f rotation) {
+		FlounderTasks.get().addTask(() -> players.put(username, new InstanceMuliplayer(FlounderEntities.get().getEntities(), position, rotation, username)));
+	}
+
+	public void updatePlayer(String username, float x, float y, float z, float w, float chunkX, float chunkZ) {
 		if (FlounderNetwork.get().getUsername().equals(username)) {
 			return;
 		}
@@ -171,7 +231,7 @@ public class KosmosWorld extends Module {
 		((ComponentMultiplayer) this.players.get(username).getComponent(ComponentMultiplayer.class)).move(x, y, z, w, chunkX, chunkZ);
 	}
 
-	public synchronized void removePlayer(String username) {
+	public void removePlayer(String username) {
 		if (this.players.containsKey(username)) {
 			Entity otherPlayer = this.players.get(username);
 			otherPlayer.forceRemove();
@@ -179,7 +239,7 @@ public class KosmosWorld extends Module {
 		}
 	}
 
-	public synchronized void removeAllPlayers() {
+	public void clearPlayers() {
 		for (String username : this.players.keySet()) {
 			Entity otherPlayer = this.players.get(username);
 			otherPlayer.forceRemove();
@@ -188,28 +248,24 @@ public class KosmosWorld extends Module {
 		this.players.clear();
 	}
 
-	public Map<String, Entity> getPlayers() {
-		return this.players;
-	}
-
-	public int connectedPlayers() {
-		return this.players.size();
-	}
-
 	public Entity getEntityPlayer() {
 		return this.entityPlayer;
+	}
+
+	public void askSendData() {
+		((KosmosPlayer) FlounderCamera.get().getPlayer()).askSendData();
 	}
 
 	public Entity getEntitySun() {
 		return this.entitySun;
 	}
 
-	public Entity getEntityMoon1() {
-		return entityMoon1;
+	public Entity getEntityMoon() {
+		return entityMoon;
 	}
 
 	public float getDayFactor() {
-		return this.dayFactor;
+		return dayFactor;
 	}
 
 	public float getSunriseFactor() {
@@ -247,6 +303,10 @@ public class KosmosWorld extends Module {
 
 	@Handler.Function(Handler.FLAG_DISPOSE)
 	public void dispose() {
+		if (worldDefinition != null) {
+			worldDefinition.save();
+			worldDefinition.dispose();
+		}
 	}
 
 	@Module.Instance

@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos;
@@ -26,8 +26,8 @@ import flounder.renderer.*;
 import flounder.shadows.*;
 import flounder.skybox.*;
 import kosmos.post.*;
-import kosmos.water.*;
 import kosmos.world.*;
+import kosmos.world.water.*;
 
 import static flounder.platform.Constants.*;
 
@@ -70,7 +70,7 @@ public class KosmosRenderer extends RendererMaster {
 		this.guisRenderer = new GuisRenderer();
 		this.fontRenderer = new FontRenderer();
 
-		this.rendererFBO = FBO.newFBO(1.0f).attachments(3).withAlphaChannel(true).depthBuffer(DepthBufferType.TEXTURE).create();
+		this.rendererFBO = FBO.newFBO(1.0f).attachments(3).withAlphaChannel(false).depthBuffer(DepthBufferType.TEXTURE).create();
 
 		this.pipelineMRT = new PipelineMRT();
 		this.pipelineBloom = new PipelineBloom();

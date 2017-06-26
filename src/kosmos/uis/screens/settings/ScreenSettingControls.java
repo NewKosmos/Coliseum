@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.uis.screens.settings;
@@ -28,14 +28,10 @@ public class ScreenSettingControls extends ScreenObject {
 			@Override
 			public void onEvent(Integer newValue) {
 				sliderCrosshairHUD.setText("Crosshair HUD: " + newValue);
+				sliderCrosshairHUD.setProgress(newValue);
 			}
 		});
-		sliderCrosshairHUD.addChangeListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				OverlayHUD.setCrosshairSelected((int) sliderCrosshairHUD.getProgress());
-			}
-		});
+		sliderCrosshairHUD.addChangeListener(() -> OverlayHUD.setCrosshairSelected((int) sliderCrosshairHUD.getProgress()));
 
 		// Slider Camera Field Of View.
 		GuiSliderText sliderFieldOfView = new GuiSliderText(this, new Vector2f(0.5f, 0.27f), "FOV: ", 30.0f, 120.0f, KosmosCamera.getFieldOfView(), GuiAlign.CENTRE);
@@ -43,14 +39,10 @@ public class ScreenSettingControls extends ScreenObject {
 			@Override
 			public void onEvent(Float newValue) {
 				sliderFieldOfView.setText("FOV: " + Maths.roundToPlace(newValue, 1));
+				sliderFieldOfView.setProgress(newValue);
 			}
 		});
-		sliderFieldOfView.addChangeListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				KosmosCamera.setFieldOfView(sliderFieldOfView.getProgress());
-			}
-		});
+		sliderFieldOfView.addChangeListener(() -> KosmosCamera.setFieldOfView(sliderFieldOfView.getProgress()));
 
 		// Slider Camera Sensitivity.
 		GuiSliderText sliderSensitivity = new GuiSliderText(this, new Vector2f(0.5f, 0.34f), "Sensitivity: ", 0.1f, 7.0f, KosmosCamera.getSensitivity(), GuiAlign.CENTRE);
@@ -58,16 +50,12 @@ public class ScreenSettingControls extends ScreenObject {
 			@Override
 			public void onEvent(Float newValue) {
 				sliderSensitivity.setText("Sensitivity: " + Maths.roundToPlace(newValue, 2));
+				sliderSensitivity.setProgress(newValue);
 			}
 		});
-		sliderSensitivity.addChangeListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				KosmosCamera.setSensitivity(sliderSensitivity.getProgress());
-			}
-		});
+		sliderSensitivity.addChangeListener(() -> KosmosCamera.setSensitivity(sliderSensitivity.getProgress()));
 
-		// Key Select Mouse Reangle.
+		// Key Select Mouse Angle.
 
 		// Toggle Mouse Lock.
 		GuiButtonText toggleMouseLock = new GuiButtonText(this, new Vector2f(0.5f, 0.41f), "Mouse Locked: ", GuiAlign.CENTRE);
@@ -75,23 +63,14 @@ public class ScreenSettingControls extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleMouseLock.setText("Mouse Locked: " + newValue);
+				//	toggleMouseLock.setProgress(newValue);
 			}
 		});
-		toggleMouseLock.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				KosmosCamera.setMouseLocked(!KosmosCamera.isMouseLocked());
-			}
-		});
+		toggleMouseLock.addLeftListener(() -> KosmosCamera.setMouseLocked(!KosmosCamera.isMouseLocked()));
 
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);
-		back.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.setNewSecondaryScreen(settings);
-			}
-		});
+		back.addLeftListener(() -> slider.setNewSecondaryScreen(settings));
 	}
 
 	@Override

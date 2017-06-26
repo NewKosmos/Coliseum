@@ -1,26 +1,24 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.uis;
 
 import flounder.camera.*;
+import flounder.events.*;
 import flounder.fonts.*;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;
-import kosmos.chunks.*;
 import kosmos.world.*;
-
-import java.util.Timer;
-import java.util.*;
+import kosmos.world.chunks.*;
 
 public class OverlayDebug extends ScreenObject {
 	private TextObject fpsText;
@@ -44,13 +42,12 @@ public class OverlayDebug extends ScreenObject {
 		this.moistureText = createStatus("MOISTURE: 1", 0.16f);
 		this.biomeText = createStatus("BIOME: NULL", 0.19f);
 
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
+		FlounderEvents.get().addEvent(new EventTime(0.333f, true) {
 			@Override
-			public void run() {
+			public void onEvent() {
 				updateText = true;
 			}
-		}, 0, 100);
+		});
 	}
 
 	private TextObject createStatus(String content, float yPos) {
@@ -73,7 +70,7 @@ public class OverlayDebug extends ScreenObject {
 			upsText.setText("UPS: " + Maths.roundToPlace(1.0f / Framework.get().getDelta(), 1));
 			positionText.setText("POSITION: [" + (FlounderCamera.get().getPlayer() == null ? "NULL" : Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().x, 1) + ", " + Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().y, 1) + ", " + Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().z, 1) + "]"));
 			timeText.setText("TIME: " + Maths.roundToPlace(KosmosWorld.get().getDayFactor(), 3));
-			seedText.setText("SEED: " + KosmosChunks.get().getNoise().getSeed());
+			seedText.setText("SEED: " + KosmosWorld.get().getWorld().getSeed());
 			moistureText.setText("MOISTURE: " + (FlounderCamera.get().getPlayer() == null ? "1" : Maths.roundToPlace(KosmosChunks.getMoistureMap(FlounderCamera.get().getPlayer().getPosition().x, FlounderCamera.get().getPlayer().getPosition().z), 2)));
 			biomeText.setText("BIOME: " + (KosmosChunks.get().getCurrent() == null ? "NULL" : KosmosChunks.get().getCurrent().getBiome().name()));
 			updateText = false;

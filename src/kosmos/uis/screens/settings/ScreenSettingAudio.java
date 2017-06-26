@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.uis.screens.settings;
@@ -28,16 +28,14 @@ public class ScreenSettingAudio extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleMusic.setText("Music Enabled: " + !newValue);
+				//	toggleMusic.setProgress(newValue);
 			}
 		});
-		toggleMusic.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				if (!FlounderSound.get().getMusicPlayer().isPaused()) {
-					FlounderSound.get().getMusicPlayer().pauseTrack();
-				} else {
-					FlounderSound.get().getMusicPlayer().unpauseTrack();
-				}
+		toggleMusic.addLeftListener(() -> {
+			if (!FlounderSound.get().getMusicPlayer().isPaused()) {
+				FlounderSound.get().getMusicPlayer().pauseTrack();
+			} else {
+				FlounderSound.get().getMusicPlayer().unpauseTrack();
 			}
 		});
 
@@ -47,14 +45,10 @@ public class ScreenSettingAudio extends ScreenObject {
 			@Override
 			public void onEvent(Float newValue) {
 				sliderMusicVolume.setText("Music Volume: " + Maths.roundToPlace(newValue, 3));
+				sliderMusicVolume.setProgress(newValue);
 			}
 		});
-		sliderMusicVolume.addChangeListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				FlounderSound.get().getMusicPlayer().setVolume(sliderMusicVolume.getProgress());
-			}
-		});
+		sliderMusicVolume.addChangeListener(() -> FlounderSound.get().getMusicPlayer().setVolume(sliderMusicVolume.getProgress()));
 
 		// Slider Sound Volume.
 		GuiSliderText sliderSoundVolume = new GuiSliderText(this, new Vector2f(0.5f, 0.34f), "Sound Volume: ", 0.0f, 1.0f, FlounderSound.get().getSourcePool().getSystemVolume(), GuiAlign.CENTRE);
@@ -62,23 +56,14 @@ public class ScreenSettingAudio extends ScreenObject {
 			@Override
 			public void onEvent(Float newValue) {
 				sliderSoundVolume.setText("Sound Volume: " + Maths.roundToPlace(newValue, 3));
+				sliderSoundVolume.setProgress(newValue);
 			}
 		});
-		sliderSoundVolume.addChangeListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				FlounderSound.get().getSourcePool().setSystemVolume(sliderSoundVolume.getProgress());
-			}
-		});
+		sliderSoundVolume.addChangeListener(() -> FlounderSound.get().getSourcePool().setSystemVolume(sliderSoundVolume.getProgress()));
 
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);
-		back.addLeftListener(new ScreenListener() {
-			@Override
-			public void eventOccurred() {
-				slider.setNewSecondaryScreen(settings);
-			}
-		});
+		back.addLeftListener(() -> slider.setNewSecondaryScreen(settings));
 	}
 
 	@Override

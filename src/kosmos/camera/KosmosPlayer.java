@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.camera;
@@ -15,16 +15,14 @@ import flounder.entities.components.*;
 import flounder.events.*;
 import flounder.guis.*;
 import flounder.inputs.*;
-import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.physics.*;
-import kosmos.chunks.*;
 import kosmos.entities.components.*;
-import kosmos.entities.instances.*;
 import kosmos.network.packets.*;
 import kosmos.world.*;
+import kosmos.world.chunks.*;
 
 import static flounder.platform.Constants.*;
 
@@ -43,8 +41,8 @@ public class KosmosPlayer extends Player {
 
 	private boolean noclipEnabled;
 
-	private Timer timer;
-	private static boolean needSendData;
+	private Timer needSendTimer;
+	private boolean needSendData;
 
 	public KosmosPlayer() {
 		super();
@@ -57,10 +55,10 @@ public class KosmosPlayer extends Player {
 
 		this.noclipEnabled = false;
 
-		this.timer = new Timer(1.0 / 14.3); // 14.3 ticks per second.
-		KosmosPlayer.needSendData = true;
+		this.needSendTimer = new Timer(1.0 / 10.0); // 10.0 ticks per second.
+		this.needSendData = true;
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		FlounderEvents.get().addEvent(new EventStandard() {
 			private MouseButton buttonRemove = new MouseButton(GLFW_MOUSE_BUTTON_RIGHT);
 
 			@Override
@@ -79,6 +77,10 @@ public class KosmosPlayer extends Player {
 							float distance = Vector3f.getDistance(entity.getPosition(), KosmosWorld.get().getEntityPlayer().getPosition());
 
 							if (data.isIntersection() && distance < 2.0f) {
+								ComponentChild child = ((ComponentChild) entity.getComponent(ComponentChild.class));
+								if (child != null && FlounderNetwork.get().getSocketClient() != null) {
+									new PacketEntityRemove(FlounderNetwork.get().getUsername(), child.getParent().getPosition(), entity.getPosition()).writeData(FlounderNetwork.get().getSocketClient());
+								}
 								entity.forceRemove();
 								return;
 							}
@@ -88,7 +90,7 @@ public class KosmosPlayer extends Player {
 			}
 		});
 
-		FlounderEvents.get().addEvent(new IEvent() {
+		/*FlounderEvents.get().addEvent(new IEvent() {
 			private final int RECURSION_COUNT = 256;
 			private final float RAY_RANGE = 70.0f;
 
@@ -184,7 +186,7 @@ public class KosmosPlayer extends Player {
 					return false;
 				}
 			}
-		});
+		});*/
 	}
 
 	@Override
@@ -193,41 +195,33 @@ public class KosmosPlayer extends Player {
 			return;
 		}
 
-		// Gets the current position and deltas.
+		// Gets the current position of the player.
 		Vector3f newPosition = KosmosWorld.get().getEntityPlayer().getPosition();
 		Vector3f newRotation = KosmosWorld.get().getEntityPlayer().getRotation();
-		float dx = newPosition.x - position.x;
-		float dy = newPosition.y - position.y;
-		float dz = newPosition.z - position.z;
-		float ry = newRotation.y - rotation.y;
 
-		// Try to send data to the server if needed.
-		if (dx != 0.0f || dy != 0.0f || dz != 0.0f || ry != 0.0f) {
-			if (!needSendData) {
-				needSendData = true;
-				timer.resetStartTime();
+		// Try's to send data when needed.
+		if (needSendData || needSendTimer.isPassedTime()) {
+			// Gets the current position and deltas.
+			float dx = newPosition.x - position.x;
+			float dy = newPosition.y - position.y;
+			float dz = newPosition.z - position.z;
+			float ry = newRotation.y - rotation.y;
+
+			// Try to send data to the server if needed.
+			if (needSendData || dx != 0.0f || dy != 0.0f || dz != 0.0f || ry != 0.0f) {
+				// Sends this players data to the server.
+				if (FlounderNetwork.get().getUsername() != null && FlounderNetwork.get().getSocketClient() != null && KosmosChunks.get().getCurrent() != null) {
+					new PacketMove(FlounderNetwork.get().getUsername(), position, rotation, KosmosChunks.get().getCurrent().getPosition().x, KosmosChunks.get().getCurrent().getPosition().z).writeData(FlounderNetwork.get().getSocketClient());
+				}
+
+				needSendData = false;
+				needSendTimer.resetStartTime();
 			}
-		}
-
-		// Stop spam requests by using a tick rate.
-		if (needSendData && timer.isPassedTime()) {
-			sendData();
 		}
 
 		// Sets the current player position to the current entity.
 		this.position.set(newPosition);
 		this.rotation.set(newRotation);
-	}
-
-	/**
-	 * Sends this players data to the server.
-	 */
-	private void sendData() {
-		if (FlounderNetwork.get().getUsername() != null && FlounderNetwork.get().getSocketClient() != null && KosmosChunks.get().getCurrent() != null) {
-			new PacketMove(FlounderNetwork.get().getUsername(), position, rotation, KosmosChunks.get().getCurrent().getPosition().x, KosmosChunks.get().getCurrent().getPosition().z).writeData(FlounderNetwork.get().getSocketClient());
-			needSendData = false;
-			timer.resetStartTime();
-		}
 	}
 
 	public boolean isNoclipEnabled() {
@@ -238,8 +232,8 @@ public class KosmosPlayer extends Player {
 		this.noclipEnabled = noclipEnabled;
 	}
 
-	public static void askSendData() {
-		KosmosPlayer.needSendData = true;
+	public void askSendData() {
+		this.needSendData = true;
 	}
 
 	@Override

@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos;
@@ -16,7 +16,7 @@ import flounder.resources.*;
 import kosmos.camera.*;
 
 public class NewKosmos extends Framework {
-	public static final String VERSION = "6.07";
+	public static final String VERSION = "6.26";
 
 	public static void main(String[] args) {
 		new NewKosmos().run();
@@ -25,7 +25,7 @@ public class NewKosmos extends Framework {
 
 	public NewKosmos() {
 		super(
-				"kosmos", new UpdaterDefault(null), -1,
+				"kosmos", new UpdaterDefault(), -1,
 				new Extension[]{new KosmosInterface(), new KosmosRenderer(), new KosmosCamera(), new KosmosPlayer(), new KosmosGuis()}
 		);
 		Framework.get().addOverrides(new PlatformLwjgl(

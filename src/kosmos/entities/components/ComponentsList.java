@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017, Equilibrium Games - All Rights Reserved
+ * Copyright (C) 2017, Equilibrium Games - All Rights Reserved.
  *
- * This source file is part of New Kosmos
+ * This source file is part of New Kosmos.
  *
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
  */
 
 package kosmos.entities.components;
@@ -27,7 +27,6 @@ public enum ComponentsList {
 
 	// New Kosmos.
 	CELESTIAL(new ComponentCelestial(null)),
-	CLOUD(new ComponentCloud(null)),
 	MULTIPLAYER(new ComponentMultiplayer(null)),
 	PLAYER(new ComponentPlayer(null)),
 	WATER_BOB(new ComponentWaterBob(null));
