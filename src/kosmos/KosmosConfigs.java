@@ -50,7 +50,7 @@ public class KosmosConfigs {
 	public static final ConfigData SHADOWMAP_SIZE = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapSize", 8192, () -> FlounderShadows.get().getShadowSize());
 	public static final ConfigData SHADOWMAP_PCF = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapPcf", 0, () -> FlounderShadows.get().getShadowPCF());
 	public static final ConfigData SHADOWMAP_BIAS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapBias", 0.001f, () -> FlounderShadows.get().getShadowBias());
-	public static final ConfigData SHADOWMAP_DARKNESS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapDarkness", 0.4f, () -> FlounderShadows.get().getShadowDarkness());
+	public static final ConfigData SHADOWMAP_DARKNESS = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapDarkness", 0.7f, () -> FlounderShadows.get().getShadowDarkness());
 	public static final ConfigData SHADOWMAP_UNLIMITED = CONFIG_MAIN.getData(ConfigSection.GRAPHICS, "shadowmapUnlimited", true, () -> FlounderShadows.get().isRenderUnlimited());
 
 	public static final ConfigData CHUNK_DISTANCE = CONFIG_MAIN.getData(ConfigSection.GENERAL, "chunkDistance", 4, () -> KosmosChunks.get().getChunkDistance());
@@ -61,7 +61,9 @@ public class KosmosConfigs {
 	public static final ConfigData POST_TILTSHIFT_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "tiltShiftEnabled", true, () -> KosmosPost.get().isTiltShiftEnabled());
 	public static final ConfigData POST_LENSFLARE_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "lensFlareEnabled", true, () -> KosmosPost.get().isLensFlareEnabled());
 	public static final ConfigData POST_CRT_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "crtEnabled", false, () -> KosmosPost.get().isCrtEnabled());
-	public static final ConfigData POST_GRAIN_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "grainEnabled", true, () -> KosmosPost.get().isGrainEnabled());
+	public static final ConfigData POST_GRAIN_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "grainEnabled", false, () -> KosmosPost.get().isGrainEnabled());
+
+	public static final ConfigData BRANDING_ENABLED = CONFIG_MAIN.getData(ConfigSection.POST, "brandingEnabled", true, () -> KosmosPost.get().isBrandingEnabled());
 
 	public static final ConfigData HUD_CROSSHAIR_TYPE = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "hudCrosshairType", 1); // Reference set in master overlay.
 	public static final ConfigData CAMERA_FOV = CONFIG_MAIN.getData(ConfigSection.CONTROLS, "cameraFOV", 45.0f); // Reference set in camera.

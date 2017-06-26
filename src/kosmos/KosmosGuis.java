@@ -16,6 +16,7 @@ import flounder.inputs.*;
 import flounder.maths.*;
 import flounder.visual.*;
 import kosmos.camera.*;
+import kosmos.post.*;
 import kosmos.uis.*;
 
 import static flounder.platform.Constants.*;
@@ -138,11 +139,17 @@ public class KosmosGuis extends GuiMaster {
 	public void update() {
 		if (overlayStartup.getAlpha() == 0.0f && overlayStartup.isStarting()) {
 			// Enable other GUI things.
-			this.overlayAlpha.setAlphaDriver(new SlideDriver(overlayAlpha.getAlpha(), 1.0f, SLIDE_TIME));
+			this.overlayAlpha.setAlphaDriver(new SlideDriver(overlayAlpha.getAlpha(), KosmosPost.get().isBrandingEnabled() ? 0.0f : 1.0f, SLIDE_TIME));
 			this.overlaySlider.setAlphaDriver(new SlideDriver(overlaySlider.getAlpha(), 1.0f, SLIDE_TIME));
 
 			overlayStartup.setAlphaDriver(new ConstantDriver(0.0f));
 			overlayStartup.setStarting(false);
+		}
+
+		if (!KosmosPost.get().isBrandingEnabled() && overlayAlpha.getAlpha() == 0.0f) {
+			overlayAlpha.setAlphaDriver(new SlideDriver(overlayAlpha.getAlpha(), 1.0f, SLIDE_TIME));
+		} else if (KosmosPost.get().isBrandingEnabled() && overlayAlpha.getAlpha() == 1.0f) {
+			overlayAlpha.setAlphaDriver(new SlideDriver(overlayAlpha.getAlpha(), 0.0f, SLIDE_TIME));
 		}
 
 		if (!isGamePaused() && overlayMap.getAlpha() == 0.0f && FlounderMouse.get().isDisplaySelected() && FlounderDisplay.get().isFocused()) {

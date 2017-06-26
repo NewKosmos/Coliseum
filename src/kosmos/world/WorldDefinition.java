@@ -191,7 +191,7 @@ public class WorldDefinition {
 				return null;
 			}
 
-			FlounderLogger.get().log("Loaded world from New Kosmos v" + readVersion);
+			// FlounderLogger.get().log("Loaded world from New Kosmos v" + readVersion);
 			return new WorldDefinition(readName, readSeed, readWorldSize, readWorldNoiseSpread, readWorldNoiseFrequency, readWorldNoiseHeight, readWorldIslandInside, readWorldIslandOutside, readWorldIslandParameter, readDayNightCycle, readDayNightRatio, readPlayers, readChunkData);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -552,8 +552,7 @@ public class WorldDefinition {
 
 	@Override
 	public String toString() {
-		return "WorldDefinition{" +
-				"name='" + name + '\'' +
+		return "name='" + name + '\'' +
 				", seed=" + seed +
 				", worldSize=" + worldSize +
 				", worldNoiseSpread=" + worldNoiseSpread +
@@ -563,11 +562,6 @@ public class WorldDefinition {
 				", worldIslandOutside=" + worldIslandOutside +
 				", worldIslandParameter=" + worldIslandParameter +
 				", dayNightCycle=" + dayNightCycle +
-				", dayNightRatio=" + dayNightRatio +
-				", noise=" + noise +
-				", mapTexture=" + mapTexture +
-				", players=" + players +
-				", chunkData=" + chunkData +
-				'}';
+				", dayNightRatio=" + dayNightRatio;
 	}
 }

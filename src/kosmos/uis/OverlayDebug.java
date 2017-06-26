@@ -42,7 +42,7 @@ public class OverlayDebug extends ScreenObject {
 		this.moistureText = createStatus("MOISTURE: 1", 0.16f);
 		this.biomeText = createStatus("BIOME: NULL", 0.19f);
 
-		FlounderEvents.get().addEvent(new EventTime(1.0f, true) {
+		FlounderEvents.get().addEvent(new EventTime(0.333f, true) {
 			@Override
 			public void onEvent() {
 				updateText = true;

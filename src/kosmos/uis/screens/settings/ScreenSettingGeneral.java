@@ -12,6 +12,7 @@ package kosmos.uis.screens.settings;
 import flounder.events.*;
 import flounder.guis.*;
 import flounder.maths.vectors.*;
+import kosmos.post.*;
 import kosmos.uis.*;
 import kosmos.uis.screens.*;
 import kosmos.world.chunks.*;
@@ -35,6 +36,19 @@ public class ScreenSettingGeneral extends ScreenObject {
 				KosmosChunks.get().setChunkDistance((int) sliderChunkDistance.getProgress());
 				KosmosChunks.get().clear(true);
 			}
+		});
+
+		// Toggle Music.
+		GuiButtonText toggleBranding = new GuiButtonText(this, new Vector2f(0.5f, 0.27f), "Branding Enabled: ", GuiAlign.CENTRE);
+		FlounderEvents.get().addEvent(new EventChange<Boolean>(KosmosPost.get()::isBrandingEnabled) {
+			@Override
+			public void onEvent(Boolean newValue) {
+				toggleBranding.setText("Branding Enabled: " + !newValue);
+				//	toggleBranding.setProgress(newValue);
+			}
+		});
+		toggleBranding.addLeftListener(() -> {
+			KosmosPost.get().setBrandingEnabled(!KosmosPost.get().isBrandingEnabled());
 		});
 
 		// Back.

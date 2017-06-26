@@ -95,7 +95,7 @@ public class KosmosServer extends Framework {
 			WorldDefinition world = WorldDefinition.load("Server1");
 
 			if (world == null) {
-				world = new WorldDefinition("Server1", 123456789, 2048, 350.0f, 40.0f, 20.0f, 0.8f, 1.0f, 0.2f, 500.0f, 0.5f, new HashMap<>(), new HashMap<>());
+				world = new WorldDefinition("Server1", (int) Maths.randomInRange(1.0, 1000000.0), 2048, 350.0f, 40.0f, 20.0f, 0.8f, 1.0f, 0.2f, 500.0f, 0.5f, new HashMap<>(), new HashMap<>());
 			}
 
 			// Generates the world.
