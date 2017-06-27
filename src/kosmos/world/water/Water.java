@@ -17,6 +17,7 @@ import flounder.maths.vectors.*;
 import flounder.physics.*;
 import flounder.processing.*;
 import flounder.processing.opengl.*;
+import kosmos.world.chunks.*;
 
 import java.util.*;
 
@@ -30,7 +31,7 @@ public class Water {
 
 	public static final Colour WATER_COLOUR = new Colour(0.0824f, 0.396f, 0.753f);
 
-	public static final double SQUARE_SIZE = Math.sqrt(3.0);
+	public static final double SQUARE_SIZE = (Math.sqrt(3.0) / 2.0) * KosmosChunks.HEXAGON_SIDE_LENGTH;
 	public static final int VERTEX_COUNT = 142;
 
 	public static final float SHINE_DAMPER = 1.0f;

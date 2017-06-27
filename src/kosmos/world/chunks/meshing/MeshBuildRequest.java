@@ -72,13 +72,19 @@ public class MeshBuildRequest implements RequestResource {
 							float vertex1 = model.getVertices()[index * 3 + 1];
 							float vertex2 = model.getVertices()[index * 3 + 2];
 
-							if (m == 0) {
+							if (m == 0 || m == 1) {
 								r.set(vertex0, vertex2);
 								Vector2f.rotate(r, rotation, r);
 								vertex0 = r.x;
 								vertex2 = r.y;
 								r.set(0.0f, 0.0f);
-							}
+							}// else {
+							//	r.set(vertex0, vertex2);
+							//	r.scale(3.0f / 2.0f);
+							//	vertex0 = r.x;
+							//	vertex2 = r.y;
+							//	r.set(0.0f, 0.0f);
+							//}
 
 							vertex0 += (tile.x / 2.0f);
 							vertex1 += (tile.y / 2.0f);

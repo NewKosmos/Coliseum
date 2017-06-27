@@ -93,7 +93,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 				//	currentStrafeSpeed *= KosmosPlayer.BOOST_MUL;
 			}
 
-			if (inputJump.wasDown() && Maths.deadband(0.05f, currentUpwardSpeed) == 0.0f) {
+			if (inputJump.wasDown() && Maths.deadband(0.1f, currentUpwardSpeed) == 0.0f) {
 				currentUpwardSpeed = KosmosPlayer.JUMP_POWER;
 			}
 		} else {
@@ -135,7 +135,7 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 
 		if (!noclip && depth < 0.0f) {
 			dy = Math.min(-depth, (float) Math.sqrt(2.0)) * 10.0f * delta;
-			dy = Maths.deadband(0.05f, dy);
+		//	dy = Maths.deadband(0.05f, dy);
 			currentUpwardSpeed = 0.0f;
 		}
 

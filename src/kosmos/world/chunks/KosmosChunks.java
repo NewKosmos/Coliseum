@@ -35,7 +35,7 @@ public class KosmosChunks extends Module {
 	public static final int CHUNK_RADIUS = 7;
 
 	// Each tile can be broken into equilateral triangles with sides of length.
-	public static final double HEXAGON_SIDE_LENGTH = 2.0;
+	public static final double HEXAGON_SIDE_LENGTH = 3.0;
 
 	// The overall world radius footprint per chunk.
 	public static final float CHUNK_WORLD_SIZE = (float) Math.sqrt(3.0) * (CHUNK_RADIUS - 0.5f);

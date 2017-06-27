@@ -35,7 +35,7 @@ public class Chunk extends Entity {
 	private static final double[][] DELTA_TILES = new double[][]{{1.0, -1.0}, {0.0, -1.0}, {-1.0, 0.0}, {-1.0, 1.0}, {0.0, 1.0}, {1.0, 0.0}};
 
 	// Deltas used to position chunks around a centre chunk when the radius is 7 for each chunk.
-	private static final double[][] DELTA_CHUNK = new double[][]{{19.0, 14.0}, {-1.0, 26.0}, {-20.0, 12.0}, {-19.0, -14.0}, {1.0, -26.0}, {20.0, -12.0}};
+	private static final double[][] DELTA_CHUNK = new double[][]{{9.5, 7.0}, {-0.5, 13.0}, {-10.0, 6.0}, {-9.5, -7.0}, {0.5, -13.0}, {10.0, -6.0}};
 
 	private List<Chunk> childrenChunks;
 	private IBiome.Biomes biome;
@@ -79,8 +79,8 @@ public class Chunk extends Entity {
 			if (childrenChunks.size() != 6) {
 				for (int i = 0; i < 6; i++) {
 					// These three variables find the positioning for chunks around the parent.
-					float x = this.getPosition().x + (float) ((Math.sqrt(3.0) / 2.0) * DELTA_CHUNK[i][0]);
-					float z = this.getPosition().z + (float) ((3.0 / 4.0) * DELTA_CHUNK[i][1]);
+					float x = this.getPosition().x + (float) ((Math.sqrt(3.0) / 2.0) * KosmosChunks.HEXAGON_SIDE_LENGTH * DELTA_CHUNK[i][0]);
+					float z = this.getPosition().z + (float) ((3.0 / 4.0) * KosmosChunks.HEXAGON_SIDE_LENGTH * DELTA_CHUNK[i][1]);
 					Vector3f p = new Vector3f(x, 0.0f, z);
 					Chunk duplicate = null;
 
