@@ -277,6 +277,17 @@ public class Chunk extends Entity {
 		}
 		FlounderLogger.get().log("Removing entity: " + entity);
 		entitiesRemoved.add(entity);
+		Entity entityWorld = null;
+
+		for (Entity e : FlounderEntities.get().getEntities().getAll(null)) {
+			if (e.getPosition().equals(entity) && e.getComponent(ComponentPlayer.class) == null && e.getComponent(ComponentMultiplayer.class) == null && e.getComponent(ComponentChunk.class) == null) {
+				entityWorld = e;
+			}
+		}
+
+		if (entityWorld != null) {
+			entityWorld.remove();
+		}
 	}
 
 	public void prepareSave() {
