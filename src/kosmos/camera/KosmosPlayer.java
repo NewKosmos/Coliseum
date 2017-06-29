@@ -20,6 +20,7 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.physics.*;
+import kosmos.*;
 import kosmos.entities.components.*;
 import kosmos.entities.instances.*;
 import kosmos.network.packets.*;
@@ -46,6 +47,8 @@ public class KosmosPlayer extends Player {
 	private Timer needSendTimer;
 	private boolean needSendData;
 
+	private static String username;
+
 	public KosmosPlayer() {
 		super();
 	}
@@ -59,6 +62,8 @@ public class KosmosPlayer extends Player {
 
 		this.needSendTimer = new Timer(1.0 / 10.0); // 10.0 ticks per second.
 		this.needSendData = true;
+
+		KosmosPlayer.username = KosmosConfigs.CLIENT_USERNAME.setReference(() -> username).getString();
 
 		FlounderEvents.get().addEvent(new EventStandard() {
 			private MouseButton buttonRemove = new MouseButton(GLFW_MOUSE_BUTTON_RIGHT);
@@ -80,9 +85,11 @@ public class KosmosPlayer extends Player {
 
 							if (data.isIntersection() && distance < 2.0f) {
 								ComponentChild child = ((ComponentChild) entity.getComponent(ComponentChild.class));
+
 								if (child != null && FlounderNetwork.get().getSocketClient() != null) {
 									new PacketEntityRemove(FlounderNetwork.get().getUsername(), child.getParent().getPosition(), entity.getPosition()).writeData(FlounderNetwork.get().getSocketClient());
 								}
+
 								entity.forceRemove();
 								return;
 							}
@@ -246,6 +253,14 @@ public class KosmosPlayer extends Player {
 	@Override
 	public Vector3f getRotation() {
 		return rotation;
+	}
+
+	public static String getUsername() {
+		return username;
+	}
+
+	public static void setUsername(String username) {
+		KosmosPlayer.username = username;
 	}
 
 	@Override

@@ -83,10 +83,10 @@ public class KosmosChunks extends Module {
 		FlounderEvents.get().addEvent(new EventTime(1.0f, false) {
 			@Override
 			public void onEvent() {
-			//	createBiomeTexture(256);
-			//	createBiomeTexture(512);
+				//	createBiomeTexture(256);
+				//	createBiomeTexture(512);
 				createBiomeTexture(1024);
-			//	createBiomeTexture(2048);
+				//	createBiomeTexture(2048);
 			}
 		});
 	}

@@ -15,7 +15,7 @@ public class KosmosLauncher {
 
 		try {
 			jep.setPage("http://equilibrium.games/");
-		}catch (IOException e) {
+		} catch (IOException e) {
 			jep.setContentType("text/html");
 			jep.setText("<html>Could not load website. Please check your internet connection.</html>");
 		}
@@ -24,7 +24,7 @@ public class KosmosLauncher {
 		JFrame f = new JFrame("New Kosmos Launcher");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.getContentPane().add(scrollPane);
-		f.setSize(new Dimension(800,600));
+		f.setSize(new Dimension(800, 600));
 		f.setVisible(true);
 
 		while (true) {

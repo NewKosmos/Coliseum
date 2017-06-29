@@ -9,11 +9,13 @@
 
 package kosmos.uis.screens.settings;
 
+import flounder.events.*;
 import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;
+import kosmos.camera.*;
 import kosmos.uis.*;
 import kosmos.uis.screens.*;
 
@@ -28,6 +30,16 @@ public class ScreenSettingClient extends ScreenObject {
 		title.setColour(new Colour(1.0f, 1.0f, 1.0f, 1.0f));
 		title.setBorderColour(new Colour(0.0f, 0.0f, 0.0f));
 		title.setBorder(new ConstantDriver(0.022f));
+
+		// Text Username.
+		GuiTextInput textUsername = new GuiTextInput(this, new Vector2f(0.5f, 0.20f), "Username: ", KosmosPlayer.getUsername(), GuiAlign.CENTRE);
+		FlounderEvents.get().addEvent(new EventChange<String>(() -> KosmosPlayer.getUsername()) {
+			@Override
+			public void onEvent(String newValue) {
+				textUsername.setValue(newValue);
+			}
+		});
+		textUsername.addChangeListener(() -> KosmosPlayer.setUsername(textUsername.getValue()));
 
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);

@@ -16,6 +16,7 @@ import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.visual.*;
 import kosmos.*;
+import kosmos.camera.*;
 import kosmos.network.packets.*;
 import kosmos.uis.*;
 
@@ -58,9 +59,8 @@ public class ScreenMultiplayer extends ScreenObject {
 				KosmosConfigs.saveAllConfigs();
 
 				// Connects to the server.
-				String username = KosmosConfigs.CLIENT_USERNAME.getString();
-				FlounderNetwork.get().startClient(username, address, port);
-				PacketConnect loginPacket = new PacketConnect(username);
+				FlounderNetwork.get().startClient(KosmosPlayer.getUsername(), address, port);
+				PacketConnect loginPacket = new PacketConnect(KosmosPlayer.getUsername());
 				loginPacket.writeData(FlounderNetwork.get().getSocketClient());
 
 				selectedSave = "null";
