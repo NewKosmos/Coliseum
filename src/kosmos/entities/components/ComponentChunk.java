@@ -39,6 +39,10 @@ public class ComponentChunk extends IComponentEntity implements IComponentEditor
 	}
 
 	@Override
+	public void dispose() {
+	}
+
+	@Override
 	public void addToPanel(JPanel panel) {
 	}
 
@@ -53,9 +57,5 @@ public class ComponentChunk extends IComponentEntity implements IComponentEditor
 		//		new String[]{} // Class constructor
 		//);
 		return null;
-	}
-
-	@Override
-	public void dispose() {
 	}
 }

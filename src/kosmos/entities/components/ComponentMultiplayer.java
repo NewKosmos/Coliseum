@@ -47,6 +47,11 @@ public class ComponentMultiplayer extends IComponentEntity implements IComponent
 		getEntity().setMoved();
 	}
 
+	@Override
+	public void dispose() {
+		//	KosmosWorld.removePlayer(username);
+	}
+
 	public void move(float x, float y, float z, float w, float chunkX, float chunkZ) {
 		getEntity().getPosition().set(x, y, z);
 		// getEntity().getPosition().y += KosmosPlayer.PLAYER_OFFSET_Y;
@@ -82,10 +87,5 @@ public class ComponentMultiplayer extends IComponentEntity implements IComponent
 				new String[]{}, // Static variables
 				new String[]{} // Class constructor
 		);
-	}
-
-	@Override
-	public void dispose() {
-		//	KosmosWorld.removePlayer(username);
 	}
 }

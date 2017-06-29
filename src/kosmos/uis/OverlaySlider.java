@@ -36,6 +36,18 @@ public class OverlaySlider extends ScreenObject {
 		this.newSecondaryScreen = null;
 	}
 
+	public void sliderStartMenu(boolean useStartMenu) {
+		if (useStartMenu && menuActive != screenStart) {
+			this.menuActive = screenStart;
+			this.screenPause.setAlphaDriver(new ConstantDriver(0.0f));
+			this.menuActive.setAlphaDriver(new ConstantDriver(1.0f));
+		} else if (menuActive != screenPause) {
+			this.menuActive = screenPause;
+			this.screenStart.setAlphaDriver(new ConstantDriver(0.0f));
+			this.menuActive.setAlphaDriver(new ConstantDriver(1.0f));
+		}
+	}
+
 	@Override
 	public void updateObject() {
 		if (newSecondaryScreen != null && secondaryScreen.getAlpha() == 0.0f) {
@@ -46,6 +58,10 @@ public class OverlaySlider extends ScreenObject {
 		if (menuActive.getAlpha() == 1.0f && secondaryScreen != null && secondaryScreen.getAlpha() == 0.0f && newSecondaryScreen == null) {
 			secondaryScreen = null;
 		}
+	}
+
+	@Override
+	public void deleteObject() {
 	}
 
 	public void setNewSecondaryScreen(ScreenObject secondScreen) {
@@ -79,27 +95,11 @@ public class OverlaySlider extends ScreenObject {
 		}
 	}
 
-	public void sliderStartMenu(boolean useStartMenu) {
-		if (useStartMenu && menuActive != screenStart) {
-			this.menuActive = screenStart;
-			this.screenPause.setAlphaDriver(new ConstantDriver(0.0f));
-			this.menuActive.setAlphaDriver(new ConstantDriver(1.0f));
-		} else if (menuActive != screenPause) {
-			this.menuActive = screenPause;
-			this.screenStart.setAlphaDriver(new ConstantDriver(0.0f));
-			this.menuActive.setAlphaDriver(new ConstantDriver(1.0f));
-		}
-	}
-
 	public boolean inStartMenu() {
 		return menuActive == screenStart;
 	}
 
 	public float getBlurFactor() {
 		return getAlpha();
-	}
-
-	@Override
-	public void deleteObject() {
 	}
 }

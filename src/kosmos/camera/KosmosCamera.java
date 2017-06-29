@@ -53,39 +53,69 @@ public class KosmosCamera extends Camera {
 	private static final float MINIMUM_ZOOM = 0.0f;
 	private static final float MAXIMUM_ZOOM = 14.0f;
 	private static final float NORMAL_ZOOM = 7.0f;
-
-	private Vector3f position;
-	private Vector3f rotation;
-
-	private Frustum viewFrustum;
-	private Ray viewRay;
-	private Matrix4f viewMatrix;
-	private Matrix4f projectionMatrix;
-
-	private float angleOfElevation;
-	private float angleAroundPlayer;
-
-	private Vector3f targetPosition;
-	private Vector3f targetRotation;
-	private float targetZoom;
-	private float targetElevation;
-	private float targetRotationAngle;
-
-	private float actualDistanceFromPoint;
-	private float horizontalDistanceFromFocus;
-	private float verticalDistanceFromFocus;
-
 	private static float fieldOfView;
 	private static float sensitivity;
 	private static boolean mouseLocked;
 	private static boolean firstPerson;
 	private static int angleButton;
+	private Vector3f position;
+	private Vector3f rotation;
+	private Frustum viewFrustum;
+	private Ray viewRay;
+	private Matrix4f viewMatrix;
+	private Matrix4f projectionMatrix;
+	private float angleOfElevation;
+	private float angleAroundPlayer;
+	private Vector3f targetPosition;
+	private Vector3f targetRotation;
+	private float targetZoom;
+	private float targetElevation;
+	private float targetRotationAngle;
+	private float actualDistanceFromPoint;
+	private float horizontalDistanceFromFocus;
+	private float verticalDistanceFromFocus;
 	private JoystickAxis joystickVertical;
 	private JoystickAxis joystickHorizontal;
 	private JoystickButton joystickZoom;
 
 	public KosmosCamera() {
 		super(FlounderJoysticks.class, FlounderKeyboard.class, FlounderMouse.class);
+	}
+
+	public static boolean isFirstPerson() {
+		return firstPerson;
+	}
+
+	public static float getFieldOfView() {
+		return fieldOfView;
+	}
+
+	public static void setFieldOfView(float fieldOfView) {
+		KosmosCamera.fieldOfView = fieldOfView;
+	}
+
+	public static float getSensitivity() {
+		return sensitivity;
+	}
+
+	public static void setSensitivity(float sensitivity) {
+		KosmosCamera.sensitivity = sensitivity;
+	}
+
+	public static boolean isMouseLocked() {
+		return mouseLocked;
+	}
+
+	public static void setMouseLocked(boolean mouseLocked) {
+		KosmosCamera.mouseLocked = mouseLocked;
+	}
+
+	public static int getAngleButton() {
+		return angleButton;
+	}
+
+	public static void setAngleButton(int angleButton) {
+		KosmosCamera.angleButton = angleButton;
 	}
 
 	@Override
@@ -296,11 +326,6 @@ public class KosmosCamera extends Camera {
 		angleOfElevation = Maths.normalizeAngle(angleOfElevation);
 	}
 
-	private void calculateDistances() {
-		horizontalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.cos(Math.toRadians(angleOfElevation)));
-		verticalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.sin(Math.toRadians(angleOfElevation)));
-	}
-
 	private void calculatePosition() {
 		double theta = Math.toRadians(targetRotation.y + angleAroundPlayer);
 		position.x = targetPosition.x - (float) (horizontalDistanceFromFocus * Math.sin(theta));
@@ -327,11 +352,6 @@ public class KosmosCamera extends Camera {
 	}
 
 	@Override
-	public Matrix4f getViewMatrix() {
-		return viewMatrix;
-	}
-
-	@Override
 	public Frustum getViewFrustum() {
 		return viewFrustum;
 	}
@@ -339,6 +359,11 @@ public class KosmosCamera extends Camera {
 	@Override
 	public Ray getViewRay() {
 		return viewRay;
+	}
+
+	@Override
+	public Matrix4f getViewMatrix() {
+		return viewMatrix;
 	}
 
 	@Override
@@ -368,44 +393,13 @@ public class KosmosCamera extends Camera {
 		this.rotation.set(rotation);
 	}
 
-	public static boolean isFirstPerson() {
-		return firstPerson;
-	}
-
-	public static float getFieldOfView() {
-		return fieldOfView;
-	}
-
-	public static void setFieldOfView(float fieldOfView) {
-		KosmosCamera.fieldOfView = fieldOfView;
-	}
-
-	public static float getSensitivity() {
-		return sensitivity;
-	}
-
-	public static void setSensitivity(float sensitivity) {
-		KosmosCamera.sensitivity = sensitivity;
-	}
-
-	public static boolean isMouseLocked() {
-		return mouseLocked;
-	}
-
-	public static void setMouseLocked(boolean mouseLocked) {
-		KosmosCamera.mouseLocked = mouseLocked;
-	}
-
-	public static int getAngleButton() {
-		return angleButton;
-	}
-
-	public static void setAngleButton(int angleButton) {
-		KosmosCamera.angleButton = angleButton;
-	}
-
 	@Override
 	public boolean isActive() {
 		return true;
+	}
+
+	private void calculateDistances() {
+		horizontalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.cos(Math.toRadians(angleOfElevation)));
+		verticalDistanceFromFocus = (float) (actualDistanceFromPoint * Math.sin(Math.toRadians(angleOfElevation)));
 	}
 }

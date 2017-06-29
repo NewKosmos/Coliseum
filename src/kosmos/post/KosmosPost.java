@@ -28,6 +28,11 @@ public class KosmosPost extends Module {
 		super();
 	}
 
+	@Module.Instance
+	public static KosmosPost get() {
+		return (KosmosPost) Framework.get().getInstance(KosmosPost.class);
+	}
+
 	@Handler.Function(Handler.FLAG_INIT)
 	public void init() {
 		this.effectsEnabled = KosmosConfigs.POST_EFFECTS_ENABLED.getBoolean();
@@ -112,10 +117,5 @@ public class KosmosPost extends Module {
 
 	@Handler.Function(Handler.FLAG_DISPOSE)
 	public void dispose() {
-	}
-
-	@Module.Instance
-	public static KosmosPost get() {
-		return (KosmosPost) Framework.get().getInstance(KosmosPost.class);
 	}
 }

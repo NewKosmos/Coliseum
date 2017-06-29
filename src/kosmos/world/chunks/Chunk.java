@@ -66,6 +66,65 @@ public class Chunk extends Entity {
 		new ComponentChunk(this);
 	}
 
+	private static void generateTile(Chunk chunk, Map<Vector3f, Boolean[]> tiles, double x, double z, boolean floating, float yOffset, boolean spawnEntity) {
+		// Calculate the position and height.
+		Vector3f worldPosition = KosmosChunks.convertTileToWorld(chunk, x, z, null);
+		worldPosition.y = KosmosChunks.getWorldHeight(worldPosition.x, worldPosition.z) + yOffset;
+		Vector3f chunkPosition = KosmosChunks.convertTileToChunk(x, z, null);
+		chunkPosition.y = worldPosition.y;
+
+		// Ignore tile if below world.
+		if (chunkPosition.y < 0.0f) {
+			return;
+		}
+
+		// Samples the 6 tiles around this tile.
+		Vector3f samplePosition = new Vector3f();
+		float height0 = getTileHeight(chunk, x, z, DELTA_TILES[0], samplePosition);
+		float height1 = getTileHeight(chunk, x, z, DELTA_TILES[1], samplePosition);
+		float height2 = getTileHeight(chunk, x, z, DELTA_TILES[2], samplePosition);
+		float height3 = getTileHeight(chunk, x, z, DELTA_TILES[3], samplePosition);
+		float height4 = getTileHeight(chunk, x, z, DELTA_TILES[4], samplePosition);
+		float height5 = getTileHeight(chunk, x, z, DELTA_TILES[5], samplePosition);
+		float heightMin = Maths.minAbsValue(height0, height1, height2, height3, height4, height5);
+
+		// Sets and stores the model object states and tile position.
+		Boolean[] objects = new Boolean[KosmosChunks.get().getHexagons().length];
+		objects[0] = yOffset == 0.0f;
+		objects[1] = floating;
+		objects[2] = height0 < chunkPosition.y;
+		objects[3] = height1 < chunkPosition.y;
+		objects[4] = height2 < chunkPosition.y;
+		objects[5] = height3 < chunkPosition.y;
+		objects[6] = height4 < chunkPosition.y;
+		objects[7] = height5 < chunkPosition.y;
+		tiles.put(chunkPosition, objects);
+
+		// Generates tiles below if there is a terrain drop, for cliff faces. This could be more efficient but is not.
+		if (chunkPosition.y - heightMin > Math.sqrt(2.0f) && chunkPosition.y - (float) Math.sqrt(2.0f) > heightMin) {
+			generateTile(chunk, tiles, x, z, false, yOffset - (float) Math.sqrt(2.0f), false);
+		}
+
+		// Spawns entities if this is the top tile, and if it was not removed.
+		if (spawnEntity) {
+			IBiome.Biomes biome = KosmosChunks.getBiomeMap(worldPosition.x, worldPosition.z);
+			Entity entity = biome.getBiome().generateEntity(chunk, worldPosition);
+
+			if (entity != null && chunk.entitiesRemoved.contains(entity.getPosition())) {
+				FlounderEntities.get().getEntities().remove(entity);
+			}
+		}
+	}
+
+	private static float getTileHeight(Chunk chunk, double x, double z, double[] delta, Vector3f sample) {
+		if (sample == null) {
+			sample = new Vector3f();
+		}
+
+		KosmosChunks.convertTileToWorld(chunk, x + delta[0], z + delta[1], sample);
+		return KosmosChunks.getWorldHeight(sample.x, sample.z);
+	}
+
 	@Override
 	public void update() {
 		// Updates the entity super class.
@@ -170,65 +229,6 @@ public class Chunk extends Entity {
 		return tiles;
 	}
 
-	private static void generateTile(Chunk chunk, Map<Vector3f, Boolean[]> tiles, double x, double z, boolean floating, float yOffset, boolean spawnEntity) {
-		// Calculate the position and height.
-		Vector3f worldPosition = KosmosChunks.convertTileToWorld(chunk, x, z, null);
-		worldPosition.y = KosmosChunks.getWorldHeight(worldPosition.x, worldPosition.z) + yOffset;
-		Vector3f chunkPosition = KosmosChunks.convertTileToChunk(x, z, null);
-		chunkPosition.y = worldPosition.y;
-
-		// Ignore tile if below world.
-		if (chunkPosition.y < 0.0f) {
-			return;
-		}
-
-		// Samples the 6 tiles around this tile.
-		Vector3f samplePosition = new Vector3f();
-		float height0 = getTileHeight(chunk, x, z, DELTA_TILES[0], samplePosition);
-		float height1 = getTileHeight(chunk, x, z, DELTA_TILES[1], samplePosition);
-		float height2 = getTileHeight(chunk, x, z, DELTA_TILES[2], samplePosition);
-		float height3 = getTileHeight(chunk, x, z, DELTA_TILES[3], samplePosition);
-		float height4 = getTileHeight(chunk, x, z, DELTA_TILES[4], samplePosition);
-		float height5 = getTileHeight(chunk, x, z, DELTA_TILES[5], samplePosition);
-		float heightMin = Maths.minAbsValue(height0, height1, height2, height3, height4, height5);
-
-		// Sets and stores the model object states and tile position.
-		Boolean[] objects = new Boolean[KosmosChunks.get().getHexagons().length];
-		objects[0] = yOffset == 0.0f;
-		objects[1] = floating;
-		objects[2] = height0 < chunkPosition.y;
-		objects[3] = height1 < chunkPosition.y;
-		objects[4] = height2 < chunkPosition.y;
-		objects[5] = height3 < chunkPosition.y;
-		objects[6] = height4 < chunkPosition.y;
-		objects[7] = height5 < chunkPosition.y;
-		tiles.put(chunkPosition, objects);
-
-		// Generates tiles below if there is a terrain drop, for cliff faces. This could be more efficient but is not.
-		if (chunkPosition.y - heightMin > Math.sqrt(2.0f) && chunkPosition.y - (float) Math.sqrt(2.0f) > heightMin) {
-			generateTile(chunk, tiles, x, z, false, yOffset - (float) Math.sqrt(2.0f), false);
-		}
-
-		// Spawns entities if this is the top tile, and if it was not removed.
-		if (spawnEntity) {
-			IBiome.Biomes biome = KosmosChunks.getBiomeMap(worldPosition.x, worldPosition.z);
-			Entity entity = biome.getBiome().generateEntity(chunk, worldPosition);
-
-			if (entity != null && chunk.entitiesRemoved.contains(entity.getPosition())) {
-				FlounderEntities.get().getEntities().remove(entity);
-			}
-		}
-	}
-
-	private static float getTileHeight(Chunk chunk, double x, double z, double[] delta, Vector3f sample) {
-		if (sample == null) {
-			sample = new Vector3f();
-		}
-
-		KosmosChunks.convertTileToWorld(chunk, x + delta[0], z + delta[1], sample);
-		return KosmosChunks.getWorldHeight(sample.x, sample.z);
-	}
-
 	public List<Chunk> getChildrenChunks() {
 		return childrenChunks;
 	}
@@ -295,6 +295,18 @@ public class Chunk extends Entity {
 		}
 	}
 
+	public void delete() {
+		chunkMesh.delete();
+		loaded = false;
+		forceRemove();
+		prepareSave();
+	}
+
+	//@Override // Call getSphere instead, this is not used any more so chunks can be culled.
+	//public Collider getCollider() {
+	//	return sphere;
+	//}
+
 	public void prepareSave() {
 		if (KosmosWorld.get().getWorld() == null) {
 			return;
@@ -311,17 +323,5 @@ public class Chunk extends Entity {
 		data.getFirst().addAll(entitiesRemoved);
 		data.getSecond().clear();
 		data.getSecond().addAll(entitiesAdded);
-	}
-
-	//@Override // Call getSphere instead, this is not used any more so chunks can be culled.
-	//public Collider getCollider() {
-	//	return sphere;
-	//}
-
-	public void delete() {
-		chunkMesh.delete();
-		loaded = false;
-		forceRemove();
-		prepareSave();
 	}
 }

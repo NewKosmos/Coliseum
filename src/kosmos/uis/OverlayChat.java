@@ -122,10 +122,6 @@ public class OverlayChat extends ScreenObject {
 		});
 	}
 
-	@Override
-	public void deleteObject() {
-	}
-
 	private static class ChatMessages extends ScreenObject {
 		private OverlayChat overlayChat;
 
@@ -140,23 +136,6 @@ public class OverlayChat extends ScreenObject {
 
 			this.chatMessages = new ArrayList<>();
 			this.chatHeight = VIEW_AREA_HEIGHT;
-		}
-
-		@Override
-		public void updateObject() {
-			if (!chatMessages.isEmpty()) {
-				for (TextObject m : chatMessages) {
-					if (!m.getParent().equals(overlayChat) && m.getAlpha() == 0.0f) {
-						m.setAlphaDriver(new ConstantDriver(1.0f));
-						m.setParent(overlayChat);
-					}
-
-					if (overlayChat.getAlpha() > 0.1f && !m.getParent().equals(overlayChat)) {
-						m.setAlphaDriver(new ConstantDriver(1.0f));
-						m.setParent(overlayChat);
-					}
-				}
-			}
 		}
 
 		private void generateObject(String string, Colour colour) {
@@ -194,10 +173,31 @@ public class OverlayChat extends ScreenObject {
 
 				generateObject("Could not find command: " + data[0], new Colour(0.81f, 0.37f, 0.24f));
 			}
+		}		@Override
+		public void updateObject() {
+			if (!chatMessages.isEmpty()) {
+				for (TextObject m : chatMessages) {
+					if (!m.getParent().equals(overlayChat) && m.getAlpha() == 0.0f) {
+						m.setAlphaDriver(new ConstantDriver(1.0f));
+						m.setParent(overlayChat);
+					}
+
+					if (overlayChat.getAlpha() > 0.1f && !m.getParent().equals(overlayChat)) {
+						m.setAlphaDriver(new ConstantDriver(1.0f));
+						m.setParent(overlayChat);
+					}
+				}
+			}
 		}
+
+
 
 		@Override
 		public void deleteObject() {
 		}
+	}	@Override
+	public void deleteObject() {
 	}
+
+
 }

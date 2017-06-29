@@ -18,11 +18,6 @@ import kosmos.camera.*;
 public class NewKosmos extends Framework {
 	public static final String VERSION = "6.26";
 
-	public static void main(String[] args) {
-		new NewKosmos().run();
-		System.exit(0);
-	}
-
 	public NewKosmos() {
 		super(
 				"kosmos", new UpdaterDefault(), -1,
@@ -41,5 +36,10 @@ public class NewKosmos extends Framework {
 				KosmosConfigs.TEXTURES_ANISOTROPY_MAX.getFloat()
 		));
 		Framework.get().setFpsLimit(KosmosConfigs.FRAMEWORK_FPS_LIMIT.getInteger());
+	}
+
+	public static void main(String[] args) {
+		new NewKosmos().run();
+		System.exit(0);
 	}
 }

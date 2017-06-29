@@ -74,14 +74,14 @@ public class ScreenLoading extends ScreenObject {
 		}
 	}
 
-	public void load(LoadFunction function) {
-		this.function = function;
-		loadTimer.resetStartTime();
-	}
-
 	@Override
 	public void deleteObject() {
 
+	}
+
+	public void load(LoadFunction function) {
+		this.function = function;
+		loadTimer.resetStartTime();
 	}
 
 	@FunctionalInterface

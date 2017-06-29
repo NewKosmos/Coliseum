@@ -39,11 +39,6 @@ import java.awt.event.*;
 import java.util.*;
 
 public class KosmosServer extends Framework {
-	public static void main(String[] args) {
-		new KosmosServer().run();
-		System.exit(0);
-	}
-
 	public KosmosServer() {
 		super(
 				"kosmos", new UpdaterDefault(), 5,
@@ -63,6 +58,11 @@ public class KosmosServer extends Framework {
 		));
 	}
 
+	public static void main(String[] args) {
+		new KosmosServer().run();
+		System.exit(0);
+	}
+
 	public static class ServerConfigs {
 		// Host server configs.
 		private static final Config CONFIG_HOST = new Config(new MyFile(Framework.getRoamingFolder("kosmos"), "configs", "host.conf"));
@@ -78,12 +78,10 @@ public class KosmosServer extends Framework {
 	}
 
 	public static class ServerInterface extends Standard {
+		public static int serverPort;
 		private static JFrame frame;
 		private static JPanel mainPanel;
 		private static JPanel renderPanel;
-
-		public static int serverPort;
-
 		private Timer timerWorld;
 
 		public ServerInterface() {

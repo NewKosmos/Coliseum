@@ -114,17 +114,17 @@ public class WaterRenderer extends Renderer {
 		shader.stop();
 	}
 
+	@Override
+	public void dispose() {
+		reflectionFBO.delete();
+		shader.delete();
+	}
+
 	public FBO getReflectionFBO() {
 		return reflectionFBO;
 	}
 
 	public FilterMRT getPipelineMRT() {
 		return pipelineMRT;
-	}
-
-	@Override
-	public void dispose() {
-		reflectionFBO.delete();
-		shader.delete();
 	}
 }

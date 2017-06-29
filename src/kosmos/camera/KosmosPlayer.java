@@ -38,19 +38,23 @@ public class KosmosPlayer extends Player {
 	public static final float BOOST_MUL = 2.0f;
 	public static final float JUMP_POWER = 8.0f;
 	public static final float FLY_SPEED = 8.0f;
-
+	private static String username;
 	private Vector3f position;
 	private Vector3f rotation;
-
 	private boolean noclipEnabled;
-
 	private Timer needSendTimer;
 	private boolean needSendData;
 
-	private static String username;
-
 	public KosmosPlayer() {
 		super();
+	}
+
+	public static String getUsername() {
+		return username;
+	}
+
+	public static void setUsername(String username) {
+		KosmosPlayer.username = username;
 	}
 
 	@Override
@@ -105,12 +109,29 @@ public class KosmosPlayer extends Player {
 
 			private MouseButton buttonPlace = new MouseButton(GLFW_MOUSE_BUTTON_LEFT);
 
-			@Override
+			private Vector3f getPointOnRay(Ray cameraRay, float distance) {
+				Vector3f camPos = FlounderCamera.get().getCamera().getPosition();
+				Vector3f start = new Vector3f(camPos.x, camPos.y, camPos.z);
+				Vector3f scaledRay = new Vector3f(cameraRay.getCurrentRay().x * distance, cameraRay.getCurrentRay().y * distance, cameraRay.getCurrentRay().z * distance);
+				return Vector3f.add(start, scaledRay, null);
+			}			@Override
 			public boolean eventTriggered() {
 				return buttonPlace.wasDown() && !FlounderGuis.get().getGuiMaster().isGamePaused();
 			}
 
-			@Override
+			private Vector3f binarySearch(Ray cameraRay, int count, float start, float finish) {
+				float half = start + ((finish - start) / 2.0f);
+
+				if (count >= RECURSION_COUNT) {
+					return getPointOnRay(cameraRay, half);
+				}
+
+				if (intersectionInRange(cameraRay, start, half)) {
+					return binarySearch(cameraRay, count + 1, start, half);
+				} else {
+					return binarySearch(cameraRay, count + 1, half, finish);
+				}
+			}			@Override
 			public void onEvent() {
 				Ray cameraRay = FlounderCamera.get().getCamera().getViewRay();
 
@@ -154,27 +175,6 @@ public class KosmosPlayer extends Player {
 				}
 			}
 
-			private Vector3f getPointOnRay(Ray cameraRay, float distance) {
-				Vector3f camPos = FlounderCamera.get().getCamera().getPosition();
-				Vector3f start = new Vector3f(camPos.x, camPos.y, camPos.z);
-				Vector3f scaledRay = new Vector3f(cameraRay.getCurrentRay().x * distance, cameraRay.getCurrentRay().y * distance, cameraRay.getCurrentRay().z * distance);
-				return Vector3f.add(start, scaledRay, null);
-			}
-
-			private Vector3f binarySearch(Ray cameraRay, int count, float start, float finish) {
-				float half = start + ((finish - start) / 2.0f);
-
-				if (count >= RECURSION_COUNT) {
-					return getPointOnRay(cameraRay, half);
-				}
-
-				if (intersectionInRange(cameraRay, start, half)) {
-					return binarySearch(cameraRay, count + 1, start, half);
-				} else {
-					return binarySearch(cameraRay, count + 1, half, finish);
-				}
-			}
-
 			private boolean intersectionInRange(Ray cameraRay, float start, float finish) {
 				Vector3f startPoint = getPointOnRay(cameraRay, start);
 				Vector3f endPoint = getPointOnRay(cameraRay, finish);
@@ -195,6 +195,10 @@ public class KosmosPlayer extends Player {
 					return false;
 				}
 			}
+
+
+
+
 		});
 	}
 
@@ -233,18 +237,6 @@ public class KosmosPlayer extends Player {
 		this.rotation.set(newRotation);
 	}
 
-	public boolean isNoclipEnabled() {
-		return noclipEnabled;
-	}
-
-	public void setNoclipEnabled(boolean noclipEnabled) {
-		this.noclipEnabled = noclipEnabled;
-	}
-
-	public void askSendData() {
-		this.needSendData = true;
-	}
-
 	@Override
 	public Vector3f getPosition() {
 		return position;
@@ -255,16 +247,20 @@ public class KosmosPlayer extends Player {
 		return rotation;
 	}
 
-	public static String getUsername() {
-		return username;
-	}
-
-	public static void setUsername(String username) {
-		KosmosPlayer.username = username;
-	}
-
 	@Override
 	public boolean isActive() {
 		return true;
+	}
+
+	public boolean isNoclipEnabled() {
+		return noclipEnabled;
+	}
+
+	public void setNoclipEnabled(boolean noclipEnabled) {
+		this.noclipEnabled = noclipEnabled;
+	}
+
+	public void askSendData() {
+		this.needSendData = true;
 	}
 }

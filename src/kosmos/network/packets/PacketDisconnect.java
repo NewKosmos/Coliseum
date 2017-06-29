@@ -43,7 +43,14 @@ public class PacketDisconnect extends Packet {
 		this.username = username;
 	}
 
-	@Override
+	/**
+	 * Gets the username of the client that disconnected.
+	 *
+	 * @return The username.
+	 */
+	public String getUsername() {
+		return username;
+	}	@Override
 	public void writeData(Client client) {
 		client.sendData(getData());
 	}
@@ -91,12 +98,5 @@ public class PacketDisconnect extends Packet {
 		return (getDataPrefix() + username).getBytes();
 	}
 
-	/**
-	 * Gets the username of the client that disconnected.
-	 *
-	 * @return The username.
-	 */
-	public String getUsername() {
-		return username;
-	}
+
 }
