@@ -18,6 +18,7 @@ import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.visual.*;
 import kosmos.world.*;
+import kosmos.world.biomes.*;
 import kosmos.world.chunks.*;
 
 public class OverlayDebug extends ScreenObject {
@@ -71,8 +72,17 @@ public class OverlayDebug extends ScreenObject {
 			positionText.setText("POSITION: [" + (FlounderCamera.get().getPlayer() == null ? "NULL" : Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().x, 1) + ", " + Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().y, 1) + ", " + Maths.roundToPlace(FlounderCamera.get().getPlayer().getPosition().z, 1) + "]"));
 			timeText.setText("TIME: " + Maths.roundToPlace(KosmosWorld.get().getDayFactor(), 3));
 			seedText.setText("SEED: " + (KosmosWorld.get().getWorld() == null ? "NULL" : KosmosWorld.get().getWorld().getSeed()));
-			moistureText.setText("MOISTURE: " + (FlounderCamera.get().getPlayer() == null ? "1" : Maths.roundToPlace(KosmosChunks.getMoistureMap(FlounderCamera.get().getPlayer().getPosition().x, FlounderCamera.get().getPlayer().getPosition().z), 2)));
-			biomeText.setText("BIOME: " + (KosmosChunks.get().getCurrent() == null ? "NULL" : KosmosChunks.get().getCurrent().getBiome().name()));
+
+			if (FlounderCamera.get().getPlayer() != null && KosmosWorld.get().getWorld() != null) {
+				IBiome.Biomes biome = KosmosChunks.getBiomeMap(FlounderCamera.get().getPlayer().getPosition().x, FlounderCamera.get().getPlayer().getPosition().z);
+
+				moistureText.setText("MOISTURE: " + Maths.roundToPlace(KosmosChunks.getMoistureMap(FlounderCamera.get().getPlayer().getPosition().x, FlounderCamera.get().getPlayer().getPosition().z), 2));
+				biomeText.setText("BIOME: " + biome.name());
+			} else {
+				moistureText.setText("MOISTURE: 1.0");
+				biomeText.setText("BIOME: NULL");
+			}
+
 			updateText = false;
 		}
 	}

@@ -79,55 +79,89 @@ public class KosmosChunks extends Module {
 		this.chunkDistance = KosmosConfigs.CHUNK_DISTANCE.getInteger();
 
 		this.textureBiome = null;
-		createBiomeTexture();
+
+		FlounderEvents.get().addEvent(new EventTime(1.0f, false) {
+			@Override
+			public void onEvent() {
+			//	createBiomeTexture(256);
+			//	createBiomeTexture(512);
+				createBiomeTexture(1024);
+			//	createBiomeTexture(2048);
+			}
+		});
 	}
 
-	private void createBiomeTexture() {
-		FlounderLogger.get().log("Generating biome map texture.");
+	private void createBiomeTexture(int imageSize) {
+		// Create the save folder.
+		File directorySave = new File(Framework.get().getRoamingFolder().getPath() + "/biomes/");
 
-		IBiome.Biomes[] biomes = IBiome.Biomes.values();
-		BufferedImage[] biomeImages = new BufferedImage[biomes.length];
-		int side = (int) Math.ceil(Math.sqrt(biomes.length));
-
-		for (int i = 0; i < biomes.length; i++) {
-			MyFile imageFile = biomes[i].getBiome().getTexture().getFile();
+		if (!directorySave.exists()) {
+			System.out.println("Creating directory: " + directorySave);
 
 			try {
-				biomeImages[i] = ImageIO.read(imageFile.getInputStream());
-			} catch (IOException e) {
-				FlounderLogger.get().log("Could not load image for biome: " + biomes[i]);
-				FlounderLogger.get().exception(e);
+				directorySave.mkdir();
+			} catch (SecurityException e) {
+				System.out.println("Filed to create directory: " + directorySave.getPath() + ".");
+				e.printStackTrace();
 			}
 		}
 
-		// Load a buffered image of the map.
-		BufferedImage imageTexture = new BufferedImage(side * 1024, side * 1024, BufferedImage.TYPE_INT_RGB);
-		Graphics2D g = (Graphics2D) imageTexture.getGraphics();
-
-		for (int i = 0; i < biomeImages.length; i++) {
-			BufferedImage image = biomeImages[i];
-			int width = image.getWidth();
-			int height = image.getHeight();
-
-			int x = width * (i % side);
-			int y = height * (i / side);
-			g.drawImage(image, x, y, width, height, null);
-		}
-
 		// Create a output file name and location.
-		File outputBiome = new File(Framework.get().getRoamingFolder().getPath() + "/biomes.png");
+		File outputBiome = new File(directorySave.getPath() + "/biomes_" + imageSize + ".png");
 
-		// Removes the old file.
-		if (outputBiome.exists()) {
-			outputBiome.delete();
-		}
+		// Does not create a texture if it already exists and has not been tampered.
+		if (!outputBiome.exists()) {
+			FlounderLogger.get().log("Generating biome map texture of size: " + imageSize);
 
-		// Save the map texture to a output file.
-		try {
-			ImageIO.write(imageTexture, "png", outputBiome);
-		} catch (IOException e) {
-			FlounderLogger.get().error("Could not save biome texture to file: " + outputBiome);
-			FlounderLogger.get().exception(e);
+			IBiome.Biomes[] biomes = IBiome.Biomes.values();
+			BufferedImage[] biomeImages = new BufferedImage[biomes.length];
+			int side = (int) Math.ceil(Math.sqrt(biomes.length));
+
+			for (int i = 0; i < biomes.length; i++) {
+				MyFile imageFile = biomes[i].getBiome().getTexture().getFile();
+
+				try {
+					biomeImages[i] = ImageIO.read(imageFile.getInputStream());
+
+					if (biomeImages[i].getWidth() != imageSize || biomeImages[i].getHeight() != imageSize) {
+						Image tmp = biomeImages[i].getScaledInstance(imageSize, imageSize, Image.SCALE_SMOOTH);
+						BufferedImage dimg = new BufferedImage(imageSize, imageSize, BufferedImage.TYPE_INT_ARGB);
+
+						Graphics2D g2d = dimg.createGraphics();
+						g2d.drawImage(tmp, 0, 0, null);
+						g2d.dispose();
+
+						biomeImages[i] = dimg;
+					}
+				} catch (IOException e) {
+					FlounderLogger.get().log("Could not load image for biome: " + biomes[i]);
+					FlounderLogger.get().exception(e);
+				}
+			}
+
+			// Load a buffered image of the map.
+			BufferedImage imageTexture = new BufferedImage(side * imageSize, side * imageSize, BufferedImage.TYPE_INT_RGB);
+			Graphics2D g = (Graphics2D) imageTexture.getGraphics();
+
+			for (int i = 0; i < biomeImages.length; i++) {
+				BufferedImage image = biomeImages[i];
+				int width = image.getWidth();
+				int height = image.getHeight();
+
+				int x = width * (i % side);
+				int y = height * (i / side);
+				g.drawImage(image, x, y, width, height, null);
+			}
+
+			g.dispose();
+
+			// Save the map texture to a output file.
+			try {
+				ImageIO.write(imageTexture, "png", outputBiome);
+			} catch (IOException e) {
+				FlounderLogger.get().error("Could not save biome texture to file: " + outputBiome);
+				FlounderLogger.get().exception(e);
+			}
 		}
 
 		// Load the map texture after a few seconds.
@@ -135,7 +169,7 @@ public class KosmosChunks extends Module {
 			@Override
 			public void onEvent() {
 				// Load the new map image.
-				textureBiome = TextureFactory.newBuilder().setFile(new MyFile(Framework.get().getRoamingFolder(), "biomes.png")).create();
+				textureBiome = TextureFactory.newBuilder().setFile(new MyFile(Framework.get().getRoamingFolder(), "biomes", "biomes_" + imageSize + ".png")).create();
 			}
 		});
 	}
@@ -211,6 +245,16 @@ public class KosmosChunks extends Module {
 		double cz = (3.0 / 2.0) * HEXAGON_SIDE_LENGTH * z;
 		double cx = Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH * ((z / 2.0) + x);
 		return destination.set((float) cx, 0.0f, (float) cz);
+	}
+
+	public static Vector2f convertChunkToTile(Vector3f chunkPosition, Vector2f destination) {
+		if (destination == null) {
+			destination = new Vector2f();
+		}
+
+		double cz = chunkPosition.z / ((3.0 / 2.0) * HEXAGON_SIDE_LENGTH);
+		double cx = (chunkPosition.x / (Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH)) - (cz / 2.0);
+		return destination.set((float) cx, (float) cz);
 	}
 
 	public static Vector3f convertTileToWorld(Chunk chunk, double x, double z, Vector3f destination) {
@@ -540,6 +584,10 @@ public class KosmosChunks extends Module {
 
 	public void setChunkDistance(int chunkDistance) {
 		this.chunkDistance = chunkDistance;
+	}
+
+	public TextureObject getTextureBiome() {
+		return textureBiome;
 	}
 
 	@Handler.Function(Handler.FLAG_DISPOSE)

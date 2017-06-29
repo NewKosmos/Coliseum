@@ -220,8 +220,6 @@ public class WorldDefinition {
 			return;
 		}
 
-		FlounderLogger.get().log("Generating map for seed: " + seed);
-
 		// Create the save folder.
 		File directorySave = new File(Framework.get().getRoamingFolder().getPath() + "/saves/");
 
@@ -236,34 +234,34 @@ public class WorldDefinition {
 			}
 		}
 
-		// Load a buffered image of the map.
-		BufferedImage imageBiome = new BufferedImage(worldSize, worldSize, BufferedImage.TYPE_INT_RGB);
-
-		for (int y = 0; y < worldSize; y++) {
-			for (int x = 0; x < worldSize; x++) {
-				float worldX = (float) x - ((float) worldSize / 2.0f);
-				float worldZ = (float) y - ((float) worldSize / 2.0f);
-
-				Colour colourBiome = KosmosChunks.getBiomeMap(worldX, worldZ).getBiome().getColour();
-				imageBiome.setRGB(x, y, (((int) (255.0f * colourBiome.r) << 8) + ((int) (255.0f * colourBiome.g)) << 8) + ((int) (255.0f * colourBiome.b)));
-			}
-		}
-
 		// Create a output file name and location.
 		String clientServer = FlounderNetwork.get().getSocketServer() != null ? "server" : "client";
 		File outputBiome = new File(directorySave.getPath() + "/" + seed + "-biome-" + clientServer + ".png");
 
-		// Removes the old file.
-		if (outputBiome.exists()) {
-			outputBiome.delete();
-		}
+		// Does not create a texture if it already exists and has not been tampered.
+		if (!outputBiome.exists()) {
+			FlounderLogger.get().log("Generating map for seed: " + seed);
 
-		// Save the map texture to a output file.
-		try {
-			ImageIO.write(imageBiome, "png", outputBiome);
-		} catch (IOException e) {
-			FlounderLogger.get().error("Could not save map image to file: " + outputBiome);
-			FlounderLogger.get().exception(e);
+			// Load a buffered image of the map.
+			BufferedImage imageBiome = new BufferedImage(worldSize, worldSize, BufferedImage.TYPE_INT_RGB);
+
+			for (int y = 0; y < worldSize; y++) {
+				for (int x = 0; x < worldSize; x++) {
+					float worldX = (float) x - ((float) worldSize / 2.0f);
+					float worldZ = (float) y - ((float) worldSize / 2.0f);
+
+					Colour colourBiome = KosmosChunks.getBiomeMap(worldX, worldZ).getBiome().getColour();
+					imageBiome.setRGB(x, y, (((int) (255.0f * colourBiome.r) << 8) + ((int) (255.0f * colourBiome.g)) << 8) + ((int) (255.0f * colourBiome.b)));
+				}
+			}
+
+			// Save the map texture to a output file.
+			try {
+				ImageIO.write(imageBiome, "png", outputBiome);
+			} catch (IOException e) {
+				FlounderLogger.get().error("Could not save map image to file: " + outputBiome);
+				FlounderLogger.get().exception(e);
+			}
 		}
 
 		// Load the map texture after a few seconds.

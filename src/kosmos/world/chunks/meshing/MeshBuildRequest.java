@@ -17,6 +17,7 @@ import flounder.models.*;
 import flounder.physics.*;
 import flounder.processing.resource.*;
 import kosmos.world.*;
+import kosmos.world.biomes.*;
 import kosmos.world.chunks.*;
 
 import java.util.*;
@@ -52,19 +53,23 @@ public class MeshBuildRequest implements RequestResource {
 
 		// Only create the model if there is stuff to build from.
 		if (!chunkData.isEmpty()) {
+			int side = (int) Math.ceil(Math.sqrt(IBiome.Biomes.values().length));
+
 			int indexOffset = 0;
 
 			// Loads all tiles into a tile mesh with all positional instances within the chunk.
 			for (Vector3f tile : chunkData.keySet()) {
+				Vector2f tilePosition = KosmosChunks.convertChunkToTile(tile, null);
+				Vector3f worldPosition = KosmosChunks.convertTileToWorld(chunkMesh.chunk, tilePosition.x, tilePosition.y, null);
+				IBiome.Biomes biome = KosmosChunks.getBiomeMap(worldPosition.x, worldPosition.z);
 				Boolean[] models = chunkData.get(tile);
 
 				for (int m = 0; m < models.length; m++) {
 					if (models[m]) {
 						ModelObject model = KosmosChunks.get().getHexagons()[m];
+
 						float rotation = Math.abs(KosmosWorld.get().getWorld().getNoise().noise(tile.x - tile.z + chunkMesh.chunk.getPosition().lengthSquared(), 1.0f)) * 20.0f;
-						rotation = ((int) rotation) * 60.0f;
-						rotation = Maths.normalizeAngle(rotation);
-						Vector2f r = new Vector2f();
+						rotation = (float) Math.toRadians(Maths.normalizeAngle(((int) rotation) * 60.0f));
 
 						for (int i = 0; i < model.getIndices().length; i++) {
 							int index = model.getIndices()[i];
@@ -73,18 +78,11 @@ public class MeshBuildRequest implements RequestResource {
 							float vertex2 = model.getVertices()[index * 3 + 2];
 
 							if (m == 0 || m == 1) {
-								r.set(vertex0, vertex2);
-								Vector2f.rotate(r, rotation, r);
-								vertex0 = r.x;
-								vertex2 = r.y;
-								r.set(0.0f, 0.0f);
-							}// else {
-							//	r.set(vertex0, vertex2);
-							//	r.scale(3.0f / 2.0f);
-							//	vertex0 = r.x;
-							//	vertex2 = r.y;
-							//	r.set(0.0f, 0.0f);
-							//}
+								float rx = (float) (vertex0 * Math.cos(rotation) - vertex2 * Math.sin(rotation));
+								float ry = (float) (vertex0 * Math.sin(rotation) + vertex2 * Math.cos(rotation));
+								vertex0 = rx;
+								vertex2 = ry;
+							}
 
 							vertex0 += (tile.x / 2.0f);
 							vertex1 += (tile.y / 2.0f);
@@ -92,6 +90,12 @@ public class MeshBuildRequest implements RequestResource {
 
 							float texture0 = model.getTextures()[index * 2];
 							float texture1 = model.getTextures()[index * 2 + 1];
+
+							texture0 /= (float) side;
+							texture1 /= (float) side;
+							texture0 += ((float) (biome.getId() % side)) / ((float) side);
+							texture1 += ((float) (biome.getId() / side)) / ((float) side);
+
 							float normal0 = model.getNormals()[index * 3];
 							float normal1 = model.getNormals()[index * 3 + 1];
 							float normal2 = model.getNormals()[index * 3 + 2];
@@ -217,7 +221,7 @@ public class MeshBuildRequest implements RequestResource {
 				componentModel.setModel(chunkMesh.chunkModel);
 				componentModel.setRenderCollider(false);
 			} else {
-				FlounderLogger.get().error(chunkMesh.chunk + " does not have a model component! Model cannot be set.");
+				FlounderLogger.get().error(chunkMesh.chunk + " does not have a model component! The model cannot be set to this chunk.");
 			}
 		}
 	}

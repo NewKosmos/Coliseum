@@ -31,7 +31,7 @@ public class ChunkMesh {
 
 	public void update() {
 		// Makes sure all chunk, model, and biome info is good.
-		if (chunk == null || chunk.getBiome() == null || KosmosChunks.get().getHexagons() == null || !KosmosChunks.get().getHexagonsLoaded()) {
+		if (chunk == null || KosmosChunks.get().getHexagons() == null || !KosmosChunks.get().getHexagonsLoaded()) {
 			return;
 		}
 

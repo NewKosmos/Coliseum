@@ -38,7 +38,6 @@ public class Chunk extends Entity {
 	private static final double[][] DELTA_CHUNK = new double[][]{{9.5, 7.0}, {-0.5, 13.0}, {-10.0, 6.0}, {-9.5, -7.0}, {0.5, -13.0}, {10.0, -6.0}};
 
 	private List<Chunk> childrenChunks;
-	private IBiome.Biomes biome;
 	private ChunkMesh chunkMesh;
 	private Sphere sphere;
 	private boolean loaded;
@@ -52,7 +51,6 @@ public class Chunk extends Entity {
 		super(structure, position, new Vector3f());
 
 		this.childrenChunks = new ArrayList<>();
-		this.biome = KosmosChunks.getBiomeMap(position.x, position.z);
 		this.chunkMesh = new ChunkMesh(this);
 		this.sphere = new Sphere(1.0f);
 		this.sphere.update(position, null, KosmosChunks.CHUNK_WORLD_SIZE, sphere);
@@ -63,7 +61,7 @@ public class Chunk extends Entity {
 		this.entitiesRemoved = KosmosWorld.get().getWorld().getChunkRemoved(position);
 		this.entitiesAdded = KosmosWorld.get().getWorld().getChunkAdded(position);
 
-		new ComponentModel(this, 1.0f, chunkMesh.getModel(), biome.getBiome().getTexture(), 0);
+		new ComponentModel(this, 1.0f, chunkMesh.getModel(), null, 0);
 		new ComponentSurface(this, 1.0f, 0.0f, false, false, true);
 		new ComponentChunk(this);
 	}
@@ -72,6 +70,13 @@ public class Chunk extends Entity {
 	public void update() {
 		// Updates the entity super class.
 		super.update();
+
+		// Sets the texture top the Kosmos Chunks texture.
+		ComponentModel componentModel = (ComponentModel) getComponent(ComponentModel.class);
+
+		if (componentModel != null) {
+			componentModel.setTexture(KosmosChunks.get().getTextureBiome());
+		}
 
 		// Creates the children for this chunk if signaled to.
 		if (createDepth != 0) {
@@ -169,11 +174,11 @@ public class Chunk extends Entity {
 		// Calculate the position and height.
 		Vector3f worldPosition = KosmosChunks.convertTileToWorld(chunk, x, z, null);
 		worldPosition.y = KosmosChunks.getWorldHeight(worldPosition.x, worldPosition.z) + yOffset;
-		Vector3f tilePosition = KosmosChunks.convertTileToChunk(x, z, null);
-		tilePosition.y = worldPosition.y;
+		Vector3f chunkPosition = KosmosChunks.convertTileToChunk(x, z, null);
+		chunkPosition.y = worldPosition.y;
 
 		// Ignore tile if below world.
-		if (tilePosition.y < 0.0f) {
+		if (chunkPosition.y < 0.0f) {
 			return;
 		}
 
@@ -191,22 +196,23 @@ public class Chunk extends Entity {
 		Boolean[] objects = new Boolean[KosmosChunks.get().getHexagons().length];
 		objects[0] = yOffset == 0.0f;
 		objects[1] = floating;
-		objects[2] = height0 < tilePosition.y;
-		objects[3] = height1 < tilePosition.y;
-		objects[4] = height2 < tilePosition.y;
-		objects[5] = height3 < tilePosition.y;
-		objects[6] = height4 < tilePosition.y;
-		objects[7] = height5 < tilePosition.y;
-		tiles.put(tilePosition, objects);
+		objects[2] = height0 < chunkPosition.y;
+		objects[3] = height1 < chunkPosition.y;
+		objects[4] = height2 < chunkPosition.y;
+		objects[5] = height3 < chunkPosition.y;
+		objects[6] = height4 < chunkPosition.y;
+		objects[7] = height5 < chunkPosition.y;
+		tiles.put(chunkPosition, objects);
 
 		// Generates tiles below if there is a terrain drop, for cliff faces. This could be more efficient but is not.
-		if (tilePosition.y - heightMin > Math.sqrt(2.0f) && tilePosition.y - (float) Math.sqrt(2.0f) > heightMin) {
+		if (chunkPosition.y - heightMin > Math.sqrt(2.0f) && chunkPosition.y - (float) Math.sqrt(2.0f) > heightMin) {
 			generateTile(chunk, tiles, x, z, false, yOffset - (float) Math.sqrt(2.0f), false);
 		}
 
 		// Spawns entities if this is the top tile, and if it was not removed.
 		if (spawnEntity) {
-			Entity entity = chunk.biome.getBiome().generateEntity(chunk, worldPosition);
+			IBiome.Biomes biome = KosmosChunks.getBiomeMap(worldPosition.x, worldPosition.z);
+			Entity entity = biome.getBiome().generateEntity(chunk, worldPosition);
 
 			if (entity != null && chunk.entitiesRemoved.contains(entity.getPosition())) {
 				FlounderEntities.get().getEntities().remove(entity);
@@ -233,10 +239,6 @@ public class Chunk extends Entity {
 
 	public Sphere getSphere() {
 		return sphere;
-	}
-
-	public IBiome.Biomes getBiome() {
-		return biome;
 	}
 
 	public boolean isLoaded() {

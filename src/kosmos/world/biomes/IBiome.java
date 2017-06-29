@@ -22,29 +22,35 @@ import kosmos.world.chunks.*;
  */
 public abstract class IBiome {
 	public enum Biomes {
-		OCEAN(new BiomeOcean()),
-		BARE(new BiomeBare()),
-		GRASSLAND(new BiomeGrassland()),
-		SCORCHED(new BiomeScorched()),
-		SHRUBLAND(new BiomeShrubland()),
-		SNOW(new BiomeSnow()),
-		SUBTROPICAL_DESERT(new BiomeSubtropicalDesert()),
-		TAIGA(new BiomeTaiga()),
-		TEMPERATE_DECIDUOUS_FOREST(new BiomeTemperateDeciduousForest()),
-		TEMPERATE_DESERT(new BiomeTemperateDesert()),
-		TEMPERATE_RAIN_FOREST(new BiomeTemperateRainForest()),
-		TROPICAL_RAIN_FOREST(new BiomeTropicalRainForest()),
-		TROPICAL_SEASONAL_FOREST(new BiomeTropicalSeasonalForest()),
-		TUNDRA(new BiomeTundra());
+		OCEAN(new BiomeOcean(), 0),
+		BARE(new BiomeBare(), 1),
+		GRASSLAND(new BiomeGrassland(), 2),
+		SCORCHED(new BiomeScorched(), 3),
+		SHRUBLAND(new BiomeShrubland(), 4),
+		SNOW(new BiomeSnow(), 5),
+		SUBTROPICAL_DESERT(new BiomeSubtropicalDesert(), 6),
+		TAIGA(new BiomeTaiga(), 7),
+		TEMPERATE_DECIDUOUS_FOREST(new BiomeTemperateDeciduousForest(), 8),
+		TEMPERATE_DESERT(new BiomeTemperateDesert(), 9),
+		TEMPERATE_RAIN_FOREST(new BiomeTemperateRainForest(), 10),
+		TROPICAL_RAIN_FOREST(new BiomeTropicalRainForest(), 11),
+		TROPICAL_SEASONAL_FOREST(new BiomeTropicalSeasonalForest(), 12),
+		TUNDRA(new BiomeTundra(), 13);
 
 		private IBiome biome;
+		private int id;
 
-		Biomes(IBiome biome) {
+		Biomes(IBiome biome, int id) {
 			this.biome = biome;
+			this.id = id;
 		}
 
 		public IBiome getBiome() {
 			return biome;
+		}
+
+		public int getId() {
+			return id;
 		}
 	}
 
