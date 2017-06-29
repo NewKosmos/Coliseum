@@ -263,7 +263,9 @@ public class Chunk extends Entity {
 		if (isRemoved()) {
 			return;
 		}
+
 		FlounderLogger.get().log("Removing entity: " + entity);
+
 		if (entitiesAdded.contains(entity)) {
 			entitiesAdded.remove(entity);
 		} else {
@@ -275,6 +277,7 @@ public class Chunk extends Entity {
 		if (isRemoved()) {
 			return;
 		}
+
 		FlounderLogger.get().log("Removing entity: " + entity);
 		entitiesRemoved.add(entity);
 		Entity entityWorld = null;

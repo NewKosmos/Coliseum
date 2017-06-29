@@ -200,7 +200,7 @@ public class KosmosWorld extends Module {
 			return null;
 		}
 
-		return worldDefinition.getMapTexture();
+		return worldDefinition.getTextureMap();
 	}
 
 	public Map<String, Entity> getPlayers() {

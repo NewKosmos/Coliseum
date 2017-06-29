@@ -15,11 +15,13 @@ import flounder.entities.components.*;
 import flounder.events.*;
 import flounder.guis.*;
 import flounder.inputs.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.physics.*;
 import kosmos.entities.components.*;
+import kosmos.entities.instances.*;
 import kosmos.network.packets.*;
 import kosmos.world.*;
 import kosmos.world.chunks.*;
@@ -90,9 +92,9 @@ public class KosmosPlayer extends Player {
 			}
 		});
 
-		/*FlounderEvents.get().addEvent(new IEvent() {
-			private final int RECURSION_COUNT = 256;
-			private final float RAY_RANGE = 70.0f;
+		FlounderEvents.get().addEvent(new EventStandard() {
+			private final int RECURSION_COUNT = 128;
+			private final float RAY_RANGE = 100.0f;
 
 			private MouseButton buttonPlace = new MouseButton(GLFW_MOUSE_BUTTON_LEFT);
 
@@ -132,7 +134,7 @@ public class KosmosPlayer extends Player {
 						Vector3f roundedPosition = KosmosChunks.convertTileToWorld(inChunk, tilePosition.x, tilePosition.y, null);
 						roundedPosition.y = KosmosChunks.getWorldHeight(roundedPosition.x, roundedPosition.z);
 
-						Entity entity = new InstanceBush(FlounderEntities.get().getEntities(),
+						Entity entity = new InstanceTable(FlounderEntities.get().getEntities(),
 								new Vector3f(
 										roundedPosition.x,
 										0.5f + roundedPosition.y * 0.5f,
@@ -186,7 +188,7 @@ public class KosmosPlayer extends Player {
 					return false;
 				}
 			}
-		});*/
+		});
 	}
 
 	@Override

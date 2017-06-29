@@ -13,6 +13,7 @@ import flounder.camera.*;
 import flounder.entities.*;
 import flounder.events.*;
 import flounder.framework.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.models.*;
@@ -26,6 +27,10 @@ import kosmos.*;
 import kosmos.world.*;
 import kosmos.world.biomes.*;
 
+import javax.imageio.*;
+import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
 import java.util.*;
 
 public class KosmosChunks extends Module {
@@ -47,6 +52,8 @@ public class KosmosChunks extends Module {
 	private Chunk currentChunk;
 
 	private int chunkDistance;
+
+	private TextureObject textureBiome;
 
 	public KosmosChunks() {
 		super(FlounderEvents.class, FlounderTasks.class, FlounderEntities.class, FlounderModels.class, FlounderTextures.class);
@@ -70,6 +77,67 @@ public class KosmosChunks extends Module {
 		this.currentChunk = null;
 
 		this.chunkDistance = KosmosConfigs.CHUNK_DISTANCE.getInteger();
+
+		this.textureBiome = null;
+		createBiomeTexture();
+	}
+
+	private void createBiomeTexture() {
+		FlounderLogger.get().log("Generating biome map texture.");
+
+		IBiome.Biomes[] biomes = IBiome.Biomes.values();
+		BufferedImage[] biomeImages = new BufferedImage[biomes.length];
+		int side = (int) Math.ceil(Math.sqrt(biomes.length));
+
+		for (int i = 0; i < biomes.length; i++) {
+			MyFile imageFile = biomes[i].getBiome().getTexture().getFile();
+
+			try {
+				biomeImages[i] = ImageIO.read(imageFile.getInputStream());
+			} catch (IOException e) {
+				FlounderLogger.get().log("Could not load image for biome: " + biomes[i]);
+				FlounderLogger.get().exception(e);
+			}
+		}
+
+		// Load a buffered image of the map.
+		BufferedImage imageTexture = new BufferedImage(side * 1024, side * 1024, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = (Graphics2D) imageTexture.getGraphics();
+
+		for (int i = 0; i < biomeImages.length; i++) {
+			BufferedImage image = biomeImages[i];
+			int width = image.getWidth();
+			int height = image.getHeight();
+
+			int x = width * (i % side);
+			int y = height * (i / side);
+			g.drawImage(image, x, y, width, height, null);
+		}
+
+		// Create a output file name and location.
+		File outputBiome = new File(Framework.get().getRoamingFolder().getPath() + "/biomes.png");
+
+		// Removes the old file.
+		if (outputBiome.exists()) {
+			outputBiome.delete();
+		}
+
+		// Save the map texture to a output file.
+		try {
+			ImageIO.write(imageTexture, "png", outputBiome);
+		} catch (IOException e) {
+			FlounderLogger.get().error("Could not save biome texture to file: " + outputBiome);
+			FlounderLogger.get().exception(e);
+		}
+
+		// Load the map texture after a few seconds.
+		FlounderEvents.get().addEvent(new EventTime(2.0f, false) {
+			@Override
+			public void onEvent() {
+				// Load the new map image.
+				textureBiome = TextureFactory.newBuilder().setFile(new MyFile(Framework.get().getRoamingFolder(), "biomes.png")).create();
+			}
+		});
 	}
 
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)

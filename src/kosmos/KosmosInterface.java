@@ -18,8 +18,10 @@ import flounder.inputs.*;
 import flounder.maths.*;
 import flounder.networking.*;
 import flounder.particles.*;
+import flounder.resources.*;
 import flounder.shadows.*;
 import flounder.skybox.*;
+import flounder.sounds.*;
 import flounder.standards.*;
 import flounder.steam.*;
 import kosmos.network.packets.*;
@@ -61,6 +63,7 @@ public class KosmosInterface extends Standard {
 		});
 
 		FlounderEvents.get().addEvent(new EventStandard() {
+			Sound sound = Sound.loadSoundInBackground(new MyFile(MyFile.RES_FOLDER, "sounds", "screenshot.wav"), 1.0f, 1.0f);
 			KeyButton screenshot = new KeyButton(GLFW_KEY_F2);
 
 			@Override
@@ -70,6 +73,7 @@ public class KosmosInterface extends Standard {
 
 			@Override
 			public void onEvent() {
+				FlounderSound.get().playSystemSound(sound);
 				FlounderDisplay.get().screenshot();
 			}
 		});

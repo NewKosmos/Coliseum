@@ -46,7 +46,7 @@ public class WorldDefinition {
 	private final float dayNightRatio;
 
 	private PerlinNoise noise;
-	private TextureObject mapTexture;
+	private TextureObject textureMap;
 
 	private Map<String, Pair<Vector3f, Vector3f>> players;
 	private Map<String, Pair<List<Vector3f>, List<Entity>>> chunkData;
@@ -84,7 +84,7 @@ public class WorldDefinition {
 		this.dayNightRatio = dayNightRatio;
 
 		this.noise = new PerlinNoise(seed);
-		this.mapTexture = null;
+		this.textureMap = null;
 
 		this.players = players;
 		this.chunkData = chunkData;
@@ -213,8 +213,8 @@ public class WorldDefinition {
 	public void generateMap() {
 		// Account for the null seed.
 		if (seed == -1) {
-			if (mapTexture != null && mapTexture.isLoaded()) {
-				mapTexture.delete();
+			if (textureMap != null && textureMap.isLoaded()) {
+				textureMap.delete();
 			}
 
 			return;
@@ -271,12 +271,12 @@ public class WorldDefinition {
 			@Override
 			public void onEvent() {
 				// Remove old map texture.
-				if (mapTexture != null && mapTexture.isLoaded()) {
-					mapTexture.delete();
+				if (textureMap != null && textureMap.isLoaded()) {
+					textureMap.delete();
 				}
 
 				// Load the new map image.
-				mapTexture = TextureFactory.newBuilder().setFile(new MyFile(Framework.get().getRoamingFolder(), "saves", seed + "-biome-" + clientServer + ".png")).create();
+				textureMap = TextureFactory.newBuilder().setFile(new MyFile(Framework.get().getRoamingFolder(), "saves", seed + "-biome-" + clientServer + ".png")).create();
 			}
 		});
 	}
@@ -394,8 +394,8 @@ public class WorldDefinition {
 	 *
 	 * @return The world map.
 	 */
-	public TextureObject getMapTexture() {
-		return mapTexture;
+	public TextureObject getTextureMap() {
+		return textureMap;
 	}
 
 	public Map<String, Pair<Vector3f, Vector3f>> getPlayers() {
@@ -550,8 +550,8 @@ public class WorldDefinition {
 	}
 
 	public void dispose() {
-		if (mapTexture != null) {
-			mapTexture.delete();
+		if (textureMap != null) {
+			textureMap.delete();
 		}
 	}
 
