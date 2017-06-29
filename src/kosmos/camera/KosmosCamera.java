@@ -79,7 +79,7 @@ public class KosmosCamera extends Camera {
 	private static float sensitivity;
 	private static boolean mouseLocked;
 	private static boolean firstPerson;
-	private int angleButton;
+	private static int angleButton;
 	private JoystickAxis joystickVertical;
 	private JoystickAxis joystickHorizontal;
 	private JoystickButton joystickZoom;
@@ -114,7 +114,7 @@ public class KosmosCamera extends Camera {
 		KosmosCamera.fieldOfView = KosmosConfigs.CAMERA_FOV.setReference(() -> fieldOfView).getFloat();
 		KosmosCamera.sensitivity = KosmosConfigs.CAMERA_SENSITIVITY.setReference(() -> sensitivity).getFloat();
 		KosmosCamera.mouseLocked = KosmosConfigs.CAMERA_MOUSE_LOCKED.setReference(() -> mouseLocked).getBoolean();
-		this.angleButton = KosmosConfigs.CAMERA_ANGLE.setReference(() -> angleButton).getInteger();
+		KosmosCamera.angleButton = KosmosConfigs.CAMERA_ANGLE.setReference(() -> angleButton).getInteger();
 		this.joystickVertical = new JoystickAxis(0, 3);
 		this.joystickHorizontal = new JoystickAxis(0, 2);
 		this.joystickZoom = new JoystickButton(0, 9);
@@ -394,6 +394,14 @@ public class KosmosCamera extends Camera {
 
 	public static void setMouseLocked(boolean mouseLocked) {
 		KosmosCamera.mouseLocked = mouseLocked;
+	}
+
+	public static int getAngleButton() {
+		return angleButton;
+	}
+
+	public static void setAngleButton(int angleButton) {
+		KosmosCamera.angleButton = angleButton;
 	}
 
 	@Override

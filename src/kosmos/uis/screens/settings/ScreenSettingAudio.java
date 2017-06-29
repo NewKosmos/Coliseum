@@ -37,7 +37,7 @@ public class ScreenSettingAudio extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleMusic.setText("Music Enabled: " + !newValue);
-				//	toggleMusic.setProgress(newValue);
+				//	toggleMusic.setValue(newValue);
 			}
 		});
 		toggleMusic.addLeftListener(() -> {
@@ -54,10 +54,10 @@ public class ScreenSettingAudio extends ScreenObject {
 			@Override
 			public void onEvent(Float newValue) {
 				sliderMusicVolume.setText("Music Volume: " + Maths.roundToPlace(newValue, 3));
-				sliderMusicVolume.setProgress(newValue);
+				sliderMusicVolume.setValue(newValue);
 			}
 		});
-		sliderMusicVolume.addChangeListener(() -> FlounderSound.get().getMusicPlayer().setVolume(sliderMusicVolume.getProgress()));
+		sliderMusicVolume.addChangeListener(() -> FlounderSound.get().getMusicPlayer().setVolume(sliderMusicVolume.getValue()));
 
 		// Slider Sound Volume.
 		GuiSliderText sliderSoundVolume = new GuiSliderText(this, new Vector2f(0.5f, 0.34f), "Sound Volume: ", 0.0f, 1.0f, FlounderSound.get().getSourcePool().getSystemVolume(), GuiAlign.CENTRE);
@@ -65,10 +65,10 @@ public class ScreenSettingAudio extends ScreenObject {
 			@Override
 			public void onEvent(Float newValue) {
 				sliderSoundVolume.setText("Sound Volume: " + Maths.roundToPlace(newValue, 3));
-				sliderSoundVolume.setProgress(newValue);
+				sliderSoundVolume.setValue(newValue);
 			}
 		});
-		sliderSoundVolume.addChangeListener(() -> FlounderSound.get().getSourcePool().setSystemVolume(sliderSoundVolume.getProgress()));
+		sliderSoundVolume.addChangeListener(() -> FlounderSound.get().getSourcePool().setSystemVolume(sliderSoundVolume.getValue()));
 
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);

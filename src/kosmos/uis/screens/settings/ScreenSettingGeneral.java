@@ -38,12 +38,12 @@ public class ScreenSettingGeneral extends ScreenObject {
 			@Override
 			public void onEvent(Integer newValue) {
 				sliderChunkDistance.setText("Chunk Distance: " + newValue);
-				sliderChunkDistance.setProgress(newValue);
+				sliderChunkDistance.setValue(newValue);
 			}
 		});
 		sliderChunkDistance.addChangeListener(() -> {
-			if (KosmosChunks.get().getChunkDistance() != (int) sliderChunkDistance.getProgress()) {
-				KosmosChunks.get().setChunkDistance((int) sliderChunkDistance.getProgress());
+			if (KosmosChunks.get().getChunkDistance() != (int) sliderChunkDistance.getValue()) {
+				KosmosChunks.get().setChunkDistance((int) sliderChunkDistance.getValue());
 				KosmosChunks.get().clear(true);
 			}
 		});
@@ -54,7 +54,7 @@ public class ScreenSettingGeneral extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleBranding.setText("Branding Enabled: " + !newValue);
-				//	toggleBranding.setProgress(newValue);
+				//	toggleBranding.setValue(newValue);
 			}
 		});
 		toggleBranding.addLeftListener(() -> {

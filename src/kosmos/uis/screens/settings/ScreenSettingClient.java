@@ -32,8 +32,8 @@ public class ScreenSettingClient extends ScreenObject {
 		title.setBorder(new ConstantDriver(0.022f));
 
 		// Text Username.
-		GuiTextInput textUsername = new GuiTextInput(this, new Vector2f(0.5f, 0.20f), "Username: ", KosmosPlayer.getUsername(), GuiAlign.CENTRE);
-		FlounderEvents.get().addEvent(new EventChange<String>(() -> KosmosPlayer.getUsername()) {
+		GuiInputText textUsername = new GuiInputText(this, new Vector2f(0.5f, 0.20f), "Username: ", KosmosPlayer.getUsername(), GuiAlign.CENTRE);
+		FlounderEvents.get().addEvent(new EventChange<String>(KosmosPlayer::getUsername) {
 			@Override
 			public void onEvent(String newValue) {
 				textUsername.setValue(newValue);

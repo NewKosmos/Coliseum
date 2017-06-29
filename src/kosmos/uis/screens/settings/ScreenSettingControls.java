@@ -37,10 +37,10 @@ public class ScreenSettingControls extends ScreenObject {
 			@Override
 			public void onEvent(Integer newValue) {
 				sliderCrosshairHUD.setText("Crosshair HUD: " + newValue);
-				sliderCrosshairHUD.setProgress(newValue);
+				sliderCrosshairHUD.setValue(newValue);
 			}
 		});
-		sliderCrosshairHUD.addChangeListener(() -> OverlayHUD.setCrosshairSelected((int) sliderCrosshairHUD.getProgress()));
+		sliderCrosshairHUD.addChangeListener(() -> OverlayHUD.setCrosshairSelected((int) sliderCrosshairHUD.getValue()));
 
 		// Slider Camera Field Of View.
 		GuiSliderText sliderFieldOfView = new GuiSliderText(this, new Vector2f(0.5f, 0.27f), "FOV: ", 30.0f, 120.0f, KosmosCamera.getFieldOfView(), GuiAlign.CENTRE);
@@ -48,10 +48,10 @@ public class ScreenSettingControls extends ScreenObject {
 			@Override
 			public void onEvent(Float newValue) {
 				sliderFieldOfView.setText("FOV: " + Maths.roundToPlace(newValue, 1));
-				sliderFieldOfView.setProgress(newValue);
+				sliderFieldOfView.setValue(newValue);
 			}
 		});
-		sliderFieldOfView.addChangeListener(() -> KosmosCamera.setFieldOfView(sliderFieldOfView.getProgress()));
+		sliderFieldOfView.addChangeListener(() -> KosmosCamera.setFieldOfView(sliderFieldOfView.getValue()));
 
 		// Slider Camera Sensitivity.
 		GuiSliderText sliderSensitivity = new GuiSliderText(this, new Vector2f(0.5f, 0.34f), "Sensitivity: ", 0.1f, 7.0f, KosmosCamera.getSensitivity(), GuiAlign.CENTRE);
@@ -59,34 +59,42 @@ public class ScreenSettingControls extends ScreenObject {
 			@Override
 			public void onEvent(Float newValue) {
 				sliderSensitivity.setText("Sensitivity: " + Maths.roundToPlace(newValue, 2));
-				sliderSensitivity.setProgress(newValue);
+				sliderSensitivity.setValue(newValue);
 			}
 		});
-		sliderSensitivity.addChangeListener(() -> KosmosCamera.setSensitivity(sliderSensitivity.getProgress()));
+		sliderSensitivity.addChangeListener(() -> KosmosCamera.setSensitivity(sliderSensitivity.getValue()));
 
 		// Key Select Mouse Angle.
+		GuiGrabMouse grabAngle = new GuiGrabMouse(this, new Vector2f(0.5f, 0.41f), "Camera Angle Mouse: ", KosmosCamera.getAngleButton(), GuiAlign.CENTRE);
+		FlounderEvents.get().addEvent(new EventChange<Integer>(KosmosCamera::getAngleButton) {
+			@Override
+			public void onEvent(Integer newValue) {
+				grabAngle.setValue(newValue);
+			}
+		});
+		grabAngle.addChangeListener(() -> KosmosCamera.setAngleButton(grabAngle.getValue()));
 
 		// Toggle Mouse Lock.
-		GuiButtonText toggleMouseLock = new GuiButtonText(this, new Vector2f(0.5f, 0.41f), "Mouse Locked: ", GuiAlign.CENTRE);
+		GuiButtonText toggleMouseLock = new GuiButtonText(this, new Vector2f(0.5f, 0.48f), "Mouse Locked: ", GuiAlign.CENTRE);
 		FlounderEvents.get().addEvent(new EventChange<Boolean>(KosmosCamera::isMouseLocked) {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleMouseLock.setText("Mouse Locked: " + newValue);
-				//	toggleMouseLock.setProgress(newValue);
+				//	toggleMouseLock.setValue(newValue);
 			}
 		});
 		toggleMouseLock.addLeftListener(() -> KosmosCamera.setMouseLocked(!KosmosCamera.isMouseLocked()));
 
 		// Slider Camera Sensitivity.
-		GuiSliderText sliderGuiScale = new GuiSliderText(this, new Vector2f(0.5f, 0.48f), "GUI Scale: ", 0.5f, 2.0f, FlounderGuis.get().getGuiScale(), GuiAlign.CENTRE);
+		GuiSliderText sliderGuiScale = new GuiSliderText(this, new Vector2f(0.5f, 0.55f), "GUI Scale: ", 0.5f, 2.0f, FlounderGuis.get().getGuiScale(), GuiAlign.CENTRE);
 		FlounderEvents.get().addEvent(new EventChange<Float>(FlounderGuis.get()::getGuiScale) {
 			@Override
 			public void onEvent(Float newValue) {
 				sliderGuiScale.setText("GUI Scale: " + Maths.roundToPlace(newValue, 2));
-				sliderGuiScale.setProgress(newValue);
+				sliderGuiScale.setValue(newValue);
 			}
 		});
-		sliderGuiScale.addChangeListener(() -> FlounderGuis.get().setGuiScale(sliderGuiScale.getProgress()));
+		sliderGuiScale.addChangeListener(() -> FlounderGuis.get().setGuiScale(sliderGuiScale.getValue()));
 
 		// Back.
 		GuiButtonText back = new GuiButtonText(this, new Vector2f(0.5f, 0.9f), "Back", GuiAlign.CENTRE);

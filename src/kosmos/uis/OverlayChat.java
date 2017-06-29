@@ -14,7 +14,6 @@ import flounder.fonts.*;
 import flounder.guis.*;
 import flounder.logger.*;
 import flounder.maths.*;
-import flounder.maths.Timer;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.resources.*;
@@ -36,7 +35,7 @@ public class OverlayChat extends ScreenObject {
 	private static final float INPUT_AREA_HEIGHT = 0.05f;
 	private static final String START_STRING = "Message: ";
 
-	private ChatDelay inputDelay;
+	private InputDelay inputDelay;
 	private int lastKey;
 
 	private GuiObject textureView;
@@ -49,7 +48,7 @@ public class OverlayChat extends ScreenObject {
 		super(parent, new Vector2f(0.5f, 0.5f), new Vector2f(1.0f, 1.0f));
 		super.setInScreenCoords(false);
 
-		this.inputDelay = new ChatDelay();
+		this.inputDelay = new InputDelay();
 		this.lastKey = 0;
 
 		this.textureView = new GuiObject(this, new Vector2f(0.5f, 1.0f - (VIEW_AREA_HEIGHT / 2.0f)), new Vector2f(1.0f, VIEW_AREA_HEIGHT), TextureFactory.newBuilder().setFile(new MyFile(FlounderGuis.GUIS_LOC, "chatView.png")).create(), 1);
@@ -125,37 +124,6 @@ public class OverlayChat extends ScreenObject {
 
 	@Override
 	public void deleteObject() {
-	}
-
-	private class ChatDelay {
-		private Timer delayTimer;
-		private Timer repeatTimer;
-		private boolean delayOver;
-
-		private ChatDelay() {
-			this.delayTimer = new Timer(0.4);
-			this.repeatTimer = new Timer(0.1);
-			this.delayOver = false;
-		}
-
-		private void update(boolean keyIsDown) {
-			if (keyIsDown) {
-				delayOver = delayTimer.isPassedTime();
-			} else {
-				delayOver = false;
-				delayTimer.resetStartTime();
-				repeatTimer.resetStartTime();
-			}
-		}
-
-		private boolean canInput() {
-			if (delayOver && repeatTimer.isPassedTime()) {
-				repeatTimer.resetStartTime();
-				return true;
-			}
-
-			return false;
-		}
 	}
 
 	private static class ChatMessages extends ScreenObject {

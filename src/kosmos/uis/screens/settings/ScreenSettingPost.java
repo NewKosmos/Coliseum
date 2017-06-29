@@ -37,7 +37,7 @@ public class ScreenSettingPost extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleEffects.setText("Post Enabled: " + newValue);
-				//	toggleEffects.setProgress(newValue);
+				//	toggleEffects.setValue(newValue);
 			}
 		});
 		toggleEffects.addLeftListener(() -> KosmosPost.get().setEffectsEnabled(!KosmosPost.get().isEffectsEnabled()));
@@ -48,7 +48,7 @@ public class ScreenSettingPost extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleBloom.setText("Bloom Enabled: " + newValue);
-				//	toggleBloom.setProgress(newValue);
+				//	toggleBloom.setValue(newValue);
 			}
 		});
 		toggleBloom.addLeftListener(() -> KosmosPost.get().setBloomEnabled(!KosmosPost.get().isBloomEnabled()));
@@ -59,7 +59,7 @@ public class ScreenSettingPost extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleMotionBlur.setText("Motion Blur Enabled: " + newValue);
-				//	toggleMotionBlur.setProgress(newValue);
+				//	toggleMotionBlur.setValue(newValue);
 			}
 		});
 		toggleMotionBlur.addLeftListener(() -> KosmosPost.get().setMotionBlurEnabled(!KosmosPost.get().isMotionBlurEnabled()));
@@ -70,7 +70,7 @@ public class ScreenSettingPost extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleTiltShift.setText("Tilt Shift Enabled: " + newValue);
-				//	toggleTiltShift.setProgress(newValue);
+				//	toggleTiltShift.setValue(newValue);
 			}
 		});
 		toggleTiltShift.addLeftListener(() -> KosmosPost.get().setTiltShiftEnabled(!KosmosPost.get().isTiltShiftEnabled()));
@@ -81,7 +81,7 @@ public class ScreenSettingPost extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleLensFlare.setText("Lens Flare Enabled: " + newValue);
-				//	toggleLensFlare.setProgress(newValue);
+				//	toggleLensFlare.setValue(newValue);
 			}
 		});
 		toggleLensFlare.addLeftListener(() -> KosmosPost.get().setLensFlareEnabled(!KosmosPost.get().isLensFlareEnabled()));
@@ -92,7 +92,7 @@ public class ScreenSettingPost extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleEffectCRT.setText("Effect CRT Enabled: " + newValue);
-				//	toggleEffectCRT.setProgress(newValue);
+				//	toggleEffectCRT.setValue(newValue);
 			}
 		});
 		toggleEffectCRT.addLeftListener(() -> KosmosPost.get().setCrtEnabled(!KosmosPost.get().isCrtEnabled()));
@@ -103,7 +103,7 @@ public class ScreenSettingPost extends ScreenObject {
 			@Override
 			public void onEvent(Boolean newValue) {
 				toggleGrain.setText("Grain Enabled: " + newValue);
-				//	toggleGrain.setProgress(newValue);
+				//	toggleGrain.setValue(newValue);
 			}
 		});
 		toggleGrain.addLeftListener(() -> KosmosPost.get().setGrainEnabled(!KosmosPost.get().isGrainEnabled()));
