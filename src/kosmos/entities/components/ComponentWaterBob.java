@@ -45,10 +45,6 @@ public class ComponentWaterBob extends IComponentEntity implements IComponentEdi
 	}
 
 	@Override
-	public void dispose() {
-	}
-
-	@Override
 	public void addToPanel(JPanel panel) {
 	}
 
@@ -62,5 +58,9 @@ public class ComponentWaterBob extends IComponentEntity implements IComponentEdi
 				new String[]{}, // Static variables
 				new String[]{} // Class constructor
 		);
+	}
+
+	@Override
+	public void dispose() {
 	}
 }

@@ -33,16 +33,6 @@ import kosmos.world.water.*;
 import java.util.*;
 
 public class KosmosWorld extends Module {
-	public static final float GRAVITY = -32.0f;
-	public static final Colour SKY_COLOUR_NIGHT = new Colour(0.05f, 0.05f, 0.1f);
-	public static final Colour SKY_COLOUR_SUNRISE = new Colour(0.9f, 0.3f, 0.3f);
-	public static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.3f, 0.7f);
-	public static final Colour SUN_COLOUR_NIGHT = new Colour(0.0f, 0.0f, 0.0f);
-	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.9f, 0.3f, 0.3f);
-	public static final Colour SUN_COLOUR_DAY = new Colour(1.0f, 1.0f, 1.0f);
-	public static final Colour MOON_COLOUR_NIGHT = new Colour(0.4f, 0.4f, 0.6f);
-	public static final Colour MOON_COLOUR_DAY = new Colour(0.0f, 0.0f, 0.0f);
-	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, 0.0f, 0.5f); // The starting light direction.
 	private MyFile[] SKYBOX_TEXTURE_FILES = {
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsRight.png"),
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsLeft.png"),
@@ -51,6 +41,22 @@ public class KosmosWorld extends Module {
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsBack.png"),
 			new MyFile(FlounderSkybox.SKYBOX_FOLDER, "starsFront.png")
 	};
+
+	public static final float GRAVITY = -32.0f;
+
+	private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.2f, 0.0f, 0.5f); // The starting light direction.
+
+	public static final Colour SKY_COLOUR_NIGHT = new Colour(0.05f, 0.05f, 0.1f);
+	public static final Colour SKY_COLOUR_SUNRISE = new Colour(0.9f, 0.3f, 0.3f);
+	public static final Colour SKY_COLOUR_DAY = new Colour(0.0f, 0.3f, 0.7f);
+
+	public static final Colour SUN_COLOUR_NIGHT = new Colour(0.0f, 0.0f, 0.0f);
+	public static final Colour SUN_COLOUR_SUNRISE = new Colour(0.9f, 0.3f, 0.3f);
+	public static final Colour SUN_COLOUR_DAY = new Colour(1.0f, 1.0f, 1.0f);
+
+	public static final Colour MOON_COLOUR_NIGHT = new Colour(0.4f, 0.4f, 0.6f);
+	public static final Colour MOON_COLOUR_DAY = new Colour(0.0f, 0.0f, 0.0f);
+
 	private WorldDefinition worldDefinition;
 
 	private Map<String, Entity> players;
@@ -64,11 +70,6 @@ public class KosmosWorld extends Module {
 
 	public KosmosWorld() {
 		super(FlounderEntities.class, KosmosChunks.class, KosmosWater.class);
-	}
-
-	@Module.Instance
-	public static KosmosWorld get() {
-		return (KosmosWorld) Framework.get().getInstance(KosmosWorld.class);
 	}
 
 	@Handler.Function(Handler.FLAG_INIT)
@@ -157,15 +158,6 @@ public class KosmosWorld extends Module {
 		});
 	}
 
-	public void clearPlayers() {
-		for (String username : this.players.keySet()) {
-			Entity otherPlayer = this.players.get(username);
-			otherPlayer.forceRemove();
-		}
-
-		this.players.clear();
-	}
-
 	@Handler.Function(Handler.FLAG_UPDATE_PRE)
 	public void update() {
 		// Update the sky colours and sun position.
@@ -181,28 +173,6 @@ public class KosmosWorld extends Module {
 			FlounderShadows.get().setShadowBoxOffset(10.0f);
 			FlounderShadows.get().setShadowBoxDistance(35.0f);
 		}
-	}
-
-	public float getSunriseFactor() {
-		return (float) Maths.clamp(-(Math.sin(2.0 * Math.PI * getDayFactor()) - 1.0) / 2.0f, 0.0, 1.0);
-	}
-
-	public float getDayFactor() {
-		return dayFactor;
-	}
-
-	public float getShadowFactor() {
-		return (float) Maths.clamp(1.7f * Math.sin(2.0f * Math.PI * getDayFactor()), 0.0, 1.0);
-	}
-
-	public float starIntensity() {
-		float addedIntensity = 0.0f;
-
-		if (FlounderGuis.get().getGuiMaster() instanceof KosmosGuis) {
-			addedIntensity = ((KosmosGuis) FlounderGuis.get().getGuiMaster()).getOverlaySlider().inStartMenu() ? 0.5f : 0.0f;
-		}
-
-		return Maths.clamp(1.0f - getShadowFactor() + addedIntensity, 0.0f, 1.0f);
 	}
 
 	public WorldDefinition getWorld() {
@@ -269,6 +239,15 @@ public class KosmosWorld extends Module {
 		}
 	}
 
+	public void clearPlayers() {
+		for (String username : this.players.keySet()) {
+			Entity otherPlayer = this.players.get(username);
+			otherPlayer.forceRemove();
+		}
+
+		this.players.clear();
+	}
+
 	public Entity getEntityPlayer() {
 		return this.entityPlayer;
 	}
@@ -277,8 +256,24 @@ public class KosmosWorld extends Module {
 		((KosmosPlayer) FlounderCamera.get().getPlayer()).askSendData();
 	}
 
+	public Entity getEntitySun() {
+		return this.entitySun;
+	}
+
 	public Entity getEntityMoon() {
 		return entityMoon;
+	}
+
+	public float getDayFactor() {
+		return dayFactor;
+	}
+
+	public float getSunriseFactor() {
+		return (float) Maths.clamp(-(Math.sin(2.0 * Math.PI * getDayFactor()) - 1.0) / 2.0f, 0.0, 1.0);
+	}
+
+	public float getShadowFactor() {
+		return (float) Maths.clamp(1.7f * Math.sin(2.0f * Math.PI * getDayFactor()), 0.0, 1.0);
 	}
 
 	public float getSunHeight() {
@@ -291,8 +286,14 @@ public class KosmosWorld extends Module {
 		return getEntitySun().getPosition().getY() + addedHeight;
 	}
 
-	public Entity getEntitySun() {
-		return this.entitySun;
+	public float starIntensity() {
+		float addedIntensity = 0.0f;
+
+		if (FlounderGuis.get().getGuiMaster() instanceof KosmosGuis) {
+			addedIntensity = ((KosmosGuis) FlounderGuis.get().getGuiMaster()).getOverlaySlider().inStartMenu() ? 0.5f : 0.0f;
+		}
+
+		return Maths.clamp(1.0f - getShadowFactor() + addedIntensity, 0.0f, 1.0f);
 	}
 
 	@Override
@@ -306,5 +307,10 @@ public class KosmosWorld extends Module {
 			worldDefinition.save();
 			worldDefinition.dispose();
 		}
+	}
+
+	@Module.Instance
+	public static KosmosWorld get() {
+		return (KosmosWorld) Framework.get().getInstance(KosmosWorld.class);
 	}
 }

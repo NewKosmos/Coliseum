@@ -87,10 +87,6 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 	}
 
 	@Override
-	public void dispose() {
-	}
-
-	@Override
 	public void addToPanel(JPanel panel) {
 	}
 
@@ -106,6 +102,10 @@ public class ComponentCelestial extends IComponentEntity implements IComponentEd
 				new String[]{}, // Static variables
 				new String[]{saveLightType} // Class constructor
 		);
+	}
+
+	@Override
+	public void dispose() {
 	}
 
 	public enum LightType {

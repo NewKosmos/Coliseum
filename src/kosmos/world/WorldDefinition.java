@@ -207,10 +207,6 @@ public class WorldDefinition {
 		return null;
 	}
 
-	public static String vectorToString(Vector3f vector) {
-		return vector.x + "," + vector.y + "," + vector.z;
-	}
-
 	/**
 	 * Generates a map for the current seed.
 	 */
@@ -555,6 +551,10 @@ public class WorldDefinition {
 		if (textureMap != null) {
 			textureMap.delete();
 		}
+	}
+
+	public static String vectorToString(Vector3f vector) {
+		return vector.x + "," + vector.y + "," + vector.z;
 	}
 
 	@Override

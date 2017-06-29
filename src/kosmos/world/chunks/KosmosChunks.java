@@ -59,272 +59,6 @@ public class KosmosChunks extends Module {
 		super(FlounderEvents.class, FlounderTasks.class, FlounderEntities.class, FlounderModels.class, FlounderTextures.class);
 	}
 
-	public static Vector3f convertTileToChunk(double x, double z, Vector3f destination) {
-		if (destination == null) {
-			destination = new Vector3f();
-		}
-
-		double cz = (3.0 / 2.0) * HEXAGON_SIDE_LENGTH * z;
-		double cx = Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH * ((z / 2.0) + x);
-		return destination.set((float) cx, 0.0f, (float) cz);
-	}
-
-	public static Vector2f convertChunkToTile(Vector3f chunkPosition, Vector2f destination) {
-		if (destination == null) {
-			destination = new Vector2f();
-		}
-
-		double cz = chunkPosition.z / ((3.0 / 2.0) * HEXAGON_SIDE_LENGTH);
-		double cx = (chunkPosition.x / (Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH)) - (cz / 2.0);
-		return destination.set((float) cx, (float) cz);
-	}
-
-	/**
-	 * Gets the terrain height for a position in the world.
-	 * The world position is rounded into tile space and then back into world space, creating positions rounded the the centres of the tiles.
-	 *
-	 * @param chunk The chunk to get the position from.
-	 * @param worldPosition The world position to sample from.
-	 *
-	 * @return The found height at that world position.
-	 */
-	public static float roundedHeight(Chunk chunk, Vector3f worldPosition) {
-		Vector2f tilePosition = convertWorldToTile(chunk, worldPosition, null);
-		tilePosition.x = Math.round(tilePosition.x);
-		tilePosition.y = Math.round(tilePosition.y);
-		Vector3f roundedPosition = convertTileToWorld(chunk, tilePosition.x, tilePosition.y, null);
-		return getWorldHeight(roundedPosition.x, roundedPosition.z);
-	}
-
-	public static Vector3f convertTileToWorld(Chunk chunk, double x, double z, Vector3f destination) {
-		if (destination == null) {
-			destination = new Vector3f();
-		}
-
-		double wz = (3.0 / 4.0) * HEXAGON_SIDE_LENGTH * z;
-		double wx = (Math.sqrt(3.0) / 2.0) * HEXAGON_SIDE_LENGTH * ((z / 2.0) + x);
-		return destination.set((float) wx + chunk.getPosition().x, 0.0f, (float) wz + chunk.getPosition().z);
-	}
-
-	public static Vector2f convertWorldToTile(Chunk chunk, Vector3f worldPosition, Vector2f destination) {
-		if (destination == null) {
-			destination = new Vector2f();
-		}
-
-		double tz = (4.0 * (worldPosition.z - chunk.getPosition().z)) / (3.0 * HEXAGON_SIDE_LENGTH);
-		double tx = ((2.0 * (worldPosition.x - chunk.getPosition().x)) / (Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH)) - (tz / 2.0);
-		return destination.set((float) tx, (float) tz);
-	}
-
-	/**
-	 * Gets the world terrain height for a position in the world.
-	 *
-	 * @param positionX The worlds X position.
-	 * @param positionZ The worlds Z position.
-	 *
-	 * @return The found height at that world position.
-	 */
-	public static float getWorldHeight(float positionX, float positionZ) {
-		/*float height = getHeightMap(positionX, positionZ) * KosmosWorld.get().getWorld().getWorldNoiseHeight();
-
-		if (height < 0.0f) {
-			return Float.NEGATIVE_INFINITY;
-		}
-
-		// Returns the final height,
-		return (int) height * (float) Math.sqrt(2.0);*/
-
-		float height = getHeightMap(positionX, positionZ) * KosmosWorld.get().getWorld().getWorldNoiseHeight();
-		height = (float) Math.sqrt(2.0) * (int) height;
-		height -= 5.6f;
-
-		if (height < 0.0f) {
-			return Float.NEGATIVE_INFINITY;
-		}
-
-		// Returns the final height,
-		return height;
-	}
-
-	/**
-	 * Gets the terrain height for a position in the world.
-	 *
-	 * @param positionX The worlds X position.
-	 * @param positionZ The worlds Z position.
-	 *
-	 * @return The found height at that world position.
-	 */
-	public static float getHeightMap(float positionX, float positionZ) {
-		/*// Gets the height from a perlin noise map and from the island factor.
-		float island = getIslandMap(positionX, positionZ);
-
-		// Ignore anything outside of the map.
-		if (island <= 0.0f) {
-			return Float.NEGATIVE_INFINITY;
-		}
-
-		float height = island * 1.70f * KosmosWorld.get().getWorld().getNoise().turbulence(
-				(positionX + KosmosWorld.get().getWorld().getWorldSize()) / KosmosWorld.get().getWorld().getWorldNoiseSpread(),
-				(positionZ + KosmosWorld.get().getWorld().getWorldSize()) / KosmosWorld.get().getWorld().getWorldNoiseSpread(),
-				KosmosWorld.get().getWorld().getWorldNoiseFrequency()
-		);
-
-		// Returns the final height,
-		return height;*/
-		// Gets the height from a perlin noise map and from the island factor.
-		float island = getIslandMap(positionX, positionZ);
-		float height = island * 1.70f * KosmosWorld.get().getWorld().getNoise().turbulence(
-				(positionX + KosmosWorld.get().getWorld().getWorldSize()) / KosmosWorld.get().getWorld().getWorldNoiseSpread(),
-				(positionZ + KosmosWorld.get().getWorld().getWorldSize()) / KosmosWorld.get().getWorld().getWorldNoiseSpread(),
-				KosmosWorld.get().getWorld().getWorldNoiseFrequency()
-		);
-		height = Maths.clamp(height, 0.0f, 1.0f);
-
-		// Ignore height that would be water/nothing.
-		if (height <= 0.1f) {
-			return Float.NEGATIVE_INFINITY;
-		}
-
-		// Returns the final height,
-		return height;
-	}
-
-	/**
-	 * Gets the island factor for a position in the world.
-	 *
-	 * @param positionX The worlds X position.
-	 * @param positionZ The worlds Z position.
-	 *
-	 * @return The island factor at that world position.
-	 */
-	public static float getIslandMap(float positionX, float positionZ) {
-		if (KosmosWorld.get().getWorld() == null) {
-			return 0.0f;
-		}
-
-		float circular = (float) Math.sqrt(Math.pow(positionX, 2) + Math.pow(positionZ, 2)); // The current radius (circular map).
-		float rectangular = Math.max(Math.abs(positionX), Math.abs(positionZ)); // The current radius (rectangular map).
-		float reading = ((1.0f - KosmosWorld.get().getWorld().getWorldIslandParameter()) * circular) + (KosmosWorld.get().getWorld().getWorldIslandParameter() * rectangular);
-
-		float radius1 = KosmosWorld.get().getWorld().getWorldIslandInside() * (KosmosWorld.get().getWorld().getWorldSize() / 2.0f); // The inside radius to the blur.
-		float radius2 = KosmosWorld.get().getWorld().getWorldIslandOutside() * (KosmosWorld.get().getWorld().getWorldSize() / 2.0f); // The outside radius to the blur.
-
-		if (positionX == 0.0f && positionZ == 0.0f) { // The special case where the reading is undefined.
-			return 1.0f;
-		} else if (reading > radius2) { // If outside the upper bound there is no factor!
-			return 0.0f;
-		} else if (reading >= radius1) { // Something between upper and lower, uses cos interpolation.
-			float blend = Maths.clamp((reading - radius1) / (radius2 - radius1), 0.0f, 1.0f);
-			return Maths.clamp(Maths.cosInterpolate(1.0f, 0.0f, blend), 0.0f, 1.0f);
-		} else { // Fully inside of the lower radius, so full factor.
-			return 1.0f;
-		}
-	}
-
-	/**
-	 * Gets the biome for a position in the world.
-	 *
-	 * @param positionX The worlds X position.
-	 * @param positionZ The worlds Z position.
-	 *
-	 * @return The biome at that world position.
-	 */
-	public static IBiome.Biomes getBiomeMap(float positionX, float positionZ) {
-		float height = getHeightMap(positionX, positionZ);
-		float moisture = getMoistureMap(positionX, positionZ);
-
-		if (height <= 0.125f) {
-			// Ocean.
-			return IBiome.Biomes.OCEAN;
-		} else if (height <= 0.25f) {
-			if (moisture <= 0.16f) {
-				// Subtropical Desert.
-				return IBiome.Biomes.SUBTROPICAL_DESERT;
-			} else if (moisture <= 0.33f) {
-				// Grassland.
-				return IBiome.Biomes.GRASSLAND;
-			} else if (moisture <= 0.66f) {
-				// Tropical Seasonal Forest.
-				return IBiome.Biomes.TROPICAL_SEASONAL_FOREST;
-			} else if (moisture <= 1.0f) {
-				// Tropical Rain Forest.
-				return IBiome.Biomes.TROPICAL_RAIN_FOREST;
-			}
-		} else if (height <= 0.5f) {
-			if (moisture <= 0.16f) {
-				// Temperate Desert.
-				return IBiome.Biomes.TEMPERATE_DESERT;
-			} else if (moisture <= 0.5f) {
-				// Grassland.
-				return IBiome.Biomes.GRASSLAND;
-			} else if (moisture <= 0.83f) {
-				// Temperate Deciduous Forest.
-				return IBiome.Biomes.TEMPERATE_DECIDUOUS_FOREST;
-			} else if (moisture <= 1.0f) {
-				// Temperate Rain Forest.
-				return IBiome.Biomes.TEMPERATE_RAIN_FOREST;
-			}
-		} else if (height <= 0.75f) {
-			if (moisture <= 0.33f) {
-				// Temperate Desert.
-				return IBiome.Biomes.TEMPERATE_DESERT;
-			} else if (moisture <= 0.66f) {
-				// Shrubland.
-				return IBiome.Biomes.SHRUBLAND;
-			} else if (moisture <= 1.0f) {
-				// Taiga.
-				return IBiome.Biomes.TAIGA;
-			}
-		} else if (height <= 1.0f) {
-			if (moisture <= 0.16f) {
-				// Scorched.
-				return IBiome.Biomes.SCORCHED;
-			} else if (moisture <= 0.33f) {
-				// Bare.
-				return IBiome.Biomes.BARE;
-			} else if (moisture <= 0.5f) {
-				// Tundra.
-				return IBiome.Biomes.TUNDRA;
-			} else if (moisture <= 1.0f) {
-				// Snow.
-				return IBiome.Biomes.SNOW;
-			}
-		}
-
-		return IBiome.Biomes.OCEAN;
-	}
-
-	/**
-	 * Gets the moisture for a position in the world.
-	 *
-	 * @param positionX The worlds X position.
-	 * @param positionZ The worlds Z position.
-	 *
-	 * @return The moisture at that world position.
-	 */
-	public static float getMoistureMap(float positionX, float positionZ) {
-		float height = getHeightMap(positionX, positionZ);
-
-		// Calculate the moisture as a inverse of height with added noise.
-		float moisture = height;
-
-		// Set to 100% moisture in the ocean/lakes/rivers.
-		if (height <= 0.0f) {
-			moisture = 1.0f;
-		} else {
-			moisture += KosmosWorld.get().getWorld().getNoise().turbulence(positionX / 150.0f, positionZ / 150.0f, 16.0f);
-		}
-
-		moisture = Maths.clamp(moisture, 0.0f, 1.0f);
-
-		return Maths.clamp(moisture, 0.0f, 1.0f);
-	}
-
-	@Module.Instance
-	public static KosmosChunks get() {
-		return (KosmosChunks) Framework.get().getInstance(KosmosChunks.class);
-	}
-
 	@Handler.Function(Handler.FLAG_INIT)
 	public void init() {
 		this.chunkRange = new Sphere(40.0f);
@@ -503,6 +237,267 @@ public class KosmosChunks extends Module {
 		return true;
 	}
 
+	public static Vector3f convertTileToChunk(double x, double z, Vector3f destination) {
+		if (destination == null) {
+			destination = new Vector3f();
+		}
+
+		double cz = (3.0 / 2.0) * HEXAGON_SIDE_LENGTH * z;
+		double cx = Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH * ((z / 2.0) + x);
+		return destination.set((float) cx, 0.0f, (float) cz);
+	}
+
+	public static Vector2f convertChunkToTile(Vector3f chunkPosition, Vector2f destination) {
+		if (destination == null) {
+			destination = new Vector2f();
+		}
+
+		double cz = chunkPosition.z / ((3.0 / 2.0) * HEXAGON_SIDE_LENGTH);
+		double cx = (chunkPosition.x / (Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH)) - (cz / 2.0);
+		return destination.set((float) cx, (float) cz);
+	}
+
+	public static Vector3f convertTileToWorld(Chunk chunk, double x, double z, Vector3f destination) {
+		if (destination == null) {
+			destination = new Vector3f();
+		}
+
+		double wz = (3.0 / 4.0) * HEXAGON_SIDE_LENGTH * z;
+		double wx = (Math.sqrt(3.0) / 2.0) * HEXAGON_SIDE_LENGTH * ((z / 2.0) + x);
+		return destination.set((float) wx + chunk.getPosition().x, 0.0f, (float) wz + chunk.getPosition().z);
+	}
+
+	public static Vector2f convertWorldToTile(Chunk chunk, Vector3f worldPosition, Vector2f destination) {
+		if (destination == null) {
+			destination = new Vector2f();
+		}
+
+		double tz = (4.0 * (worldPosition.z - chunk.getPosition().z)) / (3.0 * HEXAGON_SIDE_LENGTH);
+		double tx = ((2.0 * (worldPosition.x - chunk.getPosition().x)) / (Math.sqrt(3.0) * HEXAGON_SIDE_LENGTH)) - (tz / 2.0);
+		return destination.set((float) tx, (float) tz);
+	}
+
+	/**
+	 * Gets the island factor for a position in the world.
+	 *
+	 * @param positionX The worlds X position.
+	 * @param positionZ The worlds Z position.
+	 *
+	 * @return The island factor at that world position.
+	 */
+	public static float getIslandMap(float positionX, float positionZ) {
+		if (KosmosWorld.get().getWorld() == null) {
+			return 0.0f;
+		}
+
+		float circular = (float) Math.sqrt(Math.pow(positionX, 2) + Math.pow(positionZ, 2)); // The current radius (circular map).
+		float rectangular = Math.max(Math.abs(positionX), Math.abs(positionZ)); // The current radius (rectangular map).
+		float reading = ((1.0f - KosmosWorld.get().getWorld().getWorldIslandParameter()) * circular) + (KosmosWorld.get().getWorld().getWorldIslandParameter() * rectangular);
+
+		float radius1 = KosmosWorld.get().getWorld().getWorldIslandInside() * (KosmosWorld.get().getWorld().getWorldSize() / 2.0f); // The inside radius to the blur.
+		float radius2 = KosmosWorld.get().getWorld().getWorldIslandOutside() * (KosmosWorld.get().getWorld().getWorldSize() / 2.0f); // The outside radius to the blur.
+
+		if (positionX == 0.0f && positionZ == 0.0f) { // The special case where the reading is undefined.
+			return 1.0f;
+		} else if (reading > radius2) { // If outside the upper bound there is no factor!
+			return 0.0f;
+		} else if (reading >= radius1) { // Something between upper and lower, uses cos interpolation.
+			float blend = Maths.clamp((reading - radius1) / (radius2 - radius1), 0.0f, 1.0f);
+			return Maths.clamp(Maths.cosInterpolate(1.0f, 0.0f, blend), 0.0f, 1.0f);
+		} else { // Fully inside of the lower radius, so full factor.
+			return 1.0f;
+		}
+	}
+
+	/**
+	 * Gets the terrain height for a position in the world.
+	 *
+	 * @param positionX The worlds X position.
+	 * @param positionZ The worlds Z position.
+	 *
+	 * @return The found height at that world position.
+	 */
+	public static float getHeightMap(float positionX, float positionZ) {
+		/*// Gets the height from a perlin noise map and from the island factor.
+		float island = getIslandMap(positionX, positionZ);
+
+		// Ignore anything outside of the map.
+		if (island <= 0.0f) {
+			return Float.NEGATIVE_INFINITY;
+		}
+
+		float height = island * 1.70f * KosmosWorld.get().getWorld().getNoise().turbulence(
+				(positionX + KosmosWorld.get().getWorld().getWorldSize()) / KosmosWorld.get().getWorld().getWorldNoiseSpread(),
+				(positionZ + KosmosWorld.get().getWorld().getWorldSize()) / KosmosWorld.get().getWorld().getWorldNoiseSpread(),
+				KosmosWorld.get().getWorld().getWorldNoiseFrequency()
+		);
+
+		// Returns the final height,
+		return height;*/
+		// Gets the height from a perlin noise map and from the island factor.
+		float island = getIslandMap(positionX, positionZ);
+		float height = island * 1.70f * KosmosWorld.get().getWorld().getNoise().turbulence(
+				(positionX + KosmosWorld.get().getWorld().getWorldSize()) / KosmosWorld.get().getWorld().getWorldNoiseSpread(),
+				(positionZ + KosmosWorld.get().getWorld().getWorldSize()) / KosmosWorld.get().getWorld().getWorldNoiseSpread(),
+				KosmosWorld.get().getWorld().getWorldNoiseFrequency()
+		);
+		height = Maths.clamp(height, 0.0f, 1.0f);
+
+		// Ignore height that would be water/nothing.
+		if (height <= 0.1f) {
+			return Float.NEGATIVE_INFINITY;
+		}
+
+		// Returns the final height,
+		return height;
+	}
+
+	/**
+	 * Gets the world terrain height for a position in the world.
+	 *
+	 * @param positionX The worlds X position.
+	 * @param positionZ The worlds Z position.
+	 *
+	 * @return The found height at that world position.
+	 */
+	public static float getWorldHeight(float positionX, float positionZ) {
+		/*float height = getHeightMap(positionX, positionZ) * KosmosWorld.get().getWorld().getWorldNoiseHeight();
+
+		if (height < 0.0f) {
+			return Float.NEGATIVE_INFINITY;
+		}
+
+		// Returns the final height,
+		return (int) height * (float) Math.sqrt(2.0);*/
+
+		float height = getHeightMap(positionX, positionZ) * KosmosWorld.get().getWorld().getWorldNoiseHeight();
+		height = (float) Math.sqrt(2.0) * (int) height;
+		height -= 5.6f;
+
+		if (height < 0.0f) {
+			return Float.NEGATIVE_INFINITY;
+		}
+
+		// Returns the final height,
+		return height;
+	}
+
+	/**
+	 * Gets the terrain height for a position in the world.
+	 * The world position is rounded into tile space and then back into world space, creating positions rounded the the centres of the tiles.
+	 *
+	 * @param chunk The chunk to get the position from.
+	 * @param worldPosition The world position to sample from.
+	 *
+	 * @return The found height at that world position.
+	 */
+	public static float roundedHeight(Chunk chunk, Vector3f worldPosition) {
+		Vector2f tilePosition = convertWorldToTile(chunk, worldPosition, null);
+		tilePosition.x = Math.round(tilePosition.x);
+		tilePosition.y = Math.round(tilePosition.y);
+		Vector3f roundedPosition = convertTileToWorld(chunk, tilePosition.x, tilePosition.y, null);
+		return getWorldHeight(roundedPosition.x, roundedPosition.z);
+	}
+
+	/**
+	 * Gets the moisture for a position in the world.
+	 *
+	 * @param positionX The worlds X position.
+	 * @param positionZ The worlds Z position.
+	 *
+	 * @return The moisture at that world position.
+	 */
+	public static float getMoistureMap(float positionX, float positionZ) {
+		float height = getHeightMap(positionX, positionZ);
+
+		// Calculate the moisture as a inverse of height with added noise.
+		float moisture = height;
+
+		// Set to 100% moisture in the ocean/lakes/rivers.
+		if (height <= 0.0f) {
+			moisture = 1.0f;
+		} else {
+			moisture += KosmosWorld.get().getWorld().getNoise().turbulence(positionX / 150.0f, positionZ / 150.0f, 16.0f);
+		}
+
+		moisture = Maths.clamp(moisture, 0.0f, 1.0f);
+
+		return Maths.clamp(moisture, 0.0f, 1.0f);
+	}
+
+	/**
+	 * Gets the biome for a position in the world.
+	 *
+	 * @param positionX The worlds X position.
+	 * @param positionZ The worlds Z position.
+	 *
+	 * @return The biome at that world position.
+	 */
+	public static IBiome.Biomes getBiomeMap(float positionX, float positionZ) {
+		float height = getHeightMap(positionX, positionZ);
+		float moisture = getMoistureMap(positionX, positionZ);
+
+		if (height <= 0.125f) {
+			// Ocean.
+			return IBiome.Biomes.OCEAN;
+		} else if (height <= 0.25f) {
+			if (moisture <= 0.16f) {
+				// Subtropical Desert.
+				return IBiome.Biomes.SUBTROPICAL_DESERT;
+			} else if (moisture <= 0.33f) {
+				// Grassland.
+				return IBiome.Biomes.GRASSLAND;
+			} else if (moisture <= 0.66f) {
+				// Tropical Seasonal Forest.
+				return IBiome.Biomes.TROPICAL_SEASONAL_FOREST;
+			} else if (moisture <= 1.0f) {
+				// Tropical Rain Forest.
+				return IBiome.Biomes.TROPICAL_RAIN_FOREST;
+			}
+		} else if (height <= 0.5f) {
+			if (moisture <= 0.16f) {
+				// Temperate Desert.
+				return IBiome.Biomes.TEMPERATE_DESERT;
+			} else if (moisture <= 0.5f) {
+				// Grassland.
+				return IBiome.Biomes.GRASSLAND;
+			} else if (moisture <= 0.83f) {
+				// Temperate Deciduous Forest.
+				return IBiome.Biomes.TEMPERATE_DECIDUOUS_FOREST;
+			} else if (moisture <= 1.0f) {
+				// Temperate Rain Forest.
+				return IBiome.Biomes.TEMPERATE_RAIN_FOREST;
+			}
+		} else if (height <= 0.75f) {
+			if (moisture <= 0.33f) {
+				// Temperate Desert.
+				return IBiome.Biomes.TEMPERATE_DESERT;
+			} else if (moisture <= 0.66f) {
+				// Shrubland.
+				return IBiome.Biomes.SHRUBLAND;
+			} else if (moisture <= 1.0f) {
+				// Taiga.
+				return IBiome.Biomes.TAIGA;
+			}
+		} else if (height <= 1.0f) {
+			if (moisture <= 0.16f) {
+				// Scorched.
+				return IBiome.Biomes.SCORCHED;
+			} else if (moisture <= 0.33f) {
+				// Bare.
+				return IBiome.Biomes.BARE;
+			} else if (moisture <= 0.5f) {
+				// Tundra.
+				return IBiome.Biomes.TUNDRA;
+			} else if (moisture <= 1.0f) {
+				// Snow.
+				return IBiome.Biomes.SNOW;
+			}
+		}
+
+		return IBiome.Biomes.OCEAN;
+	}
+
 	public Chunk getCurrent() {
 		return this.currentChunk;
 	}
@@ -555,23 +550,6 @@ public class KosmosChunks extends Module {
 		}
 	}
 
-	public int getChunkDistance() {
-		return chunkDistance;
-	}
-
-	public void setChunkDistance(int chunkDistance) {
-		this.chunkDistance = chunkDistance;
-	}
-
-	public TextureObject getTextureBiome() {
-		return textureBiome;
-	}
-
-	@Handler.Function(Handler.FLAG_DISPOSE)
-	public void dispose() {
-		clear(false);
-	}
-
 	/**
 	 * Clears all chunks, then creates a current at the previous chunks position.
 	 *
@@ -598,5 +576,27 @@ public class KosmosChunks extends Module {
 			currentChunk = null;
 			lastPlayerPos.set(0.0f, 0.0f, 0.0f);
 		}
+	}
+
+	public int getChunkDistance() {
+		return chunkDistance;
+	}
+
+	public void setChunkDistance(int chunkDistance) {
+		this.chunkDistance = chunkDistance;
+	}
+
+	public TextureObject getTextureBiome() {
+		return textureBiome;
+	}
+
+	@Handler.Function(Handler.FLAG_DISPOSE)
+	public void dispose() {
+		clear(false);
+	}
+
+	@Module.Instance
+	public static KosmosChunks get() {
+		return (KosmosChunks) Framework.get().getInstance(KosmosChunks.class);
 	}
 }

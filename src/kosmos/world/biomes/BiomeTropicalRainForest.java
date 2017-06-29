@@ -34,6 +34,11 @@ public class BiomeTropicalRainForest extends IBiome {
 	}
 
 	@Override
+	public EntitySpawn[] getEntitySpawns() {
+		return SPAWNS;
+	}
+
+	@Override
 	public TextureObject getTexture() {
 		return TEXTURE;
 	}
@@ -41,10 +46,5 @@ public class BiomeTropicalRainForest extends IBiome {
 	@Override
 	public Colour getColour() {
 		return COLOUR;
-	}
-
-	@Override
-	public EntitySpawn[] getEntitySpawns() {
-		return SPAWNS;
 	}
 }

@@ -27,11 +27,6 @@ public class KosmosWater extends Module {
 		super(FlounderBounding.class, FlounderLoader.class);
 	}
 
-	@Module.Instance
-	public static KosmosWater get() {
-		return (KosmosWater) Framework.get().getInstance(KosmosWater.class);
-	}
-
 	@Handler.Function(Handler.FLAG_INIT)
 	public void init() {
 		this.colourIntensity = KosmosConfigs.WATER_COLOUR_INTENSITY.getFloat();
@@ -101,5 +96,10 @@ public class KosmosWater extends Module {
 		if (water != null) {
 			water.delete();
 		}
+	}
+
+	@Module.Instance
+	public static KosmosWater get() {
+		return (KosmosWater) Framework.get().getInstance(KosmosWater.class);
 	}
 }

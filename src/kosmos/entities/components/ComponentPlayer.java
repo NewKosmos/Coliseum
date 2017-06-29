@@ -160,10 +160,6 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 	}
 
 	@Override
-	public void dispose() {
-	}
-
-	@Override
 	public void render(ShaderObject shader, Single<Integer> vaoLength) {
 		if (KosmosCamera.isFirstPerson()) {
 			vaoLength.setSingle(-1);
@@ -189,5 +185,9 @@ public class ComponentPlayer extends IComponentEntity implements IComponentRende
 				new String[]{}, // Static variables
 				new String[]{} // Class constructor
 		);
+	}
+
+	@Override
+	public void dispose() {
 	}
 }

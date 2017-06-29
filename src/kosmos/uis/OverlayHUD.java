@@ -75,14 +75,6 @@ public class OverlayHUD extends ScreenObject {
 		this.mapZoomAmount = 3.20f;
 	}
 
-	public static int getCrosshairSelected() {
-		return crosshairSelected;
-	}
-
-	public static void setCrosshairSelected(int crosshairSelected) {
-		OverlayHUD.crosshairSelected = (int) Maths.clamp(crosshairSelected, 0, 8);
-	}
-
 	@Override
 	public void updateObject() {
 		// Update crosshair.
@@ -142,6 +134,18 @@ public class OverlayHUD extends ScreenObject {
 		}
 	}
 
+	public static int getCrosshairSelected() {
+		return crosshairSelected;
+	}
+
+	public static void setCrosshairSelected(int crosshairSelected) {
+		OverlayHUD.crosshairSelected = (int) Maths.clamp(crosshairSelected, 0, 8);
+	}
+
+	@Override
+	public void deleteObject() {
+	}
+
 	private static class HudStatus extends ScreenObject {
 		private GuiObject background;
 		private GuiObject foreground;
@@ -176,8 +180,6 @@ public class OverlayHUD extends ScreenObject {
 		@Override
 		public void deleteObject() {
 		}
-	}	@Override
-	public void deleteObject() {
 	}
 
 	public static class UsernameTag extends ScreenObject {
@@ -255,6 +257,4 @@ public class OverlayHUD extends ScreenObject {
 			gui.deleteObject();
 		}
 	}
-
-
 }
