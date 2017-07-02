@@ -14,6 +14,7 @@ import flounder.entities.*;
 import flounder.events.*;
 import flounder.framework.*;
 import flounder.guis.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
@@ -170,8 +171,10 @@ public class KosmosWorld extends Module {
 			FlounderSkybox.get().getFog().setFogDensity(0.006f + ((16 - KosmosChunks.get().getChunkDistance()) * 0.001f) + ((1.0f - getShadowFactor()) * 0.006f));
 			FlounderSkybox.get().getFog().setFogGradient(2.80f - ((1.0f - getShadowFactor()) * 0.4f));
 			FlounderSkybox.get().setBlendFactor(starIntensity());
-			FlounderShadows.get().setShadowBoxOffset(10.0f);
+			FlounderShadows.get().setShadowBoxOffset((20.0f * (1.0f - getShadowFactor())) + 10.0f);
 			FlounderShadows.get().setShadowBoxDistance(35.0f);
+			FlounderShadows.get().setShadowTransition(11.0f);
+			FlounderShadows.get().setShadowFactor(getShadowFactor());
 		}
 	}
 

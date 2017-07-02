@@ -100,8 +100,8 @@ public class KosmosPlayer extends Player {
 		});
 
 		FlounderEvents.get().addEvent(new EventStandard() {
-			private final int RECURSION_COUNT = 256;
-			private final float RAY_RANGE = 70.0f;
+			private final int RECURSION_COUNT = 64;
+			private final float RAY_RANGE = 20.0f;
 
 			private MouseButton buttonPlace = new MouseButton(GLFW_MOUSE_BUTTON_LEFT);
 
@@ -118,13 +118,14 @@ public class KosmosPlayer extends Player {
 					Vector3f terrainPosition = binarySearch(cameraRay, 0, 0, RAY_RANGE);
 
 					if (terrainPosition.getY() >= 0.0f) {
+						Vector3f test = new Vector3f(terrainPosition.x, 0.0f, terrainPosition.z);
 						Chunk inChunk = null;
 
 						for (Entity entity : FlounderEntities.get().getEntities().getAll(null)) {
 							if (entity != null && entity instanceof Chunk) {
 								Chunk chunk = (Chunk) entity;
 
-								if (chunk.getSphere().contains(new Vector3f(terrainPosition.x, 0.0f, terrainPosition.z))) {
+								if (chunk.getSphere().contains(test)) {
 									inChunk = chunk;
 								}
 							}

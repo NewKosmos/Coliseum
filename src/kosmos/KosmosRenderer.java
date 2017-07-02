@@ -163,7 +163,6 @@ public class KosmosRenderer extends RendererMaster {
 
 	private void renderPost(boolean isPaused, float blurFactor) {
 		FBO output = rendererFBO;
-		pipelineMRT.setShadowFactor(KosmosWorld.get().getShadowFactor());
 		pipelineMRT.renderPipeline(
 				output.getColourTexture(0), // Colours
 				output.getColourTexture(1), // Normals
