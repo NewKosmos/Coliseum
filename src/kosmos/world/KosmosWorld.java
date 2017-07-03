@@ -173,7 +173,7 @@ public class KosmosWorld extends Module {
 			FlounderSkybox.get().setBlendFactor(starIntensity());
 			FlounderShadows.get().setShadowBoxOffset((20.0f * (1.0f - getShadowFactor())) + 10.0f);
 			FlounderShadows.get().setShadowBoxDistance(35.0f);
-			FlounderShadows.get().setShadowTransition(11.0f);
+			FlounderShadows.get().setShadowTransition(0.0f);
 			FlounderShadows.get().setShadowFactor(getShadowFactor());
 		}
 	}

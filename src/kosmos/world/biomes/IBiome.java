@@ -92,6 +92,7 @@ public abstract class IBiome {
 
 				if (entity != null) {
 					new ComponentChild(entity, chunk, () -> chunk.entityRemove(entity));
+					new ComponentSelect(entity);
 				}
 
 				return entity;

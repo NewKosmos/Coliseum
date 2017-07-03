@@ -80,7 +80,7 @@ public class OverlayHUD extends ScreenObject {
 		// Update crosshair.
 		this.crossHair.setColourOffset(FlounderGuis.get().getGuiMaster().getPrimaryColour());
 		this.crossHair.setSelectedRow(crosshairSelected);
-		this.crossHair.setVisible(KosmosCamera.isFirstPerson());
+		// this.crossHair.setVisible(KosmosCamera.isFirstPerson());
 
 		// Update statuses.
 		this.statusHealth.percentage = KosmosWorld.get().getDayFactor();

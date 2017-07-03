@@ -17,6 +17,7 @@ import flounder.guis.*;
 import flounder.inputs.*;
 import flounder.logger.*;
 import flounder.maths.*;
+import flounder.maths.Timer;
 import flounder.maths.vectors.*;
 import flounder.networking.*;
 import flounder.physics.*;
@@ -27,11 +28,13 @@ import kosmos.network.packets.*;
 import kosmos.world.*;
 import kosmos.world.chunks.*;
 
+import java.util.*;
+
 import static flounder.platform.Constants.*;
 
 public class KosmosPlayer extends Player {
 	public static final float PLAYER_OFFSET_Y = (float) (Math.sqrt(2.0) * 0.25);
-	public static final float PLAYER_TAG_Y = 1.8f + PLAYER_OFFSET_Y;
+	public static final float PLAYER_TAG_Y = 2.25f + PLAYER_OFFSET_Y;
 
 	public static final float RUN_SPEED = 6.0f;
 	public static final float STRAFE_SPEED = 4.0f;
@@ -41,6 +44,9 @@ public class KosmosPlayer extends Player {
 
 	private Vector3f position;
 	private Vector3f rotation;
+
+	private MouseButton buttonRemove;
+	private List<Entity> entityObjects;
 
 	private boolean noclipEnabled;
 
@@ -58,6 +64,9 @@ public class KosmosPlayer extends Player {
 		this.position = new Vector3f();
 		this.rotation = new Vector3f();
 
+		this.buttonRemove = new MouseButton(GLFW_MOUSE_BUTTON_RIGHT);
+		this.entityObjects = new ArrayList<>();
+
 		this.noclipEnabled = false;
 
 		this.needSendTimer = new Timer(1.0 / 10.0); // 10.0 ticks per second.
@@ -66,42 +75,8 @@ public class KosmosPlayer extends Player {
 		KosmosPlayer.username = KosmosConfigs.CLIENT_USERNAME.setReference(() -> username).getString();
 
 		FlounderEvents.get().addEvent(new EventStandard() {
-			private MouseButton buttonRemove = new MouseButton(GLFW_MOUSE_BUTTON_RIGHT);
-
-			@Override
-			public boolean eventTriggered() {
-				return buttonRemove.wasDown() && !FlounderGuis.get().getGuiMaster().isGamePaused();
-			}
-
-			@Override
-			public void onEvent() {
-				Ray cameraRay = FlounderCamera.get().getCamera().getViewRay();
-
-				if (KosmosWorld.get().getEntityPlayer() != null) {
-					for (Entity entity : FlounderEntities.get().getEntities().getAll(null)) {
-						if (entity.getCollider() != null && entity.getComponent(ComponentPlayer.class) == null && entity.getComponent(ComponentMultiplayer.class) == null && entity.getComponent(ComponentChunk.class) == null) {
-							IntersectData data = entity.getCollider().intersects(cameraRay);
-							float distance = Vector3f.getDistance(entity.getPosition(), KosmosWorld.get().getEntityPlayer().getPosition());
-
-							if (data.isIntersection() && distance < 2.0f) {
-								ComponentChild child = ((ComponentChild) entity.getComponent(ComponentChild.class));
-
-								if (child != null && FlounderNetwork.get().getSocketClient() != null) {
-									new PacketEntityRemove(FlounderNetwork.get().getUsername(), child.getParent().getPosition(), entity.getPosition()).writeData(FlounderNetwork.get().getSocketClient());
-								}
-
-								entity.forceRemove();
-								return;
-							}
-						}
-					}
-				}
-			}
-		});
-
-		FlounderEvents.get().addEvent(new EventStandard() {
-			private final int RECURSION_COUNT = 64;
-			private final float RAY_RANGE = 20.0f;
+			private final int RECURSION_COUNT = 256;
+			private final float RAY_RANGE = 70.0f;
 
 			private MouseButton buttonPlace = new MouseButton(GLFW_MOUSE_BUTTON_LEFT);
 
@@ -151,6 +126,7 @@ public class KosmosPlayer extends Player {
 								new Vector3f()
 						);
 						new ComponentChild(entity, inChunk);
+						new ComponentSelect(entity);
 					}
 				}
 			}
@@ -203,6 +179,37 @@ public class KosmosPlayer extends Player {
 	public void update() {
 		if (KosmosWorld.get().getEntityPlayer() == null) {
 			return;
+		}
+
+		if (!FlounderGuis.get().getGuiMaster().isGamePaused()) {
+			Ray cameraRay = FlounderCamera.get().getCamera().getViewRay();
+
+			if (KosmosWorld.get().getEntityPlayer() != null) {
+				for (Entity entity : FlounderEntities.get().getEntities().queryInFrustum(FlounderCamera.get().getCamera().getViewFrustum(), entityObjects)) {
+					if (entity.getCollider() != null && entity.getComponent(ComponentPlayer.class) == null && entity.getComponent(ComponentMultiplayer.class) == null && entity.getComponent(ComponentChunk.class) == null) {
+						IntersectData data = entity.getCollider().intersects(cameraRay);
+						float distance = Vector3f.getDistance(entity.getPosition(), KosmosWorld.get().getEntityPlayer().getPosition());
+
+						if (data.isIntersection() && distance < 3.0f) {
+							if (buttonRemove.wasDown()) {
+								ComponentChild componentChild = ((ComponentChild) entity.getComponent(ComponentChild.class));
+
+								if (componentChild != null && FlounderNetwork.get().getSocketClient() != null) {
+									new PacketEntityRemove(FlounderNetwork.get().getUsername(), componentChild.getParent().getPosition(), entity.getPosition()).writeData(FlounderNetwork.get().getSocketClient());
+								}
+
+								entity.forceRemove();
+							} else {
+								ComponentSelect componentSelect = ((ComponentSelect) entity.getComponent(ComponentSelect.class));
+
+								if (componentSelect != null) {
+									componentSelect.setSelected(true);
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 
 		// Gets the current position of the player.

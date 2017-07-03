@@ -14,6 +14,7 @@ import flounder.devices.*;
 import flounder.framework.*;
 import flounder.guis.*;
 import flounder.inputs.*;
+import flounder.logger.*;
 import flounder.maths.*;
 import flounder.maths.matrices.*;
 import flounder.maths.vectors.*;
@@ -44,15 +45,17 @@ public class KosmosCamera extends Camera {
 	private static final float MAX_VERTICAL_CHANGE = 30.0f;
 	private static final float MAX_ZOOM_CHANGE = 0.5f;
 
-	private static final float CAMERA_AIM_OFFSET = 1.6f;
+	private static final float CAMERA_HEIGHT_OFFSET = 2.0f;
+	private static final float CAMERA_SIDE_OFFSET = -1.55f;
 
-	private static final float MAX_ANGLE_OF_ELEVATION_FPS = 70.0f;
+	private static final float MAX_ANGLE_OF_ELEVATION_FPS = 90.0f;
 	private static final float MIN_ANGLE_OF_ELEVATION_FPS = -45.0f;
-	private static final float MAX_ANGLE_OF_ELEVATION = 70.0f;
-	private static final float MIN_ANGLE_OF_ELEVATION = 0.0f;
+	private static final float MAX_ANGLE_OF_ELEVATION = 90.0f;
+	private static final float MIN_ANGLE_OF_ELEVATION = -11.25f;
+
 	private static final float MINIMUM_ZOOM = 0.0f;
-	private static final float MAXIMUM_ZOOM = 14.0f;
-	private static final float NORMAL_ZOOM = 7.0f;
+	private static final float MAXIMUM_ZOOM = 7.0f;
+	private static final float NORMAL_ZOOM = 3.50f;
 
 	private Vector3f position;
 	private Vector3f rotation;
@@ -146,14 +149,11 @@ public class KosmosCamera extends Camera {
 		calculateZoom();
 
 		if (player != null) {
-			//targetPosition.y = player.getPosition().y;
-			//float stepPower = 0.12f;
-			//float velocity = 10000.0f * Vector3f.subtract(targetPosition, player.getPosition(), targetPosition).lengthSquared() * delta;
-			//float systemTime = Framework.getTimeSec();
-			//double yOffset = velocity * stepPower * (float) (Math.sin(0.5 * Math.PI * systemTime) - Math.sin(1.4 * Math.PI * systemTime) + Math.abs(Math.cos(1.0 * Math.PI * systemTime)));
-
+			Vector3f v = new Vector3f(CAMERA_SIDE_OFFSET, 0.0f, 0.0f);
+			v.scale(actualDistanceFromPoint / MAXIMUM_ZOOM);
+			Vector3f.rotate(v, player.getRotation(), v);
 			this.targetPosition.set(player.getPosition());
-			//this.targetPosition.y += yOffset;
+			Vector3f.add(targetPosition, v, targetPosition);
 		}
 
 		updateActualZoom(delta);
@@ -304,7 +304,7 @@ public class KosmosCamera extends Camera {
 	private void calculatePosition() {
 		double theta = Math.toRadians(targetRotation.y + angleAroundPlayer);
 		position.x = targetPosition.x - (float) (horizontalDistanceFromFocus * Math.sin(theta));
-		position.y = targetPosition.y + verticalDistanceFromFocus + CAMERA_AIM_OFFSET;
+		position.y = targetPosition.y + verticalDistanceFromFocus + CAMERA_HEIGHT_OFFSET;
 		position.z = targetPosition.z - (float) (horizontalDistanceFromFocus * Math.cos(theta));
 
 		rotation.x = angleOfElevation;
