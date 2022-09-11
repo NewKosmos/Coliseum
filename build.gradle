@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+repositories {
+    mavenCentral()
+}
+
+mainClassName = "com.kosmos.NewKosmos"
+version = "6.27"
+
+sourceCompatibility = "11"
+
+if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+	applicationDefaultJvmArgs = ["-XstartOnFirstThread"]
+}
+
+dependencies {
+    implementation project(":Flounder")
+}
